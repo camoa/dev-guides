@@ -4,7 +4,9 @@ description: AI-friendly decision guides for Drupal, Next.js, and decoupled web 
 
 # Dev Guides
 
-Decision-making guides optimized for AI/LLM consumption. Each guide answers: "When you need to do X, what should you choose and why?"
+> **This site is designed for AI/LLM consumption, not human reading.** Content is structured as lean decision trees and pattern references optimized for token efficiency. If you're a human developer, you may find the format useful but terse — it's intentional.
+
+Decision-making guides that answer: "When you need to do X, what should you choose and why?"
 
 | Area | Topics |
 |------|--------|
@@ -14,6 +16,6 @@ Decision-making guides optimized for AI/LLM consumption. Each guide answers: "Wh
 
 ## For AI Consumers
 
-- **Index**: [`llms.txt`](../llms.txt) — structured index of all guides
+- **Index**: [`llms.txt`](llms.txt) — structured index of all guides
 - **Navigation**: Index → Topic TOC → Atomic guide (one decision per page)
 - **Format**: Tables, bullets, minimal code. No prose.

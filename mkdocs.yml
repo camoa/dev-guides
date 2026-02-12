@@ -15,12 +15,30 @@ plugins:
       sections:
         "Drupal":
           - drupal/index.md: "Drupal decision guides — forms, entities, config, rendering, frontend, architecture"
-          - drupal/forms/index.md: "Forms — choosing the right form base, validation, AJAX"
-          - drupal/forms/config-form-base.md: "ConfigFormBase — module settings forms that save to config"
-          - drupal/forms/form-base.md: "FormBase — custom input forms that process data"
-          - drupal/forms/confirm-form-base.md: "ConfirmFormBase — confirmation step before destructive actions"
-          - drupal/forms/validation.md: "Form validation — validateForm, element validation, constraints"
-          - drupal/forms/ajax.md: "AJAX in forms — dynamic updates without full page reload"
+          - drupal/forms/index.md: "Forms — choosing form types, validation, AJAX, security"
+          - drupal/forms/architecture-core-classes.md: "Form API core classes — interfaces, base classes, services"
+          - drupal/forms/architecture-lifecycle.md: "Form lifecycle — request flow, state management, caching"
+          - drupal/forms/pattern-standard-form.md: "FormBase — general-purpose forms for custom business logic"
+          - drupal/forms/pattern-config-form.md: "ConfigFormBase — admin settings forms with automatic config sync"
+          - drupal/forms/pattern-confirm-form.md: "ConfirmFormBase — confirmation dialogs for destructive actions"
+          - drupal/forms/elements-overview.md: "Form elements — types, categories, universal properties"
+          - drupal/forms/elements-input.md: "Input elements — text, numeric, password, date/time fields"
+          - drupal/forms/elements-selection.md: "Selection and file elements — dropdowns, radios, checkboxes, uploads"
+          - drupal/forms/elements-grouping.md: "Grouping and action elements — containers, fieldsets, buttons"
+          - drupal/forms/elements-lifecycle.md: "Element lifecycle callbacks — #process, #after_build, #pre_render"
+          - drupal/forms/validation-architecture.md: "Validation architecture — three-tier system, execution order, error methods"
+          - drupal/forms/validation-partial.md: "Partial validation — #limit_validation_errors for multi-step forms"
+          - drupal/forms/submission-architecture.md: "Submission architecture — handler priority, redirect patterns, state storage"
+          - drupal/forms/ajax-architecture.md: "AJAX forms — core system, element properties, callbacks, commands"
+          - drupal/forms/ajax-security.md: "AJAX security and advanced patterns — validation, XSS prevention, modals"
+          - drupal/forms/form-state-methods.md: "FormState methods reference — value access, storage, control flags, errors"
+          - drupal/forms/multi-step-forms.md: "Multi-step forms — caching, navigation, data persistence patterns"
+          - drupal/forms/form-alter-system.md: "Form alter system — hook order, alter patterns, cache contexts"
+          - drupal/forms/form-states-system.md: "Form states (#states) — client-side conditional field behavior"
+          - drupal/forms/programmatic-submission.md: "Programmatic form submission — batch operations, testing, security"
+          - drupal/forms/performance-optimization.md: "Performance optimization — form rendering, caching, validation strategies"
+          - drupal/forms/security-best-practices.md: "Security best practices — CSRF, XSS, SQL injection, file uploads, access control"
+          - drupal/forms/decision-trees.md: "Decision trees and quick reference — form selection, validation, AJAX, elements"
 
 nav:
   - Home: index.md
@@ -28,11 +46,37 @@ nav:
     - drupal/index.md
     - Forms:
       - drupal/forms/index.md
-      - drupal/forms/config-form-base.md
-      - drupal/forms/form-base.md
-      - drupal/forms/confirm-form-base.md
-      - drupal/forms/validation.md
-      - drupal/forms/ajax.md
+      - Architecture:
+        - drupal/forms/architecture-core-classes.md
+        - drupal/forms/architecture-lifecycle.md
+      - Patterns:
+        - drupal/forms/pattern-standard-form.md
+        - drupal/forms/pattern-config-form.md
+        - drupal/forms/pattern-confirm-form.md
+      - Elements:
+        - drupal/forms/elements-overview.md
+        - drupal/forms/elements-input.md
+        - drupal/forms/elements-selection.md
+        - drupal/forms/elements-grouping.md
+        - drupal/forms/elements-lifecycle.md
+      - Validation:
+        - drupal/forms/validation-architecture.md
+        - drupal/forms/validation-partial.md
+      - Submission:
+        - drupal/forms/submission-architecture.md
+      - AJAX:
+        - drupal/forms/ajax-architecture.md
+        - drupal/forms/ajax-security.md
+      - Advanced:
+        - drupal/forms/form-state-methods.md
+        - drupal/forms/multi-step-forms.md
+        - drupal/forms/form-alter-system.md
+        - drupal/forms/form-states-system.md
+        - drupal/forms/programmatic-submission.md
+        - drupal/forms/performance-optimization.md
+        - drupal/forms/security-best-practices.md
+      - Reference:
+        - drupal/forms/decision-trees.md
 
 markdown_extensions:
   - tables
