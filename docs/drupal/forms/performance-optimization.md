@@ -5,90 +5,196 @@ drupal_version: "11.x"
 
 # Performance Optimization
 
-## When to Use
+**WHY Performance Matters:**
 
-> Avoid expensive operations in buildForm(). Use entity_autocomplete for many options. Cache expensive #options generation.
+Slow forms = frustrated users, abandoned submissions, failed conversions, poor SEO (Google penalizes slow sites), server resource exhaustion, hosting cost increase. Target: Forms should load in <1 second, submit in <2 seconds.
 
-## Decision
+### Form Rendering Optimization
 
-| Scenario | Strategy | Why |
-|----------|----------|-----|
-| >100 options | entity_autocomplete | Avoid loading all |
-| Expensive options | Cache in state/config | Avoid regenerating |
-| Entity loading | Defer to submit | Don't load in build |
-| Multi-step form | setCached(TRUE) | Avoid rebuilding |
-| Remote API calls | Queue/batch | Async processing |
+**CRITICAL: What NOT to Put in buildForm()**
 
-## Expensive Operations to Avoid in buildForm()
+buildForm() is called on:
+- Initial form display
+- Every AJAX callback
+- Every validation error (form redisplays)
+- Every multi-step navigation
+- Every form alter hook
 
+**WHY This Matters:** If buildForm() takes 2 seconds, user waits 2 seconds on EVERY AJAX interaction. With 3 AJAX callbacks = 6 seconds total wait time.
+
+**Expensive Operations to Avoid in buildForm():**
 ```
-Heavy database queries for #options (load thousands of nodes)
-Entity loading in loops (N+1 query problem)
-Remote API calls (timeout risk, slow response)
-File system operations (disk I/O latency)
-Complex calculations (heavy processing)
+✗ Heavy database queries (>100 rows)
+  Impact: 1-5 seconds per query, blocks PHP thread
+  Example: Loading 10,000 nodes for select #options
+
+✗ Entity loading in loops (N+1 problem)
+  Impact: 100 entities = 100 queries = 3-10 seconds
+  Example: foreach ($ids as $id) { Node::load($id); }
+
+✗ Remote API calls
+  Impact: 500ms-10s per call, timeout risk, blocks form
+  Example: $this->weatherApi->getForecast()
+
+✗ File system operations
+  Impact: 50-500ms per file, NFS even slower
+  Example: file_exists(), scandir(), file_get_contents()
+
+✗ Complex calculations
+  Impact: 100ms-5s depending on complexity
+  Example: Recursive algorithms, image processing, PDF generation
+
+✗ External service calls
+  Impact: 200ms-30s, failure breaks form
+  Example: CRM sync, payment gateway check, geocoding
 ```
 
-**Why It Matters:**
-```
-buildForm() runs on every page load
-Cached forms still rebuild on form errors
-AJAX rebuilds call buildForm() repeatedly
-Slow buildForm = slow page load
-```
+**Performance Thresholds (2025 Research-Backed):**
 
-## Optimization Patterns
+| Operation | Acceptable | Slow | Critical |
+|-----------|-----------|------|----------|
+| buildForm() total | <200ms | 200ms-1s | >1s |
+| Database query | <50ms | 50-200ms | >200ms |
+| Entity load | <10ms | 10-50ms | >50ms |
+| API call | <100ms | 100-500ms | >500ms |
+| File operation | <20ms | 20-100ms | >100ms |
 
-**Pattern 1: Lazy-Load Options via AJAX**
+**Reference:** [Drupal Performance Optimization 2025](https://kinematic.digital/index.php/2025/06/20/advanced-drupal-performance-optimization-techniques/)
+
+### Optimization Patterns
+
+**Pattern 1: Use Autocomplete for Large Option Sets (>50 Items)**
+
+**WHY:** Select with 1000 options = 200KB HTML, 500ms DOM rendering, poor mobile UX, accessibility nightmare.
+
 ```php
-// Instead of loading 10,000 options:
-$form['entity'] = [
+// WRONG - 10,000 options = massive page load time
+$nodes = \Drupal::entityTypeManager()
+  ->getStorage('node')
+  ->loadByProperties(['type' => 'article']); // Loads 10,000 nodes!
+$options = [];
+foreach ($nodes as $node) {
+  $options[$node->id()] = $node->label(); // 10,000 iterations
+}
+$form['article'] = [
   '#type' => 'select',
-  '#options' => $this->loadThousandsOfOptions(), // SLOW
+  '#options' => $options, // 200KB+ HTML
 ];
+// Impact: 3-5 second page load, poor mobile experience
 
-// Use entity autocomplete:
-$form['entity'] = [
+// CORRECT - lazy load via autocomplete
+$form['article'] = [
   '#type' => 'entity_autocomplete',
   '#target_type' => 'node',
   '#selection_settings' => ['target_bundles' => ['article']],
 ];
+// Impact: <100ms page load, options loaded on demand via AJAX
 ```
 
-**Pattern 2: Cache Expensive Options**
+**Decision Threshold:**
+```
+<20 options: radios/checkboxes (best UX)
+20-50 options: select dropdown
+>50 options: entity_autocomplete (REQUIRED for performance)
+>1000 options: Custom AJAX autocomplete with database search
+```
+
+**Pattern 2: Cache Expensive Options (State API or Config)**
+
+**WHY:** Generating options from database/API on every form load = wasted resources. Cache once, reuse thousands of times.
+
 ```php
-// Cache in state system
+// CORRECT - cache in state system (faster than config for frequently-changing data)
 $options = \Drupal::state()->get('mymodule.options');
 if (!$options) {
-  $options = $this->generateExpensiveOptions();
+  $options = $this->generateExpensiveOptions(); // Runs once per cache clear
   \Drupal::state()->set('mymodule.options', $options);
 }
 $form['field']['#options'] = $options;
+// Impact: First load 500ms, subsequent loads <10ms
 
-// OR cache in configuration
+// OR cache in configuration (better for rarely-changing data)
 $config = $this->config('mymodule.settings');
 $options = $config->get('cached_options');
+// Impact: Cached by configuration system, exported with config
+
+// OR cache in custom cache bin (best for frequently-changing data)
+$cid = 'mymodule:form:options';
+if ($cache = \Drupal::cache()->get($cid)) {
+  $options = $cache->data;
+} else {
+  $options = $this->generateExpensiveOptions();
+  \Drupal::cache()->set($cid, $options, time() + 3600); // 1 hour TTL
+}
+```
+
+**Cache Decision Matrix:**
+```
+Changes: Never → Configuration (exported with site config)
+Changes: Daily → State API (simple, no export needed)
+Changes: Hourly → Cache API with TTL
+Changes: Per-request → Don't cache, use lazy load
 ```
 
 **Pattern 3: Defer to Validation/Submit**
+
+**WHY:** Entity loads in buildForm() run even when form not submitted. If form displayed 1000 times but submitted 10 times, you loaded entity 990 unnecessary times.
+
 ```php
-// DON'T load entity in buildForm:
+// WRONG - loads entity every time form displays
 public function buildForm(array $form, FormStateInterface $form_state) {
-  $entity = \Drupal::entityTypeManager()
+  $nid = 123;
+  $node = \Drupal::entityTypeManager()
     ->getStorage('node')
-    ->load($id); // Avoid unless necessary
+    ->load($nid); // Runs on every display, AJAX, error
+  $form['info']['#markup'] = $node->label(); // Just displaying label, not modifying
+}
+// Impact: 10-50ms wasted on every form view
+
+// CORRECT - only load when actually needed
+public function buildForm(array $form, FormStateInterface $form_state) {
+  $form['node_id'] = [
+    '#type' => 'value',
+    '#value' => 123, // Store ID only
+  ];
 }
 
-// DO load in submit:
 public function submitForm(array &$form, FormStateInterface $form_state) {
-  $id = $form_state->getValue('entity_id');
-  $entity = \Drupal::entityTypeManager()
+  $nid = $form_state->getValue('node_id');
+  $node = \Drupal::entityTypeManager()
     ->getStorage('node')
-    ->load($id); // Only on submit
+    ->load($nid); // Loads only on submit
+  $node->setTitle($form_state->getValue('title'));
+  $node->save();
 }
+// Impact: Saves 10-50ms on every form display
 ```
 
-## Form Caching Strategy
+**Pattern 4: Use loadMultiple() Not load() in Loops**
+
+**WHY:** N+1 query problem. Loading 100 entities individually = 100 database queries = 3-10 seconds.
+
+```php
+// WRONG - N+1 queries
+$nids = [1, 2, 3, ..., 100]; // 100 node IDs
+foreach ($nids as $nid) {
+  $node = Node::load($nid); // 100 separate queries!
+  $options[$nid] = $node->label();
+}
+// Impact: 3-10 seconds (100 queries × 30-100ms each)
+
+// CORRECT - single query
+$nids = [1, 2, 3, ..., 100];
+$nodes = \Drupal::entityTypeManager()
+  ->getStorage('node')
+  ->loadMultiple($nids); // 1 query loads all
+foreach ($nodes as $nid => $node) {
+  $options[$nid] = $node->label();
+}
+// Impact: 50-200ms (1 query for all entities)
+```
+
+### Form Caching Strategy
 
 **When to Enable Form Caching:**
 | Scenario | Cache? | Why |
@@ -122,7 +228,7 @@ Expiration: 6 hours default
 Cleanup: Cron purges expired entries
 ```
 
-## Validation Performance
+### Validation Performance
 
 **Expensive Validation (Avoid):**
 ```php
@@ -152,13 +258,15 @@ public function submitForm(array &$form, FormStateInterface $form_state) {
 ```
 
 **Good Validation (Fast):**
-- Format checks (regex, strlen)
-- In-memory comparisons
-- Required field checks
-- Range validation (>, <, between)
-- Type checks (is_numeric, etc.)
+```
+Format checks (regex, strlen)
+In-memory comparisons
+Required field checks
+Range validation (>, <, between)
+Type checks (is_numeric, etc.)
+```
 
-## Element-Level Optimization
+### Element-Level Optimization
 
 **Avoid Nested Loops:**
 ```php
@@ -179,33 +287,119 @@ if ($complex_widget_needed) {
   $form['#attached']['library'][] = 'mymodule/complex-widget';
 }
 
-// Not on every form
+// Not on every form:
+// $form['#attached']['library'][] = 'mymodule/rarely-used';
 ```
 
-## AJAX Performance
+### AJAX Performance
 
-**Avoid:**
-- AJAX on every keyup (use debouncing)
-- Large render arrays in AJAX responses
-- Complex AJAX callbacks with DB queries
+**WHY AJAX Performance Matters:**
 
-**Better:**
-- AJAX on change/blur events
-- Return minimal render arrays
-- Cache AJAX callback results
-- Use client-side validation first
+AJAX callbacks feel instant or feel broken - no middle ground. Users expect <300ms response time. Slow AJAX = perceived as broken, users click repeatedly, creates server load cascade.
 
-## Common Mistakes
+**Performance Thresholds (User Perception):**
+```
+<100ms: Instant (excellent)
+100-300ms: Responsive (acceptable)
+300-1000ms: Noticeable lag (poor UX)
+>1000ms: Broken (users abandon)
+```
 
-- **Wrong**: Loading entities in loops → **Right**: Use loadMultiple()
-- **Wrong**: Calling external APIs in buildForm() → **Right**: Queue or defer
-- **Wrong**: Not caching expensive #options → **Right**: Cache in state/config
-- **Wrong**: Using AJAX when #states would work → **Right**: Prefer client-side
-- **Wrong**: Not considering form rebuild impact → **Right**: Profile and optimize
+**AJAX Anti-Patterns (Avoid):**
+```
+✗ AJAX on every keyup
+  Impact: 50+ requests for typing "hello world", server overload
+  Example: Autocomplete without debouncing = DOS yourself
 
-## See Also
+✗ Large render arrays in AJAX responses
+  Impact: 100KB response = 500ms+ network time on mobile
+  Example: Returning entire form instead of just updated container
 
-- [Multi-Step Forms](multi-step-forms.md)
-- [AJAX Forms](ajax-architecture.md)
-- [Cache API](https://www.drupal.org/docs/drupal-apis/cache-api)
-- [State API](https://www.drupal.org/docs/drupal-apis/state-api)
+✗ Complex AJAX callbacks with DB queries
+  Impact: 200ms+ per callback, locks database, blocks other requests
+  Example: Loading 50 related entities in AJAX callback
+
+✗ AJAX when #states would work
+  Impact: Network roundtrip (200ms) vs instant client-side (<1ms)
+  Example: Show/hide based on checkbox = use #states
+```
+
+**Optimized AJAX Patterns:**
+```
+✓ AJAX on change/blur events (not keyup)
+  Impact: 1 request per field change vs 10+ per word typed
+
+✓ Return minimal render arrays
+  Impact: 5KB response vs 100KB, 50ms vs 500ms render time
+  Example: Return only updated container, not entire form
+
+✓ Cache AJAX callback results
+  Impact: 5ms cached vs 200ms database query
+  Example: Country/state dropdown - cache state list
+
+✓ Use client-side validation first
+  Impact: 0ms vs 200ms roundtrip for simple validation
+  Example: Email format validation via HTML5 pattern attribute
+
+✓ Debounce AJAX autocomplete
+  Impact: 3 requests vs 50+ for typing "example"
+  Example: Wait 300ms after last keyup before triggering AJAX
+```
+
+**Concrete Example - Autocomplete Optimization:**
+```php
+// WRONG - no debouncing, triggers on every keyup
+$form['search'] = [
+  '#type' => 'textfield',
+  '#ajax' => [
+    'callback' => '::searchCallback',
+    'event' => 'keyup', // 50+ AJAX requests for one search term!
+  ],
+];
+
+// CORRECT - debounced, triggers after pause
+$form['search'] = [
+  '#type' => 'textfield',
+  '#ajax' => [
+    'callback' => '::searchCallback',
+    'event' => 'change', // OR use custom JS with debounce
+    'debounce' => 300, // Wait 300ms after last keystroke (Drupal 9.3+)
+  ],
+];
+// Impact: 50+ requests reduced to 1-3 requests
+```
+
+**Reference:** [Performance Optimization Tips 2025](https://www.tutorials24x7.com/drupal/optimizing-drupal-website-performance-best-practices-for-2025)
+
+### Monitoring and Profiling
+
+**Identify Slow Forms:**
+```php
+// Add timing to log
+$start = microtime(TRUE);
+// ... form building ...
+$duration = microtime(TRUE) - $start;
+\Drupal::logger('mymodule')->debug('Form build time: @time', [
+  '@time' => $duration,
+]);
+```
+
+**Use Webprofiler Module (Development):**
+```
+Install devel and webprofiler modules
+Enable profiling toolbar
+Check form build time, query count
+```
+
+**Common Mistakes:**
+- Loading entities in loops (use loadMultiple)
+- Calling external APIs in buildForm()
+- Not caching expensive #options
+- Using AJAX when simple #states would work
+- Not considering form rebuild impact
+
+**See Also:**
+- Cache API Guide
+- Database Query Optimization
+- Entity API Performance
+- State API Guide

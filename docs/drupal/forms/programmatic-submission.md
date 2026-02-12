@@ -5,22 +5,23 @@ drupal_version: "11.x"
 
 # Programmatic Form Submission
 
-## When to Use
+### When to Use
 
-> Use programmatic submission for batch operations, cron jobs, and automated testing. Only in trusted contexts (CLI, admin operations).
+**Appropriate Use Cases:**
+- Batch operations processing items
+- Migration/import scripts
+- Automated testing (programmatic, not browser)
+- Cron jobs creating/updating content
+- Drush commands
+- Admin operations (bulk updates)
 
-## Decision
+**When NOT to Use:**
+- User-submitted forms (security risk)
+- Forms requiring user interaction
+- When form validation should block
+- Public-facing operations
 
-| Use Case | Appropriate | Why |
-|----------|-------------|-----|
-| Batch operations | Yes | Trusted context |
-| Migration/import | Yes | Automated process |
-| Cron jobs | Yes | Server-side |
-| Drush commands | Yes | CLI context |
-| User-submitted forms | NO | Security risk |
-| Public operations | NO | Bypass CSRF |
-
-## Security Implications
+### Security Implications
 
 **Bypasses:**
 ```
@@ -36,9 +37,9 @@ Normal user flow - No render, no UI validation
 - Migration processes
 - Automated tests
 
-## Pattern
+### Basic Pattern
 
-**Basic Submission:**
+**Simple Submission:**
 ```php
 use Drupal\Core\Form\FormState;
 
@@ -74,11 +75,11 @@ class MyService {
 }
 ```
 
-## Advanced Patterns
+### Advanced Patterns
 
-**Bypass Access Checks (Use with Caution):**
+**Bypass Access Checks:**
 ```php
-$form_state->setProgrammedBypassAccessCheck(TRUE);
+$form_state->setProgrammedBypassAccessCheck(TRUE); // Use with caution
 ```
 
 **Check for Errors:**
@@ -94,6 +95,12 @@ else {
 }
 ```
 
+**Get Return Value:**
+```php
+$result = $form_builder->submitForm('Drupal\mymodule\Form\MyForm', $form_state);
+// $result = form render array (usually not useful for programmatic)
+```
+
 **Nested Values:**
 ```php
 $form_state->setValues([
@@ -104,8 +111,9 @@ $form_state->setValues([
 ]);
 ```
 
-## Batch Integration
+### Batch Integration
 
+**Form Submission in Batch:**
 ```php
 public function submitForm(array &$form, FormStateInterface $form_state) {
   $items = $this->getItemsToProcess();
@@ -128,6 +136,7 @@ public function submitForm(array &$form, FormStateInterface $form_state) {
 }
 
 public function batchProcessItem($item, &$context) {
+  // Programmatically submit form for each item
   $form_state = new FormState();
   $form_state->setValues(['item_id' => $item['id']]);
   $form_state->setProgrammed(TRUE);
@@ -139,10 +148,13 @@ public function batchProcessItem($item, &$context) {
 }
 ```
 
-Reference: [Batch API Introduction](https://www.hashbangcode.com/article/drupal-11-introduction-batch-processing-batch-api)
+**Reference:**
+- Tutorial: [Drupal 11: Batch API Introduction](https://www.hashbangcode.com/article/drupal-11-introduction-batch-processing-batch-api)
+- Core: `/web/core/lib/Drupal/Core/Form/form.api.php` lines 56-95
 
-## Testing Pattern
+### Testing Pattern
 
+**PHPUnit Kernel Test:**
 ```php
 namespace Drupal\Tests\mymodule\Kernel;
 
@@ -164,16 +176,36 @@ class MyFormTest extends KernelTestBase {
 }
 ```
 
-## Common Mistakes
+### Common Mistakes
 
-- **Wrong**: Not setting programmed flag → **Right**: `$form_state->setProgrammed(TRUE)`
-- **Wrong**: Using raw form array → **Right**: Use class name/object
-- **Wrong**: Bypassing access inappropriately → **Right**: Only for trusted admin operations
-- **Wrong**: Using for user-submitted forms → **Right**: Only for automated/trusted contexts
+**Not Setting Programmed Flag:**
+```php
+// WRONG - will fail token validation
+$form_state->setValues([...]);
+\Drupal::formBuilder()->submitForm(...);
 
-## See Also
+// CORRECT
+$form_state->setProgrammed(TRUE);
+```
 
-- [Batch API](https://www.drupal.org/docs/drupal-apis/batch-api/batch-api-overview)
-- [Form State Methods](form-state-methods.md)
-- Reference: `/web/core/lib/Drupal/Core/Form/form.api.php` lines 56-95
-- Reference: `/web/core/lib/Drupal/Core/Form/FormBuilder.php`
+**Using Raw Form Array:**
+```php
+// WRONG
+$form = \Drupal::formBuilder()->getForm('Drupal\mymodule\Form\MyForm');
+// Can't submit $form array
+
+// CORRECT - use class name/object
+\Drupal::formBuilder()->submitForm('Drupal\mymodule\Form\MyForm', $form_state);
+```
+
+**Bypassing Access Inappropriately:**
+```php
+// DANGEROUS - only for trusted admin operations
+$form_state->setProgrammedBypassAccessCheck(TRUE);
+```
+
+**See Also:**
+- Batch API Guide
+- Testing Forms Guide
+- FormBuilder Service
+- Official: [Batch API Overview](https://www.drupal.org/docs/drupal-apis/batch-api/batch-api-overview)

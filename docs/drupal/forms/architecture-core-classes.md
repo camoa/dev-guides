@@ -13,24 +13,27 @@ drupal_version: "11.x"
 
 | Situation | Choose | Why |
 |-----------|--------|-----|
-| Admin settings | ConfigFormBase | Config management |
-| Delete/confirm action | ConfirmFormBase | Confirmation dialog |
+| Need config management | ConfigFormBase | Built-in config operations |
+| Need confirmation dialog | ConfirmFormBase | Standard confirm pattern |
 | Entity create/edit | EntityForm | Entity operations |
-| Custom business logic | FormBase | General purpose |
+| Custom business logic | FormBase | General purpose with DI |
 
 ## Primary Interfaces
 
 **FormInterface** - Base form contract
 - Location: `/web/core/lib/Drupal/Core/Form/FormInterface.php`
 - Methods: `getFormId()`, `buildForm()`, `validateForm()`, `submitForm()`
+- When to implement: Custom form without base class benefits
 
 **FormStateInterface** - State management contract
 - Location: `/web/core/lib/Drupal/Core/Form/FormStateInterface.php`
 - Size: 1160+ lines defining all state operations
+- Purpose: Value access, storage, control flags, error handling
 
 **FormBuilderInterface** - Form building service contract
 - Location: `/web/core/lib/Drupal/Core/Form/FormBuilderInterface.php`
 - Service: `@form_builder`
+- Use for: Programmatic form rendering, submission
 
 ## Base Form Classes
 
@@ -50,9 +53,12 @@ drupal_version: "11.x"
 
 ## Common Mistakes
 
-- **Wrong**: Implementing FormInterface directly when base class would work → **Right**: Extend FormBase
-- **Wrong**: Extending ConfigFormBase for non-config forms → **Right**: Use FormBase
-- **Wrong**: Not using dependency injection via `create()` method → **Right**: Inject services via static `create()`
+- **Wrong**: Not using dependency injection via `create()` method → **Right**: Inject services via static `create()` and constructor
+  - WHY BAD: Breaks unit testing (can't mock services), violates SOLID principles, prevents service substitution
+- **Wrong**: Extending wrong base class (ConfigFormBase for non-config forms) → **Right**: Match base class to use case
+  - WHY BAD: ConfigFormBase expects config schema, requires getEditableConfigNames(), adds unnecessary overhead
+- **Wrong**: Implementing FormInterface directly when base class would work → **Right**: Extend appropriate base class
+  - WHY BAD: Lose helper methods (t(), messenger(), config()), must implement all interface methods manually
 
 ## See Also
 
@@ -60,4 +66,6 @@ drupal_version: "11.x"
 - [Standard Form Pattern](pattern-standard-form.md)
 - [Config Form Pattern](pattern-config-form.md)
 - [Confirm Form Pattern](pattern-confirm-form.md)
+- Dependency Injection Guide
+- Configuration API Guide
 - Reference: `/web/core/lib/Drupal/Core/Form/`

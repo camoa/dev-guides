@@ -6,6 +6,7 @@ description: Drupal Form API — choosing form types, validation, AJAX, security
 
 | I need to... | Guide |
 |-------------|-------|
+| Understand Form API basics | [Overview](overview.md) |
 | Choose the right form base class | [Core Classes](architecture-core-classes.md) |
 | Understand form lifecycle and state | [Lifecycle](architecture-lifecycle.md) |
 | Build a standard form | [FormBase Pattern](pattern-standard-form.md) |
@@ -27,5 +28,7 @@ description: Drupal Form API — choosing form types, validation, AJAX, security
 | Use conditional fields (#states) | [Form States System](form-states-system.md) |
 | Submit forms programmatically | [Programmatic Submission](programmatic-submission.md) |
 | Optimize form performance | [Performance Optimization](performance-optimization.md) |
+| Follow development best practices | [Development Standards](development-standards-antipatterns.md) |
 | Secure forms | [Security Best Practices](security-best-practices.md) |
 | Make quick decisions | [Decision Trees](decision-trees.md) |
+| Find API references | [API References](api-references.md) |

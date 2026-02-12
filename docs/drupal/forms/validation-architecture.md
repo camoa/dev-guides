@@ -5,21 +5,9 @@ drupal_version: "11.x"
 
 # Validation Architecture
 
-## When to Use
+### Validation Levels
 
-> Use element validation for single field checks. Use form validation for cross-field logic. ConfigFormBase gets automatic typed config validation.
-
-## Decision
-
-| Validation Need | Level | Where |
-|----------------|-------|-------|
-| Single field format/range | Element | #element_validate property |
-| Cross-field validation | Form | validateForm() method |
-| Business logic | Form | validateForm() method |
-| ConfigFormBase constraints | Typed config | schema.yml |
-
-## Three-Tier Validation System
-
+**Three-Tier Validation System:**
 ```
 1. Element-level (#element_validate)
    - Per-element basis
@@ -37,9 +25,12 @@ drupal_version: "11.x"
    - Runs third
 ```
 
-Reference: `/web/core/lib/Drupal/Core/Form/FormValidator.php` lines 94-126
+**Reference Implementation:**
+- File: `/web/core/lib/Drupal/Core/Form/FormValidator.php`
+- Method: `validateForm()` lines 94-126 shows execution order
+- Method: `doValidateForm()` lines 122+ recursive validation
 
-## Validation Execution Order
+### Validation Execution Order
 
 **Complete Chain:**
 ```
@@ -48,14 +39,16 @@ Reference: `/web/core/lib/Drupal/Core/Form/FormValidator.php` lines 94-126
    - #element_validate callbacks
    - Built-in element type validation
 3. Form validators (#validate array)
+   - In order added (via hook_form_alter or buildForm)
 4. Form class validateForm() method
 5. Typed config validators (ConfigFormBase only)
+   - Constraint validators from schema
 6. If any errors: redisplay form, no submit handlers run
 ```
 
-Reference: `/web/core/lib/Drupal/Core/Form/form.api.php` lines 180-237
+**Reference:** `/web/core/lib/Drupal/Core/Form/form.api.php` lines 180-237
 
-## Error Setting Methods
+### Error Setting Methods
 
 **By Element Name (Preferred):**
 ```php
@@ -74,43 +67,41 @@ $errors = $form_state->getErrors(); // Associative array
 $form_state->clearErrors(); // Reset all
 ```
 
-## Validation Patterns
+### Validation Patterns
 
 **Element Validation:**
-```php
-'#element_validate' => ['::validateEmail'],
-
-public static function validateEmail($element, FormStateInterface $form_state) {
-  $value = $element['#value'];
-  if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
-    $form_state->setError($element, t('Invalid email address.'));
-  }
-}
+```
+When: Single field format/range check
+Where: #element_validate property
+Example: Email format, number range, string length
+Pattern: Return NULL, errors via setErrorByName()
 ```
 
 **Form Validation:**
-```php
-public function validateForm(array &$form, FormStateInterface $form_state) {
-  $start = $form_state->getValue('start_date');
-  $end = $form_state->getValue('end_date');
-
-  if ($end < $start) {
-    $form_state->setErrorByName('end_date',
-      $this->t('End date must be after start date.'));
-  }
-}
+```
+When: Cross-field validation, business logic
+Where: validateForm() method or #validate array
+Example: End date > start date, unique constraint
+Pattern: Access multiple fields via getValue()
 ```
 
-## Common Mistakes
+**Typed Config Validation (Drupal 10.2+):**
+```
+When: ConfigFormBase with schema constraints
+Where: Automatic from mymodule.schema.yml
+Example: Min/max values, required fields, data types
+Pattern: Define constraints in schema, validation automatic
+```
 
-- **Wrong**: Setting errors in buildForm() (wrong phase) → **Right**: Use validateForm()
-- **Wrong**: Using element validation for cross-field checks → **Right**: Use form validation
-- **Wrong**: Not translating error messages → **Right**: Use $this->t()
-- **Wrong**: Forgetting to check for existing errors → **Right**: Use hasAnyErrors()
+**Reference:** [Config Validation](https://www.drupal.org/project/drupal/issues/2971727)
 
-## See Also
+**Common Mistakes:**
+- Setting errors in buildForm() (wrong phase)
+- Using element validation for cross-field checks (no access to other fields)
+- Not translating error messages (use $this->t())
+- Forgetting to check for existing errors before setting new ones
 
-- [Partial Validation](validation-partial.md)
-- [Form State Methods](form-state-methods.md)
-- [Typed Data Constraints](https://www.drupal.org/project/drupal/issues/2971727)
-- Reference: `/web/core/lib/Drupal/Core/Form/FormValidator.php`
+**See Also:**
+- Form State Methods (dedicated section)
+- Typed Data Constraints Guide
+- Error Display Theming

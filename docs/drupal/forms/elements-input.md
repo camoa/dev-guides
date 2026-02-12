@@ -5,28 +5,7 @@ drupal_version: "11.x"
 
 # Form Elements: Input Elements
 
-## When to Use
-
-> Use semantic HTML5 input types for automatic validation and better mobile UX.
-
-## Decision
-
-| Data Type | Element | Why |
-|-----------|---------|-----|
-| Email addresses | email | Automatic @ validation, email keyboard |
-| Phone numbers | tel | Mobile phone keyboard hint |
-| Web addresses | url | Protocol validation |
-| Short text | textfield | Generic input |
-| Long text | textarea | Multi-line content |
-| Numbers | number | Spinner controls, validation |
-| Slider | range | Visual range selection |
-| Password | password | Hidden input |
-| Password + confirm | password_confirm | Dual fields, auto-matching |
-| Date only | date | Date picker |
-| Date + time | datetime | Date and time picker |
-| Date dropdowns | datelist | Granular control, old browsers |
-
-## Text Input Elements
+### Text Input Elements
 
 | Element | HTML5 Type | Validation | Key Properties |
 |---------|------------|------------|----------------|
@@ -37,9 +16,22 @@ drupal_version: "11.x"
 | url | url | URL format | #maxlength |
 | search | search | None | #maxlength |
 
-Reference: `/web/core/lib/Drupal/Core/Render/Element/Textfield.php`
+**Reference Files:**
+- `/web/core/lib/Drupal/Core/Render/Element/Textfield.php`
+- `/web/core/lib/Drupal/Core/Render/Element/Email.php`
+- `/web/core/lib/Drupal/Core/Render/Element/Url.php`
 
-## Numeric Input Elements
+**When to Use Each:**
+```
+Textfield: Generic short text (names, titles)
+Textarea: Multi-line text (descriptions, messages)
+Email: Email addresses (automatic @ validation)
+Tel: Phone numbers (mobile keyboard hint)
+Url: Web addresses (protocol validation)
+Search: Search inputs (browser styling/history)
+```
+
+### Numeric Input Elements
 
 | Element | Purpose | Properties | Browser Behavior |
 |---------|---------|------------|------------------|
@@ -47,13 +39,13 @@ Reference: `/web/core/lib/Drupal/Core/Render/Element/Textfield.php`
 | range | Slider | #min, #max, #step | Visual slider |
 
 **Number Validation:**
-```php
-'#min' => 0,           // Minimum value
-'#max' => 100,         // Maximum value
-'#step' => 0.01,       // Increment (decimals)
+```
+#min/#max: Browser validation + server validation
+#step: Increment value (e.g., 0.01 for decimals)
+No #step: Integers only (step="1")
 ```
 
-## Password Elements
+### Password Elements
 
 | Element | Purpose | Features |
 |---------|---------|----------|
@@ -61,13 +53,15 @@ Reference: `/web/core/lib/Drupal/Core/Render/Element/Textfield.php`
 | password_confirm | Password + confirm | Dual fields, automatic matching validation |
 
 **Security Note:**
-- Never set #default_value on password fields
-- Never log password values
-- Always use PasswordConfirm for user-facing password changes
+```
+Never set #default_value on password fields
+Never log password values
+Always use PasswordConfirm for user-facing password changes
+```
 
-Reference: `/web/core/lib/Drupal/Core/Render/Element/PasswordConfirm.php`
+**Reference:** `/web/core/lib/Drupal/Core/Render/Element/PasswordConfirm.php`
 
-## Date/Time Elements
+### Date/Time Elements
 
 | Element | Interface | Format | Properties |
 |---------|-----------|--------|------------|
@@ -83,16 +77,11 @@ Need granular control/old browsers? → datelist
 Complex date logic? → Custom element
 ```
 
-## Common Mistakes
+**Common Mistakes:**
+- Not setting #date_date_format (uses site default)
+- Forgetting timezone handling
+- Using textfield for dates (accessibility issue)
 
-- **Wrong**: Using textfield for dates (accessibility issue) → **Right**: Use date/datetime element
-- **Wrong**: Not setting #date_date_format (uses site default) → **Right**: Set explicit format
-- **Wrong**: Forgetting timezone handling → **Right**: Use Drupal DateTime API
-- **Wrong**: Setting #default_value on password fields → **Right**: Never set password defaults
-
-## See Also
-
-- [Selection Elements](elements-selection.md)
-- [Element Lifecycle](elements-lifecycle.md)
-- [DateTime API](https://www.drupal.org/docs/drupal-apis/date-time-api)
-- Reference: `/web/core/lib/Drupal/Core/Render/Element/`
+**See Also:**
+- DateTime API Guide
+- Timezone Handling Guide

@@ -5,58 +5,34 @@ drupal_version: "11.x"
 
 # Pattern: Confirmation Form (ConfirmFormBase)
 
-## When to Use
+### When to Use
 
-> Use ConfirmFormBase for delete operations and destructive actions. Use FormBase for multi-field forms.
+**Appropriate Use Cases:**
+- Delete operations (content, entities, config)
+- Destructive actions (purge, reset, uninstall)
+- Critical confirmations (irreversible operations)
+- Yes/no decision points
 
-## Decision
+**When NOT to Use:**
+- Multi-field forms → Use FormBase
+- Confirmations with additional inputs → Use FormBase with custom styling
 
-| Use Case | Form Type | Why |
-|----------|-----------|-----|
-| Delete operations | ConfirmFormBase | Standard pattern |
-| Destructive actions | ConfirmFormBase | User confirmation |
-| Yes/no decision | ConfirmFormBase | Simple dialog |
-| Multi-field forms | FormBase | Need additional inputs |
+### Implementation Pattern
 
-## Pattern
+**Core Example:**
+- File: `/web/core/modules/dblog/src/Form/DblogClearLogConfirmForm.php`
+- Pattern: Minimal form, clear question, cancel link, custom confirm text
 
-```php
-<?php
-
-namespace Drupal\mymodule\Form;
-
-use Drupal\Core\Form\ConfirmFormBase;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
-
-class DeleteForm extends ConfirmFormBase {
-
-  public function getFormId() {
-    return 'mymodule_delete_form';
-  }
-
-  public function getQuestion() {
-    return $this->t('Are you sure you want to delete this item?');
-  }
-
-  public function getCancelUrl() {
-    return Url::fromRoute('mymodule.collection');
-  }
-
-  public function getConfirmText() {
-    return $this->t('Delete');
-  }
-
-  public function submitForm(array &$form, FormStateInterface $form_state) {
-    // Perform deletion
-    $form_state->setRedirectUrl($this->getCancelUrl());
-  }
-}
+**Form Structure:**
+```
+Automatically provides:
+- Question text (from getQuestion())
+- Confirm button (from getConfirmText())
+- Cancel link (from getCancelUrl())
+- Standard confirmation form styling
 ```
 
-Reference: `/web/core/modules/dblog/src/Form/DblogClearLogConfirmForm.php`
-
-## Required Methods
+### Required Methods
 
 | Method | Returns | Purpose |
 |--------|---------|---------|
@@ -64,31 +40,43 @@ Reference: `/web/core/modules/dblog/src/Form/DblogClearLogConfirmForm.php`
 | `getCancelUrl()` | Url object | Destination if user cancels |
 | `getConfirmText()` | TranslatableMarkup | Submit button text (default: "Confirm") |
 | `getDescription()` | String (optional) | Additional warning/info text |
+| `getFormName()` | String (optional) | Internal form name |
 
-## Form Structure
+**URL Pattern:**
+```
+Cancel URL: Usually entity/list page or referring page
+Use Url::fromRoute('entity.type.collection')
+Or $entity->toUrl('collection')
+```
 
-Automatically provides:
-- Question text (from getQuestion())
-- Confirm button (from getConfirmText())
-- Cancel link (from getCancelUrl())
-- Standard confirmation form styling
+### Customization Options
 
-## Custom Confirm Text
-
+**Custom Confirm Text:**
+```
 Different from "Confirm":
 - "Delete" for delete operations
 - "Remove" for remove operations
 - "Reset" for reset operations
+```
 
-## Common Mistakes
+**Additional Elements:**
+```
+Can add elements in buildForm()
+Common: Checkboxes for "don't ask again", deletion options
+Must call parent::buildForm() to preserve structure
+```
 
-- **Wrong**: Forgetting to implement required methods → **Right**: Implement getQuestion, getCancelUrl, getConfirmText
-- **Wrong**: Returning string instead of Url object from getCancelUrl() → **Right**: Return `Url::fromRoute()`
-- **Wrong**: Adding complex form elements (defeats purpose) → **Right**: Keep it simple, just confirm/cancel
-- **Wrong**: Using generic "Confirm" text → **Right**: Use descriptive text ("Delete", "Remove")
+**Common Mistakes:**
+- Forgetting to implement required methods (getQuestion, getCancelUrl)
+  - **WHY BAD:** PHP fatal error on form build, ConfirmFormBase expects these methods, form won't render
+- Returning string instead of Url object from getCancelUrl()
+  - **WHY BAD:** Type error in Drupal 9+, expects Url object for route access checking and language prefix handling
+- Adding complex form elements (defeats purpose of confirm form)
+  - **WHY BAD:** Users expect simple yes/no, complex forms confuse purpose, accessibility issues with mixed UI patterns
+- Not using descriptive confirm text (users ignore generic "Confirm")
+  - **WHY BAD:** Users click without reading "Confirm", destructive actions executed without understanding, poor UX
 
-## See Also
-
-- [Standard Form Pattern](pattern-standard-form.md)
-- [URL Generation](https://www.drupal.org/docs/drupal-apis/routing-system/url-generation)
-- Reference: `/web/core/lib/Drupal/Core/Form/ConfirmFormBase.php`
+**See Also:**
+- Delete Form Patterns (Entity API Guide)
+- URL Generation Guide
+- User Experience Guidelines

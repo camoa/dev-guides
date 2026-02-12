@@ -5,20 +5,7 @@ drupal_version: "11.x"
 
 # AJAX: Security and Advanced Patterns
 
-## When to Use
-
-> Always return render arrays for XSS safety. Use AjaxResponse for multiple updates. Validate input in callbacks.
-
-## Decision
-
-| Pattern | When | Why |
-|---------|------|-----|
-| Return render array | Single update | Auto-escaped, safe |
-| Return AjaxResponse | Multiple updates | Granular control |
-| Dependent fields | Container wrapper | Update multiple fields |
-| Modal dialog | OpenModalDialogCommand | Dialog UI |
-
-## AJAX Security
+### AJAX Security
 
 **Built-in Protections:**
 ```
@@ -36,9 +23,9 @@ File uploads, dates blocked until token validated
 Prevents state changes from invalid requests
 ```
 
-Reference: `/web/core/lib/Drupal/Core/Form/FormBuilder.php` lines 133-156
+**Reference:** `/web/core/lib/Drupal/Core/Form/FormBuilder.php` lines 133-156
 
-## Safe AJAX Patterns
+### Safe AJAX Patterns
 
 **DO:**
 - Return render arrays (automatically escaped)
@@ -52,8 +39,7 @@ Reference: `/web/core/lib/Drupal/Core/Form/FormBuilder.php` lines 133-156
 - Skip form validation in AJAX rebuilds
 - Trust client-provided data
 
-## XSS Prevention
-
+**XSS Prevention:**
 ```php
 // SAFE - render array
 return $form['container'];
@@ -65,9 +51,18 @@ return ['#markup' => $this->t('Text: @text', ['@text' => $value])];
 return ['#markup' => '<div>' . $value . '</div>'];
 ```
 
-## Advanced AJAX Patterns
+### Advanced AJAX Patterns
 
 **Dependent Field Updates:**
+```
+Pattern: One field changes, others update
+Implementation:
+1. Primary field has #ajax callback
+2. Callback returns container with dependent fields
+3. Container has wrapper ID matching #ajax wrapper
+```
+
+**Example Structure:**
 ```php
 $form['trigger'] = [
   '#type' => 'select',
@@ -89,14 +84,14 @@ public function updateDependents(array &$form, FormStateInterface $form_state) {
 }
 ```
 
-## AJAX with Form States
-
+**AJAX with Form States (#states):**
+```
 Combine for best UX:
-- #states for client-side show/hide
-- AJAX for dynamic options/content
+#states for client-side show/hide
+AJAX for dynamic options/content
+```
 
-## Modal Dialog Pattern
-
+**Modal Dialog Pattern:**
 ```php
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
@@ -116,8 +111,7 @@ public function openModal(array &$form, FormStateInterface $form_state) {
 }
 ```
 
-## Progress Indicator Types
-
+**Progress Indicator Types:**
 ```php
 // Throbber (default)
 'progress' => ['type' => 'throbber']
@@ -135,17 +129,14 @@ public function openModal(array &$form, FormStateInterface $form_state) {
 'progress' => ['type' => 'none']
 ```
 
-## Common Mistakes
+**Common Mistakes:**
+- Not rebuilding form in AJAX callback (stale state)
+- Returning HTML instead of render array (XSS risk)
+- Missing AJAX library attachment
+- Using AJAX when #states would suffice (overcomplicated)
 
-- **Wrong**: Not rebuilding form in AJAX callback → **Right**: Return updated form elements
-- **Wrong**: Returning HTML instead of render array → **Right**: Return render arrays for XSS safety
-- **Wrong**: Missing AJAX library attachment → **Right**: Library auto-attached by #ajax
-- **Wrong**: Using AJAX when #states would suffice → **Right**: Prefer #states for simple logic
-
-## See Also
-
-- [AJAX Architecture](ajax-architecture.md)
-- [Form States System](form-states-system.md)
-- [Security Best Practices](security-best-practices.md)
-- Documentation: [AJAX API Basic Concepts](https://www.drupal.org/docs/drupal-apis/ajax-api/basic-concepts)
-- Reference: `/web/core/lib/Drupal/Core/Ajax/`
+**See Also:**
+- Modal Dialog Guide
+- Form States System (dedicated section)
+- JavaScript API Guide
+- Official: [AJAX API Basic Concepts](https://www.drupal.org/docs/drupal-apis/ajax-api/basic-concepts)

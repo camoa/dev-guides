@@ -5,21 +5,7 @@ drupal_version: "11.x"
 
 # AJAX Form Architecture
 
-## When to Use
-
-> Use AJAX when options must change based on server data. Use #states for simple show/hide logic.
-
-## Decision
-
-| Need | Solution | Why |
-|------|----------|-----|
-| Dependent dropdowns | AJAX | Options from server |
-| Show/hide fields | #states | Client-side, faster |
-| Load entities/data | AJAX | Server-side data |
-| Multiple element updates | AjaxResponse + Commands | Granular control |
-| Single element update | Return render array | Simpler |
-
-## Core AJAX System
+### Core AJAX System
 
 **System Components:**
 | Component | File | Purpose |
@@ -28,9 +14,11 @@ drupal_version: "11.x"
 | Event Subscriber | `/web/core/lib/Drupal/Core/Form/EventSubscriber/FormAjaxSubscriber.php` | Handles AJAX events |
 | Command Library | `/web/core/lib/Drupal/Core/Ajax/` | AJAX commands |
 
-Reference: `/web/core/modules/system/tests/modules/ajax_forms_test/src/Form/AjaxFormsTestSimpleForm.php`
+**Reference Examples:**
+- Simple AJAX: `/web/core/modules/system/tests/modules/ajax_forms_test/src/Form/AjaxFormsTestSimpleForm.php`
+- Shows: Select, checkbox, grouped elements with AJAX callbacks
 
-## Element AJAX Property
+### Element AJAX Property
 
 **Configuration Array:**
 ```php
@@ -48,13 +36,15 @@ Reference: `/web/core/modules/system/tests/modules/ajax_forms_test/src/Form/Ajax
 ```
 
 **Common Events:**
-- change - Select, checkbox, radio (default)
-- click - Buttons, links
-- keyup - Textfields (use with debouncing)
-- blur - On field exit
-- custom - Custom JavaScript event
+```
+change - Select, checkbox, radio (default)
+click - Buttons, links
+keyup - Textfields (use with debouncing)
+blur - On field exit
+custom - Custom JavaScript event
+```
 
-## AJAX Callback Patterns
+### AJAX Callback Patterns
 
 **Pattern 1: Return Element (Simple):**
 ```php
@@ -77,7 +67,14 @@ public function ajaxCallback(array &$form, FormStateInterface $form_state) {
 }
 ```
 
-## Core AJAX Commands
+**Static Callbacks for Anonymous Users:**
+```
+Issue: Non-static methods fail with anonymous users + Symfony
+Solution: Make callback methods static
+Reference: Drupal at your Fingertips - AJAX section
+```
+
+### Core AJAX Commands
 
 **Common Commands:**
 | Command | Purpose | Parameters |
@@ -91,18 +88,18 @@ public function ajaxCallback(array &$form, FormStateInterface $form_state) {
 | InvokeCommand | Call JS method | selector, method, arguments |
 | OpenModalDialogCommand | Open modal | title, content, options |
 
-Location: `/web/core/lib/Drupal/Core/Ajax/`
+**Command Files:**
+- Location: `/web/core/lib/Drupal/Core/Ajax/`
+- Study: Individual command classes for usage patterns
 
-## Common Mistakes
+**Common Mistakes:**
+- Forgetting wrapper ID in #ajax (nothing to replace)
+- Wrapper ID doesn't exist in form (AJAX fails silently)
+- Not returning render array or AjaxResponse (AJAX error)
+- Using non-unique wrapper IDs (replaces wrong element)
 
-- **Wrong**: Forgetting wrapper ID in #ajax → **Right**: Add wrapper ID to target element
-- **Wrong**: Wrapper ID doesn't exist in form → **Right**: Ensure ID exists
-- **Wrong**: Not returning render array or AjaxResponse → **Right**: Return proper type
-- **Wrong**: Using non-unique wrapper IDs → **Right**: Use unique IDs
-
-## See Also
-
-- [AJAX Security](ajax-security.md)
-- [Form States System](form-states-system.md)
-- Documentation: [AJAX Forms](https://www.drupal.org/docs/develop/drupal-apis/javascript-api/ajax-forms)
-- Reference: `/web/core/lib/Drupal/Core/Ajax/`
+**See Also:**
+- AJAX Security (next section)
+- AJAX Commands Reference (dedicated section)
+- JavaScript API Guide
+- Official: [AJAX Forms](https://www.drupal.org/docs/develop/drupal-apis/javascript-api/ajax-forms)

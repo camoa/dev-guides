@@ -5,19 +5,7 @@ drupal_version: "11.x"
 
 # Form Elements: Lifecycle Callbacks
 
-## When to Use
-
-> Use #process to add children. Use #after_build for complete tree access. Use #pre_render for final display changes.
-
-## Decision
-
-| Phase | Callback | Can Modify | Use For |
-|-------|----------|------------|---------|
-| Build | #process | Structure | Add child elements, AJAX wrappers |
-| Build | #after_build | Anything | Access complete tree, dependencies |
-| Render | #pre_render | Display | Final HTML modifications, libraries |
-
-## Element Processing Callbacks
+### Element Processing Callbacks
 
 **Callback Execution Order:**
 ```
@@ -26,50 +14,54 @@ drupal_version: "11.x"
 3. #pre_render - Final modifications before rendering
 ```
 
-**#process Pattern:**
-```php
-'#process' => [
-  '::processElement',
-  'callback_function_name',
-]
-```
+**When to Use Each:**
+| Callback | Phase | Common Use | Can Modify |
+|----------|-------|------------|------------|
+| #process | Build | Add child elements, AJAX wrappers | Structure |
+| #after_build | Build | Access complete tree, add dependencies | Anything |
+| #pre_render | Render | Final HTML modifications, libraries | Display |
 
-- Runs during form building
-- Can add child elements dynamically
-- Core example: password_confirm adds two password fields
+**#process Pattern:**
+```
+Runs during form building
+Can add child elements dynamically
+Core example: password_confirm adds two password fields
+Common use: Container elements, composite fields
+```
 
 **#after_build Pattern:**
-```php
-'#after_build' => ['::afterBuildCallback']
 ```
-
-- Runs after entire form tree exists
-- Can access parent/sibling elements
-- Common use: Add form-wide dependencies
+Runs after entire form tree exists
+Can access parent/sibling elements
+Common use: Add form-wide dependencies
+```
 
 **#pre_render Pattern:**
-```php
-'#pre_render' => ['::preRenderCallback']
+```
+Runs just before rendering to HTML
+Final chance to modify display
+Common use: Attach libraries, alter markup
 ```
 
-- Runs just before rendering to HTML
-- Final chance to modify display
-- Common use: Attach libraries, alter markup
-
-Reference: `/web/core/lib/Drupal/Core/Render/Element/FormElement.php`
-
-## Value and Validation Callbacks
+### Value and Validation Callbacks
 
 **#value_callback:**
-```php
-'#value_callback' => 'callback_function_name'
+```
+Purpose: Custom value extraction from form input
+When: Element has complex value structure
+Example: Date elements combine multiple inputs
+Reference: /web/core/lib/Drupal/Core/Render/Element/FormElement.php
 ```
 
-- Purpose: Custom value extraction from form input
-- When: Element has complex value structure
-- Example: Date elements combine multiple inputs
-
 **#element_validate:**
+```
+Purpose: Element-specific validation
+Type: Array of callback functions
+Runs: Before form-level validation
+Common: Format validation, range checks
+```
+
+**Element Validation Pattern:**
 ```php
 '#element_validate' => [
   '::validateElement',
@@ -77,12 +69,7 @@ Reference: `/web/core/lib/Drupal/Core/Render/Element/FormElement.php`
 ]
 ```
 
-- Purpose: Element-specific validation
-- Runs: Before form-level validation
-- Common: Format validation, range checks
-
-## Callback Security
-
+**Callback Security:**
 ```
 FormBuilder maintains callback whitelist
 Only approved callbacks run without token validation
@@ -90,17 +77,13 @@ Custom callbacks validated after token check
 Never use user input as callback names
 ```
 
-Reference: `/web/core/lib/Drupal/Core/Form/FormBuilder.php` lines 133-156
+**Common Mistakes:**
+- Using #process when #pre_render appropriate (inefficient)
+- Modifying values in #pre_render (too late, use #process)
+- Not understanding callback execution order
+- Adding element validators that need form-level context
 
-## Common Mistakes
-
-- **Wrong**: Using #process when #pre_render appropriate (inefficient) → **Right**: Use correct phase
-- **Wrong**: Modifying values in #pre_render (too late) → **Right**: Use #process for value changes
-- **Wrong**: Not understanding callback execution order → **Right**: Study the flow
-- **Wrong**: Adding element validators that need form-level context → **Right**: Use form validation
-
-## See Also
-
-- [Validation Architecture](validation-architecture.md)
-- [Form Builder Service](https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Form!FormBuilder.php)
-- Reference: `/web/core/lib/Drupal/Core/Render/Element/`
+**See Also:**
+- Validation Architecture (dedicated section)
+- Form Builder Service
+- Security: Value Callback Whitelist

@@ -5,19 +5,7 @@ drupal_version: "11.x"
 
 # Form Alter System
 
-## When to Use
-
-> Use specific hook (FORM_ID) when possible. Add cache contexts when alter varies by context. Use #access instead of unset().
-
-## Decision
-
-| Situation | Hook | Why |
-|-----------|------|-----|
-| Specific form | `hook_form_FORM_ID_alter()` | Performance |
-| Base form (e.g., node_form) | `hook_form_BASE_FORM_ID_alter()` | Shared forms |
-| All forms | `hook_form_alter()` | Global changes |
-
-## Hook Implementation Order
+### Hook Implementation Order
 
 **Execution Sequence:**
 ```
@@ -41,9 +29,9 @@ Modules run by:
 Lower weight = runs first
 ```
 
-Reference: `/web/core/lib/Drupal/Core/Form/form.api.php` lines 164-322
+**Reference:** `/web/core/lib/Drupal/Core/Form/form.api.php` lines 164-322
 
-## Common Alter Patterns
+### Common Alter Patterns
 
 **Add Validation Handler:**
 ```php
@@ -82,7 +70,15 @@ $form['field_name']['#access'] = FALSE;
 $form['field_name']['#disabled'] = TRUE;
 ```
 
-## Advanced Alter Patterns
+**Remove Element:**
+```php
+unset($form['field_name']);
+
+// OR hide it
+$form['field_name']['#access'] = FALSE;
+```
+
+### Advanced Alter Patterns
 
 **Add Conditional Field (#states):**
 ```php
@@ -108,7 +104,23 @@ array_unshift($form['#submit'], 'mymodule_first_submit');
 $form['#submit'][] = 'mymodule_last_submit';
 ```
 
-## Cache Context Considerations
+**Change Button Text:**
+```php
+$form['actions']['submit']['#value'] = t('Custom Text');
+$form['actions']['delete']['#value'] = t('Remove');
+```
+
+**Add Custom Button:**
+```php
+$form['actions']['custom'] = [
+  '#type' => 'submit',
+  '#value' => t('Custom Action'),
+  '#submit' => ['mymodule_custom_action_submit'],
+  '#weight' => 10,
+];
+```
+
+### Cache Context Considerations
 
 **Add Cache Dependencies:**
 ```php
@@ -136,7 +148,30 @@ Add context when alter output varies by:
 - URL parameters
 ```
 
-## Best Practices
+### Debugging Form Alters
+
+**Display Form ID:**
+```php
+function mymodule_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  \Drupal::messenger()->addMessage('Form ID: ' . $form_id);
+}
+```
+
+**Log Form Structure:**
+```php
+\Drupal::logger('mymodule')->debug('<pre>@form</pre>', [
+  '@form' => print_r($form, TRUE),
+]);
+```
+
+**Check Execution Order:**
+```php
+\Drupal::logger('mymodule')->debug('Form alter running for: @id', [
+  '@id' => $form_id,
+]);
+```
+
+### Best Practices
 
 **DO:**
 - Use specific hook (FORM_ID) when possible (performance)
@@ -150,16 +185,14 @@ Add context when alter output varies by:
 - Replace all submit handlers unless necessary
 - Forget cache contexts for conditional alters
 
-## Common Mistakes
+**Common Mistakes:**
+- Not checking if element exists before modifying
+- Using form_alter for all forms (performance)
+- Removing handlers other modules added
+- Not testing alter execution order with multiple modules
 
-- **Wrong**: Not checking if element exists before modifying → **Right**: Use `isset($form['field'])`
-- **Wrong**: Using form_alter for all forms (performance) → **Right**: Use specific hook
-- **Wrong**: Removing handlers other modules added → **Right**: Append/prepend, don't replace
-- **Wrong**: Not testing alter execution order with multiple modules → **Right**: Test with dependencies
-
-## See Also
-
-- [Form States System](form-states-system.md)
-- [Cache API](https://www.drupal.org/docs/drupal-apis/cache-api)
-- Documentation: [Form API Hooks](https://www.drupal.org/docs/drupal-apis/form-api/introduction-to-form-api)
-- Reference: `/web/core/lib/Drupal/Core/Form/form.api.php`
+**See Also:**
+- Hook System Guide
+- Cache API Guide
+- Form States System (next section)
+- Official: [Form API Hooks](https://www.drupal.org/docs/drupal-apis/form-api/introduction-to-form-api)

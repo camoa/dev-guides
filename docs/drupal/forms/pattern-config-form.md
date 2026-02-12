@@ -5,11 +5,65 @@ drupal_version: "11.x"
 
 # Pattern: Configuration Form (ConfigFormBase)
 
-## When to Use
+### When to Use
 
-> Use ConfigFormBase for admin settings. Use #config_target (10.2+) for declarative binding. Use FormBase for non-config data.
+**Appropriate Use Cases:**
+- Admin settings forms
+- System configuration pages
+- Module settings (admin/config paths)
+- Site-wide preferences
 
-## Decision
+**When NOT to Use:**
+- Non-configuration data storage → Use FormBase + custom storage
+- Entity configuration → Use EntityForm
+- Temporary workflow data → Use FormBase with FormState
+
+### Implementation Pattern
+
+**Core Example:**
+- File: `/web/core/lib/Drupal/Core/Form/ConfigFormBase.php`
+- Pattern: Automatic config sync via #config_target (Drupal 10.2+)
+- Study: Lines 106-120 (ConfigTarget), 203-262 (typed validation)
+
+**Contrib Example:**
+- File: `/modules/contrib/ai_provider_anthropic/src/Form/AnthropicConfigForm.php`
+- Pattern: Config constants, `getEditableConfigNames()`, manual save
+- Shows: Traditional pattern (pre-#config_target)
+
+**Required Configuration Files:**
+1. `config/install/mymodule.settings.yml` - Default values
+2. `config/schema/mymodule.schema.yml` - Typed data definition
+
+### Modern Pattern: #config_target (Drupal 10.2+)
+
+**Declarative Config Binding:**
+```
+'#config_target' property maps form elements to config properties
+Automatic sync: config → form and form → config
+Typed validation runs automatically from schema
+```
+
+**Benefits:**
+- Less code (no manual get/set in submit)
+- Automatic validation from schema constraints
+- Works outside forms (recipes, programmatic config)
+
+**Reference:**
+- Documentation: [#config_target in ConfigFormBase](https://www.drupal.org/node/3373502)
+- Core issue: [#3382510](https://www.drupal.org/project/drupal/issues/3382510)
+- Tutorial: [QED42: Exploring #config_target](https://www.qed42.com/insights/exploring-the-new-config-target-option-in-drupal-10)
+
+### Traditional Pattern (Pre-10.2)
+
+**Manual Config Management:**
+```
+buildForm(): $config->get('setting')
+submitForm(): $config->set('setting', $value)->save()
+```
+
+**Example:** AnthropicConfigForm lines 78-134
+
+### Key Decisions
 
 | Pattern | When to Use | Complexity |
 |---------|-------------|------------|
@@ -17,87 +71,24 @@ drupal_version: "11.x"
 | #config_target + ConfigTarget | Need transformations | Medium |
 | Manual get/set | Complex logic, conditional saving | High |
 
-## Pattern
-
-**Modern (#config_target - Drupal 10.2+):**
-
-```php
-<?php
-
-namespace Drupal\mymodule\Form;
-
-use Drupal\Core\Form\ConfigFormBase;
-use Drupal\Core\Form\FormStateInterface;
-
-class SettingsForm extends ConfigFormBase {
-
-  protected function getEditableConfigNames() {
-    return ['mymodule.settings'];
-  }
-
-  public function getFormId() {
-    return 'mymodule_settings_form';
-  }
-
-  public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['api_key'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('API Key'),
-      '#config_target' => 'mymodule.settings:api_key',
-    ];
-
-    return parent::buildForm($form, $form_state);
-  }
-}
+**Override Detection:**
+```
+ConfigFormBase automatically shows override warnings
+Respects config overrides (settings.php)
+Use hasOverrides() to check programmatically
 ```
 
-**Traditional (Manual sync):**
+**Common Mistakes:**
+- Forgetting `getEditableConfigNames()` implementation
+  - **WHY BAD:** Config override detection breaks, can't determine which configs form modifies, permission system can't enforce restrictions
+- Not creating schema file (validation won't work)
+  - **WHY BAD:** #config_target validation fails, typed data constraints not enforced, no type checking, config import doesn't validate
+- Using ConfigFormBase for non-config storage
+  - **WHY BAD:** Expects config schema, requires getEditableConfigNames(), config override system confused, unnecessary complexity
+- Hardcoding config names instead of constants
+  - **WHY BAD:** Refactoring breaks all references, typos cause silent failures, IDE can't refactor, no autocomplete
 
-```php
-public function buildForm(array $form, FormStateInterface $form_state) {
-  $config = $this->config('mymodule.settings');
-
-  $form['api_key'] = [
-    '#type' => 'textfield',
-    '#title' => $this->t('API Key'),
-    '#default_value' => $config->get('api_key'),
-  ];
-
-  return parent::buildForm($form, $form_state);
-}
-
-public function submitForm(array &$form, FormStateInterface $form_state) {
-  $this->config('mymodule.settings')
-    ->set('api_key', $form_state->getValue('api_key'))
-    ->save();
-
-  parent::submitForm($form, $form_state);
-}
-```
-
-Reference: `/web/core/lib/Drupal/Core/Form/ConfigFormBase.php` lines 106-120
-
-## Required Configuration Files
-
-1. `config/install/mymodule.settings.yml` - Default values
-2. `config/schema/mymodule.schema.yml` - Typed data definition
-
-## Benefits of #config_target
-
-- Less code (no manual get/set in submit)
-- Automatic validation from schema constraints
-- Works outside forms (recipes, programmatic config)
-
-## Common Mistakes
-
-- **Wrong**: Forgetting `getEditableConfigNames()` implementation → **Right**: Return array of config names
-- **Wrong**: Not creating schema file (validation won't work) → **Right**: Define schema for validation
-- **Wrong**: Using ConfigFormBase for non-config storage → **Right**: Use FormBase for non-config data
-- **Wrong**: Hardcoding config names instead of constants → **Right**: Define config name constants
-
-## See Also
-
-- [Validation Architecture](validation-architecture.md)
-- [Typed Data Constraints](https://www.drupal.org/project/drupal/issues/2971727)
-- Documentation: [#config_target](https://www.drupal.org/node/3373502)
-- Reference: `/modules/contrib/ai_provider_anthropic/src/Form/AnthropicConfigForm.php`
+**See Also:**
+- Configuration API Guide
+- Typed Data Guide (for schema constraints)
+- Config Translation Guide

@@ -5,21 +5,17 @@ drupal_version: "11.x"
 
 # Form States System (#states)
 
-## When to Use
+### Overview
 
-> Use #states for client-side show/hide/enable/disable. Use AJAX when server-side data loading needed.
+**Purpose:** Client-side conditional field behavior (JavaScript)
+**Use When:** Show/hide, enable/disable based on other field values
+**Alternative:** AJAX (when server-side logic needed)
 
-## Decision
+**Reference:**
+- Documentation: [Conditional Form Fields](https://www.drupal.org/docs/drupal-apis/form-api/conditional-form-fields)
+- Implementation: `/web/core/misc/states.js`
 
-| Need | Solution | Why |
-|------|----------|-----|
-| Show/hide fields | #states | Client-side, instant |
-| Enable/disable fields | #states | No server call |
-| Change required status | #states | Conditional validation |
-| Dependent dropdowns | AJAX | Options from server |
-| Load entities/data | AJAX | Server-side data |
-
-## Supported States
+### Supported States
 
 **Visibility States:**
 | State | Effect |
@@ -48,30 +44,28 @@ drupal_version: "11.x"
 | expanded | Expand when condition true | Details |
 | collapsed | Collapse when condition true | Details |
 
-Reference: `/web/core/misc/states.js`
-
-## Trigger Conditions
+### Trigger Conditions
 
 **Checkbox Conditions:**
-```php
-['checked' => TRUE]   // Checkbox is checked
-['unchecked' => TRUE] // Checkbox is not checked
-```
+| Condition | When True |
+|-----------|-----------|
+| `['checked' => TRUE]` | Checkbox is checked |
+| `['unchecked' => TRUE]` | Checkbox is not checked |
 
 **Value Conditions:**
-```php
-['value' => 'foo']           // Exact value match
-['value' => ['foo', 'bar']]  // Value in array
-['!value' => 'foo']          // Value NOT equal
-```
+| Condition | When True |
+|-----------|-----------|
+| `['value' => 'foo']` | Exact value match |
+| `['value' => ['foo', 'bar']]` | Value in array |
+| `['!value' => 'foo']` | Value NOT equal |
 
 **State Conditions:**
-```php
-['empty' => TRUE]   // Field is empty
-['filled' => TRUE]  // Field has value
-```
+| Condition | When True |
+|-----------|-----------|
+| `['empty' => TRUE]` | Field is empty |
+| `['filled' => TRUE]` | Field has value |
 
-## Basic Syntax
+### Basic Syntax
 
 **Single Condition:**
 ```php
@@ -94,7 +88,7 @@ Reference: `/web/core/misc/states.js`
 ],
 ```
 
-## Selector Syntax
+### Selector Syntax
 
 **Input Name:**
 ```php
@@ -118,7 +112,7 @@ Reference: `/web/core/misc/states.js`
 ':input[name="field_name[option1]"]' => ['checked' => TRUE]
 ```
 
-## Complex Conditions
+### Complex Conditions
 
 **AND Conditions (All Must Be True):**
 ```php
@@ -152,7 +146,22 @@ Reference: `/web/core/misc/states.js`
 ],
 ```
 
-## Practical Examples
+**Nested Logic (AND + OR):**
+```php
+'#states' => [
+  'visible' => [
+    [':input[name="enable"]' => ['checked' => TRUE]],
+    'and',
+    [
+      [':input[name="type"]' => ['value' => 'custom']],
+      'or',
+      [':input[name="type"]' => ['value' => 'advanced']],
+    ],
+  ],
+],
+```
+
+### Practical Examples
 
 **Show Field When Checkbox Checked:**
 ```php
@@ -195,7 +204,7 @@ $form['dependent'] = [
 ];
 ```
 
-## States vs AJAX Decision
+### States vs AJAX Decision
 
 **Use #states When:**
 - Simple show/hide logic
@@ -211,17 +220,51 @@ $form['dependent'] = [
 - Field structure must change
 - Need to load entities/data
 
-## Common Mistakes
+**Combine Both:**
+```
+#states for instant UI feedback
+AJAX for data loading
+Best user experience
+```
 
-- **Wrong**: Missing :input in selector `'name="field"'` → **Right**: `:input[name="field"]`
-- **Wrong**: Using dot notation for nested `'container.field'` → **Right**: `'container[field]'`
-- **Wrong**: OR logic with separate conditions → **Right**: Use array + 'or' keyword
-- **Wrong**: Not matching exact form structure → **Right**: Inspect form to get correct selector
+### Common Mistakes
 
-## See Also
+**Wrong Selector:**
+```php
+// WRONG - missing :input
+'name="field"' => ['checked' => TRUE]
 
-- [AJAX Forms](ajax-architecture.md)
-- [Form Alter](form-alter-system.md)
-- Documentation: [Conditional Form Fields](https://www.drupal.org/docs/drupal-apis/form-api/conditional-form-fields)
-- Contrib: [Conditional Fields](https://www.drupal.org/project/conditional_fields)
-- Reference: `/web/core/misc/states.js`
+// CORRECT
+':input[name="field"]' => ['checked' => TRUE]
+```
+
+**Nested Field Selector:**
+```php
+// WRONG - missing brackets
+':input[name="container.field"]'
+
+// CORRECT
+':input[name="container[field]"]'
+```
+
+**OR Logic:**
+```php
+// WRONG - separate conditions = AND
+'visible' => [
+  ':input[name="a"]' => ['checked' => TRUE],
+  ':input[name="b"]' => ['checked' => TRUE],
+]
+
+// CORRECT - array + 'or'
+'visible' => [
+  [':input[name="a"]' => ['checked' => TRUE]],
+  'or',
+  [':input[name="b"]' => ['checked' => TRUE]],
+]
+```
+
+**See Also:**
+- AJAX Forms (when states insufficient)
+- Form Alter (adding states via hook)
+- JavaScript API Guide
+- Contributed module: [Conditional Fields](https://www.drupal.org/project/conditional_fields)

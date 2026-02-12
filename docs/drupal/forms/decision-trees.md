@@ -5,9 +5,11 @@ drupal_version: "11.x"
 
 # Decision Trees and Quick Reference
 
-## Form Base Class Selection
+### Form Base Class Selection
 
 ```
+Decision Flow:
+
 Need to manage configuration?
 ├─ Yes → ConfigFormBase
 │         - Admin settings
@@ -24,6 +26,7 @@ Need to manage configuration?
                 ├─ Yes → EntityForm
                 │         - Content entities
                 │         - Config entities
+                │         - See Entity API Guide
                 │
                 └─ No → FormBase
                           - General forms
@@ -31,9 +34,11 @@ Need to manage configuration?
                           - Integrations
 ```
 
-## Validation Strategy Selection
+### Validation Strategy Selection
 
 ```
+Validation Decision:
+
 Single field format/range check?
 ├─ Yes → Element Validation
 │         - #element_validate property
@@ -50,13 +55,16 @@ Single field format/range check?
                 ├─ Yes → Typed Config Validation
                 │         - Define in schema.yml
                 │         - Automatic constraints
+                │         - Works outside forms
                 │
                 └─ No → Combine multiple levels
 ```
 
-## AJAX Implementation Selection
+### AJAX Implementation Selection
 
 ```
+AJAX Decision:
+
 Need dynamic options based on user input?
 ├─ Yes → AJAX Required
 │         - Dependent dropdowns
@@ -80,7 +88,7 @@ Need dynamic options based on user input?
                           - Return render array
 ```
 
-## Element Selection Quick Reference
+### Element Selection Quick Reference
 
 ```
 Input Type Needed:
@@ -126,7 +134,7 @@ Grouping?
 └─ Tabs? → vertical_tabs
 ```
 
-## Form Caching Decision
+### Form Caching Decision
 
 ```
 Cache Decision:
@@ -147,7 +155,7 @@ Simple form, no rebuilds?
 └─ No caching needed
 ```
 
-## Common Form Patterns Matrix
+### Common Form Patterns Matrix
 
 | Pattern | Base Class | Caching | Validation | Typical Use |
 |---------|------------|---------|------------|-------------|
@@ -160,11 +168,7 @@ Simple form, no rebuilds?
 | Search form | FormBase | No | Minimal | GET method search |
 | Batch operation | FormBase | No | Form-level | Bulk processing |
 
-## See Also
-
-- [Architecture: Core Classes](architecture-core-classes.md)
-- [Form Patterns](pattern-standard-form.md)
-- [Element Reference](elements-overview.md)
-- [Validation](validation-architecture.md)
-- [AJAX](ajax-architecture.md)
-- [Multi-Step Forms](multi-step-forms.md)
+**See Also:**
+- Architecture sections for details
+- Pattern sections for implementation
+- Element reference for properties

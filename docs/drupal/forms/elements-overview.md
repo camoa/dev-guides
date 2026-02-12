@@ -5,26 +5,21 @@ drupal_version: "11.x"
 
 # Form Elements: Overview and Categories
 
-## When to Use
+### Element Type System
 
-> Use this reference when choosing the right element type for user input or layout.
+**Architecture:**
+- Location: `/web/core/lib/Drupal/Core/Render/Element/`
+- Base classes: `FormElementBase`, `RenderElementBase`
+- Plugin system: Element annotations define metadata
 
-## Decision
+**Element Discovery:**
+```
+All elements in Element/ directory
+Study element class for properties and behaviors
+@FormElement annotation defines #type
+```
 
-| Input Need | Element Type | Category |
-|-----------|--------------|----------|
-| Short text | textfield, email, tel, url | Input |
-| Long text | textarea | Input |
-| Number | number, range | Input |
-| Date/time | date, datetime, datelist | Input |
-| Password | password, password_confirm | Input |
-| Single choice | select, radios | Selection |
-| Multiple choice | checkboxes, select (multiple) | Selection |
-| File upload | managed_file, file | File |
-| Button | submit, button | Action |
-| Grouping | container, fieldset, details | Grouping |
-
-## Element Categories
+### Element Categories
 
 **Input Elements** (user enters data):
 - Text: textfield, textarea, email, tel, url, search
@@ -37,15 +32,20 @@ drupal_version: "11.x"
 - Multiple: checkboxes
 - Binary: checkbox
 
-**File Elements**: file, managed_file
+**File Elements** (file uploads):
+- file, managed_file
 
-**Action Elements**: submit, button, image_button
+**Action Elements** (trigger behavior):
+- submit, button, image_button
 
-**Grouping Elements**: container, fieldset, details, vertical_tabs, actions
+**Grouping Elements** (organize layout):
+- container, fieldset, details, vertical_tabs, actions
 
-**Special Elements**: hidden, token, markup, item, table, entity_autocomplete
+**Special Elements** (specific purposes):
+- hidden, token, markup, item, table, tableselect
+- entity_autocomplete (entity reference)
 
-## Universal Element Properties
+### Universal Element Properties
 
 | Property | Purpose | All Elements |
 |----------|---------|--------------|
@@ -59,25 +59,8 @@ drupal_version: "11.x"
 | #attributes | HTML attributes array | All |
 | #prefix, #suffix | Wrapper markup | All |
 
-## Element Discovery
-
-```
-All elements in: /web/core/lib/Drupal/Core/Render/Element/
-Study element class for properties and behaviors
-@FormElement annotation defines #type
-```
-
-## Common Mistakes
-
-- **Wrong**: Using wrong element type for data (textfield for date) → **Right**: Use semantic HTML5 types
-- **Wrong**: Not setting #required for mandatory fields → **Right**: Use #required property
-- **Wrong**: Forgetting #default_value for edit forms → **Right**: Set default values from entity/config
-
-## See Also
-
-- [Input Elements](elements-input.md)
-- [Selection Elements](elements-selection.md)
-- [Grouping Elements](elements-grouping.md)
-- [Element Lifecycle](elements-lifecycle.md)
-- Reference: `/web/core/lib/Drupal/Core/Render/Element/`
-- Documentation: [Form Element Reference](https://drupalize.me/tutorial/form-element-reference)
+**See Also:**
+- Input Elements Reference (next section)
+- Selection Elements Reference
+- Element Lifecycle (callbacks section)
+- Official: [Form Element Reference](https://drupalize.me/tutorial/form-element-reference)

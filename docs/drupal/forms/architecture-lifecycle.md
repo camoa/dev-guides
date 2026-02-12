@@ -7,16 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this reference when debugging form flow or implementing multi-step forms.
-
-## Decision
-
-| Situation | Storage Type | Method |
-|-----------|--------------|--------|
-| Multi-step data | Persistent | `$form_state->set()` / `get()` |
-| UI state | Temporary | `setTemporaryValue()` |
-| Form input values | Values | `getValue()` |
-| Multi-step form | Caching | `setCached(TRUE)` REQUIRED |
+> Use this reference to understand form request flow, state persistence, and caching decisions.
 
 ## Request Flow
 
@@ -34,8 +25,6 @@ drupal_version: "11.x"
 3. If validation passes: runs submit handlers
 4. Redirects or returns custom response
 
-Reference: `/web/core/lib/Drupal/Core/Form/FormBuilder.php` lines 249-300
-
 ## State Management
 
 **FormState Object:**
@@ -43,15 +32,15 @@ Reference: `/web/core/lib/Drupal/Core/Form/FormBuilder.php` lines 249-300
 - Cached in database via `form_build_id` (when enabled)
 - Methods: `set()`/`get()` for persistent storage, `setTemporaryValue()` for single request
 
-**Storage Patterns:**
-| Type | Persistence | Use Case |
-|------|-------------|----------|
-| Temporary | Single request | UI state, display mode |
-| Persistent | Across rebuilds | Multi-step data, workflow state |
-| Cached | Database cache | Multi-step forms, expensive builds |
+## Decision
 
-## Form Caching Decision
+| Type | Method | Persistence | Use Case |
+|------|--------|-------------|----------|
+| Temporary | `setTemporaryValue()` | Single request | UI state, display mode |
+| Persistent | `set()`/`get()` | Across rebuilds | Multi-step data, workflow state |
+| Cached | `setCached(TRUE)` | Database cache | Multi-step forms, expensive builds |
 
+**Form Caching Decision:**
 ```
 Multi-step form? → setCached(TRUE) REQUIRED
 Frequent AJAX rebuilds? → setCached(TRUE) recommended
@@ -59,15 +48,35 @@ Expensive #options generation? → setCached(TRUE) recommended
 Simple single-step form? → No caching needed
 ```
 
+## Pattern
+
+```php
+// Multi-step form caching
+public function buildForm(array $form, FormStateInterface $form_state) {
+  $form_state->setCached(TRUE);
+
+  // Persistent storage across steps
+  $form_state->set('user_data', $data);
+
+  // Temporary (single request)
+  $form_state->setTemporaryValue('display_mode', 'advanced');
+
+  return $form;
+}
+```
+
 ## Common Mistakes
 
-- **Wrong**: Using local variables instead of `$form_state->set()` in multi-step forms → **Right**: Store in FormState
-- **Wrong**: Not calling `setCached(TRUE)` for multi-step forms → **Right**: Enable caching for persistence
-- **Wrong**: Storing sensitive data in cached forms without encryption → **Right**: Be mindful of cache security
+- **Wrong**: Using local variables instead of `$form_state->set()` in multi-step forms → **Right**: Store all step data in FormState
+  - WHY BAD: Local variables lost between page requests, form resets to step 1 on every submit
+- **Wrong**: Not calling `setCached(TRUE)` for multi-step forms → **Right**: Always enable caching for multi-step
+  - WHY BAD: FormState not persisted across requests, form_build_id link broken, multi-step navigation impossible
+- **Wrong**: Storing sensitive data in cached forms without encryption → **Right**: Use TempStore or encrypt cached data
+  - WHY BAD: cache_form table not encrypted, database dumps leak data, session hijacking exposes info
 
 ## See Also
 
-- [Multi-Step Forms](multi-step-forms.md)
-- [Form State Methods](form-state-methods.md)
-- [AJAX Architecture](ajax-architecture.md)
-- Reference: `/web/core/lib/Drupal/Core/Form/FormStateInterface.php`
+- [Multi-Step Form Pattern](multi-step-forms.md)
+- [Form State Methods Reference](form-state-methods.md)
+- [AJAX Form Architecture](ajax-architecture.md)
+- Reference: `/web/core/lib/Drupal/Core/Form/FormBuilder.php` lines 249-300

@@ -16,6 +16,7 @@ plugins:
         "Drupal":
           - drupal/index.md: "Drupal decision guides — forms, entities, config, rendering, frontend, architecture"
           - drupal/forms/index.md: "Forms — choosing form types, validation, AJAX, security"
+          - drupal/forms/overview.md: "Form API overview — core concepts, lifecycle, form type selection"
           - drupal/forms/architecture-core-classes.md: "Form API core classes — interfaces, base classes, services"
           - drupal/forms/architecture-lifecycle.md: "Form lifecycle — request flow, state management, caching"
           - drupal/forms/pattern-standard-form.md: "FormBase — general-purpose forms for custom business logic"
@@ -37,8 +38,10 @@ plugins:
           - drupal/forms/form-states-system.md: "Form states (#states) — client-side conditional field behavior"
           - drupal/forms/programmatic-submission.md: "Programmatic form submission — batch operations, testing, security"
           - drupal/forms/performance-optimization.md: "Performance optimization — form rendering, caching, validation strategies"
+          - drupal/forms/development-standards-antipatterns.md: "Development standards and anti-patterns — code quality, maintainability, best practices"
           - drupal/forms/security-best-practices.md: "Security best practices — CSRF, XSS, SQL injection, file uploads, access control"
           - drupal/forms/decision-trees.md: "Decision trees and quick reference — form selection, validation, AJAX, elements"
+          - drupal/forms/api-references.md: "API references — core files, methods, services, documentation links"
 
 nav:
   - Home: index.md
@@ -46,6 +49,7 @@ nav:
     - drupal/index.md
     - Forms:
       - drupal/forms/index.md
+      - drupal/forms/overview.md
       - Architecture:
         - drupal/forms/architecture-core-classes.md
         - drupal/forms/architecture-lifecycle.md
@@ -74,9 +78,11 @@ nav:
         - drupal/forms/form-states-system.md
         - drupal/forms/programmatic-submission.md
         - drupal/forms/performance-optimization.md
+        - drupal/forms/development-standards-antipatterns.md
         - drupal/forms/security-best-practices.md
       - Reference:
         - drupal/forms/decision-trees.md
+        - drupal/forms/api-references.md
 
 markdown_extensions:
   - tables
