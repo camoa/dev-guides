@@ -1,0 +1,31 @@
+site_name: Dev Guides
+site_url: https://camoa.github.io/dev-guides/
+site_description: AI-friendly decision guides for web development
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.indexes
+
+plugins:
+  - search
+  - llms-txt
+
+nav:
+  - Home: index.md
+  - Drupal:
+    - drupal/index.md
+    - Forms:
+      - drupal/forms/index.md
+      - drupal/forms/config-form-base.md
+      - drupal/forms/form-base.md
+      - drupal/forms/confirm-form-base.md
+      - drupal/forms/validation.md
+      - drupal/forms/ajax.md
+
+markdown_extensions:
+  - tables
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
