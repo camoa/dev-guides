@@ -10,7 +10,17 @@ theme:
 
 plugins:
   - search
-  - llms-txt
+  - llmstxt-md:
+      enable_copy_button: false
+      sections:
+        "Drupal":
+          - drupal/index.md: "Drupal decision guides — forms, entities, config, rendering, frontend, architecture"
+          - drupal/forms/index.md: "Forms — choosing the right form base, validation, AJAX"
+          - drupal/forms/config-form-base.md: "ConfigFormBase — module settings forms that save to config"
+          - drupal/forms/form-base.md: "FormBase — custom input forms that process data"
+          - drupal/forms/confirm-form-base.md: "ConfirmFormBase — confirmation step before destructive actions"
+          - drupal/forms/validation.md: "Form validation — validateForm, element validation, constraints"
+          - drupal/forms/ajax.md: "AJAX in forms — dynamic updates without full page reload"
 
 nav:
   - Home: index.md
