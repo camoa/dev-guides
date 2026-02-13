@@ -2,20 +2,84 @@
 
 Decision-making guides for web development, optimized for AI/LLM consumption.
 
-## How Guides Work
+## Architecture
 
-This site uses a two-stage workflow:
+```
+Source Guide (local)          Published Site (GitHub Pages)
+┌──────────────────┐          ┌──────────────────────────┐
+│ Comprehensive    │  guide-  │ docs/drupal/forms/       │
+│ single file with │──parti──→│   index.md (TOC)         │
+│ PARTITION markers│  tioner  │   config-form-base.md    │
+│                  │          │   validation.md          │
+└──────────────────┘          │   ...                    │
+        ▲                     └──────────────────────────┘
+        │ guide-framework-                │
+        │ maintainer                      ▼
+        │                          partition-manifest.json
+   Research, update,              (tracks source hashes)
+   add best practices
+```
 
-1. **Comprehensive source guides** — detailed single-file guides with partition markers, maintained elsewhere
-2. **Atomic guides** — extracted from source guides into small, focused files (max 80 lines each)
+**Two agents, two jobs:**
 
-The `guide-partitioner` agent (`.claude/agents/guide-partitioner.md`) handles the extraction from source to atomic format.
+| Agent | Purpose | When to use |
+|-------|---------|-------------|
+| `guide-framework-maintainer` | Research and update source guides | Source content is outdated or incomplete |
+| `guide-partitioner` | Extract atomic guides from source | Source guide has been updated (hash mismatch) |
+
+## Workflow
+
+### Updating existing content
+
+1. **Edit your source guide** — update content, add partition markers
+2. **Check if re-partitioning is needed** — `sha256sum <source-file>` vs `partition-manifest.json`
+3. **Run the partitioner** — extracts atomic guides, updates manifest with your name and hash
+4. **Submit a PR** — the manifest shows what changed and who did it
+
+### Creating a new topic
+
+1. **Write a comprehensive source guide** with partition markers (use the maintainer agent to help)
+2. **Run the partitioner** — generates `docs/<topic>/` with index + atomic guides
+3. **Submit a PR** — include the source guide path in your PR description
+
+### Using the agents (Claude Code)
+
+```
+# Maintain/update a source guide (research, add best practices)
+Use guide-framework-maintainer agent on /path/to/source-guide.md
+
+# Extract atomic guides from source
+Use guide-partitioner agent on /path/to/source-guide.md for topic drupal/forms
+```
 
 ## Guide Format
 
-### Atomic Guide (what gets published)
+### Source Guide (partition markers)
 
-Each guide covers one decision and follows this template:
+```markdown
+<!-- PARTITION: section-slug -->
+## Section Title
+
+### When to Use
+Brief scenario description.
+
+### Decision
+| If you need... | Use... | Why |
+
+### Pattern
+Minimal code (5-15 lines).
+
+### Common Mistakes
+- Mistake → Correction
+
+### See Also
+- Reference: source file or URL
+<!-- END PARTITION: section-slug -->
+```
+
+### Published Atomic Guide
+
+Each file covers one decision:
 
 ```markdown
 ---
@@ -26,31 +90,21 @@ drupal_version: "11.x"
 # Topic Name
 
 ## When to Use
-> Use [this] when [condition].
-
 ## Decision
-| Situation | Choose | Why |
-|-----------|--------|-----|
-
 ## Pattern
-Minimal code (5-15 lines).
-
 ## Common Mistakes
-- **Wrong**: X → **Right**: Y
-
 ## See Also
-- [Related guide](link.md)
 ```
 
 **Rules:**
-- Max 80 lines per file
 - No prose — tables, bullets, code only
 - One decision per file
+- Keep lean — no filler, as long as content requires
 - Include core file references and documentation URLs
 
 ### Topic Index
 
-Each topic directory has an `index.md` with a routing table:
+Each topic directory has an `index.md` routing table:
 
 ```markdown
 | I need to... | Guide |
@@ -58,32 +112,45 @@ Each topic directory has an `index.md` with a routing table:
 | Do X | [Guide Name](file.md) |
 ```
 
-Max 30 lines. Maps user intent to the right guide.
+## Partition Manifest
+
+`partition-manifest.json` tracks source-vs-published drift:
+
+```json
+{
+  "drupal/forms": {
+    "source_hash": "sha256-of-source-at-partition-time",
+    "partitioned": "2026-02-12",
+    "partitioned_by": "contributor-name",
+    "guides_extracted": 27
+  }
+}
+```
+
+- Hash mismatch = source was updated, needs re-partitioning
+- The partitioner updates this automatically after each run
+- Git history on the manifest provides full audit trail
 
 ## Structure
 
 ```
 docs/
 ├── drupal/
-│   ├── index.md          # Drupal master TOC
+│   ├── index.md              # Drupal master TOC
 │   ├── forms/
-│   │   ├── index.md      # Forms TOC
+│   │   ├── index.md          # Forms routing table
 │   │   ├── config-form-base.md
 │   │   └── ...
-│   ├── entities/
-│   └── ...
-├── nextjs/
-└── decoupled/
+│   ├── sdc/
+│   └── js-development/
+├── design-systems/
+│   ├── index.md              # Design Systems master TOC
+│   ├── recognition/
+│   ├── bootstrap/
+│   └── radix-sdc/
+├── nextjs/                   # Coming soon
+└── decoupled/                # Coming soon
 ```
-
-## Adding a Guide
-
-1. Create the `.md` file in the appropriate `docs/` directory
-2. Follow the atomic guide template above
-3. Update the topic's `index.md` with a new routing entry
-4. Update `mkdocs.yml`:
-   - Add to `nav` under the correct section
-   - Add to `plugins.llmstxt-md.sections` with a description
 
 ## Updating mkdocs.yml
 
@@ -91,18 +158,14 @@ Both sections must stay in sync:
 
 ```yaml
 nav:
-  - drupal/forms/my-new-guide.md    # Navigation
+  - drupal/forms/my-guide.md
 
 plugins:
   - llmstxt-md:
       sections:
         "Drupal":
-          - drupal/forms/my-new-guide.md: "Description for llms.txt"
+          - drupal/forms/my-guide.md: "Description for llms.txt"
 ```
-
-## AI Agent
-
-The `.claude/agents/guide-partitioner.md` agent automates extraction from comprehensive source guides. It reads partition markers and generates atomic guides in the correct format.
 
 ## Local Development
 
@@ -114,7 +177,7 @@ mkdocs build    # Build to site/
 
 ## Deployment
 
-Push to `main` — GitHub Actions builds and deploys to GitHub Pages automatically.
+Push to `main` — GitHub Actions builds and deploys to GitHub Pages automatically. The workflow only triggers on changes to `docs/`, `mkdocs.yml`, or `requirements.txt`.
 
 ## License
 

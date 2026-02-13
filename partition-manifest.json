@@ -1,0 +1,38 @@
+{
+  "drupal/forms": {
+    "source_hash": "82796f56b50464e93a56594f435d93c3b31a07fa4ff3f24e9927dff0d135ada3",
+    "partitioned": "2026-02-12",
+    "partitioned_by": "camoa",
+    "guides_extracted": 27
+  },
+  "drupal/sdc": {
+    "source_hash": "15931c6a039ada2e27985f05fe314417f97aa7368b5b5feb61ecb9e69cc79ef1",
+    "partitioned": "2026-02-12",
+    "partitioned_by": "camoa",
+    "guides_extracted": 14
+  },
+  "drupal/js-development": {
+    "source_hash": "cb29c6b341f9d919846e13e0fecc0e5d8ddeee1cb7c1c71b87c52b34bce8261c",
+    "partitioned": "2026-02-12",
+    "partitioned_by": "camoa",
+    "guides_extracted": 22
+  },
+  "design-systems/recognition": {
+    "source_hash": "9f337e6a9112b7de29ba1ce94f214bd5a6e386fe322df4584c8b4704e0d6bf3d",
+    "partitioned": "2026-02-12",
+    "partitioned_by": "camoa",
+    "guides_extracted": 13
+  },
+  "design-systems/bootstrap": {
+    "source_hash": "dded67b091e276852f8b0e549beb962bd818757650cd95d83f6e4dc1bc6a7615",
+    "partitioned": "2026-02-12",
+    "partitioned_by": "camoa",
+    "guides_extracted": 12
+  },
+  "design-systems/radix-sdc": {
+    "source_hash": "cb787d197646b19f545c9fb29a178e995af56b1f47578f77843d6f55f3e48518",
+    "partitioned": "2026-02-12",
+    "partitioned_by": "camoa",
+    "guides_extracted": 13
+  }
+}
