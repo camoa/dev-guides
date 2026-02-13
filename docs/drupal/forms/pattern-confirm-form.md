@@ -1,82 +1,90 @@
 ---
-description: ConfirmFormBase — confirmation dialogs for destructive actions
+description: ConfirmFormBase pattern for delete operations and destructive actions
 drupal_version: "11.x"
 ---
 
 # Pattern: Confirmation Form (ConfirmFormBase)
 
-### When to Use
+## When to Use
 
-**Appropriate Use Cases:**
-- Delete operations (content, entities, config)
-- Destructive actions (purge, reset, uninstall)
-- Critical confirmations (irreversible operations)
-- Yes/no decision points
+> Use ConfirmFormBase for delete operations and irreversible actions. Use FormBase for forms with additional input fields.
 
-**When NOT to Use:**
-- Multi-field forms → Use FormBase
-- Confirmations with additional inputs → Use FormBase with custom styling
+## Decision
 
-### Implementation Pattern
+| Situation | Choose | Why |
+|-----------|--------|-----|
+| Delete operations | ConfirmFormBase | Standard confirm UI |
+| Destructive actions (purge, reset) | ConfirmFormBase | Clear confirmation |
+| Yes/no decisions | ConfirmFormBase | Simple binary choice |
+| Multi-field forms | FormBase | More than yes/no |
+| Confirmations with inputs | FormBase | Custom styling needed |
 
-**Core Example:**
-- File: `/web/core/modules/dblog/src/Form/DblogClearLogConfirmForm.php`
-- Pattern: Minimal form, clear question, cancel link, custom confirm text
+## Pattern
 
-**Form Structure:**
+Minimal form with automatic confirm UI:
+
+```php
+use Drupal\Core\Form\ConfirmFormBase;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+
+class DeleteConfirmForm extends ConfirmFormBase {
+  public function getFormId() {
+    return 'mymodule_delete_confirm';
+  }
+
+  public function getQuestion() {
+    return $this->t('Are you sure you want to delete this item?');
+  }
+
+  public function getCancelUrl() {
+    return new Url('entity.node.collection');
+  }
+
+  public function getConfirmText() {
+    return $this->t('Delete'); // Default: "Confirm"
+  }
+
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    // Perform deletion
+    $this->messenger()->addStatus($this->t('Item deleted.'));
+    $form_state->setRedirectUrl($this->getCancelUrl());
+  }
+}
 ```
-Automatically provides:
-- Question text (from getQuestion())
-- Confirm button (from getConfirmText())
-- Cancel link (from getCancelUrl())
-- Standard confirmation form styling
-```
 
-### Required Methods
+## Required Methods
 
 | Method | Returns | Purpose |
 |--------|---------|---------|
 | `getQuestion()` | TranslatableMarkup | Main confirmation question |
-| `getCancelUrl()` | Url object | Destination if user cancels |
+| `getCancelUrl()` | Url object | Destination if canceled |
 | `getConfirmText()` | TranslatableMarkup | Submit button text (default: "Confirm") |
-| `getDescription()` | String (optional) | Additional warning/info text |
-| `getFormName()` | String (optional) | Internal form name |
+| `getDescription()` | String (optional) | Additional warning/info |
 
-**URL Pattern:**
-```
-Cancel URL: Usually entity/list page or referring page
-Use Url::fromRoute('entity.type.collection')
-Or $entity->toUrl('collection')
-```
+## Customization
 
-### Customization Options
+Add elements in buildForm() but call parent:
 
-**Custom Confirm Text:**
-```
-Different from "Confirm":
-- "Delete" for delete operations
-- "Remove" for remove operations
-- "Reset" for reset operations
+```php
+public function buildForm(array $form, FormStateInterface $form_state) {
+  $form['extra_option'] = [
+    '#type' => 'checkbox',
+    '#title' => $this->t('Also delete related items'),
+  ];
+  return parent::buildForm($form, $form_state);
+}
 ```
 
-**Additional Elements:**
-```
-Can add elements in buildForm()
-Common: Checkboxes for "don't ask again", deletion options
-Must call parent::buildForm() to preserve structure
-```
+## Common Mistakes
 
-**Common Mistakes:**
-- Forgetting to implement required methods (getQuestion, getCancelUrl)
-  - **WHY BAD:** PHP fatal error on form build, ConfirmFormBase expects these methods, form won't render
-- Returning string instead of Url object from getCancelUrl()
-  - **WHY BAD:** Type error in Drupal 9+, expects Url object for route access checking and language prefix handling
-- Adding complex form elements (defeats purpose of confirm form)
-  - **WHY BAD:** Users expect simple yes/no, complex forms confuse purpose, accessibility issues with mixed UI patterns
-- Not using descriptive confirm text (users ignore generic "Confirm")
-  - **WHY BAD:** Users click without reading "Confirm", destructive actions executed without understanding, poor UX
+- **Wrong**: Missing required methods → **Right**: Implement getQuestion() and getCancelUrl()
+- **Wrong**: getCancelUrl() returns string → **Right**: Return Url object
+- **Wrong**: Complex form elements → **Right**: Keep simple (defeats purpose)
+- **Wrong**: Generic "Confirm" text → **Right**: Descriptive action ("Delete", "Remove")
 
-**See Also:**
-- Delete Form Patterns (Entity API Guide)
-- URL Generation Guide
-- User Experience Guidelines
+## See Also
+
+- [URL Generation Guide](https://www.drupal.org/docs/drupal-apis/routing-system)
+- [User Experience Guidelines](https://www.drupal.org/docs/develop/user-interface-standards)
+- Reference: `/web/core/modules/dblog/src/Form/DblogClearLogConfirmForm.php`

@@ -1,5 +1,5 @@
 ---
-description: Form API overview — core concepts, lifecycle, form type selection
+description: Drupal Form API overview - declarative render array system for building secure forms
 drupal_version: "11.x"
 ---
 
@@ -7,54 +7,63 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this overview to understand Form API architecture and choose the right form approach.
-
-## Core Concepts
-
-- Forms are controllers accessed via routes with `_form` parameter
-- Forms implement FormInterface (or extend base classes)
-- Lifecycle: Build → Validate → Submit → Redirect
-- Security: CSRF tokens, input sanitization, access control
-- State management: FormState object persists across rebuilds
+> Use Form API when you need user input with validation and CSRF protection. Use render arrays for display-only content.
 
 ## Decision
 
-| Use Case | Form Type | Why |
-|----------|-----------|-----|
-| Admin settings | ConfigFormBase | Automatic config sync |
-| Custom business logic | FormBase | General purpose |
-| Delete/confirm action | ConfirmFormBase | Confirmation dialog |
-| Entity create/edit | EntityForm | Entity operations |
-| Multi-step workflow | FormBase + setCached() | State persistence |
+| Situation | Choose | Why |
+|-----------|--------|-----|
+| Admin settings | ConfigFormBase | Automatic config sync, schema validation |
+| Custom business logic | FormBase | Full control, service injection |
+| Delete/confirm action | ConfirmFormBase | Standard confirmation UI |
+| Entity create/edit | EntityForm | Entity-specific features (see Entity API guide) |
+| Multi-step workflow | FormBase + setCached() | State persistence across steps |
 
 ## Pattern
 
-Form API is a declarative render array-based system:
+Form API is declarative - you define structure, Drupal handles rendering and security.
 
 ```php
-public function buildForm(array $form, FormStateInterface $form_state) {
-  $form['field'] = [
-    '#type' => 'textfield',
-    '#title' => $this->t('Label'),
-    '#required' => TRUE,
-  ];
-  return $form;
+class ExampleForm extends FormBase {
+  public function getFormId() {
+    return 'example_form';
+  }
+
+  public function buildForm(array $form, FormStateInterface $form_state) {
+    $form['field'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Label'),
+      '#required' => TRUE,
+    ];
+    return $form;
+  }
+
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    $value = $form_state->getValue('field');
+    // Process submission
+  }
 }
 ```
 
-Forms handle the complete lifecycle: building, validation, submission, and security.
+## Core Concepts
+
+**Lifecycle:** Build → Validate → Submit → Redirect
+
+**Security:** Automatic CSRF tokens, input sanitization, access control
+
+**State Management:** FormState persists across rebuilds (AJAX, multi-step)
+
+**Forms as Controllers:** Accessed via routes with `_form` parameter
 
 ## Common Mistakes
 
-- **Wrong**: Choosing EntityForm for simple admin settings → **Right**: Use ConfigFormBase
-- **Wrong**: Using FormBase for confirmation dialogs → **Right**: Use ConfirmFormBase
-- **Wrong**: Building multi-step forms without setCached() → **Right**: Always enable caching for multi-step
+- **Wrong**: Implementing FormInterface directly → **Right**: Extend FormBase (get helper methods)
+- **Wrong**: Using `$_POST` directly → **Right**: Use `$form_state->getValue()` (sanitized, CSRF-checked)
+- **Wrong**: Business logic in buildForm() → **Right**: buildForm() for UI only, submitForm() for logic
 
 ## See Also
 
-- [Architecture: Core Classes](architecture-core-classes.md)
-- [Architecture: Lifecycle](architecture-lifecycle.md)
-- [Decision Trees](decision-trees.md)
-- Entity API Guide (for entity forms)
-- AJAX API Guide (for advanced AJAX patterns)
-- Security API Guide (for access control patterns)
+- [FormBase Pattern](pattern-standard-form.md)
+- [ConfigFormBase Pattern](pattern-config-form.md)
+- [Form Lifecycle](architecture-lifecycle.md)
+- Reference: `/web/core/lib/Drupal/Core/Form/`

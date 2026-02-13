@@ -1,15 +1,13 @@
 ---
-description: Decision trees and quick reference — form selection, validation, AJAX, elements
+description: Decision trees and quick reference matrices for form development
 drupal_version: "11.x"
 ---
 
 # Decision Trees and Quick Reference
 
-### Form Base Class Selection
+## Form Base Class Selection
 
 ```
-Decision Flow:
-
 Need to manage configuration?
 ├─ Yes → ConfigFormBase
 │         - Admin settings
@@ -34,11 +32,9 @@ Need to manage configuration?
                           - Integrations
 ```
 
-### Validation Strategy Selection
+## Validation Strategy Selection
 
 ```
-Validation Decision:
-
 Single field format/range check?
 ├─ Yes → Element Validation
 │         - #element_validate property
@@ -60,11 +56,9 @@ Single field format/range check?
                 └─ No → Combine multiple levels
 ```
 
-### AJAX Implementation Selection
+## AJAX Implementation Selection
 
 ```
-AJAX Decision:
-
 Need dynamic options based on user input?
 ├─ Yes → AJAX Required
 │         - Dependent dropdowns
@@ -88,57 +82,36 @@ Need dynamic options based on user input?
                           - Return render array
 ```
 
-### Element Selection Quick Reference
+## Element Selection Quick Reference
+
+| I need to... | Element Type |
+|-------------|--------------|
+| Short text input | textfield |
+| Long text input | textarea |
+| Email address | email |
+| Phone number | tel |
+| Web address | url |
+| Number with spinner | number |
+| Slider | range |
+| Password | password |
+| Password with confirmation | password_confirm |
+| Date only | date |
+| Date and time | datetime |
+| Select from 2-5 options | radios or select |
+| Select from >5 options | select |
+| Select from >50 options | entity_autocomplete |
+| Multiple choices | checkboxes |
+| Single yes/no | checkbox |
+| File upload (basic) | file |
+| File upload (managed) | managed_file |
+| Invisible wrapper | container |
+| Visible grouping | fieldset |
+| Collapsible section | details |
+| Tabbed interface | vertical_tabs |
+
+## Form Caching Decision
 
 ```
-Input Type Needed:
-
-Short text (< 255 chars)?
-├─ Email address? → email
-├─ Phone number? → tel
-├─ Web address? → url
-├─ Search query? → search
-└─ Generic text? → textfield
-
-Long text (> 255 chars)?
-└─ textarea
-
-Number?
-├─ Slider interface? → range
-└─ Numeric input? → number
-
-Date/Time?
-├─ Just date? → date
-├─ Date + time? → datetime
-└─ Need dropdowns? → datelist
-
-Password?
-├─ Single password? → password
-└─ With confirmation? → password_confirm
-
-Selection?
-├─ 2-5 options? → radios or select
-├─ > 5 options? → select
-├─ > 50 options? → entity_autocomplete
-├─ Multiple choices? → checkboxes
-└─ Single boolean? → checkbox
-
-File upload?
-├─ Need file entity? → managed_file
-└─ Basic upload? → file
-
-Grouping?
-├─ Invisible wrapper? → container
-├─ Visible with border? → fieldset
-├─ Collapsible? → details
-└─ Tabs? → vertical_tabs
-```
-
-### Form Caching Decision
-
-```
-Cache Decision:
-
 Multi-step form?
 └─ Yes → setCached(TRUE) REQUIRED
 
@@ -155,20 +128,43 @@ Simple form, no rebuilds?
 └─ No caching needed
 ```
 
-### Common Form Patterns Matrix
+## Common Patterns Matrix
 
-| Pattern | Base Class | Caching | Validation | Typical Use |
-|---------|------------|---------|------------|-------------|
-| Admin settings | ConfigFormBase | No | Typed config | Module config page |
+| Pattern | Base Class | Caching | Validation | Use Case |
+|---------|------------|---------|------------|----------|
+| Admin settings | ConfigFormBase | No | Typed config | Module config |
 | Contact form | FormBase | No | Form-level | User submissions |
 | Delete confirm | ConfirmFormBase | No | None | Delete operations |
 | Multi-step wizard | FormBase | Yes (required) | Partial + form | Complex workflow |
 | AJAX form | FormBase | Recommended | Form-level | Dynamic UI |
 | Entity create | EntityForm | No | Entity + form | Content creation |
-| Search form | FormBase | No | Minimal | GET method search |
+| Search form | FormBase | No | Minimal | GET method |
 | Batch operation | FormBase | No | Form-level | Bulk processing |
 
-**See Also:**
-- Architecture sections for details
-- Pattern sections for implementation
-- Element reference for properties
+## Performance Optimization Decision
+
+| Situation | Action | Why |
+|-----------|--------|-----|
+| >50 options in select | entity_autocomplete | Prevent large HTML |
+| >100 rows in query | Cache or defer | Slow database query |
+| N+1 entity loads | loadMultiple() | One query vs many |
+| External API in buildForm() | Defer to submit | Runs on every rebuild |
+| AJAX on keyup | Debounce | Prevent request flood |
+
+## Security Checklist
+
+| Security Concern | Solution | Reference |
+|------------------|----------|-----------|
+| CSRF attacks | Never disable tokens | Automatic |
+| XSS attacks | Use render arrays, t() | Never raw HTML |
+| SQL injection | Parameterized queries | Entity Query best |
+| File upload exploits | Whitelist extensions, private:// | #upload_validators |
+| Access bypass | Check permissions | #access property |
+
+## See Also
+
+- [FormBase Pattern](pattern-standard-form.md)
+- [ConfigFormBase Pattern](pattern-config-form.md)
+- [Validation Architecture](validation-architecture.md)
+- [AJAX Architecture](ajax-architecture.md)
+- [Performance Optimization](performance-optimization.md)

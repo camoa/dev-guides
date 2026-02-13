@@ -14,34 +14,115 @@ plugins:
       enable_copy_button: false
       sections:
         "Drupal":
-          - drupal/index.md: "Drupal decision guides — forms, entities, config, rendering, frontend, architecture"
-          - drupal/forms/index.md: "Forms — choosing form types, validation, AJAX, security"
-          - drupal/forms/overview.md: "Form API overview — core concepts, lifecycle, form type selection"
-          - drupal/forms/architecture-core-classes.md: "Form API core classes — interfaces, base classes, services"
-          - drupal/forms/architecture-lifecycle.md: "Form lifecycle — request flow, state management, caching"
-          - drupal/forms/pattern-standard-form.md: "FormBase — general-purpose forms for custom business logic"
-          - drupal/forms/pattern-config-form.md: "ConfigFormBase — admin settings forms with automatic config sync"
-          - drupal/forms/pattern-confirm-form.md: "ConfirmFormBase — confirmation dialogs for destructive actions"
-          - drupal/forms/elements-overview.md: "Form elements — types, categories, universal properties"
-          - drupal/forms/elements-input.md: "Input elements — text, numeric, password, date/time fields"
-          - drupal/forms/elements-selection.md: "Selection and file elements — dropdowns, radios, checkboxes, uploads"
-          - drupal/forms/elements-grouping.md: "Grouping and action elements — containers, fieldsets, buttons"
-          - drupal/forms/elements-lifecycle.md: "Element lifecycle callbacks — #process, #after_build, #pre_render"
-          - drupal/forms/validation-architecture.md: "Validation architecture — three-tier system, execution order, error methods"
-          - drupal/forms/validation-partial.md: "Partial validation — #limit_validation_errors for multi-step forms"
-          - drupal/forms/submission-architecture.md: "Submission architecture — handler priority, redirect patterns, state storage"
-          - drupal/forms/ajax-architecture.md: "AJAX forms — core system, element properties, callbacks, commands"
-          - drupal/forms/ajax-security.md: "AJAX security and advanced patterns — validation, XSS prevention, modals"
-          - drupal/forms/form-state-methods.md: "FormState methods reference — value access, storage, control flags, errors"
-          - drupal/forms/multi-step-forms.md: "Multi-step forms — caching, navigation, data persistence patterns"
-          - drupal/forms/form-alter-system.md: "Form alter system — hook order, alter patterns, cache contexts"
-          - drupal/forms/form-states-system.md: "Form states (#states) — client-side conditional field behavior"
-          - drupal/forms/programmatic-submission.md: "Programmatic form submission — batch operations, testing, security"
-          - drupal/forms/performance-optimization.md: "Performance optimization — form rendering, caching, validation strategies"
-          - drupal/forms/development-standards-antipatterns.md: "Development standards and anti-patterns — code quality, maintainability, best practices"
-          - drupal/forms/security-best-practices.md: "Security best practices — CSRF, XSS, SQL injection, file uploads, access control"
-          - drupal/forms/decision-trees.md: "Decision trees and quick reference — form selection, validation, AJAX, elements"
-          - drupal/forms/api-references.md: "API references — core files, methods, services, documentation links"
+          - drupal/index.md: "Drupal decision guides — forms, SDC components, JavaScript, entities, config, rendering, frontend, architecture"
+          - drupal/forms/index.md: "Drupal Form API decision guides - choose the right pattern, element, and approach"
+          - drupal/forms/overview.md: "Drupal Form API overview - declarative render array system for building secure forms"
+          - drupal/forms/architecture-core-classes.md: "Core Form API classes and interfaces - base classes, services, and selection criteria"
+          - drupal/forms/architecture-lifecycle.md: "Form request lifecycle and state management - build, validate, submit flow"
+          - drupal/forms/pattern-standard-form.md: "FormBase pattern for general-purpose forms with dependency injection"
+          - drupal/forms/pattern-config-form.md: "ConfigFormBase pattern with #config_target for automatic configuration sync"
+          - drupal/forms/pattern-confirm-form.md: "ConfirmFormBase pattern for delete operations and destructive actions"
+          - drupal/forms/elements-overview.md: "Form element type system - categories, discovery, and universal properties"
+          - drupal/forms/elements-input.md: "Input form elements - text, numeric, password, and date/time fields"
+          - drupal/forms/elements-selection.md: "Selection and file upload elements - select, radios, checkboxes, file uploads"
+          - drupal/forms/elements-grouping.md: "Grouping and action elements - containers, fieldsets, buttons for form organization"
+          - drupal/forms/elements-lifecycle.md: "Element lifecycle callbacks - #process, #after_build, #pre_render, and validation callbacks"
+          - drupal/forms/validation-architecture.md: "Three-tier validation architecture - element, form, and typed config validation"
+          - drupal/forms/validation-partial.md: "Partial validation pattern with #limit_validation_errors for multi-step forms"
+          - drupal/forms/submission-architecture.md: "Form submission architecture - handler priority, redirect patterns, and state storage"
+          - drupal/forms/ajax-architecture.md: "AJAX form architecture - core system, element properties, callbacks, and commands"
+          - drupal/forms/ajax-security.md: "AJAX security, XSS prevention, and advanced patterns like modals"
+          - drupal/forms/form-state-methods.md: "FormState methods reference - value access, storage, control flags, and error handling"
+          - drupal/forms/multi-step-forms.md: "Multi-step form pattern with state persistence and navigation"
+          - drupal/forms/form-alter-system.md: "Form alter hook system - execution order, alter patterns, and cache contexts"
+          - drupal/forms/form-states-system.md: "Form states system - client-side conditional field behavior with #states"
+          - drupal/forms/programmatic-submission.md: "Programmatic form submission for batch operations, testing, and automation"
+          - drupal/forms/performance-optimization.md: "Form performance optimization - rendering, caching, validation, and AJAX performance"
+          - drupal/forms/development-standards.md: "Development standards and anti-patterns - opinionated best practices and critical mistakes"
+          - drupal/forms/security-best-practices.md: "Security best practices - CSRF, XSS, SQL injection, and file upload security"
+          - drupal/forms/decision-trees.md: "Decision trees and quick reference matrices for form development"
+          - drupal/forms/api-references.md: "API references, core files, documentation links, and community resources"
+          - drupal/sdc/index.md: "Single Directory Components (SDC) — component architecture, development patterns, and best practices"
+          - drupal/sdc/sdc-architecture.md: "How Drupal discovers and loads SDC components using the plugin system"
+          - drupal/sdc/component-file-structure.md: "Required and optional files in SDC directory structure with automatic asset loading"
+          - drupal/sdc/component-yaml-schema.md: "Defining component metadata, props, slots, and library dependencies in YAML schema"
+          - drupal/sdc/twig-templates-in-sdcs.md: "Writing Twig templates for SDCs with props, slots, and attributes object"
+          - drupal/sdc/scss-css-in-sdcs.md: "CSS scoping with BEM, Bootstrap/Radix variable imports, and custom properties"
+          - drupal/sdc/javascript-in-sdcs.md: "Adding interactive behavior with Drupal.behaviors, once(), and progressive enhancement"
+          - drupal/sdc/component-composition.md: "Including components within components using include(), embed, or render arrays"
+          - drupal/sdc/props-vs-slots-decision-framework.md: "Deciding when to use props vs slots in component API design"
+          - drupal/sdc/component-variants.md: "Implementing component variations using enum props, separate components, or the variants API"
+          - drupal/sdc/replacing-templates-with-sdcs.md: "Migrating traditional Twig templates to SDC with theme overrides and field formatters"
+          - drupal/sdc/testing-sdcs.md: "Testing components with schema validation, Storybook, and visual regression"
+          - drupal/sdc/performance.md: "Optimizing component loading with automatic libraries, caching, and lazy loading"
+          - drupal/sdc/security.md: "Preventing XSS with auto-escaping, Attribute object, and props validation"
+          - drupal/sdc/anti-patterns.md: "Common component development anti-patterns with WHY explanations"
+          - drupal/js-development/index.md: "Drupal JavaScript Development - library-based architecture, behaviors, and modern patterns"
+          - drupal/js-development/javascript-architecture.md: "Drupal's library-based JavaScript architecture with behaviors, drupalSettings, and AJAX system"
+          - drupal/js-development/library-definitions.md: "Define JavaScript libraries in *.libraries.yml with dependencies and configuration"
+          - drupal/js-development/core-dependencies.md: "Essential Drupal core JavaScript library dependencies and when to use them"
+          - drupal/js-development/header-vs-footer-loading.md: "Choose header or footer placement for JavaScript loading based on criticality"
+          - drupal/js-development/library-attachment-methods.md: "Methods for attaching JavaScript libraries via PHP render arrays and hooks"
+          - drupal/js-development/conditional-loading.md: "Load JavaScript conditionally based on content type, route, user role, or other conditions"
+          - drupal/js-development/drupal-behaviors-pattern.md: "Core Drupal JavaScript pattern for AJAX-compatible DOM manipulation and initialization"
+          - drupal/js-development/once-api.md: "Prevent duplicate JavaScript initialization on elements using the once() API"
+          - drupal/js-development/drupal-settings.md: "Pass server-side PHP data to client-side JavaScript via drupalSettings"
+          - drupal/js-development/dom-manipulation.md: "Safe DOM manipulation patterns with vanilla JavaScript preferred over jQuery"
+          - drupal/js-development/ajax-integration.md: "Integrate JavaScript with Drupal's AJAX framework for dynamic content updates"
+          - drupal/js-development/event-handling.md: "Handle user interactions with addEventListener, event delegation, and debouncing"
+          - drupal/js-development/javascript-in-sdc-components.md: "Add interactive behavior to Single Directory Components with automatic library discovery"
+          - drupal/js-development/es-modules-and-modern-javascript.md: "Modern ES6+ JavaScript features available in Drupal 10/11 without build process"
+          - drupal/js-development/performance-optimization.md: "JavaScript performance optimization strategies for better user experience and SEO"
+          - drupal/js-development/aggregation-and-minification.md: "Enable JavaScript aggregation and minification for production performance"
+          - drupal/js-development/defer-and-async-attributes.md: "Non-blocking JavaScript loading with defer and async attributes"
+          - drupal/js-development/debounce-and-throttle.md: "Optimize high-frequency events with debounce and throttle patterns"
+          - drupal/js-development/security.md: "JavaScript security best practices for XSS prevention and CSP compliance"
+          - drupal/js-development/testing-javascript.md: "Test JavaScript functionality with Nightwatch.js"
+          - drupal/js-development/common-anti-patterns.md: "Common JavaScript mistakes in Drupal and how to avoid them"
+          - drupal/js-development/best-practices-summary.md: "JavaScript development standards checklist for Drupal projects"
+        "Design Systems":
+          - design-systems/index.md: "Design system guides — recognition, Bootstrap mapping, Radix SDC implementation"
+          - design-systems/recognition/index.md: "Design System Recognition — extract tokens and components from HTML/CSS, Figma, or screenshots"
+          - design-systems/recognition/design-tokens.md: "Extract color, typography, spacing, and surface tokens from any design system source"
+          - design-systems/recognition/component-classification.md: "Classify UI components into atoms, molecules, organisms, templates, and pages"
+          - design-systems/recognition/atom-recognition.md: "Identify the smallest functional UI building blocks"
+          - design-systems/recognition/molecule-recognition.md: "Recognize composite components that combine 2-3 atoms"
+          - design-systems/recognition/organism-recognition.md: "Identify complex interface sections composed of molecules and atoms"
+          - design-systems/recognition/templates-vs-pages.md: "Distinguish between layout structures and real implementations"
+          - design-systems/recognition/analysis-best-practices.md: "Assess design system quality and maturity during analysis"
+          - design-systems/recognition/html-css-analysis.md: "Extract design tokens and components from HTML/CSS source code"
+          - design-systems/recognition/figma-analysis.md: "Extract design tokens and components from Figma design files"
+          - design-systems/recognition/screenshot-analysis.md: "Recognize design patterns and components from UI screenshots"
+          - design-systems/recognition/reference-systems.md: "Industry-leading design system examples and token structure patterns"
+          - design-systems/recognition/standards-specifications.md: "W3C token format, WCAG accessibility, and atomic design methodology standards"
+          - design-systems/recognition/validation-checklist.md: "Comprehensive checklist to validate design system analysis completeness"
+          - design-systems/bootstrap/index.md: "Bootstrap 5.3 Mapping — systematic methodology for mapping design systems to Bootstrap"
+          - design-systems/bootstrap/bootstrap-accommodation-decision-framework.md: "Systematic methodology for deciding when to accommodate, extend, customize, or create"
+          - design-systems/bootstrap/scss-best-practices.md: "Critical anti-patterns and why they're harmful when customizing Bootstrap"
+          - design-systems/bootstrap/advanced-scss-best-practices.md: "Dart Sass requirements, performance optimization, and accessibility features"
+          - design-systems/bootstrap/quality-assurance-framework.md: "Validation checklist for Bootstrap accommodation decisions and SCSS best practices"
+          - design-systems/bootstrap/design-tokens-bootstrap-variables.md: "Mapping color, typography, spacing, surface, and breakpoint tokens to Bootstrap variables"
+          - design-systems/bootstrap/token-to-utility-flow.md: "How Bootstrap generates utility classes from tokens and how to extend the utility system"
+          - design-systems/bootstrap/atoms-bootstrap-components.md: "Mapping buttons, form inputs, and badges to Bootstrap's component system"
+          - design-systems/bootstrap/molecules-component-combinations.md: "Mapping input groups and card content to Bootstrap's component combinations"
+          - design-systems/bootstrap/organisms-layout-components.md: "Mapping navbars, complete cards, and forms to Bootstrap's complex components"
+          - design-systems/bootstrap/templates-bootstrap-grid.md: "Mapping page layouts and content structures to Bootstrap's grid system"
+          - design-systems/bootstrap/scss-integration-order.md: "Correct import sequence for Bootstrap customization and file organization"
+          - design-systems/bootstrap/key-bootstrap-scss-mechanisms.md: "Variable override system, map merging, mixins, and CSS custom properties generation"
+          - design-systems/radix-sdc/index.md: "Radix SDC — mapping design systems to Radix sub-themes with Single Directory Components"
+          - design-systems/radix-sdc/sub-theme-architecture.md: "Radix sub-theme architecture — directory structure, Bootstrap loading chain, configuration"
+          - design-systems/radix-sdc/design-tokens-configuration.md: "Radix design tokens configuration — variable override location, SCSS import order"
+          - design-systems/radix-sdc/atoms-sdc-components.md: "Creating atom SDC components in Radix — decision framework, component structure, button pattern"
+          - design-systems/radix-sdc/sdc-component-best-practices.md: "SDC component best practices — granularity decisions, props vs slots, SCSS scoping"
+          - design-systems/radix-sdc/radix-sub-theme-best-practices.md: "Radix sub-theme best practices — override strategy, variable location, starterkit usage"
+          - design-systems/radix-sdc/molecules-sdc-components.md: "Molecule SDC components — composing atoms, slots and composition"
+          - design-systems/radix-sdc/organisms-sdc-layout-builder.md: "Organism SDC components with Layout Builder integration"
+          - design-systems/radix-sdc/templates-drupal-theme-layer.md: "Templates and Drupal theme layer — page template structure, Layout Builder composition"
+          - design-systems/radix-sdc/layout-builder-best-practices.md: "Layout Builder vs templates vs Paragraphs, performance, editorial UX"
+          - design-systems/radix-sdc/performance-best-practices.md: "Theme performance — caching strategies, asset loading, image optimization"
+          - design-systems/radix-sdc/sdc-component-development.md: "SDC component development — YAML schema, props and slots, SCSS scoping, JavaScript"
+          - design-systems/radix-sdc/twig-preprocess-best-practices.md: "Twig and preprocess best practices — logic placement, template inheritance, attributes object"
+          - design-systems/radix-sdc/radix-component-reuse-strategy.md: "Radix component reuse strategy — component catalog, reuse decision framework"
 
 nav:
   - Home: index.md
@@ -50,39 +131,117 @@ nav:
     - Forms:
       - drupal/forms/index.md
       - drupal/forms/overview.md
-      - Architecture:
-        - drupal/forms/architecture-core-classes.md
-        - drupal/forms/architecture-lifecycle.md
-      - Patterns:
-        - drupal/forms/pattern-standard-form.md
-        - drupal/forms/pattern-config-form.md
-        - drupal/forms/pattern-confirm-form.md
-      - Elements:
-        - drupal/forms/elements-overview.md
-        - drupal/forms/elements-input.md
-        - drupal/forms/elements-selection.md
-        - drupal/forms/elements-grouping.md
-        - drupal/forms/elements-lifecycle.md
-      - Validation:
-        - drupal/forms/validation-architecture.md
-        - drupal/forms/validation-partial.md
-      - Submission:
-        - drupal/forms/submission-architecture.md
-      - AJAX:
-        - drupal/forms/ajax-architecture.md
-        - drupal/forms/ajax-security.md
-      - Advanced:
-        - drupal/forms/form-state-methods.md
-        - drupal/forms/multi-step-forms.md
-        - drupal/forms/form-alter-system.md
-        - drupal/forms/form-states-system.md
-        - drupal/forms/programmatic-submission.md
-        - drupal/forms/performance-optimization.md
-        - drupal/forms/development-standards-antipatterns.md
-        - drupal/forms/security-best-practices.md
-      - Reference:
-        - drupal/forms/decision-trees.md
-        - drupal/forms/api-references.md
+      - drupal/forms/architecture-core-classes.md
+      - drupal/forms/architecture-lifecycle.md
+      - drupal/forms/pattern-standard-form.md
+      - drupal/forms/pattern-config-form.md
+      - drupal/forms/pattern-confirm-form.md
+      - drupal/forms/elements-overview.md
+      - drupal/forms/elements-input.md
+      - drupal/forms/elements-selection.md
+      - drupal/forms/elements-grouping.md
+      - drupal/forms/elements-lifecycle.md
+      - drupal/forms/validation-architecture.md
+      - drupal/forms/validation-partial.md
+      - drupal/forms/submission-architecture.md
+      - drupal/forms/ajax-architecture.md
+      - drupal/forms/ajax-security.md
+      - drupal/forms/form-state-methods.md
+      - drupal/forms/multi-step-forms.md
+      - drupal/forms/form-alter-system.md
+      - drupal/forms/form-states-system.md
+      - drupal/forms/programmatic-submission.md
+      - drupal/forms/performance-optimization.md
+      - drupal/forms/development-standards.md
+      - drupal/forms/security-best-practices.md
+      - drupal/forms/decision-trees.md
+      - drupal/forms/api-references.md
+    - SDC:
+      - drupal/sdc/index.md
+      - drupal/sdc/sdc-architecture.md
+      - drupal/sdc/component-file-structure.md
+      - drupal/sdc/component-yaml-schema.md
+      - drupal/sdc/twig-templates-in-sdcs.md
+      - drupal/sdc/scss-css-in-sdcs.md
+      - drupal/sdc/javascript-in-sdcs.md
+      - drupal/sdc/component-composition.md
+      - drupal/sdc/props-vs-slots-decision-framework.md
+      - drupal/sdc/component-variants.md
+      - drupal/sdc/replacing-templates-with-sdcs.md
+      - drupal/sdc/testing-sdcs.md
+      - drupal/sdc/performance.md
+      - drupal/sdc/security.md
+      - drupal/sdc/anti-patterns.md
+    - JavaScript:
+      - drupal/js-development/index.md
+      - drupal/js-development/javascript-architecture.md
+      - drupal/js-development/library-definitions.md
+      - drupal/js-development/core-dependencies.md
+      - drupal/js-development/header-vs-footer-loading.md
+      - drupal/js-development/library-attachment-methods.md
+      - drupal/js-development/conditional-loading.md
+      - drupal/js-development/drupal-behaviors-pattern.md
+      - drupal/js-development/once-api.md
+      - drupal/js-development/drupal-settings.md
+      - drupal/js-development/dom-manipulation.md
+      - drupal/js-development/ajax-integration.md
+      - drupal/js-development/event-handling.md
+      - drupal/js-development/javascript-in-sdc-components.md
+      - drupal/js-development/es-modules-and-modern-javascript.md
+      - drupal/js-development/performance-optimization.md
+      - drupal/js-development/aggregation-and-minification.md
+      - drupal/js-development/defer-and-async-attributes.md
+      - drupal/js-development/debounce-and-throttle.md
+      - drupal/js-development/security.md
+      - drupal/js-development/testing-javascript.md
+      - drupal/js-development/common-anti-patterns.md
+      - drupal/js-development/best-practices-summary.md
+  - Design Systems:
+    - design-systems/index.md
+    - Recognition:
+      - design-systems/recognition/index.md
+      - design-systems/recognition/design-tokens.md
+      - design-systems/recognition/component-classification.md
+      - design-systems/recognition/atom-recognition.md
+      - design-systems/recognition/molecule-recognition.md
+      - design-systems/recognition/organism-recognition.md
+      - design-systems/recognition/templates-vs-pages.md
+      - design-systems/recognition/analysis-best-practices.md
+      - design-systems/recognition/html-css-analysis.md
+      - design-systems/recognition/figma-analysis.md
+      - design-systems/recognition/screenshot-analysis.md
+      - design-systems/recognition/reference-systems.md
+      - design-systems/recognition/standards-specifications.md
+      - design-systems/recognition/validation-checklist.md
+    - Bootstrap Mapping:
+      - design-systems/bootstrap/index.md
+      - design-systems/bootstrap/bootstrap-accommodation-decision-framework.md
+      - design-systems/bootstrap/scss-best-practices.md
+      - design-systems/bootstrap/advanced-scss-best-practices.md
+      - design-systems/bootstrap/quality-assurance-framework.md
+      - design-systems/bootstrap/design-tokens-bootstrap-variables.md
+      - design-systems/bootstrap/token-to-utility-flow.md
+      - design-systems/bootstrap/atoms-bootstrap-components.md
+      - design-systems/bootstrap/molecules-component-combinations.md
+      - design-systems/bootstrap/organisms-layout-components.md
+      - design-systems/bootstrap/templates-bootstrap-grid.md
+      - design-systems/bootstrap/scss-integration-order.md
+      - design-systems/bootstrap/key-bootstrap-scss-mechanisms.md
+    - Radix SDC:
+      - design-systems/radix-sdc/index.md
+      - design-systems/radix-sdc/sub-theme-architecture.md
+      - design-systems/radix-sdc/design-tokens-configuration.md
+      - design-systems/radix-sdc/atoms-sdc-components.md
+      - design-systems/radix-sdc/sdc-component-best-practices.md
+      - design-systems/radix-sdc/radix-sub-theme-best-practices.md
+      - design-systems/radix-sdc/molecules-sdc-components.md
+      - design-systems/radix-sdc/organisms-sdc-layout-builder.md
+      - design-systems/radix-sdc/templates-drupal-theme-layer.md
+      - design-systems/radix-sdc/layout-builder-best-practices.md
+      - design-systems/radix-sdc/performance-best-practices.md
+      - design-systems/radix-sdc/sdc-component-development.md
+      - design-systems/radix-sdc/twig-preprocess-best-practices.md
+      - design-systems/radix-sdc/radix-component-reuse-strategy.md
 
 markdown_extensions:
   - tables

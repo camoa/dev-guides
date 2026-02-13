@@ -10,7 +10,8 @@ Decision-making guides that answer: "When you need to do X, what should you choo
 
 | Area | Topics |
 |------|--------|
-| [Drupal](drupal/index.md) | Forms, Entities, Config, Render API, JS, HTMX, Plugins, Services, Routing, Security, Caching |
+| [Drupal](drupal/index.md) | Forms, SDC Components, JS Development, Entities, Config, Render API, HTMX, Plugins, Services, Routing, Security, Caching |
+| [Design Systems](design-systems/index.md) | Recognition, Bootstrap Mapping, Radix SDC Implementation |
 | Next.js | Data Fetching, Routing, State, API Routes (coming soon) |
 | Decoupled | JSON:API vs GraphQL, Auth, Content Modeling (coming soon) |
 

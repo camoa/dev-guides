@@ -1,66 +1,68 @@
 ---
-description: Form elements — types, categories, universal properties
+description: Form element type system - categories, discovery, and universal properties
 drupal_version: "11.x"
 ---
 
-# Form Elements: Overview and Categories
+# Form Elements: Overview
 
-### Element Type System
+## When to Use
 
-**Architecture:**
-- Location: `/web/core/lib/Drupal/Core/Render/Element/`
-- Base classes: `FormElementBase`, `RenderElementBase`
-- Plugin system: Element annotations define metadata
+> Choose element types based on data type and UI needs. All elements are plugins discovered from Element/ directory.
 
-**Element Discovery:**
-```
-All elements in Element/ directory
-Study element class for properties and behaviors
-@FormElement annotation defines #type
-```
+## Decision
 
-### Element Categories
+| Data Type | Element Category | Examples |
+|-----------|------------------|----------|
+| User enters data | Input elements | textfield, textarea, email, number |
+| User chooses options | Selection elements | select, radios, checkboxes |
+| User uploads files | File elements | file, managed_file |
+| Trigger behavior | Action elements | submit, button |
+| Organize layout | Grouping elements | container, fieldset, details |
 
-**Input Elements** (user enters data):
-- Text: textfield, textarea, email, tel, url, search
-- Numeric: number, range
-- Security: password, password_confirm
-- Date/Time: date, datetime, datelist
+## Element Categories
 
-**Selection Elements** (user chooses options):
-- Single: select, radios
-- Multiple: checkboxes
-- Binary: checkbox
+**Input Elements:** textfield, textarea, email, tel, url, search, number, range, password, date, datetime
 
-**File Elements** (file uploads):
-- file, managed_file
+**Selection Elements:** select, radios, checkboxes, checkbox
 
-**Action Elements** (trigger behavior):
-- submit, button, image_button
+**File Elements:** file, managed_file
 
-**Grouping Elements** (organize layout):
-- container, fieldset, details, vertical_tabs, actions
+**Action Elements:** submit, button, image_button
 
-**Special Elements** (specific purposes):
-- hidden, token, markup, item, table, tableselect
-- entity_autocomplete (entity reference)
+**Grouping Elements:** container, fieldset, details, vertical_tabs, actions
 
-### Universal Element Properties
+**Special Elements:** hidden, token, markup, item, table, entity_autocomplete
 
-| Property | Purpose | All Elements |
-|----------|---------|--------------|
-| #type | Element type | Required |
+## Universal Properties
+
+| Property | Purpose | Applicable To |
+|----------|---------|---------------|
+| #type | Element type (required) | All |
 | #title | Label text | Most |
 | #description | Help text | Most |
-| #required | Validation flag | Input elements |
+| #required | Validation flag | Input/selection |
 | #default_value | Initial value | Input/selection |
-| #access | Visibility (bool/AccessResult) | All |
+| #access | Visibility control | All |
 | #weight | Sort order | All |
-| #attributes | HTML attributes array | All |
+| #attributes | HTML attributes | All |
 | #prefix, #suffix | Wrapper markup | All |
 
-**See Also:**
-- Input Elements Reference (next section)
-- Selection Elements Reference
-- Element Lifecycle (callbacks section)
-- Official: [Form Element Reference](https://drupalize.me/tutorial/form-element-reference)
+## Element Discovery
+
+All elements located in `/web/core/lib/Drupal/Core/Render/Element/`
+
+Study element class for available properties and behaviors.
+
+## Common Mistakes
+
+- **Wrong**: Hardcoding HTML for form elements → **Right**: Use form element types
+- **Wrong**: Ignoring #access property → **Right**: Use for visibility control
+- **Wrong**: Not setting #title for accessibility → **Right**: Always provide labels
+
+## See Also
+
+- [Input Elements](elements-input.md)
+- [Selection Elements](elements-selection.md)
+- [Grouping Elements](elements-grouping.md)
+- [Element Lifecycle](elements-lifecycle.md)
+- Reference: [Form Element Reference](https://drupalize.me/tutorial/form-element-reference)

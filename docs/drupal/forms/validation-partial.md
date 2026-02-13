@@ -1,51 +1,44 @@
 ---
-description: Partial validation — #limit_validation_errors for multi-step forms
+description: Partial validation pattern with #limit_validation_errors for multi-step forms
 drupal_version: "11.x"
 ---
 
 # Validation: Partial Validation Pattern
 
-### Use Cases
+## When to Use
 
-**When to Use Partial Validation:**
-- Multi-step forms with "Previous" button
-- "Save draft" vs "Publish" buttons
-- Progressive disclosure forms
-- Forms with optional sections
+> Use partial validation for multi-step forms with "Previous" buttons, "Save draft" vs "Publish" buttons, or progressive disclosure forms.
 
-**When NOT to Use:**
-- Simple single-step forms
-- All fields always required
-- No multiple submit buttons
+## Decision
 
-### Implementation Pattern
+| Situation | Use Partial Validation | Why |
+|-----------|------------------------|-----|
+| Multi-step "Previous" button | Yes | Don't validate when going back |
+| "Save draft" vs "Publish" | Yes | Draft needs no validation |
+| Progressive disclosure | Yes | Only validate visible sections |
+| Simple single-step forms | No | Not needed |
+| All fields always required | No | Full validation appropriate |
 
-**#limit_validation_errors Property:**
-```
-Applied to: Button elements (submit, button)
-Effect: Only validates specified form sections
-Syntax: Array of arrays (element parents)
-```
+## Pattern
 
-**Example - Multi-Step Form:**
 ```php
+// Multi-step form: Previous button (no validation)
 $form['actions']['previous'] = [
   '#type' => 'submit',
   '#value' => $this->t('Previous'),
-  '#limit_validation_errors' => [['step1']], // Only validate step1
+  '#limit_validation_errors' => [], // No validation
   '#submit' => ['::previousSubmit'],
 ];
 
+// Multi-step form: Next button (validate current step only)
 $form['actions']['next'] = [
   '#type' => 'submit',
   '#value' => $this->t('Next'),
-  '#limit_validation_errors' => [['step2']], // Only validate step2
+  '#limit_validation_errors' => [['step1']], // Only validate step1
   '#submit' => ['::nextSubmit'],
 ];
-```
 
-**Example - Save Draft:**
-```php
+// Save draft (no validation) vs Publish (full validation)
 $form['actions']['draft'] = [
   '#type' => 'submit',
   '#value' => $this->t('Save Draft'),
@@ -61,71 +54,39 @@ $form['actions']['publish'] = [
 ];
 ```
 
-### Syntax Details
+## Syntax
 
-**Single Element:**
 ```php
+// Single element
 '#limit_validation_errors' => [['field_name']]
-```
 
-**Nested Element:**
-```php
+// Nested element
 '#limit_validation_errors' => [['container', 'field_name']]
-```
 
-**Multiple Elements:**
-```php
+// Multiple elements
 '#limit_validation_errors' => [
   ['step1', 'name'],
   ['step1', 'email'],
 ]
-```
 
-**No Validation:**
-```php
+// No validation
 '#limit_validation_errors' => []
 ```
 
-### How It Works
+## How It Works
 
-**Internal Mechanism:**
-```
-FormValidator checks button #limit_validation_errors
-If present: Only validates specified element paths
-If absent: Validates entire form
-#required still enforced on specified paths
-```
+FormValidator checks button #limit_validation_errors. If present, only validates specified element paths. If absent, validates entire form. #required still enforced on specified paths.
 
-**Reference:** `/web/core/lib/Drupal/Core/Form/FormStateInterface.php` lines 461-532
+## Common Mistakes
 
-### Common Mistakes
+- **Wrong**: `'#limit_validation_errors' => 'field_name'` (string) → **Right**: `[['field_name']]` (array of arrays)
+- **Wrong**: Missing parent elements in path → **Right**: Include full path `[['container', 'field']]`
+- **Wrong**: Partial validation without #submit handler → **Right**: Always pair with #submit
+- **Wrong**: Wrong element path → **Right**: Match form structure exactly
 
-**Incorrect Path:**
-```php
-// WRONG - string instead of array
-'#limit_validation_errors' => 'field_name'
+## See Also
 
-// CORRECT
-'#limit_validation_errors' => [['field_name']]
-```
-
-**Missing Parent Elements:**
-```php
-// If field is $form['container']['field']
-// WRONG
-'#limit_validation_errors' => [['field']]
-
-// CORRECT
-'#limit_validation_errors' => [['container', 'field']]
-```
-
-**Forgetting #submit Handler:**
-```
-Partial validation without custom submit handler is useless
-Always pair #limit_validation_errors with #submit
-```
-
-**See Also:**
-- Multi-Step Form Pattern (dedicated section)
-- Submission Architecture (dedicated section)
-- Button Elements (element reference)
+- [Multi-Step Forms](multi-step-forms.md)
+- [Submission Architecture](submission-architecture.md)
+- [Button Elements](elements-grouping.md)
+- Reference: `/web/core/lib/Drupal/Core/Form/FormStateInterface.php` lines 461-532

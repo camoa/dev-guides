@@ -1,13 +1,25 @@
 ---
-description: Form alter system — hook order, alter patterns, cache contexts
+description: Form alter hook system - execution order, alter patterns, and cache contexts
 drupal_version: "11.x"
 ---
 
 # Form Alter System
 
-### Hook Implementation Order
+## When to Use
 
-**Execution Sequence:**
+> Use specific form alter hooks (hook_form_FORM_ID_alter) for performance. Use generic hook_form_alter only when altering multiple forms.
+
+## Decision
+
+| Situation | Hook | Why |
+|-----------|------|-----|
+| Alter specific form | hook_form_FORM_ID_alter | Performance - runs only for that form |
+| Alter base form type | hook_form_BASE_FORM_ID_alter | Shared base (e.g., node_form) |
+| Alter multiple forms | hook_form_alter | Generic, runs on every form |
+| Alter depends on permissions | Add cache contexts | Vary cache properly |
+
+## Hook Execution Order
+
 ```
 1. hook_form_alter(&$form, $form_state, $form_id)
    - All modules, all forms
@@ -19,110 +31,53 @@ drupal_version: "11.x"
    - Specific form
 
 4. Theme alter hooks (after all module hooks)
+
+Module weight controls order within each hook level.
 ```
 
-**Module Weight:**
-```
-Modules run by:
-1. Module weight (system table)
-2. Alphabetically by module name
-Lower weight = runs first
-```
+## Common Alter Patterns
 
-**Reference:** `/web/core/lib/Drupal/Core/Form/form.api.php` lines 164-322
-
-### Common Alter Patterns
-
-**Add Validation Handler:**
 ```php
+// Add validation handler
 function mymodule_form_user_login_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $form['#validate'][] = 'mymodule_user_login_validate';
 }
 
-function mymodule_user_login_validate(array &$form, FormStateInterface $form_state) {
-  // Custom validation logic
+// Add submit handler
+function mymodule_form_FORM_ID_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['actions']['submit']['#submit'][] = 'mymodule_custom_submit';
+  // OR add to form level
+  $form['#submit'][] = 'mymodule_custom_submit';
 }
-```
 
-**Add Submit Handler:**
-```php
-$form['actions']['submit']['#submit'][] = 'mymodule_custom_submit';
-
-// OR add to form level
-$form['#submit'][] = 'mymodule_custom_submit';
-```
-
-**Modify Element:**
-```php
-// Change required status
+// Modify element
 $form['field_name']['#required'] = TRUE;
-
-// Update description
 $form['field_name']['#description'] = t('Updated description');
-
-// Change weight
 $form['field_name']['#weight'] = 10;
+$form['field_name']['#access'] = FALSE; // Hide field
+$form['field_name']['#disabled'] = TRUE; // Disable field
 
-// Hide field
-$form['field_name']['#access'] = FALSE;
-
-// Disable field
-$form['field_name']['#disabled'] = TRUE;
-```
-
-**Remove Element:**
-```php
+// Remove element
 unset($form['field_name']);
-
 // OR hide it
 $form['field_name']['#access'] = FALSE;
 ```
 
-### Advanced Alter Patterns
+## Add Conditional Field (#states)
 
-**Add Conditional Field (#states):**
 ```php
-$form['field_name']['#states'] = [
+$form['custom_value']['#states'] = [
   'visible' => [
-    ':input[name="trigger"]' => ['checked' => TRUE],
+    ':input[name="use_custom"]' => ['checked' => TRUE],
   ],
   'required' => [
-    ':input[name="trigger"]' => ['checked' => TRUE],
+    ':input[name="use_custom"]' => ['checked' => TRUE],
   ],
 ];
 ```
 
-**Modify Button Submit Handlers:**
-```php
-// Replace handlers
-$form['actions']['submit']['#submit'] = ['mymodule_custom_submit'];
+## Cache Context Considerations
 
-// Prepend handler (run first)
-array_unshift($form['#submit'], 'mymodule_first_submit');
-
-// Append handler (run last)
-$form['#submit'][] = 'mymodule_last_submit';
-```
-
-**Change Button Text:**
-```php
-$form['actions']['submit']['#value'] = t('Custom Text');
-$form['actions']['delete']['#value'] = t('Remove');
-```
-
-**Add Custom Button:**
-```php
-$form['actions']['custom'] = [
-  '#type' => 'submit',
-  '#value' => t('Custom Action'),
-  '#submit' => ['mymodule_custom_action_submit'],
-  '#weight' => 10,
-];
-```
-
-### Cache Context Considerations
-
-**Add Cache Dependencies:**
 ```php
 // When alter depends on user permissions
 $form['#cache']['contexts'][] = 'user.permissions';
@@ -138,40 +93,23 @@ $form['#cache']['contexts'][] = 'url.path';
 ```
 
 **Why Cache Contexts Matter:**
-```
-Forms are cached and reused
-Without proper contexts: same form for all users
-Add context when alter output varies by:
-- User permissions
-- User role
-- Configuration
-- URL parameters
-```
+Forms are cached and reused. Without proper contexts, same form shown to all users even when output should differ by permission/role.
 
-### Debugging Form Alters
+## Debugging
 
-**Display Form ID:**
 ```php
+// Display form ID
 function mymodule_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   \Drupal::messenger()->addMessage('Form ID: ' . $form_id);
 }
-```
 
-**Log Form Structure:**
-```php
+// Log form structure
 \Drupal::logger('mymodule')->debug('<pre>@form</pre>', [
   '@form' => print_r($form, TRUE),
 ]);
 ```
 
-**Check Execution Order:**
-```php
-\Drupal::logger('mymodule')->debug('Form alter running for: @id', [
-  '@id' => $form_id,
-]);
-```
-
-### Best Practices
+## Best Practices
 
 **DO:**
 - Use specific hook (FORM_ID) when possible (performance)
@@ -180,19 +118,21 @@ function mymodule_form_alter(&$form, FormStateInterface $form_state, $form_id) {
 - Use #access instead of unset() (allows other modules to override)
 
 **DON'T:**
-- Alter forms in .module file without hook
+- Use generic form_alter for single form (performance hit)
 - Remove elements other modules might need
 - Replace all submit handlers unless necessary
 - Forget cache contexts for conditional alters
 
-**Common Mistakes:**
-- Not checking if element exists before modifying
-- Using form_alter for all forms (performance)
-- Removing handlers other modules added
-- Not testing alter execution order with multiple modules
+## Common Mistakes
 
-**See Also:**
-- Hook System Guide
-- Cache API Guide
-- Form States System (next section)
-- Official: [Form API Hooks](https://www.drupal.org/docs/drupal-apis/form-api/introduction-to-form-api)
+- **Wrong**: Not checking element exists before modifying → **Right**: Check with isset()
+- **Wrong**: hook_form_alter for single form → **Right**: Use hook_form_FORM_ID_alter
+- **Wrong**: Removing handlers other modules added → **Right**: Append/prepend instead
+- **Wrong**: No cache contexts for conditional alters → **Right**: Add appropriate contexts
+
+## See Also
+
+- [Form States System](form-states-system.md)
+- [Cache API Guide](https://www.drupal.org/docs/drupal-apis/cache-api)
+- [Hook System Guide](https://www.drupal.org/docs/drupal-apis/hooks)
+- Reference: `/web/core/lib/Drupal/Core/Form/form.api.php` lines 164-322

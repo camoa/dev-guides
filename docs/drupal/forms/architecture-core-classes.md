@@ -1,5 +1,5 @@
 ---
-description: Form API core classes — interfaces, base classes, services
+description: Core Form API classes and interfaces - base classes, services, and selection criteria
 drupal_version: "11.x"
 ---
 
@@ -7,65 +7,68 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this reference when choosing a form base class or understanding the core form services.
+> Choose the appropriate base class based on your form's purpose. Use FormBase for general forms, ConfigFormBase for settings, ConfirmFormBase for confirmations.
 
 ## Decision
 
-| Situation | Choose | Why |
-|-----------|--------|-----|
-| Need config management | ConfigFormBase | Built-in config operations |
-| Need confirmation dialog | ConfirmFormBase | Standard confirm pattern |
-| Entity create/edit | EntityForm | Entity operations |
-| Custom business logic | FormBase | General purpose with DI |
+| Situation | Base Class | Why |
+|-----------|------------|-----|
+| Need config management | ConfigFormBase | Auto config sync, schema validation |
+| Need confirmation dialog | ConfirmFormBase | Standard confirm UI, cancel link |
+| Entity create/edit | EntityForm | Entity-specific features |
+| Everything else | FormBase | General purpose, DI support |
 
-## Primary Interfaces
+## Pattern
 
-**FormInterface** - Base form contract
-- Location: `/web/core/lib/Drupal/Core/Form/FormInterface.php`
-- Methods: `getFormId()`, `buildForm()`, `validateForm()`, `submitForm()`
-- When to implement: Custom form without base class benefits
+All forms implement FormInterface or extend a base class.
 
-**FormStateInterface** - State management contract
-- Location: `/web/core/lib/Drupal/Core/Form/FormStateInterface.php`
-- Size: 1160+ lines defining all state operations
-- Purpose: Value access, storage, control flags, error handling
+```php
+use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\FormStateInterface;
 
-**FormBuilderInterface** - Form building service contract
-- Location: `/web/core/lib/Drupal/Core/Form/FormBuilderInterface.php`
-- Service: `@form_builder`
-- Use for: Programmatic form rendering, submission
+class MyForm extends FormBase {
+  public function getFormId() {
+    return 'my_module_form';
+  }
 
-## Base Form Classes
+  public function buildForm(array $form, FormStateInterface $form_state) {
+    // Define form structure
+    return $form;
+  }
 
-| Class | Purpose | Location |
-|-------|---------|----------|
-| FormBase | Standard forms with DI | `/web/core/lib/Drupal/Core/Form/FormBase.php` |
-| ConfigFormBase | Config management | `/web/core/lib/Drupal/Core/Form/ConfigFormBase.php` |
-| ConfirmFormBase | Confirmation dialogs | `/web/core/lib/Drupal/Core/Form/ConfirmFormBase.php` |
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    // Process submission
+  }
+}
+```
+
+## Key Interfaces and Classes
+
+| Component | Location | Purpose |
+|-----------|----------|---------|
+| FormInterface | `/web/core/lib/Drupal/Core/Form/FormInterface.php` | Core contract |
+| FormStateInterface | `/web/core/lib/Drupal/Core/Form/FormStateInterface.php` | State management (1160+ lines) |
+| FormBase | `/web/core/lib/Drupal/Core/Form/FormBase.php` | Standard forms with DI |
+| ConfigFormBase | `/web/core/lib/Drupal/Core/Form/ConfigFormBase.php` | Config management |
+| ConfirmFormBase | `/web/core/lib/Drupal/Core/Form/ConfirmFormBase.php` | Confirmation dialogs |
 
 ## Core Services
 
-| Service | Purpose | File |
-|---------|---------|------|
-| FormBuilder | Main building engine | `/web/core/lib/Drupal/Core/Form/FormBuilder.php` |
-| FormValidator | Validation orchestration | `/web/core/lib/Drupal/Core/Form/FormValidator.php` |
-| FormSubmitter | Submission handling | `/web/core/lib/Drupal/Core/Form/FormSubmitter.php` |
+| Service | File | Purpose |
+|---------|------|---------|
+| FormBuilder | `/web/core/lib/Drupal/Core/Form/FormBuilder.php` | Main building engine |
+| FormValidator | `/web/core/lib/Drupal/Core/Form/FormValidator.php` | Validation orchestration |
+| FormSubmitter | `/web/core/lib/Drupal/Core/Form/FormSubmitter.php` | Submission handling |
 
 ## Common Mistakes
 
-- **Wrong**: Not using dependency injection via `create()` method → **Right**: Inject services via static `create()` and constructor
-  - WHY BAD: Breaks unit testing (can't mock services), violates SOLID principles, prevents service substitution
-- **Wrong**: Extending wrong base class (ConfigFormBase for non-config forms) → **Right**: Match base class to use case
-  - WHY BAD: ConfigFormBase expects config schema, requires getEditableConfigNames(), adds unnecessary overhead
-- **Wrong**: Implementing FormInterface directly when base class would work → **Right**: Extend appropriate base class
-  - WHY BAD: Lose helper methods (t(), messenger(), config()), must implement all interface methods manually
+- **Wrong**: Not using dependency injection via `create()` → **Right**: Use `create()` method for testability
+- **Wrong**: Extending ConfigFormBase for non-config forms → **Right**: ConfigFormBase only for config management
+- **Wrong**: Implementing FormInterface directly → **Right**: Extend base class to get helper methods
 
 ## See Also
 
 - [Form Lifecycle](architecture-lifecycle.md)
-- [Standard Form Pattern](pattern-standard-form.md)
-- [Config Form Pattern](pattern-config-form.md)
-- [Confirm Form Pattern](pattern-confirm-form.md)
-- Dependency Injection Guide
-- Configuration API Guide
-- Reference: `/web/core/lib/Drupal/Core/Form/`
+- [FormBase Pattern](pattern-standard-form.md)
+- [ConfigFormBase Pattern](pattern-config-form.md)
+- Reference: [Form API Overview](https://www.drupal.org/docs/drupal-apis/form-api)
