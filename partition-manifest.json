@@ -17,6 +17,78 @@
     "partitioned_by": "camoa",
     "guides_extracted": 22
   },
+  "drupal/entities": {
+    "source_hash": "93bcc1f63828e0d2075a21ee28463dfc3c8304f86bb15bb35e066cab8c8a753e",
+    "partitioned": "2026-02-12",
+    "partitioned_by": "camoa",
+    "guides_extracted": 20
+  },
+  "drupal/plugins": {
+    "source_hash": "9708db609eeed152f8264323b112c4cfad54167c7285ec7d0796fd53422c6f71",
+    "partitioned": "2026-02-12",
+    "partitioned_by": "camoa",
+    "guides_extracted": 13
+  },
+  "drupal/routing": {
+    "source_hash": "d715a725e1492bf775d54008c694bdd6db2b8c79e4598936af2222786333c247",
+    "partitioned": "2026-02-12",
+    "partitioned_by": "camoa",
+    "guides_extracted": 12
+  },
+  "drupal/config-forms": {
+    "source_hash": "24406aec6a13a1ae90a9faa038e4ed30fe79beed065c93d28dc0c4e5ab4b1f6c",
+    "partitioned": "2026-02-12",
+    "partitioned_by": "camoa",
+    "guides_extracted": 10
+  },
+  "drupal/icon-api": {
+    "source_hash": "bbf53ddf0a5be620df5519e153df98ccc659e247603ccd1482f9fae68f5a30c4",
+    "partitioned": "2026-02-12",
+    "partitioned_by": "camoa",
+    "guides_extracted": 21
+  },
+  "drupal/ai-content": {
+    "source_hash": "1a5234d4d5e116dffc9235abc17c0a4dcbbf6af05a94b0ed4f2ed92ac3e23225",
+    "partitioned": "2026-02-12",
+    "partitioned_by": "camoa",
+    "guides_extracted": 12
+  },
+  "drupal/media": {
+    "source_hash": "a73b189a65e1f1f205c83732ecc4849ac3ac4fd13c45d2c1edf0cd5c3a98f031",
+    "partitioned": "2026-02-12",
+    "partitioned_by": "camoa",
+    "guides_extracted": 15
+  },
+  "drupal/migration": {
+    "source_hash": "dcd66dd0ae634a4deda52bb7bd5e150b110ec96c19bed41e639e05f9528b6394",
+    "partitioned": "2026-02-12",
+    "partitioned_by": "camoa",
+    "guides_extracted": 16
+  },
+  "drupal/eca": {
+    "source_hash": "8ae4ceff0784b5fcb052d047130f82a8b4f3bddbe88eb19379aa28a3316e45ad",
+    "partitioned": "2026-02-12",
+    "partitioned_by": "camoa",
+    "guides_extracted": 21
+  },
+  "drupal/klaro": {
+    "source_hash": "44e9079cadebe4d519329ef6c705312ee4d28a5116295775bf5b130da47b49bc",
+    "partitioned": "2026-02-12",
+    "partitioned_by": "camoa",
+    "guides_extracted": 16
+  },
+  "drupal/github-actions": {
+    "source_hash": "aca5bfc1dd514efd00effd43622f47ef691f3fa2e8c182d637e7c483efdec642",
+    "partitioned": "2026-02-12",
+    "partitioned_by": "camoa",
+    "guides_extracted": 13
+  },
+  "drupal/testing": {
+    "source_hash": "a7e4995483ce4cfb00564302aed5dcb7497c115f92c87cd41ce113949a7d9ff5",
+    "partitioned": "2026-02-12",
+    "partitioned_by": "camoa",
+    "guides_extracted": 11
+  },
   "design-systems/recognition": {
     "source_hash": "9f337e6a9112b7de29ba1ce94f214bd5a6e386fe322df4584c8b4704e0d6bf3d",
     "partitioned": "2026-02-12",
