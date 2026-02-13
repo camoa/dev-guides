@@ -1,37 +1,20 @@
 ---
-description: Templates and Drupal theme layer — page template structure, Layout Builder composition, template hierarchy
+description: You're implementing page-level layouts (templates)
 drupal_version: "11.x"
 ---
 
-# Templates Drupal Theme Layer
+## 6. Templates → Drupal Theme Layer
 
-## When to Use
+### When to Use This Section
+- You're implementing page-level layouts (templates)
+- You need to override Drupal's default page structure
+- You're composing organisms into complete pages
 
-> Use this when implementing page-level layouts (templates), overriding Drupal's default page structure, or composing organisms into complete pages.
+### 6.1 Page Template Structure
 
-## Decision
+#### Pattern: Page Template Hierarchy
 
-| Template | Override When | Location |
-|----------|---------------|----------|
-| `page.html.twig` | Custom page structure | `templates/layout/` |
-| `node.html.twig` | Custom node display | `templates/content/` |
-| `node--TYPE.html.twig` | Content type specific | `templates/content/` |
-| `block.html.twig` | Custom block wrapper | `templates/layout/` |
-| `region.html.twig` | Custom region wrapper | `templates/layout/` |
-
-**Template vs Layout Builder:**
-
-| Use Template When | Use Layout Builder When |
-|-------------------|-------------------------|
-| Consistent structure across all pages | Per-page customization needed |
-| Header/footer organisms | Content-specific organisms |
-| Simple layouts | Complex, flexible layouts |
-| Developer-controlled | Editor-controlled |
-
-## Pattern
-
-**Template Hierarchy:**
-
+**Radix Template Hierarchy:**
 ```
 Radix Base Theme
 ├── templates/
@@ -54,25 +37,7 @@ Sub-Theme (Your Theme)
 │       └── node--article.html.twig  # Content type specific
 ```
 
-**Template Discovery Order:**
-
-```
-1. Sub-theme templates/        (Your custom overrides)
-2. Radix base theme templates/ (Radix defaults)
-3. Drupal core templates/      (Core fallback)
-```
-
-**Template Suggestion Hierarchy:**
-
-```
-node.html.twig                    # Generic node
-node--TYPE.html.twig              # Content type specific
-node--TYPE--VIEW-MODE.html.twig   # Content type + view mode
-node--NID.html.twig               # Specific node
-```
-
 **File: `templates/layout/page.html.twig`**
-
 ```twig
 {#
 /**
@@ -124,7 +89,33 @@ node--NID.html.twig               # Specific node
 {% endif %}
 ```
 
-**Layout Builder Composition:**
+#### Decision Table: Template Override Strategy
+
+| Template | Override When | Location |
+|----------|---------------|----------|
+| `page.html.twig` | Custom page structure | `templates/layout/` |
+| `node.html.twig` | Custom node display | `templates/content/` |
+| `node--TYPE.html.twig` | Content type specific | `templates/content/` |
+| `block.html.twig` | Custom block wrapper | `templates/layout/` |
+| `region.html.twig` | Custom region wrapper | `templates/layout/` |
+
+#### Common Mistakes
+- **Not using Drupal regions** — Define regions in `*.info.yml`
+- **Hardcoding content** — Use region variables from Drupal
+- **Not using Bootstrap grid** — Wrap content in `.container`, `.row`, `.col-*`
+- **Missing template suggestions** — Use `hook_theme_suggestions_*` for variants
+
+#### See Also
+- [1.3 Theme Configuration Files](#13-theme-configuration-files)
+- [6.3 Template Hierarchy](#63-template-hierarchy)
+
+---
+
+### 6.2 Layout Builder Composition
+
+#### Pattern: Composing Organisms via Layout Builder
+
+**Layout Builder replaces traditional page templates for content types:**
 
 ```
 Traditional Approach:
@@ -134,8 +125,13 @@ Layout Builder Approach:
 Layout Builder → sections → blocks (including SDC organisms)
 ```
 
-**Example Layout:**
+**Configuration:**
+1. Enable Layout Builder for content type
+2. Configure default layout
+3. Add organism blocks to sections
+4. Content editors can customize per-node
 
+**Example Layout:**
 ```
 Section 1 (Full Width)
 └── Hero Section Block (SDC organism)
@@ -148,28 +144,57 @@ Section 3 (Full Width)
 └── Card Grid Block (SDC organism)
 ```
 
-**Debugging Template Suggestions:**
+#### Decision Table: Template vs Layout Builder
 
+| Use Template When | Use Layout Builder When |
+|-------------------|-------------------------|
+| Consistent structure across all pages | Per-page customization needed |
+| Header/footer organisms | Content-specific organisms |
+| Simple layouts | Complex, flexible layouts |
+| Developer-controlled | Editor-controlled |
+
+#### Common Mistakes
+- **Not enabling Layout Builder** — Required in content type settings
+- **Missing block plugins** — Organisms need block plugins for Layout Builder
+- **No default layout** — Provide sensible default structure
+- **Cache issues** — Ensure proper cache tags on blocks
+
+#### See Also
+- [5.3 Layout Builder Integration](#53-layout-builder-integration)
+- Drupal Layout Builder: https://www.drupal.org/docs/8/core/modules/layout-builder
+
+---
+
+### 6.3 Template Hierarchy
+
+#### Pattern: Radix Template Hierarchy
+
+**Template Discovery Order:**
+```
+1. Sub-theme templates/        (Your custom overrides)
+2. Radix base theme templates/ (Radix defaults)
+3. Drupal core templates/      (Core fallback)
+```
+
+**Template Suggestion Hierarchy Example:**
+```
+node.html.twig                    # Generic node
+node--TYPE.html.twig              # Content type specific
+node--TYPE--VIEW-MODE.html.twig   # Content type + view mode
+node--NID.html.twig               # Specific node
+```
+
+**Debugging Template Suggestions:**
 1. Enable Twig debugging: `sites/default/services.yml`
 2. View source in browser
 3. Look for `<!-- FILE NAME SUGGESTIONS: -->` comments
 
-## Common Mistakes
+#### Common Mistakes
+- **Not using most specific template** — More specific templates override generic ones
+- **Copying all Radix templates** — Only override what you need to change
+- **Not clearing cache** — Template changes require cache clear
+- **Missing template suggestions** — Use `hook_theme_suggestions_alter()`
 
-- **Wrong**: Not defining regions in `*.info.yml` → **Right**: Define regions before using in templates
-- **Wrong**: Hardcoding content in templates → **Right**: Use region variables from Drupal
-- **Wrong**: Not using Bootstrap grid → **Right**: Wrap content in `.container`, `.row`, `.col-*`
-- **Wrong**: Copying all Radix templates → **Right**: Only override what you need to change
-- **Wrong**: Not clearing cache after template changes → **Right**: Template changes require cache clear
-- **Wrong**: Using generic template when specific exists → **Right**: Use most specific template
-- **Wrong**: Not enabling Layout Builder when needed → **Right**: Enable in content type settings
-- **Wrong**: Missing block plugins for organisms → **Right**: Organisms need block plugins for Layout Builder
-- **Wrong**: No default layout → **Right**: Provide sensible default structure
-
-## See Also
-
-- [Organisms SDC Layout Builder](organisms-sdc-layout-builder.md)
-- [Layout Builder Best Practices](layout-builder-best-practices.md)
-- [Sub-Theme Architecture](sub-theme-architecture.md)
+#### See Also
+- [6.1 Page Template Structure](#61-page-template-structure)
 - Drupal Theming Guide: https://www.drupal.org/docs/theming-drupal
-- Drupal Layout Builder: https://www.drupal.org/docs/8/core/modules/layout-builder

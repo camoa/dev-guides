@@ -1,32 +1,32 @@
 ---
-description: Templates to Bootstrap Grid — mapping page layouts and content structures to Bootstrap's grid system
+description: Map template-level page layouts to Bootstrap's grid system
 ---
 
-# Templates to Bootstrap Grid
+# Templates → Bootstrap Grid
 
 ## When to Use
 
-> Use when mapping templates (page layouts, content structures) to Bootstrap's grid system for responsive page structures.
+> Use this for mapping templates (page layouts, content structures) to Bootstrap's grid system for responsive page structures.
 
-## Decision
+## Grid Configuration
 
-| Layout Need | Bootstrap Variable | Bootstrap Map | Generated Classes |
-|-------------|-------------------|---------------|-------------------|
+| Design System Need | Bootstrap Variable | Bootstrap Map | Generated Classes |
+|-------------------|-------------------|---------------|-------------------|
 | Column count | `$grid-columns` | N/A | `.col-*` (default 12) |
 | Gutter width | `$grid-gutter-width` | N/A | Applied to `.row` |
 | Container widths | N/A | `$container-max-widths` | `.container` breakpoint widths |
 | Breakpoints | N/A | `$grid-breakpoints` | `.col-sm-*`, `.col-md-*`, etc. |
+| Row columns | N/A | N/A | `.row-cols-*` utilities |
 | Gutters (custom) | N/A | `$gutters` map | `.g-*`, `.gx-*`, `.gy-*` utilities |
 
 ## Pattern
 
-**Grid System Configuration**:
 ```scss
-// Override grid fundamentals
+// 1. Override grid fundamentals
 $grid-columns: 12;              // Keep Bootstrap default
 $grid-gutter-width: 1.5rem;     // 24px gutter
 
-// Customize container widths
+// 2. Customize container widths
 $container-max-widths: (
   sm: 540px,
   md: 720px,
@@ -35,43 +35,55 @@ $container-max-widths: (
   xxl: 1320px
 );
 
-// Add custom gutter sizes
+// 3. Add custom gutter sizes if needed
 $gutters: map-merge($gutters, (
-  6: 4rem,   // Larger gutter option
+  6: 4rem,   // Add larger gutter option
 ));
 
 @import "bootstrap";
 ```
 
-**HTML Usage**:
+## Usage
+
 ```html
-<!-- Responsive grid -->
+<!-- Basic 2-column layout -->
 <div class="container">
   <div class="row">
-    <div class="col-12 col-md-6 col-lg-4">Column 1</div>
-    <div class="col-12 col-md-6 col-lg-4">Column 2</div>
-    <div class="col-12 col-md-6 col-lg-4">Column 3</div>
+    <div class="col-md-8">Main content</div>
+    <div class="col-md-4">Sidebar</div>
+  </div>
+</div>
+
+<!-- Responsive 3-column grid -->
+<div class="container">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div class="col"><div class="card">...</div></div>
+    <div class="col"><div class="card">...</div></div>
+    <div class="col"><div class="card">...</div></div>
   </div>
 </div>
 
 <!-- Custom gutters -->
-<div class="row g-6">
-  <div class="col">Large gutter</div>
+<div class="container">
+  <div class="row gx-5 gy-3">
+    <div class="col-md-6">Content</div>
+    <div class="col-md-6">Content</div>
+  </div>
 </div>
 ```
 
 ## Common Mistakes
 
-- **Wrong**: Changing column count from 12 → **Right**: Most design systems work with 12 columns
-- **Wrong**: Not using responsive column classes → **Right**: Use `.col-sm-*`, `.col-md-*`
-- **Wrong**: Starting with desktop → **Right**: Mobile-first approach (`.col-*` first, then breakpoint-specific)
-- **Wrong**: Not using gutter utilities → **Right**: Use `.g-*`, `.gx-*`, `.gy-*` for custom spacing
-- **Wrong**: Creating custom grid systems → **Right**: Extend Bootstrap's flexible grid
+- **Wrong**: Changing column count from 12 → **Right**: Keep 12 columns (standard in design systems)
+- **Wrong**: Not using responsive column classes → **Right**: Use .col-sm-*, .col-md-* for responsive layouts
+- **Wrong**: Forgetting mobile-first approach → **Right**: Start with mobile (.col-*), then add breakpoint classes
+- **Wrong**: Not using gutter utilities → **Right**: Use .g-*, .gx-*, .gy-* for custom spacing
+- **Wrong**: Creating custom grid systems → **Right**: Extend Bootstrap's grid instead
 
 ## See Also
 
-- [Organisms to Layout + Components](organisms-layout-components.md)
-- [SCSS Integration Order](scss-integration-order.md)
-- Reference: [Bootstrap 5.3 Grid](https://getbootstrap.com/docs/5.3/layout/grid/)
-- Reference: [Bootstrap 5.3 Columns](https://getbootstrap.com/docs/5.3/layout/columns/)
-- Reference: [Bootstrap 5.3 Gutters](https://getbootstrap.com/docs/5.3/layout/gutters/)
+- [Design Tokens → Bootstrap Variables](design-tokens-bootstrap-variables.md) - Breakpoint tokens
+- [Organisms → Layout + Components](organisms-layout-components.md)
+- Reference: [Bootstrap Grid](https://getbootstrap.com/docs/5.3/layout/grid/)
+- Reference: [Bootstrap Columns](https://getbootstrap.com/docs/5.3/layout/columns/)
+- Reference: [Bootstrap Gutters](https://getbootstrap.com/docs/5.3/layout/gutters/)

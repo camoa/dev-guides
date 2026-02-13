@@ -1,61 +1,24 @@
 ---
-description: Molecule SDC components — composing atoms, slots and composition, molecule vs Drupal integration
+description: You've identified molecules using the Design System Recognition Guide
 drupal_version: "11.x"
 ---
 
-# Molecules SDC Components
+## 4. Molecules → SDC Components
 
-## When to Use
+### When to Use This Section
+- You've identified molecules using the Design System Recognition Guide
+- You need to compose multiple atoms into a reusable molecule
+- You're implementing composite patterns like search bars, card content, form fields
 
-> Use this when composing multiple atoms into a reusable molecule, implementing composite patterns like search bars or card content.
+### 4.1 Composing Atom SDCs
 
-## Decision
+#### Pattern: Including Atom SDCs in Molecule
 
-| Method | Syntax | Use When |
-|--------|--------|----------|
-| **Include (Radix)** | `{% include 'radix:button' %}` | Using Radix base theme component |
-| **Include (Sub-theme)** | `{% include 'THEME_NAME:button' %}` | Using sub-theme component |
-| **Embed** | `{% embed 'radix:button' %}` | Need to override component blocks |
-| **Direct HTML** | `<button class="btn">` | Simple, non-reusable elements |
-
-**Molecule vs Drupal System:**
-
-| Pattern | Create Molecule SDC | Use Drupal System |
-|---------|---------------------|-------------------|
-| Input + Label + Error | Maybe | **Prefer**: Field template/formatter |
-| Search input + Button | **Yes** | Could use Views exposed form |
-| User avatar + Name + Role | **Yes** | Could use User entity display |
-| Image + Caption | Maybe | **Prefer**: Media entity with formatter |
-| Breadcrumb links | Maybe | **Prefer**: Drupal breadcrumb system |
-| Pagination controls | Maybe | **Prefer**: Views pager |
-
-**Integration Decision Framework:**
-
-```
-1. Does Drupal have a built-in system for this?
-   YES → Use Drupal system (field formatter, Views, entity display)
-   NO → Continue to step 2
-
-2. Is this molecule tied to a specific content type?
-   YES → Consider field formatter or entity display mode
-   NO → Continue to step 3
-
-3. Is this molecule reused across multiple contexts?
-   YES → Create SDC molecule
-   NO → Consider template-specific implementation
-
-4. Does this need dynamic data from Drupal?
-   YES → Create SDC, populate via field formatter or preprocess
-   NO → SDC with static props is fine
-```
-
-## Pattern
-
-**Composing Atoms (Search Bar):**
+**Molecule: Search Bar** (input + button)
 
 **File: `components/search-bar/search-bar.component.yml`**
-
 ```yaml
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
 name: Search Bar
 status: stable
 description: Search input with submit button
@@ -73,7 +36,6 @@ props:
 ```
 
 **File: `components/search-bar/search-bar.twig`**
-
 ```twig
 <div class="search-bar input-group">
   {# Include Radix input component #}
@@ -91,11 +53,13 @@ props:
 ```
 
 **File: `components/search-bar/search-bar.scss`**
-
 ```scss
 @import '../../src/scss/init';
 
 .search-bar {
+  // Bootstrap's .input-group handles most styling
+  // Add molecule-specific customizations here
+
   max-width: 400px;
 
   @include media-breakpoint-up(md) {
@@ -104,11 +68,36 @@ props:
 }
 ```
 
-**Slots and Composition (Card Content):**
+#### Decision Table: Component Inclusion Methods
+
+| Method | Syntax | Use When |
+|--------|--------|----------|
+| **Include (Radix)** | `{% include 'radix:button' %}` | Using Radix base theme component |
+| **Include (Sub-theme)** | `{% include 'THEME_NAME:button' %}` | Using sub-theme component |
+| **Embed** | `{% embed 'radix:button' %}` | Need to override component blocks |
+| **Direct HTML** | `<button class="btn">` | Simple, non-reusable elements |
+
+#### Common Mistakes
+- **Not using component namespace** — Use `radix:` or `THEME_NAME:` prefix
+- **Duplicating component logic** — Include existing atoms instead
+- **Over-composing** — Not every atom pairing needs a molecule
+- **Forgetting to pass props** — Use `with {}` to pass properties
+
+#### See Also
+- [3.2 SDC Component Structure](#32-sdc-component-structure)
+- [4.2 Slots and Composition](#42-slots-and-composition)
+
+---
+
+### 4.2 Slots and Composition
+
+#### Pattern: Using Slots for Flexible Composition
+
+**Molecule: Card Content** (image + title + text + button)
 
 **File: `components/card-content/card-content.component.yml`**
-
 ```yaml
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
 name: Card Content
 status: stable
 description: Card content molecule with flexible slots
@@ -120,6 +109,7 @@ props:
       title: Card Title
     title_tag:
       type: string
+      title: Title Tag
       default: 'h3'
       enum: ['h2', 'h3', 'h4', 'h5']
 slots:
@@ -135,7 +125,6 @@ slots:
 ```
 
 **File: `components/card-content/card-content.twig`**
-
 ```twig
 <div class="card-content">
   {% if slots.image %}
@@ -167,7 +156,6 @@ slots:
 ```
 
 **Usage:**
-
 ```twig
 {% include 'THEME_NAME:card-content' with {
   title: 'Product Name',
@@ -180,20 +168,66 @@ slots:
 } %}
 ```
 
-## Common Mistakes
+#### Decision Table: Props vs Slots
 
-- **Wrong**: Not using component namespace → **Right**: Use `radix:` or `THEME_NAME:` prefix
-- **Wrong**: Duplicating component logic → **Right**: Include existing atoms instead
-- **Wrong**: Over-composing (creating molecule for every atom pairing) → **Right**: Only when reused
-- **Wrong**: Forgetting to pass props → **Right**: Use `with {}` to pass properties
-- **Wrong**: Using props for markup → **Right**: Use slots for HTML content
-- **Wrong**: Not checking slot existence → **Right**: Use `{% if slots.SLOT_NAME %}`
-- **Wrong**: Creating SDC for everything → **Right**: Leverage Drupal's field/entity systems
-- **Wrong**: Duplicating Drupal functionality → **Right**: Check for existing formatters/displays first
+| Use Props When | Use Slots When |
+|----------------|----------------|
+| Simple values (strings, booleans) | Complex markup/content |
+| Component configuration | Nested components |
+| Variant selection | User-generated content |
+| Atomic data | Variable content structure |
 
-## See Also
+#### Common Mistakes
+- **Overusing props for markup** — Use slots for HTML content
+- **Not checking slot existence** — Use `{% if slots.SLOT_NAME %}` before rendering
+- **Confusing props and slots** — Props = configuration, Slots = content
+- **Not documenting slots** — Define all slots in component.yml
 
-- [Atoms SDC Components](atoms-sdc-components.md)
-- [SDC Component Best Practices](sdc-component-best-practices.md)
-- [SDC Component Development](sdc-component-development.md)
+#### See Also
+- [7.2 Props and Slots](#72-props-and-slots)
 - Official SDC Documentation: https://www.drupal.org/docs/develop/theming-drupal/using-single-directory-components
+
+---
+
+### 4.3 Molecule vs Drupal Integration
+
+#### Decision Table: Molecule SDC vs Drupal System
+
+| Pattern | Create Molecule SDC | Use Drupal System |
+|---------|---------------------|-------------------|
+| Input + Label + Error | Maybe | **Prefer**: Field template/formatter |
+| Search input + Button | **Yes** | Could use Views exposed form |
+| User avatar + Name + Role | **Yes** | Could use User entity display |
+| Image + Caption | Maybe | **Prefer**: Media entity with formatter |
+| Breadcrumb links | Maybe | **Prefer**: Drupal breadcrumb system |
+| Pagination controls | Maybe | **Prefer**: Views pager |
+
+#### Pattern: Integration Decision Framework
+
+```
+1. Does Drupal have a built-in system for this?
+   YES → Use Drupal system (field formatter, Views, entity display)
+   NO → Continue to step 2
+
+2. Is this molecule tied to a specific content type?
+   YES → Consider field formatter or entity display mode
+   NO → Continue to step 3
+
+3. Is this molecule reused across multiple contexts?
+   YES → Create SDC molecule
+   NO → Consider template-specific implementation
+
+4. Does this need dynamic data from Drupal?
+   YES → Create SDC, populate via field formatter or preprocess
+   NO → SDC with static props is fine
+```
+
+#### Common Mistakes
+- **Creating SDC for everything** — Leverage Drupal's field/entity systems
+- **Duplicating Drupal functionality** — Check for existing formatters/displays first
+- **Not integrating with Drupal** — SDCs should work WITH Drupal, not replace it
+- **Over-abstracting** — Simple molecules may not need SDCs
+
+#### See Also
+- [5.3 Layout Builder Integration](#53-layout-builder-integration)
+- [6.1 Page Template Structure](#61-page-template-structure)

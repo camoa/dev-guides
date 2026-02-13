@@ -1,28 +1,28 @@
 ---
-description: Token to Utility Flow — how Bootstrap generates utility classes from tokens and how to extend the utility system
+description: How Bootstrap generates utility classes from SCSS tokens and maps
 ---
 
 # Token to Utility Flow
 
 ## When to Use
 
-> Use when understanding how Bootstrap generates utility classes from tokens, or when extending Bootstrap's utility system with design system tokens.
+> Use this to understand how Bootstrap auto-generates utility classes from tokens and how to extend the utility system with custom maps.
 
-## Decision
+## Utility Generation Flow
 
-| Scenario | Bootstrap Has | Strategy | Implementation |
-|----------|--------------|----------|----------------|
-| Need `.text-brand` class | Extensible `$theme-colors` map | EXTEND | Add to `$theme-colors` |
-| Need `.p-3xs` micro-spacing | Extensible `$spacers` map | EXTEND | Add to `$spacers` |
-| Need `.cursor-pointer` | No cursor utilities | CREATE | Add to `$utilities` map |
-| Need responsive cursor | Utility API supports it | CREATE + responsive | Set `responsive: true` |
-| Need custom elevation | No elevation system | CREATE | Custom utility definition |
+**Key Concept:** SCSS Variable → SCSS Map → Bootstrap Import → Utility API → Generated Classes
+
+| SCSS Input | Utility API | Generated Output | Usage |
+|-----------|------------|------------------|-------|
+| `$spacers` map | `"margin"` utility | `.m-0`, `.m-1`, `.m-2` | `<div class="m-3">` |
+| `$theme-colors` map | `"color"` utility | `.text-primary`, `.text-success` | `<p class="text-primary">` |
+| `$theme-colors` map | `"background-color"` | `.bg-primary`, `.bg-success` | `<div class="bg-primary">` |
+| `$grid-breakpoints` map | Responsive utilities | `.d-sm-block`, `.d-md-flex` | `<div class="d-lg-none">` |
 
 ## Pattern
 
-**Utility Flow Understanding**:
 ```scss
-// Step 1: Define token in SCSS variable
+// Step 1: Define token
 $primary: #0066cc;
 
 // Step 2: Add to Bootstrap map
@@ -34,10 +34,20 @@ $theme-colors: map-merge($theme-colors, (
 @import "bootstrap/scss/maps";
 @import "bootstrap/scss/utilities";
 
-// Result: .text-primary, .bg-primary, .btn-primary, .border-primary auto-generated
+// Result: .text-primary, .bg-primary, .btn-primary, .border-primary
 ```
 
-**Add New Utility**:
+## Extending Utilities
+
+| Scenario | Bootstrap Has | Strategy | Implementation |
+|----------|--------------|----------|----------------|
+| Need `.text-brand` | Extensible `$theme-colors` | EXTEND | Add to `$theme-colors` |
+| Need `.p-3xs` | Extensible `$spacers` | EXTEND | Add to `$spacers` |
+| Need `.cursor-pointer` | No cursor utilities | CREATE | Add to `$utilities` map |
+| Need `.w-10` width | Extensible "width" utility | EXTEND | Modify values |
+
+### Pattern: Add New Utility
+
 ```scss
 $utilities: map-merge($utilities, (
   "cursor": (
@@ -49,10 +59,11 @@ $utilities: map-merge($utilities, (
 ));
 
 @import "bootstrap/scss/utilities/api";
-// Generates: .cursor-pointer, .cursor-grab, .cursor-md-pointer, etc.
+// Generates: .cursor-pointer, .cursor-grab, .cursor-md-pointer
 ```
 
-**Extend Existing Utility**:
+### Pattern: Extend Existing Utility
+
 ```scss
 $utilities: map-merge($utilities, (
   "width": map-merge(
@@ -72,14 +83,14 @@ $utilities: map-merge($utilities, (
 
 ## Common Mistakes
 
-- **Wrong**: Expecting manual class creation → **Right**: Bootstrap auto-generates utilities from maps
-- **Wrong**: Maps merged AFTER Bootstrap import → **Right**: Merge BEFORE Bootstrap imports
-- **Wrong**: Not importing utilities/api → **Right**: Custom utilities require `@import "bootstrap/scss/utilities/api"`
-- **Wrong**: Adding utilities Bootstrap already has → **Right**: Research first (see Bootstrap Accommodation Decision Framework)
-- **Wrong**: Not setting `responsive: true` → **Right**: Set for breakpoint variants
+- **Wrong**: Expecting manual class creation → **Right**: Bootstrap auto-generates from maps
+- **Wrong**: Merging maps after Bootstrap import → **Right**: Merge BEFORE Bootstrap imports
+- **Wrong**: Adding utilities Bootstrap has → **Right**: Research Bootstrap capabilities first
+- **Wrong**: Not importing utilities/api → **Right**: Import `bootstrap/scss/utilities/api` for custom utilities
+- **Wrong**: Ignoring responsive needs → **Right**: Set `responsive: true` for breakpoint variants
 
 ## See Also
 
-- [Bootstrap Accommodation Decision Framework](bootstrap-accommodation-decision-framework.md)
-- [Design Tokens to Bootstrap Variables](design-tokens-bootstrap-variables.md)
-- Reference: [Bootstrap 5.3 Utility API](https://getbootstrap.com/docs/5.3/utilities/api/)
+- [Design Tokens → Bootstrap Variables](design-tokens-bootstrap-variables.md)
+- [Bootstrap Accommodation Decision Framework](bootstrap-accommodation-decision-framework.md) - EXTEND category
+- Reference: [Bootstrap Utility API](https://getbootstrap.com/docs/5.3/utilities/api/)

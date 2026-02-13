@@ -273,7 +273,56 @@ plugins:
           - drupal/testing/testing-framework-overview.md: "Overview of Drupal's five testing frameworks and when to use each one"
           - drupal/testing/testing-infrastructure-setup.md: "Set up directory structure, phpunit.xml configuration, and testing dependencies for Drupal modules"
         "Design Systems":
-          - design-systems/index.md: "Design system guides — recognition, Bootstrap mapping, Radix SDC implementation"
+          - design-systems/index.md: "Design system guides — recognition, Bootstrap mapping, Radix SDC implementation, Radix component reference"
+          - design-systems/bootstrap/index.md: "Bootstrap 5.3 Mapping — systematic methodology for mapping design systems to Bootstrap using the 6px threshold framework"
+          - design-systems/bootstrap/advanced-scss-best-practices.md: "Advanced SCSS Best Practices — Dart Sass requirements, performance optimization, and accessibility features"
+          - design-systems/bootstrap/atoms-bootstrap-components.md: "Atoms to Bootstrap Components — mapping buttons, form inputs, and badges to Bootstrap's component system"
+          - design-systems/bootstrap/bootstrap-accommodation-decision-framework.md: "Bootstrap Accommodation Decision Framework — systematic methodology for deciding when to accommodate, extend, customize, or create"
+          - design-systems/bootstrap/design-tokens-bootstrap-variables.md: "Design Tokens to Bootstrap Variables — mapping color, typography, spacing, surface, and breakpoint tokens"
+          - design-systems/bootstrap/documentation-templates.md: "Standardized templates for Bootstrap mapping documentation"
+          - design-systems/bootstrap/key-bootstrap-scss-mechanisms.md: "Key Bootstrap SCSS Mechanisms — variable override system, map merging, mixins, and CSS custom properties generation"
+          - design-systems/bootstrap/molecules-component-combinations.md: "Molecules to Component Combinations — mapping input groups and card content to Bootstrap's component combinations"
+          - design-systems/bootstrap/organisms-layout-components.md: "Organisms to Layout + Components — mapping navbars, complete cards, and forms to Bootstrap's complex components"
+          - design-systems/bootstrap/progressive-enhancement-guidelines.md: "Feature detection and graceful degradation for CREATE category features"
+          - design-systems/bootstrap/project-continuation-guidelines.md: "Guidelines for resuming Bootstrap mapping projects in new sessions"
+          - design-systems/bootstrap/project-organization-principles.md: "Systematic folder structure for design system to Bootstrap mapping projects"
+          - design-systems/bootstrap/quality-assurance-framework.md: "Quality Assurance Framework — validation checklist for Bootstrap accommodation decisions and SCSS best practices"
+          - design-systems/bootstrap/scss-best-practices.md: "SCSS Best Practices — critical anti-patterns and why they're harmful when customizing Bootstrap"
+          - design-systems/bootstrap/scss-integration-order.md: "SCSS Integration Order — correct import sequence for Bootstrap customization and file organization strategies"
+          - design-systems/bootstrap/templates-bootstrap-grid.md: "Templates to Bootstrap Grid — mapping page layouts and content structures to Bootstrap's grid system"
+          - design-systems/bootstrap/token-to-utility-flow.md: "Token to Utility Flow — how Bootstrap generates utility classes from tokens and how to extend the utility system"
+          - design-systems/radix-components/index.md: "Drupal Radix Components — Complete reference for all 57 Radix 6.x Single Directory Components"
+          - design-systems/radix-components/accessibility-best-practices.md: "Ensuring WCAG 2.2 Level AA compliance"
+          - design-systems/radix-components/component-override-patterns.md: "Modifying Radix base component for sub-theme"
+          - design-systems/radix-components/component-selection-strategy.md: "Deciding whether to use base component, override, or create custom"
+          - design-systems/radix-components/content-display-components.md: "Components for displaying Drupal content entities, fields, media, and user profiles"
+          - design-systems/radix-components/creating-custom-components.md: "Building project-specific UI not in Radix/Bootstrap"
+          - design-systems/radix-components/development-standards.md: "Maintaining code quality, security, maintainability"
+          - design-systems/radix-components/form-components.md: "Components for form inputs, form structure, and form element wrappers"
+          - design-systems/radix-components/layout-components.md: "Components for organizing and containing content in structured layouts"
+          - design-systems/radix-components/navigation-components.md: "Components for site navigation, wayfinding, and menu systems"
+          - design-systems/radix-components/page-structure-components.md: "Components for HTML structure, page layout, and regions"
+          - design-systems/radix-components/performance-best-practices.md: "Optimizing front-end performance when building/overriding components"
+          - design-systems/radix-components/radix-component-architecture.md: "Understanding Radix's SDC architecture for component selection and customization decisions"
+          - design-systems/radix-components/ui-components.md: "Components for interactive elements, user feedback, and visual indicators"
+          - design-systems/radix-components/views-components.md: "Components for Drupal Views output and grid layouts"
+          - design-systems/radix-sdc/index.md: "Radix SDC — mapping design systems to Radix sub-themes with Single Directory Components"
+          - design-systems/radix-sdc/atoms-sdc-components.md: "Creating atom SDC components in Radix — decision framework, component structure, button pattern, SCSS integration"
+          - design-systems/radix-sdc/build-tools-compilation.md: "You're setting up build tools for a new Radix sub-theme"
+          - design-systems/radix-sdc/design-tokens-radix-configuration.md: "You've identified design tokens using the Design System Recognition Guide"
+          - design-systems/radix-sdc/layout-builder-best-practices.md: "Layout Builder best practices — Layout Builder vs templates vs Paragraphs, performance, editorial UX, block integration"
+          - design-systems/radix-sdc/molecules-sdc-components.md: "Molecule SDC components — composing atoms, slots and composition, molecule vs Drupal integration"
+          - design-systems/radix-sdc/organisms-sdc-layout-builder.md: "Organism SDC components with Layout Builder integration — navigation organisms, hero sections, Layout Builder blocks"
+          - design-systems/radix-sdc/performance-best-practices.md: "Theme performance best practices — caching strategies, asset loading, image optimization, responsive images"
+          - design-systems/radix-sdc/radix-cli-integration.md: "You're creating new SDC components using Radix CLI"
+          - design-systems/radix-sdc/radix-component-reuse-strategy.md: "Radix component reuse strategy — component catalog, reuse decision framework, overriding Radix components"
+          - design-systems/radix-sdc/radix-sub-theme-architecture.md: "You're setting up a new Radix sub-theme"
+          - design-systems/radix-sdc/radix-sub-theme-best-practices.md: "Radix sub-theme best practices — override strategy, variable location, starterkit usage, library management, development workflow"
+          - design-systems/radix-sdc/sdc-component-best-practices.md: "SDC component best practices — granularity decisions, props vs slots, SCSS scoping, schema definitions"
+          - design-systems/radix-sdc/sdc-component-development.md: "SDC component development — YAML schema, props and slots, SCSS scoping, JavaScript in components"
+          - design-systems/radix-sdc/templates-drupal-theme-layer.md: "Templates and Drupal theme layer — page template structure, Layout Builder composition, template hierarchy"
+          - design-systems/radix-sdc/troubleshooting-sdc-components.md: "Your SDC component isn't being discovered by Drupal"
+          - design-systems/radix-sdc/twig-and-preprocess-best-practices.md: "You're deciding whether logic belongs in Twig or preprocess function"
           - design-systems/recognition/index.md: "Design System Recognition — extract tokens and components from HTML/CSS, Figma, or screenshots"
           - design-systems/recognition/analysis-best-practices.md: "Assess design system quality and maturity during analysis"
           - design-systems/recognition/atom-recognition.md: "Identify the smallest functional UI building blocks that cannot be decomposed further"
@@ -288,38 +337,82 @@ plugins:
           - design-systems/recognition/standards-specifications.md: "W3C token format, WCAG accessibility, and atomic design methodology standards"
           - design-systems/recognition/templates-vs-pages.md: "Distinguish between layout structures (templates) and real implementations (pages)"
           - design-systems/recognition/validation-checklist.md: "Comprehensive checklist to validate design system analysis completeness"
-          - design-systems/bootstrap/index.md: "Bootstrap 5.3 Mapping — systematic methodology for mapping design systems to Bootstrap using the 6px threshold framework"
-          - design-systems/bootstrap/advanced-scss-best-practices.md: "Advanced SCSS Best Practices — Dart Sass requirements, performance optimization, and accessibility features"
-          - design-systems/bootstrap/atoms-bootstrap-components.md: "Atoms to Bootstrap Components — mapping buttons, form inputs, and badges to Bootstrap's component system"
-          - design-systems/bootstrap/bootstrap-accommodation-decision-framework.md: "Bootstrap Accommodation Decision Framework — systematic methodology for deciding when to accommodate, extend, customize, or create"
-          - design-systems/bootstrap/design-tokens-bootstrap-variables.md: "Design Tokens to Bootstrap Variables — mapping color, typography, spacing, surface, and breakpoint tokens"
-          - design-systems/bootstrap/key-bootstrap-scss-mechanisms.md: "Key Bootstrap SCSS Mechanisms — variable override system, map merging, mixins, and CSS custom properties generation"
-          - design-systems/bootstrap/molecules-component-combinations.md: "Molecules to Component Combinations — mapping input groups and card content to Bootstrap's component combinations"
-          - design-systems/bootstrap/organisms-layout-components.md: "Organisms to Layout + Components — mapping navbars, complete cards, and forms to Bootstrap's complex components"
-          - design-systems/bootstrap/quality-assurance-framework.md: "Quality Assurance Framework — validation checklist for Bootstrap accommodation decisions and SCSS best practices"
-          - design-systems/bootstrap/scss-best-practices.md: "SCSS Best Practices — critical anti-patterns and why they're harmful when customizing Bootstrap"
-          - design-systems/bootstrap/scss-integration-order.md: "SCSS Integration Order — correct import sequence for Bootstrap customization and file organization strategies"
-          - design-systems/bootstrap/templates-bootstrap-grid.md: "Templates to Bootstrap Grid — mapping page layouts and content structures to Bootstrap's grid system"
-          - design-systems/bootstrap/token-to-utility-flow.md: "Token to Utility Flow — how Bootstrap generates utility classes from tokens and how to extend the utility system"
-          - design-systems/radix-sdc/index.md: "Radix SDC — mapping design systems to Radix sub-themes with Single Directory Components"
-          - design-systems/radix-sdc/atoms-sdc-components.md: "Creating atom SDC components in Radix — decision framework, component structure, button pattern, SCSS integration"
-          - design-systems/radix-sdc/design-tokens-configuration.md: "Radix design tokens configuration — variable override location, SCSS import order, theme settings integration"
-          - design-systems/radix-sdc/layout-builder-best-practices.md: "Layout Builder best practices — Layout Builder vs templates vs Paragraphs, performance, editorial UX, block integration"
-          - design-systems/radix-sdc/molecules-sdc-components.md: "Molecule SDC components — composing atoms, slots and composition, molecule vs Drupal integration"
-          - design-systems/radix-sdc/organisms-sdc-layout-builder.md: "Organism SDC components with Layout Builder integration — navigation organisms, hero sections, Layout Builder blocks"
-          - design-systems/radix-sdc/performance-best-practices.md: "Theme performance best practices — caching strategies, asset loading, image optimization, responsive images"
-          - design-systems/radix-sdc/radix-component-reuse-strategy.md: "Radix component reuse strategy — component catalog, reuse decision framework, overriding Radix components"
-          - design-systems/radix-sdc/radix-sub-theme-best-practices.md: "Radix sub-theme best practices — override strategy, variable location, starterkit usage, library management, development workflow"
-          - design-systems/radix-sdc/sdc-component-best-practices.md: "SDC component best practices — granularity decisions, props vs slots, SCSS scoping, schema definitions"
-          - design-systems/radix-sdc/sdc-component-development.md: "SDC component development — YAML schema, props and slots, SCSS scoping, JavaScript in components"
-          - design-systems/radix-sdc/sub-theme-architecture.md: "Radix sub-theme architecture — directory structure, Bootstrap loading chain, configuration files"
-          - design-systems/radix-sdc/templates-drupal-theme-layer.md: "Templates and Drupal theme layer — page template structure, Layout Builder composition, template hierarchy"
-          - design-systems/radix-sdc/twig-preprocess-best-practices.md: "Twig and preprocess best practices — logic placement, template inheritance, attributes object, performance"
 
 nav:
   - Home: index.md
   - Drupal:
     - drupal/index.md
+    - AI Content:
+      - drupal/ai-content/index.md
+      - drupal/ai-content/anti-patterns.md
+      - drupal/ai-content/architecture.md
+      - drupal/ai-content/automators.md
+      - drupal/ai-content/ckeditor.md
+      - drupal/ai-content/content-workflow.md
+      - drupal/ai-content/framework-patterns.md
+      - drupal/ai-content/performance.md
+      - drupal/ai-content/provider-configuration.md
+      - drupal/ai-content/quality-review.md
+      - drupal/ai-content/security-privacy.md
+      - drupal/ai-content/seo.md
+      - drupal/ai-content/vector-rag.md
+    - Config Forms:
+      - drupal/config-forms/index.md
+      - drupal/config-forms/common-mistakes.md
+      - drupal/config-forms/configformbase-pattern.md
+      - drupal/config-forms/configuration-schema.md
+      - drupal/config-forms/dependency-injection.md
+      - drupal/config-forms/formbase-pattern.md
+      - drupal/config-forms/formbase-vs-listbuilder.md
+      - drupal/config-forms/listbuilder-pattern.md
+      - drupal/config-forms/operations-implementation.md
+      - drupal/config-forms/performance-best-practices.md
+      - drupal/config-forms/security-best-practices.md
+    - ECA:
+      - drupal/eca/index.md
+      - drupal/eca/access-control-patterns.md
+      - drupal/eca/action-plugin-basics.md
+      - drupal/eca/advanced-action-patterns.md
+      - drupal/eca/cleanup-interface.md
+      - drupal/eca/common-pitfalls.md
+      - drupal/eca/complex-token-structures.md
+      - drupal/eca/condition-plugin-basics.md
+      - drupal/eca/debugging-workflows.md
+      - drupal/eca/entity-aware-events.md
+      - drupal/eca/event-plugin-basics.md
+      - drupal/eca/kernel-testing.md
+      - drupal/eca/mandatory-rules.md
+      - drupal/eca/performance-patterns.md
+      - drupal/eca/plugin-derivers.md
+      - drupal/eca/reusable-traits.md
+      - drupal/eca/security-best-practices.md
+      - drupal/eca/service-injection.md
+      - drupal/eca/string-comparison-conditions.md
+      - drupal/eca/token-form-integration.md
+      - drupal/eca/token-receiver-interface.md
+      - drupal/eca/yaml-configuration.md
+    - Entities:
+      - drupal/entities/index.md
+      - drupal/entities/base-field-definitions.md
+      - drupal/entities/bundle-entity-implementation.md
+      - drupal/entities/computed-field-patterns.md
+      - drupal/entities/content-type-configuration.md
+      - drupal/entities/custom-field-type-development.md
+      - drupal/entities/entity-architecture-fundamentals.md
+      - drupal/entities/entity-query-patterns.md
+      - drupal/entities/entity-query-performance.md
+      - drupal/entities/entity-reference-patterns.md
+      - drupal/entities/field-access-control.md
+      - drupal/entities/field-formatter-development.md
+      - drupal/entities/field-instance-configuration.md
+      - drupal/entities/field-storage-configuration.md
+      - drupal/entities/field-type-selection.md
+      - drupal/entities/field-validation-patterns.md
+      - drupal/entities/field-widget-development.md
+      - drupal/entities/file-and-image-field-patterns.md
+      - drupal/entities/form-display-configuration.md
+      - drupal/entities/view-display-configuration.md
+      - drupal/entities/view-mode-development.md
     - Forms:
       - drupal/forms/index.md
       - drupal/forms/ajax-architecture.md
@@ -348,22 +441,44 @@ nav:
       - drupal/forms/submission-architecture.md
       - drupal/forms/validation-architecture.md
       - drupal/forms/validation-partial.md
-    - SDC:
-      - drupal/sdc/index.md
-      - drupal/sdc/anti-patterns.md
-      - drupal/sdc/component-composition.md
-      - drupal/sdc/component-file-structure.md
-      - drupal/sdc/component-variants.md
-      - drupal/sdc/component-yaml-schema.md
-      - drupal/sdc/javascript-in-sdcs.md
-      - drupal/sdc/performance.md
-      - drupal/sdc/props-vs-slots-decision-framework.md
-      - drupal/sdc/replacing-templates-with-sdcs.md
-      - drupal/sdc/scss-css-in-sdcs.md
-      - drupal/sdc/sdc-architecture.md
-      - drupal/sdc/security.md
-      - drupal/sdc/testing-sdcs.md
-      - drupal/sdc/twig-templates-in-sdcs.md
+    - GitHub Actions:
+      - drupal/github-actions/index.md
+      - drupal/github-actions/caching-strategies.md
+      - drupal/github-actions/code-quality-checks.md
+      - drupal/github-actions/deployment-artifacts.md
+      - drupal/github-actions/drupal-stack-setup.md
+      - drupal/github-actions/environment-protection.md
+      - drupal/github-actions/matrix-testing.md
+      - drupal/github-actions/multi-environment-deployment.md
+      - drupal/github-actions/parallel-execution.md
+      - drupal/github-actions/phpunit-testing.md
+      - drupal/github-actions/secret-management.md
+      - drupal/github-actions/theme-asset-compilation.md
+      - drupal/github-actions/troubleshooting.md
+      - drupal/github-actions/workflow-fundamentals.md
+    - Icon API:
+      - drupal/icon-api/index.md
+      - drupal/icon-api/caching-strategy.md
+      - drupal/icon-api/choosing-extractors.md
+      - drupal/icon-api/custom-extractor-development.md
+      - drupal/icon-api/debugging-templates.md
+      - drupal/icon-api/font-extractor.md
+      - drupal/icon-api/icon-pack-architecture.md
+      - drupal/icon-api/icon-pack-definition.md
+      - drupal/icon-api/iconpackmanager-service.md
+      - drupal/icon-api/icon-slots.md
+      - drupal/icon-api/migration-patterns.md
+      - drupal/icon-api/path-extractor.md
+      - drupal/icon-api/performance-best-practices.md
+      - drupal/icon-api/remote-resource-security.md
+      - drupal/icon-api/sdc-icon-props.md
+      - drupal/icon-api/svg-extractor.md
+      - drupal/icon-api/svg-security-performance.md
+      - drupal/icon-api/svg-sprite-extractor.md
+      - drupal/icon-api/template-variables.md
+      - drupal/icon-api/troubleshooting-icon-discovery.md
+      - drupal/icon-api/twig-icon-function.md
+      - drupal/icon-api/what-is-icon-api.md
     - JavaScript:
       - drupal/js-development/index.md
       - drupal/js-development/aggregation-and-minification.md
@@ -388,106 +503,24 @@ nav:
       - drupal/js-development/performance-optimization.md
       - drupal/js-development/security.md
       - drupal/js-development/testing-javascript.md
-    - Entities:
-      - drupal/entities/index.md
-      - drupal/entities/base-field-definitions.md
-      - drupal/entities/bundle-entity-implementation.md
-      - drupal/entities/computed-field-patterns.md
-      - drupal/entities/content-type-configuration.md
-      - drupal/entities/custom-field-type-development.md
-      - drupal/entities/entity-architecture-fundamentals.md
-      - drupal/entities/entity-query-patterns.md
-      - drupal/entities/entity-query-performance.md
-      - drupal/entities/entity-reference-patterns.md
-      - drupal/entities/field-access-control.md
-      - drupal/entities/field-formatter-development.md
-      - drupal/entities/field-instance-configuration.md
-      - drupal/entities/field-storage-configuration.md
-      - drupal/entities/field-type-selection.md
-      - drupal/entities/field-validation-patterns.md
-      - drupal/entities/field-widget-development.md
-      - drupal/entities/file-and-image-field-patterns.md
-      - drupal/entities/form-display-configuration.md
-      - drupal/entities/view-display-configuration.md
-      - drupal/entities/view-mode-development.md
-    - Plugins:
-      - drupal/plugins/index.md
-      - drupal/plugins/architecture-pattern-selection.md
-      - drupal/plugins/configuration-architecture.md
-      - drupal/plugins/event-system-integration.md
-      - drupal/plugins/foundation-extension-pattern.md
-      - drupal/plugins/pattern-selection-decision-matrix.md
-      - drupal/plugins/performance-best-practices.md
-      - drupal/plugins/plugin-manager-implementation.md
-      - drupal/plugins/provider-plugin-pattern.md
-      - drupal/plugins/real-world-examples.md
-      - drupal/plugins/security-best-practices.md
-      - drupal/plugins/service-collector-pattern.md
-      - drupal/plugins/service-integration-patterns.md
-      - drupal/plugins/testing-debugging.md
-    - Routing:
-      - drupal/routing/index.md
-      - drupal/routing/access-control-patterns.md
-      - drupal/routing/admin-route-configuration.md
-      - drupal/routing/basic-route-structure.md
-      - drupal/routing/common-pitfalls.md
-      - drupal/routing/custom-access-checking.md
-      - drupal/routing/dynamic-routes.md
-      - drupal/routing/performance-best-practices.md
-      - drupal/routing/route-parameters.md
-      - drupal/routing/route-subscribers.md
-      - drupal/routing/security-best-practices.md
-      - drupal/routing/testing-and-debugging.md
-      - drupal/routing/yaml-escaping-rules.md
-    - Config Forms:
-      - drupal/config-forms/index.md
-      - drupal/config-forms/common-mistakes.md
-      - drupal/config-forms/configformbase-pattern.md
-      - drupal/config-forms/configuration-schema.md
-      - drupal/config-forms/dependency-injection.md
-      - drupal/config-forms/formbase-pattern.md
-      - drupal/config-forms/formbase-vs-listbuilder.md
-      - drupal/config-forms/listbuilder-pattern.md
-      - drupal/config-forms/operations-implementation.md
-      - drupal/config-forms/performance-best-practices.md
-      - drupal/config-forms/security-best-practices.md
-    - Icon API:
-      - drupal/icon-api/index.md
-      - drupal/icon-api/caching-strategy.md
-      - drupal/icon-api/choosing-extractors.md
-      - drupal/icon-api/custom-extractor-development.md
-      - drupal/icon-api/debugging-templates.md
-      - drupal/icon-api/font-extractor.md
-      - drupal/icon-api/icon-pack-architecture.md
-      - drupal/icon-api/icon-pack-definition.md
-      - drupal/icon-api/iconpackmanager-service.md
-      - drupal/icon-api/icon-slots.md
-      - drupal/icon-api/migration-patterns.md
-      - drupal/icon-api/path-extractor.md
-      - drupal/icon-api/performance-best-practices.md
-      - drupal/icon-api/remote-resource-security.md
-      - drupal/icon-api/sdc-icon-props.md
-      - drupal/icon-api/svg-extractor.md
-      - drupal/icon-api/svg-security-performance.md
-      - drupal/icon-api/svg-sprite-extractor.md
-      - drupal/icon-api/template-variables.md
-      - drupal/icon-api/troubleshooting-icon-discovery.md
-      - drupal/icon-api/twig-icon-function.md
-      - drupal/icon-api/what-is-icon-api.md
-    - AI Content:
-      - drupal/ai-content/index.md
-      - drupal/ai-content/anti-patterns.md
-      - drupal/ai-content/architecture.md
-      - drupal/ai-content/automators.md
-      - drupal/ai-content/ckeditor.md
-      - drupal/ai-content/content-workflow.md
-      - drupal/ai-content/framework-patterns.md
-      - drupal/ai-content/performance.md
-      - drupal/ai-content/provider-configuration.md
-      - drupal/ai-content/quality-review.md
-      - drupal/ai-content/security-privacy.md
-      - drupal/ai-content/seo.md
-      - drupal/ai-content/vector-rag.md
+    - Klaro:
+      - drupal/klaro/index.md
+      - drupal/klaro/automatic-resource-attribution.md
+      - drupal/klaro/consent-mode-selection.md
+      - drupal/klaro/development-standards.md
+      - drupal/klaro/installation-methods.md
+      - drupal/klaro/legal-compliance-requirements.md
+      - drupal/klaro/menu-integration.md
+      - drupal/klaro/performance-optimization.md
+      - drupal/klaro/purpose-management.md
+      - drupal/klaro/security-best-practices.md
+      - drupal/klaro/service-configuration.md
+      - drupal/klaro/storage-settings.md
+      - drupal/klaro/styling-and-ui-customization.md
+      - drupal/klaro/translation-and-localization.md
+      - drupal/klaro/troubleshooting.md
+      - drupal/klaro/url-pattern-exclusions.md
+      - drupal/klaro/what-is-consent-management.md
     - Media:
       - drupal/media/index.md
       - drupal/media/anti-patterns.md
@@ -523,69 +556,58 @@ nav:
       - drupal/migration/plan-custom-code-strategy.md
       - drupal/migration/security-best-practices.md
       - drupal/migration/test-migration-results.md
-    - ECA:
-      - drupal/eca/index.md
-      - drupal/eca/access-control-patterns.md
-      - drupal/eca/action-plugin-basics.md
-      - drupal/eca/advanced-action-patterns.md
-      - drupal/eca/cleanup-interface.md
-      - drupal/eca/common-pitfalls.md
-      - drupal/eca/complex-token-structures.md
-      - drupal/eca/condition-plugin-basics.md
-      - drupal/eca/debugging-workflows.md
-      - drupal/eca/entity-aware-events.md
-      - drupal/eca/event-plugin-basics.md
-      - drupal/eca/kernel-testing.md
-      - drupal/eca/mandatory-rules.md
-      - drupal/eca/performance-patterns.md
-      - drupal/eca/plugin-derivers.md
-      - drupal/eca/reusable-traits.md
-      - drupal/eca/security-best-practices.md
-      - drupal/eca/service-injection.md
-      - drupal/eca/string-comparison-conditions.md
-      - drupal/eca/token-form-integration.md
-      - drupal/eca/token-receiver-interface.md
-      - drupal/eca/yaml-configuration.md
-    - Klaro:
-      - drupal/klaro/index.md
-      - drupal/klaro/automatic-resource-attribution.md
-      - drupal/klaro/consent-mode-selection.md
-      - drupal/klaro/development-standards.md
-      - drupal/klaro/installation-methods.md
-      - drupal/klaro/legal-compliance-requirements.md
-      - drupal/klaro/menu-integration.md
-      - drupal/klaro/performance-optimization.md
-      - drupal/klaro/purpose-management.md
-      - drupal/klaro/security-best-practices.md
-      - drupal/klaro/service-configuration.md
-      - drupal/klaro/storage-settings.md
-      - drupal/klaro/styling-and-ui-customization.md
-      - drupal/klaro/translation-and-localization.md
-      - drupal/klaro/troubleshooting.md
-      - drupal/klaro/url-pattern-exclusions.md
-      - drupal/klaro/what-is-consent-management.md
-    - GitHub Actions:
-      - drupal/github-actions/index.md
-      - drupal/github-actions/caching-strategies.md
-      - drupal/github-actions/code-quality-checks.md
-      - drupal/github-actions/deployment-artifacts.md
-      - drupal/github-actions/drupal-stack-setup.md
-      - drupal/github-actions/environment-protection.md
-      - drupal/github-actions/matrix-testing.md
-      - drupal/github-actions/multi-environment-deployment.md
-      - drupal/github-actions/parallel-execution.md
-      - drupal/github-actions/phpunit-testing.md
-      - drupal/github-actions/secret-management.md
-      - drupal/github-actions/theme-asset-compilation.md
-      - drupal/github-actions/troubleshooting.md
-      - drupal/github-actions/workflow-fundamentals.md
+    - Plugins:
+      - drupal/plugins/index.md
+      - drupal/plugins/architecture-pattern-selection.md
+      - drupal/plugins/configuration-architecture.md
+      - drupal/plugins/event-system-integration.md
+      - drupal/plugins/foundation-extension-pattern.md
+      - drupal/plugins/pattern-selection-decision-matrix.md
+      - drupal/plugins/performance-best-practices.md
+      - drupal/plugins/plugin-manager-implementation.md
+      - drupal/plugins/provider-plugin-pattern.md
+      - drupal/plugins/real-world-examples.md
+      - drupal/plugins/security-best-practices.md
+      - drupal/plugins/service-collector-pattern.md
+      - drupal/plugins/service-integration-patterns.md
+      - drupal/plugins/testing-debugging.md
+    - Routing:
+      - drupal/routing/index.md
+      - drupal/routing/access-control-patterns.md
+      - drupal/routing/admin-route-configuration.md
+      - drupal/routing/basic-route-structure.md
+      - drupal/routing/common-pitfalls.md
+      - drupal/routing/custom-access-checking.md
+      - drupal/routing/dynamic-routes.md
+      - drupal/routing/performance-best-practices.md
+      - drupal/routing/route-parameters.md
+      - drupal/routing/route-subscribers.md
+      - drupal/routing/security-best-practices.md
+      - drupal/routing/testing-and-debugging.md
+      - drupal/routing/yaml-escaping-rules.md
+    - SDC:
+      - drupal/sdc/index.md
+      - drupal/sdc/anti-patterns.md
+      - drupal/sdc/component-composition.md
+      - drupal/sdc/component-file-structure.md
+      - drupal/sdc/component-variants.md
+      - drupal/sdc/component-yaml-schema.md
+      - drupal/sdc/javascript-in-sdcs.md
+      - drupal/sdc/performance.md
+      - drupal/sdc/props-vs-slots-decision-framework.md
+      - drupal/sdc/replacing-templates-with-sdcs.md
+      - drupal/sdc/scss-css-in-sdcs.md
+      - drupal/sdc/sdc-architecture.md
+      - drupal/sdc/security.md
+      - drupal/sdc/testing-sdcs.md
+      - drupal/sdc/twig-templates-in-sdcs.md
     - Testing:
       - drupal/testing/index.md
       - drupal/testing/best-practices-anti-patterns.md
       - drupal/testing/framework-selection-decision-matrix.md
       - drupal/testing/gander-performance-testing.md
-      - drupal/testing/phpunit-functionaljavascript-tests.md
       - drupal/testing/phpunit-functional-tests.md
+      - drupal/testing/phpunit-functionaljavascript-tests.md
       - drupal/testing/phpunit-kernel-tests.md
       - drupal/testing/phpunit-unit-tests.md
       - drupal/testing/progressive-testing-strategy.md
@@ -594,6 +616,58 @@ nav:
       - drupal/testing/testing-infrastructure-setup.md
   - Design Systems:
     - design-systems/index.md
+    - Bootstrap Mapping:
+      - design-systems/bootstrap/index.md
+      - design-systems/bootstrap/advanced-scss-best-practices.md
+      - design-systems/bootstrap/atoms-bootstrap-components.md
+      - design-systems/bootstrap/bootstrap-accommodation-decision-framework.md
+      - design-systems/bootstrap/design-tokens-bootstrap-variables.md
+      - design-systems/bootstrap/documentation-templates.md
+      - design-systems/bootstrap/key-bootstrap-scss-mechanisms.md
+      - design-systems/bootstrap/molecules-component-combinations.md
+      - design-systems/bootstrap/organisms-layout-components.md
+      - design-systems/bootstrap/progressive-enhancement-guidelines.md
+      - design-systems/bootstrap/project-continuation-guidelines.md
+      - design-systems/bootstrap/project-organization-principles.md
+      - design-systems/bootstrap/quality-assurance-framework.md
+      - design-systems/bootstrap/scss-best-practices.md
+      - design-systems/bootstrap/scss-integration-order.md
+      - design-systems/bootstrap/templates-bootstrap-grid.md
+      - design-systems/bootstrap/token-to-utility-flow.md
+    - Radix Components:
+      - design-systems/radix-components/index.md
+      - design-systems/radix-components/accessibility-best-practices.md
+      - design-systems/radix-components/component-override-patterns.md
+      - design-systems/radix-components/component-selection-strategy.md
+      - design-systems/radix-components/content-display-components.md
+      - design-systems/radix-components/creating-custom-components.md
+      - design-systems/radix-components/development-standards.md
+      - design-systems/radix-components/form-components.md
+      - design-systems/radix-components/layout-components.md
+      - design-systems/radix-components/navigation-components.md
+      - design-systems/radix-components/page-structure-components.md
+      - design-systems/radix-components/performance-best-practices.md
+      - design-systems/radix-components/radix-component-architecture.md
+      - design-systems/radix-components/ui-components.md
+      - design-systems/radix-components/views-components.md
+    - Radix SDC:
+      - design-systems/radix-sdc/index.md
+      - design-systems/radix-sdc/atoms-sdc-components.md
+      - design-systems/radix-sdc/build-tools-compilation.md
+      - design-systems/radix-sdc/design-tokens-radix-configuration.md
+      - design-systems/radix-sdc/layout-builder-best-practices.md
+      - design-systems/radix-sdc/molecules-sdc-components.md
+      - design-systems/radix-sdc/organisms-sdc-layout-builder.md
+      - design-systems/radix-sdc/performance-best-practices.md
+      - design-systems/radix-sdc/radix-cli-integration.md
+      - design-systems/radix-sdc/radix-component-reuse-strategy.md
+      - design-systems/radix-sdc/radix-sub-theme-architecture.md
+      - design-systems/radix-sdc/radix-sub-theme-best-practices.md
+      - design-systems/radix-sdc/sdc-component-best-practices.md
+      - design-systems/radix-sdc/sdc-component-development.md
+      - design-systems/radix-sdc/templates-drupal-theme-layer.md
+      - design-systems/radix-sdc/troubleshooting-sdc-components.md
+      - design-systems/radix-sdc/twig-and-preprocess-best-practices.md
     - Recognition:
       - design-systems/recognition/index.md
       - design-systems/recognition/analysis-best-practices.md
@@ -609,35 +683,6 @@ nav:
       - design-systems/recognition/standards-specifications.md
       - design-systems/recognition/templates-vs-pages.md
       - design-systems/recognition/validation-checklist.md
-    - Bootstrap Mapping:
-      - design-systems/bootstrap/index.md
-      - design-systems/bootstrap/advanced-scss-best-practices.md
-      - design-systems/bootstrap/atoms-bootstrap-components.md
-      - design-systems/bootstrap/bootstrap-accommodation-decision-framework.md
-      - design-systems/bootstrap/design-tokens-bootstrap-variables.md
-      - design-systems/bootstrap/key-bootstrap-scss-mechanisms.md
-      - design-systems/bootstrap/molecules-component-combinations.md
-      - design-systems/bootstrap/organisms-layout-components.md
-      - design-systems/bootstrap/quality-assurance-framework.md
-      - design-systems/bootstrap/scss-best-practices.md
-      - design-systems/bootstrap/scss-integration-order.md
-      - design-systems/bootstrap/templates-bootstrap-grid.md
-      - design-systems/bootstrap/token-to-utility-flow.md
-    - Radix SDC:
-      - design-systems/radix-sdc/index.md
-      - design-systems/radix-sdc/atoms-sdc-components.md
-      - design-systems/radix-sdc/design-tokens-configuration.md
-      - design-systems/radix-sdc/layout-builder-best-practices.md
-      - design-systems/radix-sdc/molecules-sdc-components.md
-      - design-systems/radix-sdc/organisms-sdc-layout-builder.md
-      - design-systems/radix-sdc/performance-best-practices.md
-      - design-systems/radix-sdc/radix-component-reuse-strategy.md
-      - design-systems/radix-sdc/radix-sub-theme-best-practices.md
-      - design-systems/radix-sdc/sdc-component-best-practices.md
-      - design-systems/radix-sdc/sdc-component-development.md
-      - design-systems/radix-sdc/sub-theme-architecture.md
-      - design-systems/radix-sdc/templates-drupal-theme-layer.md
-      - design-systems/radix-sdc/twig-preprocess-best-practices.md
 
 markdown_extensions:
   - tables

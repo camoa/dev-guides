@@ -1,52 +1,69 @@
 ---
-description: Key Bootstrap SCSS Mechanisms — variable override system, map merging, mixins, and CSS custom properties generation
+description: Bootstrap's internal SCSS architecture including !default flag, map merging, and mixins
 ---
 
 # Key Bootstrap SCSS Mechanisms
 
 ## When to Use
 
-> Use when understanding Bootstrap's internal architecture, troubleshooting customization issues, or leveraging Bootstrap's built-in systems effectively.
+> Use this to understand Bootstrap's internal architecture, troubleshoot customization issues, and leverage built-in systems effectively.
 
-## Decision
+## Variable Override System
 
-| Mechanism | How It Works | When to Use |
-|-----------|--------------|-------------|
-| `!default` flag | Only sets variable if not already defined | Override Bootstrap variables |
-| `map-merge()` | Combines two maps, second overwrites first | Extend Bootstrap maps |
-| `map.deep-merge()` | Merges nested maps recursively | Preserve nested values |
-| Bootstrap mixins | Reusable style generators | Button variants, media queries |
-| CSS custom properties | Generated from SCSS variables | Runtime theming, JavaScript updates |
+### How Bootstrap's `!default` Flag Works
 
-## Pattern
+**Bootstrap Variables (in `_variables.scss`):**
 
-**Variable Override System**:
 ```scss
-// Your override (before importing Bootstrap)
-$primary: #0066cc;
+$primary: #0d6efd !default;
+$secondary: #6c757d !default;
+```
+
+**Your Override (before importing Bootstrap):**
+
+```scss
+$primary: #0066cc;  // Your value (no !default)
 
 @import "bootstrap/scss/variables";
-// Bootstrap sees $primary already defined
+// Bootstrap sees $primary is already defined
 // Skips its default due to !default flag
 // Result: $primary = #0066cc
 ```
 
-**Map Merging System**:
+**Key Concept:** The `!default` flag means "only set this variable if it doesn't already exist."
+
+## Map Merging System
+
+### Pattern: Safe Map Extension
+
+**Bootstrap Map (in `_maps.scss`):**
+
+```scss
+$theme-colors: (
+  "primary": $primary,
+  "secondary": $secondary,
+  // ... other colors
+) !default;
+```
+
+**Your Extension:**
+
 ```scss
 @import "bootstrap/scss/functions";
 @import "bootstrap/scss/variables";
 
-// Merge additions with Bootstrap defaults
+// Merge your additions with Bootstrap defaults
 $theme-colors: map-merge($theme-colors, (
-  "brand": #0066cc,
-  "custom": #ff6600,
+  "brand": #0066cc,      // Add new color
+  "custom": #ff6600,     // Add another color
 ));
 
 @import "bootstrap/scss/maps";
 // Bootstrap now has ALL colors (defaults + yours)
 ```
 
-**Common Map Operations**:
+### Common Map Operations
+
 ```scss
 // Add to map
 $spacers: map-merge($spacers, (
@@ -58,73 +75,117 @@ $theme-colors: map-remove($theme-colors, "info", "light");
 
 // Get value from map
 $primary-color: map-get($theme-colors, "primary");
+
+// Nested map merge (for utilities)
+$utilities: map-merge($utilities, (
+  "width": map-merge(
+    map-get($utilities, "width"),
+    ( responsive: true )
+  )
+));
 ```
 
-**Bootstrap Mixins**:
-```scss
-// Color manipulation
-$hover-color: tint-color($primary, 20%);   // Lighten 20%
-$active-color: shade-color($primary, 20%); // Darken 20%
+## Mixin Usage System
 
-// Button variant
+### Common Bootstrap Mixins
+
+**Color Manipulation:**
+
+```scss
+@import "bootstrap/scss/functions";
+
+$hover-color: tint-color($primary, 20%);   // Lighten by 20%
+$active-color: shade-color($primary, 20%); // Darken by 20%
+```
+
+**Button Variant:**
+
+```scss
+@import "bootstrap/scss/mixins/buttons";
+
 .btn-custom {
   @include button-variant(
     $background: #0066cc,
     $border: #0066cc,
     $color: #fff,
-    $hover-background: darken(#0066cc, 7.5%)
+    $hover-background: shade-color(#0066cc, 10%),
+    $hover-border: shade-color(#0066cc, 12%),
+    $active-background: shade-color(#0066cc, 15%)
   );
-}
-
-// Media query breakpoints
-.custom-component {
-  font-size: 1rem;
-
-  @include media-breakpoint-up(md) {
-    font-size: 1.25rem;  // Tablet and up
-  }
-
-  @include media-breakpoint-up(lg) {
-    font-size: 1.5rem;   // Desktop and up
-  }
-}
-
-// Border radius
-.custom-box {
-  @include border-radius($border-radius);
 }
 ```
 
-**CSS Custom Properties Generation**:
+**Media Query Mixins:**
+
 ```scss
-// SCSS Variables
-$primary: #0066cc;
+@import "bootstrap/scss/mixins/breakpoints";
 
-// Bootstrap generates in :root
-:root {
-  --bs-primary: #0066cc;
-  --bs-primary-rgb: 0, 102, 204;
-}
-
-// Usage in CSS
 .custom-component {
-  background: var(--bs-primary);
-  color: rgba(var(--bs-primary-rgb), 0.5);
+  @include media-breakpoint-up(md) {
+    // Styles for md and larger
+  }
+
+  @include media-breakpoint-down(sm) {
+    // Styles for sm and smaller
+  }
 }
+```
+
+**Gradient Mixins:**
+
+```scss
+@import "bootstrap/scss/mixins/gradients";
+
+.gradient-component {
+  @include gradient-directional(#0066cc, #00cc66, 45deg);
+}
+```
+
+## Utility API System
+
+### How Utilities Are Generated
+
+```scss
+// Bootstrap's utility definition
+$utilities: (
+  "margin": (
+    property: margin,
+    class: m,
+    values: map-merge($spacers, (auto: auto))
+  ),
+);
+
+// Generates: .m-0, .m-1, .m-2, etc.
+```
+
+### Extending Utilities
+
+```scss
+$utilities: map-merge($utilities, (
+  "opacity": (
+    property: opacity,
+    values: (
+      0: 0,
+      25: 0.25,
+      50: 0.5,
+      75: 0.75,
+      100: 1,
+    )
+  )
+));
 ```
 
 ## Common Mistakes
 
-- **Wrong**: Setting variables after Bootstrap import → **Right**: Before import (`!default` flag)
-- **Wrong**: `map-merge()` on nested maps → **Right**: `map.deep-merge()` (preserves nested values)
-- **Wrong**: Manual CSS property creation → **Right**: Bootstrap auto-generates from SCSS variables
-- **Wrong**: Using CSS variables in media queries → **Right**: Use SCSS variables (CSS spec limitation)
-- **Wrong**: Not using Bootstrap mixins → **Right**: Leverage `button-variant()`, `media-breakpoint-up()`, etc.
+- **Wrong**: Not using !default for own variables → **Right**: Use !default for variables you want to be overridable
+- **Wrong**: map-replace() instead of map-merge() → **Right**: Use map-merge() to preserve Bootstrap defaults
+- **Wrong**: Using mixins without importing them → **Right**: Import specific mixin files first
+- **Wrong**: Modifying Bootstrap source files → **Right**: Override via SCSS variables and maps
 
 ## See Also
 
-- [Bootstrap Accommodation Decision Framework](bootstrap-accommodation-decision-framework.md)
+- [SCSS Best Practices](scss-best-practices.md)
 - [Advanced SCSS Best Practices](advanced-scss-best-practices.md)
 - [SCSS Integration Order](scss-integration-order.md)
-- Reference: [Sass: sass:map Documentation](https://sass-lang.com/documentation/modules/map/)
-- Reference: [Bootstrap 5.3 Mixins](https://getbootstrap.com/docs/5.3/customize/sass/)
+- [Token to Utility Flow](token-to-utility-flow.md)
+- Reference: [Bootstrap Sass Documentation](https://getbootstrap.com/docs/5.3/customize/sass/)

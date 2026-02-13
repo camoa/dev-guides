@@ -1,30 +1,29 @@
 ---
-description: Organism SDC components with Layout Builder integration — navigation organisms, hero sections, Layout Builder blocks
+description: You've identified organisms using the Design System Recognition Guide
 drupal_version: "11.x"
 ---
 
-# Organisms SDC + Layout Builder
+## 5. Organisms → SDC + Layout Builder
 
-## When to Use
+### When to Use This Section
+- You've identified organisms using the Design System Recognition Guide
+- You're building complex sections like navbars, heroes, card grids
+- You need to integrate organisms with Layout Builder
 
-> Use this when building complex sections like navbars, heroes, or card grids, and when integrating organisms with Layout Builder.
+### 5.1 Navigation Organisms
 
-## Decision
+#### Pattern: Navbar Organism
 
-| Organism Type | Integration Method | Example |
-|---------------|-------------------|---------|
-| **Header/Footer** | Template override | Page template includes organism |
-| **Hero Section** | Layout Builder block | Block plugin renders SDC |
-| **Card Grid** | Views + template | Views template includes card molecules |
-| **Feature Section** | Layout Builder block | Block plugin with configurable SDC |
+**Radix provides:** `radix/components/navbar/` with Bootstrap navbar integration
 
-## Pattern
-
-**Navigation Organism (Navbar):**
+**When to customize:**
+- Brand-specific navigation structure
+- Custom menu patterns
+- Integration with Drupal menu system
 
 **File: `components/site-navbar/site-navbar.component.yml`**
-
 ```yaml
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
 name: Site Navbar
 status: stable
 description: Site navigation organism
@@ -51,7 +50,6 @@ slots:
 ```
 
 **File: `components/site-navbar/site-navbar.twig`**
-
 ```twig
 {% embed 'radix:navbar' with {
   navbar_theme: navbar_theme,
@@ -66,14 +64,30 @@ slots:
     {{ slots.navigation }}
   {% endblock %}
 
+  {# Custom actions slot #}
   <div class="navbar-actions">
     {{ slots.actions }}
   </div>
 {% endembed %}
 ```
 
-**Template Integration (`templates/layout/page.html.twig`):**
+**File: `components/site-navbar/site-navbar.scss`**
+```scss
+@import '../../src/scss/init';
 
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: $spacer;
+
+  @include media-breakpoint-down(lg) {
+    flex-direction: column;
+    width: 100%;
+  }
+}
+```
+
+**Template Integration: `templates/layout/page.html.twig`**
 ```twig
 {% include 'THEME_NAME:site-navbar' with {
   navbar_theme: 'dark',
@@ -85,11 +99,25 @@ slots:
 } %}
 ```
 
-**Hero Section Organism:**
+#### Common Mistakes
+- **Not using Radix navbar base** — Extend existing Radix navbar component
+- **Hardcoding menu structure** — Use Drupal menu system
+- **Missing responsive behavior** — Use Bootstrap navbar collapse
+- **Not integrating with regions** — Map Drupal regions to navbar slots
+
+#### See Also
+- [8.3 Overriding Radix Components](#83-overriding-radix-components)
+- [6.1 Page Template Structure](#61-page-template-structure)
+
+---
+
+### 5.2 Hero and Feature Organisms
+
+#### Pattern: Hero Section Organism
 
 **File: `components/hero-section/hero-section.component.yml`**
-
 ```yaml
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
 name: Hero Section
 status: stable
 description: Hero section with heading, text, and CTA buttons
@@ -120,7 +148,6 @@ slots:
 ```
 
 **File: `components/hero-section/hero-section.twig`**
-
 ```twig
 {%
   set hero_classes = [
@@ -158,10 +185,58 @@ slots:
 </section>
 ```
 
-**Layout Builder Integration (Block Plugin):**
+**File: `components/hero-section/hero-section.scss`**
+```scss
+@import '../../src/scss/init';
+
+.hero-section {
+  background-size: cover;
+  background-position: center;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: $dark;
+  }
+
+  &__heading {
+    font-weight: $font-weight-bold;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $spacer;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+```
+
+#### Common Mistakes
+- **Not using Bootstrap grid** — Use `.container`, `.row`, `.col-*` classes
+- **Hardcoding spacing** — Use Bootstrap spacing utilities
+- **Missing responsive behavior** — Test on mobile
+- **Not using design tokens** — Reference SCSS variables
+
+#### See Also
+- [5.3 Layout Builder Integration](#53-layout-builder-integration)
+- Bootstrap Mapping Guide: Section 6 (Organisms → Layout + Components)
+
+---
+
+### 5.3 Layout Builder Integration
+
+#### Pattern: Organism as Layout Builder Block
+
+**Step 1: Create Block Plugin** (in custom module or theme)
 
 **File: `src/Plugin/Block/HeroSectionBlock.php`**
-
 ```php
 <?php
 
@@ -199,30 +274,28 @@ class HeroSectionBlock extends BlockBase {
 }
 ```
 
-**Configuration Steps:**
+**Step 2: Configure Block in Layout Builder**
 
 1. Enable Layout Builder for content type
 2. Add block to layout region
 3. Configure block settings (heading, image, etc.)
 4. SDC organism renders with configured props
 
-## Common Mistakes
+#### Decision Table: Layout Builder Integration
 
-- **Wrong**: Not using Radix navbar base → **Right**: Extend existing Radix navbar component
-- **Wrong**: Hardcoding menu structure → **Right**: Use Drupal menu system
-- **Wrong**: Missing responsive behavior → **Right**: Use Bootstrap navbar collapse
-- **Wrong**: Not integrating with regions → **Right**: Map Drupal regions to navbar slots
-- **Wrong**: Not using Bootstrap grid → **Right**: Use `.container`, `.row`, `.col-*` classes
-- **Wrong**: Hardcoding spacing → **Right**: Use Bootstrap spacing utilities
-- **Wrong**: Missing responsive behavior → **Right**: Test on mobile
-- **Wrong**: Not using `#type => 'component'` → **Right**: Drupal's SDC render element
-- **Wrong**: Hardcoding props in block → **Right**: Make configurable via block form
-- **Wrong**: Missing cache tags → **Right**: Add proper cache metadata
+| Organism Type | Integration Method | Example |
+|---------------|-------------------|---------|
+| **Header/Footer** | Template override | Page template includes organism |
+| **Hero Section** | Layout Builder block | Block plugin renders SDC |
+| **Card Grid** | Views + template | Views template includes card molecules |
+| **Feature Section** | Layout Builder block | Block plugin with configurable SDC |
 
-## See Also
+#### Common Mistakes
+- **Not using `#type => 'component'`** — Drupal's SDC render element
+- **Hardcoding props** — Make configurable via block form
+- **Not enabling Layout Builder** — Required for block placement
+- **Missing cache tags** — Add proper cache metadata
 
-- [Molecules SDC Components](molecules-sdc-components.md)
-- [Templates Drupal Theme Layer](templates-drupal-theme-layer.md)
-- [Layout Builder Best Practices](layout-builder-best-practices.md)
-- [Radix Component Reuse Strategy](radix-component-reuse-strategy.md)
+#### See Also
+- [6.2 Layout Builder Composition](#62-layout-builder-composition)
 - Drupal Layout Builder: https://www.drupal.org/docs/8/core/modules/layout-builder

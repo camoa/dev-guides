@@ -1,34 +1,40 @@
 ---
-description: Organisms to Layout + Components — mapping navbars, complete cards, and forms to Bootstrap's complex components
+description: Map organism-level components (navbars, complete cards, forms) to Bootstrap
 ---
 
-# Organisms to Layout + Components
+# Organisms → Layout + Components
 
 ## When to Use
 
-> Use when mapping organisms (navbars, complete cards, forms) — complex UI sections combining multiple molecules and atoms — to Bootstrap's layout components.
+> Use this for mapping organisms (complex UI sections combining multiple molecules and atoms) like navbars and complete cards to Bootstrap's component system.
 
-## Decision
+## Navbar Organisms
 
-| Organism Type | Bootstrap Variable | Bootstrap Classes | Custom Required |
-|---------------|-------------------|------------------|-----------------|
-| Navbar | `$navbar-padding-y`, `$navbar-brand-*` | `.navbar`, `.navbar-brand`, `.navbar-nav` | No |
-| Card | `$card-border-width`, `$card-spacer-y` | `.card`, `.card-body`, `.card-header` | No |
-| Form | `$form-label-*`, `$input-*` | `.row`, `.col-*`, `.form-label`, `.form-control` | No |
+| Design System Need | Bootstrap Variable | Bootstrap Classes |
+|-------------------|-------------------|------------------|
+| Navbar base | `$navbar-padding-y`, `$navbar-padding-x` | `.navbar` |
+| Navbar brand/logo | `$navbar-brand-*` variables | `.navbar-brand` |
+| Navbar links | `$navbar-nav-link-padding-x` | `.navbar-nav` + `.nav-link` |
+| Navbar light/dark | N/A | `.navbar-light`, `.navbar-dark` |
+| Navbar background | Uses `$theme-colors` | `.bg-primary`, `.bg-dark` |
+| Navbar toggler (mobile) | `$navbar-toggler-*` variables | `.navbar-toggler` |
 
-## Pattern
+### Pattern
 
-**Navbar Organism**:
+**SCSS:**
+
 ```scss
 $navbar-padding-y: 0.5rem;
 $navbar-padding-x: 1rem;
 $navbar-brand-font-size: 1.25rem;
 $navbar-nav-link-padding-x: 0.5rem;
 $navbar-dark-color: rgba(255, 255, 255, 0.85);
-$navbar-toggler-border-radius: 0.375rem;
+$navbar-dark-hover-color: rgba(255, 255, 255, 1);
 
 @import "bootstrap";
 ```
+
+**HTML:**
 
 ```html
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -40,47 +46,75 @@ $navbar-toggler-border-radius: 0.375rem;
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
       </ul>
     </div>
   </div>
 </nav>
 ```
 
-**Card Organism**:
+## Card Organisms
+
+| Design System Need | Bootstrap Variable | Bootstrap Classes |
+|-------------------|-------------------|------------------|
+| Card container | `$card-border-width`, `$card-border-radius` | `.card` |
+| Card sections | `$card-spacer-y`, `$card-spacer-x` | `.card-header`, `.card-body`, `.card-footer` |
+| Card colors | Uses `$theme-colors` | `.bg-*`, `.text-*`, `.border-*` |
+| Card groups | `$card-group-margin` | `.card-group`, `.card-deck` |
+
+### Pattern
+
 ```scss
 $card-spacer-y: 1rem;
 $card-spacer-x: 1rem;
 $card-border-width: 1px;
 $card-border-radius: 0.5rem;
-$card-border-color: rgba(0, 0, 0, 0.125);
+$card-cap-bg: rgba(0, 0, 0, 0.03);
 
 @import "bootstrap";
 ```
 
-**Form Organism**:
-```scss
-$form-label-margin-bottom: 0.5rem;
-$form-label-font-size: 0.875rem;
-$form-label-font-weight: 500;
-$form-feedback-valid-color: $success;
-$form-feedback-invalid-color: $danger;
+## Form Organisms
 
-@import "bootstrap";
+| Design System Need | Bootstrap Variable | Bootstrap Classes |
+|-------------------|-------------------|------------------|
+| Form layout | N/A | `.row` + `.col-*` or `.mb-3` wrappers |
+| Form labels | `$form-label-*` variables | `.form-label` |
+| Form controls | Input/select variables | `.form-control`, `.form-select` |
+| Form validation | Validation variables | `.was-validated`, `.is-valid`, `.is-invalid` |
+| Form buttons | Button variables | `.btn` |
+
+### Pattern
+
+```html
+<form class="row g-3 needs-validation" novalidate>
+  <div class="col-md-6">
+    <label for="firstName" class="form-label">First name</label>
+    <input type="text" class="form-control" id="firstName" required>
+    <div class="valid-feedback">Looks good!</div>
+  </div>
+  <div class="col-md-6">
+    <label for="lastName" class="form-label">Last name</label>
+    <input type="text" class="form-control" id="lastName" required>
+  </div>
+  <div class="col-12">
+    <button class="btn btn-primary" type="submit">Submit</button>
+  </div>
+</form>
 ```
 
 ## Common Mistakes
 
-- **Wrong**: Not using `.navbar-expand-*` classes → **Right**: Required for responsive behavior
-- **Wrong**: Mixing navbar color variants → **Right**: Use either `.navbar-light` OR `.navbar-dark`
-- **Wrong**: Not including collapse/toggler → **Right**: Mobile navigation requires these
-- **Wrong**: Using deprecated `.card-deck` → **Right**: Use grid system (`.row` + `.row-cols-*`)
-- **Wrong**: Not using `.form-label` class → **Right**: Labels need this for proper styling
-- **Wrong**: Not using grid for form layout → **Right**: Use Bootstrap grid (`.row` + `.col-*`)
+- **Wrong**: Not using .navbar-expand-* classes → **Right**: Required for responsive behavior
+- **Wrong**: Mixing navbar color variants → **Right**: Use either .navbar-light or .navbar-dark
+- **Wrong**: Not including collapse/toggler → **Right**: Mobile navigation requires .navbar-toggler and .collapse
+- **Wrong**: Hardcoding navbar heights → **Right**: Bootstrap calculates from brand/padding variables
+- **Wrong**: Not using container → **Right**: Wrap navbar content in .container or .container-fluid
 
 ## See Also
 
-- [Molecules to Component Combinations](molecules-component-combinations.md)
-- [Templates to Bootstrap Grid](templates-bootstrap-grid.md)
-- Reference: [Bootstrap 5.3 Navbar](https://getbootstrap.com/docs/5.3/components/navbar/)
-- Reference: [Bootstrap 5.3 Cards](https://getbootstrap.com/docs/5.3/components/card/)
-- Reference: [Bootstrap 5.3 Forms](https://getbootstrap.com/docs/5.3/forms/overview/)
+- [Molecules → Component Combinations](molecules-component-combinations.md)
+- [Templates → Bootstrap Grid](templates-bootstrap-grid.md)
+- Reference: [Bootstrap Navbar](https://getbootstrap.com/docs/5.3/components/navbar/)
+- Reference: [Bootstrap Cards](https://getbootstrap.com/docs/5.3/components/card/)
+- Reference: [Bootstrap Forms](https://getbootstrap.com/docs/5.3/forms/overview/)

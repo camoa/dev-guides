@@ -96,15 +96,21 @@
     "guides_extracted": 13
   },
   "design-systems/bootstrap": {
-    "source_hash": "dded67b091e276852f8b0e549beb962bd818757650cd95d83f6e4dc1bc6a7615",
-    "partitioned": "2026-02-12",
+    "source_hash": "7b97291a322efc309f59abd96008a643ee390078259c03b37036638c20682d1c",
+    "partitioned": "2026-02-13",
     "partitioned_by": "camoa",
-    "guides_extracted": 12
+    "guides_extracted": 16
   },
   "design-systems/radix-sdc": {
-    "source_hash": "cb787d197646b19f545c9fb29a178e995af56b1f47578f77843d6f55f3e48518",
-    "partitioned": "2026-02-12",
+    "source_hash": "9272e69dd754ebc2718236f7eadeb9144c4f972ab87f029dbe5e131d37e0c189",
+    "partitioned": "2026-02-13",
     "partitioned_by": "camoa",
-    "guides_extracted": 13
+    "guides_extracted": 16
+  },
+  "design-systems/radix-components": {
+    "source_hash": "44b79f4f154e400999c37e73671cedaef35fd2c16cab25e753d424d3ccbf6ecf",
+    "partitioned": "2026-02-13",
+    "partitioned_by": "camoa",
+    "guides_extracted": 14
   }
 }
