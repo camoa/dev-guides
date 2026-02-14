@@ -162,22 +162,6 @@ plugins:
           - drupal/config-forms/operations-implementation.md: "Add action links (Edit, Delete) to table rows with operations render element"
           - drupal/config-forms/performance-best-practices.md: "Optimize configuration forms to avoid performance bottlenecks"
           - drupal/config-forms/security-best-practices.md: "Security patterns for configuration forms"
-          - drupal/deepchat-nextjs/index.md: "DeepChat + Next.js integration guides covering setup, API routes, streaming, Drupal backend, and security"
-          - drupal/deepchat-nextjs/ai-provider-integration.md: "Direct OpenAI and Anthropic API integration with streaming support"
-          - drupal/deepchat-nextjs/anti-patterns.md: "Common mistakes and anti-patterns to avoid in DeepChat + Next.js"
-          - drupal/deepchat-nextjs/authentication-sessions.md: "NextAuth Bearer token authentication, Drupal OAuth + CSRF flow, session management"
-          - drupal/deepchat-nextjs/best-practices.md: "Component architecture, performance optimization, lazy loading, error handling"
-          - drupal/deepchat-nextjs/connect-configuration.md: "Configure DeepChat API connection and request/response interceptors"
-          - drupal/deepchat-nextjs/custom-handlers.md: "Custom request handlers, transform requests/responses, and retry logic"
-          - drupal/deepchat-nextjs/deepchat-overview.md: "Framework-agnostic web component for AI chat interfaces"
-          - drupal/deepchat-nextjs/drupal-backend.md: "Drupal AI module integration with DeepChat including session management"
-          - drupal/deepchat-nextjs/file-upload.md: "Configure file upload, handle FormData requests, integrate with AI vision models"
-          - drupal/deepchat-nextjs/installation.md: "Install DeepChat in Next.js and configure dynamic import to avoid SSR errors"
-          - drupal/deepchat-nextjs/message-formats.md: "Message structure, request/response formats, history management"
-          - drupal/deepchat-nextjs/nextjs-api-routes.md: "Next.js API route handlers with proxy pattern, authentication, and CSRF"
-          - drupal/deepchat-nextjs/security.md: "XSS prevention, API key management, file upload validation, rate limiting"
-          - drupal/deepchat-nextjs/streaming-responses.md: "Server-Sent Events streaming with ReadableStream for AI chat responses"
-          - drupal/deepchat-nextjs/styling-theming.md: "Style DeepChat with CSS variables, messageStyles, and shadow DOM"
           - drupal/icon-api/index.md: "Icon API — unified icon management for Drupal 11+ with SVG, sprites, fonts, and remote sources"
           - drupal/icon-api/caching-strategy.md: "Icon API caching behavior for performance optimization"
           - drupal/icon-api/choosing-extractors.md: "Select the appropriate extractor plugin for your icon source format"
@@ -269,26 +253,6 @@ plugins:
           - drupal/migration/plan-custom-code-strategy.md: "Rewrite vs retrofit vs retire strategy for D7 custom modules in D11"
           - drupal/migration/security-best-practices.md: "Security controls for SQL injection, XSS, and access bypass in migrations"
           - drupal/migration/test-migration-results.md: "Validation and testing strategy throughout migration lifecycle"
-          - drupal/next-drupal/index.md: "Next.js for Drupal — decoupled frontend with next-drupal library"
-          - drupal/next-drupal/authentication-patterns.md: "Authentication patterns for Next.js and Drupal integration"
-          - drupal/next-drupal/building-pages.md: "Build SSG, SSR, or ISR pages from Drupal content"
-          - drupal/next-drupal/decoupled-architecture-decision.md: "Choose decoupled Drupal with Next.js architecture"
-          - drupal/next-drupal/draft-mode.md: "Preview unpublished content in Next.js from Drupal"
-          - drupal/next-drupal/drupal-setup.md: "Set up Drupal backend for Next.js frontend"
-          - drupal/next-drupal/environment-variables.md: "Configure Next.js connection to Drupal with environment variables"
-          - drupal/next-drupal/fetching-content.md: "Fetch JSON:API resources from Drupal for Next.js pages"
-          - drupal/next-drupal/jsonapi-vs-graphql.md: "JSON:API vs GraphQL decision for next-drupal"
-          - drupal/next-drupal/media-images.md: "Handle Drupal media entities and images in Next.js"
-          - drupal/next-drupal/multilingual-support.md: "Multi-language support for Next.js with Drupal"
-          - drupal/next-drupal/nextdrupal-client-configuration.md: "Configure the NextDrupal client options"
-          - drupal/next-drupal/nextjs-project-setup.md: "Create a new Next.js frontend for Drupal"
-          - drupal/next-drupal/on-demand-revalidation.md: "Automatically update Next.js cached pages on Drupal content changes"
-          - drupal/next-drupal/performance-optimization.md: "Reduce build times, improve page load, minimize API requests"
-          - drupal/next-drupal/search-integration.md: "Implement search using Drupal Search API via JSON:API"
-          - drupal/next-drupal/security-best-practices.md: "Security practices for Next.js and Drupal implementations"
-          - drupal/next-drupal/sources-maintenance.md: "Reference sources and maintenance manifest"
-          - drupal/next-drupal/troubleshooting.md: "Diagnose and resolve common Next.js + Drupal issues"
-          - drupal/next-drupal/webform-integration.md: "Submit webforms from Next.js to Drupal"
           - drupal/eca/index.md: "ECA (Event-Condition-Action) plugin development — create custom actions, events, and conditions"
           - drupal/eca/access-control-patterns.md: "Validate plugin config in access() before execution with AccessResult patterns"
           - drupal/eca/action-plugin-basics.md: "Create custom ECA Action plugins with ConfigurableActionBase for user-configurable operations"
@@ -398,6 +362,44 @@ plugins:
           - drupal/tiptap-editor/ui-bubble-menu.md: "Selection-based context menu"
           - drupal/tiptap-editor/ui-floating-menu.md: "Floating menu and slash commands"
           - drupal/tiptap-editor/ui-toolbar.md: "Persistent toolbar"
+        "Next.js":
+          - nextjs/index.md: "Next.js guides — Drupal integration, chat interfaces, and decoupled frontend patterns"
+          - nextjs/next-drupal/index.md: "Next.js for Drupal — decoupled frontend with next-drupal library"
+          - nextjs/next-drupal/authentication-patterns.md: "Authentication patterns for Next.js and Drupal integration"
+          - nextjs/next-drupal/building-pages.md: "Build SSG, SSR, or ISR pages from Drupal content"
+          - nextjs/next-drupal/decoupled-architecture-decision.md: "Choose decoupled Drupal with Next.js architecture"
+          - nextjs/next-drupal/draft-mode.md: "Preview unpublished content in Next.js from Drupal"
+          - nextjs/next-drupal/drupal-setup.md: "Set up Drupal backend for Next.js frontend"
+          - nextjs/next-drupal/environment-variables.md: "Configure Next.js connection to Drupal with environment variables"
+          - nextjs/next-drupal/fetching-content.md: "Fetch JSON:API resources from Drupal for Next.js pages"
+          - nextjs/next-drupal/jsonapi-vs-graphql.md: "JSON:API vs GraphQL decision for next-drupal"
+          - nextjs/next-drupal/media-images.md: "Handle Drupal media entities and images in Next.js"
+          - nextjs/next-drupal/multilingual-support.md: "Multi-language support for Next.js with Drupal"
+          - nextjs/next-drupal/nextdrupal-client-configuration.md: "Configure the NextDrupal client options"
+          - nextjs/next-drupal/nextjs-project-setup.md: "Create a new Next.js frontend for Drupal"
+          - nextjs/next-drupal/on-demand-revalidation.md: "Automatically update Next.js cached pages on Drupal content changes"
+          - nextjs/next-drupal/performance-optimization.md: "Reduce build times, improve page load, minimize API requests"
+          - nextjs/next-drupal/search-integration.md: "Implement search using Drupal Search API via JSON:API"
+          - nextjs/next-drupal/security-best-practices.md: "Security practices for Next.js and Drupal implementations"
+          - nextjs/next-drupal/sources-maintenance.md: "Reference sources and maintenance manifest"
+          - nextjs/next-drupal/troubleshooting.md: "Diagnose and resolve common Next.js + Drupal issues"
+          - nextjs/next-drupal/webform-integration.md: "Submit webforms from Next.js to Drupal"
+          - nextjs/deepchat-nextjs/index.md: "DeepChat + Next.js integration guides covering setup, API routes, streaming, Drupal backend, and security"
+          - nextjs/deepchat-nextjs/ai-provider-integration.md: "Direct OpenAI and Anthropic API integration with streaming support"
+          - nextjs/deepchat-nextjs/anti-patterns.md: "Common mistakes and anti-patterns to avoid in DeepChat + Next.js"
+          - nextjs/deepchat-nextjs/authentication-sessions.md: "NextAuth Bearer token authentication, Drupal OAuth + CSRF flow, session management"
+          - nextjs/deepchat-nextjs/best-practices.md: "Component architecture, performance optimization, lazy loading, error handling"
+          - nextjs/deepchat-nextjs/connect-configuration.md: "Configure DeepChat API connection and request/response interceptors"
+          - nextjs/deepchat-nextjs/custom-handlers.md: "Custom request handlers, transform requests/responses, and retry logic"
+          - nextjs/deepchat-nextjs/deepchat-overview.md: "Framework-agnostic web component for AI chat interfaces"
+          - nextjs/deepchat-nextjs/drupal-backend.md: "Drupal AI module integration with DeepChat including session management"
+          - nextjs/deepchat-nextjs/file-upload.md: "Configure file upload, handle FormData requests, integrate with AI vision models"
+          - nextjs/deepchat-nextjs/installation.md: "Install DeepChat in Next.js and configure dynamic import to avoid SSR errors"
+          - nextjs/deepchat-nextjs/message-formats.md: "Message structure, request/response formats, history management"
+          - nextjs/deepchat-nextjs/nextjs-api-routes.md: "Next.js API route handlers with proxy pattern, authentication, and CSRF"
+          - nextjs/deepchat-nextjs/security.md: "XSS prevention, API key management, file upload validation, rate limiting"
+          - nextjs/deepchat-nextjs/streaming-responses.md: "Server-Sent Events streaming with ReadableStream for AI chat responses"
+          - nextjs/deepchat-nextjs/styling-theming.md: "Style DeepChat with CSS variables, messageStyles, and shadow DOM"
         "Design Systems":
           - design-systems/index.md: "Design system guides — recognition, Bootstrap mapping, Radix SDC implementation, Radix component reference"
           - design-systems/bootstrap/index.md: "Bootstrap 5.3 Mapping — systematic methodology for mapping design systems to Bootstrap using the 6px threshold framework"
@@ -494,23 +496,6 @@ nav:
       - drupal/config-forms/operations-implementation.md
       - drupal/config-forms/performance-best-practices.md
       - drupal/config-forms/security-best-practices.md
-    - "DeepChat + Next.js":
-      - drupal/deepchat-nextjs/index.md
-      - drupal/deepchat-nextjs/ai-provider-integration.md
-      - drupal/deepchat-nextjs/anti-patterns.md
-      - drupal/deepchat-nextjs/authentication-sessions.md
-      - drupal/deepchat-nextjs/best-practices.md
-      - drupal/deepchat-nextjs/connect-configuration.md
-      - drupal/deepchat-nextjs/custom-handlers.md
-      - drupal/deepchat-nextjs/deepchat-overview.md
-      - drupal/deepchat-nextjs/drupal-backend.md
-      - drupal/deepchat-nextjs/file-upload.md
-      - drupal/deepchat-nextjs/installation.md
-      - drupal/deepchat-nextjs/message-formats.md
-      - drupal/deepchat-nextjs/nextjs-api-routes.md
-      - drupal/deepchat-nextjs/security.md
-      - drupal/deepchat-nextjs/streaming-responses.md
-      - drupal/deepchat-nextjs/styling-theming.md
     - ECA:
       - drupal/eca/index.md
       - drupal/eca/access-control-patterns.md
@@ -723,27 +708,6 @@ nav:
       - drupal/migration/plan-custom-code-strategy.md
       - drupal/migration/security-best-practices.md
       - drupal/migration/test-migration-results.md
-    - Next Drupal:
-      - drupal/next-drupal/index.md
-      - drupal/next-drupal/authentication-patterns.md
-      - drupal/next-drupal/building-pages.md
-      - drupal/next-drupal/decoupled-architecture-decision.md
-      - drupal/next-drupal/draft-mode.md
-      - drupal/next-drupal/drupal-setup.md
-      - drupal/next-drupal/environment-variables.md
-      - drupal/next-drupal/fetching-content.md
-      - drupal/next-drupal/jsonapi-vs-graphql.md
-      - drupal/next-drupal/media-images.md
-      - drupal/next-drupal/multilingual-support.md
-      - drupal/next-drupal/nextdrupal-client-configuration.md
-      - drupal/next-drupal/nextjs-project-setup.md
-      - drupal/next-drupal/on-demand-revalidation.md
-      - drupal/next-drupal/performance-optimization.md
-      - drupal/next-drupal/search-integration.md
-      - drupal/next-drupal/security-best-practices.md
-      - drupal/next-drupal/sources-maintenance.md
-      - drupal/next-drupal/troubleshooting.md
-      - drupal/next-drupal/webform-integration.md
     - Plugins:
       - drupal/plugins/index.md
       - drupal/plugins/architecture-pattern-selection.md
@@ -871,6 +835,46 @@ nav:
       - drupal/tiptap-editor/ui-bubble-menu.md
       - drupal/tiptap-editor/ui-floating-menu.md
       - drupal/tiptap-editor/ui-toolbar.md
+  - "Next.js":
+    - nextjs/index.md
+    - Next Drupal:
+      - nextjs/next-drupal/index.md
+      - nextjs/next-drupal/authentication-patterns.md
+      - nextjs/next-drupal/building-pages.md
+      - nextjs/next-drupal/decoupled-architecture-decision.md
+      - nextjs/next-drupal/draft-mode.md
+      - nextjs/next-drupal/drupal-setup.md
+      - nextjs/next-drupal/environment-variables.md
+      - nextjs/next-drupal/fetching-content.md
+      - nextjs/next-drupal/jsonapi-vs-graphql.md
+      - nextjs/next-drupal/media-images.md
+      - nextjs/next-drupal/multilingual-support.md
+      - nextjs/next-drupal/nextdrupal-client-configuration.md
+      - nextjs/next-drupal/nextjs-project-setup.md
+      - nextjs/next-drupal/on-demand-revalidation.md
+      - nextjs/next-drupal/performance-optimization.md
+      - nextjs/next-drupal/search-integration.md
+      - nextjs/next-drupal/security-best-practices.md
+      - nextjs/next-drupal/sources-maintenance.md
+      - nextjs/next-drupal/troubleshooting.md
+      - nextjs/next-drupal/webform-integration.md
+    - "DeepChat + Next.js":
+      - nextjs/deepchat-nextjs/index.md
+      - nextjs/deepchat-nextjs/ai-provider-integration.md
+      - nextjs/deepchat-nextjs/anti-patterns.md
+      - nextjs/deepchat-nextjs/authentication-sessions.md
+      - nextjs/deepchat-nextjs/best-practices.md
+      - nextjs/deepchat-nextjs/connect-configuration.md
+      - nextjs/deepchat-nextjs/custom-handlers.md
+      - nextjs/deepchat-nextjs/deepchat-overview.md
+      - nextjs/deepchat-nextjs/drupal-backend.md
+      - nextjs/deepchat-nextjs/file-upload.md
+      - nextjs/deepchat-nextjs/installation.md
+      - nextjs/deepchat-nextjs/message-formats.md
+      - nextjs/deepchat-nextjs/nextjs-api-routes.md
+      - nextjs/deepchat-nextjs/security.md
+      - nextjs/deepchat-nextjs/streaming-responses.md
+      - nextjs/deepchat-nextjs/styling-theming.md
   - Design Systems:
     - design-systems/index.md
     - Bootstrap Mapping:

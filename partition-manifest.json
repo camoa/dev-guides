@@ -95,7 +95,7 @@
     "partitioned_by": "camoa",
     "guides_extracted": 43
   },
-  "drupal/deepchat-nextjs": {
+  "nextjs/deepchat-nextjs": {
     "source_hash": "9dacfdcfd768e5edf498d09c0e7e8331a74ea4ffd3714cba2a655d08705b07ad",
     "partitioned": "2026-02-14",
     "partitioned_by": "camoa",
@@ -113,7 +113,7 @@
     "partitioned_by": "camoa",
     "guides_extracted": 21
   },
-  "drupal/next-drupal": {
+  "nextjs/next-drupal": {
     "source_hash": "f9078b86430ff65bc652340475424198fcba6037b201a226478657df777e47e9",
     "partitioned": "2026-02-14",
     "partitioned_by": "camoa",

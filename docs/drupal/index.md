@@ -23,9 +23,6 @@ description: Drupal decision guides — forms, SDC components, JavaScript, entit
 | Add testing frameworks to modules | [Testing](testing/index.md) |
 | Create and manage Drupal recipes | [Recipes](recipes/index.md) |
 | Build a JSON:API for Drupal content | [JSON:API](jsonapi/index.md) |
-| Build a decoupled Next.js frontend | [Next.js for Drupal](next-drupal/index.md) |
-| Build a rich text editor with Tiptap | [Tiptap Editor](tiptap-editor/index.md) |
-| Add a chat UI with DeepChat | [DeepChat + Next.js](deepchat-nextjs/index.md) |
 | Manage configuration and schema | Config (coming soon) |
 | Build render arrays and templates | Render API (coming soon) |
 | Use HTMX in Drupal | HTMX (coming soon) |
