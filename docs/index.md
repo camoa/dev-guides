@@ -10,10 +10,9 @@ Decision-making guides that answer: "When you need to do X, what should you choo
 
 | Area | Topics |
 |------|--------|
-| [Drupal](drupal/index.md) | Forms, SDC Components, JS Development, Entities, Config, Render API, HTMX, Plugins, Services, Routing, Security, Caching |
-| [Design Systems](design-systems/index.md) | Recognition, Bootstrap Mapping, Radix SDC Implementation |
-| Next.js | Data Fetching, Routing, State, API Routes (coming soon) |
-| Decoupled | JSON:API vs GraphQL, Auth, Content Modeling (coming soon) |
+| [Drupal](drupal/index.md) | Forms, SDC, JS, Entities, Plugins, Routing, Config Forms, Icon API, AI Content, Media, Migration, ECA, Klaro, GitHub Actions, Testing, Recipes, JSON:API |
+| [Next.js](nextjs/index.md) | Next.js for Drupal, Tiptap Editor, DeepChat |
+| [Design Systems](design-systems/index.md) | Recognition, Bootstrap Mapping, Radix SDC, Radix Components |
 
 ## For AI Consumers
 
