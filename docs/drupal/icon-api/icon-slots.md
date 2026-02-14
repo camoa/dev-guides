@@ -1,5 +1,5 @@
 ---
-description: Maximum flexibility for icon content using SDC slots
+description: Maximum flexibility for icon content including custom SVG, multiple icons, or complex compositions
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when your component needs maximum flexibility for icon content, including custom SVG, multiple icons, or complex icon compositions.
+Your component needs maximum flexibility for icon content, including custom SVG, multiple icons, or complex icon compositions.
 
 ## Decision
 

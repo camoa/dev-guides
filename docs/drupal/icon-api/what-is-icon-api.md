@@ -1,5 +1,5 @@
 ---
-description: Unified icon management for Drupal 11+ with SVG, sprites, fonts, and remote sources
+description: Unified system for managing and rendering icons across Drupal 11.1+ sites with support for SVG, sprites, fonts, and remote sources
 drupal_version: "11.x"
 ---
 
@@ -7,16 +7,17 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use Icon API when you need a unified, performant system for managing icons across your Drupal site rather than manually handling SVG files, icon fonts, or external resources in templates and CSS.
+You need a unified, performant system for managing icons across your Drupal 11.1+ site rather than manually handling SVG files, icon fonts, or external resources in templates and CSS. Icon API provides the core infrastructure; the UI Icons contrib module adds field integration, widgets, and additional extractors.
 
 ## Decision
 
 | If you need... | Use... | Why |
 |---|---|---|
-| Single SVG files in theme | SVG extractor | Automatic discovery, template control, security sanitization |
-| Large icon sets (50+ icons) | SVG sprite extractor | One HTTP request, smaller payload, faster rendering |
-| CDN/external icons | Path extractor | Supports remote URLs, flexible formats (PNG, SVG, WebP) |
-| Existing icon font | Font extractor | Leverages existing assets, CSS-controlled sizing/color |
+| Single SVG files in theme | SVG extractor (core) | Automatic discovery, template control, security sanitization |
+| Large icon sets (50+ icons) | SVG sprite extractor (core) | One HTTP request, smaller payload, faster rendering |
+| CDN/external icons | Path extractor (core) | Supports remote URLs, flexible formats (PNG, SVG, WebP) |
+| Existing icon font | Font extractor (UI Icons contrib) | Leverages existing assets, codepoint metadata, CSS-controlled sizing/color |
+| Field/menu/CKEditor integration | UI Icons module | Field widget, menu icon picker, WYSIWYG embedding |
 | Programmatic icon access | IconPackManager service | Type-safe API, cache integration, plugin discovery |
 
 ## Pattern
@@ -43,6 +44,8 @@ Use in templates with the `icon()` Twig function:
 ```twig
 {{ icon('my_theme:home', { size: 32, color: '#007bff' }) }}
 ```
+
+**Core extractors** (Drupal 11.1+): `svg`, `svg_sprite`, `path`. **Contrib extractors** (UI Icons module): `font` for icon fonts with codepoint metadata, `iconify` for Iconify CDN integration.
 
 Reference: `/core/lib/Drupal/Core/Theme/Icon/` for API classes and interfaces.
 

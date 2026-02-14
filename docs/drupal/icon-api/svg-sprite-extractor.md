@@ -1,5 +1,5 @@
 ---
-description: Optimal performance for large icon sets with single-file SVG sprites
+description: Optimal performance with single-file loading for large icon sets in SVG sprite format
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when you have large icon sets (50+ icons) in SVG sprite format and want optimal performance with single-file loading.
+You have large icon sets (50+ icons) in SVG sprite format and want optimal performance with single-file loading.
 
 ## Decision
 

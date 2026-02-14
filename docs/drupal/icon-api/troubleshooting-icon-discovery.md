@@ -1,5 +1,5 @@
 ---
-description: Debug icon packs not loading or icon IDs not resolving
+description: Debug when icons aren't appearing, pack definitions aren't loading, or icon IDs aren't resolving
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when icons aren't appearing, pack definitions aren't loading, or icon IDs aren't resolving correctly.
+Icons aren't appearing, pack definitions aren't loading, or icon IDs aren't resolving correctly.
 
 ## Decision
 

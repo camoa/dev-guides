@@ -1,5 +1,5 @@
 ---
-description: Icon API caching behavior for performance optimization
+description: Icon API caching behavior to optimize performance and troubleshoot cache-related issues
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when you need to understand Icon API caching behavior to optimize performance or troubleshoot cache-related issues.
+You need to understand Icon API caching behavior to optimize performance or troubleshoot cache-related issues.
 
 ## Decision
 

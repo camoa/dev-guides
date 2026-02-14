@@ -1,5 +1,5 @@
 ---
-description: Build custom extractor plugins for API, database, or computed icons
+description: Develop custom extractor plugins for icon sources not supported by core extractors
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when core extractors (SVG, SVG Sprite, Path, Font) don't support your icon source (API, database, generated icons, external service).
+Core extractors (SVG, SVG Sprite, Path, Font) don't support your icon source (API, database, generated icons, external service).
 
 ## Decision
 

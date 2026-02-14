@@ -1,29 +1,30 @@
 ---
-description: Icon API — unified icon management for Drupal 11+ with SVG, sprites, fonts, and remote sources
+description: Icon API - unified system for managing and rendering icons across Drupal 11.1+ sites
 ---
 
 # Icon API
 
 | I need to... | Guide |
 |-------------|-------|
-| Understand the icon system | [What is Icon API](what-is-icon-api.md) |
-| Understand pack lifecycle | [Icon Pack Architecture](icon-pack-architecture.md) |
-| Create a new icon pack | [Icon Pack Definition](icon-pack-definition.md) |
-| Choose the right extractor | [Choosing Extractors](choosing-extractors.md) |
+| Understand the Icon API system | [What is Icon API](what-is-icon-api.md) |
+| Understand icon pack discovery and lifecycle | [Icon Pack Architecture](icon-pack-architecture.md) |
+| Create a new icon pack in YAML | [Icon Pack Definition](icon-pack-definition.md) |
+| Choose the right extractor for my icons | [Choosing Extractors](choosing-extractors.md) |
 | Use individual SVG files | [SVG Extractor](svg-extractor.md) |
-| Use SVG sprite files | [SVG Sprite Extractor](svg-sprite-extractor.md) |
-| Use remote/CDN icons | [Path Extractor](path-extractor.md) |
-| Use icon fonts | [Font Extractor](font-extractor.md) |
+| Use SVG sprite files for large icon sets | [SVG Sprite Extractor](svg-sprite-extractor.md) |
+| Use any image format or remote sources | [Path Extractor](path-extractor.md) |
+| Integrate existing icon fonts | [Font Extractor](font-extractor.md) |
+| Add icon fields, menu icons, or CKEditor integration | [UI Icons Module Features](ui-icons-module-features.md) |
 | Understand template variables | [Template Variables](template-variables.md) |
-| Render icons in templates | [Twig Icon Function](twig-icon-function.md) |
-| Add icons to SDC components | [SDC Icon Props](sdc-icon-props.md) |
-| Use slots for complex icons | [Icon Slots](icon-slots.md) |
-| Access icons in PHP | [IconPackManager Service](iconpackmanager-service.md) |
-| Optimize icon caching | [Caching Strategy](caching-strategy.md) |
-| Improve icon performance | [Performance Best Practices](performance-best-practices.md) |
-| Secure SVG icons | [SVG Security & Performance](svg-security-performance.md) |
-| Secure remote icons | [Remote Resource Security](remote-resource-security.md) |
-| Debug icon discovery | [Troubleshooting Icon Discovery](troubleshooting-icon-discovery.md) |
-| Debug icon templates | [Debugging Templates](debugging-templates.md) |
-| Migrate to Icon API | [Migration Patterns](migration-patterns.md) |
-| Build custom extractors | [Custom Extractor Development](custom-extractor-development.md) |
+| Render icons in Twig templates | [Twig Icon Function](twig-icon-function.md) |
+| Build SDC components with icon props | [SDC Icon Props](sdc-icon-props.md) |
+| Use icon slots in components | [Icon Slots](icon-slots.md) |
+| Access icons programmatically in PHP | [IconPackManager Service](iconpackmanager-service.md) |
+| Understand icon caching | [Caching Strategy](caching-strategy.md) |
+| Optimize icon performance | [Performance Best Practices](performance-best-practices.md) |
+| Handle SVG security and optimization | [SVG Security & Performance](svg-security-performance.md) |
+| Secure remote icon sources | [Remote Resource Security](remote-resource-security.md) |
+| Debug icon discovery issues | [Troubleshooting Icon Discovery](troubleshooting-icon-discovery.md) |
+| Debug template rendering issues | [Debugging Templates](debugging-templates.md) |
+| Migrate from existing icon systems | [Migration Patterns](migration-patterns.md) |
+| Build a custom extractor plugin | [Custom Extractor Development](custom-extractor-development.md) |

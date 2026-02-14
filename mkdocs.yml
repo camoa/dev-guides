@@ -160,6 +160,7 @@ plugins:
           - drupal/icon-api/template-variables.md: "Available variables in icon pack templates and how to use them"
           - drupal/icon-api/troubleshooting-icon-discovery.md: "Debug icon packs not loading or icon IDs not resolving"
           - drupal/icon-api/twig-icon-function.md: "Render icons in Twig templates with type safety, caching, and settings"
+          - drupal/icon-api/ui-icons-module-features.md: "Icon integration beyond rendering - field types, menu icons, CKEditor embedding, and browsing UI for content editors"
           - drupal/icon-api/what-is-icon-api.md: "Unified icon management for Drupal 11+ with SVG, sprites, fonts, and remote sources"
           - drupal/ai-content/index.md: "AI Content - AI-powered content creation, optimization, and management using Drupal AI module"
           - drupal/ai-content/anti-patterns.md: "Common anti-patterns to avoid - trusting AI output, synchronous processing, token limits, hardcoding"
@@ -478,6 +479,7 @@ nav:
       - drupal/icon-api/template-variables.md
       - drupal/icon-api/troubleshooting-icon-discovery.md
       - drupal/icon-api/twig-icon-function.md
+      - drupal/icon-api/ui-icons-module-features.md
       - drupal/icon-api/what-is-icon-api.md
     - JavaScript:
       - drupal/js-development/index.md

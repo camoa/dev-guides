@@ -1,5 +1,5 @@
 ---
-description: Maximum flexibility for any image format from local or remote sources
+description: Maximum flexibility for any image format from local or remote sources without content manipulation
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when you need maximum flexibility for any image format (SVG, PNG, WebP) from local or remote sources, and don't need content manipulation.
+You need maximum flexibility for any image format (SVG, PNG, WebP) from local or remote sources, and don't need content manipulation.
 
 ## Decision
 

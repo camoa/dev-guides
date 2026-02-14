@@ -1,5 +1,5 @@
 ---
-description: Configurable icons as props in Single Directory Components
+description: Building Single Directory Components with configurable icons as props for reusable component APIs
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when you're building Single Directory Components that need configurable icons as props for reusable, flexible component APIs.
+You're building Single Directory Components that need configurable icons as props for reusable, flexible component APIs.
 
 ## Decision
 

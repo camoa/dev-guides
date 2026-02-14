@@ -1,5 +1,5 @@
 ---
-description: Complete YAML structure for icon pack definitions
+description: Complete YAML structure for creating icon packs with all required and optional properties
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when you're creating a new icon pack in a theme or module and need the complete YAML structure with all required and optional properties.
+You're creating a new icon pack in a theme or module and need the complete YAML structure with all required and optional properties.
 
 ## Decision
 

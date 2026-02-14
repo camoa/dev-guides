@@ -1,5 +1,5 @@
 ---
-description: SVG security implications and optimization techniques
+description: Security implications and optimization techniques for working with SVG icons
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when you're working with SVG icons and need to understand security implications and optimization techniques.
+You're working with SVG icons and need to understand security implications and optimization techniques.
 
 ## Decision
 

@@ -1,5 +1,5 @@
 ---
-description: Select the appropriate extractor plugin for your icon source format
+description: Select the appropriate extractor plugin for your icon source format and security requirements
 drupal_version: "11.x"
 ---
 
@@ -7,17 +7,18 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when you need to select the appropriate extractor plugin for your icon source format and security requirements.
+You need to select the appropriate extractor plugin for your icon source format and security requirements.
 
 ## Decision
 
-| If icons are... | Use extractor... | Security | Performance |
-|---|---|---|---|
-| Individual SVG files (local) | `svg` | High (sanitized) | Fast (cached) |
-| SVG sprite file (local/remote) | `svg_sprite` | Medium (sprite only) | Fastest (one file) |
-| Any format, any source | `path` | Low (no sanitization) | Varies (depends on source) |
-| Icon font (TTF, WOFF, etc.) | `font` | High (local only) | Fast (CSS-rendered) |
-| Custom source (API, database) | Custom extractor | Varies | Varies |
+| If icons are... | Use extractor... | Provided by | Security | Performance |
+|---|---|---|---|---|
+| Individual SVG files (local) | `svg` | Core | High (sanitized) | Fast (cached) |
+| SVG sprite file (local/remote) | `svg_sprite` | Core | Medium (sprite only) | Fastest (one file) |
+| Any format, any source | `path` | Core | Low (no sanitization) | Varies (depends on source) |
+| Icon font with codepoints | `font` | UI Icons contrib | High (local only) | Fast (CSS-rendered) |
+| Iconify CDN | `iconify` | Iconify Icons contrib | Medium (remote) | Fast (CDN cached) |
+| Custom source (API, database) | Custom extractor | Your module | Varies | Varies |
 
 ## Pattern
 

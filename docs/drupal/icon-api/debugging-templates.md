@@ -1,5 +1,5 @@
 ---
-description: Debug incorrect icon rendering, missing variables, or malformed SVG
+description: Debug when icons render incorrectly, template variables are missing, or SVG markup is malformed
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when icons render incorrectly, template variables are missing, or SVG markup is malformed.
+Icons render incorrectly, template variables are missing, or SVG markup is malformed.
 
 ## Decision
 

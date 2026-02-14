@@ -1,5 +1,5 @@
 ---
-description: Icon pack discovery, loading, and rendering lifecycle
+description: Icon pack discovery, loading, and rendering lifecycle for efficient icon systems
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when you need to understand how icon packs are discovered, loaded, and rendered to design efficient icon systems or troubleshoot icon discovery issues.
+You need to understand how icon packs are discovered, loaded, and rendered to design efficient icon systems or troubleshoot icon discovery issues.
 
 ## Decision
 

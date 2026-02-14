@@ -1,5 +1,5 @@
 ---
-description: Optimize icon rendering for large-scale sites and slow networks
+description: Optimize icon rendering performance for large-scale sites with many icons or slow networks
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when you're optimizing icon rendering performance for large-scale sites with many icons or slow networks.
+You're optimizing icon rendering performance for large-scale sites with many icons or slow networks.
 
 ## Decision
 

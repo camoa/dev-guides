@@ -42,10 +42,10 @@
     "guides_extracted": 10
   },
   "drupal/icon-api": {
-    "source_hash": "bbf53ddf0a5be620df5519e153df98ccc659e247603ccd1482f9fae68f5a30c4",
-    "partitioned": "2026-02-12",
+    "source_hash": "2e4e826850b5854a708d9c9e079aefb17fdc09f5c712d0dfd9af5256d5437180",
+    "partitioned": "2026-02-13",
     "partitioned_by": "camoa",
-    "guides_extracted": 21
+    "guides_extracted": 23
   },
   "drupal/ai-content": {
     "source_hash": "1a5234d4d5e116dffc9235abc17c0a4dcbbf6af05a94b0ed4f2ed92ac3e23225",

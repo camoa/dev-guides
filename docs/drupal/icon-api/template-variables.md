@@ -1,5 +1,5 @@
 ---
-description: Available variables in icon pack templates and how to use them
+description: Available variables in icon pack templates and how to use them effectively
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when you're writing icon pack templates and need to understand available variables and how to use them effectively.
+You're writing icon pack templates and need to understand available variables and how to use them effectively.
 
 ## Decision
 
@@ -77,6 +77,6 @@ Reference: `/core/lib/Drupal/Core/Theme/Icon/IconDefinition.php` for variable pr
 
 ## See Also
 
-- [Font Extractor](font-extractor.md)
+- [UI Icons Module Features](ui-icons-module-features.md)
 - [Twig Icon Function](twig-icon-function.md)
 - Reference: [Twig filters in Drupal](https://www.drupal.org/docs/theming-drupal/twig-in-drupal/filters-modifying-variables-in-twig-templates)

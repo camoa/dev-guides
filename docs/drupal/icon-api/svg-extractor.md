@@ -1,5 +1,5 @@
 ---
-description: Automatic discovery and sanitization for individual SVG files
+description: Automatic discovery, sanitization, and template rendering for individual SVG files
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when you have individual SVG files stored locally in your theme or module and want automatic discovery, sanitization, and template rendering.
+You have individual SVG files stored locally in your theme or module and want automatic discovery, sanitization, and template rendering.
 
 ## Decision
 

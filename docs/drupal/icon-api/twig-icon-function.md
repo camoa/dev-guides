@@ -1,5 +1,5 @@
 ---
-description: Render icons in Twig templates with type safety, caching, and settings
+description: Render icons in Twig templates with type safety, caching, and settings support
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when you need to render icons in Twig templates with type safety, caching, and settings support.
+You need to render icons in Twig templates with type safety, caching, and settings support.
 
 ## Decision
 
