@@ -162,6 +162,22 @@ plugins:
           - drupal/config-forms/operations-implementation.md: "Add action links (Edit, Delete) to table rows with operations render element"
           - drupal/config-forms/performance-best-practices.md: "Optimize configuration forms to avoid performance bottlenecks"
           - drupal/config-forms/security-best-practices.md: "Security patterns for configuration forms"
+          - drupal/deepchat-nextjs/index.md: "DeepChat + Next.js integration guides covering setup, API routes, streaming, Drupal backend, and security"
+          - drupal/deepchat-nextjs/ai-provider-integration.md: "Direct OpenAI and Anthropic API integration with streaming support"
+          - drupal/deepchat-nextjs/anti-patterns.md: "Common mistakes and anti-patterns to avoid in DeepChat + Next.js"
+          - drupal/deepchat-nextjs/authentication-sessions.md: "NextAuth Bearer token authentication, Drupal OAuth + CSRF flow, session management"
+          - drupal/deepchat-nextjs/best-practices.md: "Component architecture, performance optimization, lazy loading, error handling"
+          - drupal/deepchat-nextjs/connect-configuration.md: "Configure DeepChat API connection and request/response interceptors"
+          - drupal/deepchat-nextjs/custom-handlers.md: "Custom request handlers, transform requests/responses, and retry logic"
+          - drupal/deepchat-nextjs/deepchat-overview.md: "Framework-agnostic web component for AI chat interfaces"
+          - drupal/deepchat-nextjs/drupal-backend.md: "Drupal AI module integration with DeepChat including session management"
+          - drupal/deepchat-nextjs/file-upload.md: "Configure file upload, handle FormData requests, integrate with AI vision models"
+          - drupal/deepchat-nextjs/installation.md: "Install DeepChat in Next.js and configure dynamic import to avoid SSR errors"
+          - drupal/deepchat-nextjs/message-formats.md: "Message structure, request/response formats, history management"
+          - drupal/deepchat-nextjs/nextjs-api-routes.md: "Next.js API route handlers with proxy pattern, authentication, and CSRF"
+          - drupal/deepchat-nextjs/security.md: "XSS prevention, API key management, file upload validation, rate limiting"
+          - drupal/deepchat-nextjs/streaming-responses.md: "Server-Sent Events streaming with ReadableStream for AI chat responses"
+          - drupal/deepchat-nextjs/styling-theming.md: "Style DeepChat with CSS variables, messageStyles, and shadow DOM"
           - drupal/icon-api/index.md: "Icon API — unified icon management for Drupal 11+ with SVG, sprites, fonts, and remote sources"
           - drupal/icon-api/caching-strategy.md: "Icon API caching behavior for performance optimization"
           - drupal/icon-api/choosing-extractors.md: "Select the appropriate extractor plugin for your icon source format"
@@ -338,6 +354,50 @@ plugins:
           - drupal/testing/running-debugging-tests.md: "Command-line patterns for running and debugging PHPUnit tests in Drupal modules"
           - drupal/testing/testing-framework-overview.md: "Overview of Drupal's five testing frameworks and when to use each one"
           - drupal/testing/testing-infrastructure-setup.md: "Set up directory structure, phpunit.xml configuration, and testing dependencies for Drupal modules"
+          - drupal/tiptap-editor/index.md: "TipTap Editor guides for React, Next.js, and Drupal integration"
+          - drupal/tiptap-editor/anti-patterns.md: "Common pitfalls and bad practices to avoid"
+          - drupal/tiptap-editor/code-reference.md: "Quick reference to key Tiptap packages, classes, and imports"
+          - drupal/tiptap-editor/collaboration-architecture.md: "Real-time collaborative editing with Y.js"
+          - drupal/tiptap-editor/commands-api.md: "Programmatically modify editor content, selection, or state"
+          - drupal/tiptap-editor/content-formats.md: "Content storage and transfer formats (HTML vs JSON)"
+          - drupal/tiptap-editor/custom-commands.md: "Create reusable command logic for extensions"
+          - drupal/tiptap-editor/custom-extension-architecture.md: "Create custom node, mark, or functionality extensions"
+          - drupal/tiptap-editor/custom-extension-input-rules.md: "Markdown-style shortcuts and custom paste handling"
+          - drupal/tiptap-editor/custom-extension-node-views.md: "Custom DOM rendering with React components"
+          - drupal/tiptap-editor/dark-mode.md: "Light and dark theme support"
+          - drupal/tiptap-editor/drupal-json-api.md: "Drupal JSON API integration for decoupled content editing"
+          - drupal/tiptap-editor/editor-comparison.md: "Tiptap vs Lexical vs Slate comparison"
+          - drupal/tiptap-editor/editor-configuration.md: "Editor instance configuration options"
+          - drupal/tiptap-editor/editor-events.md: "React to editor state changes"
+          - drupal/tiptap-editor/event-optimization.md: "Optimize expensive operations triggered by editor events"
+          - drupal/tiptap-editor/functionality-extensions-history.md: "Undo/redo functionality"
+          - drupal/tiptap-editor/functionality-extensions-starter.md: "StarterKit bundle of common extensions"
+          - drupal/tiptap-editor/functionality-extensions-ui.md: "DropCursor, GapCursor, FocusClasses"
+          - drupal/tiptap-editor/functionality-extensions-utility.md: "CharacterCount, Placeholder, TextAlign"
+          - drupal/tiptap-editor/hocuspocus-server.md: "Self-hosted WebSocket server for collaboration"
+          - drupal/tiptap-editor/installation.md: "Install Tiptap in a JavaScript/TypeScript project"
+          - drupal/tiptap-editor/mark-extensions-advanced.md: "Highlight, text colors, font sizes"
+          - drupal/tiptap-editor/mark-extensions-basic.md: "Bold, italic, underline, strikethrough"
+          - drupal/tiptap-editor/mark-extensions-link.md: "Hyperlinks with URL validation"
+          - drupal/tiptap-editor/nextjs-api-integration.md: "Save/load Tiptap content via Next.js API routes"
+          - drupal/tiptap-editor/nextjs-setup.md: "Next.js App Router integration"
+          - drupal/tiptap-editor/node-extensions-content.md: "Heading, Blockquote, Lists"
+          - drupal/tiptap-editor/node-extensions-media.md: "Image, Video, File, Table, CodeBlock"
+          - drupal/tiptap-editor/node-extensions-structure.md: "Document, Paragraph, Text nodes"
+          - drupal/tiptap-editor/nodeview-performance.md: "React node view performance optimization"
+          - drupal/tiptap-editor/prosemirror-foundation.md: "ProseMirror underlying architecture"
+          - drupal/tiptap-editor/react-integration.md: "React and Next.js integration"
+          - drupal/tiptap-editor/react-performance.md: "Fix excessive re-renders and lag"
+          - drupal/tiptap-editor/schema-architecture.md: "Document structure rules and schema"
+          - drupal/tiptap-editor/security-model.md: "User-generated content security and XSS prevention"
+          - drupal/tiptap-editor/serialization-patterns.md: "Export content to different formats"
+          - drupal/tiptap-editor/sources-maintenance.md: "Reference sources and maintenance manifest"
+          - drupal/tiptap-editor/styling-approach.md: "CSS styling for editor content and UI"
+          - drupal/tiptap-editor/testing-strategy.md: "Automated testing for custom extensions"
+          - drupal/tiptap-editor/tiptap-overview.md: "Rich text editor framework overview"
+          - drupal/tiptap-editor/ui-bubble-menu.md: "Selection-based context menu"
+          - drupal/tiptap-editor/ui-floating-menu.md: "Floating menu and slash commands"
+          - drupal/tiptap-editor/ui-toolbar.md: "Persistent toolbar"
         "Design Systems":
           - design-systems/index.md: "Design system guides — recognition, Bootstrap mapping, Radix SDC implementation, Radix component reference"
           - design-systems/bootstrap/index.md: "Bootstrap 5.3 Mapping — systematic methodology for mapping design systems to Bootstrap using the 6px threshold framework"
@@ -434,6 +494,23 @@ nav:
       - drupal/config-forms/operations-implementation.md
       - drupal/config-forms/performance-best-practices.md
       - drupal/config-forms/security-best-practices.md
+    - "DeepChat + Next.js":
+      - drupal/deepchat-nextjs/index.md
+      - drupal/deepchat-nextjs/ai-provider-integration.md
+      - drupal/deepchat-nextjs/anti-patterns.md
+      - drupal/deepchat-nextjs/authentication-sessions.md
+      - drupal/deepchat-nextjs/best-practices.md
+      - drupal/deepchat-nextjs/connect-configuration.md
+      - drupal/deepchat-nextjs/custom-handlers.md
+      - drupal/deepchat-nextjs/deepchat-overview.md
+      - drupal/deepchat-nextjs/drupal-backend.md
+      - drupal/deepchat-nextjs/file-upload.md
+      - drupal/deepchat-nextjs/installation.md
+      - drupal/deepchat-nextjs/message-formats.md
+      - drupal/deepchat-nextjs/nextjs-api-routes.md
+      - drupal/deepchat-nextjs/security.md
+      - drupal/deepchat-nextjs/streaming-responses.md
+      - drupal/deepchat-nextjs/styling-theming.md
     - ECA:
       - drupal/eca/index.md
       - drupal/eca/access-control-patterns.md
@@ -749,6 +826,51 @@ nav:
       - drupal/testing/running-debugging-tests.md
       - drupal/testing/testing-framework-overview.md
       - drupal/testing/testing-infrastructure-setup.md
+    - "Tiptap Editor":
+      - drupal/tiptap-editor/index.md
+      - drupal/tiptap-editor/anti-patterns.md
+      - drupal/tiptap-editor/code-reference.md
+      - drupal/tiptap-editor/collaboration-architecture.md
+      - drupal/tiptap-editor/commands-api.md
+      - drupal/tiptap-editor/content-formats.md
+      - drupal/tiptap-editor/custom-commands.md
+      - drupal/tiptap-editor/custom-extension-architecture.md
+      - drupal/tiptap-editor/custom-extension-input-rules.md
+      - drupal/tiptap-editor/custom-extension-node-views.md
+      - drupal/tiptap-editor/dark-mode.md
+      - drupal/tiptap-editor/drupal-json-api.md
+      - drupal/tiptap-editor/editor-comparison.md
+      - drupal/tiptap-editor/editor-configuration.md
+      - drupal/tiptap-editor/editor-events.md
+      - drupal/tiptap-editor/event-optimization.md
+      - drupal/tiptap-editor/functionality-extensions-history.md
+      - drupal/tiptap-editor/functionality-extensions-starter.md
+      - drupal/tiptap-editor/functionality-extensions-ui.md
+      - drupal/tiptap-editor/functionality-extensions-utility.md
+      - drupal/tiptap-editor/hocuspocus-server.md
+      - drupal/tiptap-editor/installation.md
+      - drupal/tiptap-editor/mark-extensions-advanced.md
+      - drupal/tiptap-editor/mark-extensions-basic.md
+      - drupal/tiptap-editor/mark-extensions-link.md
+      - drupal/tiptap-editor/nextjs-api-integration.md
+      - drupal/tiptap-editor/nextjs-setup.md
+      - drupal/tiptap-editor/node-extensions-content.md
+      - drupal/tiptap-editor/node-extensions-media.md
+      - drupal/tiptap-editor/node-extensions-structure.md
+      - drupal/tiptap-editor/nodeview-performance.md
+      - drupal/tiptap-editor/prosemirror-foundation.md
+      - drupal/tiptap-editor/react-integration.md
+      - drupal/tiptap-editor/react-performance.md
+      - drupal/tiptap-editor/schema-architecture.md
+      - drupal/tiptap-editor/security-model.md
+      - drupal/tiptap-editor/serialization-patterns.md
+      - drupal/tiptap-editor/sources-maintenance.md
+      - drupal/tiptap-editor/styling-approach.md
+      - drupal/tiptap-editor/testing-strategy.md
+      - drupal/tiptap-editor/tiptap-overview.md
+      - drupal/tiptap-editor/ui-bubble-menu.md
+      - drupal/tiptap-editor/ui-floating-menu.md
+      - drupal/tiptap-editor/ui-toolbar.md
   - Design Systems:
     - design-systems/index.md
     - Bootstrap Mapping:
