@@ -162,6 +162,28 @@ plugins:
           - drupal/icon-api/twig-icon-function.md: "Render icons in Twig templates with type safety, caching, and settings"
           - drupal/icon-api/ui-icons-module-features.md: "Icon integration beyond rendering - field types, menu icons, CKEditor embedding, and browsing UI for content editors"
           - drupal/icon-api/what-is-icon-api.md: "Unified icon management for Drupal 11+ with SVG, sprites, fonts, and remote sources"
+          - drupal/jsonapi/index.md: "JSON:API — spec-compliant REST API with filtering, includes, pagination, and customization"
+          - drupal/jsonapi/authentication-patterns.md: "Authentication for write operations and accessing restricted content"
+          - drupal/jsonapi/code-reference-map.md: "Navigate JSON:API source code for debugging, customization, or understanding internals"
+          - drupal/jsonapi/core-architecture.md: "JSON:API architecture — ResourceType, normalization, controller, query systems"
+          - drupal/jsonapi/creating-resources.md: "Creating new entities via the API with POST requests"
+          - drupal/jsonapi/deleting-resources.md: "Removing entities from Drupal with DELETE requests"
+          - drupal/jsonapi/fetching-resources.md: "Retrieving entity data with GET requests for collections and individuals"
+          - drupal/jsonapi/field-enhancers.md: "Transform field values during normalization with jsonapi_extras enhancers"
+          - drupal/jsonapi/file-uploads.md: "Uploading binary files to entity file/image fields"
+          - drupal/jsonapi/filtering.md: "Narrow down collection results based on field values"
+          - drupal/jsonapi/includes-sparse-fieldsets.md: "Fetch related entities in a single request and request only needed fields"
+          - drupal/jsonapi/jsonapi-extras-customization.md: "Customize resource names, URLs, field visibility with jsonapi_extras"
+          - drupal/jsonapi/jsonapi-vs-rest-vs-graphql.md: "Choose the right API approach for your project"
+          - drupal/jsonapi/performance-optimization.md: "Caching, sparse fieldsets, CDN, and indexing for production APIs"
+          - drupal/jsonapi/revisions-translations.md: "Access specific entity revisions or translations via JSON:API"
+          - drupal/jsonapi/security-best-practices.md: "Security for JSON:API deployments and public-facing APIs"
+          - drupal/jsonapi/sorting-pagination.md: "Control result order and break large result sets into pages"
+          - drupal/jsonapi/sources-maintenance.md: "Reference sources and maintenance manifest"
+          - drupal/jsonapi/testing-debugging.md: "Development, troubleshooting, and QA of JSON:API implementations"
+          - drupal/jsonapi/updating-resources.md: "Modifying existing entities with PATCH requests"
+          - drupal/jsonapi/url-structure-resource-types.md: "Understanding URL patterns and resource type naming"
+          - drupal/jsonapi/what-is-jsonapi.md: "Understanding JSON:API purpose and determining project fit"
           - drupal/ai-content/index.md: "AI Content - AI-powered content creation, optimization, and management using Drupal AI module"
           - drupal/ai-content/anti-patterns.md: "Common anti-patterns to avoid - trusting AI output, synchronous processing, token limits, hardcoding"
           - drupal/ai-content/architecture.md: "AI module architecture - provider layer, model types, plugin system, and service layer"
@@ -208,6 +230,26 @@ plugins:
           - drupal/migration/plan-custom-code-strategy.md: "Rewrite vs retrofit vs retire strategy for D7 custom modules in D11"
           - drupal/migration/security-best-practices.md: "Security controls for SQL injection, XSS, and access bypass in migrations"
           - drupal/migration/test-migration-results.md: "Validation and testing strategy throughout migration lifecycle"
+          - drupal/next-drupal/index.md: "Next.js for Drupal — decoupled frontend with next-drupal library"
+          - drupal/next-drupal/authentication-patterns.md: "Authentication patterns for Next.js and Drupal integration"
+          - drupal/next-drupal/building-pages.md: "Build SSG, SSR, or ISR pages from Drupal content"
+          - drupal/next-drupal/decoupled-architecture-decision.md: "Choose decoupled Drupal with Next.js architecture"
+          - drupal/next-drupal/draft-mode.md: "Preview unpublished content in Next.js from Drupal"
+          - drupal/next-drupal/drupal-setup.md: "Set up Drupal backend for Next.js frontend"
+          - drupal/next-drupal/environment-variables.md: "Configure Next.js connection to Drupal with environment variables"
+          - drupal/next-drupal/fetching-content.md: "Fetch JSON:API resources from Drupal for Next.js pages"
+          - drupal/next-drupal/jsonapi-vs-graphql.md: "JSON:API vs GraphQL decision for next-drupal"
+          - drupal/next-drupal/media-images.md: "Handle Drupal media entities and images in Next.js"
+          - drupal/next-drupal/multilingual-support.md: "Multi-language support for Next.js with Drupal"
+          - drupal/next-drupal/nextdrupal-client-configuration.md: "Configure the NextDrupal client options"
+          - drupal/next-drupal/nextjs-project-setup.md: "Create a new Next.js frontend for Drupal"
+          - drupal/next-drupal/on-demand-revalidation.md: "Automatically update Next.js cached pages on Drupal content changes"
+          - drupal/next-drupal/performance-optimization.md: "Reduce build times, improve page load, minimize API requests"
+          - drupal/next-drupal/search-integration.md: "Implement search using Drupal Search API via JSON:API"
+          - drupal/next-drupal/security-best-practices.md: "Security practices for Next.js and Drupal implementations"
+          - drupal/next-drupal/sources-maintenance.md: "Reference sources and maintenance manifest"
+          - drupal/next-drupal/troubleshooting.md: "Diagnose and resolve common Next.js + Drupal issues"
+          - drupal/next-drupal/webform-integration.md: "Submit webforms from Next.js to Drupal"
           - drupal/eca/index.md: "ECA (Event-Condition-Action) plugin development — create custom actions, events, and conditions"
           - drupal/eca/access-control-patterns.md: "Validate plugin config in access() before execution with AccessResult patterns"
           - drupal/eca/action-plugin-basics.md: "Create custom ECA Action plugins with ConfigurableActionBase for user-configurable operations"
@@ -481,6 +523,29 @@ nav:
       - drupal/icon-api/twig-icon-function.md
       - drupal/icon-api/ui-icons-module-features.md
       - drupal/icon-api/what-is-icon-api.md
+    - "JSON:API":
+      - drupal/jsonapi/index.md
+      - drupal/jsonapi/authentication-patterns.md
+      - drupal/jsonapi/code-reference-map.md
+      - drupal/jsonapi/core-architecture.md
+      - drupal/jsonapi/creating-resources.md
+      - drupal/jsonapi/deleting-resources.md
+      - drupal/jsonapi/fetching-resources.md
+      - drupal/jsonapi/field-enhancers.md
+      - drupal/jsonapi/file-uploads.md
+      - drupal/jsonapi/filtering.md
+      - drupal/jsonapi/includes-sparse-fieldsets.md
+      - drupal/jsonapi/jsonapi-extras-customization.md
+      - drupal/jsonapi/jsonapi-vs-rest-vs-graphql.md
+      - drupal/jsonapi/performance-optimization.md
+      - drupal/jsonapi/revisions-translations.md
+      - drupal/jsonapi/security-best-practices.md
+      - drupal/jsonapi/sorting-pagination.md
+      - drupal/jsonapi/sources-maintenance.md
+      - drupal/jsonapi/testing-debugging.md
+      - drupal/jsonapi/updating-resources.md
+      - drupal/jsonapi/url-structure-resource-types.md
+      - drupal/jsonapi/what-is-jsonapi.md
     - JavaScript:
       - drupal/js-development/index.md
       - drupal/js-development/aggregation-and-minification.md
@@ -558,6 +623,27 @@ nav:
       - drupal/migration/plan-custom-code-strategy.md
       - drupal/migration/security-best-practices.md
       - drupal/migration/test-migration-results.md
+    - Next Drupal:
+      - drupal/next-drupal/index.md
+      - drupal/next-drupal/authentication-patterns.md
+      - drupal/next-drupal/building-pages.md
+      - drupal/next-drupal/decoupled-architecture-decision.md
+      - drupal/next-drupal/draft-mode.md
+      - drupal/next-drupal/drupal-setup.md
+      - drupal/next-drupal/environment-variables.md
+      - drupal/next-drupal/fetching-content.md
+      - drupal/next-drupal/jsonapi-vs-graphql.md
+      - drupal/next-drupal/media-images.md
+      - drupal/next-drupal/multilingual-support.md
+      - drupal/next-drupal/nextdrupal-client-configuration.md
+      - drupal/next-drupal/nextjs-project-setup.md
+      - drupal/next-drupal/on-demand-revalidation.md
+      - drupal/next-drupal/performance-optimization.md
+      - drupal/next-drupal/search-integration.md
+      - drupal/next-drupal/security-best-practices.md
+      - drupal/next-drupal/sources-maintenance.md
+      - drupal/next-drupal/troubleshooting.md
+      - drupal/next-drupal/webform-integration.md
     - Plugins:
       - drupal/plugins/index.md
       - drupal/plugins/architecture-pattern-selection.md

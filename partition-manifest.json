@@ -89,6 +89,18 @@
     "partitioned_by": "camoa",
     "guides_extracted": 11
   },
+  "drupal/jsonapi": {
+    "source_hash": "647d84edfe9a5ed4fade2de588183c3b415f50fae21f5fc1396e963bba1962c0",
+    "partitioned": "2026-02-14",
+    "partitioned_by": "camoa",
+    "guides_extracted": 21
+  },
+  "drupal/next-drupal": {
+    "source_hash": "f9078b86430ff65bc652340475424198fcba6037b201a226478657df777e47e9",
+    "partitioned": "2026-02-14",
+    "partitioned_by": "camoa",
+    "guides_extracted": 19
+  },
   "design-systems/recognition": {
     "source_hash": "9f337e6a9112b7de29ba1ce94f214bd5a6e386fe322df4584c8b4704e0d6bf3d",
     "partitioned": "2026-02-12",
