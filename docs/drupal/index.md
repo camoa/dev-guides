@@ -28,9 +28,8 @@ description: Drupal decision guides — forms, SDC components, JavaScript, entit
 | Configure image styles and responsive images | [Image Styles](image-styles/index.md) |
 | Build layouts with Layout Builder | [Layout Builder](layout-builder/index.md) |
 | Create and customize Views | [Views](views/index.md) |
-| Manage configuration and schema | Config (coming soon) |
-| Build render arrays and templates | Render API (coming soon) |
-| Use HTMX in Drupal | HTMX (coming soon) |
-| Define or use services | Services (coming soon) |
-| Handle security correctly | Security (coming soon) |
-| Configure caching | Caching (coming soon) |
+| Manage configuration and schema | [Config Management](config-management/index.md) |
+| Build render arrays and templates | [Render API](render-api/index.md) |
+| Define or use services | [Services & DI](services/index.md) |
+| Handle security correctly | [Security](security/index.md) |
+| Configure caching | [Caching](caching/index.md) |

@@ -10,7 +10,7 @@ Decision-making guides that answer: "When you need to do X, what should you choo
 
 | Area | Topics |
 |------|--------|
-| [Drupal](drupal/index.md) | Forms, SDC, JS, Entities, Plugins, Routing, Config Forms, Icon API, AI Content, Blocks, Media, Migration, ECA, Klaro, GitHub Actions, Testing, Recipes, JSON:API, Taxonomy, Image Styles, Layout Builder, Views |
+| [Drupal](drupal/index.md) | Forms, SDC, JS, Entities, Plugins, Routing, Config Forms, Icon API, AI Content, Blocks, Media, Migration, ECA, Klaro, GitHub Actions, Testing, Recipes, JSON:API, Taxonomy, Image Styles, Layout Builder, Views, Caching, Config Management, Render API, Security, Services |
 | [Next.js](nextjs/index.md) | Next.js for Drupal, Tiptap Editor, DeepChat |
 | [Design Systems](design-systems/index.md) | Recognition, Bootstrap Mapping, Radix SDC, Radix Components |
 

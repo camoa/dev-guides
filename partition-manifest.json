@@ -149,6 +149,36 @@
     "partitioned_by": "camoa",
     "guides_extracted": 19
   },
+  "drupal/caching": {
+    "source_hash": "959c8a81b7aeb72f9f00157e6af46a052946147c13ccefff89c0c54a8a37521c",
+    "partitioned": "2026-02-14",
+    "partitioned_by": "camoa",
+    "guides_extracted": 20
+  },
+  "drupal/config-management": {
+    "source_hash": "91109682e54153fc18f5d304c7638f8d8e73b95166a262219b57780c301c2d60",
+    "partitioned": "2026-02-14",
+    "partitioned_by": "camoa",
+    "guides_extracted": 22
+  },
+  "drupal/render-api": {
+    "source_hash": "0b4861b3a17864c904ab146b0e9067bcafcededdc15985a6a997bb3690dc0df3",
+    "partitioned": "2026-02-14",
+    "partitioned_by": "camoa",
+    "guides_extracted": 19
+  },
+  "drupal/security": {
+    "source_hash": "67d6ea7a1d7e06b17949dd4092eafcb9b84129c5bbc115f2e5e9dd00b88ba2c8",
+    "partitioned": "2026-02-14",
+    "partitioned_by": "camoa",
+    "guides_extracted": 21
+  },
+  "drupal/services": {
+    "source_hash": "f056556d1746abf63abdcdb738c4b13dde544dced68b3904b1b3095a054e7be7",
+    "partitioned": "2026-02-14",
+    "partitioned_by": "camoa",
+    "guides_extracted": 21
+  },
   "design-systems/recognition": {
     "source_hash": "9f337e6a9112b7de29ba1ce94f214bd5a6e386fe322df4584c8b4704e0d6bf3d",
     "partitioned": "2026-02-12",

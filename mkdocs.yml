@@ -51,6 +51,27 @@ plugins:
           - drupal/blocks/sdc-component-blocks.md: "Use Single Directory Components (SDC) as blocks"
           - drupal/blocks/security-performance.md: "Ensure blocks don't introduce vulnerabilities or performance bottlenecks"
           - drupal/blocks/visibility-conditions.md: "Control block visibility based on pages, roles, content types, or custom logic"
+          - drupal/caching/index.md: "Drupal caching decision guides — cache metadata, backends, invalidation, and performance"
+          - drupal/caching/anti-patterns-common-mistakes.md: "Avoid common caching mistakes that cause bugs, stale content, and performance issues"
+          - drupal/caching/best-practices-patterns.md: "Follow proven caching best practices for maximum cache hit rates"
+          - drupal/caching/bigpipe.md: "Progressively render expensive content with BigPipe streaming"
+          - drupal/caching/bubbleable-metadata-cache-bubbling.md: "Handle cache metadata bubbling from child to parent render arrays"
+          - drupal/caching/cache-backend-configuration.md: "Configure Redis, Memcache, and APCu cache backends in settings.php"
+          - drupal/caching/cache-backends.md: "Choose and configure a cache backend — Redis, Memcache, APCu, or database"
+          - drupal/caching/cache-bins.md: "Understand cache bins and their purposes for different types of cached data"
+          - drupal/caching/cache-contexts.md: "Vary cached content by URL, user, language, and other request contexts"
+          - drupal/caching/cache-invalidation-patterns.md: "Invalidate caches when data changes using tags, bins, and time-based expiration"
+          - drupal/caching/cache-max-age.md: "Set how long cached content remains valid using max-age expiration"
+          - drupal/caching/cache-metadata-trinity.md: "Learn the three pillars of cache metadata — tags, contexts, and max-age"
+          - drupal/caching/cache-system-overview.md: "Understand Drupal's caching layers and when to use each one"
+          - drupal/caching/cache-tags.md: "Add cache tags to invalidate cached content on entity and config changes"
+          - drupal/caching/code-reference-map.md: "Find cache-related core files, APIs, and implementation locations"
+          - drupal/caching/custom-cache-tags.md: "Create and invalidate custom cache tags for non-entity data"
+          - drupal/caching/dynamic-page-cache.md: "Cache pages for authenticated users with Dynamic Page Cache and placeholders"
+          - drupal/caching/lazy-builders.md: "Defer expensive rendering with placeholders using lazy builders"
+          - drupal/caching/page-cache.md: "Understand anonymous page caching with Drupal's Internal Page Cache"
+          - drupal/caching/render-caching.md: "Cache render arrays and understand how render caching stores rendered HTML"
+          - drupal/caching/security-performance.md: "Ensure cache security against data leakage and optimize cache performance"
           - drupal/config-forms/index.md: "Configuration Forms — choose form types, build admin interfaces, implement operations"
           - drupal/config-forms/common-mistakes.md: "Common configuration form mistakes and how to fix them"
           - drupal/config-forms/configformbase-pattern.md: "Build module settings forms with ConfigFormBase"
@@ -62,6 +83,29 @@ plugins:
           - drupal/config-forms/operations-implementation.md: "Add action links (Edit, Delete) to table rows with operations render element"
           - drupal/config-forms/performance-best-practices.md: "Optimize configuration forms to avoid performance bottlenecks"
           - drupal/config-forms/security-best-practices.md: "Security patterns for configuration forms"
+          - drupal/config-management/index.md: "Drupal Configuration Management — the Config API, simple config vs config entities, schema, storage, synchronization, overrides, Config Split, dependencies, and deployment workflows."
+          - drupal/config-management/anti-patterns-and-common-mistakes.md: "Identify and fix common config management mistakes — patterns that break deployment, cause data loss, or create security issues."
+          - drupal/config-management/best-practices-and-patterns.md: "Config management patterns, architecture decisions, and proven approaches for maintainable config workflows."
+          - drupal/config-management/code-reference-map.md: "Locate core config classes, interfaces, and files for deeper understanding or extending config functionality."
+          - drupal/config-management/config-and-recipes-integration.md: "Distribute reusable configuration bundles with Recipes — modules, config, and content as a single installable unit."
+          - drupal/config-management/config-dependencies.md: "Understand how Drupal tracks config dependencies — modules, themes, config entities — and how they affect import order and deletion."
+          - drupal/config-management/config-entities.md: "Create user-manageable config entity types with CRUD operations, dependencies, and admin UI."
+          - drupal/config-management/config-entity-schema-definition.md: "Define config schema for config entities — matching exported YAML structure and including all entity keys."
+          - drupal/config-management/config-events.md: "React to config changes via event subscribers — save, delete, import, rename events."
+          - drupal/config-management/config-factory-and-reading-config.md: "Read and write configuration values in custom code — forms, controllers, services, hooks."
+          - drupal/config-management/config-import-export.md: "Export config from active storage to sync directory and import config from sync to active using Drush commands."
+          - drupal/config-management/config-installer.md: "Provide default configuration that installs when a module is enabled — content types, views, fields, settings."
+          - drupal/config-management/config-override-system.md: "Override config values per environment without modifying stored config or committing credentials to Git."
+          - drupal/config-management/config-schema-yaml.md: "Define the structure and data types for module configuration so Drupal can validate, cast, and translate config values."
+          - drupal/config-management/config-split.md: "Manage environment-specific configuration with Config Split — dev modules, production settings, conditional overrides."
+          - drupal/config-management/config-storage.md: "Understand how Drupal stores configuration data — active storage (database), sync storage (filesystem), and custom backends."
+          - drupal/config-management/config-synchronization.md: "Sync configuration between environments — export from dev, commit to Git, import to staging/production."
+          - drupal/config-management/config-system-overview.md: "Understand Drupal's configuration management architecture — how config data is structured, stored, validated, synchronized, and overridden."
+          - drupal/config-management/core-data-types-schema.md: "Available core data types for config schema — scalars, containers, extended types, and special types."
+          - drupal/config-management/deployment-workflows.md: "Deploy configuration changes safely from development to staging to production with rollback capability."
+          - drupal/config-management/security-and-performance.md: "Secure configuration data, prevent vulnerabilities, and optimize config access for performance."
+          - drupal/config-management/simple-config-vs-config-entities.md: "Choose between simple config (singleton YAML) and config entities (multiple instances with CRUD and UI)."
+          - drupal/config-management/writing-config-schema.md: "Step-by-step guide to creating config schema for new modules with simple config or config entities."
           - drupal/eca/index.md: "ECA (Event-Condition-Action) plugin development — create custom actions, events, and conditions"
           - drupal/eca/access-control-patterns.md: "Validate plugin config in access() before execution with AccessResult patterns"
           - drupal/eca/action-plugin-basics.md: "Create custom ECA Action plugins with ConfigurableActionBase for user-configurable operations"
@@ -338,6 +382,26 @@ plugins:
           - drupal/recipes/recipe-tooling.md: "Drush commands and core scripts for applying, testing, and developing recipes"
           - drupal/recipes/recipe-yaml-schema.md: "recipe.yml structure — metadata, dependencies, extensions, configuration, inputs, content"
           - drupal/recipes/security-performance.md: "Security and performance considerations for recipes"
+          - drupal/render-api/index.md: "Drupal Render API decision guides -- render arrays, elements, caching, theming, security, and performance patterns."
+          - drupal/render-api/anti-patterns-common-mistakes.md: "Anti-patterns to avoid in render arrays -- early rendering, raw HTML, missing cache metadata, XSS vulnerabilities, structural mistakes."
+          - drupal/render-api/attachments.md: "Attaching CSS/JS libraries, drupalSettings, HTML head elements, and HTTP headers to render arrays."
+          - drupal/render-api/best-practices-patterns.md: "Architectural best practices for render arrays -- dependency injection, cache metadata, access checks, testing, and performance optimization."
+          - drupal/render-api/cache-metadata-render-arrays.md: "Adding cache keys, contexts, tags, and max-age to render arrays for correct caching and invalidation."
+          - drupal/render-api/code-reference-map.md: "Quick reference to core render API files, interfaces, element classes, cache utilities, and documentation links."
+          - drupal/render-api/core-render-elements.md: "Reference for built-in render element plugins -- link, table, container, html_tag, inline_template, details, status_messages."
+          - drupal/render-api/custom-render-elements.md: "Creating custom render element plugins and form element plugins with proper plugin structure and pre-render callbacks."
+          - drupal/render-api/form-render-elements.md: "Using form elements outside forms as render-only elements -- textfield, select, checkboxes, radios, tableselect."
+          - drupal/render-api/lazy-builders-placeholders.md: "Deferring expensive or personalized rendering with lazy builders, auto-placeholdering, and Big Pipe integration."
+          - drupal/render-api/main-content-renderers.md: "How Drupal renders different response types -- HTML pages, AJAX, modal dialogs -- and choosing the right response format."
+          - drupal/render-api/preprocess-functions.md: "Using preprocess functions to modify or add variables before Twig templates -- render arrays, cache metadata, pre-render callbacks."
+          - drupal/render-api/render-api-overview.md: "When to use render arrays vs other approaches for generating HTML output in Drupal."
+          - drupal/render-api/render-array-patterns.md: "Common render array patterns -- progressive enhancement, conditional access, weighted ordering, entity views, item lists, AJAX responses, debugging."
+          - drupal/render-api/render-array-structure.md: "Render array structure fundamentals -- properties vs children, nesting, weight-based ordering."
+          - drupal/render-api/renderer-service.md: "Using the Renderer service to programmatically convert render arrays to HTML -- methods, patterns, and render context management."
+          - drupal/render-api/render-properties.md: "Complete reference for render array properties -- universal, lifecycle, and advanced properties with usage examples."
+          - drupal/render-api/security-performance.md: "Security best practices (XSS protection, access checks, CSRF) and performance optimization (cache strategies, lazy loading, efficient attachments)."
+          - drupal/render-api/theme-hooks-suggestions.md: "Creating theme hooks, template suggestions, theme wrappers, and template discovery for custom themed output."
+          - drupal/render-api/twig-integration.md: "Passing render arrays to Twig templates -- automatic rendering, conditional output, filters, and read-only array behavior."
           - drupal/routing/index.md: "Drupal Routing - YAML route definitions, access control, dynamic routes, and security best practices"
           - drupal/routing/access-control-patterns.md: "Drupal route access control - permission, role, and custom access patterns to secure routes"
           - drupal/routing/admin-route-configuration.md: "Admin route configuration - use admin theme and integrate with Drupal's administrative UI patterns"
@@ -366,6 +430,50 @@ plugins:
           - drupal/sdc/security.md: "Preventing XSS with auto-escaping, Attribute object, and props validation"
           - drupal/sdc/testing-sdcs.md: "Testing components with schema validation, Storybook, and visual regression"
           - drupal/sdc/twig-templates-in-sdcs.md: "Writing Twig templates for SDCs with props, slots, and attributes object"
+          - drupal/security/index.md: "Drupal security architecture, access control, XSS/CSRF/SQL injection prevention, authentication, and OWASP best practices."
+          - drupal/security/access-system-architecture.md: "Understanding Drupal's three-layer access control architecture for routes, entities, and fields."
+          - drupal/security/accessresult-patterns.md: "Returning access decisions using AccessResult objects with proper cache metadata, combining logic, and conditional methods."
+          - drupal/security/anti-patterns-and-common-mistakes.md: "Recognizing and avoiding dangerous security anti-patterns in Drupal including missing access checks, SQL injection, XSS holes, and CSRF bypass."
+          - drupal/security/authentication-system.md: "Understanding Drupal's authentication providers including cookie-based auth, API keys, OAuth, and custom authentication implementation."
+          - drupal/security/best-practices-and-patterns.md: "Security best practices organized by domain covering access control, code security, input/output, authentication, and infrastructure hardening."
+          - drupal/security/code-reference-map.md: "Quick lookup table for security-related classes, interfaces, and file paths in Drupal core organized by subsystem."
+          - drupal/security/content-access-node-grants.md: "Implementing node grants for database-level content access filtering based on taxonomy, groups, or user-specific rules."
+          - drupal/security/csrf-protection.md: "Protecting state-changing operations from Cross-Site Request Forgery using Form API tokens, route-level CSRF, and AJAX token headers."
+          - drupal/security/entity-access-control.md: "Controlling entity CRUD operations through custom access handlers with proper cache metadata and entity query access checks."
+          - drupal/security/file-upload-security.md: "Securing file uploads with extension whitelists, MIME validation, private file storage, filename sanitization, and directory protection."
+          - drupal/security/input-validation-and-sanitization.md: "Validating user input with Form API, typed data constraints, URL validation, file validation, and output sanitization patterns."
+          - drupal/security/owasp-top-10-in-drupal.md: "Mapping OWASP Top 10 2021 vulnerabilities to Drupal-specific mitigations, common pitfalls, and prevention patterns."
+          - drupal/security/permissions-and-roles.md: "Defining permissions in modules, creating dynamic permissions with callbacks, and grouping them into roles."
+          - drupal/security/route-access-checks.md: "Protecting routes from unauthorized access using permission checks, entity access, and custom access check services."
+          - drupal/security/security-headers.md: "Configuring Content Security Policy, CORS, HSTS, and other HTTP security headers to prevent clickjacking, MIME sniffing, and XSS."
+          - drupal/security/security-overview.md: "Understanding Drupal's defense-in-depth security model with multiple layers of protection against different attack vectors."
+          - drupal/security/session-management.md: "Securing sessions with cookie settings, trusted host patterns, session regeneration, flood control, and proper logout implementation."
+          - drupal/security/sql-injection-prevention.md: "Preventing SQL injection using Database API placeholders, Entity Query, Query Builder, and safe identifier escaping."
+          - drupal/security/trusted-callbacks.md: "Declaring trusted callbacks for render arrays using TrustedCallbackInterface and the TrustedCallback attribute to prevent arbitrary code execution."
+          - drupal/security/twig-autoescape-and-safe-markup.md: "Understanding Twig automatic XSS protection, Markup objects, translation placeholders, and avoiding double-escaping issues."
+          - drupal/security/xss-prevention.md: "Preventing Cross-Site Scripting attacks using Twig autoescape, Xss::filter(), Html::escape(), and safe markup patterns."
+          - drupal/services/index.md: "Drupal Services & Dependency Injection decision guides — atomic references for defining services, injection patterns, service tags, event subscribers, and container architecture."
+          - drupal/services/anti-patterns-and-common-mistakes.md: "Common DI anti-patterns to avoid — container injection, constructor logic, \\Drupal in classes, eager collection, concrete type hints, circular dependencies, public properties, and missing AutowireTrait."
+          - drupal/services/autowiring.md: "Using autowiring to automatically resolve constructor arguments from type hints — enabling autowire, creating aliases for ambiguous interfaces, and the Autowire attribute."
+          - drupal/services/best-practices-and-patterns.md: "Established Drupal community standards for services and DI — interface injection, constructor simplicity, autoconfigure, AutowireTrait, testing considerations, and performance patterns."
+          - drupal/services/code-reference-map.md: "Source code locations for DI components in Drupal core — key files, interfaces, traits, container components, compiler passes, example services, and documentation URLs."
+          - drupal/services/compiler-passes.md: "Custom container compilation logic — compiler pass types and phases, processing tagged services, validating definitions, collecting service IDs, and core compiler passes."
+          - drupal/services/constructor-injection.md: "Injecting services into controllers and forms via ContainerInjectionInterface — the create() pattern, AutowireTrait shortcut, and form injection examples."
+          - drupal/services/core-services-reference.md: "Catalog of commonly used Drupal core services — database, entity_type.manager, config.factory, cache, logger, request_stack, current_user, renderer, file_system, messenger, state, and more."
+          - drupal/services/defining-services.md: "Step-by-step guide to registering a new service — creating the class, writing the YAML definition, clearing cache, and choosing service IDs and visibility."
+          - drupal/services/dependency-serialization-trait.md: "Handling service serialization with DependencySerializationTrait — how it replaces service objects with IDs during serialize and restores them on wakeup."
+          - drupal/services/drupal-global-helper.md: "When to use the \\Drupal static helper vs dependency injection — acceptable uses in procedural code, refactoring patterns, and anti-pattern examples."
+          - drupal/services/event-subscribers.md: "Creating event subscribers — implementing EventSubscriberInterface, registering with tags or autoconfigure, kernel events, entity events, and priority ordering."
+          - drupal/services/factory-services.md: "Using factories for complex service instantiation — factory classes, static factory methods, YAML factory configuration, and the core logger factory pattern."
+          - drupal/services/plugin-injection.md: "Injecting services into Drupal plugins (blocks, field formatters, widgets) via ContainerFactoryPluginInterface — parameter order, parent constructors, and formatter examples."
+          - drupal/services/security-and-performance.md: "Security and performance implications of service design — avoiding user input in definitions, lazy services, tagged iterators, constructor dependency limits, container caching, and profiling."
+          - drupal/services/service-container-architecture.md: "How Drupal's service container works — lifecycle phases, lazy instantiation, compilation vs runtime, and the role of ServiceProviders and compiler passes."
+          - drupal/services/service-definition-properties.md: "Complete reference of all properties available in service definitions — class, arguments, tags, calls, factory, autowire, autoconfigure, shared, lazy, deprecated, and more."
+          - drupal/services/service-providers-and-altering.md: "Altering existing services and adding services programmatically — ServiceProviderBase, alter() vs register(), decorating services, conditional registration, and compiler pass integration."
+          - drupal/services/services-di-overview.md: "Foundation of Drupal services and dependency injection — what they are, when to use DI vs static helpers, and basic service definition patterns."
+          - drupal/services/services-yml-schema.md: "Structure and schema of *.services.yml files — top-level keys, _defaults, service IDs, and YAML schema validation for IDE support."
+          - drupal/services/service-tags.md: "Catalog of core service tags — event_subscriber, cache.context, cache.bin, access_check, breadcrumb_builder, service_collector, theme_negotiator, path processors, and more."
+          - drupal/services/tagged-service-collectors.md: "Building extensible systems with tagged service collectors — service_collector tag, addHandler pattern, tagged_iterator for lazy loading, and named arguments."
           - drupal/taxonomy/index.md: "Drupal Taxonomy — vocabulary and term management, config-first development"
           - drupal/taxonomy/anti-patterns.md: "Identify and fix problematic taxonomy implementation patterns"
           - drupal/taxonomy/best-practices.md: "Taxonomy architecture, naming conventions, and maintenance strategies"
@@ -619,6 +727,28 @@ nav:
       - drupal/blocks/sdc-component-blocks.md
       - drupal/blocks/security-performance.md
       - drupal/blocks/visibility-conditions.md
+    - Caching:
+      - drupal/caching/index.md
+      - drupal/caching/anti-patterns-common-mistakes.md
+      - drupal/caching/best-practices-patterns.md
+      - drupal/caching/bigpipe.md
+      - drupal/caching/bubbleable-metadata-cache-bubbling.md
+      - drupal/caching/cache-backend-configuration.md
+      - drupal/caching/cache-backends.md
+      - drupal/caching/cache-bins.md
+      - drupal/caching/cache-contexts.md
+      - drupal/caching/cache-invalidation-patterns.md
+      - drupal/caching/cache-max-age.md
+      - drupal/caching/cache-metadata-trinity.md
+      - drupal/caching/cache-system-overview.md
+      - drupal/caching/cache-tags.md
+      - drupal/caching/code-reference-map.md
+      - drupal/caching/custom-cache-tags.md
+      - drupal/caching/dynamic-page-cache.md
+      - drupal/caching/lazy-builders.md
+      - drupal/caching/page-cache.md
+      - drupal/caching/render-caching.md
+      - drupal/caching/security-performance.md
     - Config Forms:
       - drupal/config-forms/index.md
       - drupal/config-forms/common-mistakes.md
@@ -631,6 +761,30 @@ nav:
       - drupal/config-forms/operations-implementation.md
       - drupal/config-forms/performance-best-practices.md
       - drupal/config-forms/security-best-practices.md
+    - Config Management:
+      - drupal/config-management/index.md
+      - drupal/config-management/anti-patterns-and-common-mistakes.md
+      - drupal/config-management/best-practices-and-patterns.md
+      - drupal/config-management/code-reference-map.md
+      - drupal/config-management/config-and-recipes-integration.md
+      - drupal/config-management/config-dependencies.md
+      - drupal/config-management/config-entities.md
+      - drupal/config-management/config-entity-schema-definition.md
+      - drupal/config-management/config-events.md
+      - drupal/config-management/config-factory-and-reading-config.md
+      - drupal/config-management/config-import-export.md
+      - drupal/config-management/config-installer.md
+      - drupal/config-management/config-override-system.md
+      - drupal/config-management/config-schema-yaml.md
+      - drupal/config-management/config-split.md
+      - drupal/config-management/config-storage.md
+      - drupal/config-management/config-synchronization.md
+      - drupal/config-management/config-system-overview.md
+      - drupal/config-management/core-data-types-schema.md
+      - drupal/config-management/deployment-workflows.md
+      - drupal/config-management/security-and-performance.md
+      - drupal/config-management/simple-config-vs-config-entities.md
+      - drupal/config-management/writing-config-schema.md
     - ECA:
       - drupal/eca/index.md
       - drupal/eca/access-control-patterns.md
@@ -921,6 +1075,27 @@ nav:
       - drupal/recipes/recipe-tooling.md
       - drupal/recipes/recipe-yaml-schema.md
       - drupal/recipes/security-performance.md
+    - Render API:
+      - drupal/render-api/index.md
+      - drupal/render-api/anti-patterns-common-mistakes.md
+      - drupal/render-api/attachments.md
+      - drupal/render-api/best-practices-patterns.md
+      - drupal/render-api/cache-metadata-render-arrays.md
+      - drupal/render-api/code-reference-map.md
+      - drupal/render-api/core-render-elements.md
+      - drupal/render-api/custom-render-elements.md
+      - drupal/render-api/form-render-elements.md
+      - drupal/render-api/lazy-builders-placeholders.md
+      - drupal/render-api/main-content-renderers.md
+      - drupal/render-api/preprocess-functions.md
+      - drupal/render-api/render-api-overview.md
+      - drupal/render-api/render-array-patterns.md
+      - drupal/render-api/render-array-structure.md
+      - drupal/render-api/renderer-service.md
+      - drupal/render-api/render-properties.md
+      - drupal/render-api/security-performance.md
+      - drupal/render-api/theme-hooks-suggestions.md
+      - drupal/render-api/twig-integration.md
     - Routing:
       - drupal/routing/index.md
       - drupal/routing/access-control-patterns.md
@@ -951,6 +1126,52 @@ nav:
       - drupal/sdc/security.md
       - drupal/sdc/testing-sdcs.md
       - drupal/sdc/twig-templates-in-sdcs.md
+    - Security:
+      - drupal/security/index.md
+      - drupal/security/access-system-architecture.md
+      - drupal/security/accessresult-patterns.md
+      - drupal/security/anti-patterns-and-common-mistakes.md
+      - drupal/security/authentication-system.md
+      - drupal/security/best-practices-and-patterns.md
+      - drupal/security/code-reference-map.md
+      - drupal/security/content-access-node-grants.md
+      - drupal/security/csrf-protection.md
+      - drupal/security/entity-access-control.md
+      - drupal/security/file-upload-security.md
+      - drupal/security/input-validation-and-sanitization.md
+      - drupal/security/owasp-top-10-in-drupal.md
+      - drupal/security/permissions-and-roles.md
+      - drupal/security/route-access-checks.md
+      - drupal/security/security-headers.md
+      - drupal/security/security-overview.md
+      - drupal/security/session-management.md
+      - drupal/security/sql-injection-prevention.md
+      - drupal/security/trusted-callbacks.md
+      - drupal/security/twig-autoescape-and-safe-markup.md
+      - drupal/security/xss-prevention.md
+    - Services:
+      - drupal/services/index.md
+      - drupal/services/anti-patterns-and-common-mistakes.md
+      - drupal/services/autowiring.md
+      - drupal/services/best-practices-and-patterns.md
+      - drupal/services/code-reference-map.md
+      - drupal/services/compiler-passes.md
+      - drupal/services/constructor-injection.md
+      - drupal/services/core-services-reference.md
+      - drupal/services/defining-services.md
+      - drupal/services/dependency-serialization-trait.md
+      - drupal/services/drupal-global-helper.md
+      - drupal/services/event-subscribers.md
+      - drupal/services/factory-services.md
+      - drupal/services/plugin-injection.md
+      - drupal/services/security-and-performance.md
+      - drupal/services/service-container-architecture.md
+      - drupal/services/service-definition-properties.md
+      - drupal/services/service-providers-and-altering.md
+      - drupal/services/services-di-overview.md
+      - drupal/services/services-yml-schema.md
+      - drupal/services/service-tags.md
+      - drupal/services/tagged-service-collectors.md
     - Taxonomy:
       - drupal/taxonomy/index.md
       - drupal/taxonomy/anti-patterns.md
