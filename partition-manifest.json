@@ -89,6 +89,36 @@
     "partitioned_by": "camoa",
     "guides_extracted": 11
   },
+  "drupal/blocks": {
+    "source_hash": "2f98a6a1905f542b8082f2d2bdf44215b33326d061048dadc9de52225c8fc4e1",
+    "partitioned": "2026-02-14",
+    "partitioned_by": "camoa",
+    "guides_extracted": 22
+  },
+  "drupal/taxonomy": {
+    "source_hash": "973a5a54acbb7ab8ca74adbdfb79cc04303565db222cf9dfcacd22a855f91024",
+    "partitioned": "2026-02-14",
+    "partitioned_by": "camoa",
+    "guides_extracted": 16
+  },
+  "drupal/image-styles": {
+    "source_hash": "fa3638e07edf6c113a86a2b4bfb9c40a7cd66ad63517b5709589094206069fa4",
+    "partitioned": "2026-02-14",
+    "partitioned_by": "camoa",
+    "guides_extracted": 15
+  },
+  "drupal/layout-builder": {
+    "source_hash": "88cda0ac6386d16eab0568b6dddedd14f72bfa02b1eaf8dae658ab8eafdbe8aa",
+    "partitioned": "2026-02-14",
+    "partitioned_by": "camoa",
+    "guides_extracted": 20
+  },
+  "drupal/views": {
+    "source_hash": "8550aeb22ec9be19efd8941e758ed64d0bf15c0c22eff57193e58e05c8a266f9",
+    "partitioned": "2026-02-14",
+    "partitioned_by": "camoa",
+    "guides_extracted": 33
+  },
   "nextjs/tiptap-editor": {
     "source_hash": "00ee683159139c0985dbe8f3886fa8d423b5339013eeeb8fd0fee47f5046fe3e",
     "partitioned": "2026-02-14",

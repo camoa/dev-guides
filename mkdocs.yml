@@ -15,6 +15,96 @@ plugins:
       sections:
         "Drupal":
           - drupal/index.md: "Drupal decision guides — forms, SDC components, JavaScript, entities, config, rendering, frontend, architecture"
+          - drupal/ai-content/index.md: "AI Content - AI-powered content creation, optimization, and management using Drupal AI module"
+          - drupal/ai-content/anti-patterns.md: "Common anti-patterns to avoid - trusting AI output, synchronous processing, token limits, hardcoding"
+          - drupal/ai-content/architecture.md: "AI module architecture - provider layer, model types, plugin system, and service layer"
+          - drupal/ai-content/automators.md: "AI Automator system - field-level content generation with 50+ automator types"
+          - drupal/ai-content/ckeditor.md: "CKEditor AI integration - in-editor content generation, rewriting, and enhancement"
+          - drupal/ai-content/content-workflow.md: "8-stage AI content workflow - from strategic planning to publishing and discovery optimization"
+          - drupal/ai-content/framework-patterns.md: "Content framework patterns - AIDA, PAS, BAB, Inverted Pyramid, Storytelling for AI generation"
+          - drupal/ai-content/performance.md: "Performance optimization for AI - rate limiting, caching, queue processing, cost management"
+          - drupal/ai-content/provider-configuration.md: "Configure AI providers - authentication, model access, rate limits, and operational settings"
+          - drupal/ai-content/quality-review.md: "Content quality review with AI - 4 C's framework, automated quality checks, lifecycle management"
+          - drupal/ai-content/security-privacy.md: "Security and privacy for AI - API key management, prompt injection prevention, PII handling"
+          - drupal/ai-content/seo.md: "AI-powered SEO - automated metatags, structured data, E-E-A-T implementation"
+          - drupal/ai-content/vector-rag.md: "Vector databases and RAG - semantic search, content similarity, AI chatbots with site context"
+          - drupal/blocks/index.md: "Drupal Blocks — atomic guides for block system development"
+          - drupal/blocks/anti-patterns.md: "Avoid common pitfalls that lead to bugs, performance issues, or maintenance problems"
+          - drupal/blocks/best-practices.md: "Architectural guidance for maintainable, performant, testable block plugins"
+          - drupal/blocks/block-access-control.md: "Control block visibility based on permissions, roles, or custom logic"
+          - drupal/blocks/block-caching.md: "Implement proper caching for block performance"
+          - drupal/blocks/block-configuration.md: "Add configurable settings to block plugins"
+          - drupal/blocks/block-events-hooks.md: "React to block operations and alter block behavior with hooks"
+          - drupal/blocks/block-placement.md: "Control where blocks appear via regions, themes, and configuration"
+          - drupal/blocks/block-rendering.md: "Customize block appearance through templates, preprocessing, and altering"
+          - drupal/blocks/block-system-architecture.md: "Understanding Drupal's 4-layer block system architecture"
+          - drupal/blocks/block-type-decision.md: "Decide between block plugin, content block, or inline block for your use case"
+          - drupal/blocks/code-reference-map.md: "Quick reference of key classes, interfaces, and services in Drupal's block system"
+          - drupal/blocks/config-recipes.md: "Export block configuration and use in recipes for deployment"
+          - drupal/blocks/content-blocks.md: "Work with block content entities (fieldable content blocks)"
+          - drupal/blocks/core-block-plugins.md: "Reference of core block plugins available in Drupal"
+          - drupal/blocks/creating-block-plugins.md: "Building custom block plugins with programmatic logic"
+          - drupal/blocks/custom-block-types.md: "Create reusable fieldable block types managed by content editors"
+          - drupal/blocks/dependency-injection.md: "Inject Drupal services into block plugins"
+          - drupal/blocks/layout-builder-blocks.md: "Inline blocks, field blocks, and extra field blocks in Layout Builder"
+          - drupal/blocks/programmatic-operations.md: "Load, create, modify, and place blocks programmatically"
+          - drupal/blocks/sdc-component-blocks.md: "Use Single Directory Components (SDC) as blocks"
+          - drupal/blocks/security-performance.md: "Ensure blocks don't introduce vulnerabilities or performance bottlenecks"
+          - drupal/blocks/visibility-conditions.md: "Control block visibility based on pages, roles, content types, or custom logic"
+          - drupal/config-forms/index.md: "Configuration Forms — choose form types, build admin interfaces, implement operations"
+          - drupal/config-forms/common-mistakes.md: "Common configuration form mistakes and how to fix them"
+          - drupal/config-forms/configformbase-pattern.md: "Build module settings forms with ConfigFormBase"
+          - drupal/config-forms/configuration-schema.md: "Define structure and validation constraints for configuration"
+          - drupal/config-forms/dependency-injection.md: "Inject services into forms using dependency injection pattern"
+          - drupal/config-forms/formbase-pattern.md: "Build custom admin forms with FormBase"
+          - drupal/config-forms/formbase-vs-listbuilder.md: "Choose between FormBase and ListBuilder for admin interfaces"
+          - drupal/config-forms/listbuilder-pattern.md: "Build entity collection admin pages with ListBuilder"
+          - drupal/config-forms/operations-implementation.md: "Add action links (Edit, Delete) to table rows with operations render element"
+          - drupal/config-forms/performance-best-practices.md: "Optimize configuration forms to avoid performance bottlenecks"
+          - drupal/config-forms/security-best-practices.md: "Security patterns for configuration forms"
+          - drupal/eca/index.md: "ECA (Event-Condition-Action) plugin development — create custom actions, events, and conditions"
+          - drupal/eca/access-control-patterns.md: "Validate plugin config in access() before execution with AccessResult patterns"
+          - drupal/eca/action-plugin-basics.md: "Create custom ECA Action plugins with ConfigurableActionBase for user-configurable operations"
+          - drupal/eca/advanced-action-patterns.md: "Integrate external APIs, YAML config, dynamic forms, and structured error handling in ECA actions"
+          - drupal/eca/cleanup-interface.md: "Implement CleanupInterface to restore state after event actions complete (account switching, locks)"
+          - drupal/eca/common-pitfalls.md: "Avoid critical ECA plugin mistakes — parent::create pattern, token attributes, negationCheck"
+          - drupal/eca/complex-token-structures.md: "Store structured data in tokens with success/error indicators for downstream actions"
+          - drupal/eca/condition-plugin-basics.md: "Create custom ECA Condition plugins with ConditionBase for business logic evaluation"
+          - drupal/eca/debugging-workflows.md: "Debug ECA workflows with logging, token inspection, and drush watchdog commands"
+          - drupal/eca/entity-aware-events.md: "Filter ECA event triggers by entity type, bundle, or field with wildcard patterns"
+          - drupal/eca/event-plugin-basics.md: "Create custom ECA Event plugins with EventBase and derivers for business logic triggers"
+          - drupal/eca/kernel-testing.md: "Write kernel tests for ECA plugins to verify configuration, execution, and token handling"
+          - drupal/eca/mandatory-rules.md: "Pre-completion checklist for ECA plugins — all rules are MANDATORY, not optional"
+          - drupal/eca/performance-patterns.md: "Cache API calls, batch entity loading, and optimize token access in ECA plugins"
+          - drupal/eca/plugin-derivers.md: "Generate multiple plugin instances from one class using DeriverBase and ContainerDeriverInterface"
+          - drupal/eca/reusable-traits.md: "Use ECA traits for form fields, entity saving, lists, and YAML config to avoid code duplication"
+          - drupal/eca/security-best-practices.md: "Sanitize input, check access, validate API responses, and secure credentials in ECA plugins"
+          - drupal/eca/service-injection.md: "Inject services into ECA plugins using parent::create pattern (NEVER new static)"
+          - drupal/eca/string-comparison-conditions.md: "Compare values with StringComparisonBase — override getLeftValue/getRightValue, NOT evaluate"
+          - drupal/eca/token-form-integration.md: "Add token replacement, reference, and selection to ECA form fields"
+          - drupal/eca/token-receiver-interface.md: "Implement TokenReceiverInterface to preserve event tokens across workflow execution"
+          - drupal/eca/yaml-configuration.md: "Use YAML config fields for complex structured settings with YamlParser validation"
+          - drupal/entities/index.md: "Drupal entities and fields — content types, field development, and entity patterns"
+          - drupal/entities/base-field-definitions.md: "Base fields that exist on all bundles of an entity type"
+          - drupal/entities/bundle-entity-implementation.md: "Custom bundle entity classes for programmatic content type creation"
+          - drupal/entities/computed-field-patterns.md: "Computed fields — virtual fields with dynamic values from stored data"
+          - drupal/entities/content-type-configuration.md: "Content type YAML configuration for exportable content types"
+          - drupal/entities/custom-field-type-development.md: "Building custom field types with custom storage and validation"
+          - drupal/entities/entity-architecture-fundamentals.md: "Entity architecture — two-layer system separating configuration from content"
+          - drupal/entities/entity-query-patterns.md: "Entity query API for efficient database queries with access control"
+          - drupal/entities/entity-query-performance.md: "Entity query optimization for large datasets and high-traffic scenarios"
+          - drupal/entities/entity-reference-patterns.md: "Entity reference fields for relationships with referential integrity"
+          - drupal/entities/field-access-control.md: "Field-level access control with cache metadata"
+          - drupal/entities/field-formatter-development.md: "Custom display formatters for field values in view modes"
+          - drupal/entities/field-instance-configuration.md: "Field instance — bundle-specific field settings and configuration"
+          - drupal/entities/field-storage-configuration.md: "Field storage — technical specs for reusable fields across bundles"
+          - drupal/entities/field-type-selection.md: "Choosing the right field type for your data structure"
+          - drupal/entities/field-validation-patterns.md: "Field validation with custom constraints and business rules"
+          - drupal/entities/field-widget-development.md: "Custom input widgets for field types in entity forms"
+          - drupal/entities/file-and-image-field-patterns.md: "File and image fields with security validation and performance optimization"
+          - drupal/entities/form-display-configuration.md: "Form display — widget selection and field ordering in entity edit forms"
+          - drupal/entities/view-display-configuration.md: "View display — formatter selection and field visibility in view modes"
+          - drupal/entities/view-mode-development.md: "Custom view modes for specialized display contexts"
           - drupal/forms/index.md: "Drupal Form API decision guides - choose the right pattern, element, and approach"
           - drupal/forms/ajax-architecture.md: "AJAX form architecture - core system, element properties, callbacks, and commands"
           - drupal/forms/ajax-security.md: "AJAX security, XSS prevention, and advanced patterns like modals"
@@ -42,21 +132,81 @@ plugins:
           - drupal/forms/submission-architecture.md: "Form submission architecture - handler priority, redirect patterns, and state storage"
           - drupal/forms/validation-architecture.md: "Three-tier validation architecture - element, form, and typed config validation"
           - drupal/forms/validation-partial.md: "Partial validation pattern with #limit_validation_errors for multi-step forms"
-          - drupal/sdc/index.md: "Single Directory Components (SDC) — component architecture, development patterns, and best practices"
-          - drupal/sdc/anti-patterns.md: "Common component development anti-patterns with WHY explanations from code review perspective"
-          - drupal/sdc/component-composition.md: "Including components within components using include(), embed, or render arrays"
-          - drupal/sdc/component-file-structure.md: "Required and optional files in SDC directory structure with automatic asset loading"
-          - drupal/sdc/component-variants.md: "Implementing component variations using enum props, separate components, or the variants API"
-          - drupal/sdc/component-yaml-schema.md: "Defining component metadata, props, slots, and library dependencies in YAML schema"
-          - drupal/sdc/javascript-in-sdcs.md: "Adding interactive behavior with Drupal.behaviors, once(), and progressive enhancement"
-          - drupal/sdc/performance.md: "Optimizing component loading with automatic libraries, caching, and lazy loading"
-          - drupal/sdc/props-vs-slots-decision-framework.md: "Deciding when to use props (typed data) vs slots (renderable content) in component API design"
-          - drupal/sdc/replacing-templates-with-sdcs.md: "Migrating traditional Twig templates to SDC with theme overrides and field formatters"
-          - drupal/sdc/scss-css-in-sdcs.md: "CSS scoping with BEM, Bootstrap/Radix variable imports, and custom properties"
-          - drupal/sdc/sdc-architecture.md: "How Drupal discovers and loads SDC components using the plugin system"
-          - drupal/sdc/security.md: "Preventing XSS with auto-escaping, Attribute object, and props validation"
-          - drupal/sdc/testing-sdcs.md: "Testing components with schema validation, Storybook, and visual regression"
-          - drupal/sdc/twig-templates-in-sdcs.md: "Writing Twig templates for SDCs with props, slots, and attributes object"
+          - drupal/github-actions/index.md: "GitHub Actions for Drupal — automated CI/CD workflows for testing, building, and deploying"
+          - drupal/github-actions/caching-strategies.md: "Speed up GitHub Actions workflows by caching Composer, npm, and Drupal dependencies"
+          - drupal/github-actions/code-quality-checks.md: "PHPCS, PHPStan, deprecation detection, and security audits for Drupal code"
+          - drupal/github-actions/deployment-artifacts.md: "Package and upload Drupal builds for deployment to staging or production"
+          - drupal/github-actions/drupal-stack-setup.md: "Configure PHP, MySQL/PostgreSQL, and Composer for Drupal testing environments"
+          - drupal/github-actions/environment-protection.md: "Add approval gates, wait timers, and validation for production deployments"
+          - drupal/github-actions/matrix-testing.md: "Test Drupal across multiple versions, PHP versions, and database types using matrix strategy"
+          - drupal/github-actions/multi-environment-deployment.md: "Deploy Drupal to staging, production, or multiple hosting environments with approval gates"
+          - drupal/github-actions/parallel-execution.md: "Run independent GitHub Actions jobs concurrently to reduce total workflow time"
+          - drupal/github-actions/phpunit-testing.md: "Run unit, kernel, functional, and JavaScript tests with PHPUnit in GitHub Actions"
+          - drupal/github-actions/secret-management.md: "Store and use sensitive credentials for GitHub Actions deployments and third-party services"
+          - drupal/github-actions/theme-asset-compilation.md: "Build Sass, JavaScript, and optimize assets for Drupal themes in CI/CD pipelines"
+          - drupal/github-actions/troubleshooting.md: "Debug common GitHub Actions failures in Drupal workflows"
+          - drupal/github-actions/workflow-fundamentals.md: "GitHub Actions workflow triggers, structure, and core concepts for Drupal CI/CD"
+          - drupal/icon-api/index.md: "Icon API — unified icon management for Drupal 11+ with SVG, sprites, fonts, and remote sources"
+          - drupal/icon-api/caching-strategy.md: "Icon API caching behavior for performance optimization"
+          - drupal/icon-api/choosing-extractors.md: "Select the appropriate extractor plugin for your icon source format"
+          - drupal/icon-api/custom-extractor-development.md: "Build custom extractor plugins for API, database, or computed icons"
+          - drupal/icon-api/debugging-templates.md: "Debug incorrect icon rendering, missing variables, or malformed SVG"
+          - drupal/icon-api/font-extractor.md: "Integrate existing icon fonts with Icon API and CSS-based rendering"
+          - drupal/icon-api/icon-pack-architecture.md: "Icon pack discovery, loading, and rendering lifecycle"
+          - drupal/icon-api/icon-pack-definition.md: "Complete YAML structure for icon pack definitions"
+          - drupal/icon-api/iconpackmanager-service.md: "Programmatic access to icon packs and icons in PHP"
+          - drupal/icon-api/icon-slots.md: "Maximum flexibility for icon content using SDC slots"
+          - drupal/icon-api/migration-patterns.md: "Migrate from manual icons, icon fonts, or other systems to Icon API"
+          - drupal/icon-api/path-extractor.md: "Maximum flexibility for any image format from local or remote sources"
+          - drupal/icon-api/performance-best-practices.md: "Optimize icon rendering for large-scale sites and slow networks"
+          - drupal/icon-api/remote-resource-security.md: "Loading icons from CDNs with SSRF, mixed content, and availability protection"
+          - drupal/icon-api/sdc-icon-props.md: "Configurable icons as props in Single Directory Components"
+          - drupal/icon-api/svg-extractor.md: "Automatic discovery and sanitization for individual SVG files"
+          - drupal/icon-api/svg-security-performance.md: "SVG security implications and optimization techniques"
+          - drupal/icon-api/svg-sprite-extractor.md: "Optimal performance for large icon sets with single-file SVG sprites"
+          - drupal/icon-api/template-variables.md: "Available variables in icon pack templates and how to use them"
+          - drupal/icon-api/troubleshooting-icon-discovery.md: "Debug icon packs not loading or icon IDs not resolving"
+          - drupal/icon-api/twig-icon-function.md: "Render icons in Twig templates with type safety, caching, and settings"
+          - drupal/icon-api/ui-icons-module-features.md: "Icon integration beyond rendering - field types, menu icons, CKEditor embedding, and browsing UI for content editors"
+          - drupal/icon-api/what-is-icon-api.md: "Unified icon management for Drupal 11+ with SVG, sprites, fonts, and remote sources"
+          - drupal/image-styles/index.md: "Drupal Image Styles & Responsive Images - Configuration-first approach to image optimization"
+          - drupal/image-styles/anti-patterns.md: "Avoid common mistakes"
+          - drupal/image-styles/art-direction-resolution.md: "Decide between art direction and resolution switching"
+          - drupal/image-styles/best-practices.md: "Follow naming conventions and performance patterns"
+          - drupal/image-styles/breakpoint-configuration.md: "Define breakpoints in your theme"
+          - drupal/image-styles/code-reference-map.md: "Find key classes and interfaces"
+          - drupal/image-styles/config-export-recipes.md: "Export image styles or create a recipe"
+          - drupal/image-styles/core-image-effects.md: "Configure resize, scale, crop, or conversion effects"
+          - drupal/image-styles/creating-styles-config.md: "Create an image style via YAML config"
+          - drupal/image-styles/image-field-formatters.md: "Configure image field formatters"
+          - drupal/image-styles/image-overview.md: "When to use image styles vs responsive images"
+          - drupal/image-styles/image-style-schema.md: "Full YAML config schema for image styles"
+          - drupal/image-styles/programmatic-operations.md: "Generate derivatives or create custom effects programmatically"
+          - drupal/image-styles/responsive-image-config.md: "Set up a responsive image style with breakpoints"
+          - drupal/image-styles/security-performance.md: "Secure image derivatives and optimize performance"
+          - drupal/image-styles/webp-avif-optimization.md: "Optimize images with WebP and AVIF"
+          - drupal/jsonapi/index.md: "JSON:API — spec-compliant REST API with filtering, includes, pagination, and customization"
+          - drupal/jsonapi/authentication-patterns.md: "Authentication for write operations and accessing restricted content"
+          - drupal/jsonapi/code-reference-map.md: "Navigate JSON:API source code for debugging, customization, or understanding internals"
+          - drupal/jsonapi/core-architecture.md: "JSON:API architecture — ResourceType, normalization, controller, query systems"
+          - drupal/jsonapi/creating-resources.md: "Creating new entities via the API with POST requests"
+          - drupal/jsonapi/deleting-resources.md: "Removing entities from Drupal with DELETE requests"
+          - drupal/jsonapi/fetching-resources.md: "Retrieving entity data with GET requests for collections and individuals"
+          - drupal/jsonapi/field-enhancers.md: "Transform field values during normalization with jsonapi_extras enhancers"
+          - drupal/jsonapi/file-uploads.md: "Uploading binary files to entity file/image fields"
+          - drupal/jsonapi/filtering.md: "Narrow down collection results based on field values"
+          - drupal/jsonapi/includes-sparse-fieldsets.md: "Fetch related entities in a single request and request only needed fields"
+          - drupal/jsonapi/jsonapi-extras-customization.md: "Customize resource names, URLs, field visibility with jsonapi_extras"
+          - drupal/jsonapi/jsonapi-vs-rest-vs-graphql.md: "Choose the right API approach for your project"
+          - drupal/jsonapi/performance-optimization.md: "Caching, sparse fieldsets, CDN, and indexing for production APIs"
+          - drupal/jsonapi/revisions-translations.md: "Access specific entity revisions or translations via JSON:API"
+          - drupal/jsonapi/security-best-practices.md: "Security for JSON:API deployments and public-facing APIs"
+          - drupal/jsonapi/sorting-pagination.md: "Control result order and break large result sets into pages"
+          - drupal/jsonapi/sources-maintenance.md: "Reference sources and maintenance manifest"
+          - drupal/jsonapi/testing-debugging.md: "Development, troubleshooting, and QA of JSON:API implementations"
+          - drupal/jsonapi/updating-resources.md: "Modifying existing entities with PATCH requests"
+          - drupal/jsonapi/url-structure-resource-types.md: "Understanding URL patterns and resource type naming"
+          - drupal/jsonapi/what-is-jsonapi.md: "Understanding JSON:API purpose and determining project fit"
           - drupal/js-development/index.md: "Drupal JavaScript Development - library-based architecture, behaviors, and modern patterns"
           - drupal/js-development/aggregation-and-minification.md: "Enable JavaScript aggregation and minification for production performance"
           - drupal/js-development/ajax-integration.md: "Integrate JavaScript with Drupal's AJAX framework for dynamic content updates"
@@ -80,27 +230,77 @@ plugins:
           - drupal/js-development/performance-optimization.md: "JavaScript performance optimization strategies for better user experience and SEO"
           - drupal/js-development/security.md: "JavaScript security best practices for XSS prevention and CSP compliance"
           - drupal/js-development/testing-javascript.md: "Test JavaScript functionality with Nightwatch.js for AJAX, accessibility, and browser compatibility"
-          - drupal/entities/index.md: "Drupal entities and fields — content types, field development, and entity patterns"
-          - drupal/entities/base-field-definitions.md: "Base fields that exist on all bundles of an entity type"
-          - drupal/entities/bundle-entity-implementation.md: "Custom bundle entity classes for programmatic content type creation"
-          - drupal/entities/computed-field-patterns.md: "Computed fields — virtual fields with dynamic values from stored data"
-          - drupal/entities/content-type-configuration.md: "Content type YAML configuration for exportable content types"
-          - drupal/entities/custom-field-type-development.md: "Building custom field types with custom storage and validation"
-          - drupal/entities/entity-architecture-fundamentals.md: "Entity architecture — two-layer system separating configuration from content"
-          - drupal/entities/entity-query-patterns.md: "Entity query API for efficient database queries with access control"
-          - drupal/entities/entity-query-performance.md: "Entity query optimization for large datasets and high-traffic scenarios"
-          - drupal/entities/entity-reference-patterns.md: "Entity reference fields for relationships with referential integrity"
-          - drupal/entities/field-access-control.md: "Field-level access control with cache metadata"
-          - drupal/entities/field-formatter-development.md: "Custom display formatters for field values in view modes"
-          - drupal/entities/field-instance-configuration.md: "Field instance — bundle-specific field settings and configuration"
-          - drupal/entities/field-storage-configuration.md: "Field storage — technical specs for reusable fields across bundles"
-          - drupal/entities/field-type-selection.md: "Choosing the right field type for your data structure"
-          - drupal/entities/field-validation-patterns.md: "Field validation with custom constraints and business rules"
-          - drupal/entities/field-widget-development.md: "Custom input widgets for field types in entity forms"
-          - drupal/entities/file-and-image-field-patterns.md: "File and image fields with security validation and performance optimization"
-          - drupal/entities/form-display-configuration.md: "Form display — widget selection and field ordering in entity edit forms"
-          - drupal/entities/view-display-configuration.md: "View display — formatter selection and field visibility in view modes"
-          - drupal/entities/view-mode-development.md: "Custom view modes for specialized display contexts"
+          - drupal/klaro/index.md: "Klaro Cookie & Consent Management — GDPR-compliant consent for Drupal sites"
+          - drupal/klaro/automatic-resource-attribution.md: "Enable automatic detection and blocking of external resources without manual HTML attributes"
+          - drupal/klaro/consent-mode-selection.md: "Choose between Silent, Notice, or Modal consent modes based on regulatory requirements"
+          - drupal/klaro/development-standards.md: "Drupal development best practices for extending, theming, and testing Klaro"
+          - drupal/klaro/installation-methods.md: "Install Klaro module and klaro-js library via Composer or manual methods"
+          - drupal/klaro/legal-compliance-requirements.md: "GDPR, ePrivacy, and legal requirements for consent management configuration"
+          - drupal/klaro/menu-integration.md: "Add privacy settings links to menus or use floating toggle button for consent management"
+          - drupal/klaro/performance-optimization.md: "Optimize Klaro for fast page load, minimal render blocking, and efficient resource management"
+          - drupal/klaro/purpose-management.md: "Group related services into purposes (categories) for clearer consent choices"
+          - drupal/klaro/security-best-practices.md: "Prevent XSS vulnerabilities and secure consent configuration"
+          - drupal/klaro/service-configuration.md: "Configure services to control external resources (scripts, iframes, cookies) per user consent"
+          - drupal/klaro/storage-settings.md: "Configure cookie vs localStorage, expiration, and domain scope for consent storage"
+          - drupal/klaro/styling-and-ui-customization.md: "Customize Klaro appearance with CSS variables, positioning, and HTML in descriptions"
+          - drupal/klaro/translation-and-localization.md: "Translate Klaro UI, service descriptions, and purposes for multi-language sites"
+          - drupal/klaro/troubleshooting.md: "Diagnose consent modal, script blocking, and configuration issues"
+          - drupal/klaro/url-pattern-exclusions.md: "Disable Klaro on admin pages, previews, or specific URL patterns using regex"
+          - drupal/klaro/what-is-consent-management.md: "Understand when and why to use consent management for GDPR and privacy compliance"
+          - drupal/layout-builder/index.md: "Layout Builder — visual layout control for Drupal entity displays with sections and blocks"
+          - drupal/layout-builder/anti-patterns.md: "Common Layout Builder mistakes to avoid"
+          - drupal/layout-builder/best-practices.md: "Layout Builder best practices and patterns"
+          - drupal/layout-builder/block-placement.md: "Placing and configuring blocks in layouts"
+          - drupal/layout-builder/code-reference.md: "Key classes and files in Layout Builder"
+          - drupal/layout-builder/config-recipes.md: "Exporting and deploying Layout Builder configuration"
+          - drupal/layout-builder/config-schema.md: "Layout Builder YAML configuration structure and schema"
+          - drupal/layout-builder/core-layouts.md: "Core layout plugins available in Drupal"
+          - drupal/layout-builder/custom-layouts.md: "Creating custom layout plugins"
+          - drupal/layout-builder/defaults-vs-overrides.md: "Default layouts vs per-entity overrides"
+          - drupal/layout-builder/enabling.md: "How to enable Layout Builder on content types and view modes"
+          - drupal/layout-builder/events-hooks.md: "Layout Builder events and hooks"
+          - drupal/layout-builder/field-blocks.md: "Using field and extra field blocks in layouts"
+          - drupal/layout-builder/inline-vs-reusable.md: "Choosing between inline and reusable blocks"
+          - drupal/layout-builder/overview.md: "Overview of Layout Builder and when to use it"
+          - drupal/layout-builder/restrictions.md: "Restricting which blocks can be added to layouts"
+          - drupal/layout-builder/sections-layouts.md: "Understanding sections, layouts, and regions"
+          - drupal/layout-builder/security-performance.md: "Security and performance considerations"
+          - drupal/layout-builder/sources.md: "Documentation sources and maintenance notes"
+          - drupal/layout-builder/styles.md: "Adding CSS classes to sections and blocks"
+          - drupal/layout-builder/theming.md: "Theming Layout Builder admin UI and frontend"
+          - drupal/media/index.md: "Media Types — custom media source plugins, metadata extraction, and third-party API integrations"
+          - drupal/media/anti-patterns.md: "Common mistakes and anti-patterns to avoid in media source plugins"
+          - drupal/media/architecture-overview.md: "Media source plugin architecture and how it fits into Drupal's plugin system"
+          - drupal/media/base-class-selection.md: "Choosing MediaSourceBase, File, or OEmbed base class for custom plugins"
+          - drupal/media/custom-media-source-plugin.md: "Creating custom media source plugins for third-party API integrations"
+          - drupal/media/dependency-injection.md: "Injecting services into media source plugins for HTTP, logging, caching"
+          - drupal/media/display-configuration.md: "Configuring custom formatters and widgets for media source fields"
+          - drupal/media/extending-oembed-sources.md: "Extending core OEmbed source for custom providers and validation"
+          - drupal/media/field-mapping.md: "Mapping metadata to entity fields for search, filtering, and editing"
+          - drupal/media/media-type-selection-strategy.md: "Decision tree for choosing core, contrib, or custom media types"
+          - drupal/media/metadata-system.md: "Defining and extracting metadata attributes from media sources"
+          - drupal/media/performance-optimization.md: "Caching, queuing, and optimization strategies for media source plugins"
+          - drupal/media/security-best-practices.md: "Security measures to prevent XSS, SSRF, and other vulnerabilities"
+          - drupal/media/testing-strategies.md: "Unit, kernel, and functional testing strategies for media source plugins"
+          - drupal/media/thumbnail-generation.md: "Downloading, caching, and generating thumbnails for media entities"
+          - drupal/media/validation-constraints.md: "Validating media source field values with custom constraints"
+          - drupal/migration/index.md: "Drupal 7 to 11 migration — decision guides for Migrate API, content strategy, and performance"
+          - drupal/migration/anti-patterns.md: "Common migration failures that cause project delays and technical debt"
+          - drupal/migration/assess-migration-scope.md: "Inventory and timeline estimation for D7 to D11 migration projects"
+          - drupal/migration/choose-migration-approach.md: "Standard Migrate API rebuild vs wizard vs retrofit for D7 to D11 migrations"
+          - drupal/migration/complex-field-mappings.md: "Multi-step process pipelines for paragraphs and entity references with revisions"
+          - drupal/migration/configure-migration-sources.md: "Configure D7 database connection and source plugins for Migrate API"
+          - drupal/migration/create-migration-definitions.md: "YAML migration definition structure for source, process, and destination"
+          - drupal/migration/debug-migration-failures.md: "Logging, verbose output, and debugging techniques for migration failures"
+          - drupal/migration/handle-field-mappings.md: "Process plugins for transforming source data to destination format"
+          - drupal/migration/map-content-structure.md: "Map D7 field collections and content architecture to D11 entities"
+          - drupal/migration/migrate-configuration.md: "Migrate content types, views, and configuration from D7 to D11"
+          - drupal/migration/migrate-content-entities.md: "Execute migrations in dependency order with Drush commands"
+          - drupal/migration/migration-best-practices.md: "Critical success factors and patterns from community migration experience"
+          - drupal/migration/performance-optimization.md: "Memory management and batch processing for large-scale migrations"
+          - drupal/migration/plan-custom-code-strategy.md: "Rewrite vs retrofit vs retire strategy for D7 custom modules in D11"
+          - drupal/migration/security-best-practices.md: "Security controls for SQL injection, XSS, and access bypass in migrations"
+          - drupal/migration/test-migration-results.md: "Validation and testing strategy throughout migration lifecycle"
           - drupal/plugins/index.md: "Plugin Architecture - choose between Foundation+Extension, Provider Plugin, and Service Collector patterns"
           - drupal/plugins/architecture-pattern-selection.md: "Choose between Foundation+Extension, Provider Plugin, or Service Collector patterns"
           - drupal/plugins/configuration-architecture.md: "Store and manage plugin configuration across patterns"
@@ -151,161 +351,38 @@ plugins:
           - drupal/routing/security-best-practices.md: "Drupal routing security - protect routes with access control, input validation, and CSRF protection"
           - drupal/routing/testing-and-debugging.md: "Testing and debugging Drupal routes - validate YAML syntax and troubleshoot routing issues"
           - drupal/routing/yaml-escaping-rules.md: "YAML escaping rules for Drupal routing - single backslashes in single quotes prevent fatal site crashes"
-          - drupal/config-forms/index.md: "Configuration Forms — choose form types, build admin interfaces, implement operations"
-          - drupal/config-forms/common-mistakes.md: "Common configuration form mistakes and how to fix them"
-          - drupal/config-forms/configformbase-pattern.md: "Build module settings forms with ConfigFormBase"
-          - drupal/config-forms/configuration-schema.md: "Define structure and validation constraints for configuration"
-          - drupal/config-forms/dependency-injection.md: "Inject services into forms using dependency injection pattern"
-          - drupal/config-forms/formbase-pattern.md: "Build custom admin forms with FormBase"
-          - drupal/config-forms/formbase-vs-listbuilder.md: "Choose between FormBase and ListBuilder for admin interfaces"
-          - drupal/config-forms/listbuilder-pattern.md: "Build entity collection admin pages with ListBuilder"
-          - drupal/config-forms/operations-implementation.md: "Add action links (Edit, Delete) to table rows with operations render element"
-          - drupal/config-forms/performance-best-practices.md: "Optimize configuration forms to avoid performance bottlenecks"
-          - drupal/config-forms/security-best-practices.md: "Security patterns for configuration forms"
-          - drupal/icon-api/index.md: "Icon API — unified icon management for Drupal 11+ with SVG, sprites, fonts, and remote sources"
-          - drupal/icon-api/caching-strategy.md: "Icon API caching behavior for performance optimization"
-          - drupal/icon-api/choosing-extractors.md: "Select the appropriate extractor plugin for your icon source format"
-          - drupal/icon-api/custom-extractor-development.md: "Build custom extractor plugins for API, database, or computed icons"
-          - drupal/icon-api/debugging-templates.md: "Debug incorrect icon rendering, missing variables, or malformed SVG"
-          - drupal/icon-api/font-extractor.md: "Integrate existing icon fonts with Icon API and CSS-based rendering"
-          - drupal/icon-api/icon-pack-architecture.md: "Icon pack discovery, loading, and rendering lifecycle"
-          - drupal/icon-api/icon-pack-definition.md: "Complete YAML structure for icon pack definitions"
-          - drupal/icon-api/iconpackmanager-service.md: "Programmatic access to icon packs and icons in PHP"
-          - drupal/icon-api/icon-slots.md: "Maximum flexibility for icon content using SDC slots"
-          - drupal/icon-api/migration-patterns.md: "Migrate from manual icons, icon fonts, or other systems to Icon API"
-          - drupal/icon-api/path-extractor.md: "Maximum flexibility for any image format from local or remote sources"
-          - drupal/icon-api/performance-best-practices.md: "Optimize icon rendering for large-scale sites and slow networks"
-          - drupal/icon-api/remote-resource-security.md: "Loading icons from CDNs with SSRF, mixed content, and availability protection"
-          - drupal/icon-api/sdc-icon-props.md: "Configurable icons as props in Single Directory Components"
-          - drupal/icon-api/svg-extractor.md: "Automatic discovery and sanitization for individual SVG files"
-          - drupal/icon-api/svg-security-performance.md: "SVG security implications and optimization techniques"
-          - drupal/icon-api/svg-sprite-extractor.md: "Optimal performance for large icon sets with single-file SVG sprites"
-          - drupal/icon-api/template-variables.md: "Available variables in icon pack templates and how to use them"
-          - drupal/icon-api/troubleshooting-icon-discovery.md: "Debug icon packs not loading or icon IDs not resolving"
-          - drupal/icon-api/twig-icon-function.md: "Render icons in Twig templates with type safety, caching, and settings"
-          - drupal/icon-api/ui-icons-module-features.md: "Icon integration beyond rendering - field types, menu icons, CKEditor embedding, and browsing UI for content editors"
-          - drupal/icon-api/what-is-icon-api.md: "Unified icon management for Drupal 11+ with SVG, sprites, fonts, and remote sources"
-          - drupal/jsonapi/index.md: "JSON:API — spec-compliant REST API with filtering, includes, pagination, and customization"
-          - drupal/jsonapi/authentication-patterns.md: "Authentication for write operations and accessing restricted content"
-          - drupal/jsonapi/code-reference-map.md: "Navigate JSON:API source code for debugging, customization, or understanding internals"
-          - drupal/jsonapi/core-architecture.md: "JSON:API architecture — ResourceType, normalization, controller, query systems"
-          - drupal/jsonapi/creating-resources.md: "Creating new entities via the API with POST requests"
-          - drupal/jsonapi/deleting-resources.md: "Removing entities from Drupal with DELETE requests"
-          - drupal/jsonapi/fetching-resources.md: "Retrieving entity data with GET requests for collections and individuals"
-          - drupal/jsonapi/field-enhancers.md: "Transform field values during normalization with jsonapi_extras enhancers"
-          - drupal/jsonapi/file-uploads.md: "Uploading binary files to entity file/image fields"
-          - drupal/jsonapi/filtering.md: "Narrow down collection results based on field values"
-          - drupal/jsonapi/includes-sparse-fieldsets.md: "Fetch related entities in a single request and request only needed fields"
-          - drupal/jsonapi/jsonapi-extras-customization.md: "Customize resource names, URLs, field visibility with jsonapi_extras"
-          - drupal/jsonapi/jsonapi-vs-rest-vs-graphql.md: "Choose the right API approach for your project"
-          - drupal/jsonapi/performance-optimization.md: "Caching, sparse fieldsets, CDN, and indexing for production APIs"
-          - drupal/jsonapi/revisions-translations.md: "Access specific entity revisions or translations via JSON:API"
-          - drupal/jsonapi/security-best-practices.md: "Security for JSON:API deployments and public-facing APIs"
-          - drupal/jsonapi/sorting-pagination.md: "Control result order and break large result sets into pages"
-          - drupal/jsonapi/sources-maintenance.md: "Reference sources and maintenance manifest"
-          - drupal/jsonapi/testing-debugging.md: "Development, troubleshooting, and QA of JSON:API implementations"
-          - drupal/jsonapi/updating-resources.md: "Modifying existing entities with PATCH requests"
-          - drupal/jsonapi/url-structure-resource-types.md: "Understanding URL patterns and resource type naming"
-          - drupal/jsonapi/what-is-jsonapi.md: "Understanding JSON:API purpose and determining project fit"
-          - drupal/ai-content/index.md: "AI Content - AI-powered content creation, optimization, and management using Drupal AI module"
-          - drupal/ai-content/anti-patterns.md: "Common anti-patterns to avoid - trusting AI output, synchronous processing, token limits, hardcoding"
-          - drupal/ai-content/architecture.md: "AI module architecture - provider layer, model types, plugin system, and service layer"
-          - drupal/ai-content/automators.md: "AI Automator system - field-level content generation with 50+ automator types"
-          - drupal/ai-content/ckeditor.md: "CKEditor AI integration - in-editor content generation, rewriting, and enhancement"
-          - drupal/ai-content/content-workflow.md: "8-stage AI content workflow - from strategic planning to publishing and discovery optimization"
-          - drupal/ai-content/framework-patterns.md: "Content framework patterns - AIDA, PAS, BAB, Inverted Pyramid, Storytelling for AI generation"
-          - drupal/ai-content/performance.md: "Performance optimization for AI - rate limiting, caching, queue processing, cost management"
-          - drupal/ai-content/provider-configuration.md: "Configure AI providers - authentication, model access, rate limits, and operational settings"
-          - drupal/ai-content/quality-review.md: "Content quality review with AI - 4 C's framework, automated quality checks, lifecycle management"
-          - drupal/ai-content/security-privacy.md: "Security and privacy for AI - API key management, prompt injection prevention, PII handling"
-          - drupal/ai-content/seo.md: "AI-powered SEO - automated metatags, structured data, E-E-A-T implementation"
-          - drupal/ai-content/vector-rag.md: "Vector databases and RAG - semantic search, content similarity, AI chatbots with site context"
-          - drupal/media/index.md: "Media Types — custom media source plugins, metadata extraction, and third-party API integrations"
-          - drupal/media/anti-patterns.md: "Common mistakes and anti-patterns to avoid in media source plugins"
-          - drupal/media/architecture-overview.md: "Media source plugin architecture and how it fits into Drupal's plugin system"
-          - drupal/media/base-class-selection.md: "Choosing MediaSourceBase, File, or OEmbed base class for custom plugins"
-          - drupal/media/custom-media-source-plugin.md: "Creating custom media source plugins for third-party API integrations"
-          - drupal/media/dependency-injection.md: "Injecting services into media source plugins for HTTP, logging, caching"
-          - drupal/media/display-configuration.md: "Configuring custom formatters and widgets for media source fields"
-          - drupal/media/extending-oembed-sources.md: "Extending core OEmbed source for custom providers and validation"
-          - drupal/media/field-mapping.md: "Mapping metadata to entity fields for search, filtering, and editing"
-          - drupal/media/media-type-selection-strategy.md: "Decision tree for choosing core, contrib, or custom media types"
-          - drupal/media/metadata-system.md: "Defining and extracting metadata attributes from media sources"
-          - drupal/media/performance-optimization.md: "Caching, queuing, and optimization strategies for media source plugins"
-          - drupal/media/security-best-practices.md: "Security measures to prevent XSS, SSRF, and other vulnerabilities"
-          - drupal/media/testing-strategies.md: "Unit, kernel, and functional testing strategies for media source plugins"
-          - drupal/media/thumbnail-generation.md: "Downloading, caching, and generating thumbnails for media entities"
-          - drupal/media/validation-constraints.md: "Validating media source field values with custom constraints"
-          - drupal/migration/index.md: "Drupal 7 to 11 migration — decision guides for Migrate API, content strategy, and performance"
-          - drupal/migration/anti-patterns.md: "Common migration failures that cause project delays and technical debt"
-          - drupal/migration/assess-migration-scope.md: "Inventory and timeline estimation for D7 to D11 migration projects"
-          - drupal/migration/choose-migration-approach.md: "Standard Migrate API rebuild vs wizard vs retrofit for D7 to D11 migrations"
-          - drupal/migration/complex-field-mappings.md: "Multi-step process pipelines for paragraphs and entity references with revisions"
-          - drupal/migration/configure-migration-sources.md: "Configure D7 database connection and source plugins for Migrate API"
-          - drupal/migration/create-migration-definitions.md: "YAML migration definition structure for source, process, and destination"
-          - drupal/migration/debug-migration-failures.md: "Logging, verbose output, and debugging techniques for migration failures"
-          - drupal/migration/handle-field-mappings.md: "Process plugins for transforming source data to destination format"
-          - drupal/migration/map-content-structure.md: "Map D7 field collections and content architecture to D11 entities"
-          - drupal/migration/migrate-configuration.md: "Migrate content types, views, and configuration from D7 to D11"
-          - drupal/migration/migrate-content-entities.md: "Execute migrations in dependency order with Drush commands"
-          - drupal/migration/migration-best-practices.md: "Critical success factors and patterns from community migration experience"
-          - drupal/migration/performance-optimization.md: "Memory management and batch processing for large-scale migrations"
-          - drupal/migration/plan-custom-code-strategy.md: "Rewrite vs retrofit vs retire strategy for D7 custom modules in D11"
-          - drupal/migration/security-best-practices.md: "Security controls for SQL injection, XSS, and access bypass in migrations"
-          - drupal/migration/test-migration-results.md: "Validation and testing strategy throughout migration lifecycle"
-          - drupal/eca/index.md: "ECA (Event-Condition-Action) plugin development — create custom actions, events, and conditions"
-          - drupal/eca/access-control-patterns.md: "Validate plugin config in access() before execution with AccessResult patterns"
-          - drupal/eca/action-plugin-basics.md: "Create custom ECA Action plugins with ConfigurableActionBase for user-configurable operations"
-          - drupal/eca/advanced-action-patterns.md: "Integrate external APIs, YAML config, dynamic forms, and structured error handling in ECA actions"
-          - drupal/eca/cleanup-interface.md: "Implement CleanupInterface to restore state after event actions complete (account switching, locks)"
-          - drupal/eca/common-pitfalls.md: "Avoid critical ECA plugin mistakes — parent::create pattern, token attributes, negationCheck"
-          - drupal/eca/complex-token-structures.md: "Store structured data in tokens with success/error indicators for downstream actions"
-          - drupal/eca/condition-plugin-basics.md: "Create custom ECA Condition plugins with ConditionBase for business logic evaluation"
-          - drupal/eca/debugging-workflows.md: "Debug ECA workflows with logging, token inspection, and drush watchdog commands"
-          - drupal/eca/entity-aware-events.md: "Filter ECA event triggers by entity type, bundle, or field with wildcard patterns"
-          - drupal/eca/event-plugin-basics.md: "Create custom ECA Event plugins with EventBase and derivers for business logic triggers"
-          - drupal/eca/kernel-testing.md: "Write kernel tests for ECA plugins to verify configuration, execution, and token handling"
-          - drupal/eca/mandatory-rules.md: "Pre-completion checklist for ECA plugins — all rules are MANDATORY, not optional"
-          - drupal/eca/performance-patterns.md: "Cache API calls, batch entity loading, and optimize token access in ECA plugins"
-          - drupal/eca/plugin-derivers.md: "Generate multiple plugin instances from one class using DeriverBase and ContainerDeriverInterface"
-          - drupal/eca/reusable-traits.md: "Use ECA traits for form fields, entity saving, lists, and YAML config to avoid code duplication"
-          - drupal/eca/security-best-practices.md: "Sanitize input, check access, validate API responses, and secure credentials in ECA plugins"
-          - drupal/eca/service-injection.md: "Inject services into ECA plugins using parent::create pattern (NEVER new static)"
-          - drupal/eca/string-comparison-conditions.md: "Compare values with StringComparisonBase — override getLeftValue/getRightValue, NOT evaluate"
-          - drupal/eca/token-form-integration.md: "Add token replacement, reference, and selection to ECA form fields"
-          - drupal/eca/token-receiver-interface.md: "Implement TokenReceiverInterface to preserve event tokens across workflow execution"
-          - drupal/eca/yaml-configuration.md: "Use YAML config fields for complex structured settings with YamlParser validation"
-          - drupal/klaro/index.md: "Klaro Cookie & Consent Management — GDPR-compliant consent for Drupal sites"
-          - drupal/klaro/automatic-resource-attribution.md: "Enable automatic detection and blocking of external resources without manual HTML attributes"
-          - drupal/klaro/consent-mode-selection.md: "Choose between Silent, Notice, or Modal consent modes based on regulatory requirements"
-          - drupal/klaro/development-standards.md: "Drupal development best practices for extending, theming, and testing Klaro"
-          - drupal/klaro/installation-methods.md: "Install Klaro module and klaro-js library via Composer or manual methods"
-          - drupal/klaro/legal-compliance-requirements.md: "GDPR, ePrivacy, and legal requirements for consent management configuration"
-          - drupal/klaro/menu-integration.md: "Add privacy settings links to menus or use floating toggle button for consent management"
-          - drupal/klaro/performance-optimization.md: "Optimize Klaro for fast page load, minimal render blocking, and efficient resource management"
-          - drupal/klaro/purpose-management.md: "Group related services into purposes (categories) for clearer consent choices"
-          - drupal/klaro/security-best-practices.md: "Prevent XSS vulnerabilities and secure consent configuration"
-          - drupal/klaro/service-configuration.md: "Configure services to control external resources (scripts, iframes, cookies) per user consent"
-          - drupal/klaro/storage-settings.md: "Configure cookie vs localStorage, expiration, and domain scope for consent storage"
-          - drupal/klaro/styling-and-ui-customization.md: "Customize Klaro appearance with CSS variables, positioning, and HTML in descriptions"
-          - drupal/klaro/translation-and-localization.md: "Translate Klaro UI, service descriptions, and purposes for multi-language sites"
-          - drupal/klaro/troubleshooting.md: "Diagnose consent modal, script blocking, and configuration issues"
-          - drupal/klaro/url-pattern-exclusions.md: "Disable Klaro on admin pages, previews, or specific URL patterns using regex"
-          - drupal/klaro/what-is-consent-management.md: "Understand when and why to use consent management for GDPR and privacy compliance"
-          - drupal/github-actions/index.md: "GitHub Actions for Drupal — automated CI/CD workflows for testing, building, and deploying"
-          - drupal/github-actions/caching-strategies.md: "Speed up GitHub Actions workflows by caching Composer, npm, and Drupal dependencies"
-          - drupal/github-actions/code-quality-checks.md: "PHPCS, PHPStan, deprecation detection, and security audits for Drupal code"
-          - drupal/github-actions/deployment-artifacts.md: "Package and upload Drupal builds for deployment to staging or production"
-          - drupal/github-actions/drupal-stack-setup.md: "Configure PHP, MySQL/PostgreSQL, and Composer for Drupal testing environments"
-          - drupal/github-actions/environment-protection.md: "Add approval gates, wait timers, and validation for production deployments"
-          - drupal/github-actions/matrix-testing.md: "Test Drupal across multiple versions, PHP versions, and database types using matrix strategy"
-          - drupal/github-actions/multi-environment-deployment.md: "Deploy Drupal to staging, production, or multiple hosting environments with approval gates"
-          - drupal/github-actions/parallel-execution.md: "Run independent GitHub Actions jobs concurrently to reduce total workflow time"
-          - drupal/github-actions/phpunit-testing.md: "Run unit, kernel, functional, and JavaScript tests with PHPUnit in GitHub Actions"
-          - drupal/github-actions/secret-management.md: "Store and use sensitive credentials for GitHub Actions deployments and third-party services"
-          - drupal/github-actions/theme-asset-compilation.md: "Build Sass, JavaScript, and optimize assets for Drupal themes in CI/CD pipelines"
-          - drupal/github-actions/troubleshooting.md: "Debug common GitHub Actions failures in Drupal workflows"
-          - drupal/github-actions/workflow-fundamentals.md: "GitHub Actions workflow triggers, structure, and core concepts for Drupal CI/CD"
+          - drupal/sdc/index.md: "Single Directory Components (SDC) — component architecture, development patterns, and best practices"
+          - drupal/sdc/anti-patterns.md: "Common component development anti-patterns with WHY explanations from code review perspective"
+          - drupal/sdc/component-composition.md: "Including components within components using include(), embed, or render arrays"
+          - drupal/sdc/component-file-structure.md: "Required and optional files in SDC directory structure with automatic asset loading"
+          - drupal/sdc/component-variants.md: "Implementing component variations using enum props, separate components, or the variants API"
+          - drupal/sdc/component-yaml-schema.md: "Defining component metadata, props, slots, and library dependencies in YAML schema"
+          - drupal/sdc/javascript-in-sdcs.md: "Adding interactive behavior with Drupal.behaviors, once(), and progressive enhancement"
+          - drupal/sdc/performance.md: "Optimizing component loading with automatic libraries, caching, and lazy loading"
+          - drupal/sdc/props-vs-slots-decision-framework.md: "Deciding when to use props (typed data) vs slots (renderable content) in component API design"
+          - drupal/sdc/replacing-templates-with-sdcs.md: "Migrating traditional Twig templates to SDC with theme overrides and field formatters"
+          - drupal/sdc/scss-css-in-sdcs.md: "CSS scoping with BEM, Bootstrap/Radix variable imports, and custom properties"
+          - drupal/sdc/sdc-architecture.md: "How Drupal discovers and loads SDC components using the plugin system"
+          - drupal/sdc/security.md: "Preventing XSS with auto-escaping, Attribute object, and props validation"
+          - drupal/sdc/testing-sdcs.md: "Testing components with schema validation, Storybook, and visual regression"
+          - drupal/sdc/twig-templates-in-sdcs.md: "Writing Twig templates for SDCs with props, slots, and attributes object"
+          - drupal/taxonomy/index.md: "Drupal Taxonomy — vocabulary and term management, config-first development"
+          - drupal/taxonomy/anti-patterns.md: "Identify and fix problematic taxonomy implementation patterns"
+          - drupal/taxonomy/best-practices.md: "Taxonomy architecture, naming conventions, and maintenance strategies"
+          - drupal/taxonomy/code-reference-map.md: "Key classes, files, and code references for Drupal taxonomy"
+          - drupal/taxonomy/creating-vocabularies-config.md: "Create vocabularies for deployment via config management or module installation"
+          - drupal/taxonomy/entity-reference-taxonomy.md: "Configure entity reference field widgets and formatters for taxonomy term fields"
+          - drupal/taxonomy/hierarchical-taxonomy.md: "Decide between flat or hierarchical taxonomy structures"
+          - drupal/taxonomy/programmatic-terms.md: "Create, update, or delete terms via code (migrations, imports, install hooks)"
+          - drupal/taxonomy/security-performance.md: "Harden taxonomy against security vulnerabilities and optimize for scale"
+          - drupal/taxonomy/taxonomy-config-recipes.md: "Package taxonomy vocabulary config for reuse or deployment via recipes"
+          - drupal/taxonomy/taxonomy-overview.md: "When to use taxonomy vs other content organization approaches"
+          - drupal/taxonomy/taxonomy-permissions.md: "Configure granular permissions for taxonomy term operations"
+          - drupal/taxonomy/taxonomy-views.md: "Build Views with taxonomy filters, arguments, and relationships"
+          - drupal/taxonomy/term-management.md: "Create, edit, or bulk-manage taxonomy terms via UI, Drush, or code"
+          - drupal/taxonomy/term-reference-config.md: "Add taxonomy term reference fields to content types via config"
+          - drupal/taxonomy/term-storage-querying.md: "Query taxonomy terms programmatically with TermStorage methods"
+          - drupal/taxonomy/vocabulary-config-schema.md: "Complete schema for taxonomy.vocabulary.*.yml config files"
           - drupal/testing/index.md: "Drupal Testing — automated testing frameworks for modules (PHPUnit Unit, Kernel, Functional, FunctionalJavascript, and Gander performance tests)"
           - drupal/testing/best-practices-anti-patterns.md: "Security, performance, and development standards best practices for writing maintainable Drupal tests"
           - drupal/testing/framework-selection-decision-matrix.md: "Decision matrix for selecting the right testing framework based on module complexity and component type"
@@ -318,6 +395,40 @@ plugins:
           - drupal/testing/running-debugging-tests.md: "Command-line patterns for running and debugging PHPUnit tests in Drupal modules"
           - drupal/testing/testing-framework-overview.md: "Overview of Drupal's five testing frameworks and when to use each one"
           - drupal/testing/testing-infrastructure-setup.md: "Set up directory structure, phpunit.xml configuration, and testing dependencies for Drupal modules"
+          - drupal/views/index.md: "Drupal Views — query and display entity lists with UI-based configuration"
+          - drupal/views/access-control.md: "When restricting who can view a display based on permissions or roles."
+          - drupal/views/anti-patterns.md: "What NOT to do and WHY."
+          - drupal/views/best-practices.md: "Guidelines for building maintainable, performant, secure views."
+          - drupal/views/block-display.md: "When you need a view placed in block regions, Layout Builder, or programmatically rendered contexts."
+          - drupal/views/caching-configuration.md: "When optimizing view performance by caching query results and rendered output."
+          - drupal/views/code-reference-map.md: "Quick reference to key classes, files, and code locations for Views configuration."
+          - drupal/views/config-export-recipes.md: "When managing views as exportable configuration, deploying via config sync, or packaging in recipes."
+          - drupal/views/custom-argument-handler.md: "URL-based filtering with custom logic: argument validation, default values, custom summary views, title overrides."
+          - drupal/views/custom-cache-plugin.md: "Specialized caching beyond time-based and tag-based: per-user caching, geolocation-based, A/B testing variants, external cache backends."
+          - drupal/views/custom-display-plugin.md: "New output channel beyond Page/Block/REST: CLI output, email rendering, queue processing, specialized API formats."
+          - drupal/views/custom-field-handler.md: "When you need custom field output: computed values, external API data, complex formatting that can't be achieved with field templates or rewrite rules."
+          - drupal/views/custom-filter-handler.md: "When standard filter operators aren't sufficient: custom logic, complex conditions, integration with external validation, multi-field filters."
+          - drupal/views/custom-relationship-handler.md: "Complex JOIN logic beyond standard entity reference relationships: multi-column joins, conditional joins, subquery-based relationships."
+          - drupal/views/custom-sort-handler.md: "Custom sort logic: computed fields, weighted sorting, multi-column sorts, integration with external ranking systems."
+          - drupal/views/custom-style-row-plugins.md: "Custom result set formatting and per-row rendering beyond standard Table/Grid/List style and row plugins."
+          - drupal/views/display-configuration.md: "When configuring common options shared across all display types: title, access, cache, pager, style, fields, filters, sorts."
+          - drupal/views/feed-attachment-displays.md: "When you need RSS/Atom feeds or attaching views to other display outputs."
+          - drupal/views/fields-configuration.md: "When configuring field output, labels, formatters, rewriting, and CSS classes in views using fields-based rows."
+          - drupal/views/filters-exposed.md: "When restricting query results via fixed criteria (filters) or user-selectable criteria (exposed filters)."
+          - drupal/views/page-display.md: "When you need a full page with a dedicated URL, menu integration, and optional admin theme."
+          - drupal/views/pager-configuration.md: "When controlling how many items display per page and how users navigate through results."
+          - drupal/views/programmatic-modification.md: "When config-based approach isn't sufficient: runtime view modification, dynamic filter injection, custom display logic."
+          - drupal/views/query-settings.md: "When tuning the underlying database query for performance, distinct results, or query debugging."
+          - drupal/views/relationships.md: "When you need to access fields from related entities (entity references, users, taxonomy terms, etc.) or apply filters/sorts on related entity data."
+          - drupal/views/rest-export-display.md: "When you need JSON, XML, or other serialized output for APIs, AJAX endpoints, or headless/decoupled applications."
+          - drupal/views/security-performance.md: "Critical security and performance considerations for production views."
+          - drupal/views/sort-contextual.md: "When ordering results (sorts) or filtering based on URL parameters (contextual filters/arguments)."
+          - drupal/views/sources-maintenance.md: "Sources and maintenance manifest."
+          - drupal/views/style-row-plugins.md: "When configuring how Views formats output (style) and renders individual rows (row)."
+          - drupal/views/view-config-schema.md: "When writing or editing views.view.*.yml files directly, or understanding config structure for recipes and exports."
+          - drupal/views/views-data-integration.md: "Exposing custom database tables, altering entity views integration, defining custom handlers for existing fields, adding computed/pseudo-fields."
+          - drupal/views/views-overview.md: "You need to query and display lists of content, users, taxonomy terms, or other entities with filtering, sorting, and display formatting."
+          - drupal/views/views-plugin-architecture.md: "When Views UI configuration and programmatic view modification aren't sufficient for custom data processing, specialized formatting, or integration."
         "Next.js":
           - nextjs/index.md: "Next.js guides — Drupal integration, chat interfaces, and decoupled frontend patterns"
           - nextjs/next-drupal/index.md: "Next.js for Drupal — decoupled frontend with next-drupal library"
@@ -484,6 +595,30 @@ nav:
       - drupal/ai-content/security-privacy.md
       - drupal/ai-content/seo.md
       - drupal/ai-content/vector-rag.md
+    - Blocks:
+      - drupal/blocks/index.md
+      - drupal/blocks/anti-patterns.md
+      - drupal/blocks/best-practices.md
+      - drupal/blocks/block-access-control.md
+      - drupal/blocks/block-caching.md
+      - drupal/blocks/block-configuration.md
+      - drupal/blocks/block-events-hooks.md
+      - drupal/blocks/block-placement.md
+      - drupal/blocks/block-rendering.md
+      - drupal/blocks/block-system-architecture.md
+      - drupal/blocks/block-type-decision.md
+      - drupal/blocks/code-reference-map.md
+      - drupal/blocks/config-recipes.md
+      - drupal/blocks/content-blocks.md
+      - drupal/blocks/core-block-plugins.md
+      - drupal/blocks/creating-block-plugins.md
+      - drupal/blocks/custom-block-types.md
+      - drupal/blocks/dependency-injection.md
+      - drupal/blocks/layout-builder-blocks.md
+      - drupal/blocks/programmatic-operations.md
+      - drupal/blocks/sdc-component-blocks.md
+      - drupal/blocks/security-performance.md
+      - drupal/blocks/visibility-conditions.md
     - Config Forms:
       - drupal/config-forms/index.md
       - drupal/config-forms/common-mistakes.md
@@ -608,6 +743,23 @@ nav:
       - drupal/icon-api/twig-icon-function.md
       - drupal/icon-api/ui-icons-module-features.md
       - drupal/icon-api/what-is-icon-api.md
+    - Image Styles:
+      - drupal/image-styles/index.md
+      - drupal/image-styles/anti-patterns.md
+      - drupal/image-styles/art-direction-resolution.md
+      - drupal/image-styles/best-practices.md
+      - drupal/image-styles/breakpoint-configuration.md
+      - drupal/image-styles/code-reference-map.md
+      - drupal/image-styles/config-export-recipes.md
+      - drupal/image-styles/core-image-effects.md
+      - drupal/image-styles/creating-styles-config.md
+      - drupal/image-styles/image-field-formatters.md
+      - drupal/image-styles/image-overview.md
+      - drupal/image-styles/image-style-schema.md
+      - drupal/image-styles/programmatic-operations.md
+      - drupal/image-styles/responsive-image-config.md
+      - drupal/image-styles/security-performance.md
+      - drupal/image-styles/webp-avif-optimization.md
     - "JSON:API":
       - drupal/jsonapi/index.md
       - drupal/jsonapi/authentication-patterns.md
@@ -673,6 +825,28 @@ nav:
       - drupal/klaro/troubleshooting.md
       - drupal/klaro/url-pattern-exclusions.md
       - drupal/klaro/what-is-consent-management.md
+    - Layout Builder:
+      - drupal/layout-builder/index.md
+      - drupal/layout-builder/anti-patterns.md
+      - drupal/layout-builder/best-practices.md
+      - drupal/layout-builder/block-placement.md
+      - drupal/layout-builder/code-reference.md
+      - drupal/layout-builder/config-recipes.md
+      - drupal/layout-builder/config-schema.md
+      - drupal/layout-builder/core-layouts.md
+      - drupal/layout-builder/custom-layouts.md
+      - drupal/layout-builder/defaults-vs-overrides.md
+      - drupal/layout-builder/enabling.md
+      - drupal/layout-builder/events-hooks.md
+      - drupal/layout-builder/field-blocks.md
+      - drupal/layout-builder/inline-vs-reusable.md
+      - drupal/layout-builder/overview.md
+      - drupal/layout-builder/restrictions.md
+      - drupal/layout-builder/sections-layouts.md
+      - drupal/layout-builder/security-performance.md
+      - drupal/layout-builder/sources.md
+      - drupal/layout-builder/styles.md
+      - drupal/layout-builder/theming.md
     - Media:
       - drupal/media/index.md
       - drupal/media/anti-patterns.md
@@ -777,6 +951,24 @@ nav:
       - drupal/sdc/security.md
       - drupal/sdc/testing-sdcs.md
       - drupal/sdc/twig-templates-in-sdcs.md
+    - Taxonomy:
+      - drupal/taxonomy/index.md
+      - drupal/taxonomy/anti-patterns.md
+      - drupal/taxonomy/best-practices.md
+      - drupal/taxonomy/code-reference-map.md
+      - drupal/taxonomy/creating-vocabularies-config.md
+      - drupal/taxonomy/entity-reference-taxonomy.md
+      - drupal/taxonomy/hierarchical-taxonomy.md
+      - drupal/taxonomy/programmatic-terms.md
+      - drupal/taxonomy/security-performance.md
+      - drupal/taxonomy/taxonomy-config-recipes.md
+      - drupal/taxonomy/taxonomy-overview.md
+      - drupal/taxonomy/taxonomy-permissions.md
+      - drupal/taxonomy/taxonomy-views.md
+      - drupal/taxonomy/term-management.md
+      - drupal/taxonomy/term-reference-config.md
+      - drupal/taxonomy/term-storage-querying.md
+      - drupal/taxonomy/vocabulary-config-schema.md
     - Testing:
       - drupal/testing/index.md
       - drupal/testing/best-practices-anti-patterns.md
@@ -790,6 +982,41 @@ nav:
       - drupal/testing/running-debugging-tests.md
       - drupal/testing/testing-framework-overview.md
       - drupal/testing/testing-infrastructure-setup.md
+    - Views:
+      - drupal/views/index.md
+      - drupal/views/access-control.md
+      - drupal/views/anti-patterns.md
+      - drupal/views/best-practices.md
+      - drupal/views/block-display.md
+      - drupal/views/caching-configuration.md
+      - drupal/views/code-reference-map.md
+      - drupal/views/config-export-recipes.md
+      - drupal/views/custom-argument-handler.md
+      - drupal/views/custom-cache-plugin.md
+      - drupal/views/custom-display-plugin.md
+      - drupal/views/custom-field-handler.md
+      - drupal/views/custom-filter-handler.md
+      - drupal/views/custom-relationship-handler.md
+      - drupal/views/custom-sort-handler.md
+      - drupal/views/custom-style-row-plugins.md
+      - drupal/views/display-configuration.md
+      - drupal/views/feed-attachment-displays.md
+      - drupal/views/fields-configuration.md
+      - drupal/views/filters-exposed.md
+      - drupal/views/page-display.md
+      - drupal/views/pager-configuration.md
+      - drupal/views/programmatic-modification.md
+      - drupal/views/query-settings.md
+      - drupal/views/relationships.md
+      - drupal/views/rest-export-display.md
+      - drupal/views/security-performance.md
+      - drupal/views/sort-contextual.md
+      - drupal/views/sources-maintenance.md
+      - drupal/views/style-row-plugins.md
+      - drupal/views/view-config-schema.md
+      - drupal/views/views-data-integration.md
+      - drupal/views/views-overview.md
+      - drupal/views/views-plugin-architecture.md
   - "Next.js":
     - nextjs/index.md
     - Next Drupal:
