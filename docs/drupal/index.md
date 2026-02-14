@@ -21,6 +21,7 @@ description: Drupal decision guides — forms, SDC components, JavaScript, entit
 | Configure cookie consent with Klaro | [Klaro](klaro/index.md) |
 | Set up CI/CD with GitHub Actions | [GitHub Actions](github-actions/index.md) |
 | Add testing frameworks to modules | [Testing](testing/index.md) |
+| Create and manage Drupal recipes | [Recipes](recipes/index.md) |
 | Build a JSON:API for Drupal content | [JSON:API](jsonapi/index.md) |
 | Build a decoupled Next.js frontend | [Next.js for Drupal](next-drupal/index.md) |
 | Manage configuration and schema | Config (coming soon) |

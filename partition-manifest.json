@@ -89,6 +89,12 @@
     "partitioned_by": "camoa",
     "guides_extracted": 11
   },
+  "drupal/recipes": {
+    "source_hash": "464ebbfa2d8383806effde795c2285a37fa0294742b13621145b555ba9d119c4",
+    "partitioned": "2026-02-14",
+    "partitioned_by": "camoa",
+    "guides_extracted": 22
+  },
   "drupal/jsonapi": {
     "source_hash": "647d84edfe9a5ed4fade2de588183c3b415f50fae21f5fc1396e963bba1962c0",
     "partitioned": "2026-02-14",

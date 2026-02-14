@@ -115,6 +115,29 @@ plugins:
           - drupal/plugins/service-collector-pattern.md: "Aggregate stateless services via tagged service collection with REST API-first architecture"
           - drupal/plugins/service-integration-patterns.md: "Integrate consumer services with plugin managers and service collectors"
           - drupal/plugins/testing-debugging.md: "Test plugin architectures with PHPUnit unit and functional tests"
+          - drupal/recipes/index.md: "Drupal Recipes — reusable configuration patterns for composable site setup"
+          - drupal/recipes/anti-patterns-mistakes.md: "Avoid patterns that lead to brittle, untestable, or unmaintainable recipes"
+          - drupal/recipes/best-practices-patterns.md: "Follow patterns to create maintainable, reusable, testable recipes"
+          - drupal/recipes/code-reference-map.md: "Quick reference to key recipe system classes in Drupal core"
+          - drupal/recipes/composer-integration.md: "Publish recipes as Composer packages for distribution and versioning"
+          - drupal/recipes/config-actions-advanced.md: "Complex config action scenarios including wildcards, optional config, chaining"
+          - drupal/recipes/config-actions-entity-specific.md: "Config actions for specific entity types derived from ActionMethod attributes"
+          - drupal/recipes/config-actions-universal.md: "Config actions that work on ANY config entity or simple config"
+          - drupal/recipes/config-import-strict.md: "Config import and strict mode validation for recipes"
+          - drupal/recipes/core-recipes-catalog.md: "Drupal core ships with 28 recipes as reusable building blocks"
+          - drupal/recipes/creating-first-recipe.md: "Step-by-step workflow to create a minimal working recipe"
+          - drupal/recipes/default-content-exporting.md: "Export existing content entities to YAML for bundling with recipes"
+          - drupal/recipes/default-content-importing.md: "Automatic default content import from content directory during application"
+          - drupal/recipes/default-content-overview.md: "Default content ships demo or starter content with recipes as YAML"
+          - drupal/recipes/extension-installation.md: "The install key declares modules and themes the recipe requires"
+          - drupal/recipes/input-collection-forms.md: "Collect input values interactively via CLI or web forms"
+          - drupal/recipes/input-default-sources.md: "Default sources from literal values, config references, or environment variables"
+          - drupal/recipes/input-defining.md: "Define user-provided values for recipe portability"
+          - drupal/recipes/recipe-composition.md: "Compose granular recipes into complex functionality via dependencies"
+          - drupal/recipes/recipe-system-overview.md: "Drupal Recipes compose reusable functionality into shareable configuration packages"
+          - drupal/recipes/recipe-tooling.md: "Drush commands and core scripts for applying, testing, and developing recipes"
+          - drupal/recipes/recipe-yaml-schema.md: "recipe.yml structure — metadata, dependencies, extensions, configuration, inputs, content"
+          - drupal/recipes/security-performance.md: "Security and performance considerations for recipes"
           - drupal/routing/index.md: "Drupal Routing - YAML route definitions, access control, dynamic routes, and security best practices"
           - drupal/routing/access-control-patterns.md: "Drupal route access control - permission, role, and custom access patterns to secure routes"
           - drupal/routing/admin-route-configuration.md: "Admin route configuration - use admin theme and integrate with Drupal's administrative UI patterns"
@@ -659,6 +682,30 @@ nav:
       - drupal/plugins/service-collector-pattern.md
       - drupal/plugins/service-integration-patterns.md
       - drupal/plugins/testing-debugging.md
+    - Recipes:
+      - drupal/recipes/index.md
+      - drupal/recipes/anti-patterns-mistakes.md
+      - drupal/recipes/best-practices-patterns.md
+      - drupal/recipes/code-reference-map.md
+      - drupal/recipes/composer-integration.md
+      - drupal/recipes/config-actions-advanced.md
+      - drupal/recipes/config-actions-entity-specific.md
+      - drupal/recipes/config-actions-universal.md
+      - drupal/recipes/config-import-strict.md
+      - drupal/recipes/core-recipes-catalog.md
+      - drupal/recipes/creating-first-recipe.md
+      - drupal/recipes/default-content-exporting.md
+      - drupal/recipes/default-content-importing.md
+      - drupal/recipes/default-content-overview.md
+      - drupal/recipes/extension-installation.md
+      - drupal/recipes/input-collection-forms.md
+      - drupal/recipes/input-default-sources.md
+      - drupal/recipes/input-defining.md
+      - drupal/recipes/recipe-composition.md
+      - drupal/recipes/recipe-system-overview.md
+      - drupal/recipes/recipe-tooling.md
+      - drupal/recipes/recipe-yaml-schema.md
+      - drupal/recipes/security-performance.md
     - Routing:
       - drupal/routing/index.md
       - drupal/routing/access-control-patterns.md
