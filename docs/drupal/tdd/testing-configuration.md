@@ -1,5 +1,5 @@
 ---
-description: Test Drupal config schema, default values, config forms, and config overrides.
+description: Test config schema validation, default config values, config forms, and config overrides in Drupal.
 ---
 
 # Testing Configuration
@@ -101,5 +101,7 @@ Reference: `/core/modules/system/tests/src/Kernel/System/`
 - Not testing config dependencies -- module uninstall leaves orphaned config
 
 ## See Also
+- [Testing Routes & Controllers](testing-routes-controllers.md)
+- [Testing Events & Hooks](testing-events-hooks.md)
 - Reference: `/core/tests/Drupal/Tests/SchemaCheckTestTrait.php`
 - Example: `/core/modules/config/tests/src/Kernel/`

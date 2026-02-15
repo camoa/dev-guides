@@ -1,5 +1,5 @@
 ---
-description: Use Drupal test traits for reusable setup patterns including user, node, content type, and block creation.
+description: Use Drupal test traits for creating users, nodes, content types, blocks, and random test data.
 ---
 
 # Test Traits & Utilities
@@ -138,5 +138,7 @@ $email = $this->randomMachineName() . '@example.com';
 - Over-relying on traits for complex setup -- abstracts away what test is actually doing (be explicit when clarity matters)
 
 ## See Also
+- [JavaScript Tests with WebDriverTestBase](javascript-tests.md)
+- [Test Modules](test-modules.md)
 - Reference: `/core/modules/*/tests/src/Traits/`
-- Official documentation: [PHPUnit and Drupal Test Traits](https://www.drupalatyourfingertips.com/dtt)
+- [PHPUnit and Drupal Test Traits](https://www.drupalatyourfingertips.com/dtt)

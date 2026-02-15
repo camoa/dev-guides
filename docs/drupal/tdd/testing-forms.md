@@ -1,5 +1,5 @@
 ---
-description: Test Drupal forms including structure, validation, submission handlers, and AJAX callbacks.
+description: Test Drupal form structure, validation, submission, and AJAX behaviors across test types.
 ---
 
 # Testing Forms
@@ -98,5 +98,6 @@ Reference: `/core/modules/system/tests/src/Functional/Form/`
 - Not testing access control -- form accessible to users who shouldn't see it
 
 ## See Also
-- Reference: Drupal Form API Guide
+- [Testing Plugins](testing-plugins.md)
+- [Testing Entities](testing-entities.md)
 - Example: `/core/modules/system/tests/src/Functional/Form/FormTest.php`

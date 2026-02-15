@@ -1,5 +1,5 @@
 ---
-description: Test Drupal entity CRUD operations, field values, entity references, and validation constraints.
+description: Test entity CRUD operations, field values, entity references, and validation in Drupal.
 ---
 
 # Testing Entities
@@ -90,5 +90,7 @@ Reference: `/core/modules/node/tests/src/Kernel/`
 - Not testing validation constraints -- invalid data accepted
 
 ## See Also
+- [Testing Forms](testing-forms.md)
+- [Testing Access & Permissions](testing-access-permissions.md)
 - Reference: `/core/modules/node/tests/src/Kernel/NodeAccessTest.php`
 - Example: `/core/modules/system/tests/modules/entity_test/`

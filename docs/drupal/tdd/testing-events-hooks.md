@@ -1,5 +1,5 @@
 ---
-description: Test Drupal event subscribers, hook implementations, and alter hooks.
+description: Test event subscribers, hook implementations, and alter hooks in Drupal.
 ---
 
 # Testing Events & Hooks
@@ -74,4 +74,6 @@ Reference: `/core/tests/Drupal/KernelTests/Core/`
 - Not verifying hook execution order when multiple modules implement same hook -- race conditions
 
 ## See Also
+- [Testing Configuration](testing-configuration.md)
+- [Spec-Driven Drupal Development](spec-driven-drupal-development.md)
 - Reference: `/core/lib/Drupal/Core/Test/EventSubscriber/`

@@ -1,5 +1,5 @@
 ---
-description: Test Drupal services with unit mocking, kernel container integration, and service replacement patterns.
+description: Test Drupal services with unit mocks, kernel container integration, and service replacement patterns.
 ---
 
 # Testing Services
@@ -77,6 +77,7 @@ Reference: `/core/modules/system/tests/src/Unit/Routing/AdminRouteSubscriberTest
 - Forgetting to call `expects()` on mock -- mock created but never verified
 
 ## See Also
-- Reference: [Mocking Entities and Services with PHPUnit | Drupal.org](https://www.drupal.org/docs/develop/automated-testing/phpunit-in-drupal/mocking-entities-and-services-with-phpunit-and-mocks)
-- Example: `/core/modules/system/tests/src/Unit/Menu/MenuLinkTreeTest.php`
-- Dependency injection guide: [Services and dependency injection in Drupal](https://www.drupal.org/docs/drupal-apis/services-and-dependency-injection/services-and-dependency-injection-in-drupal)
+- [Test Modules](test-modules.md)
+- [Testing Plugins](testing-plugins.md)
+- [Mocking Entities and Services with PHPUnit | Drupal.org](https://www.drupal.org/docs/develop/automated-testing/phpunit-in-drupal/mocking-entities-and-services-with-phpunit-and-mocks)
+- [Services and dependency injection in Drupal](https://www.drupal.org/docs/drupal-apis/services-and-dependency-injection/services-and-dependency-injection-in-drupal)

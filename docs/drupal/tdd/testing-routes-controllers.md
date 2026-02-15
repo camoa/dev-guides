@@ -1,5 +1,5 @@
 ---
-description: Test Drupal custom routes, controller methods, route parameters, and JSON responses.
+description: Test custom routes, controller methods, route parameters, and JSON responses in Drupal.
 ---
 
 # Testing Routes & Controllers
@@ -86,4 +86,6 @@ Reference: `/core/modules/system/tests/src/Functional/System/`
 - Forgetting CSRF token for non-GET routes -- POST fails with access denied
 
 ## See Also
+- [Testing Access & Permissions](testing-access-permissions.md)
+- [Testing Configuration](testing-configuration.md)
 - Reference: `/core/modules/system/tests/src/Functional/System/`

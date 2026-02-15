@@ -548,29 +548,32 @@ plugins:
           - drupal/taxonomy/term-reference-config.md: "Add taxonomy term reference fields to content types via config"
           - drupal/taxonomy/term-storage-querying.md: "Query taxonomy terms programmatically with TermStorage methods"
           - drupal/taxonomy/vocabulary-config-schema.md: "Complete schema for taxonomy.vocabulary.*.yml config files"
-          - drupal/tdd/index.md: "Drupal Test-Driven Development guide covering PHPUnit test types, configuration, patterns, and spec-driven workflows for Drupal 11.x."
-          - drupal/tdd/anti-patterns-common-mistakes.md: "Avoid Drupal testing anti-patterns including wrong test types, over-mocking, sleep waits, and shared state."
-          - drupal/tdd/best-practices-patterns.md: "Follow Drupal testing best practices for organization, performance, security, reliability, and maintainability."
-          - drupal/tdd/browser-tests.md: "Write Drupal browser tests with BrowserTestBase for full user workflows, form submission, and access control."
-          - drupal/tdd/code-reference-map.md: "Find Drupal test base classes, traits, assertions, and example test files in core."
-          - drupal/tdd/javascript-tests.md: "Write Drupal JavaScript tests with WebDriverTestBase for AJAX, DOM manipulation, and real browser interactions."
-          - drupal/tdd/kernel-tests.md: "Write Drupal kernel tests with KernelTestBase for services, entities, and database operations without HTTP overhead."
-          - drupal/tdd/nightwatch-testing.md: "Write Nightwatch.js tests for Drupal JavaScript functional testing, accessibility, and cross-browser compatibility."
-          - drupal/tdd/phpunit-configuration.md: "Set up PHPUnit configuration for Drupal testing in local, DDEV, and CI/CD environments."
-          - drupal/tdd/running-tests.md: "Run Drupal PHPUnit tests locally and in CI/CD with filtering, debugging, and DDEV support."
-          - drupal/tdd/spec-driven-drupal-development.md: "Apply TDD spec-driven workflow to Drupal module development with specification, test, implement, refactor cycles."
-          - drupal/tdd/test-modules.md: "Create test modules to provide fixtures, mock services, and test-specific configuration for Drupal testing."
-          - drupal/tdd/test-traits-utilities.md: "Use Drupal test traits for reusable setup patterns including user, node, content type, and block creation."
-          - drupal/tdd/test-type-decision-matrix.md: "Choose the right Drupal test type based on what you need to test and the level of infrastructure required."
-          - drupal/tdd/testing-access-permissions.md: "Test Drupal permission checks, role-based access, entity access, and route access control."
-          - drupal/tdd/testing-configuration.md: "Test Drupal config schema, default values, config forms, and config overrides."
-          - drupal/tdd/testing-entities.md: "Test Drupal entity CRUD operations, field values, entity references, and validation constraints."
-          - drupal/tdd/testing-events-hooks.md: "Test Drupal event subscribers, hook implementations, and alter hooks."
-          - drupal/tdd/testing-forms.md: "Test Drupal forms including structure, validation, submission handlers, and AJAX callbacks."
+          - drupal/tdd/index.md: "Drupal Test-Driven Development guide covering PHPUnit test types, TDD workflow, testing patterns, and quality gates for Drupal 11.x."
+          - drupal/tdd/anti-patterns-common-mistakes.md: "Avoid common Drupal testing anti-patterns including wrong test types, over-mocking, implementation testing, and shared state."
+          - drupal/tdd/best-practices-patterns.md: "Follow best practices for test organization, data, performance, security, reliability, and maintainability in Drupal testing."
+          - drupal/tdd/browser-tests.md: "Write browser tests with BrowserTestBase for full user workflows, form submission, and access control."
+          - drupal/tdd/code-reference-map.md: "Find test base classes, traits, assertions, and example tests in Drupal core for reference."
+          - drupal/tdd/coverage-metrics-strategy.md: "Measure code coverage with PCOV or Xdebug, set coverage targets by code type, and avoid coverage anti-patterns."
+          - drupal/tdd/javascript-tests.md: "Write JavaScript tests with WebDriverTestBase for AJAX, DOM manipulation, and real browser interactions."
+          - drupal/tdd/kernel-tests.md: "Write kernel tests with KernelTestBase for services, entities, and database operations without HTTP."
+          - drupal/tdd/nightwatch-testing.md: "Use Nightwatch.js for JavaScript functional testing, accessibility testing, and cross-browser testing in Drupal."
+          - drupal/tdd/phpunit-configuration.md: "Set up PHPUnit configuration for Drupal testing with DDEV, local, or CI/CD environments."
+          - drupal/tdd/quality-gates-audit-checklist.md: "Set up automated quality gates at pre-commit, pre-push, and CI/CD stages with GrumPHP, PHPStan, and PHPCS."
+          - drupal/tdd/running-tests.md: "Execute Drupal PHPUnit tests locally and in CI/CD with filtering, debugging, and DDEV support."
+          - drupal/tdd/spec-driven-drupal-development.md: "Apply TDD spec-driven workflow to Drupal module development with specification, test, implement, refactor cycle."
+          - drupal/tdd/tdd-workflow-red-green-refactor.md: "Apply the RED-GREEN-REFACTOR TDD cycle to Drupal module development."
+          - drupal/tdd/test-modules.md: "Create test modules for fixtures, mock services, test-specific config, and hook testing."
+          - drupal/tdd/test-traits-utilities.md: "Use Drupal test traits for creating users, nodes, content types, blocks, and random test data."
+          - drupal/tdd/test-type-decision-matrix.md: "Choose the right Drupal test type based on what you're testing and the level of infrastructure required."
+          - drupal/tdd/testing-access-permissions.md: "Test permission checks, role-based access, entity access, and route access in Drupal."
+          - drupal/tdd/testing-configuration.md: "Test config schema validation, default config values, config forms, and config overrides in Drupal."
+          - drupal/tdd/testing-entities.md: "Test entity CRUD operations, field values, entity references, and validation in Drupal."
+          - drupal/tdd/testing-events-hooks.md: "Test event subscribers, hook implementations, and alter hooks in Drupal."
+          - drupal/tdd/testing-forms.md: "Test Drupal form structure, validation, submission, and AJAX behaviors across test types."
           - drupal/tdd/testing-plugins.md: "Test Drupal plugins including blocks, field types, formatters, widgets, and views plugins."
-          - drupal/tdd/testing-routes-controllers.md: "Test Drupal custom routes, controller methods, route parameters, and JSON responses."
-          - drupal/tdd/testing-services.md: "Test Drupal services with unit mocking, kernel container integration, and service replacement patterns."
-          - drupal/tdd/unit-tests.md: "Write Drupal unit tests with UnitTestCase for pure PHP logic with no Drupal dependencies."
+          - drupal/tdd/testing-routes-controllers.md: "Test custom routes, controller methods, route parameters, and JSON responses in Drupal."
+          - drupal/tdd/testing-services.md: "Test Drupal services with unit mocks, kernel container integration, and service replacement patterns."
+          - drupal/tdd/unit-tests.md: "Write unit tests with UnitTestCase for pure PHP logic with no Drupal dependencies."
           - drupal/testing/index.md: "Drupal Testing — automated testing frameworks for modules (PHPUnit Unit, Kernel, Functional, FunctionalJavascript, and Gander performance tests)"
           - drupal/testing/best-practices-anti-patterns.md: "Security, performance, and development standards best practices for writing maintainable Drupal tests"
           - drupal/testing/framework-selection-decision-matrix.md: "Decision matrix for selecting the right testing framework based on module complexity and component type"
@@ -1414,12 +1417,15 @@ nav:
       - drupal/tdd/best-practices-patterns.md
       - drupal/tdd/browser-tests.md
       - drupal/tdd/code-reference-map.md
+      - drupal/tdd/coverage-metrics-strategy.md
       - drupal/tdd/javascript-tests.md
       - drupal/tdd/kernel-tests.md
       - drupal/tdd/nightwatch-testing.md
       - drupal/tdd/phpunit-configuration.md
+      - drupal/tdd/quality-gates-audit-checklist.md
       - drupal/tdd/running-tests.md
       - drupal/tdd/spec-driven-drupal-development.md
+      - drupal/tdd/tdd-workflow-red-green-refactor.md
       - drupal/tdd/test-modules.md
       - drupal/tdd/test-traits-utilities.md
       - drupal/tdd/test-type-decision-matrix.md

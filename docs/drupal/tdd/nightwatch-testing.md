@@ -1,5 +1,5 @@
 ---
-description: Write Nightwatch.js tests for Drupal JavaScript functional testing, accessibility, and cross-browser compatibility.
+description: Use Nightwatch.js for JavaScript functional testing, accessibility testing, and cross-browser testing in Drupal.
 ---
 
 # Nightwatch.js Testing
@@ -81,5 +81,6 @@ Reference: `/core/tests/Drupal/Nightwatch/`
 - Forgetting `@tags` annotation -- can't filter tests by module
 
 ## See Also
-- Reference: `/core/tests/README.md` lines 90-151
-- Official documentation: `/core/tests/Drupal/Nightwatch/README.md`
+- [Spec-Driven Drupal Development](spec-driven-drupal-development.md)
+- [Running Tests](running-tests.md)
+- Reference: `/core/tests/Drupal/Nightwatch/README.md`

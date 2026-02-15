@@ -186,10 +186,10 @@
     "guides_extracted": 19
   },
   "drupal/tdd": {
-    "source_hash": "f256b467e3553236ef274fc184104b284c51fb7684c90b11903f13853f72b3d6",
+    "source_hash": "98db7ac8cf6ee545b682db1aaa3d314ffad6adf3d8497a04189ddff8b524b42c",
     "partitioned": "2026-02-15",
     "partitioned_by": "camoa",
-    "guides_extracted": 22
+    "guides_extracted": 25
   },
   "drupal/solid-principles": {
     "source_hash": "e74081113fbd40bc0c8c525483204381591502e4966f4c10cba0631c00a19ee0",

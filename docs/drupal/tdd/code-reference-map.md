@@ -1,5 +1,5 @@
 ---
-description: Find Drupal test base classes, traits, assertions, and example test files in core.
+description: Find test base classes, traits, assertions, and example tests in Drupal core for reference.
 ---
 
 # Code Reference Map
@@ -64,5 +64,6 @@ Finding test base classes, traits, assertions, example tests in Drupal core.
 | `/core/.env.example` | Nightwatch environment template |
 
 ## See Also
-- Official API documentation: [Drupal API](https://api.drupal.org/api/drupal/core!core.api.php/group/testing/11.x)
+- [Anti-Patterns & Common Mistakes](anti-patterns-common-mistakes.md)
+- [Drupal API](https://api.drupal.org/api/drupal/core!core.api.php/group/testing/11.x)
 - Test discovery: Run `./vendor/bin/phpunit --list-groups` to see all available test groups

@@ -1,5 +1,5 @@
 ---
-description: Test Drupal permission checks, role-based access, entity access, and route access control.
+description: Test permission checks, role-based access, entity access, and route access in Drupal.
 ---
 
 # Testing Access & Permissions
@@ -99,5 +99,7 @@ Reference: `/core/modules/node/tests/src/Kernel/NodeAccessTest.php`
 - Forgetting to call `node_access_rebuild()` when access rules change -- stale access grants
 
 ## See Also
+- [Testing Entities](testing-entities.md)
+- [Testing Routes & Controllers](testing-routes-controllers.md)
 - Reference: `/core/modules/node/tests/src/Kernel/NodeAccessTest.php`
 - Example: `/core/modules/user/tests/src/Unit/PermissionAccessCheckTest.php`

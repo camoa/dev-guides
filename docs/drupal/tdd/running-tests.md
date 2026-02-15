@@ -1,5 +1,5 @@
 ---
-description: Run Drupal PHPUnit tests locally and in CI/CD with filtering, debugging, and DDEV support.
+description: Execute Drupal PHPUnit tests locally and in CI/CD with filtering, debugging, and DDEV support.
 ---
 
 # Running Tests
@@ -85,5 +85,7 @@ Reference: `/core/tests/README.md` lines 45-79
 - Not setting `SIMPLETEST_DB` environment variable -- database tests fail
 
 ## See Also
+- [Nightwatch.js Testing](nightwatch-testing.md)
+- [Coverage Metrics Strategy](coverage-metrics-strategy.md)
 - Reference: `/core/tests/README.md`
-- DDEV guide: [Running Drupal's PHPUnit test suites on DDEV | Matt Glaman](https://mglaman.dev/blog/running-drupals-phpunit-test-suites-ddev)
+- [Running Drupal's PHPUnit test suites on DDEV | Matt Glaman](https://mglaman.dev/blog/running-drupals-phpunit-test-suites-ddev)

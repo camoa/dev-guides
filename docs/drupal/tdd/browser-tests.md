@@ -1,5 +1,5 @@
 ---
-description: Write Drupal browser tests with BrowserTestBase for full user workflows, form submission, and access control.
+description: Write browser tests with BrowserTestBase for full user workflows, form submission, and access control.
 ---
 
 # Browser Tests with BrowserTestBase
@@ -78,5 +78,8 @@ Reference: `/core/tests/Drupal/Tests/BrowserTestBase.php`
 - Not using traits (NodeCreationTrait, UserCreationTrait) -- reinventing helper methods
 
 ## See Also
+- [Kernel Tests with KernelTestBase](kernel-tests.md)
+- [JavaScript Tests with WebDriverTestBase](javascript-tests.md)
+- [Test Traits & Utilities](test-traits-utilities.md)
 - Reference: `/core/tests/Drupal/Tests/BrowserTestBase.php`
 - Example: `/core/modules/node/tests/src/Functional/NodeCreationTest.php`

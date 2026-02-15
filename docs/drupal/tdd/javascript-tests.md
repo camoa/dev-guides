@@ -1,5 +1,5 @@
 ---
-description: Write Drupal JavaScript tests with WebDriverTestBase for AJAX, DOM manipulation, and real browser interactions.
+description: Write JavaScript tests with WebDriverTestBase for AJAX, DOM manipulation, and real browser interactions.
 ---
 
 # JavaScript Tests with WebDriverTestBase
@@ -76,6 +76,7 @@ Reference: `/core/tests/Drupal/FunctionalJavascriptTests/WebDriverTestBase.php`
 - Disabling CSS animations with `$disableCssAnimations = FALSE` without reason -- tests fail on timing issues
 
 ## See Also
+- [Browser Tests with BrowserTestBase](browser-tests.md)
+- [Test Traits & Utilities](test-traits-utilities.md)
 - Reference: `/core/tests/Drupal/FunctionalJavascriptTests/WebDriverTestBase.php`
-- Setup guide: `/core/tests/README.md` lines 81-89
-- Official documentation: [Running PHPUnit JavaScript tests | Drupal.org](https://www.drupal.org/docs/develop/automated-testing/phpunit-in-drupal/running-phpunit-javascript-tests)
+- [Running PHPUnit JavaScript tests | Drupal.org](https://www.drupal.org/docs/develop/automated-testing/phpunit-in-drupal/running-phpunit-javascript-tests)

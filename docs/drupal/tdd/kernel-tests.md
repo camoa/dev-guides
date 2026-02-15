@@ -1,5 +1,5 @@
 ---
-description: Write Drupal kernel tests with KernelTestBase for services, entities, and database operations without HTTP overhead.
+description: Write kernel tests with KernelTestBase for services, entities, and database operations without HTTP.
 ---
 
 # Kernel Tests with KernelTestBase
@@ -64,6 +64,8 @@ Reference: `/core/tests/Drupal/KernelTests/KernelTestBase.php` lines 69-82
 - Not calling `parent::setUp()` -- bootstrap incomplete, random failures
 
 ## See Also
+- [Unit Tests with UnitTestCase](unit-tests.md)
+- [Browser Tests with BrowserTestBase](browser-tests.md)
 - Reference: `/core/tests/Drupal/KernelTests/KernelTestBase.php`
 - Example: `/core/modules/block/tests/src/Kernel/BlockViewBuilderTest.php`
-- Official documentation: [PHPUnit in Drupal | Drupal.org](https://www.drupal.org/docs/develop/automated-testing/phpunit-in-drupal)
+- [PHPUnit in Drupal | Drupal.org](https://www.drupal.org/docs/develop/automated-testing/phpunit-in-drupal)

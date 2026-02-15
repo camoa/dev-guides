@@ -1,5 +1,5 @@
 ---
-description: Avoid Drupal testing anti-patterns including wrong test types, over-mocking, sleep waits, and shared state.
+description: Avoid common Drupal testing anti-patterns including wrong test types, over-mocking, implementation testing, and shared state.
 ---
 
 # Anti-Patterns & Common Mistakes
@@ -187,4 +187,6 @@ public function testB(): void {
 - Not using coverage reports -- dead code accumulates
 
 ## See Also
-- Reference: [Test Driven Development for Decoupled Drupal | Lullabot](https://www.lullabot.com/articles/test-driven-development-decoupled-drupal)
+- [Best Practices & Patterns](best-practices-patterns.md)
+- [Code Reference Map](code-reference-map.md)
+- [Test Driven Development for Decoupled Drupal | Lullabot](https://www.lullabot.com/articles/test-driven-development-decoupled-drupal)

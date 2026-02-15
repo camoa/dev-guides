@@ -1,5 +1,5 @@
 ---
-description: Create test modules to provide fixtures, mock services, and test-specific configuration for Drupal testing.
+description: Create test modules for fixtures, mock services, test-specific config, and hook testing.
 ---
 
 # Test Modules
@@ -71,5 +71,7 @@ Reference: `/core/modules/node/tests/modules/node_test/`
 - Over-engineering test modules -- if mock fits in 10 lines, don't create a module (mock in test class)
 
 ## See Also
+- [Test Traits & Utilities](test-traits-utilities.md)
+- [Testing Services](testing-services.md)
 - Reference: `/core/modules/system/tests/modules/`
 - Example: `/core/modules/node/tests/modules/node_test/`

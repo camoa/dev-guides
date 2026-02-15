@@ -1,5 +1,5 @@
 ---
-description: Set up PHPUnit configuration for Drupal testing in local, DDEV, and CI/CD environments.
+description: Set up PHPUnit configuration for Drupal testing with DDEV, local, or CI/CD environments.
 ---
 
 # PHPUnit Configuration
@@ -46,6 +46,7 @@ Reference: `/core/phpunit.xml.dist` lines 28-60
 - Committing phpunit.xml to version control -- leaks local environment config (add to .gitignore, commit phpunit.xml.dist instead)
 
 ## See Also
-- Reference: `/core/tests/README.md` lines 22-34
-- Official documentation: [Running PHPUnit tests | Drupal.org](https://www.drupal.org/docs/develop/automated-testing/phpunit-in-drupal/running-phpunit-tests)
-- DDEV guide: [Setting Up PHPUnit Testing for Drupal in DDEV](https://www.thedroptimes.com/43998/setting-phpunit-testing-drupal-in-ddev-step-step-guide)
+- [TDD Workflow: RED-GREEN-REFACTOR](tdd-workflow-red-green-refactor.md)
+- [Unit Tests with UnitTestCase](unit-tests.md)
+- [Running PHPUnit tests | Drupal.org](https://www.drupal.org/docs/develop/automated-testing/phpunit-in-drupal/running-phpunit-tests)
+- [Setting Up PHPUnit Testing for Drupal in DDEV](https://www.thedroptimes.com/43998/setting-phpunit-testing-drupal-in-ddev-step-step-guide)

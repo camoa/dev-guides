@@ -1,5 +1,5 @@
 ---
-description: Apply TDD spec-driven workflow to Drupal module development with specification, test, implement, refactor cycles.
+description: Apply TDD spec-driven workflow to Drupal module development with specification, test, implement, refactor cycle.
 ---
 
 # Spec-Driven Drupal Development
@@ -116,5 +116,6 @@ class ContentExportTest extends BrowserTestBase {
 - Specification ambiguity -- tests don't match actual requirements (clarify spec first)
 
 ## See Also
-- Universal TDD principles: `dev-tdd-spec-driven.md`
-- Reference: [Test Driven Development in Drupal | Oliver Davies](https://www.oliverdavies.uk/blog/writing-new-drupal-8-module-using-test-driven-development-tdd)
+- [Testing Events & Hooks](testing-events-hooks.md)
+- [Nightwatch.js Testing](nightwatch-testing.md)
+- [Test Driven Development in Drupal | Oliver Davies](https://www.oliverdavies.uk/blog/writing-new-drupal-8-module-using-test-driven-development-tdd)

@@ -1,5 +1,5 @@
 ---
-description: Write Drupal unit tests with UnitTestCase for pure PHP logic with no Drupal dependencies.
+description: Write unit tests with UnitTestCase for pure PHP logic with no Drupal dependencies.
 ---
 
 # Unit Tests with UnitTestCase
@@ -56,5 +56,6 @@ Reference: `/core/tests/Drupal/Tests/UnitTestCase.php`
 - Not using `::class` for namespaced classes in mocks -- string typos not caught until runtime
 
 ## See Also
+- [Kernel Tests with KernelTestBase](kernel-tests.md)
 - Reference: `/core/tests/Drupal/Tests/UnitTestCase.php`
 - Example: `/core/modules/system/tests/src/Unit/Menu/MenuLinkTreeTest.php`

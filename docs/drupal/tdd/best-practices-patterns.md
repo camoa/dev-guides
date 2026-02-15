@@ -1,5 +1,5 @@
 ---
-description: Follow Drupal testing best practices for organization, performance, security, reliability, and maintainability.
+description: Follow best practices for test organization, data, performance, security, reliability, and maintainability in Drupal testing.
 ---
 
 # Best Practices & Patterns
@@ -106,5 +106,6 @@ public function testInvalidInputThrowsException(): void {
 - Ignoring test failures ("flaky test, will fix later") -- technical debt accumulates
 
 ## See Also
-- Reference: [Introduction to Testing in Drupal | Drupalize.me](https://drupalize.me/tutorial/introduction-testing-drupal)
-- Best practices: [PHPUnit in Drupal | Drupal.org](https://www.drupal.org/docs/develop/automated-testing/phpunit-in-drupal)
+- [Quality Gates & Audit Checklist](quality-gates-audit-checklist.md)
+- [Anti-Patterns & Common Mistakes](anti-patterns-common-mistakes.md)
+- [PHPUnit in Drupal | Drupal.org](https://www.drupal.org/docs/develop/automated-testing/phpunit-in-drupal)

@@ -1,16 +1,17 @@
 ---
-description: Drupal Test-Driven Development guide covering PHPUnit test types, configuration, patterns, and spec-driven workflows for Drupal 11.x.
+description: Drupal Test-Driven Development guide covering PHPUnit test types, TDD workflow, testing patterns, and quality gates for Drupal 11.x.
 ---
 
 # Drupal Test-Driven Development
 
-**For Drupal 11.x** | **PHPUnit 10.5+**
+**Drupal 11.x** | **PHPUnit 10.5+**
 
 ## I need to...
 
 | Task | Guide |
 |------|-------|
 | Choose the right test type | [Test Type Decision Matrix](test-type-decision-matrix.md) |
+| Apply RED-GREEN-REFACTOR cycle | [TDD Workflow: RED-GREEN-REFACTOR](tdd-workflow-red-green-refactor.md) |
 | Set up PHPUnit configuration | [PHPUnit Configuration](phpunit-configuration.md) |
 | Write a unit test | [Unit Tests with UnitTestCase](unit-tests.md) |
 | Write a kernel test | [Kernel Tests with KernelTestBase](kernel-tests.md) |
@@ -29,6 +30,8 @@ description: Drupal Test-Driven Development guide covering PHPUnit test types, c
 | Apply TDD to Drupal modules | [Spec-Driven Drupal Development](spec-driven-drupal-development.md) |
 | Test JavaScript with Nightwatch | [Nightwatch.js Testing](nightwatch-testing.md) |
 | Run tests | [Running Tests](running-tests.md) |
+| Measure code coverage | [Coverage Metrics Strategy](coverage-metrics-strategy.md) |
+| Set up quality gates | [Quality Gates & Audit Checklist](quality-gates-audit-checklist.md) |
 | Follow best practices | [Best Practices & Patterns](best-practices-patterns.md) |
 | Avoid common mistakes | [Anti-Patterns & Common Mistakes](anti-patterns-common-mistakes.md) |
 | Find test resources | [Code Reference Map](code-reference-map.md) |

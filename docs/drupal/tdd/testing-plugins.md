@@ -87,5 +87,7 @@ Reference: `/core/modules/block/tests/src/Kernel/BlockViewBuilderTest.php`
 - Forgetting to test access control in block plugins -- blocks visible when they shouldn't be
 
 ## See Also
+- [Testing Services](testing-services.md)
+- [Testing Forms](testing-forms.md)
 - Reference: `/core/modules/block/tests/src/Kernel/BlockViewBuilderTest.php`
 - Example: `/core/modules/field/tests/src/Kernel/`
