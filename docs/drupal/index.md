@@ -33,3 +33,7 @@ description: Drupal decision guides — forms, SDC components, JavaScript, entit
 | Define or use services | [Services & DI](services/index.md) |
 | Handle security correctly | [Security](security/index.md) |
 | Configure caching | [Caching](caching/index.md) |
+| Create multi-column compound fields | [Custom Field](custom-field/index.md) |
+| Apply DRY principles in Drupal | [DRY in Drupal](dry-principles/index.md) |
+| Apply SOLID principles in Drupal | [SOLID in Drupal](solid-principles/index.md) |
+| Practice TDD with PHPUnit in Drupal | [TDD in Drupal](tdd/index.md) |

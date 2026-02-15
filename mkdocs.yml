@@ -106,6 +106,43 @@ plugins:
           - drupal/config-management/security-and-performance.md: "Secure configuration data, prevent vulnerabilities, and optimize config access for performance."
           - drupal/config-management/simple-config-vs-config-entities.md: "Choose between simple config (singleton YAML) and config entities (multiple instances with CRUD and UI)."
           - drupal/config-management/writing-config-schema.md: "Step-by-step guide to creating config schema for new modules with simple config or config entities."
+          - drupal/custom-field/index.md: "Drupal Custom Field module guides -- compound fields with multiple sub-fields stored in a single table for optimal performance."
+          - drupal/custom-field/architecture.md: "Custom Field plugin architecture with three plugin managers, key services, hook classes, and extensibility patterns."
+          - drupal/custom-field/best-practices.md: "Performance optimization, security hardening, dependency injection, and coding standards for custom field development."
+          - drupal/custom-field/code-reference-map.md: "Source code locations for all Custom Field components -- field types, widgets, formatters, services, hooks, Views plugins, templates, and sub-modules."
+          - drupal/custom-field/column-types.md: "All 27 custom field column types organized by category -- text, numeric, date/time, reference, file, and data fields with schema details and gotchas."
+          - drupal/custom-field/config-first-creation.md: "Step-by-step creation of custom fields through the Drupal UI using config-first approach with column definitions and widget configuration."
+          - drupal/custom-field/custom-plugins.md: "Creating custom field type, widget, and formatter plugins with PHP attribute-based discovery and required base class methods."
+          - drupal/custom-field/datetime-fields.md: "Working with datetime, daterange, time, time_range, and duration sub-fields including widget selection and timezone handling."
+          - drupal/custom-field/entity-references.md: "Configuring and using entity reference sub-fields with autocomplete, select, radios, and hierarchical widgets."
+          - drupal/custom-field/feeds-integration.md: "Importing CSV and external data into custom field columns via Feeds module with 28 target handlers and mapping configuration."
+          - drupal/custom-field/field-level-formatters.md: "Six field-level formatters for rendering custom field output -- stacked, inline, list, table, flipped table, and token template."
+          - drupal/custom-field/field-level-widgets.md: "Stacked and flexbox layout widgets for controlling how the entire custom field displays on the edit form."
+          - drupal/custom-field/files-images.md: "File upload and image sub-fields with widget configuration, extended properties for alt/title/dimensions, and media library integration."
+          - drupal/custom-field/link-fields.md: "Link sub-fields with URL, title, attributes, Linkit integration, and security considerations for target_blank links."
+          - drupal/custom-field/overview.md: "When to use Custom Field vs Paragraphs, entity references, or core multi-value fields for compound data storage in Drupal."
+          - drupal/custom-field/schema-updates.md: "Adding, removing, and modifying columns in existing custom fields with data using CustomFieldUpdateManager service."
+          - drupal/custom-field/sub-modules.md: "Eight sub-modules for GraphQL, JSON API, Entity Browser, Linkit, Media Library, Search API, Viewfield, and AI integration."
+          - drupal/custom-field/token-support.md: "Token replacement for custom field values in Pathauto, Rules, and email templates with correct separator syntax."
+          - drupal/custom-field/views-integration.md: "Querying, filtering, sorting, and displaying custom field data in Views with custom field, date, and entity reference plugins."
+          - drupal/custom-field/widget-plugins.md: "Widget selection reference for all 27 custom field types with 39 available widgets, showing defaults and compatibility."
+          - drupal/dry-principles/index.md: "Drupal-specific DRY (Don't Repeat Yourself) principles - config, services, base classes, traits, plugins, templates, SDC, render arrays, hooks, and more."
+          - drupal/dry-principles/dry-drupal-overview.md: "Overview of DRY principles in Drupal's architecture - config, services, base classes, traits, plugins, templates, SDC, and render API."
+          - drupal/dry-principles/base-classes-inheritance.md: "Extend Drupal core base classes and create project-specific base classes to eliminate duplication across entities, forms, and blocks."
+          - drupal/dry-principles/best-practices-decision-framework.md: "Decision framework for when to abstract vs duplicate in Drupal, with security, performance, testing, and development standards considerations."
+          - drupal/dry-principles/code-reference-map.md: "Reference map of core file locations for DRY patterns - config, services, base classes, traits, plugins, render API, hooks, SDC, and recipes."
+          - drupal/dry-principles/config-single-source-truth.md: "Use Drupal's configuration system as the single source of truth for site settings, entity definitions, and environment-portable values."
+          - drupal/dry-principles/config-split-environments.md: "Manage environment-specific configuration with Config Split and settings.php overrides to avoid duplicating config across dev/staging/prod."
+          - drupal/dry-principles/drush-cli-reuse.md: "Reuse business logic between web controllers and Drush CLI commands by extracting shared logic into services."
+          - drupal/dry-principles/hook-event-reuse.md: "Share logic across Drupal hooks and event subscribers by delegating to services instead of duplicating code in each hook."
+          - drupal/dry-principles/over-dry-anti-patterns.md: "Recognize and avoid over-DRY anti-patterns in Drupal - god services, premature base classes, over-configurable plugins, and forced reuse."
+          - drupal/dry-principles/plugin-reuse.md: "Reuse patterns in Drupal's plugin system - extending base plugins, creating shared bases, and using derivatives for dynamic generation."
+          - drupal/dry-principles/recipes-reusable-config.md: "Package and distribute reusable configuration with Drupal Recipes for composable, version-controlled config distribution across sites."
+          - drupal/dry-principles/render-array-patterns.md: "Create reusable render patterns with structured render arrays, theme hooks, and render element plugins instead of duplicating markup."
+          - drupal/dry-principles/sdc-component-reuse.md: "Build reusable UI components with Drupal Single Directory Components (SDC) using props, slots, and component composition."
+          - drupal/dry-principles/services-shared-logic.md: "Extract shared business logic into Drupal services with dependency injection for testable, reusable code."
+          - drupal/dry-principles/traits-cross-cutting.md: "Use Drupal core traits and custom traits to share cross-cutting concerns like translation, logging, and messaging across unrelated classes."
+          - drupal/dry-principles/twig-template-inheritance.md: "Leverage Twig template inheritance (extends, block, parent, include, embed) to reuse markup structure and avoid template duplication."
           - drupal/eca/index.md: "ECA (Event-Condition-Action) plugin development — create custom actions, events, and conditions"
           - drupal/eca/access-control-patterns.md: "Validate plugin config in access() before execution with AccessResult patterns"
           - drupal/eca/action-plugin-basics.md: "Create custom ECA Action plugins with ConfigurableActionBase for user-configurable operations"
@@ -474,6 +511,26 @@ plugins:
           - drupal/services/services-yml-schema.md: "Structure and schema of *.services.yml files — top-level keys, _defaults, service IDs, and YAML schema validation for IDE support."
           - drupal/services/service-tags.md: "Catalog of core service tags — event_subscriber, cache.context, cache.bin, access_check, breadcrumb_builder, service_collector, theme_negotiator, path processors, and more."
           - drupal/services/tagged-service-collectors.md: "Building extensible systems with tagged service collectors — service_collector tag, addHandler pattern, tagged_iterator for lazy loading, and named arguments."
+          - drupal/solid-principles/index.md: "SOLID principles in Drupal 11 development - services, plugins, entities, forms, hooks, dependency injection"
+          - drupal/solid-principles/overview.md: "How Drupal 11 architecture embodies SOLID principles - services, plugins, entities, forms, hooks"
+          - drupal/solid-principles/access-results-lsp.md: "Combine Drupal AccessResult objects correctly following LSP substitutability"
+          - drupal/solid-principles/anti-patterns-dip.md: "Recognize and fix dependency injection anti-patterns that violate DIP in Drupal"
+          - drupal/solid-principles/best-practices-checklist.md: "Code review checklist for SOLID compliance in Drupal modules"
+          - drupal/solid-principles/code-reference-map.md: "Core code examples demonstrating each SOLID principle in Drupal"
+          - drupal/solid-principles/common-mistakes.md: "Common SOLID violations in Drupal development with real impact explanations"
+          - drupal/solid-principles/config-overrides-ocp.md: "Use config overrides to change configuration values without modifying stored config"
+          - drupal/solid-principles/controllers-srp.md: "Keep controllers thin and forms focused - delegate business logic to services"
+          - drupal/solid-principles/dependency-injection-patterns-dip.md: "Drupal dependency injection patterns - constructor injection, autowiring, service decorators"
+          - drupal/solid-principles/entity-hierarchy-lsp.md: "Drupal entity type hierarchy follows LSP - subtypes can substitute for base types"
+          - drupal/solid-principles/entity-interfaces-isp.md: "Implement only the entity interfaces your Drupal entity actually needs"
+          - drupal/solid-principles/form-hierarchy-lsp.md: "Choose the right Drupal form base class to honor LSP behavioral contracts"
+          - drupal/solid-principles/hook-classes-srp.md: "Organize Drupal 11 OOP hook classes by domain concern, not by hook type"
+          - drupal/solid-principles/hooks-events-ocp.md: "Use hooks and event subscribers to extend Drupal behavior without modifying existing code"
+          - drupal/solid-principles/injection-interfaces-isp.md: "Use the correct focused Drupal injection interface for dependency injection"
+          - drupal/solid-principles/module-architecture.md: "Structure a Drupal module following SOLID principles - directory layout and organization"
+          - drupal/solid-principles/plugin-system-ocp.md: "Use Drupal plugins to extend functionality without modifying existing code"
+          - drupal/solid-principles/service-container-dip.md: "Use Drupal service container to depend on abstractions, not concrete implementations"
+          - drupal/solid-principles/services-srp.md: "Keep Drupal services focused on a single responsibility - one reason to change per service"
           - drupal/taxonomy/index.md: "Drupal Taxonomy — vocabulary and term management, config-first development"
           - drupal/taxonomy/anti-patterns.md: "Identify and fix problematic taxonomy implementation patterns"
           - drupal/taxonomy/best-practices.md: "Taxonomy architecture, naming conventions, and maintenance strategies"
@@ -491,6 +548,29 @@ plugins:
           - drupal/taxonomy/term-reference-config.md: "Add taxonomy term reference fields to content types via config"
           - drupal/taxonomy/term-storage-querying.md: "Query taxonomy terms programmatically with TermStorage methods"
           - drupal/taxonomy/vocabulary-config-schema.md: "Complete schema for taxonomy.vocabulary.*.yml config files"
+          - drupal/tdd/index.md: "Drupal Test-Driven Development guide covering PHPUnit test types, configuration, patterns, and spec-driven workflows for Drupal 11.x."
+          - drupal/tdd/anti-patterns-common-mistakes.md: "Avoid Drupal testing anti-patterns including wrong test types, over-mocking, sleep waits, and shared state."
+          - drupal/tdd/best-practices-patterns.md: "Follow Drupal testing best practices for organization, performance, security, reliability, and maintainability."
+          - drupal/tdd/browser-tests.md: "Write Drupal browser tests with BrowserTestBase for full user workflows, form submission, and access control."
+          - drupal/tdd/code-reference-map.md: "Find Drupal test base classes, traits, assertions, and example test files in core."
+          - drupal/tdd/javascript-tests.md: "Write Drupal JavaScript tests with WebDriverTestBase for AJAX, DOM manipulation, and real browser interactions."
+          - drupal/tdd/kernel-tests.md: "Write Drupal kernel tests with KernelTestBase for services, entities, and database operations without HTTP overhead."
+          - drupal/tdd/nightwatch-testing.md: "Write Nightwatch.js tests for Drupal JavaScript functional testing, accessibility, and cross-browser compatibility."
+          - drupal/tdd/phpunit-configuration.md: "Set up PHPUnit configuration for Drupal testing in local, DDEV, and CI/CD environments."
+          - drupal/tdd/running-tests.md: "Run Drupal PHPUnit tests locally and in CI/CD with filtering, debugging, and DDEV support."
+          - drupal/tdd/spec-driven-drupal-development.md: "Apply TDD spec-driven workflow to Drupal module development with specification, test, implement, refactor cycles."
+          - drupal/tdd/test-modules.md: "Create test modules to provide fixtures, mock services, and test-specific configuration for Drupal testing."
+          - drupal/tdd/test-traits-utilities.md: "Use Drupal test traits for reusable setup patterns including user, node, content type, and block creation."
+          - drupal/tdd/test-type-decision-matrix.md: "Choose the right Drupal test type based on what you need to test and the level of infrastructure required."
+          - drupal/tdd/testing-access-permissions.md: "Test Drupal permission checks, role-based access, entity access, and route access control."
+          - drupal/tdd/testing-configuration.md: "Test Drupal config schema, default values, config forms, and config overrides."
+          - drupal/tdd/testing-entities.md: "Test Drupal entity CRUD operations, field values, entity references, and validation constraints."
+          - drupal/tdd/testing-events-hooks.md: "Test Drupal event subscribers, hook implementations, and alter hooks."
+          - drupal/tdd/testing-forms.md: "Test Drupal forms including structure, validation, submission handlers, and AJAX callbacks."
+          - drupal/tdd/testing-plugins.md: "Test Drupal plugins including blocks, field types, formatters, widgets, and views plugins."
+          - drupal/tdd/testing-routes-controllers.md: "Test Drupal custom routes, controller methods, route parameters, and JSON responses."
+          - drupal/tdd/testing-services.md: "Test Drupal services with unit mocking, kernel container integration, and service replacement patterns."
+          - drupal/tdd/unit-tests.md: "Write Drupal unit tests with UnitTestCase for pure PHP logic with no Drupal dependencies."
           - drupal/testing/index.md: "Drupal Testing — automated testing frameworks for modules (PHPUnit Unit, Kernel, Functional, FunctionalJavascript, and Gander performance tests)"
           - drupal/testing/best-practices-anti-patterns.md: "Security, performance, and development standards best practices for writing maintainable Drupal tests"
           - drupal/testing/framework-selection-decision-matrix.md: "Decision matrix for selecting the right testing framework based on module complexity and component type"
@@ -684,6 +764,84 @@ plugins:
           - design-systems/recognition/standards-specifications.md: "W3C token format, WCAG accessibility, and atomic design methodology standards"
           - design-systems/recognition/templates-vs-pages.md: "Distinguish between layout structures (templates) and real implementations (pages)"
           - design-systems/recognition/validation-checklist.md: "Comprehensive checklist to validate design system analysis completeness"
+        "Development Practices":
+          - development/index.md: "Development practices guides — TDD, SOLID, DRY, security, and tool-agnostic best practices"
+          - development/dry-principles/index.md: "DRY (Don't Repeat Yourself), code reuse, and abstraction strategies - when to abstract, when to duplicate, and how to avoid premature abstraction"
+          - development/dry-principles/abstraction-strategies.md: "Choosing the right abstraction mechanism to eliminate duplication - functions, classes, composition, and configuration"
+          - development/dry-principles/best-practices-decision-framework.md: "Practical decision framework for abstraction, duplication, and code organization including security and performance"
+          - development/dry-principles/code-duplication.md: "Identifying and deciding how to address duplicated code blocks - true vs incidental duplication"
+          - development/dry-principles/code-reference-map.md: "Authoritative books, articles, tools, and specifications for DRY principles and code reuse"
+          - development/dry-principles/code-smells-detection.md: "Detecting duplication through code review, automated tools, and metrics - plus identifying wrong abstractions"
+          - development/dry-principles/dry-across-boundaries.md: "Handling knowledge duplication across microservices, frontend/backend, multiple languages, and separate repositories"
+          - development/dry-principles/dry-in-configuration.md: "Managing application configuration, environment variables, and settings without duplication across environments"
+          - development/dry-principles/dry-in-documentation.md: "Writing and maintaining technical documentation using code as the single source of truth"
+          - development/dry-principles/dry-in-testing.md: "Eliminating repeated setup, data creation, and assertion patterns in test suites without sacrificing clarity"
+          - development/dry-principles/dry-overview.md: "Understanding what DRY actually means - knowledge duplication vs code duplication"
+          - development/dry-principles/dry-vs-wet-vs-aha.md: "Choosing between DRY, WET (Write Everything Twice), and AHA (Avoid Hasty Abstractions) approaches"
+          - development/dry-principles/four-types-of-duplication.md: "Imposed, inadvertent, impatient, and interdeveloper duplication - identifying and addressing each type"
+          - development/dry-principles/knowledge-duplication.md: "Ensuring business rules, validation logic, and domain knowledge exist in only one authoritative place"
+          - development/dry-principles/over-dry-anti-patterns.md: "Recognizing when abstractions hurt more than help and when to choose duplication over the wrong abstraction"
+          - development/dry-principles/rule-of-three.md: "Deciding when to refactor duplicated code into an abstraction using the three strikes rule"
+          - development/security-practices/index.md: "Security best practices for modern web development - tool-agnostic principles covering OWASP Top 10, authentication, cryptography, supply chain security, and secure SDLC."
+          - development/security-practices/api-security.md: "API security covering authentication (JWT, API keys), rate limiting, input validation, CORS, mass assignment prevention, and GraphQL security."
+          - development/security-practices/authentication-best-practices.md: "Secure authentication covering password hashing (Argon2id, bcrypt), rate limiting, MFA, session management, and OAuth 2.0 with PKCE."
+          - development/security-practices/authorization-access-control.md: "Authorization patterns including RBAC, ABAC, ACLs, least privilege, IDOR prevention, and resource ownership checks."
+          - development/security-practices/code-reference-map.md: "Security tools and libraries mapped by category and language - SAST, DAST, dependency scanning, security libraries, OWASP resources, online scanners, and learning resources."
+          - development/security-practices/cross-site-scripting-xss.md: "XSS attack types (stored, reflected, DOM-based, mutation), attack scenarios, real-world impact, and prevention strategies."
+          - development/security-practices/cryptography-basics.md: "Cryptography fundamentals including AES-256-GCM encryption, RSA asymmetric encryption, Argon2id password hashing, HMAC, secure random generation, and key rotation."
+          - development/security-practices/csrf-prevention.md: "CSRF attack mechanics and prevention using SameSite cookies, CSRF tokens, double submit cookie pattern, and Origin/Referer validation."
+          - development/security-practices/dependency-security.md: "Supply chain security including 7-day dependency cooldown, lock files, vulnerability scanning, dependency pruning, SRI, and private registries."
+          - development/security-practices/file-upload-security.md: "Secure file upload handling including magic byte validation, secure storage, malware scanning, filename sanitization, and path traversal prevention."
+          - development/security-practices/input-validation.md: "Input validation strategies including allowlist validation, type checking, length limits, and multi-layer validation patterns."
+          - development/security-practices/logging-monitoring.md: "Security logging and monitoring including structured JSON logging, event types, data redaction, log rotation, real-time alerting, SIEM integration, and audit trails."
+          - development/security-practices/output-encoding-escaping.md: "Context-specific output escaping for HTML, JavaScript, URL, and CSS contexts, plus template engine auto-escaping behavior."
+          - development/security-practices/owasp-top-10.md: "The OWASP Top 10 (2021) vulnerabilities with attack scenarios, real-world impact, and prevention strategies for each."
+          - development/security-practices/secure-development-lifecycle.md: "Integrating security into every development phase - threat modeling (STRIDE), SAST, DAST, security code review, penetration testing, secure CI/CD, and secrets management."
+          - development/security-practices/security-anti-patterns.md: "Common security anti-patterns including security through obscurity, blacklist validation, client-side trust, weak passwords, plaintext storage, deprecated crypto, and no rate limiting."
+          - development/security-practices/security-checklist.md: "Comprehensive pre-deployment security checklist covering authentication, input validation, XSS, CSRF, cryptography, API security, file uploads, dependencies, headers, logging, and compliance."
+          - development/security-practices/security-headers.md: "HTTP security headers configuration including CSP, HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, and Permissions-Policy."
+          - development/security-practices/security-mindset-overview.md: "Core security principles including defense in depth, least privilege, zero trust, and threat modeling basics using STRIDE."
+          - development/security-practices/sensitive-data-protection.md: "Protecting sensitive data with encryption at rest (AES-256-GCM), encryption in transit (TLS 1.3), key management, tokenization, and data minimization."
+          - development/security-practices/sources-maintenance-manifest.md: "Web sources, code sources, and version history for the security best practices guide."
+          - development/security-practices/sql-injection-prevention.md: "SQL injection prevention using parameterized queries, ORM safe patterns, dynamic identifier handling, and stored procedures."
+          - development/security-practices/xss-prevention-patterns.md: "Defense-in-depth XSS protections including Content Security Policy (CSP), HTML sanitization libraries, template auto-escaping, and HTTPOnly cookies."
+          - development/solid-principles/index.md: "SOLID principles for object-oriented design — decision guides for SRP, OCP, LSP, ISP, and DIP with practical examples in PHP, TypeScript, Python, and Java."
+          - development/solid-principles/best-practices-framework.md: "Daily SOLID decision framework — decision tree, apply-or-skip matrix, security and performance best practices, and anti-pattern avoidance checklist."
+          - development/solid-principles/code-reference-map.md: "Authoritative books, articles, papers, online resources, and community standards for SOLID principles."
+          - development/solid-principles/dependency-inversion-principle.md: "Dependency Inversion Principle — depending on abstractions instead of concrete classes, with dependency injection patterns."
+          - development/solid-principles/dip-in-practice.md: "Practical DIP patterns — IoC containers, constructor/setter/interface injection, Ports and Adapters architecture, and testing with DIP."
+          - development/solid-principles/interface-segregation-principle.md: "Interface Segregation Principle — splitting fat interfaces into focused role interfaces so clients only implement what they need."
+          - development/solid-principles/isp-in-practice.md: "Practical ISP patterns — adapter pattern for third-party interfaces, interface inheritance, granularity decisions, and refactoring fat interfaces."
+          - development/solid-principles/liskov-substitution-principle.md: "Liskov Substitution Principle — when subtypes break substitutability, behavioral contracts, and the classic Rectangle/Square violation."
+          - development/solid-principles/lsp-in-practice.md: "Detecting and fixing LSP violations — contract testing, covariance/contravariance, composition over inheritance, and refactoring patterns."
+          - development/solid-principles/ocp-in-practice.md: "Practical OCP patterns — plugin systems, middleware, data-driven configuration, and when to apply or skip OCP."
+          - development/solid-principles/open-closed-principle.md: "Open/Closed Principle — how to make code extensible without modification using polymorphism, composition, and data-driven logic."
+          - development/solid-principles/single-responsibility-principle.md: "When a class has too many responsibilities and how to identify SRP violations using the \"one reason to change\" test."
+          - development/solid-principles/solid-anti-patterns.md: "Common SOLID anti-patterns — God Object, Modification Cascade, Refused Bequest, Interface Bloat, Service Locator, and more."
+          - development/solid-principles/solid-code-smells.md: "Code smells that indicate SOLID violations — Large Class, Switch on Type, Empty Override, Feature Envy, Shotgun Surgery, and more with detection and refactoring guidance."
+          - development/solid-principles/solid-modern-architecture.md: "Applying SOLID principles to microservices, component-based frontends, API design, and event-driven architecture."
+          - development/solid-principles/solid-overview.md: "What SOLID means, why it matters, and when to learn each principle across career stages."
+          - development/solid-principles/solid-pragmatism.md: "When to bend SOLID rules — balancing principles with YAGNI, KISS, and pragmatic decision-making based on project context."
+          - development/solid-principles/srp-in-practice.md: "Practical refactoring strategies for Single Responsibility Principle — when to split, detection patterns, and when NOT to split."
+          - development/tdd-spec-driven/index.md: "Decision guides for Test-Driven Development and Spec-Driven Development practices"
+          - development/tdd-spec-driven/anti-patterns.md: "Classic and modern TDD anti-patterns including The Liar, Excessive Setup, The Giant, and over-mocking"
+          - development/tdd-spec-driven/code-reference-map.md: "Testing frameworks, mocking libraries, BDD tools, and resources organized by programming language"
+          - development/tdd-spec-driven/development-standards.md: "Dependency injection, single responsibility, coding standards, and testability checklist"
+          - development/tdd-spec-driven/integration-testing.md: "Test pyramid vs trophy vs diamond strategies, what to test at each level, and integration test structure"
+          - development/tdd-spec-driven/performance-best-practices.md: "Test suite speed targets, making tests fast, performance testing strategy, and identifying bottlenecks"
+          - development/tdd-spec-driven/red-green-refactor.md: "Step-by-step Red-Green-Refactor workflow with decision points at each phase"
+          - development/tdd-spec-driven/refactoring-confidence.md: "Safe refactoring workflow under test coverage, code smells, and when to refactor"
+          - development/tdd-spec-driven/security-best-practices.md: "Security testing for authentication, authorization, injection, XSS, and a security test checklist"
+          - development/tdd-spec-driven/spec-driven-overview.md: "What Spec-Driven Development is, how it works, and how it complements TDD for AI-assisted coding"
+          - development/tdd-spec-driven/spec-to-implementation.md: "Workflow for generating code from specs using AI tools, with verification and iterative refinement"
+          - development/tdd-spec-driven/tdd-overview.md: "What TDD is, why it matters, when to use it, and common mistakes to avoid"
+          - development/tdd-spec-driven/tdd-vs-traditional.md: "When to use TDD versus traditional testing approaches, with cost-benefit analysis"
+          - development/tdd-spec-driven/test-coverage.md: "Coverage targets by context, what to test vs skip, branch vs line coverage, and coverage tools"
+          - development/tdd-spec-driven/test-doubles.md: "When and how to use mocks, stubs, fakes, spies, and dummies in tests"
+          - development/tdd-spec-driven/testing-patterns.md: "Arrange-Act-Assert, Given-When-Then, naming conventions, parameterized tests, and setup/teardown"
+          - development/tdd-spec-driven/three-laws-tdd.md: "Robert C. Martin's three laws of TDD and the rapid test-first discipline cycle"
+          - development/tdd-spec-driven/unit-testing-fundamentals.md: "FIRST principles for unit tests and characteristics of good unit tests"
+          - development/tdd-spec-driven/writing-specs.md: "How to structure specifications with behavior, acceptance criteria, edge cases, and constraints"
 
 nav:
   - Home: index.md
@@ -785,6 +943,45 @@ nav:
       - drupal/config-management/security-and-performance.md
       - drupal/config-management/simple-config-vs-config-entities.md
       - drupal/config-management/writing-config-schema.md
+    - Custom Field:
+      - drupal/custom-field/index.md
+      - drupal/custom-field/architecture.md
+      - drupal/custom-field/best-practices.md
+      - drupal/custom-field/code-reference-map.md
+      - drupal/custom-field/column-types.md
+      - drupal/custom-field/config-first-creation.md
+      - drupal/custom-field/custom-plugins.md
+      - drupal/custom-field/datetime-fields.md
+      - drupal/custom-field/entity-references.md
+      - drupal/custom-field/feeds-integration.md
+      - drupal/custom-field/field-level-formatters.md
+      - drupal/custom-field/field-level-widgets.md
+      - drupal/custom-field/files-images.md
+      - drupal/custom-field/link-fields.md
+      - drupal/custom-field/overview.md
+      - drupal/custom-field/schema-updates.md
+      - drupal/custom-field/sub-modules.md
+      - drupal/custom-field/token-support.md
+      - drupal/custom-field/views-integration.md
+      - drupal/custom-field/widget-plugins.md
+    - DRY Principles:
+      - drupal/dry-principles/index.md
+      - drupal/dry-principles/dry-drupal-overview.md
+      - drupal/dry-principles/base-classes-inheritance.md
+      - drupal/dry-principles/best-practices-decision-framework.md
+      - drupal/dry-principles/code-reference-map.md
+      - drupal/dry-principles/config-single-source-truth.md
+      - drupal/dry-principles/config-split-environments.md
+      - drupal/dry-principles/drush-cli-reuse.md
+      - drupal/dry-principles/hook-event-reuse.md
+      - drupal/dry-principles/over-dry-anti-patterns.md
+      - drupal/dry-principles/plugin-reuse.md
+      - drupal/dry-principles/recipes-reusable-config.md
+      - drupal/dry-principles/render-array-patterns.md
+      - drupal/dry-principles/sdc-component-reuse.md
+      - drupal/dry-principles/services-shared-logic.md
+      - drupal/dry-principles/traits-cross-cutting.md
+      - drupal/dry-principles/twig-template-inheritance.md
     - ECA:
       - drupal/eca/index.md
       - drupal/eca/access-control-patterns.md
@@ -1172,6 +1369,27 @@ nav:
       - drupal/services/services-yml-schema.md
       - drupal/services/service-tags.md
       - drupal/services/tagged-service-collectors.md
+    - SOLID Principles:
+      - drupal/solid-principles/index.md
+      - drupal/solid-principles/overview.md
+      - drupal/solid-principles/access-results-lsp.md
+      - drupal/solid-principles/anti-patterns-dip.md
+      - drupal/solid-principles/best-practices-checklist.md
+      - drupal/solid-principles/code-reference-map.md
+      - drupal/solid-principles/common-mistakes.md
+      - drupal/solid-principles/config-overrides-ocp.md
+      - drupal/solid-principles/controllers-srp.md
+      - drupal/solid-principles/dependency-injection-patterns-dip.md
+      - drupal/solid-principles/entity-hierarchy-lsp.md
+      - drupal/solid-principles/entity-interfaces-isp.md
+      - drupal/solid-principles/form-hierarchy-lsp.md
+      - drupal/solid-principles/hook-classes-srp.md
+      - drupal/solid-principles/hooks-events-ocp.md
+      - drupal/solid-principles/injection-interfaces-isp.md
+      - drupal/solid-principles/module-architecture.md
+      - drupal/solid-principles/plugin-system-ocp.md
+      - drupal/solid-principles/service-container-dip.md
+      - drupal/solid-principles/services-srp.md
     - Taxonomy:
       - drupal/taxonomy/index.md
       - drupal/taxonomy/anti-patterns.md
@@ -1190,6 +1408,30 @@ nav:
       - drupal/taxonomy/term-reference-config.md
       - drupal/taxonomy/term-storage-querying.md
       - drupal/taxonomy/vocabulary-config-schema.md
+    - TDD:
+      - drupal/tdd/index.md
+      - drupal/tdd/anti-patterns-common-mistakes.md
+      - drupal/tdd/best-practices-patterns.md
+      - drupal/tdd/browser-tests.md
+      - drupal/tdd/code-reference-map.md
+      - drupal/tdd/javascript-tests.md
+      - drupal/tdd/kernel-tests.md
+      - drupal/tdd/nightwatch-testing.md
+      - drupal/tdd/phpunit-configuration.md
+      - drupal/tdd/running-tests.md
+      - drupal/tdd/spec-driven-drupal-development.md
+      - drupal/tdd/test-modules.md
+      - drupal/tdd/test-traits-utilities.md
+      - drupal/tdd/test-type-decision-matrix.md
+      - drupal/tdd/testing-access-permissions.md
+      - drupal/tdd/testing-configuration.md
+      - drupal/tdd/testing-entities.md
+      - drupal/tdd/testing-events-hooks.md
+      - drupal/tdd/testing-forms.md
+      - drupal/tdd/testing-plugins.md
+      - drupal/tdd/testing-routes-controllers.md
+      - drupal/tdd/testing-services.md
+      - drupal/tdd/unit-tests.md
     - Testing:
       - drupal/testing/index.md
       - drupal/testing/best-practices-anti-patterns.md
@@ -1392,6 +1634,88 @@ nav:
       - design-systems/recognition/standards-specifications.md
       - design-systems/recognition/templates-vs-pages.md
       - design-systems/recognition/validation-checklist.md
+  - Development Practices:
+    - development/index.md
+    - DRY Principles:
+      - development/dry-principles/index.md
+      - development/dry-principles/abstraction-strategies.md
+      - development/dry-principles/best-practices-decision-framework.md
+      - development/dry-principles/code-duplication.md
+      - development/dry-principles/code-reference-map.md
+      - development/dry-principles/code-smells-detection.md
+      - development/dry-principles/dry-across-boundaries.md
+      - development/dry-principles/dry-in-configuration.md
+      - development/dry-principles/dry-in-documentation.md
+      - development/dry-principles/dry-in-testing.md
+      - development/dry-principles/dry-overview.md
+      - development/dry-principles/dry-vs-wet-vs-aha.md
+      - development/dry-principles/four-types-of-duplication.md
+      - development/dry-principles/knowledge-duplication.md
+      - development/dry-principles/over-dry-anti-patterns.md
+      - development/dry-principles/rule-of-three.md
+    - Security Practices:
+      - development/security-practices/index.md
+      - development/security-practices/api-security.md
+      - development/security-practices/authentication-best-practices.md
+      - development/security-practices/authorization-access-control.md
+      - development/security-practices/code-reference-map.md
+      - development/security-practices/cross-site-scripting-xss.md
+      - development/security-practices/cryptography-basics.md
+      - development/security-practices/csrf-prevention.md
+      - development/security-practices/dependency-security.md
+      - development/security-practices/file-upload-security.md
+      - development/security-practices/input-validation.md
+      - development/security-practices/logging-monitoring.md
+      - development/security-practices/output-encoding-escaping.md
+      - development/security-practices/owasp-top-10.md
+      - development/security-practices/secure-development-lifecycle.md
+      - development/security-practices/security-anti-patterns.md
+      - development/security-practices/security-checklist.md
+      - development/security-practices/security-headers.md
+      - development/security-practices/security-mindset-overview.md
+      - development/security-practices/sensitive-data-protection.md
+      - development/security-practices/sources-maintenance-manifest.md
+      - development/security-practices/sql-injection-prevention.md
+      - development/security-practices/xss-prevention-patterns.md
+    - SOLID Principles:
+      - development/solid-principles/index.md
+      - development/solid-principles/best-practices-framework.md
+      - development/solid-principles/code-reference-map.md
+      - development/solid-principles/dependency-inversion-principle.md
+      - development/solid-principles/dip-in-practice.md
+      - development/solid-principles/interface-segregation-principle.md
+      - development/solid-principles/isp-in-practice.md
+      - development/solid-principles/liskov-substitution-principle.md
+      - development/solid-principles/lsp-in-practice.md
+      - development/solid-principles/ocp-in-practice.md
+      - development/solid-principles/open-closed-principle.md
+      - development/solid-principles/single-responsibility-principle.md
+      - development/solid-principles/solid-anti-patterns.md
+      - development/solid-principles/solid-code-smells.md
+      - development/solid-principles/solid-modern-architecture.md
+      - development/solid-principles/solid-overview.md
+      - development/solid-principles/solid-pragmatism.md
+      - development/solid-principles/srp-in-practice.md
+    - "TDD & Spec-Driven":
+      - development/tdd-spec-driven/index.md
+      - development/tdd-spec-driven/anti-patterns.md
+      - development/tdd-spec-driven/code-reference-map.md
+      - development/tdd-spec-driven/development-standards.md
+      - development/tdd-spec-driven/integration-testing.md
+      - development/tdd-spec-driven/performance-best-practices.md
+      - development/tdd-spec-driven/red-green-refactor.md
+      - development/tdd-spec-driven/refactoring-confidence.md
+      - development/tdd-spec-driven/security-best-practices.md
+      - development/tdd-spec-driven/spec-driven-overview.md
+      - development/tdd-spec-driven/spec-to-implementation.md
+      - development/tdd-spec-driven/tdd-overview.md
+      - development/tdd-spec-driven/tdd-vs-traditional.md
+      - development/tdd-spec-driven/test-coverage.md
+      - development/tdd-spec-driven/test-doubles.md
+      - development/tdd-spec-driven/testing-patterns.md
+      - development/tdd-spec-driven/three-laws-tdd.md
+      - development/tdd-spec-driven/unit-testing-fundamentals.md
+      - development/tdd-spec-driven/writing-specs.md
 
 markdown_extensions:
   - tables

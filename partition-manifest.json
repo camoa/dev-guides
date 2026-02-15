@@ -179,6 +179,30 @@
     "partitioned_by": "camoa",
     "guides_extracted": 21
   },
+  "drupal/custom-field": {
+    "source_hash": "27354b70343aa95fa94646e98c877e5752ed60023310db6a632d4fb3c920578d",
+    "partitioned": "2026-02-14",
+    "partitioned_by": "camoa",
+    "guides_extracted": 19
+  },
+  "drupal/tdd": {
+    "source_hash": "f256b467e3553236ef274fc184104b284c51fb7684c90b11903f13853f72b3d6",
+    "partitioned": "2026-02-15",
+    "partitioned_by": "camoa",
+    "guides_extracted": 22
+  },
+  "drupal/solid-principles": {
+    "source_hash": "e74081113fbd40bc0c8c525483204381591502e4966f4c10cba0631c00a19ee0",
+    "partitioned": "2026-02-15",
+    "partitioned_by": "camoa",
+    "guides_extracted": 19
+  },
+  "drupal/dry-principles": {
+    "source_hash": "c045af36aa7193cae283829d8e809a5bbfcbbba75b18bea73815ad0e5116fbbb",
+    "partitioned": "2026-02-15",
+    "partitioned_by": "camoa",
+    "guides_extracted": 16
+  },
   "design-systems/recognition": {
     "source_hash": "9f337e6a9112b7de29ba1ce94f214bd5a6e386fe322df4584c8b4704e0d6bf3d",
     "partitioned": "2026-02-12",
@@ -202,5 +226,29 @@
     "partitioned": "2026-02-13",
     "partitioned_by": "camoa",
     "guides_extracted": 14
+  },
+  "development/tdd-spec-driven": {
+    "source_hash": "204ec2da5579f28c51bc1fb6fc799d2ae9a49b0c0ea90d615cb0bf487e3924df",
+    "partitioned": "2026-02-14",
+    "partitioned_by": "camoa",
+    "guides_extracted": 18
+  },
+  "development/solid-principles": {
+    "source_hash": "9e7af3ae4ff853b150dfa9b73892e196d0050747458a0c1c97b3977cda5f310a",
+    "partitioned": "2026-02-14",
+    "partitioned_by": "camoa",
+    "guides_extracted": 17
+  },
+  "development/dry-principles": {
+    "source_hash": "4f1ce1f90d3c0c1ec68accd010b8df21bdaa5dc03bd930fb6538aeb225d0ac83",
+    "partitioned": "2026-02-14",
+    "partitioned_by": "camoa",
+    "guides_extracted": 15
+  },
+  "development/security-practices": {
+    "source_hash": "5a5238f8f23d117aacf143e63642b4c9c02fdc2302734ac62df61a9d0415d022",
+    "partitioned": "2026-02-14",
+    "partitioned_by": "camoa",
+    "guides_extracted": 22
   }
 }
