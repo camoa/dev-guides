@@ -38,3 +38,4 @@ description: Drupal decision guides — forms, SDC components, JavaScript, entit
 | Apply DRY principles in Drupal | [DRY in Drupal](dry-principles/index.md) |
 | Apply SOLID principles in Drupal | [SOLID in Drupal](solid-principles/index.md) |
 | Practice TDD with PHPUnit in Drupal | [TDD in Drupal](tdd/index.md) |
+| Build a multilingual site with translations | [Multilingual](multilingual/index.md) |

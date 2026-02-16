@@ -392,6 +392,29 @@ plugins:
           - drupal/media-system/media-views.md: "Displaying media collections in Views"
           - drupal/media-system/responsive-image-strategy.md: "THE KEY PATTERN — connecting media view modes to responsive image delivery"
           - drupal/media-system/security-performance.md: "Media security and performance optimization"
+          - drupal/multilingual/index.md: "Drupal Multilingual & Translation — language setup, content translation, config translation, interface translation, best practices"
+          - drupal/multilingual/multilingual-overview.md: "Multilingual architecture overview — modules, language types, entity translation, field translatability"
+          - drupal/multilingual/language-setup.md: "Adding languages via config YAML, programmatic setup, default language configuration"
+          - drupal/multilingual/language-negotiation.md: "Language negotiation methods — URL prefix, domain, session, browser, user preference"
+          - drupal/multilingual/content-translation-setup.md: "Enabling content translation per entity type and bundle"
+          - drupal/multilingual/translating-content-entities.md: "UI workflow for translating nodes, taxonomy terms, and media"
+          - drupal/multilingual/field-translatability.md: "Translatable vs non-translatable fields, sync settings, storage impact"
+          - drupal/multilingual/translation-revisions.md: "Revision behavior with translations, content moderation per language"
+          - drupal/multilingual/config-translation.md: "Translating views, menus, field labels, and custom config via schema"
+          - drupal/multilingual/interface-translation.md: "Interface translation — .po files, locale import/export, custom module translations"
+          - drupal/multilingual/translatable-markup.md: "TranslatableMarkup and t() — placeholders, context, plural forms"
+          - drupal/multilingual/programmatic-entity-translation.md: "Programmatic entity translation — addTranslation, getTranslation, metadata API"
+          - drupal/multilingual/twig-translation.md: "Twig translation — t filter, trans block, plural forms, field output"
+          - drupal/multilingual/url-language-routing.md: "URL language routing — path prefixes, domains, hreflang, Pathauto, language switcher"
+          - drupal/multilingual/language-aware-queries.md: "Language-aware entity queries, Views language filters, known issues"
+          - drupal/multilingual/translation-workflows.md: "Translation workflows — TMGMT, translation jobs, DeepL/Google integration"
+          - drupal/multilingual/translating-custom-modules.md: "Making custom modules translatable — strings, config schema, .po files, JavaScript"
+          - drupal/multilingual/drupal-11-changes.md: "Drupal 11 multilingual changes, deprecations, and compatibility checking"
+          - drupal/multilingual/best-practices.md: "Multilingual best practices — config-first setup, deployment, performance, security"
+          - drupal/multilingual/anti-patterns.md: "Multilingual anti-patterns — what NOT to do with translations, security risks"
+          - drupal/multilingual/security-performance-caching.md: "Translation security, performance optimization, cache contexts, CDN configuration"
+          - drupal/multilingual/code-reference-map.md: "Translation code reference — core modules, services, entity API, hooks, debugging"
+          - drupal/multilingual/sources-maintenance.md: "Sources and maintenance manifest for multilingual guide"
           - drupal/migration/index.md: "Drupal 7 to 11 migration — decision guides for Migrate API, content strategy, and performance"
           - drupal/migration/anti-patterns.md: "Common migration failures that cause project delays and technical debt"
           - drupal/migration/assess-migration-scope.md: "Inventory and timeline estimation for D7 to D11 migration projects"
@@ -1273,6 +1296,30 @@ nav:
       - drupal/media-system/anti-patterns-mistakes.md
       - drupal/media-system/security-performance.md
       - drupal/media-system/code-reference-map.md
+    - Multilingual:
+      - drupal/multilingual/index.md
+      - drupal/multilingual/multilingual-overview.md
+      - drupal/multilingual/language-setup.md
+      - drupal/multilingual/language-negotiation.md
+      - drupal/multilingual/content-translation-setup.md
+      - drupal/multilingual/translating-content-entities.md
+      - drupal/multilingual/field-translatability.md
+      - drupal/multilingual/translation-revisions.md
+      - drupal/multilingual/config-translation.md
+      - drupal/multilingual/interface-translation.md
+      - drupal/multilingual/translatable-markup.md
+      - drupal/multilingual/programmatic-entity-translation.md
+      - drupal/multilingual/twig-translation.md
+      - drupal/multilingual/url-language-routing.md
+      - drupal/multilingual/language-aware-queries.md
+      - drupal/multilingual/translation-workflows.md
+      - drupal/multilingual/translating-custom-modules.md
+      - drupal/multilingual/drupal-11-changes.md
+      - drupal/multilingual/best-practices.md
+      - drupal/multilingual/anti-patterns.md
+      - drupal/multilingual/security-performance-caching.md
+      - drupal/multilingual/code-reference-map.md
+      - drupal/multilingual/sources-maintenance.md
     - Migration:
       - drupal/migration/index.md
       - drupal/migration/anti-patterns.md

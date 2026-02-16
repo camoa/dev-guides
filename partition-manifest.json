@@ -256,5 +256,11 @@
     "partitioned": "2026-02-16",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 21
+  },
+  "drupal/multilingual": {
+    "source_hash": "cc5946807b71025d3e73b74337b95f46e1551bf5c5117ac8344e3a5da660c885",
+    "partitioned": "2026-02-16",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 21
   }
 }
