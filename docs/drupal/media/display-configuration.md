@@ -1,15 +1,14 @@
 ---
-description: Configuring custom formatters and widgets for media source fields
-drupal_version: "11.x"
+description: Customizing how media source fields are displayed in views and edited in forms when media type is created.
 ---
 
 # Display Configuration
 
-## When to Use
+### When to Use
 
-> Use display configuration when customizing how media source fields are displayed in views and edited in forms when media type is created.
+Customizing how media source fields are displayed in views and edited in forms when media type is created.
 
-## Decision
+### Decision
 
 | Customization | Method | Use Case |
 |---------------|--------|----------|
@@ -18,7 +17,7 @@ drupal_version: "11.x"
 | Hide source field in display | Set component to hidden in prepareViewDisplay() | Source field not user-facing |
 | Add help text to widget | Configure widget description | Guide editors on URL format |
 
-## Pattern
+### Pattern
 
 Configuring custom formatter and widget (10 lines):
 ```php
@@ -41,16 +40,22 @@ public function prepareFormDisplay(MediaTypeInterface $type, EntityFormDisplayIn
 }
 ```
 
-## Common Mistakes
+### Common Mistakes
 
-- **Wrong**: Hardcoding field name → **Right**: Use `getSourceFieldDefinition()->getName()`
-- **Wrong**: Not calling `getSourceFieldDefinition()` → **Right**: Get field name dynamically
-- **Wrong**: Forgetting to set weight → **Right**: Set weight for predictable ordering
-- **Wrong**: Using non-existent formatter → **Right**: Verify formatter plugin exists
-- **Wrong**: Not considering Media Library → **Right**: Test widgets in inline entity forms
+- Hardcoding field name → Breaks when source field name changes
+- Not calling `getSourceFieldDefinition()` → Wrong field configured
+- Forgetting to set weight → Display order unpredictable
+- Using non-existent formatter → White screen, plugin not found error
+- Not considering Media Library → Custom widgets may break inline entity forms
 
-## See Also
+**WHY:**
+- **Field name flexibility**: Source field name is configurable; hardcoding assumes default name, breaks custom configurations
+- **Weight matters**: Display components stack by weight; missing weight causes fields to appear in wrong order
+- **Plugin existence**: Referenced formatters/widgets must exist; non-existent plugins cause fatal errors
+- **Media Library compatibility**: Media Library uses inline entity forms with specific requirements; custom widgets may break selection UI
 
-- Previous: [Validation Constraints](validation-constraints.md)
-- Next: [Security Best Practices](security-best-practices.md)
+### See Also
+
+- Previous: [Validation Constraints](index.md)
+- Next: [Security Best Practices](index.md)
 - Reference: core/modules/media/src/MediaSourceInterface.php (line 146-179)

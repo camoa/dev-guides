@@ -1,15 +1,14 @@
 ---
-description: Choosing MediaSourceBase, File, or OEmbed base class for custom plugins
-drupal_version: "11.x"
+description: Building a custom media source plugin and choosing which base class to extend (MediaSourceBase, File, or OEmbed).
 ---
 
 # Base Class Selection
 
-## When to Use
+### When to Use
 
-> Use MediaSourceBase when building a custom API integration. Use File when extending local file handling. Use OEmbed when service supports oEmbed protocol.
+Building a custom media source plugin and choosing which base class to extend (MediaSourceBase, File, or OEmbed).
 
-## Decision
+### Decision
 
 | Base Class | Use When | Provides | Complexity |
 |------------|----------|----------|------------|
@@ -17,7 +16,7 @@ drupal_version: "11.x"
 | **File** | Local files with custom extensions/validation | All MediaSourceBase + file entity handling, extension validation | Low |
 | **OEmbed** | Service supports oEmbed protocol | All MediaSourceBase + resource fetching, URL validation, thumbnail downloading (11 injected services) | High |
 
-## Pattern
+### Pattern
 
 Extending MediaSourceBase for custom API:
 ```php
@@ -38,15 +37,15 @@ class CustomApi extends MediaSourceBase {
 }
 ```
 
-## Common Mistakes
+### Common Mistakes
 
-- **Wrong**: Extending OEmbed for non-oEmbed APIs → **Right**: Use MediaSourceBase, avoid 11 unused services
-- **Wrong**: Extending MediaSourceBase for files → **Right**: Extend File class for file handling
-- **Wrong**: Not checking provider oEmbed support → **Right**: Verify oEmbed endpoint exists
-- **Wrong**: Using File base for remote media → **Right**: MediaSourceBase for URL-based media
+- Extending OEmbed for non-oEmbed APIs → Adds 11 unused services, complex inheritance
+- Extending MediaSourceBase for files → Reimplements file handling that File class provides
+- Not checking provider oEmbed support → Build custom when core OEmbed would work
+- Using File base for remote media → File entity required, inappropriate for URLs
 
-## See Also
+### See Also
 
-- Previous: [Media Type Selection Strategy](media-type-selection-strategy.md)
-- Next: [Architecture Overview](architecture-overview.md)
+- Previous: [Media Type Selection Strategy](index.md)
+- Next: [Architecture Overview](index.md)
 - Reference: core/modules/media/src/MediaSourceBase.php

@@ -1,9 +1,8 @@
 ---
-description: Common Layout Builder mistakes to avoid
-drupal_version: "11.x"
+description: Common Layout Builder anti-patterns — what NOT to do with overrides, inline blocks, restrictions, CSS, and layout architecture.
 ---
 
-# Anti-Patterns & Common Mistakes
+## 17. Anti-Patterns & Common Mistakes
 
 ### When to Use
 

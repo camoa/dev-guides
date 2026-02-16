@@ -1,9 +1,8 @@
 ---
-description: Overview of Layout Builder and when to use it
-drupal_version: "11.x"
+description: Overview of Layout Builder — when to use it, core concepts, and how it relates to other layout systems.
 ---
 
-# Layout Builder Overview
+## 1. Layout Builder Overview
 
 ### When to Use
 

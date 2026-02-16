@@ -1,15 +1,14 @@
 ---
-description: Creating custom media source plugins for third-party API integrations
-drupal_version: "11.x"
+description: Integrating a third-party API or custom service that doesn't support oEmbed and no contrib module exists.
 ---
 
 # Custom Media Source Plugin
 
-## When to Use
+### When to Use
 
-> Use custom MediaSourceBase plugin when integrating a third-party API or custom service that doesn't support oEmbed and no contrib module exists.
+Integrating a third-party API or custom service that doesn't support oEmbed and no contrib module exists.
 
-## Decision
+### Decision
 
 | Integration Type | Source Field Type | Metadata Strategy |
 |------------------|-------------------|-------------------|
@@ -18,7 +17,7 @@ drupal_version: "11.x"
 | Local files with custom processing | `file` | Extend File class, add processing |
 | Hybrid (URL + credentials) | `link` + config form | Store URL in field, credentials in config |
 
-## Pattern
+### Pattern
 
 Complete custom source plugin (12-15 lines):
 ```php
@@ -62,16 +61,21 @@ class CustomApi extends MediaSourceBase {
 }
 ```
 
-## Common Mistakes
+### Common Mistakes
 
-- **Wrong**: Not implementing `default_name` → **Right**: Return title/name for automatic naming
-- **Wrong**: Missing `thumbnail_uri` → **Right**: Return URI or NULL for fallback icon
-- **Wrong**: Not caching API responses → **Right**: Cache with tags, 1-hour TTL minimum
-- **Wrong**: Using static service calls → **Right**: Inject services via constructor
-- **Wrong**: No error handling → **Right**: Catch exceptions, return NULL gracefully
+- Not implementing `default_name` → Media items show as "Unsaved media"
+- Missing `thumbnail_uri` → Media Library shows broken thumbnails
+- Not caching API responses → Performance issues, rate limit hits
+- Using static service calls → Breaks testability, violates DI principles
+- No error handling → Network failures crash pages
 
-## See Also
+**WHY these matter:**
+- **default_name**: Required for automatic naming when editors create media without manually entering a title
+- **Caching**: API calls are expensive; without caching, every page load hits the API, causing slowness and rate limit issues
+- **Error handling**: Third-party APIs fail; graceful degradation prevents white screens and improves user experience
 
-- Next: [Extending OEmbed Sources](extending-oembed-sources.md)
+### See Also
+
+- Next: [Extending OEmbed Sources](index.md)
 - Reference: core/modules/media/src/Plugin/media/Source/File.php
 - Reference: https://drupalize.me/tutorial/create-custom-media-source-plugin

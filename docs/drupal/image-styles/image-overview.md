@@ -1,13 +1,12 @@
 ---
-description: When to use image styles vs responsive images
-drupal_version: "11.x"
+description: Understand the difference between image styles (single derivative) and responsive images (multiple derivatives for different contexts)
 ---
 
 # Image System Overview
 
 ## When to Use
 
-> Use image styles when you need a single derivative at a fixed size. Use responsive images when you need different sizes for different devices/viewports.
+> Use image styles for fixed-size images. Use responsive image styles when you need different sizes for different devices/viewports.
 
 ## Decision
 
@@ -55,10 +54,10 @@ image_style_mappings:
 
 ## Common Mistakes
 
-- **Wrong**: Using responsive images when a single image style suffices → **Right**: Use single image style for fixed-size elements (adds complexity and generates unnecessary derivatives, increases storage/processing)
-- **Wrong**: Not setting a fallback_image_style → **Right**: Always set fallback to smallest acceptable size (breaks display when JavaScript disabled or responsive_image module missing)
-- **Wrong**: Creating separate image styles for every breakpoint instead of reusing → **Right**: Reuse image styles across breakpoints (bloats config, makes maintenance harder)
-- **Wrong**: Using image styles for full-width hero images without responsive variants → **Right**: Use responsive image style for full-width content (wastes bandwidth on mobile devices)
+- Using responsive images when a single image style suffices → Adds complexity and generates unnecessary derivatives, increases storage/processing
+- Not setting a fallback_image_style → Breaks display when JavaScript disabled or responsive_image module missing
+- Creating separate image styles for every breakpoint instead of reusing → Bloats config, makes maintenance harder
+- Using image styles for full-width hero images without responsive variants → Wastes bandwidth on mobile devices
 
 ## See Also
 

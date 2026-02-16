@@ -1,28 +1,22 @@
 ---
-description: Secure image derivatives and optimize performance
-drupal_version: "11.x"
+description: Secure image derivatives with itok tokens, optimize derivative generation strategies, and manage CDN integration for performance
 ---
 
 # Security & Performance
 
 ## When to Use
 
-> Use this when securing image derivatives against attacks and optimizing image delivery performance.
+> Use this when you need to secure image derivatives against attacks and optimize image delivery performance.
 
-## Decision - Image Derivative Security
+## Security Concerns
 
-| If you have... | Set... | Why |
-|---|---|---|
-| Standard Drupal, no CDN | `allow_insecure_derivatives: FALSE` | Prevents DoS via arbitrary derivative requests |
-| CDN with signed URLs | `allow_insecure_derivatives: TRUE`, `suppress_itok_output: TRUE` | CDN handles security, cleaner URLs |
-| CDN without security | Keep secure (FALSE) | Drupal token is only protection |
-
-## Pattern - Image Derivative Token (itok)
+### 1. Image Derivative Token (itok)
 
 **Threat:** Unauthenticated users could generate unlimited derivatives by crafting URLs, causing denial-of-service through storage/CPU exhaustion.
 
-**Protection:** Drupal adds `?itok=HASH` token to derivative URLs.
+**Protection:** Drupal adds `?itok=HASH` token to derivative URLs. Server validates token before generating derivative.
 
+**Config:**
 ```php
 // sites/default/settings.php
 
@@ -36,6 +30,14 @@ $config['image.settings']['allow_insecure_derivatives'] = TRUE;
 $config['image.settings']['suppress_itok_output'] = TRUE;
 ```
 
+**Decision:**
+
+| If you have... | Set... | Why |
+|---|---|---|
+| Standard Drupal, no CDN | `allow_insecure_derivatives: FALSE` | Prevents DoS via arbitrary derivative requests |
+| CDN with signed URLs | `allow_insecure_derivatives: TRUE`, `suppress_itok_output: TRUE` | CDN handles security, cleaner URLs |
+| CDN without security | Keep secure (FALSE) | Drupal token is only protection |
+
 **Attack scenario prevented:**
 ```
 # Without token protection
@@ -48,7 +50,44 @@ GET /styles/custom_9999x9999/public/image.jpg
 → 403 Forbidden (missing valid token)
 ```
 
-## Pattern - Derivative Generation Strategy
+### 2. Directory Traversal
+
+**Threat:** Crafted URIs could access files outside public files directory.
+
+**Protection:** Drupal validates stream wrapper scheme and normalizes paths before derivative generation.
+
+**Example attack prevented:**
+```php
+// Malicious attempt
+$uri = 'public://../../private/secret.pdf';
+$style->buildUri($uri);
+
+// Drupal normalizes to
+// public://private/secret.pdf (within public)
+// OR rejects entirely
+```
+
+### 3. Source Image Validation
+
+**Threat:** Uploaded files could contain malicious code disguised as images.
+
+**Protection:**
+- File module validates MIME type
+- Image toolkit validates image structure
+- GD/ImageMagick reject non-image files
+
+**Best practice:**
+```php
+// In custom upload handling
+$image = \Drupal::service('image.factory')->get($uri);
+if (!$image->isValid()) {
+  // Reject file, not a real image
+}
+```
+
+## Performance Optimization
+
+### 1. Derivative Generation Strategy
 
 **Lazy generation (default):**
 - Derivatives created on first request
@@ -66,12 +105,13 @@ $image_style->createDerivative($source_uri, $derivative_uri);
 
 **Recommendation:** Use lazy for most cases. Pre-generate for critical above-fold images only.
 
-## Pattern - CDN Integration
+### 2. CDN Integration
 
 **Without CDN:**
 ```
 Browser → Drupal → Generate derivative → Serve file
 ```
+Every request hits Drupal, even for cached derivatives.
 
 **With CDN:**
 ```
@@ -84,10 +124,17 @@ Browser → CDN (cache miss) → Drupal → Generate → CDN caches → Return f
 // settings.php
 $config['image.settings']['allow_insecure_derivatives'] = TRUE;
 $config['image.settings']['suppress_itok_output'] = TRUE;
+
+// Ensure CDN is configured in settings
 $settings['file_public_base_url'] = 'https://cdn.example.com';
 ```
 
-## Storage Management
+### 3. Storage Management
+
+**Derivatives location:**
+```
+public://styles/{style_name}/{scheme}/{original_path}
+```
 
 **Flush strategies:**
 
@@ -108,26 +155,79 @@ Storage per image = 2 MB × 0.3 (WebP compression) × 10 = 6 MB
 For 1000 images = 6 GB derivatives storage
 ```
 
+### 4. Caching
+
+**Render cache:**
+```php
+// Image render element includes cache metadata
+$image = [
+  '#theme' => 'image_style',
+  '#style_name' => 'large',
+  '#uri' => $uri,
+  '#cache' => [
+    'tags' => ['image_style:large'],
+    'contexts' => ['url.site'],
+  ],
+];
+```
+
+**Clear cache on style change:**
+```bash
+# Automatic on style save
+drush cr
+
+# Manual if needed
+drush cache:rebuild
+```
+
+### 5. Batch Processing
+
+**For large derivative generation:**
+```php
+// In batch operation
+$batch = [
+  'operations' => [
+    ['my_module_generate_derivatives', [$image_uri]],
+  ],
+];
+batch_set($batch);
+
+function my_module_generate_derivatives($uri, &$context) {
+  $styles = ImageStyle::loadMultiple();
+  foreach ($styles as $style) {
+    $derivative_uri = $style->buildUri($uri);
+    $style->createDerivative($uri, $derivative_uri);
+  }
+}
+```
+
+Prevents timeout/memory errors on large imagesets.
+
 ## Monitoring
 
+**Derivative storage size:**
 ```bash
-# Derivative storage size
 du -sh sites/default/files/styles/
+```
 
-# Derivative count
+**Derivative count:**
+```bash
 find sites/default/files/styles/ -type f | wc -l
+```
 
-# Failed derivatives
+**Failed derivatives (check logs):**
+```bash
 drush watchdog:show --type=image
 ```
 
 ## Common Mistakes
 
-- **Wrong**: Disabling token protection without CDN security → **Right**: Keep tokens enabled (DoS vulnerability, arbitrary derivative generation)
-- **Wrong**: Not flushing after style changes → **Right**: Flush affected styles (serving outdated derivatives, user confusion)
-- **Wrong**: Pre-generating all derivatives → **Right**: Use lazy generation (wastes storage and processing, most unused)
-- **Wrong**: Allowing insecure derivatives on public internet → **Right**: Use tokens or CDN security (attacker can exhaust disk/CPU)
-- **Wrong**: Not monitoring derivative storage → **Right**: Monitor with du/find (disk fills silently, site crashes)
+- Disabling token protection without CDN security → DoS vulnerability, arbitrary derivative generation
+- Not flushing after style changes → Serving outdated derivatives, user confusion
+- Pre-generating all derivatives → Wastes storage and processing, most unused
+- Allowing insecure derivatives on public internet → Attacker can exhaust disk/CPU
+- Not monitoring derivative storage → Disk fills silently, site crashes
+- Using token URLs with aggressive CDN caching → Cache miss on every token change, poor hit rate
 
 ## See Also
 

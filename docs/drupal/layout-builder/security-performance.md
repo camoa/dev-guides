@@ -1,9 +1,8 @@
 ---
-description: Security and performance considerations
-drupal_version: "11.x"
+description: Security and performance considerations for Layout Builder — access control, XSS prevention, orphan cleanup, render caching, and query optimization.
 ---
 
-# Security & Performance
+## 18. Security & Performance
 
 ### When to Use
 

@@ -1,9 +1,8 @@
 ---
-description: Understanding sections, layouts, and regions
-drupal_version: "11.x"
+description: How sections work as containers with layout plugins, regions, and section storage types for defaults and overrides.
 ---
 
-# Sections & Layouts
+## 4. Sections & Layouts
 
 ### When to Use
 

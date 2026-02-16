@@ -265,6 +265,7 @@ plugins:
           - drupal/image-styles/programmatic-operations.md: "Generate derivatives or create custom effects programmatically"
           - drupal/image-styles/responsive-image-config.md: "Set up a responsive image style with breakpoints"
           - drupal/image-styles/security-performance.md: "Secure image derivatives and optimize performance"
+          - drupal/image-styles/sources-maintenance.md: "Source references and version history"
           - drupal/image-styles/webp-avif-optimization.md: "Optimize images with WebP and AVIF"
           - drupal/jsonapi/index.md: "JSON:API — spec-compliant REST API with filtering, includes, pagination, and customization"
           - drupal/jsonapi/authentication-patterns.md: "Authentication for write operations and accessing restricted content"
@@ -329,26 +330,30 @@ plugins:
           - drupal/klaro/url-pattern-exclusions.md: "Disable Klaro on admin pages, previews, or specific URL patterns using regex"
           - drupal/klaro/what-is-consent-management.md: "Understand when and why to use consent management for GDPR and privacy compliance"
           - drupal/layout-builder/index.md: "Layout Builder — visual layout control for Drupal entity displays with sections and blocks"
-          - drupal/layout-builder/anti-patterns.md: "Common Layout Builder mistakes to avoid"
-          - drupal/layout-builder/best-practices.md: "Layout Builder best practices and patterns"
-          - drupal/layout-builder/block-placement.md: "Placing and configuring blocks in layouts"
-          - drupal/layout-builder/code-reference.md: "Key classes and files in Layout Builder"
-          - drupal/layout-builder/config-recipes.md: "Exporting and deploying Layout Builder configuration"
-          - drupal/layout-builder/config-schema.md: "Layout Builder YAML configuration structure and schema"
-          - drupal/layout-builder/core-layouts.md: "Core layout plugins available in Drupal"
-          - drupal/layout-builder/custom-layouts.md: "Creating custom layout plugins"
-          - drupal/layout-builder/defaults-vs-overrides.md: "Default layouts vs per-entity overrides"
-          - drupal/layout-builder/enabling.md: "How to enable Layout Builder on content types and view modes"
-          - drupal/layout-builder/events-hooks.md: "Layout Builder events and hooks"
-          - drupal/layout-builder/field-blocks.md: "Using field and extra field blocks in layouts"
-          - drupal/layout-builder/inline-vs-reusable.md: "Choosing between inline and reusable blocks"
-          - drupal/layout-builder/overview.md: "Overview of Layout Builder and when to use it"
-          - drupal/layout-builder/restrictions.md: "Restricting which blocks can be added to layouts"
+          - drupal/layout-builder/lb-overview.md: "Overview of Layout Builder and when to use it"
+          - drupal/layout-builder/enabling-lb.md: "How to enable Layout Builder on content types and view modes"
+          - drupal/layout-builder/lb-config-schema.md: "Layout Builder YAML configuration structure and schema"
           - drupal/layout-builder/sections-layouts.md: "Understanding sections, layouts, and regions"
+          - drupal/layout-builder/core-layout-plugins.md: "Core layout plugins available in Drupal"
+          - drupal/layout-builder/block-placement.md: "Placing and configuring blocks in layouts"
+          - drupal/layout-builder/inline-vs-reusable.md: "Choosing between inline and reusable blocks"
+          - drupal/layout-builder/field-extra-field-blocks.md: "Using field and extra field blocks in layouts"
+          - drupal/layout-builder/defaults-vs-overrides.md: "Default layouts vs per-entity overrides"
+          - drupal/layout-builder/lb-restrictions.md: "Restricting which blocks editors can add in Layout Builder"
+          - drupal/layout-builder/lb-styles-overview.md: "Layout Builder Styles overview — applying CSS classes to sections and blocks"
+          - drupal/layout-builder/lb-styles-groups.md: "Creating and configuring Layout Builder Style groups"
+          - drupal/layout-builder/lb-styles-definitions.md: "Defining individual Layout Builder Styles with restrictions"
+          - drupal/layout-builder/lb-styles-bootstrap.md: "Integrating Layout Builder Styles with Bootstrap and Radix"
+          - drupal/layout-builder/lb-styles-extending.md: "Extending Layout Builder Styles programmatically"
+          - drupal/layout-builder/custom-layout-plugins.md: "Creating custom layout plugins"
+          - drupal/layout-builder/lb-events-hooks.md: "Layout Builder events and hooks for altering rendering"
+          - drupal/layout-builder/lb-config-recipes.md: "Exporting and deploying Layout Builder configuration with recipes"
+          - drupal/layout-builder/theming-lb.md: "Theming Layout Builder admin UI and frontend output"
+          - drupal/layout-builder/best-practices.md: "Layout Builder best practices and patterns"
+          - drupal/layout-builder/anti-patterns.md: "Common Layout Builder mistakes to avoid"
           - drupal/layout-builder/security-performance.md: "Security and performance considerations"
-          - drupal/layout-builder/sources.md: "Documentation sources and maintenance notes"
-          - drupal/layout-builder/styles.md: "Adding CSS classes to sections and blocks"
-          - drupal/layout-builder/theming.md: "Theming Layout Builder admin UI and frontend"
+          - drupal/layout-builder/code-reference-map.md: "Key classes, files, and code patterns in Layout Builder"
+          - drupal/layout-builder/sources-maintenance.md: "Documentation sources and maintenance notes"
           - drupal/media/index.md: "Media Types — custom media source plugins, metadata extraction, and third-party API integrations"
           - drupal/media/anti-patterns.md: "Common mistakes and anti-patterns to avoid in media source plugins"
           - drupal/media/architecture-overview.md: "Media source plugin architecture and how it fits into Drupal's plugin system"
@@ -365,6 +370,28 @@ plugins:
           - drupal/media/testing-strategies.md: "Unit, kernel, and functional testing strategies for media source plugins"
           - drupal/media/thumbnail-generation.md: "Downloading, caching, and generating thumbnails for media entities"
           - drupal/media/validation-constraints.md: "Validating media source field values with custom constraints"
+          - drupal/media-system/index.md: "Drupal Media System — media types, view modes, display configuration, Media Library, responsive image delivery"
+          - drupal/media-system/anti-patterns-mistakes.md: "Media system anti-patterns and common mistakes to avoid"
+          - drupal/media-system/best-practices-patterns.md: "Best practices for naming, config management, and Media Library optimization"
+          - drupal/media-system/ckeditor-media-embedding.md: "CKEditor media embedding with text format filters and view mode selection"
+          - drupal/media-system/code-reference-map.md: "Key classes, services, config schemas, templates, and hooks"
+          - drupal/media-system/core-media-types.md: "Core media types — Image, Document, Remote Video, Audio, Video"
+          - drupal/media-system/custom-media-type-config.md: "Creating custom media types with oEmbed or custom source plugins"
+          - drupal/media-system/focal-point-crop-integration.md: "Smart cropping with Focal Point and Crop API"
+          - drupal/media-system/media-access-permissions.md: "Media access control and role-based permissions"
+          - drupal/media-system/media-display-config.md: "Configuring display formatters per media view mode"
+          - drupal/media-system/media-fields-field-mapping.md: "Media source fields and metadata mapping configuration"
+          - drupal/media-system/media-file-system.md: "File storage configuration — public vs private, CDN, date-organized directories"
+          - drupal/media-system/media-form-display.md: "Media upload and edit form configuration"
+          - drupal/media-system/media-layout-builder.md: "Placing media in Layout Builder with inline and custom blocks"
+          - drupal/media-system/media-library-views.md: "Customizing the Media Library browser view"
+          - drupal/media-system/media-library-widget.md: "Media Library widget configuration for entity reference fields"
+          - drupal/media-system/media-overview.md: "When to use Media subsystem vs direct file/image fields"
+          - drupal/media-system/media-reference-fields.md: "Configuring media reference fields on content types"
+          - drupal/media-system/media-view-modes.md: "Creating media view modes for different display contexts"
+          - drupal/media-system/media-views.md: "Displaying media collections in Views"
+          - drupal/media-system/responsive-image-strategy.md: "THE KEY PATTERN — connecting media view modes to responsive image delivery"
+          - drupal/media-system/security-performance.md: "Media security and performance optimization"
           - drupal/migration/index.md: "Drupal 7 to 11 migration — decision guides for Migrate API, content strategy, and performance"
           - drupal/migration/anti-patterns.md: "Common migration failures that cause project delays and technical debt"
           - drupal/migration/assess-migration-scope.md: "Inventory and timeline estimation for D7 to D11 migration projects"
@@ -1113,6 +1140,7 @@ nav:
       - drupal/image-styles/programmatic-operations.md
       - drupal/image-styles/responsive-image-config.md
       - drupal/image-styles/security-performance.md
+      - drupal/image-styles/sources-maintenance.md
       - drupal/image-styles/webp-avif-optimization.md
     - "JSON:API":
       - drupal/jsonapi/index.md
@@ -1181,26 +1209,30 @@ nav:
       - drupal/klaro/what-is-consent-management.md
     - Layout Builder:
       - drupal/layout-builder/index.md
-      - drupal/layout-builder/anti-patterns.md
-      - drupal/layout-builder/best-practices.md
-      - drupal/layout-builder/block-placement.md
-      - drupal/layout-builder/code-reference.md
-      - drupal/layout-builder/config-recipes.md
-      - drupal/layout-builder/config-schema.md
-      - drupal/layout-builder/core-layouts.md
-      - drupal/layout-builder/custom-layouts.md
-      - drupal/layout-builder/defaults-vs-overrides.md
-      - drupal/layout-builder/enabling.md
-      - drupal/layout-builder/events-hooks.md
-      - drupal/layout-builder/field-blocks.md
-      - drupal/layout-builder/inline-vs-reusable.md
-      - drupal/layout-builder/overview.md
-      - drupal/layout-builder/restrictions.md
+      - drupal/layout-builder/lb-overview.md
+      - drupal/layout-builder/enabling-lb.md
+      - drupal/layout-builder/lb-config-schema.md
       - drupal/layout-builder/sections-layouts.md
+      - drupal/layout-builder/core-layout-plugins.md
+      - drupal/layout-builder/block-placement.md
+      - drupal/layout-builder/inline-vs-reusable.md
+      - drupal/layout-builder/field-extra-field-blocks.md
+      - drupal/layout-builder/defaults-vs-overrides.md
+      - drupal/layout-builder/lb-restrictions.md
+      - drupal/layout-builder/lb-styles-overview.md
+      - drupal/layout-builder/lb-styles-groups.md
+      - drupal/layout-builder/lb-styles-definitions.md
+      - drupal/layout-builder/lb-styles-bootstrap.md
+      - drupal/layout-builder/lb-styles-extending.md
+      - drupal/layout-builder/custom-layout-plugins.md
+      - drupal/layout-builder/lb-events-hooks.md
+      - drupal/layout-builder/lb-config-recipes.md
+      - drupal/layout-builder/theming-lb.md
+      - drupal/layout-builder/best-practices.md
+      - drupal/layout-builder/anti-patterns.md
       - drupal/layout-builder/security-performance.md
-      - drupal/layout-builder/sources.md
-      - drupal/layout-builder/styles.md
-      - drupal/layout-builder/theming.md
+      - drupal/layout-builder/code-reference-map.md
+      - drupal/layout-builder/sources-maintenance.md
     - Media:
       - drupal/media/index.md
       - drupal/media/anti-patterns.md
@@ -1218,6 +1250,29 @@ nav:
       - drupal/media/testing-strategies.md
       - drupal/media/thumbnail-generation.md
       - drupal/media/validation-constraints.md
+    - Media System:
+      - drupal/media-system/index.md
+      - drupal/media-system/media-overview.md
+      - drupal/media-system/core-media-types.md
+      - drupal/media-system/custom-media-type-config.md
+      - drupal/media-system/media-fields-field-mapping.md
+      - drupal/media-system/media-view-modes.md
+      - drupal/media-system/media-display-config.md
+      - drupal/media-system/responsive-image-strategy.md
+      - drupal/media-system/media-form-display.md
+      - drupal/media-system/media-library-widget.md
+      - drupal/media-system/media-library-views.md
+      - drupal/media-system/ckeditor-media-embedding.md
+      - drupal/media-system/media-access-permissions.md
+      - drupal/media-system/media-reference-fields.md
+      - drupal/media-system/media-layout-builder.md
+      - drupal/media-system/media-views.md
+      - drupal/media-system/focal-point-crop-integration.md
+      - drupal/media-system/media-file-system.md
+      - drupal/media-system/best-practices-patterns.md
+      - drupal/media-system/anti-patterns-mistakes.md
+      - drupal/media-system/security-performance.md
+      - drupal/media-system/code-reference-map.md
     - Migration:
       - drupal/migration/index.md
       - drupal/migration/anti-patterns.md

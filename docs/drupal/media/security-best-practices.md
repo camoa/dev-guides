@@ -1,15 +1,14 @@
 ---
-description: Security measures to prevent XSS, SSRF, and other vulnerabilities
-drupal_version: "11.x"
+description: Every media source plugin must implement security measures to prevent common vulnerabilities.
 ---
 
 # Security Best Practices
 
-## When to Use
+### When to Use
 
-> Use these security measures in every media source plugin to prevent XSS, SSRF, arbitrary file access, and other common vulnerabilities.
+Every media source plugin must implement security measures to prevent common vulnerabilities.
 
-## Decision
+### Decision
 
 | Vulnerability | Prevention Strategy | Implementation |
 |---------------|---------------------|----------------|
@@ -19,7 +18,7 @@ drupal_version: "11.x"
 | **SQL Injection** | Use entity API, avoid raw queries | Use `$media->set()`, not db_query() |
 | **Unvalidated redirects** | Validate oEmbed redirect URLs | Check redirect targets match provider |
 
-## Pattern
+### Pattern
 
 Secure URL validation and fetching (8 lines):
 ```php
@@ -66,17 +65,24 @@ public function getMetadata(MediaInterface $media, $attribute_name): mixed {
 }
 ```
 
-## Common Mistakes
+### Common Mistakes
 
-- **Wrong**: Trusting user-supplied URLs → **Right**: Whitelist domains, validate scheme
-- **Wrong**: Not sanitizing API responses → **Right**: Use Xss::filter() for display
-- **Wrong**: Allowing HTTP URLs → **Right**: Enforce HTTPS only
-- **Wrong**: No timeout on HTTP requests → **Right**: Set 5-second timeout
-- **Wrong**: Storing credentials in code → **Right**: Use config or key module
+- Trusting user-supplied URLs → SSRF attacks, internal network scanning
+- Not sanitizing API responses → XSS when metadata displayed
+- Allowing HTTP URLs → Man-in-the-middle attacks, credential theft
+- No timeout on HTTP requests → DoS via slow APIs, hanging requests
+- Storing credentials in code → Exposed in version control, leaked in logs
 
-## See Also
+**WHY these matter (the security reasoning):**
+- **SSRF is critical**: Accepting arbitrary URLs allows attackers to scan internal networks, access cloud metadata endpoints (AWS EC2 metadata), or probe internal services
+- **XSS in metadata**: Metadata displayed in HTML; unsanitized content allows JavaScript injection, session hijacking, and credential theft
+- **HTTP vs HTTPS**: HTTP traffic is readable by network eavesdroppers; API keys and tokens transmitted in plain text
+- **Timeouts prevent DoS**: Attackers can provide URLs to slow endpoints, tying up PHP workers and causing site-wide outages
+- **Credential exposure**: Hardcoded credentials in code are visible in Git history, deployment logs, and error messages
 
-- Next: [Performance Optimization](performance-optimization.md)
+### See Also
+
+- Next: [Performance Optimization](index.md)
 - Reference: https://www.getastra.com/blog/cms/drupal-security/drupal-security-guide/
 - Reference: https://metadesignsolutions.com/drupal-security-best-practices-protecting-enterprise-websites-in-2026/
 - Reference: https://www.drupal.org/docs/security-in-drupal

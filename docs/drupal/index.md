@@ -15,6 +15,7 @@ description: Drupal decision guides — forms, SDC components, JavaScript, entit
 | Build configuration forms and admin interfaces | [Config Forms](config-forms/index.md) |
 | Use the Icon API for unified icon management | [Icon API](icon-api/index.md) |
 | Generate AI-powered content | [AI Content](ai-content/index.md) |
+| Configure media types, view modes, and display | [Media System](media-system/index.md) |
 | Create custom media source plugins | [Media Types](media/index.md) |
 | Migrate from Drupal 7 to 11 | [Migration](migration/index.md) |
 | Build ECA custom actions, events, conditions | [ECA Development](eca/index.md) |

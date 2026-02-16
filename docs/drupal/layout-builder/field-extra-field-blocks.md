@@ -1,9 +1,8 @@
 ---
-description: Using field and extra field blocks in layouts
-drupal_version: "11.x"
+description: Exposing entity fields and extra fields (pseudo-fields) as blocks in Layout Builder layouts.
 ---
 
-# Field & Extra Field Blocks
+## 8. Field & Extra Field Blocks
 
 ### When to Use
 

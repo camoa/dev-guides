@@ -1,9 +1,8 @@
 ---
-description: How to enable Layout Builder on content types and view modes
-drupal_version: "11.x"
+description: How to enable Layout Builder on content types, custom entities, and view modes via UI, config, or code.
 ---
 
-# Enabling Layout Builder
+## 2. Enabling Layout Builder
 
 ### When to Use
 

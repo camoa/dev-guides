@@ -1,15 +1,14 @@
 ---
-description: Unit, kernel, and functional testing strategies for media source plugins
-drupal_version: "11.x"
+description: Ensuring media source plugin works correctly across different scenarios and preventing regressions.
 ---
 
 # Testing Strategies
 
-## When to Use
+### When to Use
 
-> Use layered testing to ensure media source plugin works correctly across different scenarios and prevent regressions.
+Ensuring media source plugin works correctly across different scenarios and preventing regressions.
 
-## Decision
+### Decision
 
 | Test Type | Tests What | Speed | Dependency |
 |-----------|-----------|-------|------------|
@@ -17,7 +16,7 @@ drupal_version: "11.x"
 | **Kernel tests** | Database operations, entity integration | Medium (2-5s) | Database required |
 | **Functional tests** | UI forms, Media Library, display | Slow (10-30s) | Full Drupal bootstrap |
 
-## Pattern
+### Pattern
 
 Unit test for metadata extraction (12 lines):
 ```php
@@ -38,7 +37,13 @@ class CustomApiTest extends UnitTestCase {
   }
 
   protected function createPluginInstance(): CustomApi {
-    // Mock dependencies, create plugin instance
+    $entity_type_manager = $this->createMock(EntityTypeManagerInterface::class);
+    $entity_field_manager = $this->createMock(EntityFieldManagerInterface::class);
+    $field_type_manager = $this->createMock(FieldTypePluginManagerInterface::class);
+    $config_factory = $this->createMock(ConfigFactoryInterface::class);
+
+    return new CustomApi([], 'custom_api', ['id' => 'custom_api'],
+      $entity_type_manager, $entity_field_manager, $field_type_manager, $config_factory);
   }
 }
 ```
@@ -63,16 +68,22 @@ class CustomApiKernelTest extends EntityKernelTestBase {
 }
 ```
 
-## Common Mistakes
+### Common Mistakes
 
-- **Wrong**: Not mocking external services → **Right**: Mock HTTP client and API responses
-- **Wrong**: No test coverage for error conditions → **Right**: Test API failures, timeouts
-- **Wrong**: Only testing happy path → **Right**: Test validation failures, missing data
-- **Wrong**: Functional tests for logic → **Right**: Unit tests for logic, functional for UI
-- **Wrong**: No test for Media Library integration → **Right**: Test custom widgets in inline forms
+- Not mocking external services → Unit tests make real API calls, fail without network
+- No test coverage for error conditions → Plugin crashes when API unavailable
+- Only testing happy path → Bugs appear when validation fails, fields missing
+- Functional tests for logic → Slow test suite, wastes CI time
+- No test for Media Library integration → Custom widgets break selection UI
 
-## See Also
+**WHY:**
+- **Mock external dependencies**: Unit tests run in isolation; real HTTP calls make tests slow, flaky, and dependent on external services
+- **Error condition coverage**: APIs fail 1-5% of the time in production; untested error paths cause white screens
+- **Happy path bias**: Most bugs occur in edge cases (empty values, malformed URLs, missing metadata); testing only success cases misses 80% of issues
+- **Test at right level**: Unit tests for logic (fast feedback), kernel for entity operations (integration), functional for UI (user acceptance)
 
-- Previous: [Performance Optimization](performance-optimization.md)
-- Next: [Anti-Patterns](anti-patterns.md)
+### See Also
+
+- Previous: [Performance Optimization](index.md)
+- Next: [Anti-Patterns](index.md)
 - Reference: core/modules/media/tests/

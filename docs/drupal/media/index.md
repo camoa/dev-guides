@@ -1,11 +1,15 @@
 ---
-description: Media Types — custom media source plugins, metadata extraction, and third-party API integrations
+description: Drupal Media Types — custom media source plugins, metadata systems, oEmbed extensions, and third-party service integrations.
 ---
 
 # Media Types
 
-| I need to... | Guide |
-|-------------|-------|
+**Purpose**: Create custom media source plugins to integrate third-party services (APIs, platforms), extend oEmbed sources, manage metadata attributes, map fields, generate thumbnails, and configure display/form widgets.
+
+## I Need To...
+
+| Task | Guide |
+|------|-------|
 | Decide between core/contrib/custom media types | [Media Type Selection Strategy](media-type-selection-strategy.md) |
 | Choose the right base class for a custom plugin | [Base Class Selection](base-class-selection.md) |
 | Understand the media source architecture | [Architecture Overview](architecture-overview.md) |

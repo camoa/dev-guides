@@ -1,15 +1,14 @@
 ---
-description: Downloading, caching, and generating thumbnails for media entities
-drupal_version: "11.x"
+description: Providing thumbnails for Media Library display and media entity views.
 ---
 
 # Thumbnail Generation
 
-## When to Use
+### When to Use
 
-> Use thumbnail generation strategies when providing thumbnails for Media Library display and media entity views.
+Providing thumbnails for Media Library display and media entity views.
 
-## Decision
+### Decision
 
 | Media Type | Strategy | Implementation |
 |------------|----------|----------------|
@@ -19,7 +18,7 @@ drupal_version: "11.x"
 | Remote media without thumbnail | Use default icon | Provide default PNG in module/images/ |
 | Generated thumbnails (PDFs, videos) | Queue-based generation | Queue thumbnail generation, serve default until ready |
 
-## Pattern
+### Pattern
 
 Remote thumbnail with caching (OEmbed pattern, 12 lines):
 ```php
@@ -45,17 +44,23 @@ protected function downloadThumbnail(string $url): string {
 }
 ```
 
-## Common Mistakes
+### Common Mistakes
 
-- **Wrong**: Downloading thumbnails on every request → **Right**: Download once, cache by URL hash
-- **Wrong**: Not hashing URLs → **Right**: Hash with md5() to detect duplicates
-- **Wrong**: Storing in temp directory → **Right**: Use public:// for persistence
-- **Wrong**: No error handling → **Right**: Return NULL on failure for fallback icon
-- **Wrong**: Blocking requests for generation → **Right**: Queue-based generation for expensive operations
+- Downloading thumbnails on every request → Massive performance hit, bandwidth waste
+- Not hashing URLs → Can't detect duplicates, re-downloads same thumbnail
+- Storing in temp directory → Thumbnails deleted on cache clear, re-downloaded constantly
+- No error handling → Network failures crash thumbnail display
+- Blocking requests for generation → Long page loads waiting for thumbnail downloads
 
-## See Also
+**WHY:**
+- **Hashing prevents duplicates**: Multiple media items may reference same thumbnail URL; hashing detects this and reuses cached file
+- **Public storage persistence**: Temp storage gets cleared; thumbnails should persist like uploaded files
+- **Error handling**: Network requests fail; returning NULL allows fallback to default icon instead of white screen
+- **Queue-based generation**: Generating thumbnails (especially for PDFs/videos) is expensive; queueing prevents timeout issues
 
-- Previous: [Field Mapping](field-mapping.md)
-- Next: [Dependency Injection](dependency-injection.md)
+### See Also
+
+- Previous: [Field Mapping](index.md)
+- Next: [Dependency Injection](index.md)
 - Reference: core/modules/media/src/Plugin/media/Source/OEmbed.php (line 403-464)
 - Reference: https://www.drupal.org/project/media_thumbnails

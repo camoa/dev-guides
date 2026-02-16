@@ -1,19 +1,20 @@
 ---
-description: Full YAML config schema for image styles
-drupal_version: "11.x"
+description: Complete YAML schema for image.style.*.yml config files including all required fields and effect structure
 ---
 
 # Image Style Config Schema
 
 ## When to Use
 
-> Use this when writing or validating image.style.*.yml config files manually.
+> Use this when you need to write or validate image.style.*.yml config files manually.
 
-## Schema Definition
+## Schema Structure
 
 **Config entity type**: `image.style.*`
 
 **File location**: `config/sync/image.style.{machine_name}.yml`
+
+### Schema Definition
 
 From `core/modules/image/config/schema/image.schema.yml`:
 
@@ -41,23 +42,23 @@ image.style.*:
             type: image.effect.[%parent.id]  # Effect-specific config
 ```
 
-## Complete Config Example
+### Complete Config File Example
 
 ```yaml
 langcode: en
 status: true
 dependencies: { }
-name: thumbnail
-label: 'Thumbnail (100x100)'
+name: hero_large
+label: 'Hero Large (1920x800)'
 effects:
   1cfec298-8620-4749-b100-ccb6c4500779:
     uuid: 1cfec298-8620-4749-b100-ccb6c4500779
-    id: image_scale
+    id: image_scale_and_crop
     weight: 0
     data:
-      width: 100
-      height: 100
-      upscale: false
+      width: 1920
+      height: 800
+      anchor: center-center
   c4eb9942-2c9e-4a81-949f-6161a44b6559:
     uuid: c4eb9942-2c9e-4a81-949f-6161a44b6559
     id: image_convert_avif
@@ -66,7 +67,7 @@ effects:
       extension: webp
 ```
 
-## Key Properties
+### Key Properties
 
 | Property | Type | Required | Description |
 |---|---|---|---|
@@ -80,14 +81,14 @@ effects:
 
 ## Common Mistakes
 
-- **Wrong**: Missing UUID for effect → **Right**: Generate UUID for every effect (config import fails with schema validation error)
-- **Wrong**: Duplicate UUIDs across effects → **Right**: Unique UUID per effect (only first effect executes, silent failure on others)
-- **Wrong**: Wrong effect plugin ID → **Right**: Use valid plugin ID from core or contrib ("Plugin does not exist" error on style load)
-- **Wrong**: Omitting `data` key when effect requires config → **Right**: Always include data key with required properties (uses defaults, may not match expectations)
-- **Wrong**: Not setting weight correctly → **Right**: Set weights in execution order (effects execute in wrong order, e.g., crop before scale)
+- Missing UUID for effect → Config import fails with schema validation error
+- Duplicate UUIDs across effects → Only first effect executes, silent failure on others
+- Wrong effect plugin ID → "Plugin does not exist" error on style load
+- Omitting `data` key when effect requires config → Uses defaults, may not match expectations
+- Not setting weight correctly → Effects execute in wrong order (e.g., crop before scale)
 
 ## See Also
 
-- [Core Image Effects](core-image-effects.md)
-- [Creating Image Styles via Config](creating-styles-config.md)
+- [Core Image Effects](core-image-effects.md) (for effect-specific schemas)
+- [Creating Image Styles via Config](creating-styles-config.md) (for workflow)
 - Reference: core/modules/image/config/schema/image.schema.yml

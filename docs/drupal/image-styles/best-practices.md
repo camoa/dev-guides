@@ -1,24 +1,30 @@
 ---
-description: Follow naming conventions and performance patterns
-drupal_version: "11.x"
+description: Naming conventions, standard sizes, lazy loading strategies, and performance patterns for image style configuration and deployment
 ---
 
 # Best Practices & Patterns
 
 ## When to Use
 
-> Use this for guidance on naming conventions, standard sizes, performance optimization, and lazy loading patterns.
+> Use this when you need guidance on naming conventions, standard sizes, performance optimization, and lazy loading patterns.
 
 ## Naming Conventions
 
 **Image styles:**
 - **Pattern:** `{purpose}_{size_descriptor}` or `{context}_{dimensions}`
-- **Examples:** `thumbnail`, `hero_large`, `card_image_16x9`, `author_avatar`
+- **Examples:**
+  - `thumbnail` (generic, 100x100)
+  - `hero_large` (purpose + size)
+  - `card_image_16x9` (purpose + aspect ratio)
+  - `author_avatar` (purpose, implies square)
 - **Avoid:** Non-descriptive names like `style_1`, `new_style`, `test`
 
 **Responsive image styles:**
 - **Pattern:** `{context}_responsive` or just `{context}`
-- **Examples:** `hero`, `content_responsive`, `gallery_item`
+- **Examples:**
+  - `hero` (implies responsive)
+  - `content_responsive`
+  - `gallery_item`
 
 ## Standard Image Style Sizes
 
@@ -42,7 +48,7 @@ drupal_version: "11.x"
 
 ## Performance Patterns
 
-**1. Lazy loading strategy:**
+### 1. Lazy loading strategy
 
 | Image type | Loading attribute | Why |
 |---|---|---|
@@ -51,36 +57,51 @@ drupal_version: "11.x"
 | User avatars | `lazy` | Often numerous, non-critical |
 | Background images | N/A (CSS) | Use Intersection Observer if critical |
 
-**2. Derivative generation:**
+### 2. Derivative generation
+
 - **Lazy generation (default):** Derivatives created on first request. Good: no wasted processing. Bad: first-user delay.
 - **Pre-generation:** Generate derivatives via cron/script. Good: no user-facing delay. Bad: storage bloat if images unused.
 
-**3. Image style reuse:**
+### 3. CDN integration
+
+```php
+// Let CDN handle image derivatives
+$config['image.settings']['allow_insecure_derivatives'] = TRUE;
+$config['image.settings']['suppress_itok_output'] = TRUE;
+```
+Only if CDN provides security (signed URLs, origin restrictions).
+
+### 4. Image style reuse
+
 ```yaml
 # DON'T create near-duplicate styles
-image.style.content_large_1920: { width: 1920 }
-image.style.content_large_1900: { width: 1900 }
+image.style.content_large_1920:
+  effects: { width: 1920 }
+image.style.content_large_1900:
+  effects: { width: 1900 }
 
 # DO reuse with minor differences handled in CSS
-image.style.content_large: { width: 1920 }
+image.style.content_large:
+  effects: { width: 1920 }
 ```
 
 ## Breakpoint Alignment
 
-Align image breakpoints with CSS breakpoints:
+**Align image breakpoints with CSS breakpoints:**
 
 ```yaml
-# olivero.breakpoints.yml
+# olivero.breakpoints.yml (theme breakpoints)
 olivero.md:
   label: Medium
   mediaQuery: 'all and (min-width: 700px)'
 
-# Should match SCSS
+# Should match SCSS breakpoints
 $breakpoint-md: 700px;
 ```
 
 ## Config Organization
 
+**Module/theme structure:**
 ```
 my_theme/
 ├── config/
@@ -94,11 +115,12 @@ my_theme/
 
 ## Common Mistakes
 
-- **Wrong**: Not aligning image breakpoints with CSS → **Right**: Match breakpoints exactly (images switch at different viewport widths than layout)
-- **Wrong**: Creating too many image styles → **Right**: Keep to 5-10 styles (storage bloat, confusing UI, maintenance burden)
-- **Wrong**: Inconsistent naming → **Right**: Follow naming patterns (hard to remember, unclear purpose)
-- **Wrong**: Using eager loading everywhere → **Right**: Eager for above-fold only (wastes bandwidth, slower page loads)
-- **Wrong**: Not reusing image styles → **Right**: Reuse across contexts (duplication, config bloat)
+- Not aligning image breakpoints with CSS → Images switch at different viewport widths than layout
+- Creating too many image styles → Storage bloat, confusing UI, maintenance burden
+- Inconsistent naming → Hard to remember, unclear purpose
+- Using eager loading everywhere → Wastes bandwidth, slower page loads
+- Not reusing image styles → Duplication, config bloat
+- Generating derivatives for unused view modes → Wasted storage, processing
 
 ## See Also
 

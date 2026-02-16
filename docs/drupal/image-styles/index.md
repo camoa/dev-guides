@@ -1,11 +1,15 @@
 ---
-description: Drupal Image Styles & Responsive Images - Configuration-first approach to image optimization
+description: Image styles and responsive images — configuration-first approach to derivatives, effects, breakpoints, and modern format optimization.
 ---
 
-# Image Styles & Responsive Images
+# Image Styles
 
-| I need to... | Guide |
-|-------------|-------|
+**Philosophy**: Configuration over code. Image styles and responsive image styles are config entities defined via YAML. The preferred workflow is config management, export/import, and recipes.
+
+## I Need To...
+
+| Task | Guide |
+|------|-------|
 | Understand when to use image styles vs responsive images | [Image System Overview](image-overview.md) |
 | Know the full YAML config schema for image styles | [Image Style Config Schema](image-style-schema.md) |
 | Configure resize, scale, crop, or conversion effects | [Core Image Effects](core-image-effects.md) |
@@ -21,3 +25,4 @@ description: Drupal Image Styles & Responsive Images - Configuration-first appro
 | Avoid common mistakes | [Anti-Patterns & Common Mistakes](anti-patterns.md) |
 | Secure image derivatives and optimize performance | [Security & Performance](security-performance.md) |
 | Find key classes and interfaces | [Code Reference Map](code-reference-map.md) |
+| Check sources and version history | [Sources & Maintenance](sources-maintenance.md) |

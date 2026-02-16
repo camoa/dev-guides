@@ -1,15 +1,14 @@
 ---
-description: Decision tree for choosing core, contrib, or custom media types
-drupal_version: "11.x"
+description: Starting a media integration project and deciding whether to use core media types, contrib modules, or build a custom media source plugin.
 ---
 
 # Media Type Selection Strategy
 
-## When to Use
+### When to Use
 
-> Use this when starting a media integration project and deciding whether to use core media types, contrib modules, or build a custom media source plugin.
+Starting a media integration project and deciding whether to use core media types, contrib modules, or build a custom media source plugin.
 
-## Decision
+### Decision
 
 | If you need... | Use... | Why |
 |---|---|---|
@@ -21,7 +20,7 @@ drupal_version: "11.x"
 | Custom API (non-oEmbed) | Custom MediaSourceBase plugin | Full control, custom auth, specific metadata |
 | oEmbed service (TikTok, Spotify) | Custom OEmbed extension | Leverage core oEmbed, add custom validation |
 
-## Pattern
+### Pattern
 
 Decision tree flow:
 ```
@@ -36,14 +35,14 @@ Does service support oEmbed? → Create custom OEmbed extension
 Create custom MediaSourceBase plugin
 ```
 
-## Common Mistakes
+### Common Mistakes
 
-- **Wrong**: Using custom plugin when core type sufficient → **Right**: Check core types first
-- **Wrong**: Not checking contrib first → **Right**: Search drupal.org/project before building
-- **Wrong**: Extending wrong base class (File source for APIs) → **Right**: MediaSourceBase for APIs
-- **Wrong**: Building oEmbed integration from scratch → **Right**: Extend core OEmbed class
+- Using custom plugin when core type sufficient → Adds unnecessary maintenance burden
+- Not checking contrib first → Reinventing the wheel, missing community updates
+- Extending wrong base class → File source for APIs, MediaSourceBase for local files
+- Building oEmbed integration from scratch → Core provides OEmbed infrastructure for free
 
-## See Also
+### See Also
 
-- Next: [Base Class Selection](base-class-selection.md)
+- Next: [Base Class Selection](index.md)
 - Reference: https://www.drupal.org/docs/8/core/modules/media/creating-and-configuring-media-types

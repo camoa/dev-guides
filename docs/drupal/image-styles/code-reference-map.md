@@ -1,13 +1,12 @@
 ---
-description: Find key classes and interfaces
-drupal_version: "11.x"
+description: Complete index of core classes, interfaces, plugins, forms, and config files for image styles and responsive images
 ---
 
 # Code Reference Map
 
 ## When to Use
 
-> Use this to find the authoritative source code for image style and responsive image functionality.
+> Use this when you need to find the authoritative source code for image style and responsive image functionality.
 
 ## Core Entities
 
@@ -36,6 +35,7 @@ drupal_version: "11.x"
 | `ImageEffectInterface` | core/modules/image/src/ImageEffectInterface.php | Effect plugin interface |
 | `ImageEffectBase` | core/modules/image/src/ImageEffectBase.php | Non-configurable effect base |
 | `ConfigurableImageEffectBase` | core/modules/image/src/ConfigurableImageEffectBase.php | Configurable effect base |
+| `ImageEffectPluginCollection` | core/modules/image/src/ImageEffectPluginCollection.php | Effect collection |
 | `ImageEffectManager` | core/modules/image/src/ImageEffectManager.php | Effect plugin manager |
 
 ## Field Formatters
@@ -45,6 +45,16 @@ drupal_version: "11.x"
 | `image` | core/modules/image/src/Plugin/Field/FieldFormatter/ImageFormatter.php | Standard image formatter |
 | `image_url` | core/modules/image/src/Plugin/Field/FieldFormatter/ImageUrlFormatter.php | URL-only formatter |
 | `responsive_image` | core/modules/responsive_image/src/Plugin/Field/FieldFormatter/ResponsiveImageFormatter.php | Responsive image formatter |
+
+## Forms & UI
+
+| Class | Path | Purpose |
+|---|---|---|
+| `ImageStyleForm` | core/modules/image/src/Form/ImageStyleEditForm.php | Style edit form |
+| `ImageStyleAddForm` | core/modules/image/src/Form/ImageStyleAddForm.php | Style add form |
+| `ImageStyleDeleteForm` | core/modules/image/src/Form/ImageStyleDeleteForm.php | Style delete form |
+| `ImageStyleFlushForm` | core/modules/image/src/Form/ImageStyleFlushForm.php | Derivative flush form |
+| `ResponsiveImageStyleForm` | core/modules/responsive_image/src/ResponsiveImageStyleForm.php | Responsive style form |
 
 ## Storage & Manager
 
@@ -80,5 +90,6 @@ drupal_version: "11.x"
 
 ## See Also
 
+- All previous sections reference these source files
 - Reference: https://api.drupal.org/api/drupal/core!modules!image
 - Reference: https://api.drupal.org/api/drupal/core!modules!responsive_image

@@ -1,9 +1,8 @@
 ---
-description: Key classes and files in Layout Builder
-drupal_version: "11.x"
+description: Quick reference map of key Layout Builder classes, files, services, and common code patterns for programmatic use.
 ---
 
-# Code Reference Map
+## 19. Code Reference Map
 
 ### When to Use
 

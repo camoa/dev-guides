@@ -1,15 +1,14 @@
 ---
-description: Validating media source field values with custom constraints
-drupal_version: "11.x"
+description: Validating source field values before saving media entities (URL patterns, API connectivity, file types).
 ---
 
 # Validation Constraints
 
-## When to Use
+### When to Use
 
-> Use validation constraints when validating source field values before saving media entities (URL patterns, API connectivity, file types).
+Validating source field values before saving media entities (URL patterns, API connectivity, file types).
 
-## Decision
+### Decision
 
 | Validation Type | Constraint Approach | Example |
 |----------------|---------------------|---------|
@@ -18,7 +17,7 @@ drupal_version: "11.x"
 | File type validation | Built-in file extension constraint | Already handled by File source |
 | Value uniqueness | Unique field constraint | Prevent duplicate media items |
 
-## Pattern
+### Pattern
 
 Implementing validation constraint (3 files, ~15 lines total):
 
@@ -67,16 +66,22 @@ class CustomApiUrlConstraintValidator extends ConstraintValidator {
 }
 ```
 
-## Common Mistakes
+### Common Mistakes
 
-- **Wrong**: Not implementing `MediaSourceFieldConstraintsInterface` → **Right**: Implement interface for constraint discovery
-- **Wrong**: Expensive validation (API calls) → **Right**: Keep validation fast, queue expensive checks
-- **Wrong**: Not handling empty values → **Right**: Check for empty and skip validation
-- **Wrong**: Weak regex patterns → **Right**: Strong, security-focused regex
-- **Wrong**: No user feedback → **Right**: Clear violation messages with examples
+- Not implementing `MediaSourceFieldConstraintsInterface` → Constraint never applied
+- Expensive validation (API calls) → Slows form saves, times out
+- Not handling empty values → Validation error on optional fields
+- Weak regex patterns → Security risk, allows malicious URLs
+- No user feedback → Validation fails silently, confusing editors
 
-## See Also
+**WHY:**
+- **Interface required**: Drupal only applies constraints from plugins implementing this interface; missing it means validation skipped
+- **Performance matters**: Validation runs on every form submission; expensive checks (API calls) should be queued or cached
+- **Empty value handling**: Constraint validators receive empty values for optional fields; must check and skip validation
+- **Security-critical regex**: URL validation prevents injection attacks; weak patterns allow attackers to submit malicious URLs
 
-- Previous: [Dependency Injection](dependency-injection.md)
-- Next: [Display Configuration](display-configuration.md)
+### See Also
+
+- Previous: [Dependency Injection](index.md)
+- Next: [Display Configuration](index.md)
 - Reference: core/modules/media/src/MediaSourceFieldConstraintsInterface.php

@@ -1,9 +1,8 @@
 ---
-description: Default layouts vs per-entity overrides
-drupal_version: "11.x"
+description: Choosing between default layouts (config-based, shared) and per-entity overrides (content-based, individual).
 ---
 
-# Defaults vs Overrides
+## 9. Defaults vs Overrides
 
 ### When to Use
 

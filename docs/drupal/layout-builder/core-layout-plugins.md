@@ -1,9 +1,8 @@
 ---
-description: Core layout plugins available in Drupal
-drupal_version: "11.x"
+description: Reference for all core layout plugins — regions, settings, templates, and differences between layout_discovery and layout_builder layouts.
 ---
 
-# Core Layout Plugins
+## 5. Core Layout Plugins
 
 ### When to Use
 

@@ -1,13 +1,12 @@
 ---
-description: Decide between art direction and resolution switching
-drupal_version: "11.x"
+description: Choose between sizes attribute (resolution switching) and picture element (art direction) for responsive images with config examples
 ---
 
 # Art Direction vs Resolution Switching
 
 ## When to Use
 
-> Use resolution switching (sizes attribute) when you need the same crop at different resolutions. Use art direction (picture element) when you need different crops or aspect ratios per breakpoint.
+> Use this when you need to decide whether to use the sizes attribute (resolution switching) or distinct image styles per breakpoint (art direction).
 
 ## Decision
 
@@ -19,10 +18,11 @@ drupal_version: "11.x"
 | Same aspect ratio, automatic browser selection | Sizes attribute | Simpler config, browser optimizes based on viewport + DPR |
 | Show different focal points (face on mobile, full body on desktop) | Picture element (art direction) | Manual control over important content visibility |
 
-## Pattern - Resolution Switching
+## Pattern - Resolution Switching (Sizes Attribute)
 
 **When:** Same image crop, browser picks resolution based on viewport width and device pixel ratio.
 
+**Config:**
 ```yaml
 # responsive_image.styles.content.yml
 id: content
@@ -52,10 +52,11 @@ image_style_mappings:
      src="/styles/medium/image.jpg" alt="...">
 ```
 
-## Pattern - Art Direction
+## Pattern - Art Direction (Picture Element)
 
 **When:** Different crops/aspect ratios per breakpoint.
 
+**Config:**
 ```yaml
 # responsive_image.styles.hero.yml
 id: hero
@@ -91,28 +92,31 @@ image_style_mappings:
 
 **Format:** `(media-query) width, (media-query) width, default-width`
 
+**Examples:**
+
 ```yaml
-# Full viewport width
+# Full viewport width on all screens
 sizes: '100vw'
 
 # Fixed width on desktop, full width on mobile
 sizes: '(min-width: 1200px) 1200px, 100vw'
 
-# Sidebar layout (75% on desktop)
+# Sidebar layout (main content is 75% on desktop, full on mobile)
 sizes: '(min-width: 768px) 75vw, 100vw'
 
-# Fixed max with padding
+# Fixed max width with padding
 sizes: '(min-width: 1400px) 1200px, calc(100vw - 2rem)'
 ```
 
 ## Common Mistakes
 
-- **Wrong**: Using sizes attribute with 2x/3x multipliers → **Right**: Sizes only with 1x (invalid HTML, browser ignores sizes)
-- **Wrong**: Art direction when resolution switching suffices → **Right**: Use sizes for same-crop scenarios (storage bloat, maintenance overhead)
-- **Wrong**: Sizes attribute doesn't match CSS layout → **Right**: Match CSS exactly (browser picks wrong image, wasted bandwidth)
-- **Wrong**: Listing image styles in wrong order → **Right**: List largest to smallest (browser confused about which to use)
-- **Wrong**: Not providing fallback for `<picture>` → **Right**: Always include img fallback (broken images in old browsers)
-- **Wrong**: Sizes attribute missing default value → **Right**: Last value should have no media query
+- Using sizes attribute with 2x/3x multipliers → Invalid HTML, browser ignores sizes
+- Art direction when resolution switching suffices → Storage bloat, maintenance overhead
+- Sizes attribute doesn't match CSS layout → Browser picks wrong image, wasted bandwidth
+- Listing image styles in sizes_image_styles in wrong order → Browser confused about which to use
+- Not providing fallback for `<picture>` → Broken images in old browsers
+- Using art direction for minor crop differences → Over-engineering, user won't notice
+- Sizes attribute missing default value → Last value should have no media query
 
 ## See Also
 

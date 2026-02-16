@@ -1,54 +1,59 @@
 ---
-description: Define breakpoints in your theme
-drupal_version: "11.x"
+description: Define breakpoints in theme/module YAML files with media queries, weights, and multipliers for responsive image mappings
 ---
 
 # Breakpoint Configuration
 
 ## When to Use
 
-> Use this when defining breakpoints in your theme or module for responsive image style mappings.
+> Use this when you need to define breakpoints in your theme or module for responsive image style mappings.
 
-## Pattern
+## Steps
 
-1. **Create breakpoint definition file** at `{theme_or_module_name}.breakpoints.yml`
+### 1. Create breakpoint definition file
 
-   ```yaml
-   # olivero.breakpoints.yml
-   olivero.sm:
-     label: Small
-     mediaQuery: 'all and (min-width: 500px)'
-     weight: 0
-     multipliers:
-       - 1x
-   olivero.md:
-     label: Medium
-     mediaQuery: 'all and (min-width: 700px)'
-     weight: 1
-     multipliers:
-       - 1x
-   olivero.lg:
-     label: Large
-     mediaQuery: 'all and (min-width: 1000px)'
-     weight: 2
-     multipliers:
-       - 1x
-       - 2x
-   ```
+At `{theme_or_module_name}.breakpoints.yml` in theme/module root
 
-2. **Clear cache**
+```yaml
+# olivero.breakpoints.yml
+olivero.sm:
+  label: Small
+  mediaQuery: 'all and (min-width: 500px)'
+  weight: 0
+  multipliers:
+    - 1x
+olivero.md:
+  label: Medium
+  mediaQuery: 'all and (min-width: 700px)'
+  weight: 1
+  multipliers:
+    - 1x
+olivero.lg:
+  label: Large
+  mediaQuery: 'all and (min-width: 1000px)'
+  weight: 2
+  multipliers:
+    - 1x
+    - 2x
+```
 
-   ```bash
-   drush cr
-   ```
+### 2. Clear cache to register breakpoints
 
-3. **Verify**
+```bash
+drush cr
+```
 
-   ```bash
-   drush php-eval "print_r(\Drupal::service('breakpoint.manager')->getGroups());"
-   ```
+### 3. Verify breakpoints registered
 
-## Schema
+```bash
+# List all breakpoint groups
+drush config:get breakpoint.breakpoint.*
+
+# Check programmatically
+drush php-eval "print_r(\Drupal::service('breakpoint.manager')->getGroups());"
+```
+
+## Breakpoint Schema
 
 | Property | Type | Required | Description |
 |---|---|---|---|
@@ -58,7 +63,36 @@ drupal_version: "11.x"
 | `weight` | integer | Yes | Controls order (lower = higher priority in sorting) |
 | `multipliers` | sequence | Yes | List of pixel densities: `['1x']`, `['1x', '2x']`, etc. |
 
-## Decision
+## Media Query Patterns
+
+**Viewport width (most common):**
+```yaml
+mediaQuery: 'all and (min-width: 768px)'
+```
+
+**Viewport sizing (no media query, for sizes attribute):**
+```yaml
+mediaQuery: ''
+```
+
+**Max-width (less common, mobile-first is preferred):**
+```yaml
+mediaQuery: 'all and (max-width: 1199px)'
+```
+
+**Orientation:**
+```yaml
+mediaQuery: 'all and (orientation: landscape)'
+```
+
+**Retina/HiDPI:**
+```yaml
+mediaQuery: 'all and (min-resolution: 192dpi)'
+multipliers:
+  - 2x
+```
+
+## Decision Points
 
 | If you need... | Use... | Why |
 |---|---|---|
@@ -69,11 +103,12 @@ drupal_version: "11.x"
 
 ## Common Mistakes
 
-- **Wrong**: Using max-width instead of min-width → **Right**: Use min-width (desktop-first approach, harder to maintain, conflicts with mobile-first CSS)
-- **Wrong**: Breakpoints don't match CSS breakpoints → **Right**: Align with theme CSS (images switch at different points than layout, jarring UX)
-- **Wrong**: Missing 1x multiplier → **Right**: Always include 1x (no images generated for standard DPI screens)
-- **Wrong**: Too many breakpoints → **Right**: Use 3-5 breakpoints maximum (excessive derivatives, storage bloat, marginal UX gains)
-- **Wrong**: Wrong weight ordering → **Right**: Set weights in ascending order (breakpoints applied in unexpected order, wrong image selected)
+- Using max-width instead of min-width → Desktop-first approach, harder to maintain, conflicts with mobile-first CSS
+- Breakpoints don't match CSS breakpoints → Images switch at different points than layout, jarring UX
+- Missing 1x multiplier → No images generated for standard DPI screens
+- Too many breakpoints → Excessive derivatives, storage bloat, marginal UX gains
+- Wrong weight ordering → Breakpoints applied in unexpected order, wrong image selected
+- Forgetting to clear cache after changes → Old breakpoint definitions cached, changes ignored
 
 ## See Also
 

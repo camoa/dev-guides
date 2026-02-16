@@ -1,15 +1,14 @@
 ---
-description: Common mistakes and anti-patterns to avoid in media source plugins
-drupal_version: "11.x"
+description: Avoiding common mistakes that lead to maintenance problems, security issues, or performance degradation.
 ---
 
 # Anti-Patterns
 
-## When to Use
+### When to Use
 
-> Use this guide to avoid common mistakes that lead to maintenance problems, security issues, or performance degradation.
+Avoiding common mistakes that lead to maintenance problems, security issues, or performance degradation.
 
-## Decision
+### Decision
 
 | Anti-Pattern | Why It's Wrong | Correct Approach |
 |--------------|----------------|------------------|
@@ -19,7 +18,7 @@ drupal_version: "11.x"
 | Weak URL validation | SSRF attacks, security breach | Whitelist domains, validate scheme |
 | Synchronous thumbnail downloads | Page timeouts, poor UX | Queue-based generation |
 
-## Pattern
+### Pattern
 
 **WRONG - Static service calls:**
 ```php
@@ -85,16 +84,25 @@ if ($host !== 'api.example.com') return NULL; // ✅ Exact domain match
 if (parse_url($url, PHP_URL_SCHEME) !== 'https') return NULL; // ✅ HTTPS only
 ```
 
-## Common Mistakes
+### Common Mistakes
 
-- **Wrong**: Not implementing default_name → **Right**: Return title/name for automatic naming
-- **Wrong**: No error handling on HTTP requests → **Right**: Catch exceptions, return NULL
-- **Wrong**: Caching without tags → **Right**: Tag with media ID for targeted invalidation
-- **Wrong**: Hardcoding API credentials → **Right**: Use config or key module
-- **Wrong**: Not calling parent methods → **Right**: Call parent for core functionality
+- **Not implementing default_name** → Users see "Unsaved media", poor UX
+  - **WHY**: Media entity uses default_name for automatic naming; without it, entity label is empty until manually set
 
-## See Also
+- **No error handling on HTTP requests** → White screens when API down
+  - **WHY**: Network requests fail unpredictably; exceptions bubble up and crash pages unless caught
 
-- Security: [Security Best Practices](security-best-practices.md)
-- Performance: [Performance Optimization](performance-optimization.md)
+- **Caching without tags** → Stale content, can't invalidate selectively
+  - **WHY**: Cache tags enable targeted invalidation; without them, must flush entire cache bin to update one item
+
+- **Hardcoding API credentials** → Security breach when code leaked
+  - **WHY**: Code is visible in Git history, deployment logs, and to all developers; credentials must be in config or key storage
+
+- **Not calling parent methods** → Missing core functionality
+  - **WHY**: Parent classes provide essential features (OEmbed thumbnails, File validation); not calling parent loses these
+
+### See Also
+
 - Reference: All previous sections for correct patterns
+- Security: [Security Best Practices](index.md)
+- Performance: [Performance Optimization](index.md)

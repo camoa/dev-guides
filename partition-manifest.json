@@ -54,9 +54,9 @@
     "guides_extracted": 12
   },
   "drupal/media": {
-    "source_hash": "a73b189a65e1f1f205c83732ecc4849ac3ac4fd13c45d2c1edf0cd5c3a98f031",
-    "partitioned": "2026-02-12",
-    "partitioned_by": "camoa",
+    "source_hash": "8fc3a7b3b278b1088e63755fc404d1304bb39b26818af773cd7bed89182568ae",
+    "partitioned": "2026-02-16",
+    "partitioned_by": "Carlos Ospina",
     "guides_extracted": 15
   },
   "drupal/migration": {
@@ -102,16 +102,16 @@
     "guides_extracted": 16
   },
   "drupal/image-styles": {
-    "source_hash": "fa3638e07edf6c113a86a2b4bfb9c40a7cd66ad63517b5709589094206069fa4",
-    "partitioned": "2026-02-14",
-    "partitioned_by": "camoa",
-    "guides_extracted": 15
+    "source_hash": "0b8c1247d9638956e51f1f139e71d17d77fb7799dcc11097583052fca6da6e2d",
+    "partitioned": "2026-02-16",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 16
   },
   "drupal/layout-builder": {
-    "source_hash": "88cda0ac6386d16eab0568b6dddedd14f72bfa02b1eaf8dae658ab8eafdbe8aa",
-    "partitioned": "2026-02-14",
+    "source_hash": "2485467d61dd7f5b868d7da41ad5b5f10a7d60d2ee058136e1f825e8ac9dc7fe",
+    "partitioned": "2026-02-16",
     "partitioned_by": "camoa",
-    "guides_extracted": 20
+    "guides_extracted": 24
   },
   "drupal/views": {
     "source_hash": "8550aeb22ec9be19efd8941e758ed64d0bf15c0c22eff57193e58e05c8a266f9",
@@ -250,5 +250,11 @@
     "partitioned": "2026-02-14",
     "partitioned_by": "camoa",
     "guides_extracted": 22
+  },
+  "drupal/media-system": {
+    "source_hash": "2fd4b1d18e03edf803bc59099afdb702bf85694ddb81e10b99ed3fa36cea2bf8",
+    "partitioned": "2026-02-16",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 21
   }
 }

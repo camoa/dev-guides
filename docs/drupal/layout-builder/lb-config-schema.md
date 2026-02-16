@@ -1,9 +1,8 @@
 ---
-description: Layout Builder YAML configuration structure and schema
-drupal_version: "11.x"
+description: Complete Layout Builder configuration schema — sections, components, inline blocks, field blocks, and YAML structure.
 ---
 
-# Layout Builder Configuration Schema
+## 3. Layout Builder Configuration Schema
 
 ### When to Use
 

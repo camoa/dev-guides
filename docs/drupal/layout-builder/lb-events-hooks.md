@@ -1,9 +1,8 @@
 ---
-description: Layout Builder events and hooks
-drupal_version: "11.x"
+description: Layout Builder events and hooks — SectionComponentBuildRenderArrayEvent, PrepareLayoutEvent, and alter hooks for rendering and block control.
 ---
 
-# Layout Builder Events & Hooks
+## 13. Layout Builder Events & Hooks
 
 ### When to Use
 

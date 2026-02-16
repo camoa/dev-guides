@@ -1,15 +1,14 @@
 ---
-description: Caching, queuing, and optimization strategies for media source plugins
-drupal_version: "11.x"
+description: Media source plugin causes slow page loads, high API usage, or database performance issues.
 ---
 
 # Performance Optimization
 
-## When to Use
+### When to Use
 
-> Use these optimizations when media source plugin causes slow page loads, high API usage, or database performance issues.
+Media source plugin causes slow page loads, high API usage, or database performance issues.
 
-## Decision
+### Decision
 
 | Performance Issue | Solution | Impact |
 |-------------------|----------|--------|
@@ -19,7 +18,7 @@ drupal_version: "11.x"
 | **Large metadata responses** | Store in field map, avoid fetching on display | Reduces API calls by 90%+ |
 | **Slow validation** | Move expensive checks to queue, validate basic format only | Fast form submissions |
 
-## Pattern
+### Pattern
 
 Caching API responses with tags (10 lines):
 ```php
@@ -63,18 +62,25 @@ public function getMetadata(MediaInterface $media, $attribute_name): mixed {
 }
 ```
 
-## Common Mistakes
+### Common Mistakes
 
-- **Wrong**: No caching → **Right**: Cache with 1-hour minimum TTL
-- **Wrong**: Cache without tags → **Right**: Tag with media ID for invalidation
-- **Wrong**: Synchronous thumbnail downloads → **Right**: Queue-based generation
-- **Wrong**: Fetching all metadata when only one needed → **Right**: Lazy-load specific attributes
-- **Wrong**: Short cache TTL → **Right**: 1-24 hour TTL based on update frequency
+- No caching → Every display hits API, rate limits exceeded quickly
+- Cache without tags → Can't invalidate when content changes, shows stale data
+- Synchronous thumbnail downloads → Page loads wait for network I/O, timeouts common
+- Fetching all metadata when only one needed → Wastes bandwidth, slows responses
+- Short cache TTL → Cache misses too frequent, negates performance benefits
 
-## See Also
+**WHY these matter (performance reasoning):**
+- **Caching is not optional**: APIs have rate limits (Instagram: 200/hour, Twitter: 300/15min); without caching, popular media items exhaust limits quickly
+- **Cache tags enable invalidation**: Without tags, clearing cache requires flushing entire cache bin, impacting unrelated content
+- **Queue-based processing**: Network operations (downloading thumbnails) are unpredictable; queuing prevents user-facing timeouts
+- **Lazy loading**: Fetching all metadata eagerly wastes 80%+ of bandwidth; fetch only what's displayed
+- **TTL tuning**: Too short (< 5min) causes frequent cache misses; too long (> 24hr) shows stale data when API content updates
 
-- Previous: [Security Best Practices](security-best-practices.md)
-- Next: [Testing Strategies](testing-strategies.md)
+### See Also
+
+- Previous: [Security Best Practices](index.md)
+- Next: [Testing Strategies](index.md)
 - Reference: https://www.tutorials24x7.com/drupal/optimizing-drupal-website-performance-best-practices-for-2026
 - Reference: https://pantheon.io/learning-center/drupal/caching
 - Reference: https://www.drupal.org/project/media_thumbnails

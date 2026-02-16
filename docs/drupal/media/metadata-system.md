@@ -1,15 +1,14 @@
 ---
-description: Defining and extracting metadata attributes from media sources
-drupal_version: "11.x"
+description: Defining what information a media source can provide and implementing the extraction logic.
 ---
 
 # Metadata System
 
-## When to Use
+### When to Use
 
-> Use metadata attributes when defining what information a media source can provide and implementing the extraction logic for searchable, displayable data.
+Defining what information a media source can provide and implementing the extraction logic.
 
-## Decision
+### Decision
 
 | Metadata Type | Example Attributes | Field Mapping Use |
 |---------------|-------------------|-------------------|
@@ -18,7 +17,7 @@ drupal_version: "11.x"
 | **Technical** | width, height, duration, filesize | Map for filtering/sorting in views |
 | **Provider-specific** | shortcode (Instagram), tweet_id (Twitter) | Use programmatically, rarely map |
 
-## Pattern
+### Pattern
 
 Complete metadata implementation (10 lines):
 ```php
@@ -45,16 +44,21 @@ public function getMetadata(MediaInterface $media, $attribute_name): mixed {
 }
 ```
 
-## Common Mistakes
+### Common Mistakes
 
-- **Wrong**: Not defining attributes in `getMetadataAttributes()` → **Right**: Define all attributes for field mapping UI
-- **Wrong**: Returning arrays instead of scalar values → **Right**: Return strings/numbers for field mapping
-- **Wrong**: Expensive operations without caching → **Right**: Cache metadata fetches
-- **Wrong**: Not handling missing data → **Right**: Return NULL instead of throwing exceptions
-- **Wrong**: Forgetting parent fallback → **Right**: Call parent::getMetadata() in default case
+- Not defining attributes in `getMetadataAttributes()` → Field mapping UI won't show them
+- Returning arrays instead of scalar values → Field mapping expects strings/numbers
+- Expensive operations without caching → Metadata fetched on every display/save
+- Not handling missing data → NULL returns better than exceptions
+- Forgetting parent fallback → Core metadata like default_name missing
 
-## See Also
+**WHY:**
+- **getMetadataAttributes() defines UI**: Field mappers see this list when configuring media types; missing attributes can't be mapped
+- **Caching is critical**: Metadata is fetched during entity saves, displays, and field mapping; uncached API calls create performance bottlenecks
+- **Graceful failures**: Third-party APIs fail; returning NULL prevents crashes and allows fallback to default values
 
-- Previous: [Extending OEmbed Sources](extending-oembed-sources.md)
-- Next: [Field Mapping](field-mapping.md)
+### See Also
+
+- Previous: [Extending OEmbed Sources](index.md)
+- Next: [Field Mapping](index.md)
 - Reference: core/modules/media/src/MediaSourceInterface.php (line 68-95)

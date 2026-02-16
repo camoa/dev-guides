@@ -1,9 +1,8 @@
 ---
-description: Theming Layout Builder admin UI and frontend
-drupal_version: "11.x"
+description: Styling Layout Builder output — overriding layout templates, Bootstrap grid integration, admin UI theming, and template suggestions.
 ---
 
-# Theming Layout Builder
+## 15. Theming Layout Builder
 
 ### When to Use
 

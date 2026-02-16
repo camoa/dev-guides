@@ -1,72 +1,83 @@
 ---
-description: Export image styles or create a recipe
-drupal_version: "11.x"
+description: Export image styles for version control and create distribution recipes with config dependencies and import strategies
 ---
 
 # Config Export & Recipes
 
 ## When to Use
 
-> Use this when exporting image styles for version control or creating a recipe to distribute image styles as reusable config.
+> Use this when you need to export image styles for version control or create a recipe to distribute image styles as reusable config.
 
-## Pattern - Config Export
+## Steps - Config Export
 
-1. **Export specific image style**
+### 1. Export specific image style
 
-   ```bash
-   drush config:export image.style.large --destination=/tmp/config
-   # or all: drush config:export --destination=config/sync
-   ```
+```bash
+# View single style config
+drush config:get image.style.large
 
-2. **Export for module/theme distribution**
+# Full config export (includes all image styles)
+drush config:export
+```
 
-   ```bash
-   cp config/sync/image.style.hero_large.yml modules/custom/my_module/config/install/
-   sed -i '1d' modules/custom/my_module/config/install/image.style.hero_large.yml  # Remove UUID
-   ```
+### 2. Export for module/theme distribution
 
-3. **Export responsive image styles with dependencies**
+```bash
+# Copy to module's config/install
+cp config/sync/image.style.hero_large.yml modules/custom/my_module/config/install/
 
-   ```bash
-   drush config:export responsive_image.styles.hero
-   drush config:export image.style.hero_small
-   drush config:export image.style.hero_medium
-   drush config:export image.style.hero_large
-   ```
+# Remove UUID from top of file (required for install config)
+sed -i '1d' modules/custom/my_module/config/install/image.style.hero_large.yml
+```
 
-## Pattern - Creating a Recipe
+### 3. Export responsive image styles with dependencies
 
-1. **Create recipe directory structure**
+Responsive image styles depend on image styles. Export both:
 
-   ```
-   recipes/my_images/
-   ├── recipe.yml
-   └── config/
-       ├── image.style.hero_large.yml
-       ├── image.style.hero_medium.yml
-       └── responsive_image.styles.hero.yml
-   ```
+```bash
+# Export responsive style
+drush config:export responsive_image.styles.hero
 
-2. **Create recipe.yml**
+# Export all referenced image styles
+drush config:export image.style.hero_small
+drush config:export image.style.hero_medium
+drush config:export image.style.hero_large
+```
 
-   ```yaml
-   name: 'Hero Image Styles'
-   description: 'Provides hero image styles and responsive variants.'
-   type: 'Image styles'
-   install:
-     - responsive_image
-   config:
-     strict: false
-     import:
-       image: '*'
-       responsive_image: '*'
-   ```
+## Steps - Creating a Recipe
 
-3. **Apply recipe**
+### 1. Create recipe directory structure
 
-   ```bash
-   drush recipe recipes/my_images
-   ```
+```
+recipes/my_images/
+├── recipe.yml
+└── config/
+    ├── image.style.hero_large.yml
+    ├── image.style.hero_medium.yml
+    └── responsive_image.styles.hero.yml
+```
+
+### 2. Create recipe.yml
+
+```yaml
+name: 'Hero Image Styles'
+description: 'Provides hero image styles and responsive variants.'
+type: 'Image styles'
+install:
+  - responsive_image
+config:
+  strict: false
+  import:
+    image: '*'
+    responsive_image: '*'
+```
+
+### 3. Apply recipe
+
+```bash
+# Apply recipe to site
+drush recipe recipes/my_images
+```
 
 ## Recipe Config Options
 
@@ -79,7 +90,7 @@ drupal_version: "11.x"
 
 ## Config Dependencies
 
-Always declare dependencies in responsive image style config:
+**Always declare dependencies** in responsive image style config:
 
 ```yaml
 # responsive_image.styles.hero.yml
@@ -94,11 +105,12 @@ dependencies:
 
 ## Common Mistakes
 
-- **Wrong**: Exporting config with UUID for module distribution → **Right**: Remove UUID line from install config (config import fails, UUID mismatch errors)
-- **Wrong**: Not declaring dependencies in responsive image styles → **Right**: Declare all config dependencies (silent breakage when referenced style deleted)
-- **Wrong**: Using `strict: true` in recipe meant for updates → **Right**: Use `strict: false` for updates (fails on existing sites)
-- **Wrong**: Forgetting to install responsive_image module in recipe → **Right**: Add to install list (config import fails, module not found)
-- **Wrong**: Exporting only responsive style without image styles → **Right**: Export all dependencies (broken config, missing dependencies)
+- Exporting config with UUID for module distribution → Config import fails, UUID mismatch errors
+- Not declaring dependencies in responsive image styles → Silent breakage when referenced style deleted
+- Using `strict: true` in recipe meant for updates → Fails on existing sites, should use `strict: false`
+- Forgetting to install responsive_image module in recipe → Config import fails, module not found
+- Exporting only responsive style without image styles → Broken config, missing dependencies
+- Not removing site-specific values from exported config → UUID conflicts, unexpected site references
 
 ## See Also
 

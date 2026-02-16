@@ -1,9 +1,8 @@
 ---
-description: Placing and configuring blocks in layouts
-drupal_version: "11.x"
+description: How to add blocks to Layout Builder sections programmatically — creating components, setting regions, and choosing block plugins.
 ---
 
-# Block Placement in Layouts
+## 6. Block Placement in Layouts
 
 ### When to Use
 

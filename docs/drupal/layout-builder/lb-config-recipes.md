@@ -1,9 +1,8 @@
 ---
-description: Exporting and deploying Layout Builder configuration
-drupal_version: "11.x"
+description: Exporting, deploying, and packaging Layout Builder configuration with config sync and Drupal recipes.
 ---
 
-# Configuration Export & Recipes
+## 14. Configuration Export & Recipes
 
 ### When to Use
 

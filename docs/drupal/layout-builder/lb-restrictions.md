@@ -1,9 +1,8 @@
 ---
-description: Restricting which blocks can be added to layouts
-drupal_version: "11.x"
+description: Limiting which blocks, layouts, and sections editors can use in Layout Builder for content governance.
 ---
 
-# Layout Builder Restrictions
+## 10. Layout Builder Restrictions
 
 ### When to Use
 

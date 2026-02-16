@@ -1,9 +1,8 @@
 ---
-description: Choosing between inline and reusable blocks
-drupal_version: "11.x"
+description: Deciding between non-reusable inline blocks and reusable block content entities in Layout Builder.
 ---
 
-# Inline Blocks vs Reusable Blocks
+## 7. Inline Blocks vs Reusable Blocks
 
 ### When to Use
 

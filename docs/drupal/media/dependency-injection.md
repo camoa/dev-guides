@@ -1,15 +1,14 @@
 ---
-description: Injecting services into media source plugins for HTTP, logging, caching
-drupal_version: "11.x"
+description: Media source plugin needs services like HTTP client, logger, cache, file system, or custom services.
 ---
 
 # Dependency Injection
 
-## When to Use
+### When to Use
 
-> Use dependency injection when media source plugin needs services like HTTP client, logger, cache, file system, or custom services.
+Media source plugin needs services like HTTP client, logger, cache, file system, or custom services.
 
-## Decision
+### Decision
 
 | Service | Use When | Container Service ID |
 |---------|----------|---------------------|
@@ -20,7 +19,7 @@ drupal_version: "11.x"
 | **token** | Directory paths with tokens | `token` |
 | Custom service | Module-specific logic | `yourmodule.service_name` |
 
-## Pattern
+### Pattern
 
 Service injection in plugin (15 lines):
 ```php
@@ -66,17 +65,22 @@ class CustomApi extends MediaSourceBase {
 }
 ```
 
-## Common Mistakes
+### Common Mistakes
 
-- **Wrong**: Using `\Drupal::service()` in plugins → **Right**: Inject via constructor
-- **Wrong**: Not calling parent constructor → **Right**: Call parent with base services
-- **Wrong**: Forgetting `create()` method → **Right**: Implement static factory method
-- **Wrong**: Wrong parent constructor signature → **Right**: Match MediaSourceBase signature
-- **Wrong**: Injecting unnecessary services → **Right**: Only inject what's needed
+- Using `\Drupal::service()` in plugins → Breaks testability, violates DI principles
+- Not calling parent constructor → Missing base services, plugin breaks
+- Forgetting `create()` method → Services not injected, constructor fails
+- Wrong parent constructor signature → Parameter order mismatches cause errors
+- Injecting unnecessary services → Adds complexity, slows instantiation
 
-## See Also
+**WHY:**
+- **DI over static calls**: `\Drupal::service()` creates global dependencies; DI enables unit testing with mocked services
+- **Parent constructor**: MediaSourceBase requires 4 core services; not calling parent means these aren't initialized
+- **create() is factory**: Plugins instantiated via static factory; forgetting this means services never injected
 
-- Previous: [Thumbnail Generation](thumbnail-generation.md)
-- Next: [Validation Constraints](validation-constraints.md)
+### See Also
+
+- Previous: [Thumbnail Generation](index.md)
+- Next: [Validation Constraints](index.md)
 - Reference: https://www.drupal.org/docs/drupal-apis/services-and-dependency-injection/dependency-injection-in-plugin-block
 - Reference: https://drupalize.me/topic/dependency-injection

@@ -1,15 +1,14 @@
 ---
-description: Media source plugin architecture and how it fits into Drupal's plugin system
-drupal_version: "11.x"
+description: Understanding how media source plugins fit into Drupal's entity and plugin systems before implementing custom functionality.
 ---
 
 # Architecture Overview
 
-## When to Use
+### When to Use
 
-> Use this when understanding how media source plugins fit into Drupal's entity and plugin systems before implementing custom functionality.
+Understanding how media source plugins fit into Drupal's entity and plugin systems before implementing custom functionality.
 
-## Decision
+### Decision
 
 | Component | Purpose | Key File |
 |-----------|---------|----------|
@@ -19,7 +18,7 @@ drupal_version: "11.x"
 | **Media Entity** | Content entity storing metadata and source field | core/modules/media/src/Entity/Media.php |
 | **Media Type** | Bundle configuration linking to source plugin | core/modules/media/src/Entity/MediaType.php |
 
-## Pattern
+### Pattern
 
 Class hierarchy and plugin structure:
 ```
@@ -39,15 +38,15 @@ Plugin Discovery Flow:
 5. Services injected via constructor
 ```
 
-## Common Mistakes
+### Common Mistakes
 
-- **Wrong**: Not implementing MediaSourceInterface contract → **Right**: Implement all required methods
-- **Wrong**: Skipping plugin attribute → **Right**: Add #[MediaSource] attribute for discovery
-- **Wrong**: Hardcoding service access → **Right**: Use DI, not \Drupal::service()
-- **Wrong**: Misunderstanding field ownership → **Right**: Media type owns fields, source defines requirements
+- Not implementing MediaSourceInterface contract → Missing required methods causes fatal errors
+- Skipping plugin attribute → Plugin not discovered by manager
+- Hardcoding service access → Use DI, not \Drupal::service() in plugins
+- Misunderstanding field ownership → Media type owns fields, source defines requirements
 
-## See Also
+### See Also
 
-- Previous: [Base Class Selection](base-class-selection.md)
-- Next: [Custom Media Source Plugin](custom-media-source-plugin.md)
+- Previous: [Base Class Selection](index.md)
+- Next: [Custom Media Source Plugin](index.md)
 - Reference: core/modules/media/src/MediaSourceInterface.php

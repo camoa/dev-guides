@@ -1,9 +1,8 @@
 ---
-description: Creating custom layout plugins
-drupal_version: "11.x"
+description: Creating custom layout plugins for Layout Builder — layouts.yml, Twig templates, libraries, and registration.
 ---
 
-# Custom Layout Plugins
+## 12. Custom Layout Plugins
 
 ### When to Use
 
@@ -93,7 +92,7 @@ When core layouts don't provide the regions or structure you need, or when you w
 - **Hardcoding layout classes** → Use `attributes.addClass()` in template so contrib modules can alter classes
 - **Not checking for empty regions** → Use `{% if content.region %}` to avoid rendering empty region markup
 - **Missing library attachment** → Layout-specific CSS won't load without library defined and attached
-- **Using underscores in layout ID** → Use hyphens: `custom-hero` not `custom_hero` (though both work, hyphens conventional)
+- **Inconsistent layout ID naming** → Follow core convention: use underscores (`custom_hero`) matching core patterns like `layout_twocol_section`, `layout_onecol`
 - **Not providing category** → Layouts without category appear in "Unknown" group. Provide category for organization
 
 ### See Also
