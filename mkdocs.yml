@@ -895,6 +895,28 @@ plugins:
           - development/tdd-spec-driven/three-laws-tdd.md: "Robert C. Martin's three laws of TDD and the rapid test-first discipline cycle"
           - development/tdd-spec-driven/unit-testing-fundamentals.md: "FIRST principles for unit tests and characteristics of good unit tests"
           - development/tdd-spec-driven/writing-specs.md: "How to structure specifications with behavior, acceptance criteria, edge cases, and constraints"
+        "AI Tooling":
+          - ai-tooling/index.md: "AI tooling guides — MCP servers, AI agent integrations, and design-to-code workflows"
+          - ai-tooling/figma-mcp/index.md: "Figma MCP Server — design-to-code AI workflows for Claude Code, VS Code, Cursor, and Windsurf"
+          - ai-tooling/figma-mcp/figma-mcp-overview.md: "Figma MCP overview — remote vs desktop server, tool types, when to use each"
+          - ai-tooling/figma-mcp/remote-server-setup.md: "Remote Figma MCP server setup for Claude Code, VS Code, Cursor, and Windsurf"
+          - ai-tooling/figma-mcp/desktop-server-setup.md: "Desktop Figma MCP server setup for selection-based design-to-code workflow"
+          - ai-tooling/figma-mcp/claude-code-plugin.md: "Claude Code Figma plugin — one-command install with bundled skills"
+          - ai-tooling/figma-mcp/available-tools-reference.md: "All 13 Figma MCP tools — parameters, return values, example prompts, and gotchas"
+          - ai-tooling/figma-mcp/design-context-extraction.md: "Design context extraction — get_design_context for structured layout and component data"
+          - ai-tooling/figma-mcp/design-tokens-and-variables.md: "Design tokens and variables — get_variable_defs for token-aware code generation"
+          - ai-tooling/figma-mcp/code-connect-integration.md: "Code Connect integration — map Figma components to real codebase implementations"
+          - ai-tooling/figma-mcp/screenshots-and-metadata.md: "Screenshots and metadata — visual reference and layer navigation for large frames"
+          - ai-tooling/figma-mcp/figjam-and-diagram-tools.md: "FigJam and diagram tools — extract diagrams and generate Mermaid-based FigJam content"
+          - ai-tooling/figma-mcp/design-system-rules.md: "Design system rules — generate persistent agent rules for design system alignment"
+          - ai-tooling/figma-mcp/selection-vs-link-workflows.md: "Selection vs link workflows — choosing how to provide design context to AI agents"
+          - ai-tooling/figma-mcp/prompting-strategies.md: "Prompting strategies — framework targeting, component reuse, and token-aware generation"
+          - ai-tooling/figma-mcp/figma-file-best-practices.md: "Figma file best practices — structure, naming, variables, and Auto Layout for AI generation"
+          - ai-tooling/figma-mcp/custom-agent-rules.md: "Custom agent rules — persistent workflow and constraint rules for consistent AI output"
+          - ai-tooling/figma-mcp/rate-limits-and-access-tiers.md: "Rate limits and access tiers — daily limits, per-minute caps, and feature availability by plan"
+          - ai-tooling/figma-mcp/best-practices-and-patterns.md: "Best practices and session patterns for sustainable design-to-code workflows"
+          - ai-tooling/figma-mcp/limitations-and-workarounds.md: "Limitations and workarounds — context limits, design updates, and missing states"
+          - ai-tooling/figma-mcp/sources-maintenance.md: "Sources and maintenance manifest for Figma MCP server guide"
 
 nav:
   - Home: index.md
@@ -1824,6 +1846,29 @@ nav:
       - development/tdd-spec-driven/three-laws-tdd.md
       - development/tdd-spec-driven/unit-testing-fundamentals.md
       - development/tdd-spec-driven/writing-specs.md
+  - AI Tooling:
+    - ai-tooling/index.md
+    - Figma MCP Server:
+      - ai-tooling/figma-mcp/index.md
+      - ai-tooling/figma-mcp/figma-mcp-overview.md
+      - ai-tooling/figma-mcp/remote-server-setup.md
+      - ai-tooling/figma-mcp/desktop-server-setup.md
+      - ai-tooling/figma-mcp/claude-code-plugin.md
+      - ai-tooling/figma-mcp/available-tools-reference.md
+      - ai-tooling/figma-mcp/design-context-extraction.md
+      - ai-tooling/figma-mcp/design-tokens-and-variables.md
+      - ai-tooling/figma-mcp/code-connect-integration.md
+      - ai-tooling/figma-mcp/screenshots-and-metadata.md
+      - ai-tooling/figma-mcp/figjam-and-diagram-tools.md
+      - ai-tooling/figma-mcp/design-system-rules.md
+      - ai-tooling/figma-mcp/selection-vs-link-workflows.md
+      - ai-tooling/figma-mcp/prompting-strategies.md
+      - ai-tooling/figma-mcp/figma-file-best-practices.md
+      - ai-tooling/figma-mcp/custom-agent-rules.md
+      - ai-tooling/figma-mcp/rate-limits-and-access-tiers.md
+      - ai-tooling/figma-mcp/best-practices-and-patterns.md
+      - ai-tooling/figma-mcp/limitations-and-workarounds.md
+      - ai-tooling/figma-mcp/sources-maintenance.md
 
 markdown_extensions:
   - tables

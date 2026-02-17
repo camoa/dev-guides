@@ -257,6 +257,12 @@
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 21
   },
+  "ai-tooling/figma-mcp": {
+    "source_hash": "a8baf3fc4ee971b7b229ca4bcdbf84fc4b7e2b088851087f5af3d501c82afbe6",
+    "partitioned": "2026-02-17",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 18
+  },
   "drupal/multilingual": {
     "source_hash": "cc5946807b71025d3e73b74337b95f46e1551bf5c5117ac8344e3a5da660c885",
     "partitioned": "2026-02-16",
