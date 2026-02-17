@@ -12,7 +12,7 @@ Guides for the design-to-code pipeline: analyze a design system, map it to Boots
 | Map design system patterns to Bootstrap 5.3 | [Bootstrap Mapping](bootstrap/index.md) |
 | Implement in Drupal with Radix theme and SDC components | [Radix SDC Mapping](radix-sdc/index.md) |
 | Look up Radix 6.x SDC component props, slots, and usage | [Radix Components](radix-components/index.md) |
-| Choose a design style, pick components, build accessible pages | [Web Design Strategy](web-design-strategy/index.md) |
+| Choose a design style, pick components, build accessible pages | [Visual Design Strategy](visual-design-strategy/index.md) |
 
 ## Workflow
 

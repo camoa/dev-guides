@@ -817,41 +817,43 @@ plugins:
           - design-systems/recognition/standards-specifications.md: "W3C token format, WCAG accessibility, and atomic design methodology standards"
           - design-systems/recognition/templates-vs-pages.md: "Distinguish between layout structures (templates) and real implementations (pages)"
           - design-systems/recognition/validation-checklist.md: "Comprehensive checklist to validate design system analysis completeness"
-          - design-systems/web-design-strategy/index.md: "Comprehensive web design strategy guide — design principles, style catalog, component psychology, accessibility, and page composition for all content types"
-          - design-systems/web-design-strategy/design-principles.md: "The 16 universal visual design principles that govern all visual work — definitions, visual examples, web application, presentation application, and style mappings."
-          - design-systems/web-design-strategy/style-by-context.md: "Matchmaker guide — maps industry, goal, audience, and content type to recommended design styles with explicit rationale for each recommendation."
-          - design-systems/web-design-strategy/anti-monotony.md: "Mandatory rules and enforcement patterns to prevent visual monotony in web pages and presentations — layout rhythm limits, component variety requirements, and composition sequences."
-          - design-systems/web-design-strategy/style-minimal-clean.md: "Minimal, Flat Design, and Resonant Stark design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
-          - design-systems/web-design-strategy/style-editorial.md: "Iki and Editorial/Magazine design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
-          - design-systems/web-design-strategy/style-organic-warm.md: "Organic (Shizen), Hygge, and Wabi-Sabi design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
-          - design-systems/web-design-strategy/style-luxury-refined.md: "Shibui design style — philosophy, web enforcement, presentation enforcement, component compatibility"
-          - design-systems/web-design-strategy/style-bold-expressive.md: "Dramatic, Maximalist, and Memphis design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
-          - design-systems/web-design-strategy/style-empty-space.md: "Ma, Yeo-baek, and Feng Shui design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
-          - design-systems/web-design-strategy/style-balanced-functional.md: "Lagom design style — philosophy, web enforcement, presentation enforcement, component compatibility"
-          - design-systems/web-design-strategy/style-swiss-typographic.md: "Swiss/International Typographic Style and Archival Index design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
-          - design-systems/web-design-strategy/style-brutalist.md: "Neo-brutalism, Soft Brutalism, and Cute-alism design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
-          - design-systems/web-design-strategy/style-glass-depth.md: "Glassmorphism and Liquid Glass design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
-          - design-systems/web-design-strategy/style-dark-elevation.md: "Dark Mode and Material Design (Google M3) design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
-          - design-systems/web-design-strategy/style-bento.md: "Bento Grid design style — philosophy, web enforcement, presentation enforcement, component compatibility"
-          - design-systems/web-design-strategy/style-retro-nostalgic.md: "Retro/Y2K and Anti-AI Aesthetic design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
-          - design-systems/web-design-strategy/style-motion-immersive.md: "Kinetic and 3D/Immersive design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
-          - design-systems/web-design-strategy/style-soft-ui.md: "Neumorphism (Soft UI) design style — philosophy, web enforcement, presentation enforcement, component compatibility"
-          - design-systems/web-design-strategy/style-anti-design.md: "Anti-Design and Creative Process design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
-          - design-systems/web-design-strategy/component-heroes.md: "Hero components — when to use, HTML/CSS patterns, accessibility, style compatibility"
-          - design-systems/web-design-strategy/component-social-proof.md: "Social proof components — testimonials, logo bar, stats bar, quote spotlight — when to use, HTML/CSS patterns, accessibility, style compatibility"
-          - design-systems/web-design-strategy/component-features.md: "Feature components — feature grid, feature spotlight, tabs, comparison table — when to use, HTML/CSS patterns, accessibility, style compatibility"
-          - design-systems/web-design-strategy/component-navigation.md: "Navigation and footer components — when to use, HTML/CSS patterns, accessibility, ARIA landmarks, style compatibility"
-          - design-systems/web-design-strategy/component-conversion.md: "Conversion components — CTA, pricing cards, contact forms — when to use, HTML/CSS patterns, accessibility, style compatibility"
-          - design-systems/web-design-strategy/component-content.md: "Content components — content blocks, timeline, process steps, FAQ accordion — when to use, HTML/CSS patterns, accessibility, style compatibility"
-          - design-systems/web-design-strategy/component-utility.md: "Utility components — team grid, gallery, announcement strip — when to use, HTML/CSS patterns, accessibility, style compatibility"
-          - design-systems/web-design-strategy/accessibility-wcag22.md: "WCAG 2.2 AA requirements with implementation patterns for focus, touch, contrast, motion, and ARIA widgets."
-          - design-systems/web-design-strategy/accessibility-inclusive.md: "Inclusive design beyond WCAG compliance — cognitive accessibility, universal design principles, APCA contrast, and why overlays fail."
-          - design-systems/web-design-strategy/typography.md: "Typography constraints, type scales, fluid sizing, font pairing, and WCAG text accessibility for web and presentation contexts."
-          - design-systems/web-design-strategy/color-contrast.md: "Color theory, WCAG and APCA contrast requirements, color-blind safe palettes, dark mode, OKLCH, and color psychology by industry."
-          - design-systems/web-design-strategy/spacing-layout.md: "Spacing systems, touch targets, layout patterns, responsive design strategies, CSS Grid vs Flexbox, and section padding reference."
-          - design-systems/web-design-strategy/design-tokens.md: "Design token architecture — three-tier hierarchy, naming taxonomy, CSS custom property patterns, and token-based theming for style switching."
-          - design-systems/web-design-strategy/modern-css.md: "Modern CSS techniques with browser support status, code examples, and progressive enhancement strategies for production use."
-          - design-systems/web-design-strategy/quantitative-constraints.md: "All the numbers — engineering tolerances for typography, color, spacing, performance, interaction, layout, forms, and presentations with source citations."
+          - design-systems/visual-design-strategy/index.md: "Comprehensive visual design strategy guide — design principles, style catalog, component psychology, accessibility, and page composition for web, presentations, carousels, and infographics"
+          - design-systems/visual-design-strategy/design-principles.md: "The 16 universal visual design principles that govern all visual work — definitions, visual examples, web application, presentation application, and style mappings."
+          - design-systems/visual-design-strategy/style-by-context.md: "Matchmaker guide — maps industry, goal, audience, and content type to recommended design styles with explicit rationale for each recommendation."
+          - design-systems/visual-design-strategy/component-selection.md: "Component selection psychology — when to use testimonials vs stats, grids vs spotlights, timelines vs process steps. Decision guide for web AND presentation contexts."
+          - design-systems/visual-design-strategy/page-composition.md: "Page and slide composition strategy — scroll psychology framework, section ordering by page type, social proof placement, conversion patterns, and presentation deck structures."
+          - design-systems/visual-design-strategy/anti-monotony.md: "Mandatory rules and enforcement patterns to prevent visual monotony in web pages and presentations — layout rhythm limits, component variety requirements, and composition sequences."
+          - design-systems/visual-design-strategy/style-minimal-clean.md: "Minimal, Flat Design, and Resonant Stark design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
+          - design-systems/visual-design-strategy/style-editorial.md: "Iki and Editorial/Magazine design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
+          - design-systems/visual-design-strategy/style-organic-warm.md: "Organic (Shizen), Hygge, and Wabi-Sabi design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
+          - design-systems/visual-design-strategy/style-luxury-refined.md: "Shibui design style — philosophy, web enforcement, presentation enforcement, component compatibility"
+          - design-systems/visual-design-strategy/style-bold-expressive.md: "Dramatic, Maximalist, and Memphis design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
+          - design-systems/visual-design-strategy/style-empty-space.md: "Ma, Yeo-baek, and Feng Shui design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
+          - design-systems/visual-design-strategy/style-balanced-functional.md: "Lagom design style — philosophy, web enforcement, presentation enforcement, component compatibility"
+          - design-systems/visual-design-strategy/style-swiss-typographic.md: "Swiss/International Typographic Style and Archival Index design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
+          - design-systems/visual-design-strategy/style-brutalist.md: "Neo-brutalism, Soft Brutalism, and Cute-alism design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
+          - design-systems/visual-design-strategy/style-glass-depth.md: "Glassmorphism and Liquid Glass design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
+          - design-systems/visual-design-strategy/style-dark-elevation.md: "Dark Mode and Material Design (Google M3) design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
+          - design-systems/visual-design-strategy/style-bento.md: "Bento Grid design style — philosophy, web enforcement, presentation enforcement, component compatibility"
+          - design-systems/visual-design-strategy/style-retro-nostalgic.md: "Retro/Y2K and Anti-AI Aesthetic design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
+          - design-systems/visual-design-strategy/style-motion-immersive.md: "Kinetic and 3D/Immersive design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
+          - design-systems/visual-design-strategy/style-soft-ui.md: "Neumorphism (Soft UI) design style — philosophy, web enforcement, presentation enforcement, component compatibility"
+          - design-systems/visual-design-strategy/style-anti-design.md: "Anti-Design and Creative Process design styles — philosophy, web enforcement, presentation enforcement, component compatibility"
+          - design-systems/visual-design-strategy/component-heroes.md: "Hero components — when to use, HTML/CSS patterns, accessibility, style compatibility"
+          - design-systems/visual-design-strategy/component-social-proof.md: "Social proof components — testimonials, logo bar, stats bar, quote spotlight — when to use, HTML/CSS patterns, accessibility, style compatibility"
+          - design-systems/visual-design-strategy/component-features.md: "Feature components — feature grid, feature spotlight, tabs, comparison table — when to use, HTML/CSS patterns, accessibility, style compatibility"
+          - design-systems/visual-design-strategy/component-navigation.md: "Navigation and footer components — when to use, HTML/CSS patterns, accessibility, ARIA landmarks, style compatibility"
+          - design-systems/visual-design-strategy/component-conversion.md: "Conversion components — CTA, pricing cards, contact forms — when to use, HTML/CSS patterns, accessibility, style compatibility"
+          - design-systems/visual-design-strategy/component-content.md: "Content components — content blocks, timeline, process steps, FAQ accordion — when to use, HTML/CSS patterns, accessibility, style compatibility"
+          - design-systems/visual-design-strategy/component-utility.md: "Utility components — team grid, gallery, announcement strip — when to use, HTML/CSS patterns, accessibility, style compatibility"
+          - design-systems/visual-design-strategy/accessibility-wcag22.md: "WCAG 2.2 AA requirements with implementation patterns for focus, touch, contrast, motion, and ARIA widgets."
+          - design-systems/visual-design-strategy/accessibility-inclusive.md: "Inclusive design beyond WCAG compliance — cognitive accessibility, universal design principles, APCA contrast, and why overlays fail."
+          - design-systems/visual-design-strategy/typography.md: "Typography constraints, type scales, fluid sizing, font pairing, and WCAG text accessibility for web and presentation contexts."
+          - design-systems/visual-design-strategy/color-contrast.md: "Color theory, WCAG and APCA contrast requirements, color-blind safe palettes, dark mode, OKLCH, and color psychology by industry."
+          - design-systems/visual-design-strategy/spacing-layout.md: "Spacing systems, touch targets, layout patterns, responsive design strategies, CSS Grid vs Flexbox, and section padding reference."
+          - design-systems/visual-design-strategy/design-tokens.md: "Design token architecture — three-tier hierarchy, naming taxonomy, CSS custom property patterns, and token-based theming for style switching."
+          - design-systems/visual-design-strategy/modern-css.md: "Modern CSS techniques with browser support status, code examples, and progressive enhancement strategies for production use."
+          - design-systems/visual-design-strategy/quantitative-constraints.md: "All the numbers — engineering tolerances for typography, color, spacing, performance, interaction, layout, forms, and presentations with source citations."
         "Development Practices":
           - development/index.md: "Development practices guides — TDD, SOLID, DRY, security, and tool-agnostic best practices"
           - development/dry-principles/index.md: "DRY (Don't Repeat Yourself), code reuse, and abstraction strategies - when to abstract, when to duplicate, and how to avoid premature abstraction"
@@ -1777,42 +1779,44 @@ nav:
       - design-systems/recognition/standards-specifications.md
       - design-systems/recognition/templates-vs-pages.md
       - design-systems/recognition/validation-checklist.md
-    - Web Design Strategy:
-      - design-systems/web-design-strategy/index.md
-      - design-systems/web-design-strategy/design-principles.md
-      - design-systems/web-design-strategy/style-by-context.md
-      - design-systems/web-design-strategy/anti-monotony.md
-      - design-systems/web-design-strategy/style-minimal-clean.md
-      - design-systems/web-design-strategy/style-editorial.md
-      - design-systems/web-design-strategy/style-organic-warm.md
-      - design-systems/web-design-strategy/style-luxury-refined.md
-      - design-systems/web-design-strategy/style-bold-expressive.md
-      - design-systems/web-design-strategy/style-empty-space.md
-      - design-systems/web-design-strategy/style-balanced-functional.md
-      - design-systems/web-design-strategy/style-swiss-typographic.md
-      - design-systems/web-design-strategy/style-brutalist.md
-      - design-systems/web-design-strategy/style-glass-depth.md
-      - design-systems/web-design-strategy/style-dark-elevation.md
-      - design-systems/web-design-strategy/style-bento.md
-      - design-systems/web-design-strategy/style-retro-nostalgic.md
-      - design-systems/web-design-strategy/style-motion-immersive.md
-      - design-systems/web-design-strategy/style-soft-ui.md
-      - design-systems/web-design-strategy/style-anti-design.md
-      - design-systems/web-design-strategy/component-heroes.md
-      - design-systems/web-design-strategy/component-social-proof.md
-      - design-systems/web-design-strategy/component-features.md
-      - design-systems/web-design-strategy/component-navigation.md
-      - design-systems/web-design-strategy/component-conversion.md
-      - design-systems/web-design-strategy/component-content.md
-      - design-systems/web-design-strategy/component-utility.md
-      - design-systems/web-design-strategy/accessibility-wcag22.md
-      - design-systems/web-design-strategy/accessibility-inclusive.md
-      - design-systems/web-design-strategy/typography.md
-      - design-systems/web-design-strategy/color-contrast.md
-      - design-systems/web-design-strategy/spacing-layout.md
-      - design-systems/web-design-strategy/design-tokens.md
-      - design-systems/web-design-strategy/modern-css.md
-      - design-systems/web-design-strategy/quantitative-constraints.md
+    - Visual Design Strategy:
+      - design-systems/visual-design-strategy/index.md
+      - design-systems/visual-design-strategy/design-principles.md
+      - design-systems/visual-design-strategy/style-by-context.md
+      - design-systems/visual-design-strategy/component-selection.md
+      - design-systems/visual-design-strategy/page-composition.md
+      - design-systems/visual-design-strategy/anti-monotony.md
+      - design-systems/visual-design-strategy/style-minimal-clean.md
+      - design-systems/visual-design-strategy/style-editorial.md
+      - design-systems/visual-design-strategy/style-organic-warm.md
+      - design-systems/visual-design-strategy/style-luxury-refined.md
+      - design-systems/visual-design-strategy/style-bold-expressive.md
+      - design-systems/visual-design-strategy/style-empty-space.md
+      - design-systems/visual-design-strategy/style-balanced-functional.md
+      - design-systems/visual-design-strategy/style-swiss-typographic.md
+      - design-systems/visual-design-strategy/style-brutalist.md
+      - design-systems/visual-design-strategy/style-glass-depth.md
+      - design-systems/visual-design-strategy/style-dark-elevation.md
+      - design-systems/visual-design-strategy/style-bento.md
+      - design-systems/visual-design-strategy/style-retro-nostalgic.md
+      - design-systems/visual-design-strategy/style-motion-immersive.md
+      - design-systems/visual-design-strategy/style-soft-ui.md
+      - design-systems/visual-design-strategy/style-anti-design.md
+      - design-systems/visual-design-strategy/component-heroes.md
+      - design-systems/visual-design-strategy/component-social-proof.md
+      - design-systems/visual-design-strategy/component-features.md
+      - design-systems/visual-design-strategy/component-navigation.md
+      - design-systems/visual-design-strategy/component-conversion.md
+      - design-systems/visual-design-strategy/component-content.md
+      - design-systems/visual-design-strategy/component-utility.md
+      - design-systems/visual-design-strategy/accessibility-wcag22.md
+      - design-systems/visual-design-strategy/accessibility-inclusive.md
+      - design-systems/visual-design-strategy/typography.md
+      - design-systems/visual-design-strategy/color-contrast.md
+      - design-systems/visual-design-strategy/spacing-layout.md
+      - design-systems/visual-design-strategy/design-tokens.md
+      - design-systems/visual-design-strategy/modern-css.md
+      - design-systems/visual-design-strategy/quantitative-constraints.md
   - Development Practices:
     - development/index.md
     - DRY Principles:
