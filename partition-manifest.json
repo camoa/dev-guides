@@ -268,5 +268,11 @@
     "partitioned": "2026-02-16",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 21
+  },
+  "drupal/twig": {
+    "source_hash": "8804e8b71e096e35c1e27135fa7ffd46bb9ce8141196d91b38f9228a0e8928f7",
+    "partitioned": "2026-02-18",
+    "partitioned_by": "camoa",
+    "guides_extracted": 21
   }
 }

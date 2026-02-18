@@ -39,3 +39,4 @@ description: Drupal decision guides — forms, SDC components, JavaScript, entit
 | Apply SOLID principles in Drupal | [SOLID in Drupal](solid-principles/index.md) |
 | Practice TDD with PHPUnit in Drupal | [TDD in Drupal](tdd/index.md) |
 | Build a multilingual site with translations | [Multilingual](multilingual/index.md) |
+| Write and debug Twig templates | [Twig Theming](twig/index.md) |

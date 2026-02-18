@@ -415,6 +415,29 @@ plugins:
           - drupal/multilingual/security-performance-caching.md: "Translation security, performance optimization, cache contexts, CDN configuration"
           - drupal/multilingual/code-reference-map.md: "Translation code reference — core modules, services, entity API, hooks, debugging"
           - drupal/multilingual/sources-maintenance.md: "Sources and maintenance manifest for multilingual guide"
+          - drupal/twig/index.md: "Drupal Twig Theming — template development, field access, preprocess functions, debugging, and contrib tools"
+          - drupal/twig/twig-overview.md: "How Twig integrates with Drupal's theme system — autoescape, sandbox policy, and render pipeline"
+          - drupal/twig/template-discovery-naming.md: "Template file naming conventions, suggestion separators, and discovery order"
+          - drupal/twig/template-hierarchy.md: "Full rendering chain from html.html.twig through field.html.twig"
+          - drupal/twig/variables-by-template-level.md: "Variables available in html, page, region, block, node, field, and views templates"
+          - drupal/twig/accessing-field-values.md: "Accessing field values in Twig — rendered vs raw, field properties, entity references"
+          - drupal/twig/entity-reference-traversal.md: "Traversing entity references with null checks — taxonomy, media, user, paragraph"
+          - drupal/twig/multi-value-fields.md: "Iterating, counting, and slicing multi-value fields in Twig"
+          - drupal/twig/attribute-system.md: "Adding, removing, and modifying HTML attributes and CSS classes in templates"
+          - drupal/twig/preprocess-functions.md: "Preprocess function levels, execution order, procedural vs OOP hooks"
+          - drupal/twig/adding-variables-preprocess.md: "Passing custom PHP data to Twig templates with cache metadata"
+          - drupal/twig/theme-hooks-registration.md: "Registering custom theme hooks and templates in modules"
+          - drupal/twig/template-suggestions.md: "Adding template suggestions programmatically and with Twig filters"
+          - drupal/twig/twig-functions.md: "Drupal Twig functions — url(), path(), link(), file_url(), attach_library(), create_attribute()"
+          - drupal/twig/twig-filters.md: "Drupal Twig filters — |t, |without, |clean_class, |render, |safe_join, |raw"
+          - drupal/twig/twig-tweak.md: "Twig Tweak module — drupal_view(), drupal_entity(), drupal_block(), drupal_field()"
+          - drupal/twig/sdc-in-templates.md: "Including and embedding SDC components from Twig templates"
+          - drupal/twig/template-debugging.md: "Debug mode, dump(), kint(), template path comments, and debugging workflow"
+          - drupal/twig/template-inheritance.md: "Template inheritance with extends, include, embed, and block tags"
+          - drupal/twig/security-performance.md: "Security rules for |raw, URI injection, sandbox; performance for caching and entity traversal"
+          - drupal/twig/anti-patterns.md: "Common Twig anti-patterns — logic in templates, double-rendering, bypassing formatters"
+          - drupal/twig/code-reference-map.md: "Core source files for Twig engine, theme system, and core templates"
+          - drupal/twig/sources-maintenance.md: "Sources and maintenance manifest for Twig theming guide"
           - drupal/migration/index.md: "Drupal 7 to 11 migration — decision guides for Migrate API, content strategy, and performance"
           - drupal/migration/anti-patterns.md: "Common migration failures that cause project delays and technical debt"
           - drupal/migration/assess-migration-scope.md: "Inventory and timeline estimation for D7 to D11 migration projects"
@@ -1342,6 +1365,30 @@ nav:
       - drupal/multilingual/security-performance-caching.md
       - drupal/multilingual/code-reference-map.md
       - drupal/multilingual/sources-maintenance.md
+    - Twig Theming:
+      - drupal/twig/index.md
+      - drupal/twig/twig-overview.md
+      - drupal/twig/template-discovery-naming.md
+      - drupal/twig/template-hierarchy.md
+      - drupal/twig/variables-by-template-level.md
+      - drupal/twig/accessing-field-values.md
+      - drupal/twig/entity-reference-traversal.md
+      - drupal/twig/multi-value-fields.md
+      - drupal/twig/attribute-system.md
+      - drupal/twig/preprocess-functions.md
+      - drupal/twig/adding-variables-preprocess.md
+      - drupal/twig/theme-hooks-registration.md
+      - drupal/twig/template-suggestions.md
+      - drupal/twig/twig-functions.md
+      - drupal/twig/twig-filters.md
+      - drupal/twig/twig-tweak.md
+      - drupal/twig/sdc-in-templates.md
+      - drupal/twig/template-debugging.md
+      - drupal/twig/template-inheritance.md
+      - drupal/twig/security-performance.md
+      - drupal/twig/anti-patterns.md
+      - drupal/twig/code-reference-map.md
+      - drupal/twig/sources-maintenance.md
     - Migration:
       - drupal/migration/index.md
       - drupal/migration/anti-patterns.md
