@@ -274,5 +274,23 @@
     "partitioned": "2026-02-18",
     "partitioned_by": "camoa",
     "guides_extracted": 21
+  },
+  "design-systems/daisyui": {
+    "source_hash": "d1dc2d4acb2fdb8c964c93605e41581170a0307437523bb720c6c6fd7e9acbfd",
+    "partitioned": "2026-02-19",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 14
+  },
+  "design-systems/react-design-system": {
+    "source_hash": "02534ecc113fcb9da1d3ebb425e660ea46814dde8fc9c436086a2f8b4c28215c",
+    "partitioned": "2026-02-19",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 18
+  },
+  "design-systems/tailwind": {
+    "source_hash": "1a94018ca2c9cc7eeab076a36f1c90656fd13c0af1e87f5fa977ec0da00e3df6",
+    "partitioned": "2026-02-19",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 17
   }
 }

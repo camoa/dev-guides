@@ -776,7 +776,7 @@ plugins:
           - nextjs/deepchat-nextjs/streaming-responses.md: "Server-Sent Events streaming with ReadableStream for AI chat responses"
           - nextjs/deepchat-nextjs/styling-theming.md: "Style DeepChat with CSS variables, messageStyles, and shadow DOM"
         "Design Systems":
-          - design-systems/index.md: "Design system guides — recognition, Bootstrap mapping, Radix SDC implementation, Radix component reference, web design strategy"
+          - design-systems/index.md: "Design system guides — recognition, Bootstrap mapping, Radix SDC implementation, Radix component reference, Tailwind CSS integration"
           - design-systems/bootstrap/index.md: "Bootstrap 5.3 Mapping — systematic methodology for mapping design systems to Bootstrap using the 6px threshold framework"
           - design-systems/bootstrap/advanced-scss-best-practices.md: "Advanced SCSS Best Practices — Dart Sass requirements, performance optimization, and accessibility features"
           - design-systems/bootstrap/atoms-bootstrap-components.md: "Atoms to Bootstrap Components — mapping buttons, form inputs, and badges to Bootstrap's component system"
@@ -840,6 +840,58 @@ plugins:
           - design-systems/recognition/standards-specifications.md: "W3C token format, WCAG accessibility, and atomic design methodology standards"
           - design-systems/recognition/templates-vs-pages.md: "Distinguish between layout structures (templates) and real implementations (pages)"
           - design-systems/recognition/validation-checklist.md: "Comprehensive checklist to validate design system analysis completeness"
+          - design-systems/daisyui/index.md: "DaisyUI v5 guides — theming, color tokens, component reference, React integration, customization, accessibility"
+          - design-systems/daisyui/daisyui-vs-alternatives.md: "Decide whether to use DaisyUI, raw Tailwind, shadcn/ui, or Radix UI for a project"
+          - design-systems/daisyui/installation-configuration.md: "Install and configure DaisyUI with Tailwind v4 (CSS-first) or Tailwind v3 (JS config)"
+          - design-systems/daisyui/theming-system.md: "Implement multi-theme support, light/dark mode, and custom brand themes using DaisyUI's data-theme system"
+          - design-systems/daisyui/color-system-design-tokens.md: "Reference for DaisyUI CSS variables, semantic color tokens, and how to use them as Tailwind utility classes"
+          - design-systems/daisyui/actions-components.md: "Reference for DaisyUI action components — button, dropdown, modal, and swap"
+          - design-systems/daisyui/data-display-components.md: "Reference for DaisyUI data display components — badge, alert, card, stat, table, and accordion"
+          - design-systems/daisyui/navigation-components.md: "Reference for DaisyUI navigation components — navbar, menu, tabs, breadcrumbs, and steps"
+          - design-systems/daisyui/data-input-components.md: "Reference for DaisyUI form input components — input, fieldset, select, textarea, checkbox, toggle, range, and rating"
+          - design-systems/daisyui/layout-components.md: "Reference for DaisyUI layout components — drawer, hero, divider, join, indicator, and stack"
+          - design-systems/daisyui/customization-patterns.md: "Extend DaisyUI components with Tailwind utilities, CSS variable overrides, and global layer overrides"
+          - design-systems/daisyui/daisyui-react.md: "Use DaisyUI in React with CVA variant management, theme switching, and Radix UI accessibility integration"
+          - design-systems/daisyui/best-practices.md: "DaisyUI best practices and anti-patterns — when to use component classes vs Tailwind utilities, performance, and team conventions"
+          - design-systems/daisyui/security-accessibility.md: "DaisyUI accessibility gaps, required ARIA attributes, keyboard navigation status, and security considerations"
+          - design-systems/daisyui/sources-maintenance.md: "DaisyUI guide sources, verified versions, web references, and code file locations"
+          - design-systems/react-design-system/index.md: "React design system guides — component architecture, props patterns, composition, Tailwind, CVA variants, TypeScript, accessibility, Storybook, performance, testing"
+          - design-systems/react-design-system/component-architecture-decisions.md: "Choose between flat props, compound components, headless, controlled, or polymorphic patterns for a new React component"
+          - design-systems/react-design-system/props-patterns.md: "Design component prop APIs using discriminated unions, polymorphic as props, spread rest, and TypeScript defaults"
+          - design-systems/react-design-system/children-and-slot-patterns.md: "Choose between children, compound dot-notation slots, asChild (Radix), named slot props, and render props for component content regions"
+          - design-systems/react-design-system/composition-patterns.md: "Build multi-part components with compound components + Context, ref forwarding, Radix wrappers, and use client directives in Next.js App Router"
+          - design-systems/react-design-system/tailwind-integration.md: "Use cn() (clsx + tailwind-merge) and CVA for class merging and variant definitions in every Tailwind-based component"
+          - design-systems/react-design-system/variant-management.md: "Manage component size, color, and state variants with CVA compoundVariants and tailwind-variants slots"
+          - design-systems/react-design-system/design-token-consumption.md: "Connect design tokens to React components using CSS custom properties and Tailwind v4 CSS-first @theme inline configuration"
+          - design-systems/react-design-system/typescript-patterns.md: "Type React design system components with ComponentPropsWithoutRef, VariantProps, discriminated unions, and React 19 ref patterns"
+          - design-systems/react-design-system/accessibility-patterns.md: "Make React design system components accessible using Radix primitives, ARIA prop forwarding, focus management, and icon-only button patterns"
+          - design-systems/react-design-system/storybook-integration.md: "Document React design system components in Storybook using CSF3, argTypes, and the a11y addon"
+          - design-systems/react-design-system/component-organization.md: "Structure React design system files using flat folders (small systems) or atomic design (large systems) with explicit barrel exports"
+          - design-systems/react-design-system/form-components.md: "Build accessible form components with compound FormField, react-hook-form integration, Zod validation, and aria-describedby error linking"
+          - design-systems/react-design-system/layout-components.md: "Build Stack, Flex, Grid, and Container layout primitives that standardize spacing and remove repetitive Tailwind class sets from feature code"
+          - design-systems/react-design-system/performance.md: "Optimize React design system component render performance using React.memo, useMemo, useCallback, and React.lazy with Suspense"
+          - design-systems/react-design-system/testing.md: "Test React design system components using React Testing Library for behavior, jest-axe for accessibility, and Storybook for visual regression"
+          - design-systems/react-design-system/best-practices-and-anti-patterns.md: "Pre-ship checklist and anti-pattern catalog for React design system components covering API design, security, performance, and code review standards"
+          - design-systems/react-design-system/sources-maintenance.md: "Source references, verified package versions, and maintenance notes for the React design system guides"
+          - design-systems/tailwind/index.md: "Tailwind CSS design system guides — v3/v4 migration, configuration, tokens, variants, responsive, dark mode, CVA, tailwind-merge, performance, accessibility"
+          - design-systems/tailwind/tailwind-v3-vs-v4.md: "Choose between Tailwind v3 and v4 based on browser requirements, project stage, and framework integration needs"
+          - design-systems/tailwind/installation-integration.md: "Choose the right Tailwind installation path for your build tool — Vite plugin, PostCSS, or CLI"
+          - design-systems/tailwind/v4-configuration.md: "Configure a Tailwind v4 project using CSS-first @theme blocks — add tokens, override defaults, and define custom utilities"
+          - design-systems/tailwind/v3-configuration.md: "Configure Tailwind v3 using tailwind.config.js — extend vs override, content paths, and preset sharing"
+          - design-systems/tailwind/design-token-mapping.md: "Translate design tokens from Figma, Style Dictionary, or a design spec into Tailwind v4 or v3 configuration"
+          - design-systems/tailwind/utility-class-reference.md: "Quick-reference for Tailwind utility categories — layout, spacing, typography, color, sizing, effects, and state variants"
+          - design-systems/tailwind/custom-theme-extension.md: "Add custom utilities, variants, animations, and shared themes beyond what design tokens alone provide in Tailwind v4"
+          - design-systems/tailwind/responsive-design.md: "Choose between viewport breakpoints and container queries, and apply mobile-first responsive patterns in Tailwind"
+          - design-systems/tailwind/dark-mode.md: "Implement dark mode in Tailwind — choose between automatic system preference, class-based toggle, or design token approach"
+          - design-systems/tailwind/component-patterns.md: "Decide when to keep utilities inline, extract to a framework component, or create a component class"
+          - design-systems/tailwind/apply-guidance.md: "Know when @apply is appropriate (CMS content, base elements) versus when it fights the utility-first model"
+          - design-systems/tailwind/class-variance-authority.md: "Use Class Variance Authority (CVA) to manage component variants with type-safe, structured class generation"
+          - design-systems/tailwind/tailwind-merge-clsx.md: "Use tailwind-merge and clsx together as cn() to safely merge Tailwind classes at runtime, resolving conflicts"
+          - design-systems/tailwind/design-system-integration.md: "Connect Figma or Style Dictionary token pipelines to Tailwind configuration and maintain design-to-code consistency"
+          - design-systems/tailwind/performance-optimization.md: "Ensure Tailwind produces minimal CSS, builds fast, and doesn't generate unused styles — class detection and bundle size guidance"
+          - design-systems/tailwind/best-practices.md: "Tailwind best practices and anti-patterns — utility-first philosophy, class organization, security, and when to extract abstractions"
+          - design-systems/tailwind/accessibility.md: "Implement accessible focus rings, screen reader utilities, reduced motion, ARIA state variants, and color contrast in Tailwind"
+          - design-systems/tailwind/sources-maintenance.md: "Source references, verified versions, and maintenance notes for the Tailwind CSS design system guides"
         "Development Practices":
           - development/index.md: "Development practices guides — TDD, SOLID, DRY, security, and tool-agnostic best practices"
           - development/dry-principles/index.md: "DRY (Don't Repeat Yourself), code reuse, and abstraction strategies - when to abstract, when to duplicate, and how to avoid premature abstraction"
@@ -1811,6 +1863,61 @@ nav:
       - design-systems/recognition/standards-specifications.md
       - design-systems/recognition/templates-vs-pages.md
       - design-systems/recognition/validation-checklist.md
+    - DaisyUI:
+      - design-systems/daisyui/index.md
+      - design-systems/daisyui/daisyui-vs-alternatives.md
+      - design-systems/daisyui/installation-configuration.md
+      - design-systems/daisyui/theming-system.md
+      - design-systems/daisyui/color-system-design-tokens.md
+      - design-systems/daisyui/actions-components.md
+      - design-systems/daisyui/data-display-components.md
+      - design-systems/daisyui/navigation-components.md
+      - design-systems/daisyui/data-input-components.md
+      - design-systems/daisyui/layout-components.md
+      - design-systems/daisyui/customization-patterns.md
+      - design-systems/daisyui/daisyui-react.md
+      - design-systems/daisyui/best-practices.md
+      - design-systems/daisyui/security-accessibility.md
+      - design-systems/daisyui/sources-maintenance.md
+    - React Design System:
+      - design-systems/react-design-system/index.md
+      - design-systems/react-design-system/component-architecture-decisions.md
+      - design-systems/react-design-system/props-patterns.md
+      - design-systems/react-design-system/children-and-slot-patterns.md
+      - design-systems/react-design-system/composition-patterns.md
+      - design-systems/react-design-system/tailwind-integration.md
+      - design-systems/react-design-system/variant-management.md
+      - design-systems/react-design-system/design-token-consumption.md
+      - design-systems/react-design-system/typescript-patterns.md
+      - design-systems/react-design-system/accessibility-patterns.md
+      - design-systems/react-design-system/storybook-integration.md
+      - design-systems/react-design-system/component-organization.md
+      - design-systems/react-design-system/form-components.md
+      - design-systems/react-design-system/layout-components.md
+      - design-systems/react-design-system/performance.md
+      - design-systems/react-design-system/testing.md
+      - design-systems/react-design-system/best-practices-and-anti-patterns.md
+      - design-systems/react-design-system/sources-maintenance.md
+    - Tailwind CSS:
+      - design-systems/tailwind/index.md
+      - design-systems/tailwind/tailwind-v3-vs-v4.md
+      - design-systems/tailwind/installation-integration.md
+      - design-systems/tailwind/v4-configuration.md
+      - design-systems/tailwind/v3-configuration.md
+      - design-systems/tailwind/design-token-mapping.md
+      - design-systems/tailwind/utility-class-reference.md
+      - design-systems/tailwind/custom-theme-extension.md
+      - design-systems/tailwind/responsive-design.md
+      - design-systems/tailwind/dark-mode.md
+      - design-systems/tailwind/component-patterns.md
+      - design-systems/tailwind/apply-guidance.md
+      - design-systems/tailwind/class-variance-authority.md
+      - design-systems/tailwind/tailwind-merge-clsx.md
+      - design-systems/tailwind/design-system-integration.md
+      - design-systems/tailwind/performance-optimization.md
+      - design-systems/tailwind/best-practices.md
+      - design-systems/tailwind/accessibility.md
+      - design-systems/tailwind/sources-maintenance.md
   - Development Practices:
     - development/index.md
     - DRY Principles:
