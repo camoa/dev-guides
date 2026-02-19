@@ -298,5 +298,11 @@
     "partitioned": "2026-02-19",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 16
+  },
+  "drupal/ui-suite-daisyui": {
+    "source_hash": "c74871b01ce2228440a6bdc4cc0024f08f77ec295867897bb66f0fe2323c7592",
+    "partitioned": "2026-02-19",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 15
   }
 }

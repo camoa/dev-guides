@@ -455,6 +455,23 @@ plugins:
           - drupal/ui-patterns/creating-custom-source-plugins.md: "Creating Custom Source Plugins — widget and context-aware source patterns, derivers"
           - drupal/ui-patterns/best-practices-and-anti-patterns.md: "UI Patterns Best Practices — slot vs prop decisions, prop drilling, prop paradoxes"
           - drupal/ui-patterns/security-and-accessibility.md: "UI Patterns Security & Accessibility — XSS protection, block filtering, attributes"
+          - drupal/ui-suite-daisyui/index.md: "UI Suite DaisyUI — DaisyUI 5 theme with 51 SDC components via UI Patterns/Styles/Skins"
+          - drupal/ui-suite-daisyui/overview-and-decision.md: "UI Suite DaisyUI Overview — when to use DaisyUI theme vs alternatives"
+          - drupal/ui-suite-daisyui/architecture.md: "Architecture — UI Patterns + UI Styles + UI Skins + UI Icons ecosystem"
+          - drupal/ui-suite-daisyui/installation-and-setup.md: "Installation & Setup — Composer install, theme enable, config import"
+          - drupal/ui-suite-daisyui/theme-components-catalog.md: "Theme Components Catalog — 51 DaisyUI components with props/slots reference"
+          - drupal/ui-suite-daisyui/ui-styles-integration.md: "UI Styles Integration — apply utility styles to blocks and Layout Builder"
+          - drupal/ui-suite-daisyui/ui-skins-integration.md: "UI Skins Integration — 35 DaisyUI themes and 25 CSS variables"
+          - drupal/ui-suite-daisyui/template-overrides.md: "Template Overrides — 22 overridden Drupal templates"
+          - drupal/ui-suite-daisyui/preprocess-and-hooks.md: "Preprocess & Hooks — theme hooks for pager, forms, views"
+          - drupal/ui-suite-daisyui/sub-theming-starterkit.md: "Sub-theming Starterkit — Vite + Tailwind 4 + DaisyUI 5 build pipeline"
+          - drupal/ui-suite-daisyui/component-reuse-decision-tree.md: "Component Reuse Decision Tree — when to reuse, override, or create"
+          - drupal/ui-suite-daisyui/layout-builder-integration.md: "Layout Builder Integration — components as sections, UI Styles LB"
+          - drupal/ui-suite-daisyui/libraries-and-assets.md: "Libraries & Assets — CSS/JS pipeline, icon packs, CKEditor 5"
+          - drupal/ui-suite-daisyui/customization-patterns.md: "Customization Patterns — custom components, DaisyUI token overrides"
+          - drupal/ui-suite-daisyui/best-practices-and-anti-patterns.md: "Best Practices — component naming, slot usage, Tailwind patterns"
+          - drupal/ui-suite-daisyui/security-and-accessibility.md: "Security & Accessibility — XSS, CSP, ARIA, keyboard nav"
+          - drupal/ui-suite-daisyui/sources-maintenance.md: "Sources and maintenance manifest for UI Suite DaisyUI guide"
           - drupal/migration/index.md: "Drupal 7 to 11 migration — decision guides for Migrate API, content strategy, and performance"
           - drupal/migration/anti-patterns.md: "Common migration failures that cause project delays and technical debt"
           - drupal/migration/assess-migration-scope.md: "Inventory and timeline estimation for D7 to D11 migration projects"
@@ -1476,6 +1493,24 @@ nav:
       - drupal/ui-patterns/creating-custom-source-plugins.md
       - drupal/ui-patterns/best-practices-and-anti-patterns.md
       - drupal/ui-patterns/security-and-accessibility.md
+    - UI Suite DaisyUI:
+      - drupal/ui-suite-daisyui/index.md
+      - drupal/ui-suite-daisyui/overview-and-decision.md
+      - drupal/ui-suite-daisyui/architecture.md
+      - drupal/ui-suite-daisyui/installation-and-setup.md
+      - drupal/ui-suite-daisyui/theme-components-catalog.md
+      - drupal/ui-suite-daisyui/ui-styles-integration.md
+      - drupal/ui-suite-daisyui/ui-skins-integration.md
+      - drupal/ui-suite-daisyui/template-overrides.md
+      - drupal/ui-suite-daisyui/preprocess-and-hooks.md
+      - drupal/ui-suite-daisyui/sub-theming-starterkit.md
+      - drupal/ui-suite-daisyui/component-reuse-decision-tree.md
+      - drupal/ui-suite-daisyui/layout-builder-integration.md
+      - drupal/ui-suite-daisyui/libraries-and-assets.md
+      - drupal/ui-suite-daisyui/customization-patterns.md
+      - drupal/ui-suite-daisyui/best-practices-and-anti-patterns.md
+      - drupal/ui-suite-daisyui/security-and-accessibility.md
+      - drupal/ui-suite-daisyui/sources-maintenance.md
     - Migration:
       - drupal/migration/index.md
       - drupal/migration/anti-patterns.md

@@ -41,3 +41,4 @@ description: Drupal decision guides — forms, SDC components, JavaScript, entit
 | Build a multilingual site with translations | [Multilingual](multilingual/index.md) |
 | Write and debug Twig templates | [Twig Theming](twig/index.md) |
 | Use SDC components in Drupal's site-builder UI | [UI Patterns 2.x](ui-patterns/index.md) |
+| Use DaisyUI 5 components in Drupal with UI Patterns | [UI Suite DaisyUI](ui-suite-daisyui/index.md) |
