@@ -40,3 +40,4 @@ description: Drupal decision guides — forms, SDC components, JavaScript, entit
 | Practice TDD with PHPUnit in Drupal | [TDD in Drupal](tdd/index.md) |
 | Build a multilingual site with translations | [Multilingual](multilingual/index.md) |
 | Write and debug Twig templates | [Twig Theming](twig/index.md) |
+| Use SDC components in Drupal's site-builder UI | [UI Patterns 2.x](ui-patterns/index.md) |

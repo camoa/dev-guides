@@ -438,6 +438,23 @@ plugins:
           - drupal/twig/anti-patterns.md: "Common Twig anti-patterns — logic in templates, double-rendering, bypassing formatters"
           - drupal/twig/code-reference-map.md: "Core source files for Twig engine, theme system, and core templates"
           - drupal/twig/sources-maintenance.md: "Sources and maintenance manifest for Twig theming guide"
+          - drupal/ui-patterns/index.md: "UI Patterns 2.x — bridges SDC components to Drupal's site-builder UI via source plugins"
+          - drupal/ui-patterns/overview-and-decision.md: "UI Patterns Overview & Decision — when to use UI Patterns vs SDC alone"
+          - drupal/ui-patterns/architecture.md: "UI Patterns Architecture — 4 plugin types, service decoration, rendering pipeline"
+          - drupal/ui-patterns/defining-components.md: "Defining Components — YAML structure, props JSON Schema, slots, variants, noUi"
+          - drupal/ui-patterns/props-system.md: "Props System — built-in prop types, normalize/preprocess pipeline, meta:enum"
+          - drupal/ui-patterns/slots-system.md: "Slots System — multiple sources per slot, slot source plugins, Twig access"
+          - drupal/ui-patterns/source-plugins.md: "Source Plugins — built-in sources, context system, source discovery and matching"
+          - drupal/ui-patterns/variants.md: "Variants — visual variations, variant prop generation, when to use variants vs props"
+          - drupal/ui-patterns/sdc-integration.md: "SDC Integration — service decoration, pre_render hooks, Twig node visitors"
+          - drupal/ui-patterns/layout-builder-integration.md: "Layout Builder Integration — components as layout sections, region-to-slot mapping"
+          - drupal/ui-patterns/views-integration.md: "Views Integration — ComponentRow and ComponentStyle plugins, entity context"
+          - drupal/ui-patterns/field-formatters.md: "Field Formatters — ComponentFormatter and ComponentFormatterSingle, granularity"
+          - drupal/ui-patterns/blocks-integration.md: "Blocks Integration — components as block plugins, BlockSource for embedding blocks in slots"
+          - drupal/ui-patterns/pattern-library.md: "Pattern Library — browsable component library, stories YAML format, template overrides"
+          - drupal/ui-patterns/creating-custom-source-plugins.md: "Creating Custom Source Plugins — widget and context-aware source patterns, derivers"
+          - drupal/ui-patterns/best-practices-and-anti-patterns.md: "UI Patterns Best Practices — slot vs prop decisions, prop drilling, prop paradoxes"
+          - drupal/ui-patterns/security-and-accessibility.md: "UI Patterns Security & Accessibility — XSS protection, block filtering, attributes"
           - drupal/migration/index.md: "Drupal 7 to 11 migration — decision guides for Migrate API, content strategy, and performance"
           - drupal/migration/anti-patterns.md: "Common migration failures that cause project delays and technical debt"
           - drupal/migration/assess-migration-scope.md: "Inventory and timeline estimation for D7 to D11 migration projects"
@@ -1441,6 +1458,24 @@ nav:
       - drupal/twig/anti-patterns.md
       - drupal/twig/code-reference-map.md
       - drupal/twig/sources-maintenance.md
+    - UI Patterns:
+      - drupal/ui-patterns/index.md
+      - drupal/ui-patterns/overview-and-decision.md
+      - drupal/ui-patterns/architecture.md
+      - drupal/ui-patterns/defining-components.md
+      - drupal/ui-patterns/props-system.md
+      - drupal/ui-patterns/slots-system.md
+      - drupal/ui-patterns/source-plugins.md
+      - drupal/ui-patterns/variants.md
+      - drupal/ui-patterns/sdc-integration.md
+      - drupal/ui-patterns/layout-builder-integration.md
+      - drupal/ui-patterns/views-integration.md
+      - drupal/ui-patterns/field-formatters.md
+      - drupal/ui-patterns/blocks-integration.md
+      - drupal/ui-patterns/pattern-library.md
+      - drupal/ui-patterns/creating-custom-source-plugins.md
+      - drupal/ui-patterns/best-practices-and-anti-patterns.md
+      - drupal/ui-patterns/security-and-accessibility.md
     - Migration:
       - drupal/migration/index.md
       - drupal/migration/anti-patterns.md
