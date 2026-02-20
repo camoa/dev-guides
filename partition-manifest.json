@@ -316,5 +316,35 @@
     "partitioned": "2026-02-19",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 20
+  },
+  "drupal/htmx": {
+    "source_hash": "6b7ca46c84a5225147c34320c0ddb7e72aa09666a2bd52db962ffbd49e7cb035",
+    "partitioned": "2026-02-20",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 18
+  },
+  "drupal/ajax-htmx-migration": {
+    "source_hash": "9baf1f0b3aff16171177558972ea081c1667bbb2f4739a3c28c6fb7a22bfff74",
+    "partitioned": "2026-02-20",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 17
+  },
+  "drupal/ajax": {
+    "source_hash": "2d6034155730a112f453fc1a1643e98d58425d6bcdd06bb44180d609e90e6cc1",
+    "partitioned": "2026-02-20",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 26
+  },
+  "nextjs/deepchat-drupal-auth": {
+    "source_hash": "e33fe6b62da86bc06eb0bdfea64a33b61eace51da031a0aac90b7b578a4c2a7e",
+    "partitioned": "2026-02-20",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 7
+  },
+  "drupal/salesforce": {
+    "source_hash": "4f65de3fff3002daa03ea738f4ce80e071576504601f0c9e0d6036a72003e911",
+    "partitioned": "2026-02-20",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 22
   }
 }

@@ -90,6 +90,104 @@ Common field type properties accessible via `node.field_name.*`:
 | file | `.entity.fileUri` | `public://...` URI |
 | address | `.country_code`, `.locality`, etc. | Address components |
 
+### Cache Invalidation Warning: Entity Traversal in Twig Bypasses Cache Metadata
+
+When you use `{{ content.field_name }}`, Drupal's renderer renders the field through its formatter, producing a render array with `#cache` metadata (tags, contexts, max-age). This metadata **bubbles up** through the render tree, so when the referenced data changes, every cached page that included it gets invalidated.
+
+When you bypass the render array by accessing `{{ node.field_name.value }}` or traversing entity references directly in Twig, **none of the loaded entities' cache tags enter the render tree**. The page caches fine — but it never invalidates when the underlying data changes.
+
+**What goes wrong — stale pages:**
+
+```twig
+{# This loads the referenced term entity in Twig. Its cache tags
+   (taxonomy_term:42) never bubble into the render array.
+   If the term gets renamed, cached pages still show the old name. #}
+{% set category = node.field_category.entity %}
+{% if category %}
+  <span class="badge">{{ category.label }}</span>
+{% endif %}
+
+{# Deep chains are worse — two entities loaded, zero cache tags bubbled.
+   If the media gets replaced or the file changes, stale image persists. #}
+{% set media = node.field_hero_media.entity %}
+{% if media and media.field_media_image.entity %}
+  <img src="{{ file_url(media.field_media_image.entity.fileUri) }}"
+       alt="{{ media.field_media_image.alt }}">
+{% endif %}
+
+{# Even conditions based on raw values cause stale output.
+   If the referenced term changes from "Featured" to something else,
+   cached pages still render the featured layout. #}
+{% if node.field_category.entity.label == 'Featured' %}
+  <div class="featured-layout">{{ content.field_body }}</div>
+{% else %}
+  {{ content.field_body }}
+{% endif %}
+```
+
+**The rule:** Every entity you load via `.entity` in Twig is invisible to the cache system. Simple `.value` access on the current node's own fields is lower risk (the node's own cache tags are already in the render tree), but traversal to **other entities** is where stale pages happen.
+
+**Correct pattern — preprocess with cache metadata bubbling:**
+
+When you need raw data from referenced entities for display or conditional logic, load it in preprocess and bubble the cache metadata:
+
+```php
+use Drupal\Core\Cache\CacheableMetadata;
+
+function mytheme_preprocess_node(&$variables) {
+  $node = $variables['node'];
+
+  // Start from existing render array metadata
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+
+  // Category label for badge display
+  if (!$node->get('field_category')->isEmpty()) {
+    $term = $node->get('field_category')->entity;
+    if ($term) {
+      $variables['category_label'] = $term->label();
+      // Bubble the term's cache tags — page invalidates when term changes
+      $cache->addCacheableDependency($term);
+    }
+  }
+
+  // Hero image from media reference
+  if (!$node->get('field_hero_media')->isEmpty()) {
+    $media = $node->get('field_hero_media')->entity;
+    if ($media && !$media->get('field_media_image')->isEmpty()) {
+      $file = $media->get('field_media_image')->entity;
+      if ($file) {
+        $variables['hero_image_url'] = \Drupal::service('file_url_generator')
+          ->generateAbsoluteString($file->getFileUri());
+        $variables['hero_image_alt'] = $media->get('field_media_image')->alt;
+        // Bubble both media AND file cache tags
+        $cache->addCacheableDependency($media);
+        $cache->addCacheableDependency($file);
+      }
+    }
+  }
+
+  $cache->applyTo($variables);
+}
+```
+
+Then in Twig, use the preprocess variables instead of entity traversal:
+
+```twig
+{# Safe — cache tags bubbled in preprocess #}
+{% if category_label %}
+  <span class="badge">{{ category_label }}</span>
+{% endif %}
+
+{% if hero_image_url %}
+  <img src="{{ hero_image_url }}" alt="{{ hero_image_alt }}">
+{% endif %}
+```
+
+**When direct Twig access is acceptable:**
+- Accessing the **current node's own** scalar fields for conditions (`node.field_bool.value`, `node.field_status.value`) — the node's cache tags are already in the render tree from `{{ content }}`
+- Checking `node.field_name.value is not empty` before rendering `{{ content.field_name }}` — the emptiness check itself doesn't produce output, and the rendered field handles its own metadata
+- One-off prototyping where caching is disabled — but never in production templates
+
 ### Common Mistakes
 - `{{ node.field_body.value|raw }}` — RAW FILTER on user content is XSS. Use `{{ content.field_body }}` instead
 - `{{ content.field_name.value }}` — the `content` array holds render arrays, not field objects. Access raw values via `{{ node.field_name.value }}`
@@ -97,8 +195,11 @@ Common field type properties accessible via `node.field_name.*`:
 - Skipping empty check on entity references → `node.field_reference.entity` will throw an error if field is empty
 - Using `{{ node.body }}` instead of `{{ node.field_body }}` — base fields use their machine name which may not have `field_` prefix (e.g., `body`, `title`, `uid`)
 - Printing `{{ node.field_image.entity.fileUri }}` directly — outputs `public://path/to/file.jpg`, not a web URL. Use `file_url(node.field_image.entity.fileUri)`
+- **Traversing `.entity` chains in Twig for display** — loads referenced entities without bubbling cache tags. The page caches correctly once, then serves stale content when the referenced entity changes. Move traversal to preprocess and call `$cache->addCacheableDependency($entity)` for every loaded entity
 
 ### See Also
 - Multi-value field iteration → [Multi-Value Fields](multi-value-fields.md)
 - Entity reference traversal → [Entity Reference Traversal](entity-reference-traversal.md)
 - Why `|raw` is dangerous → [Security & Performance](security-performance.md)
+- Cache metadata bubbling → [Cache Metadata in Render Arrays](../render-api/cache-metadata-render-arrays.md)
+- BubbleableMetadata → [BubbleableMetadata & Cache Bubbling](../caching/bubbleable-metadata-cache-bubbling.md)

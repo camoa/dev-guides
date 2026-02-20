@@ -15,6 +15,33 @@ plugins:
       sections:
         "Drupal":
           - drupal/index.md: "Drupal decision guides — forms, SDC components, JavaScript, entities, config, rendering, frontend, architecture"
+          - drupal/ajax/index.md: "Drupal AJAX Framework — forms, commands, routes, security, performance, and accessibility"
+          - drupal/ajax/core-concepts.md: "AJAX core concepts — three-layer architecture, workflow, and minimal form pattern"
+          - drupal/ajax/form-element-ajax-configuration.md: "Configure the #ajax property — callbacks, wrappers, events, and progress indicators"
+          - drupal/ajax/dependent-field-patterns.md: "Dependent form fields that update based on parent value — category/subcategory patterns"
+          - drupal/ajax/multi-step-form-workflows.md: "Wizard-style multi-step forms with AJAX navigation and form_state step tracking"
+          - drupal/ajax/live-field-validation.md: "Validate form fields on focusout for immediate feedback without form submission"
+          - drupal/ajax/content-manipulation-commands.md: "AJAX commands for DOM updates — ReplaceCommand, HtmlCommand, AppendCommand and others"
+          - drupal/ajax/css-styling-commands.md: "AJAX commands for CSS, jQuery method invocation, data attributes, and dynamic CSS"
+          - drupal/ajax/dialog-commands.md: "Open, close, and configure modal dialogs, off-canvas panels, and non-modal dialogs"
+          - drupal/ajax/feedback-commands.md: "Show messages, alerts, and screen reader announcements via MessageCommand and AnnounceCommand"
+          - drupal/ajax/custom-ajax-commands.md: "Create custom AJAX commands with CommandInterface for complex DOM manipulation"
+          - drupal/ajax/custom-route-implementation.md: "Build AJAX endpoints outside Form API with nojs/ajax route parameters"
+          - drupal/ajax/file-upload-patterns.md: "Upload files via AJAX with managed_file, validators, and progress indicators"
+          - drupal/ajax/autocomplete-implementation.md: "Implement autocomplete with custom route, controller, and character threshold"
+          - drupal/ajax/access-control-patterns.md: "Restrict AJAX callbacks and routes with permissions and custom access callbacks"
+          - drupal/ajax/csrf-protection.md: "Protect AJAX endpoints from CSRF using Drupal's token system"
+          - drupal/ajax/performance-optimization.md: "Reduce AJAX response times — minimal DOM updates, batch processing, query limits"
+          - drupal/ajax/response-caching.md: "Cache AJAX responses with CacheableAjaxResponse, tags, and contexts"
+          - drupal/ajax/wcag-compliance-patterns.md: "Make AJAX interactions accessible — WCAG 2.1 Level AA patterns for keyboard and screen readers"
+          - drupal/ajax/screen-reader-support.md: "Announce dynamic AJAX updates to screen readers using AnnounceCommand and ARIA live regions"
+          - drupal/ajax/debugging-techniques.md: "Debug AJAX failures with browser DevTools, server-side logging, and a troubleshooting checklist"
+          - drupal/ajax/testing-ajax.md: "Automated AJAX tests with WebDriverTestBase — assertWaitOnAjaxRequest and common pitfalls"
+          - drupal/ajax/frontend-framework-integration.md: "Integrate React or Vue with Drupal AJAX endpoints using JSON responses"
+          - drupal/ajax/best-practices-security.md: "Security requirements for AJAX — access control, XSS prevention, CSRF, input validation"
+          - drupal/ajax/best-practices-performance.md: "Performance standards for AJAX — DOM minimization, query limits, Batch API thresholds"
+          - drupal/ajax/best-practices-development.md: "Development standards for AJAX — dependency injection, render arrays, error handling"
+          - drupal/ajax/best-practices-accessibility.md: "Accessibility requirements for AJAX — WCAG 2.1 Level AA checklist and patterns"
           - drupal/ai-content/index.md: "AI Content - AI-powered content creation, optimization, and management using Drupal AI module"
           - drupal/ai-content/anti-patterns.md: "Common anti-patterns to avoid - trusting AI output, synchronous processing, token limits, hardcoding"
           - drupal/ai-content/architecture.md: "AI module architecture - provider layer, model types, plugin system, and service layer"
@@ -28,6 +55,24 @@ plugins:
           - drupal/ai-content/security-privacy.md: "Security and privacy for AI - API key management, prompt injection prevention, PII handling"
           - drupal/ai-content/seo.md: "AI-powered SEO - automated metatags, structured data, E-E-A-T implementation"
           - drupal/ai-content/vector-rag.md: "Vector databases and RAG - semantic search, content similarity, AI chatbots with site context"
+          - drupal/ajax-htmx-migration/index.md: "AJAX to HTMX Migration — pattern-by-pattern guide for replacing Drupal AJAX API with core HTMX in Drupal 11.3+"
+          - drupal/ajax-htmx-migration/ajax-vs-htmx-fundamentals.md: "Core architectural differences between Drupal AJAX API and HTMX — choose the right approach before migrating"
+          - drupal/ajax-htmx-migration/ajax-command-to-htmx-equivalents.md: "Quick reference mapping every Drupal AJAX command to its HTMX equivalent swap strategy or method"
+          - drupal/ajax-htmx-migration/dependent-dropdown-migration.md: "Migrate a parent select that updates child select options — the most common Drupal AJAX pattern"
+          - drupal/ajax-htmx-migration/cascading-selects-with-url-migration.md: "Migrate multiple dependent selects with browser URL sync — bookmarkable state via pushUrlHeader and swapOob"
+          - drupal/ajax-htmx-migration/button-triggered-content-load-migration.md: "Migrate AJAX button or link that loads dynamic content into a container — replace AjaxResponse with render arrays"
+          - drupal/ajax-htmx-migration/multi-step-wizard-migration.md: "Migrate multi-step wizard forms to HTMX — bookmarkable steps with browser back/forward support via route parameters"
+          - drupal/ajax-htmx-migration/real-time-validation-migration.md: "Migrate field-level validation on blur — email availability checks and format verification without form submission"
+          - drupal/ajax-htmx-migration/infinite-scroll-migration.md: "Migrate Load More buttons and infinite scroll patterns — append content using swap beforeend and the revealed trigger"
+          - drupal/ajax-htmx-migration/dynamic-field-addition-migration.md: "Migrate Add Another button patterns — use vals() to pass incremented count instead of form state storage"
+          - drupal/ajax-htmx-migration/javascript-event-migration.md: "Migrate custom JavaScript AJAX event hooks to HTMX events — beforeSend, success, error equivalents"
+          - drupal/ajax-htmx-migration/custom-ajax-command-migration.md: "Migrate custom AJAX CommandInterface classes to HTMX trigger headers that fire custom JavaScript events"
+          - drupal/ajax-htmx-migration/drupal-behavior-migration.md: "Migrate Drupal behaviors for HTMX swaps — behaviors work identically, update from jQuery.once to the once() API"
+          - drupal/ajax-htmx-migration/accessibility-migration.md: "Migrate AJAX accessibility features — ARIA live regions, screen reader announcements, and focus management for HTMX swaps"
+          - drupal/ajax-htmx-migration/when-not-to-migrate.md: "Cases where AJAX is better than HTMX — complex command sequences, dialogs, CSS manipulation, and contrib dependencies"
+          - drupal/ajax-htmx-migration/hybrid-ajax-htmx-approach.md: "Use AJAX and HTMX together in the same application — coexistence patterns, library dependencies, and integration points"
+          - drupal/ajax-htmx-migration/migration-strategy-best-practices.md: "Plan your AJAX to HTMX migration — priorities by risk and ROI, phased workflow, and testing strategy"
+          - drupal/ajax-htmx-migration/migration-checklist.md: "Step-by-step verification checklist for each AJAX to HTMX migration — pre-migration, code changes, testing, and post-migration"
           - drupal/blocks/index.md: "Drupal Blocks — atomic guides for block system development"
           - drupal/blocks/anti-patterns.md: "Avoid common pitfalls that lead to bugs, performance issues, or maintenance problems"
           - drupal/blocks/best-practices.md: "Architectural guidance for maintainable, performant, testable block plugins"
@@ -476,6 +521,25 @@ plugins:
           - drupal/ui-suite-daisyui/best-practices-and-anti-patterns.md: "Best Practices — component naming, slot usage, Tailwind patterns"
           - drupal/ui-suite-daisyui/security-and-accessibility.md: "Security & Accessibility — XSS, CSP, ARIA, keyboard nav"
           - drupal/ui-suite-daisyui/sources-maintenance.md: "Sources and maintenance manifest for UI Suite DaisyUI guide"
+          - drupal/htmx/index.md: "Drupal HTMX — native HTMX integration in Drupal 11.3+ for dynamic content without traditional JavaScript"
+          - drupal/htmx/htmx-overview.md: "HTMX Overview — core concepts, benefits, and when to use declarative HTML-driven interactions"
+          - drupal/htmx/htmx-vs-ajax.md: "HTMX vs AJAX — decision table for choosing between HTMX and traditional AJAX in Drupal"
+          - drupal/htmx/request-response-lifecycle.md: "Request/Response Lifecycle — 8-step flow of HTMX requests through Drupal's render pipeline"
+          - drupal/htmx/basic-setup.md: "Basic Setup — enable HTMX in a custom module with route definition, controller, and library attachment"
+          - drupal/htmx/library-dependencies.md: "Library Dependencies — what core/drupal.htmx loads and differential asset loading"
+          - drupal/htmx/request-detection.md: "Request Detection — detect HTMX requests and access metadata using HtmxRequestInfoTrait"
+          - drupal/htmx/dynamic-forms.md: "Dynamic Forms — cascading selects, OOB updates, and browser history with HTMX"
+          - drupal/htmx/htmx-controllers.md: "HTMX Controllers — conditional responses, route options, and render array patterns"
+          - drupal/htmx/htmx-attributes.md: "HTMX Attributes Reference — complete attribute reference via the Drupal Htmx class"
+          - drupal/htmx/response-headers.md: "Response Headers — redirect, trigger events, retarget, reswap, and history via HTMX headers"
+          - drupal/htmx/drupal-behaviors.md: "Drupal Behaviors Integration — run behaviors on HTMX content, custom events, lifecycle hooks"
+          - drupal/htmx/asset-loading.md: "Asset Loading — differential CSS/JS loading, drupalSettings merge, and history cleanup"
+          - drupal/htmx/production-patterns.md: "Production Patterns — load more, infinite scroll, modals, polling, and live search with HTMX"
+          - drupal/htmx/production-example-config-export.md: "Production Example: ConfigSingleExportForm — cascading selects, OOB updates, history management"
+          - drupal/htmx/best-practices.md: "Best Practices — security, performance, accessibility, and coding standards for HTMX in Drupal"
+          - drupal/htmx/troubleshooting.md: "Troubleshooting — debug HTMX attribute, swap, behavior, and request issues"
+          - drupal/htmx/ajax-migration.md: "AJAX to HTMX Migration — patterns for buttons, forms, multiple updates, and migration checklist"
+          - drupal/htmx/core-file-reference.md: "Core File Reference — Drupal core HTMX PHP classes, JavaScript files, and production examples"
           - drupal/migration/index.md: "Drupal 7 to 11 migration — decision guides for Migrate API, content strategy, and performance"
           - drupal/migration/anti-patterns.md: "Common migration failures that cause project delays and technical debt"
           - drupal/migration/assess-migration-scope.md: "Inventory and timeline estimation for D7 to D11 migration projects"
@@ -563,6 +627,29 @@ plugins:
           - drupal/routing/security-best-practices.md: "Drupal routing security - protect routes with access control, input validation, and CSRF protection"
           - drupal/routing/testing-and-debugging.md: "Testing and debugging Drupal routes - validate YAML syntax and troubleshoot routing issues"
           - drupal/routing/yaml-escaping-rules.md: "YAML escaping rules for Drupal routing - single backslashes in single quotes prevent fatal site crashes"
+          - drupal/salesforce/index.md: "Drupal Salesforce Suite — bidirectional sync between Drupal entities and Salesforce objects, authentication, mapping, events, and Drush operations"
+          - drupal/salesforce/salesforce-overview.md: "Salesforce module suite architecture — core components, service IDs, storage objects, and submodule responsibilities"
+          - drupal/salesforce/oauth-authentication.md: "Salesforce OAuth 2.0 Web Server authentication setup — when to use OAuth vs JWT, Connected App configuration"
+          - drupal/salesforce/jwt-authentication.md: "Salesforce JWT Bearer Token authentication setup — standard vs GovCloud plugin, RSA key configuration"
+          - drupal/salesforce/mapping-framework.md: "Salesforce mapping framework — SalesforceMapping config entity, MappedObject content entity, field mapping plugins"
+          - drupal/salesforce/mapping-ui.md: "Salesforce mapping admin UI — sync triggers, field direction, queue options, UI vs code decision"
+          - drupal/salesforce/push-synchronization.md: "Drupal to Salesforce push sync — queue architecture, event flow, async vs sync, upsert vs create/update"
+          - drupal/salesforce/pull-synchronization.md: "Salesforce to Drupal pull sync — queue handler, SOQL query, event flow, pull trigger date, WHERE clause filtering"
+          - drupal/salesforce/optional-submodules.md: "Salesforce optional submodules — logger, example, webform, address, SOAP — when to enable each"
+          - drupal/salesforce/event-system.md: "Salesforce event system — all available push/pull/delete events, EventSubscriber pattern, service definition"
+          - drupal/salesforce/rest-client-api.md: "Salesforce REST client programmatic API — objectCreate, objectUpdate, objectUpsert, query, direct API calls, binary fetch"
+          - drupal/salesforce/soql-query-builder.md: "SOQL query builder — SelectQuery properties, conditions, operators, pagination, raw SOQL with SelectQueryRaw"
+          - drupal/salesforce/mapped-objects-api.md: "MappedObject programmatic API — load by SFID, by entity, by mapping, create records"
+          - drupal/salesforce/push-queue-operations.md: "Push queue programmatic operations — queue entity for push, process queue via service"
+          - drupal/salesforce/custom-field-mapping-plugin.md: "Custom Salesforce field mapping plugin — extend PropertiesBase, implement value() and pullValue(), @SalesforceMappingField annotation"
+          - drupal/salesforce/configuration-management.md: "Salesforce configuration management — mapping export paths, auth secrets handling, global settings, environment deployment workflow"
+          - drupal/salesforce/queue-processing.md: "Salesforce queue processing — cron vs standalone endpoints, configuration, scheduling decisions"
+          - drupal/salesforce/drush-commands.md: "Salesforce Drush commands reference — push queue, pull queue, mapping maintenance, token management"
+          - drupal/salesforce/class-reference.md: "Salesforce class reference — RestClient methods, SFID, SObject, SelectQueryResult, PushParams, MappingConstants, SOAP client"
+          - drupal/salesforce/troubleshooting.md: "Salesforce troubleshooting — auth failures, push not triggering, pull not creating entities, field mapping issues, stuck queues, API limits"
+          - drupal/salesforce/performance.md: "Salesforce performance — caching strategy, queue processing for high volume, API call optimization for push and pull"
+          - drupal/salesforce/extension-patterns.md: "Salesforce extension patterns — custom auth provider, custom queue processor, custom pull worker"
+          - drupal/salesforce/decision-framework.md: "Salesforce decision framework — submodule selection, events vs plugins vs config, when to customize vs configure"
           - drupal/sdc/index.md: "Single Directory Components (SDC) — component architecture, development patterns, and best practices"
           - drupal/sdc/anti-patterns.md: "Common component development anti-patterns with WHY explanations from code review perspective"
           - drupal/sdc/component-composition.md: "Including components within components using include(), embed, or render arrays"
@@ -814,6 +901,14 @@ plugins:
           - nextjs/deepchat-nextjs/security.md: "XSS prevention, API key management, file upload validation, rate limiting"
           - nextjs/deepchat-nextjs/streaming-responses.md: "Server-Sent Events streaming with ReadableStream for AI chat responses"
           - nextjs/deepchat-nextjs/styling-theming.md: "Style DeepChat with CSS variables, messageStyles, and shadow DOM"
+          - nextjs/deepchat-drupal-auth/index.md: "DeepChat + Drupal OAuth auth — architecture, CSRF lifecycle, configuration, pitfalls, and debugging"
+          - nextjs/deepchat-drupal-auth/oauth-csrf-overview.md: "Architecture overview for DeepChat + Next.js + Drupal OAuth — component stack and key file locations"
+          - nextjs/deepchat-drupal-auth/dual-authentication-flow.md: "Step-by-step OAuth + CSRF authentication flow for DeepChat + Drupal — dual-auth challenge and sequence"
+          - nextjs/deepchat-drupal-auth/csrf-token-lifecycle.md: "How Drupal CSRF tokens are generated and validated — seed storage, HMAC computation, and root causes of validation failure"
+          - nextjs/deepchat-drupal-auth/deepchat-configuration.md: "Configure deep-chat-react for Next.js proxy — connect, requestInterceptor, responseInterceptor, SSE streaming, and useChatSession hook"
+          - nextjs/deepchat-drupal-auth/common-pitfalls.md: "Common CSRF and session pitfalls in DeepChat + Drupal OAuth — mismatched auth contexts, missing session start, wrong token placement"
+          - nextjs/deepchat-drupal-auth/debugging-checklist.md: "Step-by-step debugging guide for CSRF failures in DeepChat + Drupal OAuth — curl commands, log inspection, session verification"
+          - nextjs/deepchat-drupal-auth/reference-implementation.md: "Complete working implementation — Next.js proxy route handler, React ChatWorkspace component, and Drupal setSession controller"
         "Design Systems":
           - design-systems/index.md: "Design system guides — recognition, Bootstrap mapping, Radix SDC implementation, Radix component reference, Tailwind CSS integration"
           - design-systems/bootstrap/index.md: "Bootstrap 5.3 Mapping — systematic methodology for mapping design systems to Bootstrap using the 6px threshold framework"
@@ -1067,6 +1162,34 @@ nav:
   - Home: index.md
   - Drupal:
     - drupal/index.md
+    - AJAX:
+      - drupal/ajax/index.md
+      - drupal/ajax/core-concepts.md
+      - drupal/ajax/form-element-ajax-configuration.md
+      - drupal/ajax/dependent-field-patterns.md
+      - drupal/ajax/multi-step-form-workflows.md
+      - drupal/ajax/live-field-validation.md
+      - drupal/ajax/content-manipulation-commands.md
+      - drupal/ajax/css-styling-commands.md
+      - drupal/ajax/dialog-commands.md
+      - drupal/ajax/feedback-commands.md
+      - drupal/ajax/custom-ajax-commands.md
+      - drupal/ajax/custom-route-implementation.md
+      - drupal/ajax/file-upload-patterns.md
+      - drupal/ajax/autocomplete-implementation.md
+      - drupal/ajax/access-control-patterns.md
+      - drupal/ajax/csrf-protection.md
+      - drupal/ajax/performance-optimization.md
+      - drupal/ajax/response-caching.md
+      - drupal/ajax/wcag-compliance-patterns.md
+      - drupal/ajax/screen-reader-support.md
+      - drupal/ajax/debugging-techniques.md
+      - drupal/ajax/testing-ajax.md
+      - drupal/ajax/frontend-framework-integration.md
+      - drupal/ajax/best-practices-security.md
+      - drupal/ajax/best-practices-performance.md
+      - drupal/ajax/best-practices-development.md
+      - drupal/ajax/best-practices-accessibility.md
     - AI Content:
       - drupal/ai-content/index.md
       - drupal/ai-content/anti-patterns.md
@@ -1081,6 +1204,25 @@ nav:
       - drupal/ai-content/security-privacy.md
       - drupal/ai-content/seo.md
       - drupal/ai-content/vector-rag.md
+    - AJAX-HTMX Migration:
+      - drupal/ajax-htmx-migration/index.md
+      - drupal/ajax-htmx-migration/ajax-vs-htmx-fundamentals.md
+      - drupal/ajax-htmx-migration/ajax-command-to-htmx-equivalents.md
+      - drupal/ajax-htmx-migration/dependent-dropdown-migration.md
+      - drupal/ajax-htmx-migration/cascading-selects-with-url-migration.md
+      - drupal/ajax-htmx-migration/button-triggered-content-load-migration.md
+      - drupal/ajax-htmx-migration/multi-step-wizard-migration.md
+      - drupal/ajax-htmx-migration/real-time-validation-migration.md
+      - drupal/ajax-htmx-migration/infinite-scroll-migration.md
+      - drupal/ajax-htmx-migration/dynamic-field-addition-migration.md
+      - drupal/ajax-htmx-migration/javascript-event-migration.md
+      - drupal/ajax-htmx-migration/custom-ajax-command-migration.md
+      - drupal/ajax-htmx-migration/drupal-behavior-migration.md
+      - drupal/ajax-htmx-migration/accessibility-migration.md
+      - drupal/ajax-htmx-migration/when-not-to-migrate.md
+      - drupal/ajax-htmx-migration/hybrid-ajax-htmx-approach.md
+      - drupal/ajax-htmx-migration/migration-strategy-best-practices.md
+      - drupal/ajax-htmx-migration/migration-checklist.md
     - Blocks:
       - drupal/blocks/index.md
       - drupal/blocks/anti-patterns.md
@@ -1551,6 +1693,26 @@ nav:
       - drupal/ui-suite-daisyui/best-practices-and-anti-patterns.md
       - drupal/ui-suite-daisyui/security-and-accessibility.md
       - drupal/ui-suite-daisyui/sources-maintenance.md
+    - HTMX:
+      - drupal/htmx/index.md
+      - drupal/htmx/htmx-overview.md
+      - drupal/htmx/htmx-vs-ajax.md
+      - drupal/htmx/request-response-lifecycle.md
+      - drupal/htmx/basic-setup.md
+      - drupal/htmx/library-dependencies.md
+      - drupal/htmx/request-detection.md
+      - drupal/htmx/dynamic-forms.md
+      - drupal/htmx/htmx-controllers.md
+      - drupal/htmx/htmx-attributes.md
+      - drupal/htmx/response-headers.md
+      - drupal/htmx/drupal-behaviors.md
+      - drupal/htmx/asset-loading.md
+      - drupal/htmx/production-patterns.md
+      - drupal/htmx/production-example-config-export.md
+      - drupal/htmx/best-practices.md
+      - drupal/htmx/troubleshooting.md
+      - drupal/htmx/ajax-migration.md
+      - drupal/htmx/core-file-reference.md
     - Migration:
       - drupal/migration/index.md
       - drupal/migration/anti-patterns.md
@@ -1643,6 +1805,30 @@ nav:
       - drupal/routing/security-best-practices.md
       - drupal/routing/testing-and-debugging.md
       - drupal/routing/yaml-escaping-rules.md
+    - Salesforce:
+      - drupal/salesforce/index.md
+      - drupal/salesforce/salesforce-overview.md
+      - drupal/salesforce/oauth-authentication.md
+      - drupal/salesforce/jwt-authentication.md
+      - drupal/salesforce/mapping-framework.md
+      - drupal/salesforce/mapping-ui.md
+      - drupal/salesforce/push-synchronization.md
+      - drupal/salesforce/pull-synchronization.md
+      - drupal/salesforce/optional-submodules.md
+      - drupal/salesforce/event-system.md
+      - drupal/salesforce/rest-client-api.md
+      - drupal/salesforce/soql-query-builder.md
+      - drupal/salesforce/mapped-objects-api.md
+      - drupal/salesforce/push-queue-operations.md
+      - drupal/salesforce/custom-field-mapping-plugin.md
+      - drupal/salesforce/configuration-management.md
+      - drupal/salesforce/queue-processing.md
+      - drupal/salesforce/drush-commands.md
+      - drupal/salesforce/class-reference.md
+      - drupal/salesforce/troubleshooting.md
+      - drupal/salesforce/performance.md
+      - drupal/salesforce/extension-patterns.md
+      - drupal/salesforce/decision-framework.md
     - SDC:
       - drupal/sdc/index.md
       - drupal/sdc/anti-patterns.md
@@ -1905,6 +2091,15 @@ nav:
       - nextjs/deepchat-nextjs/security.md
       - nextjs/deepchat-nextjs/streaming-responses.md
       - nextjs/deepchat-nextjs/styling-theming.md
+    - "DeepChat + Drupal Auth":
+      - nextjs/deepchat-drupal-auth/index.md
+      - nextjs/deepchat-drupal-auth/oauth-csrf-overview.md
+      - nextjs/deepchat-drupal-auth/dual-authentication-flow.md
+      - nextjs/deepchat-drupal-auth/csrf-token-lifecycle.md
+      - nextjs/deepchat-drupal-auth/deepchat-configuration.md
+      - nextjs/deepchat-drupal-auth/common-pitfalls.md
+      - nextjs/deepchat-drupal-auth/debugging-checklist.md
+      - nextjs/deepchat-drupal-auth/reference-implementation.md
   - Design Systems:
     - design-systems/index.md
     - Bootstrap Mapping:

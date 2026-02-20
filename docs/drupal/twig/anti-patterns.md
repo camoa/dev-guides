@@ -87,7 +87,19 @@ Reading time: {{ reading_time }} minutes
 **8. Using template preprocess for data that belongs in field formatters**
 If you're rewriting how a field renders in preprocess + template, consider: should this be a custom field formatter instead? Formatters are reusable, configurable in the UI, and cacheable properly.
 
-**9. Modifying render arrays destructively in templates**
+**9. Entity traversal in Twig for display output (cache invalidation bypass)**
+```twig
+{# WRONG — loads term entity in Twig; its cache tags never bubble.
+   If the term gets renamed, cached pages show the old name. #}
+{% set term = node.field_category.entity %}
+<span>{{ term.label }}</span>
+
+{# RIGHT — load in preprocess, bubble cache tags #}
+<span>{{ category_label }}</span>
+```
+See [Accessing Field Values — Cache Invalidation Warning](accessing-field-values.md#cache-invalidation-warning-entity-traversal-in-twig-bypasses-cache-metadata) for the preprocess pattern with `addCacheableDependency()`.
+
+**10. Modifying render arrays destructively in templates**
 ```twig
 {# WRONG — `without` takes the name as a string argument, not like this #}
 {% set custom_content = content %}
