@@ -1,7 +1,3 @@
----
-description: Sources, references, and maintenance manifest for the Layout Builder guide — web sources, code sources, and version history.
----
-
 ## Sources & Maintenance Manifest
 
 ### Drupal Research Install

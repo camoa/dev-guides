@@ -1,5 +1,5 @@
 ---
-description: Control where blocks appear via regions, themes, and configuration
+description: Control where blocks appear via regions, themes, and Block config entities
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Controlling where blocks appear (regions, themes) and their configuration (weight, visibility, settings).
+> Use when controlling where blocks appear (regions, themes) and their configuration (weight, visibility, settings). Block config entities are the placement layer — distinct from the block plugin itself.
 
 ## Decision
 

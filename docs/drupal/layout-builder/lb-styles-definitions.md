@@ -1,7 +1,3 @@
----
-description: Defining individual Layout Builder Styles — CSS classes, block/layout restrictions, groups, and config YAML structure.
----
-
 ## 11.2. Layout Builder Style Definitions
 
 ### When to Use

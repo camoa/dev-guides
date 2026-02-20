@@ -1,7 +1,3 @@
----
-description: Exporting, deploying, and packaging Layout Builder configuration with config sync and Drupal recipes.
----
-
 ## 14. Configuration Export & Recipes
 
 ### When to Use

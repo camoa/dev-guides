@@ -1,174 +1,147 @@
 ---
-description: Comprehensive checklist to validate design system analysis completeness
+description: Design system recognition — 11. validation checklist
 ---
 
-# Validation Checklist
+## 11. Validation Checklist
 
-## When to Use
+### When to Use This Section
+- You've completed your design system analysis and need to validate
+- You're ensuring nothing was missed in the recognition process
+- You're preparing documentation of your analysis
 
-> Use after completing design system analysis. Use to ensure nothing was missed in recognition process, or when preparing documentation.
+### 11.1 Foundation Layer Validation
 
-## Decision
+**Design Tokens Checklist:**
 
-| Validation Category | Complete When... | Missing Indicator |
-|-------------------|------------------|-------------------|
-| **Foundation Layer** | All token types extracted (color, typography, spacing, surface) | No token hierarchy documented |
-| **Component Hierarchy** | All 5 stages identified (atoms → pages) | Components uncategorized |
-| **Source Analysis** | Source-specific patterns documented (CSS/Figma/screenshots) | No source files referenced |
-| **Standards Compliance** | W3C DTCG, WCAG 2.2, Atomic Design validated | No compliance notes |
-| **Documentation** | All components cataloged, relationships mapped | Incomplete catalog |
+- [ ] **Color tokens extracted**
+  - [ ] Reference/primitive colors identified
+  - [ ] Semantic color mappings documented
+  - [ ] Theme variations (light/dark) noted
+  - [ ] Color space identified (hex, OKLCH, RGB)
+  - [ ] Contrast ratios meet WCAG 2.2 requirements
 
-## Pattern
+- [ ] **Typography tokens extracted**
+  - [ ] Type scale identified (ratio or custom)
+  - [ ] Font families documented
+  - [ ] Font weights mapped
+  - [ ] Line height tokens noted
+  - [ ] Responsive/fluid typography checked
 
-**Foundation Layer Validation:**
+- [ ] **Spacing tokens extracted**
+  - [ ] Base unit identified (4px, 8px, etc.)
+  - [ ] Scale progression determined (linear, geometric)
+  - [ ] Naming convention documented
+  - [ ] Contextual spacing variants noted
 
-```
-☐ Color tokens extracted
-  ☐ Reference/primitive colors
-  ☐ Semantic color mappings
-  ☐ Theme variations (light/dark)
-  ☐ Color space identified (hex, OKLCH, RGB)
-  ☐ Contrast ratios meet WCAG 2.2
+- [ ] **Surface tokens extracted**
+  - [ ] Border radius values documented
+  - [ ] Shadow system identified
+  - [ ] Elevation levels mapped
+  - [ ] Border styles/widths noted
+  - [ ] Opacity values extracted
 
-☐ Typography tokens extracted
-  ☐ Type scale identified (ratio or custom)
-  ☐ Font families documented
-  ☐ Font weights mapped
-  ☐ Line height tokens noted
-  ☐ Responsive/fluid typography checked
+### 11.2 Component Hierarchy Validation
 
-☐ Spacing tokens extracted
-  ☐ Base unit identified (4px, 8px, etc.)
-  ☐ Scale progression (linear, geometric)
-  ☐ Naming convention documented
-  ☐ Contextual spacing variants
+**Atomic Design Classification Checklist:**
 
-☐ Surface tokens extracted
-  ☐ Border radius values
-  ☐ Shadow system identified
-  ☐ Elevation levels mapped
-  ☐ Border styles/widths
-  ☐ Opacity values
-```
+- [ ] **Atoms identified**
+  - [ ] Form elements cataloged
+  - [ ] Buttons listed
+  - [ ] Typography atoms documented
+  - [ ] Media atoms noted
+  - [ ] Indicator atoms cataloged
 
-**Component Hierarchy Validation:**
+- [ ] **Molecules identified**
+  - [ ] Form field molecules documented
+  - [ ] Navigation item molecules noted
+  - [ ] Card content molecules identified
+  - [ ] All molecules contain 2-3 atoms
+  - [ ] Single responsibility verified for each
 
-```
-☐ Atoms identified
-  ☐ Form elements cataloged
-  ☐ Buttons listed
-  ☐ Typography atoms
-  ☐ Media atoms
-  ☐ Indicator atoms
+- [ ] **Organisms identified**
+  - [ ] Header/footer documented
+  - [ ] Navigation organisms mapped
+  - [ ] Form organisms identified
+  - [ ] Card grids noted
+  - [ ] Each contains multiple molecules/atoms
+  - [ ] Distinct interface sections confirmed
 
-☐ Molecules identified
-  ☐ Form field molecules
-  ☐ Navigation item molecules
-  ☐ Card content molecules
-  ☐ All contain 2-3 atoms
-  ☐ Single responsibility verified
+- [ ] **Templates identified**
+  - [ ] Layout structures documented
+  - [ ] Content areas defined
+  - [ ] Grid systems noted
+  - [ ] Responsive breakpoints identified
+  - [ ] Confirmed placeholder content (not real)
 
-☐ Organisms identified
-  ☐ Header/footer documented
-  ☐ Navigation organisms
-  ☐ Form organisms
-  ☐ Card grids
-  ☐ Contains multiple molecules/atoms
-  ☐ Distinct interface sections
+- [ ] **Pages identified**
+  - [ ] Real content instances documented
+  - [ ] Edge cases noted (long headlines, empty states)
+  - [ ] Variations cataloged (logged in/out, mobile/desktop)
+  - [ ] Confirmed real content (not placeholders)
 
-☐ Templates identified
-  ☐ Layout structures documented
-  ☐ Content areas defined
-  ☐ Grid systems noted
-  ☐ Responsive breakpoints
-  ☐ Placeholder content confirmed
+### 11.3 Source Analysis Validation
 
-☐ Pages identified
-  ☐ Real content instances
-  ☐ Edge cases noted (long headlines, empty states)
-  ☐ Variations cataloged (logged in/out, mobile/desktop)
-  ☐ Real content confirmed
-```
+**HTML/CSS Source Checklist:**
 
-**Source Analysis Validation:**
+- [ ] CSS custom properties extracted from `:root`
+- [ ] Token layers identified (primitive → semantic → component)
+- [ ] Component class names mapped to atomic hierarchy
+- [ ] BEM or naming convention documented
+- [ ] Theme variations extracted (dark mode, etc.)
 
-**HTML/CSS:**
-```
-☐ CSS custom properties extracted from :root
-☐ Token layers identified (primitive → semantic → component)
-☐ Component class names mapped to atomic hierarchy
-☐ BEM or naming convention documented
-☐ Theme variations extracted (dark mode, etc.)
-```
+**Figma Source Checklist:**
 
-**Figma:**
-```
-☐ Variables/styles extracted
-☐ Component hierarchy mapped via naming
-☐ Component sets and variants documented
-☐ Auto-layout spacing values extracted
-☐ Layout grids documented (columns, gutters, margins)
-☐ Component nesting analyzed
-```
+- [ ] Variables/styles extracted from design file
+- [ ] Component hierarchy mapped via naming convention
+- [ ] Component sets and variants documented
+- [ ] Auto-layout spacing values extracted
+- [ ] Layout grids documented (columns, gutters, margins)
+- [ ] Component nesting analyzed (atom → molecule → organism)
 
-**Screenshots:**
-```
-☐ Visual boundaries identified
-☐ Color palette sampled and grouped
-☐ Typography hierarchy measured
-☐ Spacing system measured
-☐ Components classified by visual pattern
-☐ Design system fingerprint identified
-```
+**Screenshot Source Checklist:**
 
-**Standards Compliance Validation:**
+- [ ] Visual boundaries identified
+- [ ] Color palette sampled and grouped
+- [ ] Typography hierarchy measured
+- [ ] Spacing system measured
+- [ ] Components classified by visual pattern
+- [ ] Design system fingerprint identified (Material, Bootstrap, etc.)
 
-```
-☐ W3C DTCG Compliance
-  ☐ Token structure uses $value property
-  ☐ Token types specified with $type
-  ☐ Composite tokens use correct structure
-  ☐ Group hierarchy documented
-  ☐ File format follows spec (.tokens.json)
+### 11.4 Standards Compliance Validation
 
-☐ WCAG 2.2 Compliance
-  ☐ Color contrast ratios validated
-  ☐ Level AA minimum met (4.5:1 normal, 3:1 large)
-  ☐ Level AAA documented if met
-  ☐ UI component contrast checked (3:1)
+**W3C DTCG Compliance:**
 
-☐ Atomic Design Compliance
-  ☐ All 5 stages represented
-  ☐ Classification rationale documented
-  ☐ Single responsibility for molecules
-  ☐ Templates distinguished from pages
-```
+- [ ] Token structure uses `$value` property
+- [ ] Token types specified with `$type`
+- [ ] Composite tokens use correct structure
+- [ ] Group hierarchy documented
+- [ ] File format follows specification (.tokens.json)
 
-**Documentation Completeness:**
+**WCAG 2.2 Compliance:**
 
-```
-☐ All design tokens cataloged with values
-☐ All components classified (atom/molecule/organism/template/page)
-☐ Source files referenced (URLs, file paths)
-☐ Design system patterns identified
-☐ Edge cases and variations documented
-☐ Naming conventions explained
-☐ Token hierarchy visualized
-☐ Component relationships mapped
-☐ Accessibility audit completed
-☐ Standards compliance validated
-```
+- [ ] Color contrast ratios validated
+- [ ] Level AA minimum met (4.5:1 normal, 3:1 large)
+- [ ] Level AAA documented if met
+- [ ] UI component contrast checked (3:1)
 
-## Common Mistakes
+**Atomic Design Compliance:**
 
-- **Wrong**: Skipping edge case documentation → **Right**: Document long headlines, empty states, missing images (pages reveal real-world issues)
-- **Wrong**: No source file references → **Right**: Link to original CSS files, Figma URLs, screenshot paths
-- **Wrong**: Missing theme variant documentation → **Right**: Document light/dark/high-contrast token swaps
-- **Wrong**: Incomplete component catalog → **Right**: Every component categorized and relationships mapped
+- [ ] All five stages represented (atoms → pages)
+- [ ] Classification rationale documented
+- [ ] Single responsibility principle followed for molecules
+- [ ] Templates distinguished from pages (placeholder vs real content)
 
-## See Also
+### 11.5 Documentation Completeness
 
-- [Design Tokens](./design-tokens.md)
-- [Component Classification](./component-classification.md)
-- [Analysis Best Practices](./analysis-best-practices.md)
-- [Standards & Specifications](./standards-specifications.md)
+**Final Documentation Checklist:**
+
+- [ ] All design tokens cataloged with values
+- [ ] All components classified (atom/molecule/organism/template/page)
+- [ ] Source files referenced (URLs, file paths)
+- [ ] Design system patterns identified
+- [ ] Edge cases and variations documented
+- [ ] Naming conventions explained
+- [ ] Token hierarchy visualized
+- [ ] Component relationships mapped
+- [ ] Accessibility audit completed
+- [ ] Standards compliance validated

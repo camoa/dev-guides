@@ -1,8 +1,3 @@
----
-description: When writing or editing views.view.*.yml files directly, or understanding config structure for recipes and exports.
-drupal_version: "11.x"
----
-
 ## 2. View Config Schema (views.view.*.yml)
 
 ### When to Use
@@ -91,3 +86,4 @@ Reference: `core/modules/node/config/optional/views.view.content.yml`
 - Section 3: Display Configuration — full `display_options` schema
 - Section 32: Code Reference Map — View entity class
 - Reference: [views.schema.yml API docs](https://api.drupal.org/api/drupal/core!modules!views!config!schema!views.schema.yml/11.x)
+

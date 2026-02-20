@@ -1,7 +1,3 @@
----
-description: Styling Layout Builder output — overriding layout templates, Bootstrap grid integration, admin UI theming, and template suggestions.
----
-
 ## 15. Theming Layout Builder
 
 ### When to Use

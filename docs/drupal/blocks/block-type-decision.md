@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Before creating any block, decide which approach fits your use case.
+> Use block plugins when you need logic, DI, or dynamic content. Use content blocks when editors need to manage content without code changes. Use inline blocks for one-off content in Layout Builder layouts.
 
 ## Decision
 

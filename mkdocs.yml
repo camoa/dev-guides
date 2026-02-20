@@ -51,6 +51,7 @@ plugins:
           - drupal/blocks/sdc-component-blocks.md: "Use Single Directory Components (SDC) as blocks"
           - drupal/blocks/security-performance.md: "Ensure blocks don't introduce vulnerabilities or performance bottlenecks"
           - drupal/blocks/visibility-conditions.md: "Control block visibility based on pages, roles, content types, or custom logic"
+          - drupal/blocks/sources-maintenance.md: "Blocks Sources & Maintenance — web and code source references"
           - drupal/caching/index.md: "Drupal caching decision guides — cache metadata, backends, invalidation, and performance"
           - drupal/caching/anti-patterns-common-mistakes.md: "Avoid common caching mistakes that cause bugs, stale content, and performance issues"
           - drupal/caching/best-practices-patterns.md: "Follow proven caching best practices for maximum cache hit rates"
@@ -354,6 +355,7 @@ plugins:
           - drupal/layout-builder/security-performance.md: "Security and performance considerations"
           - drupal/layout-builder/code-reference-map.md: "Key classes, files, and code patterns in Layout Builder"
           - drupal/layout-builder/sources-maintenance.md: "Documentation sources and maintenance notes"
+          - drupal/layout-builder/ui-patterns-layouts.md: "UI Patterns Layouts — SDC components as Layout Builder section layouts, UI Styles integration"
           - drupal/media/index.md: "Media Types — custom media source plugins, metadata extraction, and third-party API integrations"
           - drupal/media/anti-patterns.md: "Common mistakes and anti-patterns to avoid in media source plugins"
           - drupal/media/architecture-overview.md: "Media source plugin architecture and how it fits into Drupal's plugin system"
@@ -453,8 +455,10 @@ plugins:
           - drupal/ui-patterns/blocks-integration.md: "Blocks Integration — components as block plugins, BlockSource for embedding blocks in slots"
           - drupal/ui-patterns/pattern-library.md: "Pattern Library — browsable component library, stories YAML format, template overrides"
           - drupal/ui-patterns/creating-custom-source-plugins.md: "Creating Custom Source Plugins — widget and context-aware source patterns, derivers"
+          - drupal/ui-patterns/config-export-reference.md: "Config Export Reference — ui_patterns_component schema, source types, integration file locations"
           - drupal/ui-patterns/best-practices-and-anti-patterns.md: "UI Patterns Best Practices — slot vs prop decisions, prop drilling, prop paradoxes"
           - drupal/ui-patterns/security-and-accessibility.md: "UI Patterns Security & Accessibility — XSS protection, block filtering, attributes"
+          - drupal/ui-patterns/sources-maintenance.md: "UI Patterns Sources & Maintenance — module versions, web sources, code references"
           - drupal/ui-suite-daisyui/index.md: "UI Suite DaisyUI — DaisyUI 5 theme with 51 SDC components via UI Patterns/Styles/Skins"
           - drupal/ui-suite-daisyui/overview-and-decision.md: "UI Suite DaisyUI Overview — when to use DaisyUI theme vs alternatives"
           - drupal/ui-suite-daisyui/architecture.md: "Architecture — UI Patterns + UI Styles + UI Skins + UI Icons ecosystem"
@@ -574,6 +578,7 @@ plugins:
           - drupal/sdc/security.md: "Preventing XSS with auto-escaping, Attribute object, and props validation"
           - drupal/sdc/testing-sdcs.md: "Testing components with schema validation, Storybook, and visual regression"
           - drupal/sdc/twig-templates-in-sdcs.md: "Writing Twig templates for SDCs with props, slots, and attributes object"
+          - drupal/sdc/ui-patterns-2-integration.md: "UI Patterns 2 Integration — using SDC components with UI Patterns source plugins"
           - drupal/security/index.md: "Drupal security architecture, access control, XSS/CSRF/SQL injection prevention, authentication, and OWASP best practices."
           - drupal/security/access-system-architecture.md: "Understanding Drupal's three-layer access control architecture for routes, entities, and fields."
           - drupal/security/accessresult-patterns.md: "Returning access decisions using AccessResult objects with proper cache metadata, combining logic, and conditional methods."
@@ -861,19 +866,18 @@ plugins:
           - design-systems/radix-sdc/troubleshooting-sdc-components.md: "Your SDC component isn't being discovered by Drupal"
           - design-systems/radix-sdc/twig-and-preprocess-best-practices.md: "You're deciding whether logic belongs in Twig or preprocess function"
           - design-systems/recognition/index.md: "Design System Recognition — extract tokens and components from HTML/CSS, Figma, or screenshots"
-          - design-systems/recognition/analysis-best-practices.md: "Assess design system quality and maturity during analysis"
+          - design-systems/recognition/foundation-layer-design-tokens.md: "Extract color, typography, spacing, and surface tokens from any design system source"
+          - design-systems/recognition/component-classification-framework.md: "Classify UI components into atoms, molecules, organisms, templates, and pages"
           - design-systems/recognition/atom-recognition.md: "Identify the smallest functional UI building blocks that cannot be decomposed further"
-          - design-systems/recognition/component-classification.md: "Classify UI components into atoms, molecules, organisms, templates, and pages"
-          - design-systems/recognition/design-tokens.md: "Extract color, typography, spacing, and surface tokens from any design system source"
-          - design-systems/recognition/figma-analysis.md: "Extract design tokens and components from Figma design files"
-          - design-systems/recognition/html-css-analysis.md: "Extract design tokens and components from HTML/CSS source code"
           - design-systems/recognition/molecule-recognition.md: "Recognize composite components that combine 2-3 atoms for a single purpose"
           - design-systems/recognition/organism-recognition.md: "Identify complex interface sections composed of molecules and atoms"
-          - design-systems/recognition/reference-systems.md: "Industry-leading design system examples and token structure patterns"
-          - design-systems/recognition/screenshot-analysis.md: "Recognize design patterns and components from UI screenshots without source access"
-          - design-systems/recognition/standards-specifications.md: "W3C token format, WCAG accessibility, and atomic design methodology standards"
           - design-systems/recognition/templates-vs-pages.md: "Distinguish between layout structures (templates) and real implementations (pages)"
+          - design-systems/recognition/design-system-analysis-best-practices.md: "Assess design system quality and maturity during analysis"
+          - design-systems/recognition/source-specific-recognition.md: "Extract design tokens and components from Figma, HTML/CSS, or screenshots"
+          - design-systems/recognition/reference-design-systems.md: "Industry-leading design system examples and token structure patterns"
+          - design-systems/recognition/standards-specifications.md: "W3C token format, WCAG accessibility, and atomic design methodology standards"
           - design-systems/recognition/validation-checklist.md: "Comprehensive checklist to validate design system analysis completeness"
+          - design-systems/recognition/conclusion.md: "Design system recognition workflow summary and next steps"
           - design-systems/daisyui/index.md: "DaisyUI v5 guides — theming, color tokens, component reference, React integration, customization, accessibility"
           - design-systems/daisyui/daisyui-vs-alternatives.md: "Decide whether to use DaisyUI, raw Tailwind, shadcn/ui, or Radix UI for a project"
           - design-systems/daisyui/installation-configuration.md: "Install and configure DaisyUI with Tailwind v4 (CSS-first) or Tailwind v3 (JS config)"
@@ -926,6 +930,38 @@ plugins:
           - design-systems/tailwind/best-practices.md: "Tailwind best practices and anti-patterns — utility-first philosophy, class organization, security, and when to extract abstractions"
           - design-systems/tailwind/accessibility.md: "Implement accessible focus rings, screen reader utilities, reduced motion, ARIA state variants, and color contrast in Tailwind"
           - design-systems/tailwind/sources-maintenance.md: "Source references, verified versions, and maintenance notes for the Tailwind CSS design system guides"
+          - design-systems/tailwind-tokens/index.md: "Tailwind CSS 4 design tokens — decision guides for extraction, mapping, and multi-platform integration"
+          - design-systems/tailwind-tokens/overview-when-to-use.md: "When to use this guide and which extraction method to choose"
+          - design-systems/tailwind-tokens/tailwind-v4-token-architecture.md: "Tailwind v4 @theme block architecture and utility class generation"
+          - design-systems/tailwind-tokens/tailwind-v4-namespace-reference.md: "Complete reference of Tailwind v4 @theme namespaces and generated utilities"
+          - design-systems/tailwind-tokens/custom-token-definition.md: "Define custom brand tokens and extend Tailwind's default theme"
+          - design-systems/tailwind-tokens/token-consumption-patterns.md: "Access design tokens from CSS, Twig, JavaScript, and Drupal preprocess"
+          - design-systems/tailwind-tokens/daisyui-v5-color-token-system.md: "DaisyUI v5 semantic color roles and component mapping"
+          - design-systems/tailwind-tokens/daisyui-css-variable-reference.md: "Complete reference of all 28 DaisyUI v5 CSS variables"
+          - design-systems/tailwind-tokens/brand-color-mapping-workflow.md: "Map brand guidelines to DaisyUI semantic color system"
+          - design-systems/tailwind-tokens/custom-daisyui-theme-definition.md: "Create branded DaisyUI themes with Tailwind v4 syntax"
+          - design-systems/tailwind-tokens/typography-token-mapping.md: "Map typography decisions to Tailwind v4 and DaisyUI token systems"
+          - design-systems/tailwind-tokens/spacing-layout-token-system.md: "Build semantic spacing and layout tokens for consistent vertical rhythm"
+          - design-systems/tailwind-tokens/tailwind-v3-token-extraction.md: "Extract design tokens from Tailwind v3 config files"
+          - design-systems/tailwind-tokens/token-naming-conventions.md: "Choose the right token naming convention for your use case"
+          - design-systems/tailwind-tokens/figma-to-tailwind-mapping.md: "Map Figma variables to Tailwind tokens via automated pipeline"
+          - design-systems/tailwind-tokens/w3c-design-tokens-format.md: "W3C Design Tokens (DTCG) format for vendor-neutral token interchange"
+          - design-systems/tailwind-tokens/drupal-sdc-token-integration.md: "Map design tokens to Drupal SDC component props"
+          - design-systems/tailwind-tokens/ui-suite-daisyui-starterkit-patterns.md: "UI Suite DaisyUI starterkit token organization and customization"
+          - design-systems/tailwind-tokens/common-mistakes.md: "Common token extraction and naming mistakes to avoid"
+          - design-systems/tailwind-tokens/best-practices.md: "Token management best practices for design systems"
+          - design-systems/tailwind-tokens/sources-maintenance.md: "Sources and maintenance manifest for Tailwind Tokens guides"
+          - design-systems/jsx-to-twig/index.md: "JSX to Twig conversion patterns for React → Drupal SDC migration"
+          - design-systems/jsx-to-twig/overview.md: "When to translate JSX 1:1 vs restructure for Drupal SDC"
+          - design-systems/jsx-to-twig/conditional-rendering.md: "Convert JSX conditional expressions to Twig if/else"
+          - design-systems/jsx-to-twig/loops-iteration.md: "Convert JavaScript array methods to Twig for loops"
+          - design-systems/jsx-to-twig/props-to-twig.md: "Map React component props to SDC component.yml and Twig variables"
+          - design-systems/jsx-to-twig/children-slots.md: "Convert React children and JSX props to Twig blocks and SDC slots"
+          - design-systems/jsx-to-twig/event-handlers.md: "Convert React event handlers to Drupal behaviors and server-side patterns"
+          - design-systems/jsx-to-twig/composition.md: "Convert React component composition patterns to Twig includes and embeds"
+          - design-systems/jsx-to-twig/styling.md: "Convert React styling patterns to Twig and SDC scoped CSS"
+          - design-systems/jsx-to-twig/typescript-to-component-yml.md: "Step-by-step workflow for converting TypeScript interfaces to component.yml schemas"
+          - design-systems/jsx-to-twig/sources-maintenance.md: "Source references and maintenance tracking for JSX to Twig guides"
         "Development Practices":
           - development/index.md: "Development practices guides — TDD, SOLID, DRY, security, and tool-agnostic best practices"
           - development/dry-principles/index.md: "DRY (Don't Repeat Yourself), code reuse, and abstraction strategies - when to abstract, when to duplicate, and how to avoid premature abstraction"
@@ -1069,6 +1105,7 @@ nav:
       - drupal/blocks/sdc-component-blocks.md
       - drupal/blocks/security-performance.md
       - drupal/blocks/visibility-conditions.md
+      - drupal/blocks/sources-maintenance.md
     - Caching:
       - drupal/caching/index.md
       - drupal/caching/anti-patterns-common-mistakes.md
@@ -1387,6 +1424,7 @@ nav:
       - drupal/layout-builder/security-performance.md
       - drupal/layout-builder/code-reference-map.md
       - drupal/layout-builder/sources-maintenance.md
+      - drupal/layout-builder/ui-patterns-layouts.md
     - Media:
       - drupal/media/index.md
       - drupal/media/anti-patterns.md
@@ -1491,8 +1529,10 @@ nav:
       - drupal/ui-patterns/blocks-integration.md
       - drupal/ui-patterns/pattern-library.md
       - drupal/ui-patterns/creating-custom-source-plugins.md
+      - drupal/ui-patterns/config-export-reference.md
       - drupal/ui-patterns/best-practices-and-anti-patterns.md
       - drupal/ui-patterns/security-and-accessibility.md
+      - drupal/ui-patterns/sources-maintenance.md
     - UI Suite DaisyUI:
       - drupal/ui-suite-daisyui/index.md
       - drupal/ui-suite-daisyui/overview-and-decision.md
@@ -1619,6 +1659,7 @@ nav:
       - drupal/sdc/security.md
       - drupal/sdc/testing-sdcs.md
       - drupal/sdc/twig-templates-in-sdcs.md
+      - drupal/sdc/ui-patterns-2-integration.md
     - Security:
       - drupal/security/index.md
       - drupal/security/access-system-architecture.md
@@ -1920,19 +1961,18 @@ nav:
       - design-systems/radix-sdc/twig-and-preprocess-best-practices.md
     - Recognition:
       - design-systems/recognition/index.md
-      - design-systems/recognition/analysis-best-practices.md
+      - design-systems/recognition/foundation-layer-design-tokens.md
+      - design-systems/recognition/component-classification-framework.md
       - design-systems/recognition/atom-recognition.md
-      - design-systems/recognition/component-classification.md
-      - design-systems/recognition/design-tokens.md
-      - design-systems/recognition/figma-analysis.md
-      - design-systems/recognition/html-css-analysis.md
       - design-systems/recognition/molecule-recognition.md
       - design-systems/recognition/organism-recognition.md
-      - design-systems/recognition/reference-systems.md
-      - design-systems/recognition/screenshot-analysis.md
-      - design-systems/recognition/standards-specifications.md
       - design-systems/recognition/templates-vs-pages.md
+      - design-systems/recognition/design-system-analysis-best-practices.md
+      - design-systems/recognition/source-specific-recognition.md
+      - design-systems/recognition/reference-design-systems.md
+      - design-systems/recognition/standards-specifications.md
       - design-systems/recognition/validation-checklist.md
+      - design-systems/recognition/conclusion.md
     - DaisyUI:
       - design-systems/daisyui/index.md
       - design-systems/daisyui/daisyui-vs-alternatives.md
@@ -1988,6 +2028,40 @@ nav:
       - design-systems/tailwind/best-practices.md
       - design-systems/tailwind/accessibility.md
       - design-systems/tailwind/sources-maintenance.md
+    - Tailwind Tokens:
+      - design-systems/tailwind-tokens/index.md
+      - design-systems/tailwind-tokens/overview-when-to-use.md
+      - design-systems/tailwind-tokens/tailwind-v4-token-architecture.md
+      - design-systems/tailwind-tokens/tailwind-v4-namespace-reference.md
+      - design-systems/tailwind-tokens/custom-token-definition.md
+      - design-systems/tailwind-tokens/token-consumption-patterns.md
+      - design-systems/tailwind-tokens/daisyui-v5-color-token-system.md
+      - design-systems/tailwind-tokens/daisyui-css-variable-reference.md
+      - design-systems/tailwind-tokens/brand-color-mapping-workflow.md
+      - design-systems/tailwind-tokens/custom-daisyui-theme-definition.md
+      - design-systems/tailwind-tokens/typography-token-mapping.md
+      - design-systems/tailwind-tokens/spacing-layout-token-system.md
+      - design-systems/tailwind-tokens/tailwind-v3-token-extraction.md
+      - design-systems/tailwind-tokens/token-naming-conventions.md
+      - design-systems/tailwind-tokens/figma-to-tailwind-mapping.md
+      - design-systems/tailwind-tokens/w3c-design-tokens-format.md
+      - design-systems/tailwind-tokens/drupal-sdc-token-integration.md
+      - design-systems/tailwind-tokens/ui-suite-daisyui-starterkit-patterns.md
+      - design-systems/tailwind-tokens/common-mistakes.md
+      - design-systems/tailwind-tokens/best-practices.md
+      - design-systems/tailwind-tokens/sources-maintenance.md
+    - JSX to Twig:
+      - design-systems/jsx-to-twig/index.md
+      - design-systems/jsx-to-twig/overview.md
+      - design-systems/jsx-to-twig/conditional-rendering.md
+      - design-systems/jsx-to-twig/loops-iteration.md
+      - design-systems/jsx-to-twig/props-to-twig.md
+      - design-systems/jsx-to-twig/children-slots.md
+      - design-systems/jsx-to-twig/event-handlers.md
+      - design-systems/jsx-to-twig/composition.md
+      - design-systems/jsx-to-twig/styling.md
+      - design-systems/jsx-to-twig/typescript-to-component-yml.md
+      - design-systems/jsx-to-twig/sources-maintenance.md
   - Development Practices:
     - development/index.md
     - DRY Principles:

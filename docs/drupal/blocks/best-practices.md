@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Architectural guidance for building maintainable, performant, testable block plugins.
+> Apply these patterns when building any block plugin. These are the architectural decisions that keep blocks maintainable, testable, and performant.
 
 ## Decision
 
@@ -55,25 +55,12 @@ class RecentContentBlock extends BlockBase implements ContainerFactoryPluginInte
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
-  public static function create(
-    ContainerInterface $container,
-    array $configuration,
-    $plugin_id,
-    $plugin_definition
-  ) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('entity_type.manager')
-    );
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static($configuration, $plugin_id, $plugin_definition, $container->get('entity_type.manager'));
   }
 
   public function defaultConfiguration() {
-    return [
-      'items_count' => 5,
-      'content_type' => 'article',
-    ] + parent::defaultConfiguration();
+    return ['items_count' => 5, 'content_type' => 'article'] + parent::defaultConfiguration();
   }
 
   public function blockForm($form, FormStateInterface $form_state) {
@@ -81,8 +68,7 @@ class RecentContentBlock extends BlockBase implements ContainerFactoryPluginInte
       '#type' => 'number',
       '#title' => $this->t('Number of items'),
       '#default_value' => $this->configuration['items_count'],
-      '#min' => 1,
-      '#max' => 20,
+      '#min' => 1, '#max' => 20,
     ];
     return $form;
   }
@@ -100,59 +86,37 @@ class RecentContentBlock extends BlockBase implements ContainerFactoryPluginInte
 
   public function build() {
     $storage = $this->entityTypeManager->getStorage('node');
-    $query = $storage->getQuery()
+    $nids = $storage->getQuery()
       ->condition('type', $this->configuration['content_type'])
       ->condition('status', 1)
       ->sort('created', 'DESC')
       ->range(0, $this->configuration['items_count'])
-      ->accessCheck(TRUE);
+      ->accessCheck(TRUE)
+      ->execute();
 
-    $nids = $query->execute();
-
-    // Return empty when no results
     if (empty($nids)) {
-      return [];
+      return []; // No render when empty
     }
 
     $nodes = $storage->loadMultiple($nids);
     $view_builder = $this->entityTypeManager->getViewBuilder('node');
-
-    $build = [];
-    foreach ($nodes as $node) {
-      $build[] = $view_builder->view($node, 'teaser');
-    }
-
-    return $build;
+    return array_map(fn($n) => $view_builder->view($n, 'teaser'), $nodes);
   }
 
   public function getCacheTags() {
-    return Cache::mergeTags(
-      parent::getCacheTags(),
-      ['node_list:' . $this->configuration['content_type']]
-    );
+    return Cache::mergeTags(parent::getCacheTags(), ['node_list:' . $this->configuration['content_type']]);
   }
 
   public function getCacheContexts() {
-    return Cache::mergeContexts(
-      parent::getCacheContexts(),
-      ['user.permissions']
-    );
+    return Cache::mergeContexts(parent::getCacheContexts(), ['user.permissions']);
   }
 }
 ```
 
 **Code organization:**
-- One block plugin per file
-- File location: `{module}/src/Plugin/Block/{ClassName}.php`
-- Class name matches filename
+- One block plugin per file: `{module}/src/Plugin/Block/{ClassName}.php`
 - Use typed properties (PHP 8.0+)
-- Document complex logic with comments
-
-**Testing:**
-- Unit test: Mock services, test `build()` logic
-- Kernel test: Test with real services, database
-- Functional test: Test UI placement, visibility
-- Always test cache metadata
+- Test: Unit (mock services), Kernel (real services), Functional (UI placement)
 
 ## Common Mistakes
 

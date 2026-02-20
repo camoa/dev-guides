@@ -1,5 +1,5 @@
 ---
-description: Common component development anti-patterns with WHY explanations from code review perspective
+description: Common SDC anti-patterns with explanations from code review perspective
 drupal_version: "11.x"
 ---
 
@@ -9,43 +9,79 @@ drupal_version: "11.x"
 
 > Use this when code reviewing component implementations, debugging component issues, or establishing component development standards.
 
-## Common Mistakes
+## Decision
 
-**Over-Componentizing**
-- **Wrong**: Creating components for heading, paragraph, link, image, text-with-heading (combines previous 4) → **Right**: Each component has discovery/loading overhead. Group elements that always appear together into single component at meaningful abstraction level.
+| Anti-Pattern | Why Wrong | Correct Approach |
+|--------------|-----------|------------------|
+| Over-componentizing | Each component has discovery/loading overhead | Create components at meaningful abstraction level |
+| Logic in Twig | Business logic belongs in preprocessing | Templates should be presentation-only |
+| Missing schema definitions | No validation, no IDE support | Always define complete props/slots schemas |
+| Slots for simple data | Slots bypass validation | Use props for typed configuration data |
+| Hardcoded child components | Reduces flexibility | Use slots for variable content areas |
+| Not using `with_context = false` | Creates hidden dependencies | Isolate component context |
+| Complex conditionals on slots | Slots contain arbitrary renderables | Only check `if slot` for existence |
+| Using `@extend` in SCSS | Bloats compiled CSS | Use mixins or utility classes |
+| Not checking slot existence | Creates empty wrapper elements | Wrap optional slots in conditionals |
+| Global CSS selectors | Collides with other components | Use BEM with component-specific namespace |
+| Module component overrides | Only themes can use `replaces` | Override in theme, not module |
+| Changing schema in `replaces` | Breaks API contract | Replacement must have identical schema |
 
-**Logic in Twig Templates**
-- **Wrong**: Complex business logic in template (checking user roles, computing values) → **Right**: Business logic belongs in preprocessing/controllers. Templates should be presentation-only.
+## Pattern
 
-**Missing Schema Definitions**
-- **Wrong**: No props or slots defined in component YAML → **Right**: No validation, no IDE support, no documentation of component API. Integration modules require schemas.
+**Anti-Pattern 1: Over-Componentizing**
+```
+❌ WRONG: Atomic-level components
+components/
+├── heading/
+├── paragraph/
+├── link/
+└── image/
 
-**Using Slots for Simple Typed Data**
-- **Wrong**: Using slot for boolean/enum values → **Right**: Slots bypass validation. Simple typed values should be validated props for type safety and better errors.
+✓ RIGHT: Meaningful abstraction
+components/
+└── article-card/  ← Combines elements
+```
 
-**Hardcoding Child Components**
-- **Wrong**: Hardcoded child components in template → **Right**: Reduces flexibility. Use slot for content area. Let calling code decide what to include.
+**Anti-Pattern 3: Missing Schema**
+```yaml
+❌ WRONG: No schema
+name: 'Button'
+status: stable
 
-**Not Using `with_context = false`**
-- **Wrong**: `{{ include('my_theme:button', { text: 'Click' }) }}` → **Right**: Component inherits all parent template variables. Creates hidden dependencies and unpredictable behavior. Use `with_context = false` to isolate context.
+✓ RIGHT: Complete schema
+name: 'Button'
+status: stable
+props:
+  type: object
+  properties:
+    text:
+      type: string
+      title: 'Button Text'
+```
 
-**Complex Conditionals on Slots**
-- **Wrong**: `{% if content and content.field_name and content.field_name|render|striptags|trim %}` → **Right**: Slots contain arbitrary renderables. Can't reliably access their properties. Only check `if slot` for existence.
+**Anti-Pattern 6: Variable Leakage**
+```twig
+❌ WRONG: Leaking context
+{{ include('my_theme:button', { text: 'Click' }) }}
 
-**Using `@extend` in SCSS**
-- **Wrong**: `@extend .btn;` in Sass → **Right**: Creates unexpected selector chains, bloats compiled CSS, makes debugging difficult. Use mixins or utility classes instead.
+✓ RIGHT: Isolated context
+{{ include('my_theme:button', { text: 'Click' }, with_context = false) }}
+```
 
-**Not Checking Slot Existence**
-- **Wrong**: Rendering wrapper element without checking if slot has content → **Right**: Creates empty wrapper elements when slot not provided. Invalid HTML and accessibility issues. Always wrap optional slots in `{% if slot %}` conditional.
+**Anti-Pattern 9: Empty Wrappers**
+```twig
+❌ WRONG: Unconditional wrapper
+<header class="component__header">
+  {{ header }}
+</header>
 
-**Global CSS Selectors**
-- **Wrong**: Generic selectors like `.button`, `.card`, `.title` → **Right**: Collides with other components and global styles. Use BEM with component-specific namespace: `.my-component__element`.
-
-**Trying to Override Components from Modules**
-- **Wrong**: Using `replaces` directive in module component → **Right**: Only themes can use `replaces` directive. Module overrides not supported.
-
-**Changing Schema in `replaces` Component**
-- **Wrong**: Replacement with different props/slots than original → **Right**: Breaks API contract. Calling code expects original schema. Replacement must have identical schemas.
+✓ RIGHT: Conditional wrapper
+{% if header %}
+  <header class="component__header">
+    {{ header }}
+  </header>
+{% endif %}
+```
 
 ## See Also
 

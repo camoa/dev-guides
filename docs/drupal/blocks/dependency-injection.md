@@ -1,5 +1,5 @@
 ---
-description: Inject Drupal services into block plugins
+description: Inject Drupal services into block plugins using ContainerFactoryPluginInterface
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Your block plugin needs access to Drupal services (database, config, entity manager, custom services).
+> Use when your block plugin needs access to Drupal services (database, config, entity manager, custom services). Always prefer DI over static `\Drupal::service()` calls.
 
 ## Decision
 

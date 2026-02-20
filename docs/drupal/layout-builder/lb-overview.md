@@ -1,7 +1,3 @@
----
-description: Overview of Layout Builder — when to use it, core concepts, and how it relates to other layout systems.
----
-
 ## 1. Layout Builder Overview
 
 ### When to Use

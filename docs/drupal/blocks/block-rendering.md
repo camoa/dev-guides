@@ -1,5 +1,5 @@
 ---
-description: Customize block appearance through templates, preprocessing, and altering
+description: Customize block appearance through templates, preprocessing, and alter hooks
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Customizing block appearance through templates, preprocessing, or altering render output.
+> Use block templates for markup changes, preprocessing for adding template variables, and alter hooks to modify render arrays across blocks. Keep logic out of templates.
 
 ## Decision
 

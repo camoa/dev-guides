@@ -1,8 +1,3 @@
----
-description: 33. Sources & Maintenance Manifest
-drupal_version: "11.x"
----
-
 ## 33. Sources & Maintenance Manifest
 
 ### Drupal Research Install
@@ -41,3 +36,4 @@ Path: /home/camoa/workspace/contrib/web
 | Comment | core/modules/comment/ | 1, 7, 9, 12, 16, 24, 32 | 11.x |
 | User | core/modules/user/ | 23, 32 | 11.x |
 | Taxonomy | core/modules/taxonomy/ | 21, 28, 32 | 11.x |
+

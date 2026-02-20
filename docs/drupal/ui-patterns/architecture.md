@@ -1,57 +1,88 @@
 ---
-description: UI Patterns Architecture — 4 plugin types, service decoration, rendering pipeline
-drupal_version: "11.x"
+description: UI Patterns plugin system — managers, services, and rendering pipeline
+drupal_version: "10.3+ / 11"
 ---
 
-# UI Patterns Architecture
+## Architecture
 
-## When to Use
+### Plugin System Overview
 
-> Reference this guide when debugging the rendering pipeline, understanding how UI Patterns hooks into SDC, or troubleshooting source plugin discovery.
-
-## Decision
+UI Patterns introduces four plugin types managed by dedicated plugin managers:
 
 | Plugin Type | Manager Service | Attribute | Namespace |
-|-------------|-----------------|-----------|-----------|
+|---|---|---|---|
 | **Source** | `plugin.manager.ui_patterns_source` | `#[Source]` | `Plugin/UiPatterns/Source` |
 | **PropType** | `plugin.manager.ui_patterns_prop_type` | `#[PropType]` | `Plugin/UiPatterns/PropType` |
 | **PropTypeAdapter** | `plugin.manager.ui_patterns_prop_type_adapter` | `#[PropTypeAdapter]` | `Plugin/UiPatterns/PropTypeAdapter` |
 | **DerivableContext** | `plugin.manager.ui_patterns_derivable_context` | `#[DerivableContext]` | `Plugin/UiPatterns/DerivableContext` |
 
-## Pattern
+Additionally, the core SDC plugin manager is **decorated**:
 
-### Service decoration
-
-```yaml
-# ui_patterns.services.yml
-Drupal\ui_patterns\ComponentPluginManager:
+```
+Drupal\ui_patterns\ComponentPluginManager
   decorates: plugin.manager.sdc
   parent: plugin.manager.sdc
 ```
 
-The decoration intercepts `alterDefinition()` to annotate every prop and slot with `ui_patterns` metadata.
+This decoration intercepts `alterDefinition()` to annotate every prop and slot with `ui_patterns` metadata (type_definition, summary, required status, prop_type_adapter).
 
-### Rendering pipeline
+### Rendering Pipeline
 
-1. Integration builds render array: `['#type' => 'component', '#component' => $id, '#ui_patterns' => $config, '#source_contexts' => $contexts]`
-2. `ComponentElementBuilder::build()` fires as `#pre_render` callback
-3. For each prop/slot, instantiates the configured source plugin and calls `$source->getValue($prop_type)`
-4. Source values pass through `hook_ui_patterns_source_value_alter()`
-5. Values added to `#props` (typed data) or `#slots` (render arrays)
-6. `ComponentElementAlter::alter()` normalizes slots and processes `#attributes`
-7. `normalizeProps()` runs before SDC validation, converting values via `PropType::normalize()`
-8. After validation, `preprocessProps()` runs `PropType::preprocess()`
-9. SDC's Twig template receives processed props and slots
+The rendering pipeline for a UI Patterns component:
 
-## Common Mistakes
+1. An integration (block, layout, formatter, views) builds a render array:
+   ```php
+   ['#type' => 'component', '#component' => $id, '#ui_patterns' => $config, '#source_contexts' => $contexts]
+   ```
+2. `ComponentElementBuilder::build()` fires as a `#pre_render` callback (registered via `hook_element_info_alter()`).
+3. For each prop/slot, it instantiates the configured **source plugin** and calls `$source->getValue($prop_type)`.
+4. Source values pass through `hook_ui_patterns_source_value_alter()`.
+5. Values are added to `#props` (typed data) or `#slots` (render arrays).
+6. `ComponentElementAlter::alter()` fires next, normalizing slots and processing `#attributes`.
+7. The Twig extension's `normalizeProps()` runs before SDC's validator, converting values via `PropType::normalize()`.
+8. After validation, `preprocessProps()` runs `PropType::preprocess()` to prepare template-ready values.
+9. SDC's Twig template receives the processed props and slots.
 
-- **Wrong**: Assuming UI Patterns replaces SDC → **Right**: UI Patterns decorates SDC; components are still SDC components
-- **Wrong**: Calling source plugins directly in custom code → **Right**: Use `SourcePluginManager::getSource()` to properly initialize context and configuration
-- **Wrong**: Not clearing caches after adding/changing components → **Right**: Use `drush cr`; the decorated `ComponentPluginManager` caches definitions
+### Service Architecture
 
-## See Also
+Key services from `ui_patterns.services.yml`:
 
-- [Source Plugins](source-plugins.md)
-- [Props System](props-system.md)
-- [SDC Integration](sdc-integration.md)
-- Reference: `modules/contrib/ui_patterns/src/`
+```yaml
+# Decorates core SDC manager -- the central entry point
+Drupal\ui_patterns\ComponentPluginManager:
+  decorates: plugin.manager.sdc
+
+# Builds render elements from configuration + sources
+ui_patterns.component_element_builder:
+  class: Drupal\ui_patterns\Element\ComponentElementBuilder
+
+# Post-build normalization (slots, attributes)
+ui_patterns.component_element_alter:
+  class: Drupal\ui_patterns\Element\ComponentElementAlter
+
+# JSON schema resolution for ui-patterns:// refs
+ui_patterns.schema_stream_wrapper:
+  tags: [{ name: stream_wrapper, scheme: ui-patterns }]
+
+# Schema compatibility checking (prop type guessing)
+ui_patterns.schema_compatibility_checker:
+  class: Drupal\ui_patterns\SchemaManager\CompatibilityChecker
+
+# Twig extension: normalize/preprocess + add_class/set_attribute filters
+ui_patterns.twig.extension:
+  class: Drupal\ui_patterns\Template\TwigExtension
+```
+
+### Common Mistakes
+
+| Mistake | Why It Is Wrong |
+|---|---|
+| Assuming UI Patterns replaces SDC | UI Patterns decorates SDC; components are still SDC components. Removing UI Patterns should not break templates. |
+| Calling source plugins directly in custom code | Sources are managed by `SourcePluginManager`; use `getSource()` to properly initialize context and configuration. |
+| Not clearing caches after adding/changing components | The decorated `ComponentPluginManager` caches definitions; use `drush cr` when component YAML changes. |
+
+### See Also
+
+- [Source Plugins](#source-plugins)
+- [Props System](#props-system)
+- SDC Development Guide

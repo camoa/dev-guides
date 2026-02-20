@@ -1,8 +1,3 @@
----
-description: Custom sort logic: computed fields, weighted sorting, multi-column sorts, integration with external ranking systems.
-drupal_version: "11.x"
----
-
 ## 22. Custom Sort Handler
 
 ### When to Use
@@ -78,3 +73,4 @@ Custom sort logic: computed fields, weighted sorting, multi-column sorts, integr
 - Section 10: Sort & Contextual Filters — configuration approach
 - Reference: `core/modules/views/src/Plugin/views/sort/SortPluginBase.php`
 - Reference: `core/modules/views/src/Plugin/views/sort/Random.php` — formula-based sort example
+

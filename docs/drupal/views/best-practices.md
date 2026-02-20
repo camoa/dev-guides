@@ -1,8 +1,3 @@
----
-description: Guidelines for building maintainable, performant, secure views.
-drupal_version: "11.x"
----
-
 ## 29. Best Practices & Patterns
 
 ### When to Use
@@ -68,3 +63,4 @@ Reference: [Improving Layout Builder Experience](https://www.specbee.com/blogs/i
 - Section 13: Caching Configuration — cache strategies
 - Section 14: Access Control — security patterns
 - Section 31: Security & Performance — detailed security guidance
+

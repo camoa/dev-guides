@@ -1,5 +1,5 @@
 ---
-description: Drupal Blocks — atomic guides for block system development
+description: Drupal Blocks — block plugins, derivatives, contexts, Layout Builder, render pipeline
 ---
 
 # Drupal Blocks
@@ -23,7 +23,7 @@ description: Drupal Blocks — atomic guides for block system development
 | Inject services into my block plugin | [Dependency Injection in Blocks](dependency-injection.md) |
 | React to block events or alter block output | [Block Hooks & Events](block-events-hooks.md) |
 | Export block config or use in recipes | [Config Management & Recipes](config-recipes.md) |
-| Use SDC components as blocks | [SDC Component Blocks](sdc-component-blocks.md) |
+| Use SDC components or UI Patterns as blocks | [SDC Component Blocks](sdc-component-blocks.md) |
 | Follow best practices and patterns | [Best Practices](best-practices.md) |
 | Avoid common mistakes and anti-patterns | [Anti-Patterns & Common Mistakes](anti-patterns.md) |
 | Ensure security and performance | [Security & Performance](security-performance.md) |

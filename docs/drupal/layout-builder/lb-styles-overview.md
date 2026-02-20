@@ -1,7 +1,3 @@
----
-description: Overview of Layout Builder Styles module — applying CSS classes to sections and blocks via config entities and editor UI.
----
-
 ## 11. Layout Builder Styles Overview
 
 ### When to Use

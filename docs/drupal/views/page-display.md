@@ -1,8 +1,3 @@
----
-description: When you need a full page with a dedicated URL, menu integration, and optional admin theme.
-drupal_version: "11.x"
----
-
 ## 4. Page Display
 
 ### When to Use
@@ -103,3 +98,4 @@ Reference: `core/modules/comment/config/optional/views.view.comment.yml` lines 8
 - Section 10: Sort & Contextual Filters — using % wildcards in paths as arguments
 - Section 14: Access Control — setting page-level permissions
 - Section 17: Views Config Export & Recipes — exporting page displays with menu links
+

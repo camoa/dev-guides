@@ -1,5 +1,5 @@
 ---
-description: Including components within components using include(), embed, or render arrays
+description: Methods for including, embedding, and nesting components
 drupal_version: "11.x"
 ---
 
@@ -9,18 +9,18 @@ drupal_version: "11.x"
 
 > Use this when including one component in another, deciding between `include()`, `embed`, or render arrays, or nesting components.
 
-## Decision: Composition Methods
+## Decision
 
 | Method | Use Case | When to Use |
 |--------|----------|-------------|
-| `include()` | Simple component with props only | Most common, no slots needed |
-| `{% embed %}` | Component with slots via Twig blocks | Only when populating slots |
-| Render arrays | Programmatic composition | Preprocessing, controllers, forms, hooks |
+| `include()` | Simple component inclusion | Props-only components |
+| `{% embed %}` | Populating slots via Twig blocks | Components with slots that need custom content |
+| Render arrays | Programmatic rendering | PHP code (preprocessing, controllers, forms) |
+| Nested components | Complex compositions | Building organisms from molecules |
 
 ## Pattern
 
-include() function (most common):
-
+**include() Function (Most Common):**
 ```twig
 {# Simple inclusion #}
 {{ include('my_theme:button', {
@@ -29,17 +29,14 @@ include() function (most common):
   disabled: false
 }) }}
 
-{# With context control (recommended) #}
+{# With context isolation (recommended) #}
 {{ include('my_theme:button', {
   text: 'Save',
   variant: 'primary'
 }, with_context = false) }}
 ```
 
-**WHY `with_context = false`**: Prevents automatic variable leakage into component, keeping components isolated and predictable.
-
-embed tag (only for slots):
-
+**embed Tag (Only for Slots):**
 ```twig
 {% embed 'my_theme:card' with {
   title: node.label,
@@ -61,10 +58,8 @@ embed tag (only for slots):
 {% endembed %}
 ```
 
-Render arrays (programmatic):
-
+**Render Arrays (Programmatic):**
 ```php
-// In .theme file or controller
 $build = [
   '#type' => 'component',
   '#component' => 'my_theme:card',
@@ -79,28 +74,11 @@ $build = [
 ];
 ```
 
-Nested components (components in slots):
-
-```twig
-{# Parent component with child components in slots #}
-{% embed 'my_theme:hero-banner' with { variant: 'primary' } only %}
-
-  {% block content %}
-    <h1>{{ title }}</h1>
-    {{ include('my_theme:button', {
-      text: 'Get Started',
-      variant: 'primary',
-      size: 'large'
-    }) }}
-  {% endblock %}
-
-{% endembed %}
-```
-
 ## Common Mistakes
 
-- **Wrong**: Using `embed` when `include()` is sufficient → **Right**: `embed` has overhead and complexity. Only use when you need to populate slots with Twig blocks. For props-only components, use `include()`.
-- **Wrong**: Hardcoding child components instead of using slots → **Right**: Reduces flexibility. Slots allow different child components in different contexts. Hardcoding couples parent to specific children.
+- **Wrong**: Using `embed` for props-only components → **Right**: Use `include()` (simpler, less overhead)
+- **Wrong**: Not using `with_context = false` → **Right**: Prevent variable leakage for predictable components
+- **Wrong**: Hardcoding child components → **Right**: Use slots for flexibility
 
 ## See Also
 

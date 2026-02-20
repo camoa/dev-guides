@@ -1,59 +1,69 @@
 ---
-description: Source Plugins — built-in sources, context system, source discovery and matching
-drupal_version: "11.x"
+description: Source plugins — widgets, API sources, and context-dependent data for component props/slots
+drupal_version: "10.3+ / 11"
 ---
 
-# Source Plugins
+## Source Plugins
 
-## When to Use
+### What Sources Are
 
-> Reference this guide when choosing which source to use for a prop or slot, when debugging why a source is not appearing in the UI, or when understanding context requirements.
-
-## Decision
+Source plugins provide data to props and slots. They are the mechanism by which Drupal's data (entity fields, menus, blocks, user input) flows into component props and slots. Every prop and slot value in a UI Patterns configuration comes from a source plugin.
 
 Sources fall into three categories:
 
-| Category | Description | Context Required |
-|----------|-------------|-----------------|
-| **Widgets** | Direct user input (textfield, checkbox, select, url) | No |
-| **Drupal API sources** | Pull from menus, breadcrumbs, paths, entity fields | Sometimes |
-| **Context switchers** | Change available context (entity_reference switches to referenced entity) | Yes |
+1. **Widgets** -- Direct user input (textfield, checkbox, select, number, URL, WYSIWYG). Tagged `widget`. Store values directly in configuration.
+2. **Drupal API sources** -- Pull data from Drupal systems. Context-independent (menu, breadcrumb, path) or context-dependent (entity fields, entity links, field labels, field formatters, blocks).
+3. **Context switchers** -- Change the available context without providing a value themselves (e.g., selecting an entity reference field switches context to the referenced entity, making its fields available as sources).
 
-## Pattern
+### Source Discovery and Matching
 
-### Built-in sources
+The `SourcePluginManager` filters available sources for each prop/slot based on:
 
-| Source ID | Category | Prop Types | Context Required |
-|-----------|----------|------------|-----------------|
-| `textfield` | Widget | string, identifier | No |
-| `number` | Widget | number | No |
-| `checkbox` | Widget | boolean | No |
-| `select` | Widget | enum | No |
-| `url` | Widget | url | No |
-| `attributes` | Widget | attributes | No |
-| `wysiwyg` | Widget | slot | No |
-| `component` | Source | slot | No |
-| `block` | Source | slot | No |
-| `menu` | Source | links | No |
-| `token` | Source | string | Entity (optional) |
-| `field_property` | Source | (derived) | Entity + Field |
-| `field_formatter` | Source | slot | Entity + Field |
-| `entity_link` | Source | url, links | Entity |
-| `entity_field` | Source | slot | Entity + Field |
-| `entity_reference` | Source | (derived) | Entity + Field |
-
-### Source attribute declaration
+1. **Prop type compatibility** -- Sources declare `prop_types` in their `#[Source]` attribute. Only sources matching the prop's type (or a convertible type) appear.
+2. **Context requirements** -- Sources can require specific contexts (entity, bundle, field items) via `context_requirements`. Only sources whose context is satisfied appear.
+3. **Tag filtering** -- Sources are filtered by tags (e.g., `widget` sources are excluded from some contexts).
 
 ```php
+// Source attribute example:
 #[Source(
   id: 'textfield',
   label: new TranslatableMarkup('Textfield'),
-  prop_types: ['string', 'identifier'],
-  tags: ['widget']
+  prop_types: ['string', 'identifier'],  // Works with these prop types
+  tags: ['widget']                         // Categorization tag
 )]
 ```
 
-### Passing entity context
+### Built-in Source Plugins
+
+| Source ID | Category | Prop Types | Context Required | Description |
+|---|---|---|---|---|
+| `textfield` | Widget | string, identifier | No | Single-line text input |
+| `number` | Widget | number | No | Numeric input |
+| `checkbox` | Widget | boolean | No | Boolean toggle |
+| `select` | Widget | enum | No | Dropdown select |
+| `selects` | Widget | enum_list | No | Multiple select |
+| `checkboxes` | Widget | enum_set | No | Checkbox group |
+| `url` | Widget | url | No | URL input field |
+| `attributes` | Widget | attributes | No | Key-value attribute pairs |
+| `class_attribute` | Widget | attributes | No | CSS class input |
+| `list_textarea` | Widget | list | No | Multi-line list input |
+| `wysiwyg` | Widget | slot | No | CKEditor rich text |
+| `component` | Source | slot | No | Nested SDC component |
+| `block` | Source | slot | No | Drupal block plugin |
+| `menu` | Source | links | No | Menu tree |
+| `breadcrumb` | Source | links | No | Breadcrumb trail |
+| `path` | Source | url, string | No | Current path |
+| `token` | Source | string | Entity (optional) | Token replacement |
+| `field_property` | Source | (derived) | Entity + Field | Entity field property value |
+| `field_formatter` | Source | slot | Entity + Field | Field rendered through formatter |
+| `field_label` | Source | string | Entity + Field | Field label text |
+| `entity_link` | Source | url, links | Entity | Entity canonical/edit URLs |
+| `entity_field` | Source | slot | Entity + Field | Entity field rendered as slot content |
+| `entity_reference` | Source | (derived) | Entity + Field | Switches context to a referenced entity |
+
+### Context System
+
+Sources that need entity data rely on Drupal's context system. Contexts are passed through `#source_contexts` in the render array:
 
 ```php
 $build = [
@@ -67,16 +77,18 @@ $build = [
 ];
 ```
 
-## Common Mistakes
+The `ChainContextEntityResolver` service attempts to discover entity context automatically in Layout Builder and Field Layout integrations.
 
-- **Wrong**: Expecting field sources without entity context → **Right**: Field-based sources only appear when entity context is available (Layout Builder, field formatters, Views with entity base)
-- **Wrong**: Confusing `prop_types` with JSON Schema types → **Right**: Source `prop_types` refer to UI Patterns prop type plugin IDs (`string`, `url`), not JSON Schema types
-- **Wrong**: Calling a source's `getPropValue()` directly → **Right**: Use `SourcePluginManager::getSource()` to properly initialize context and configuration
+### Common Mistakes
 
-## See Also
+| Mistake | Why It Is Wrong |
+|---|---|
+| Expecting field sources without entity context | Field-based sources are derived per entity type + bundle + field. They only appear when entity context is available (Layout Builder, field formatters, Views with entity base). |
+| Confusing prop_types with JSON Schema types | Source `prop_types` refer to UI Patterns prop type plugin IDs (`string`, `url`, `boolean`), not JSON Schema types (`string`, `number`, `integer`). |
+| Not understanding source derivation | Field sources use derivers (`FieldPropertySourceDeriver`, `FieldFormatterSourceDeriver`) to create one source plugin per entity-type/bundle/field combination. The base source ID is just the template. |
 
-- [Creating Custom Source Plugins](creating-custom-source-plugins.md)
-- [Props System](props-system.md)
-- [Slots System](slots-system.md)
-- Reference: [Source Plugins](https://project.pages.drupalcode.org/ui_patterns/3-devs/1-source-plugins/)
-- Reference: [Component Form](https://project.pages.drupalcode.org/ui_patterns/1-users/0-component-form/)
+### See Also
+
+- [Creating Custom Source Plugins](#creating-custom-source-plugins)
+- [Props System](#props-system)
+- [Slots System](#slots-system)

@@ -1,7 +1,3 @@
----
-description: Limiting which blocks, layouts, and sections editors can use in Layout Builder for content governance.
----
-
 ## 10. Layout Builder Restrictions
 
 ### When to Use

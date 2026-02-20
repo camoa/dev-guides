@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Creating reusable, fieldable block types that content editors can manage without code changes.
+> Use custom block types when content editors need to manage block content with custom fields without code changes. Use block plugins instead for logic-driven or dynamic content.
 
 ## Decision
 

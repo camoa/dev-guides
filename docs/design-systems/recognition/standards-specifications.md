@@ -1,25 +1,21 @@
 ---
-description: W3C token format, WCAG accessibility, and atomic design methodology standards
+description: Design system recognition — 10. standards & specifications
 ---
 
-# Standards & Specifications
+## 10. Standards & Specifications
 
-## When to Use
+### When to Use This Section
+- You need to validate your token structure against W3C standards
+- You're implementing a design token system
+- You need to ensure cross-tool compatibility
 
-> Use when validating token structure against W3C standards. Use when implementing design token systems or ensuring cross-tool compatibility.
+### 10.1 W3C DTCG Token Format
 
-## Decision
+**Official Specification:** [https://www.designtokens.org/tr/drafts/format/](https://www.designtokens.org/tr/drafts/format/)
 
-| Standard | When to Apply | Compliance Check |
-|----------|---------------|------------------|
-| **W3C DTCG Token Format** | Implementing token system | JSON with `$value`, `$type` properties |
-| **WCAG 2.2 Color Contrast** | All color tokens | 4.5:1 normal text, 3:1 large text (Level AA) |
-| **Atomic Design Methodology** | Component classification | 5-stage hierarchy (atoms → pages) |
+**Core Requirements:**
 
-## Pattern
-
-**W3C DTCG Token Format (2025.10 Stable Version):**
-
+**1. Token Structure**
 ```json
 {
   "token-name": {
@@ -31,67 +27,94 @@ description: W3C token format, WCAG accessibility, and atomic design methodology
 ```
 
 **Required:**
-- `$value` property
+- `$value` property (identifies token)
 - Token name as parent object key
 
 **Optional:**
 - `$type` (can inherit from group)
-- `$description`
-- `$deprecated`
-- `$extensions` (vendor-specific)
+- `$description` (plain text explanation)
+- `$deprecated` (boolean or string)
+- `$extensions` (vendor-specific metadata)
 
-**Supported Types:**
-- **Primitives**: color, dimension, fontFamily, fontWeight, duration, cubicBezier, number
-- **Composites**: shadow (color, offsetX, offsetY, blur, spread), border (width, style, color), typography (fontFamily, fontSize, fontWeight, lineHeight), gradient, transition
+**2. Supported Types**
+- **color:** Hex, RGB, color space values
+- **dimension:** Numeric + unit (px, rem)
+- **fontFamily:** String or array
+- **fontWeight:** 100-1000 or keywords
+- **duration:** Milliseconds or seconds
+- **cubicBezier:** Four-number array
+- **number:** Any numeric value
 
-**File Format:**
-- Format: JSON
-- MIME: `application/design-tokens+json` or `application/json`
-- Extensions: `.tokens` or `.tokens.json`
+**3. Composite Tokens**
+- **shadow:** color, offsetX, offsetY, blur, spread
+- **border:** width, style, color
+- **typography:** fontFamily, fontSize, fontWeight, lineHeight
+- **gradient:** stops array
+- **transition:** duration, delay, timingFunction
 
-**References:**
-- Curly brace: `{group.token}`
+**4. Groups & Hierarchy**
+- Objects without `$value` = groups
+- Groups can inherit `$type` to children
+- Dot notation for paths: `color.brand.primary`
+- Reserved name: `$root` for group-level tokens
+
+**5. File Format**
+- **Format:** JSON
+- **MIME type:** `application/design-tokens+json` or `application/json`
+- **Extensions:** `.tokens` or `.tokens.json`
+
+**6. References**
+- Curly brace syntax: `{group.token}`
 - JSON Pointer: `#/path/to/target`
+- Tools MUST support JSON Pointer
+
+**Reference:** [Design Tokens Format Module 2025.10](https://www.designtokens.org/tr/drafts/format/)
+
+### 10.2 Accessibility Standards
 
 **WCAG 2.2 Color Contrast Requirements:**
 
-| Level | Normal Text | Large Text (18pt+ or 14pt+ bold) | UI Components |
-|-------|-------------|----------------------------------|---------------|
-| **AA (Standard)** | 4.5:1 minimum | 3:1 minimum | 3:1 against adjacent |
-| **AAA (Enhanced)** | 7:1 minimum | 4.5:1 minimum | N/A |
+**Level AA (Standard):**
+- Normal text: **4.5:1** minimum contrast ratio
+- Large text (18pt+ or 14pt+ bold): **3:1** minimum
+- UI components: **3:1** against adjacent colors
+
+**Level AAA (Enhanced):**
+- Normal text: **7:1** minimum
+- Large text: **4.5:1** minimum
 
 **Exceptions:**
 - Incidental text (inactive controls, decorative)
 - Logotypes and brand names
 
-**WCAG 2.2 Update:**
-- Color contrast moved from Level AA to **Level A** (strengthened requirement)
+**Reference:** [Understanding WCAG 2.1 Contrast (Minimum)](https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html)
 
-**Atomic Design Methodology (Brad Frost 2013, Evolved 2025):**
+**WCAG 2.2 Update:**
+- Color contrast now moved from Level AA to **Level A** (strengthened)
+- More stringent requirement for foundational accessibility
+
+**Tools for Validation:**
+- WebAIM Contrast Checker: [https://webaim.org/resources/contrastchecker/](https://webaim.org/resources/contrastchecker/)
+- Browser DevTools built-in contrast checkers
+
+### 10.3 Atomic Design Methodology
+
+**Original Source:** Brad Frost, "Atomic Design" (2013)
+**URL:** [https://atomicdesign.bradfrost.com/](https://atomicdesign.bradfrost.com/)
 
 **Five-Stage Hierarchy:**
+1. **Atoms** — Foundational building blocks (HTML elements)
+2. **Molecules** — Simple groups of UI elements (2-3 atoms)
+3. **Organisms** — Complex UI components (multiple molecules/atoms)
+4. **Templates** — Page-level layouts (content structure)
+5. **Pages** — Template instances with real content
 
-| Stage | Description | 2025 Evolution |
-|-------|-------------|----------------|
-| **Atoms** | Foundational building blocks (HTML elements) | Design tokens as foundation layer (not in original) |
-| **Molecules** | Simple groups (2-3 atoms) | Semantic naming preferred over strict categorization |
-| **Organisms** | Complex components (multiple molecules/atoms) | Behavioral patterns emphasized |
-| **Templates** | Page-level layouts (content structure) | Flexible interpretation encouraged |
-| **Pages** | Template instances with real content | Purpose-driven classification |
+**2025 Evolution:**
+- Design tokens as foundation layer (not in original)
+- Semantic naming preferred over strict categorization
+- Behavioral patterns emphasized (Atlassian ADG approach)
+- Flexible interpretation encouraged
 
-## Common Mistakes
-
-- **Wrong**: Custom token format incompatible with tools → **Right**: Use W3C DTCG standard for cross-tool compatibility (Figma, Style Dictionary, Tokens Studio)
-- **Wrong**: Color pairs that fail WCAG contrast → **Right**: Validate all text/background combinations (4.5:1 minimum for normal text)
-- **Wrong**: Rigid atomic design enforcement → **Right**: Use as mental model, not rigid rulebook (labels aid communication, not dogma)
-- **Wrong**: Missing composite token structure → **Right**: Shadows, borders, typography use composite format with multiple properties
-
-## See Also
-
-- [Design Tokens](./design-tokens.md)
-- [Component Classification](./component-classification.md)
-- [Validation Checklist](./validation-checklist.md)
-- Reference: [W3C Design Tokens Format](https://www.designtokens.org/tr/drafts/format/)
-- Reference: [WCAG 2.1 Contrast (Minimum)](https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html)
-- Reference: [Atomic Design](https://atomicdesign.bradfrost.com/)
-- Reference: [Atomic Design in 2025: Flexible Practice](https://medium.com/design-bootcamp/atomic-design-in-2025-from-rigid-theory-to-flexible-practice-91f7113b9274)
+**References:**
+- [Atomic Design in 2025: From Rigid Theory to Flexible Practice](https://medium.com/design-bootcamp/atomic-design-in-2025-from-rigid-theory-to-flexible-practice-91f7113b9274)
+- [Atomic Design Systems: Why the Labels Don't Matter](https://www.qt.io/blog/atomic-design-systems-why-the-labels-dont-matter)

@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Understanding how Layout Builder uses blocks differently: inline blocks, field blocks, and extra field blocks.
+> Use Layout Builder blocks when placing content within layouts. Use inline blocks for one-off content, field blocks to display entity fields, and extra field blocks for pseudo-fields.
 
 ## Decision
 
@@ -15,7 +15,7 @@ Understanding how Layout Builder uses blocks differently: inline blocks, field b
 |----------------|--------|-----|
 | One-off content specific to this layout | Inline Block | Non-reusable, owned by layout, no block library clutter |
 | Entity field displayed as block in layout | Field Block | Native entity display, automatic updates when entity changes |
-| Pseudo-field (like "author" or "submitted by") as block | Extra Field Block | Exposes hook_entity_extra_field_info() items as blocks |
+| Pseudo-field (like "author" or "submitted by") as block | Extra Field Block | Exposes `hook_entity_extra_field_info()` items as blocks |
 | Reusable block in Layout Builder | Regular Block Plugin | Can be placed via Layout Builder and traditional regions |
 | Block content that might become reusable later | Start with Inline Block, convert if needed | Easier to promote to reusable than demote from reusable |
 

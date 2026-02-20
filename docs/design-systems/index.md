@@ -1,5 +1,5 @@
 ---
-description: Design system guides — recognition, Bootstrap mapping, Radix SDC implementation, Radix component reference, Tailwind CSS integration
+description: Design system guides — recognition, Bootstrap mapping, Radix SDC implementation, Radix component reference, Tailwind CSS integration, design token extraction
 ---
 
 # Design Systems
@@ -14,6 +14,8 @@ Guides for the design-to-code pipeline: analyze a design system, map it to Boots
 | Look up Radix 6.x SDC component props, slots, and usage | [Radix Components](radix-components/index.md) |
 | Use DaisyUI v5 components, theming, and React integration | [DaisyUI](daisyui/index.md) |
 | Implement a design system with Tailwind CSS v4/v3 | [Tailwind CSS](tailwind/index.md) |
+| Extract and map design tokens across Tailwind, DaisyUI, Figma, and W3C DTCG | [Tailwind Tokens](tailwind-tokens/index.md) |
+| Convert React/JSX components to Drupal Twig templates and SDC | [JSX to Twig](jsx-to-twig/index.md) |
 
 ## Workflow
 

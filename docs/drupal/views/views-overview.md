@@ -1,8 +1,3 @@
----
-description: You need to query and display lists of content, users, taxonomy terms, or other entities with filtering, sorting, and display formatting.
-drupal_version: "11.x"
----
-
 ## 1. Views System Overview
 
 ### When to Use
@@ -55,3 +50,4 @@ Reference: `core/modules/views/src/Entity/View.php` lines 38-45 (config_export k
 - Section 2: View Config Schema — full YAML structure
 - Section 17: Views Config Export & Recipes — managing views as config
 - Reference: [Drupal Views API Overview](https://www.drupal.org/docs/drupal-apis/views-api)
+

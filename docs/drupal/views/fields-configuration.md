@@ -1,8 +1,3 @@
----
-description: When configuring field output, labels, formatters, rewriting, and CSS classes in views using fields-based rows.
-drupal_version: "11.x"
----
-
 ## 8. Fields Configuration
 
 ### When to Use
@@ -141,3 +136,4 @@ Reference: `core/modules/node/config/optional/views.view.content.yml` lines 39-5
 - Section 15: Style & Row Plugins — fields vs entity row rendering
 - Section 9: Filters & Exposed Filters — using field values in filters
 - Reference: [views_field schema](https://api.drupal.org/api/drupal/core!modules!views!config!schema!views.data_types.schema.yml/11.x)
+

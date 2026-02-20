@@ -1,5 +1,5 @@
 ---
-description: Defining component metadata, props, slots, and library dependencies in YAML schema
+description: Component YAML schema definition for props, slots, and dependencies
 drupal_version: "11.x"
 ---
 
@@ -9,33 +9,29 @@ drupal_version: "11.x"
 
 > Use this when defining component metadata, specifying props and slots, or configuring library dependencies.
 
-## Decision: Schema Definition Requirements
+## Decision
 
-| Field | Required | Purpose |
-|-------|----------|---------|
-| `$schema` | Recommended | JSON Schema URL for IDE validation |
-| `name` | Required | Human-readable component name |
-| `status` | Required | experimental, stable, deprecated, obsolete |
-| `description` | Optional | Component purpose |
-| `group` | Optional | Organizational category |
-| `replaces` | Optional | Override directive (themes only, must match schemas) |
-| `props` | Optional | JSON Schema for typed data |
-| `slots` | Optional | Content insertion points |
-| `libraryDependencies` | Optional | Simple dependency array |
-| `libraryOverrides` | Optional | Advanced library configuration |
+| Field | Required | Purpose | When to Use |
+|-------|----------|---------|-------------|
+| `$schema` | Recommended | JSON Schema URL for IDE validation | Always (enables autocomplete and validation) |
+| `name` | Yes | Human-readable name | Always |
+| `status` | Yes | experimental \| stable \| deprecated \| obsolete | Always |
+| `description` | No | Component purpose | Recommended |
+| `props` | No | JSON Schema for typed data | For configuration values (strings, booleans, enums) |
+| `slots` | No | Content insertion points | For renderable content areas |
+| `libraryDependencies` | No | Simple dependency array | When component needs other libraries |
+| `replaces` | No | Override directive (themes only) | To replace another component |
 
 ## Pattern
 
-Minimum required schema:
-
+**Minimum Required:**
 ```yaml
 $schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
 name: 'Component Name'
 status: stable
 ```
 
-Props definition (strictly typed, validated data):
-
+**Props (typed, validated data):**
 ```yaml
 props:
   type: object
@@ -48,55 +44,39 @@ props:
       minLength: 2
     variant:
       type: string
-      title: 'Visual Variant'
       enum: [primary, secondary, danger]
       default: primary
-    disabled:
-      type: boolean
-      title: 'Disabled State'
-      default: false
 ```
 
-Slots definition (unstructured content areas):
-
+**Slots (unstructured content):**
 ```yaml
 slots:
   content:
     title: 'Main Content'
     required: true
-    description: 'Primary content area'
   header:
     title: 'Header Content'
     required: false
-    description: 'Optional header region'
 ```
 
-Library dependencies:
-
+**Library Dependencies:**
 ```yaml
 libraryDependencies:
   - core/drupal
   - core/once
   - my_theme/utilities
-
-libraryOverrides:
-  js:
-    custom.js:
-      attributes: { defer: true }
-      preprocess: false
-  dependencies:
-    - core/jquery
 ```
 
 ## Common Mistakes
 
-- **Wrong**: Not including `$schema` URL → **Right**: Without schema URL, IDEs can't provide validation/autocomplete, and developers lose development-time error checking.
-- **Wrong**: Using `type: array` for `card_title_prefix` when it should be a slot → **Right**: Arrays of renderable content should be slots, not props. Props are for typed scalar/object data that validates against JSON Schema.
+- **Wrong**: Omitting `$schema` URL → **Right**: Always include schema for IDE validation and autocomplete
+- **Wrong**: Using `type: array` for renderable content → **Right**: Use slots for render arrays, props for typed data
+- **Wrong**: No prop validation → **Right**: Define complete JSON Schema with types, enums, defaults
 
 ## See Also
 
 - Reference: `/core/assets/schemas/v1/metadata.schema.json` - Official JSON Schema
 - Reference: `/core/modules/system/tests/modules/sdc_test/components/my-button/my-button.component.yml`
-- Reference: `/core/themes/olivero/components/teaser/teaser.component.yml`
+- Reference: `/themes/contrib/radix/components/button/button.component.yml`
 - [Props vs Slots Decision Framework](props-vs-slots-decision-framework.md)
-- [Component YAML Reference](https://www.drupal.org/docs/develop/theming-drupal/using-single-directory-components/annotated-example-componentyml)
+- [Official Component YAML Reference](https://www.drupal.org/docs/develop/theming-drupal/using-single-directory-components/annotated-example-componentyml)

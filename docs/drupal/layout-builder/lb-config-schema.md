@@ -1,7 +1,3 @@
----
-description: Complete Layout Builder configuration schema — sections, components, inline blocks, field blocks, and YAML structure.
----
-
 ## 3. Layout Builder Configuration Schema
 
 ### When to Use

@@ -1,5 +1,5 @@
 ---
-description: Reference of core block plugins available in Drupal
+description: Reference of core block plugins available in Drupal — system, user, views, layout_builder
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Finding existing core block plugins to reuse, extend, or understand patterns.
+> Check here before creating a custom block. Many common needs (menus, branding, login, search, views) are covered by core plugins. Derivatives mean one plugin covers many cases.
 
 ## Decision
 

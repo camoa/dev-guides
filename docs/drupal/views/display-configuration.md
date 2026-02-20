@@ -1,8 +1,3 @@
----
-description: When configuring common options shared across all display types: title, access, cache, pager, style, fields, filters, sorts.
-drupal_version: "11.x"
----
-
 ## 3. Display Configuration
 
 ### When to Use
@@ -98,3 +93,4 @@ Reference: `core/modules/views/config/schema/views.data_types.schema.yml` lines 
 - Section 4-7: Specific display types (page, block, REST export, feed, attachment)
 - Section 8-16: Detailed configuration for fields, filters, sorts, pager, cache, access
 - Reference: [Drupal Views Configuration API](https://www.drupal.org/docs/drupal-apis/configuration-api/configuration-schemametadata)
+

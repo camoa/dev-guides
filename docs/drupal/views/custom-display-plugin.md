@@ -1,8 +1,3 @@
----
-description: New output channel beyond Page/Block/REST: CLI output, email rendering, queue processing, specialized API formats.
-drupal_version: "11.x"
----
-
 ## 25. Custom Display Plugin
 
 ### When to Use
@@ -88,3 +83,4 @@ New output channel beyond Page/Block/REST: CLI output, email rendering, queue pr
 - Section 4-7: Display types configuration
 - Reference: `core/modules/views/src/Plugin/views/display/DisplayPluginBase.php`
 - Reference: `core/modules/rest/src/Plugin/views/display/RestExport.php` — REST display example
+

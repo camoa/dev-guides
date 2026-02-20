@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Reacting to block operations or altering block behavior across all blocks or specific plugins.
+> Use alter hooks to modify block render arrays or access across all blocks or specific plugins. Use preprocess for adding template variables. Return `AccessResult`, never booleans.
 
 ## Decision
 

@@ -1,8 +1,3 @@
----
-description: Critical security and performance considerations for production views.
-drupal_version: "11.x"
----
-
 ## 31. Security & Performance
 
 ### When to Use
@@ -162,3 +157,4 @@ Logs all queries — check for duplicate or inefficient queries.
 - Section 14: Access Control — access security
 - Section 16: Query Settings — query tuning
 - Reference: [OWASP Top 10](https://owasp.org/www-project-top-ten/) for web security
+

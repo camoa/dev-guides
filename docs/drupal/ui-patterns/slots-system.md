@@ -1,48 +1,62 @@
 ---
-description: Slots System — multiple sources per slot, slot source plugins, Twig access
-drupal_version: "11.x"
+description: Slots — renderables, multiple sources, and normalization for component placeholders
+drupal_version: "10.3+ / 11"
 ---
 
-# Slots System
+## Slots System
 
-## When to Use
+### How Slots Work
 
-> Use slots for renderables — blocks, other components, WYSIWYG content, field formatter output. Use props for typed scalar/structured data.
+Slots are named placeholders in a component that accept Drupal render arrays. Unlike props (typed scalar/structured data), slots hold renderables: blocks, other components, WYSIWYG content, or field formatter output.
 
-## Decision
+Internally, the `slot` prop type is a special PropType plugin that normalizes any input into a render array via `SlotPropType::normalize()`:
 
-| Content Type | Use | Reason |
-|-------------|-----|--------|
-| Block output, rendered markup | Slot | Renderables need the render pipeline |
-| Plain text, numbers, booleans | Prop | Strictly typed, validated by JSON Schema |
-| Multiple stacked renderables in one area | Slot | Slots support multiple sources, props do not |
-| Navigation links | Prop (`links` type) | Structured data with a defined schema |
+- Strings become `['#children' => Markup::create($string)]`
+- Objects implementing `RenderableInterface` are converted via `->toRenderable()`
+- `MarkupInterface` objects become `['#children' => $value]`
+- Arrays pass through as render arrays (with cleanup for non-list keys)
 
-## Pattern
-
-### Slot definition
+### Slot Definition in YAML
 
 ```yaml
 slots:
   content:
     title: "Main Content"
-    description: "The primary content area"
+    description: "The primary content area of the card"
   sidebar:
     title: "Sidebar"
+    description: "Optional sidebar content"
 ```
 
-### Built-in slot sources
+Slots do not have JSON Schema types. Their only metadata is `title` and `description`. UI Patterns automatically adds `title` from the slot key if missing.
+
+### Multiple Sources Per Slot
+
+Unlike props (one source per prop), slots support **multiple sources**. In the UI, site-builders can add several sources to a single slot (e.g., a component + a block + WYSIWYG text), and they render in sequence:
+
+```php
+// In ComponentElementBuilder::buildSlot()
+foreach ($configuration['sources'] as $source_configuration) {
+    $build = $this->buildSource($build, $slot_id, $definition, $source_configuration, $contexts);
+}
+```
+
+### Slot Sources
+
+Built-in sources that work with slots (`prop_types: ['slot']`):
 
 | Source | What It Does |
-|--------|-------------|
-| `component` | Embeds another SDC component |
+|---|---|
+| `component` | Embeds another SDC component (nesting) |
 | `block` | Embeds a Drupal block plugin |
-| `wysiwyg` | Rich text via CKEditor |
+| `wysiwyg` | Rich text via CKEditor text_format element |
 | `field_formatter` | Renders a field using a Drupal field formatter |
 
-String-type sources (textfield, token) also work via the `slot <- string` conversion path.
+String-type sources (textfield, token, etc.) also work via the `slot <- string` conversion path.
 
-### Accessing slots in Twig
+### Accessing Slots in Twig
+
+Slots appear as Twig variables matching their YAML key names:
 
 ```twig
 <div class="card">
@@ -53,16 +67,16 @@ String-type sources (textfield, token) also work via the `slot <- string` conver
 </div>
 ```
 
-Unlike props (one source per prop), slots support **multiple sources**. Site-builders can stack a component + a block + WYSIWYG text in a single slot; they render in sequence.
+### Common Mistakes
 
-## Common Mistakes
+| Mistake | Why It Is Wrong |
+|---|---|
+| Looping over a slot variable | Render arrays are iterable in Twig, so `{% for item in content %}` may iterate over render array keys (`#theme`, `#cache`) instead of child elements. Only loop if you have verified the slot is a sequence of renderables. |
+| Correlating indices across multiple slots | If you have `images` and `captions` slots, there is no guarantee they have matching indices. Use a single slot with a sub-component that pairs them. |
+| Applying filters to slot output | Slots should pass through unmodified. Filtering slot content (except approved slot filters like `add_class` and `set_attribute`) may break render arrays. |
 
-- **Wrong**: `{% for item in content %}` to loop a slot → **Right**: Render arrays are iterable over their keys (`#theme`, `#cache`), not child elements; output the slot variable directly
-- **Wrong**: Correlating indices across multiple slots (images + captions) → **Right**: Use a single slot with a sub-component that pairs them
-- **Wrong**: Applying filters to slot output → **Right**: Only approved slot filters (`add_class`, `set_attribute`) are safe; other filters may break render arrays
+### See Also
 
-## See Also
-
-- [Source Plugins](source-plugins.md)
-- [Defining Components](defining-components.md)
-- [Best Practices & Anti-Patterns](best-practices-and-anti-patterns.md)
+- [Source Plugins](#source-plugins)
+- [Defining Components](#defining-components)
+- [Best Practices & Anti-Patterns](#best-practices--anti-patterns)

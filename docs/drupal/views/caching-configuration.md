@@ -1,8 +1,3 @@
----
-description: When optimizing view performance by caching query results and rendered output.
-drupal_version: "11.x"
----
-
 ## 13. Caching Configuration
 
 ### When to Use
@@ -131,3 +126,4 @@ Reference: [Pantheon Views Caching Guide](https://docs.pantheon.io/drupal-cachin
 ### See Also
 - Section 31: Security & Performance — cache poisoning risks
 - Reference: [Caching Overview](https://www.drupal.org/docs/7/managing-site-performance-and-scalability/caching-to-improve-performance/caching-overview)
+

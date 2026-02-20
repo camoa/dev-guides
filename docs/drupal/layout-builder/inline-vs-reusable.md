@@ -1,7 +1,3 @@
----
-description: Deciding between non-reusable inline blocks and reusable block content entities in Layout Builder.
----
-
 ## 7. Inline Blocks vs Reusable Blocks
 
 ### When to Use

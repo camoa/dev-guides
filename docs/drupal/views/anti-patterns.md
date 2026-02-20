@@ -1,8 +1,3 @@
----
-description: What NOT to do and WHY.
-drupal_version: "11.x"
----
-
 ## 30. Anti-Patterns & Common Mistakes
 
 ### When to Use
@@ -126,3 +121,4 @@ What NOT to do and WHY.
 ### See Also
 - Section 29: Best Practices & Patterns — what to do instead
 - Section 31: Security & Performance — security details
+

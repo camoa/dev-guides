@@ -1,8 +1,3 @@
----
-description: When ordering results (sorts) or filtering based on URL parameters (contextual filters/arguments).
-drupal_version: "11.x"
----
-
 ## 10. Sort & Contextual Filters (Arguments)
 
 ### When to Use
@@ -164,3 +159,4 @@ arguments:
 - Section 4: Page Display — using % in paths for arguments
 - Section 11: Relationships — arguments on related entities
 - Section 31: Security & Performance — argument validation security
+

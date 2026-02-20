@@ -25,6 +25,7 @@ description: Drupal Layout Builder development guides — configuration-first ap
 | Define individual styles with restrictions | [Style Definitions](lb-styles-definitions.md) |
 | Integrate LB Styles with Bootstrap/Radix | [Bootstrap Integration](lb-styles-bootstrap.md) |
 | Extend LB Styles programmatically | [Extending LB Styles](lb-styles-extending.md) |
+| Use UI Patterns as LB layouts + UI Styles | [UI Patterns Layouts & UI Styles Integration](ui-patterns-layouts.md) |
 | Create custom layout plugins | [Custom Layout Plugins](custom-layout-plugins.md) |
 | React to layout rendering with events | [Events & Hooks](lb-events-hooks.md) |
 | Export and deploy LB configuration | [Config Export & Recipes](lb-config-recipes.md) |

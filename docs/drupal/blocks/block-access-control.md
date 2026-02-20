@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Controlling whether a block should be displayed based on user permissions, roles, or custom logic.
+> Use `blockAccess()` for programmatic access control tied to code logic. Use Visibility Conditions for UI-configurable per-placement access (pages, roles, content type).
 
 ## Decision
 

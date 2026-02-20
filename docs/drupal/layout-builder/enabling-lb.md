@@ -1,7 +1,3 @@
----
-description: How to enable Layout Builder on content types, custom entities, and view modes via UI, config, or code.
----
-
 ## 2. Enabling Layout Builder
 
 ### When to Use

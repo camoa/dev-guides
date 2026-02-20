@@ -1,8 +1,3 @@
----
-description: **Style Plugin**: Custom result set formatting (calendar, timeline, accordion) that standard Table/Grid/List can't achieve. **Row Plugin**: Custom ...
-drupal_version: "11.x"
----
-
 ## 26. Custom Style & Row Plugins
 
 ### When to Use
@@ -96,3 +91,4 @@ drupal_version: "11.x"
 - Reference: `core/modules/views/src/Plugin/views/style/StylePluginBase.php`
 - Reference: `core/modules/views/src/Plugin/views/style/Table.php` — usesFields = TRUE example
 - Reference: `core/modules/views/src/Plugin/views/row/EntityRow.php` — entity row plugin
+

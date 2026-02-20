@@ -1,7 +1,3 @@
----
-description: Choosing between default layouts (config-based, shared) and per-entity overrides (content-based, individual).
----
-
 ## 9. Defaults vs Overrides
 
 ### When to Use

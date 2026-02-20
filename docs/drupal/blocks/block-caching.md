@@ -1,5 +1,5 @@
 ---
-description: Implement proper caching for block performance
+description: Implement proper caching for block performance and correctness
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Ensuring blocks are cached properly for performance while varying by necessary contexts and invalidating when data changes.
+> Ensure blocks are cached properly for performance while varying by necessary contexts and invalidating when data changes. Wrong caching = slow site or incorrect content shown to users.
 
 ## Decision
 

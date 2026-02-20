@@ -1,5 +1,5 @@
 ---
-description: Building custom block plugins with programmatic logic
+description: Build custom block plugins with programmatic logic and service integration
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Building a block that requires programmatic logic, external data, or service integration.
+> Use a block plugin when you need programmatic logic, external data, or service integration. Use content blocks when editors need to manage content without code changes.
 
 ## Decision
 
@@ -47,7 +47,7 @@ class HelloWorldBlock extends BlockBase {
 **Steps:**
 
 1. Create file: `{module}/src/Plugin/Block/MyBlock.php`
-2. Add `#[Block]` attribute with id, admin_label, category
+2. Add `#[Block]` attribute with `id`, `admin_label`, `category`
 3. Extend `BlockBase` and implement `build()`
 4. Clear cache: `drush cr`
 5. Place via UI: `/admin/structure/block`

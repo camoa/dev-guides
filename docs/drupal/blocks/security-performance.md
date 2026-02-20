@@ -1,5 +1,5 @@
 ---
-description: Ensure blocks don't introduce vulnerabilities or performance bottlenecks
+description: Ensure blocks don't introduce security vulnerabilities or performance bottlenecks
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Ensuring blocks don't introduce vulnerabilities or performance bottlenecks.
+> Apply these patterns when blocks handle user input, load entities, or call external APIs. Security issues in blocks affect every page they appear on.
 
 ## Decision
 
@@ -33,47 +33,30 @@ Ensuring blocks don't introduce vulnerabilities or performance bottlenecks.
 | Too-broad cache tags | Tag with specific entities, not entity type | More precise invalidation = better hit rate |
 | Large result sets | Paginate or limit results | Loading 1000 nodes crashes page, breaks memory |
 | Synchronous API calls | Use Guzzle async or queue API | External API delays block entire page render |
-| Uncompressed images | Use image styles, lazy loading | Large images slow initial page load |
-| No CDN for assets | Use CDN for libraries, enable aggregation | Browser caching, reduced server load |
 
 ## Pattern
 
 **Security: Safe output**
 ```php
 // WRONG - XSS vulnerability
-public function build() {
-  $title = $_GET['title']; // User input
-  return ['#markup' => '<h2>' . $title . '</h2>']; // Unescaped
-}
+return ['#markup' => '<h2>' . $_GET['title'] . '</h2>'];
 
-// RIGHT - Auto-escaped
-public function build() {
-  $title = \Drupal::request()->query->get('title');
-  return [
-    '#theme' => 'my_block',
-    '#title' => $title, // Twig escapes automatically
-  ];
-}
+// RIGHT - Auto-escaped via theme
+$title = \Drupal::request()->query->get('title');
+return ['#theme' => 'my_block', '#title' => $title];
 ```
 
 **Security: Proper access checks**
 ```php
 // WRONG - Exposes private content
-public function build() {
-  $nodes = $this->entityTypeManager->getStorage('node')
-    ->loadByProperties(['type' => 'private_content']);
-  // Anyone can see this!
-}
+$nodes = $this->entityTypeManager->getStorage('node')
+  ->loadByProperties(['type' => 'private_content']);
 
 // RIGHT - Respects entity access
-public function build() {
-  $storage = $this->entityTypeManager->getStorage('node');
-  $query = $storage->getQuery()
-    ->condition('type', 'private_content')
-    ->accessCheck(TRUE); // Applies view access
-  $nids = $query->execute();
-  $nodes = $storage->loadMultiple($nids);
-}
+$query = $storage->getQuery()
+  ->condition('type', 'private_content')
+  ->accessCheck(TRUE); // Applies view access
+$nids = $query->execute();
 
 protected function blockAccess(AccountInterface $account) {
   return AccessResult::allowedIfHasPermission($account, 'view private content')
@@ -85,10 +68,8 @@ protected function blockAccess(AccountInterface $account) {
 ```php
 // WRONG - Slow API call on every page
 public function build() {
-  $client = new \GuzzleHttp\Client();
   $response = $client->get('https://api.example.com/data');
-  $data = json_decode($response->getBody());
-  return ['#markup' => $data->message];
+  return ['#markup' => json_decode($response->getBody())->message];
 }
 
 // RIGHT - Lazy builder + cache
@@ -98,38 +79,17 @@ public function build() {
     '#create_placeholder' => TRUE,
   ];
 }
-
-// In mymodule.services.yml: mymodule.lazy_builder
-class MyLazyBuilder {
-  public function buildApiBlock() {
-    $cache = \Drupal::cache()->get('mymodule_api_data');
-    if ($cache) {
-      $data = $cache->data;
-    } else {
-      $client = new \GuzzleHttp\Client();
-      $response = $client->get('https://api.example.com/data');
-      $data = json_decode($response->getBody());
-      \Drupal::cache()->set('mymodule_api_data', $data, time() + 3600);
-    }
-    return [
-      '#markup' => $data->message,
-      '#cache' => ['max-age' => 3600],
-    ];
-  }
-}
 ```
 
 **Performance: Efficient entity loading**
 ```php
-// WRONG - N+1 queries (one per node)
-$nids = [1, 2, 3, 4, 5];
+// WRONG - N+1 queries
 foreach ($nids as $nid) {
   $node = Node::load($nid); // Query per loop iteration
   $items[] = $node->label();
 }
 
 // RIGHT - Single query
-$nids = [1, 2, 3, 4, 5];
 $nodes = Node::loadMultiple($nids); // One query for all
 foreach ($nodes as $node) {
   $items[] = $node->label();

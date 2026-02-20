@@ -1,7 +1,3 @@
----
-description: Reference for all core layout plugins — regions, settings, templates, and differences between layout_discovery and layout_builder layouts.
----
-
 ## 5. Core Layout Plugins
 
 ### When to Use

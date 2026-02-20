@@ -1,8 +1,3 @@
----
-description: When restricting query results via fixed criteria (filters) or user-selectable criteria (exposed filters).
-drupal_version: "11.x"
----
-
 ## 9. Filters & Exposed Filters
 
 ### When to Use
@@ -185,3 +180,4 @@ When enabled, exposed form renders in a separate block (`views_exposed_filter_bl
 - Section 5: Block Display — exposed filter blocks
 - Section 31: Security & Performance — exposed filter security
 - Reference: [Better Exposed Filters module](https://www.drupal.org/docs/extending-drupal/contributed-modules/contributed-module-documentation/better-exposed-filters) for enhanced UX
+

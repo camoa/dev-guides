@@ -1,5 +1,5 @@
 ---
-description: Control block visibility based on pages, roles, content types, or custom logic
+description: Control block visibility based on pages, roles, content types, or custom condition plugins
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Controlling block visibility based on pages, user roles, content types, or custom logic.
+> Use visibility conditions for UI-configurable placement rules (pages, roles, node type). Use `blockAccess()` for programmatic logic that can't be expressed in conditions.
 
 ## Decision
 

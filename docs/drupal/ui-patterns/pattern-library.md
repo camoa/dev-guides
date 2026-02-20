@@ -1,34 +1,34 @@
 ---
-description: Pattern Library — browsable component library, stories YAML format, template overrides
-drupal_version: "11.x"
+description: Pattern Library — browsable component preview with stories
+drupal_version: "10.3+ / 11"
 ---
 
-# Pattern Library
+## Pattern Library
 
 **Sub-module:** `ui_patterns_library`
 **Dependencies:** `ui_patterns`
 
-## When to Use
+### What It Does
 
-> Enable `ui_patterns_library` when developers and designers need to browse, preview, and document components with example states (stories).
+Provides a browsable component library at `/admin/appearance/ui/components` where developers and designers can preview components with their stories (documented example states).
 
-## Decision
+### Library Pages
 
-| Need | Approach |
-|------|---------|
-| Browse all components | `/admin/appearance/ui/components` |
-| Preview components with example states | Add `.{story-id}.stories.yml` files |
-| Override library page templates | Implement `hook_theme` overrides for `ui_patterns_*` templates |
+| Page | URL | Content |
+|---|---|---|
+| Overview | `/admin/appearance/ui/components` | All components grouped by category |
+| Provider | `/admin/appearance/ui/components/{provider}` | Components from a specific module/theme |
+| Single | `/admin/appearance/ui/components/{provider}/{machineName}` | Component detail with metadata, props/slots tables, stories |
 
-## Pattern
+### Stories
 
-### Story file format
+Stories are YAML files that define example renderings of a component. They are discovered by the `StoryPluginManager`:
 
 **File naming:** `{component-name}.{story-id}.stories.yml`
-**Location:** Same directory as the component, inside `components/`
+**Location:** Same directory as the component (inside `components/`)
 
 ```yaml
-# components/card/card.featured.stories.yml
+# components/card/card.featured.story.yml
 name: "Featured Card"
 description: "A card with all slots filled and highlighted variant"
 props:
@@ -45,13 +45,25 @@ slots:
     - "#markup": "<span>Read more</span>"
 ```
 
-### Story display behavior
+Stories can also reference components from other providers using the `component` key:
+
+```yaml
+# In a sub-theme, adding stories to a base theme component
+component: "base_theme:card"
+name: "Custom Story"
+props:
+  title: "Sub-theme version"
+```
+
+### Story Display Behavior
 
 - Stories with a `variant` prop display once with that variant
 - Stories without a `variant` prop display once per defined variant
+- Library wrappers allow custom HTML around story output
 
-### Seven overridable templates
+### Customizing Library Pages
 
+Library pages use Drupal's `hook_theme` system. Seven templates can be overridden:
 - `ui_patterns_overview_page`
 - `ui_patterns_single_page`
 - `ui_patterns_component_metadata`
@@ -60,15 +72,15 @@ slots:
 - `ui_patterns_stories_full`
 - `ui_patterns_stories_compact`
 
-## Common Mistakes
+### Common Mistakes
 
-- **Wrong**: Using stories for runtime configuration → **Right**: Stories are documentation artifacts; runtime behavior is controlled by source plugins
-- **Wrong**: Wrapping single renderables in unnecessary arrays in stories → **Right**: Keep story structures flat
-- **Wrong**: Treating the UI Patterns library as a Storybook replacement → **Right**: They serve different purposes (Drupal-native vs external JS tool) and can coexist
+| Mistake | Why It Is Wrong |
+|---|---|
+| Using stories for runtime configuration | Stories are documentation artifacts, not configuration. They exist only in the library preview. Runtime behavior is controlled by source plugins. |
+| Wrapping single renderables in unnecessary arrays in stories | Keep story structures flat. A single renderable does not need array wrapping. |
+| Confusing the library with Storybook | The UI Patterns library is a Drupal-native tool. Storybook is an external JavaScript tool. They serve different purposes and can coexist. |
 
-## See Also
+### See Also
 
-- [Defining Components](defining-components.md)
-- [Variants](variants.md)
-- Reference: [Stories and Library](https://project.pages.drupalcode.org/ui_patterns/2-authors/1-stories-and-library/)
-- Reference: `modules/contrib/ui_patterns/modules/ui_patterns_library/`
+- [Defining Components](#defining-components)
+- [Variants](#variants)

@@ -1,14 +1,15 @@
 ---
-description: Identify the smallest functional UI building blocks that cannot be decomposed further
+description: Design system recognition — 3. atom recognition
 ---
 
-# Atom Recognition
+## 3. Atom Recognition
 
-## When to Use
+#### When to Use This Section
+- You're analyzing a UI and need to identify the smallest functional building blocks
+- You're extracting foundational elements from HTML, Figma, or screenshots
+- You need to catalog all atoms before identifying molecules
 
-> Use when analyzing a UI and need to identify foundational elements. Use before identifying molecules — atoms are the base components.
-
-## Decision
+#### Decision Table: Common Atoms
 
 | Atom Category | Examples | Recognition Cues |
 |---------------|----------|------------------|
@@ -19,51 +20,99 @@ description: Identify the smallest functional UI building blocks that cannot be 
 | **Indicators** | Badge, tag, status dot, spinner | Visual feedback elements |
 | **Dividers** | Horizontal rule, vertical divider | Separators |
 
-## Pattern
+#### Pattern: Atom Identification Process
 
-**Atom Identification Process:**
+**Step 1: Extract all UI elements**
+- Scan the interface for every distinct visual element
+- Ignore layout/spacing (those are templates/organisms)
+- Focus on elements that cannot be decomposed further
 
-```
-1. Extract all UI elements
-   - Scan interface for distinct visual elements
-   - Ignore layout/spacing
+**Step 2: Test decomposability**
+- Can it be broken into smaller functional parts?
+- If NO → It's an atom
+- If YES → It's a molecule or organism
 
-2. Test decomposability
-   - Can it be broken into smaller functional parts?
-   - NO → Atom
-   - YES → Molecule or organism
+**Step 3: Verify functional independence**
+- Does it function on its own?
+- If NO (requires context) → May still be atom if structurally minimal
+- If YES → Likely atom or molecule
 
-3. Verify functional independence
-   - Does it function on its own?
-   - Structurally minimal?
-```
+**Reference Sources:**
+- Atomic design atoms: [https://atomicdesign.bradfrost.com/chapter-2/#atoms](https://atomicdesign.bradfrost.com/chapter-2/)
+- Component examples: [Building better UIs with Atomic Design](https://www.justinmind.com/ui-design/atomic-design)
+- Design system examples: [Atomic Design methodology](https://blog.kamathrohan.com/atomic-design-methodology-for-building-design-systems-f912cf714f53)
 
 **Comprehensive Atom Catalog:**
 
-| Category | Atoms |
-|----------|-------|
-| Form | Text input, textarea, select, checkbox, radio, range slider, file upload, toggle |
-| Button | Primary, secondary, tertiary, icon button, link button |
-| Typography | Heading (h1-h6), paragraph, label, caption, blockquote |
-| Media | Image, video, icon, avatar, logo |
-| Indicator | Badge, tag, status dot, progress bar, spinner |
-| Structural | Divider, vertical divider |
+**Form Atoms:**
+- Text input (single-line)
+- Textarea (multi-line)
+- Select dropdown
+- Checkbox
+- Radio button
+- Range slider
+- Date picker input
+- File upload button
+- Toggle/switch
 
-**Source Recognition:**
+**Button Atoms:**
+- Primary button
+- Secondary button
+- Tertiary/ghost button
+- Icon button
+- Link button
 
-- **HTML/CSS**: `<button>`, `<input>`, `<label>`, `<img>`, class names like `.btn`, `.badge`
-- **Figma**: Base components (not component sets), lowest hierarchy in Assets panel
-- **Screenshots**: Smallest distinct visual elements that repeat consistently
+**Typography Atoms:**
+- Heading (h1-h6)
+- Paragraph
+- Label
+- Caption
+- Blockquote
+- List item
 
-## Common Mistakes
+**Media Atoms:**
+- Image
+- Video player controls (play, pause, volume)
+- Icon (SVG/font icon)
+- Avatar
+- Logo
 
-- **Wrong**: Tokens (colors, spacing) classified as atoms → **Right**: Atoms are UI elements; tokens are values
-- **Wrong**: Search bar (input + button) as atom → **Right**: Compound elements are molecules
-- **Wrong**: Button primary vs secondary as separate atoms → **Right**: Same atom, different variant styling
-- **Wrong**: Every CSS class is an atom → **Right**: Focus on functional UI elements, not utility classes
+**Indicator Atoms:**
+- Badge (notification count)
+- Tag/chip
+- Status dot (online/offline)
+- Progress bar
+- Spinner/loader
 
-## See Also
+**Structural Atoms:**
+- Divider (horizontal rule)
+- Vertical divider
+- Spacer (though often implemented as token/utility)
 
-- [Molecule Recognition](./molecule-recognition.md)
-- [Design Tokens](./design-tokens.md)
-- Reference: [Atomic Design Atoms](https://atomicdesign.bradfrost.com/chapter-2/#atoms)
+**Recognition in Different Sources:**
+
+**HTML/CSS:**
+- Look for: `<button>`, `<input>`, `<label>`, `<img>`, `<h1>-<h6>`, `<p>`, `<hr>`
+- Check class names: `.btn`, `.input`, `.badge`, `.avatar`, `.icon`
+
+**Figma:**
+- Base components (not component sets)
+- Elements without nested component instances
+- Entries in "Assets" panel at lowest hierarchy level
+
+**Screenshots:**
+- Smallest distinct visual elements
+- Elements that repeat consistently across interface
+- Components that don't contain other components
+
+#### Common Mistakes
+- **Confusing atoms with tokens** — Tokens are values (colors, spacing); atoms are UI elements (buttons, inputs)
+- **Treating compound elements as atoms** — If it contains multiple elements, it's a molecule
+- **Missing variant atoms** — Button primary vs secondary are the same atom with different styling
+- **Over-atomizing** — Not every CSS class is an atom; focus on functional UI elements
+
+#### See Also
+- [4. Molecule Recognition](#4-molecule-recognition)
+- [1. Foundation Layer: Design Tokens](#1-foundation-layer-design-tokens)
+
+---

@@ -1,8 +1,3 @@
----
-description: When you need custom field output: computed values, external API data, complex formatting that can't be achieved with field templates or rewrite ru...
-drupal_version: "11.x"
----
-
 ## 20. Custom Field Handler
 
 ### When to Use
@@ -83,3 +78,4 @@ When you need custom field output: computed values, external API data, complex f
 - Section 29: Views Data Integration — registering fields in hook_views_data()
 - Reference: `core/modules/views/src/Plugin/views/field/FieldPluginBase.php`
 - Reference: `core/modules/node/src/Plugin/views/field/Node.php` — real-world example
+

@@ -1,8 +1,3 @@
----
-description: When tuning the underlying database query for performance, distinct results, or query debugging.
-drupal_version: "11.x"
----
-
 ## 16. Query Settings
 
 ### When to Use
@@ -98,3 +93,4 @@ Setting `disable_sql_rewrite: true` **bypasses all node access grants**. This me
 - Section 11: Relationships — when DISTINCT is necessary
 - Section 31: Security & Performance — query performance optimization
 - Reference: [views_query schema](https://api.drupal.org/api/drupal/core!modules!views!config!schema!views.data_types.schema.yml/11.x)
+

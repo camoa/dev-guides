@@ -1,68 +1,70 @@
 ---
-description: UI Patterns Security & Accessibility — XSS protection, block filtering, attributes
-drupal_version: "11.x"
+description: Security and accessibility — XSS protection, sanitization, and a11y considerations
+drupal_version: "10.3+ / 11"
 ---
 
-# Security & Accessibility
+## Security & Accessibility
 
-## When to Use
+### XSS Protection
 
-> Reference this guide when defining string props that may carry user input, choosing between slots and props for rich text, or ensuring components work with Drupal's accessibility tooling.
+UI Patterns inherits SDC's rendering pipeline, which means:
 
-## Decision
+- **String props** with `contentMediaType: text/html` pass through `Markup::create()` during preprocessing, marking them as safe HTML. Ensure the source data is already sanitized.
+- **String props** with `contentMediaType: text/plain` are run through `strip_tags()` during normalization, providing automatic XSS protection.
+- **Slot content** passes through Drupal's render API, which auto-escapes by default via Twig's autoescape.
+- **Token replacement** uses `Token::replacePlain()` for non-markup contexts and `Token::replace()` with `['clear' => TRUE]` for markup, preventing unresolved tokens from appearing.
 
-| Content | Safe Approach |
-|---------|--------------|
-| User-visible text that should never contain HTML | `type: string` + `contentMediaType: text/plain` (applies `strip_tags()`) |
-| Rich text content | Use a slot with WYSIWYG source |
-| HTML from a trusted/sanitized source | `contentMediaType: text/html` (passes through `Markup::create()`) |
-| Arbitrary HTML attributes | `attributes` prop (Drupal's `Attribute` class escapes values) |
-
-## Pattern
-
-### Prop sanitization via `contentMediaType`
+### Sanitization Best Practices
 
 ```yaml
-# For plain text — strip_tags() applied automatically
+# For user-visible text that should never contain HTML:
 description:
   title: "Description"
   type: "string"
-  contentMediaType: "text/plain"
+  contentMediaType: "text/plain"   # strip_tags() applied
 
-# For rich text — use a slot instead of a string prop
+# For rich text content:
+# Use a slot instead of a string prop
 slots:
   body:
     title: "Body content"
 ```
 
-### XSS protection chain
+### Block Source Security
 
-- **`text/plain` string props**: `strip_tags()` applied during `normalize()`
-- **`text/html` string props**: `Markup::create()` applied during `preprocess()` — only use on already-sanitized content
-- **Slot content**: passes through Drupal's render API with Twig autoescape
-- **Token replacement**: `Token::replacePlain()` for non-markup; `Token::replace(['clear' => TRUE])` for markup
+The `BlockSource` filters dangerous blocks via `hook_plugin_filter_block__ui_patterns_alter()`:
+- `inline_block` is excluded (prevents config-to-content dependencies)
+- `system_main_block` and `page_title_block` are excluded (Layout Builder convention)
+- `layout_builder` and `ui_patterns_blocks` provider blocks are excluded (prevents recursion)
 
-### Block source security — excluded from slots
+### Attributes and Injection
 
-- `inline_block` — prevents config-to-content dependencies
-- `system_main_block`, `page_title_block` — Layout Builder convention
-- `layout_builder` and `ui_patterns_blocks` provider blocks — prevents recursion
+The `attributes` prop type accepts arbitrary key-value pairs. This is safe because Drupal's `Attribute` class escapes attribute values during rendering. However:
 
-### Accessibility checklist
+- Never pass `attributes` values directly into JavaScript contexts without escaping
+- The `class_attribute` widget provides a safer interface for CSS-only attribute input
 
-- Always apply `{{ attributes }}` on wrapper elements — accessibility tools inject `aria-*` attributes through this
-- Provide meaningful `title` values for all props and slots (become form labels)
-- Use semantic HTML in component templates — UI Patterns does not enforce semantics
-- Mark decorative slots as optional — required slots that may be empty create broken layouts for assistive technology users
-- Attach JavaScript via the Drupal library system, not inline scripts (CSP compliance)
+### Accessibility Considerations
 
-## Common Mistakes
+- **Always use the `attributes` prop** on wrapper elements. Accessibility tools inject `aria-*` attributes through this mechanism.
+- **Provide meaningful titles** for all props and slots. These become form labels for screen reader users configuring components.
+- **Use semantic HTML** in component templates. UI Patterns does not enforce semantics; that responsibility stays with the component author.
+- **Support keyboard navigation** in interactive components. UI Patterns handles the data layer; interaction patterns are the template's responsibility.
+- **Mark decorative slots as optional** in the component definition. Required slots that may be empty create broken layouts for assistive technology users.
 
-- **Wrong**: `Markup::create()` on raw user input → **Right**: Only use it on already-sanitized content; it bypasses Twig's autoescape
-- **Wrong**: Skipping `{{ attributes }}` on the wrapper element → **Right**: Drupal modules that add `data-*` attributes for contextual links and accessibility features will silently fail
-- **Wrong**: Not setting `contentMediaType: text/plain` for plain text props → **Right**: Without it, string props allow HTML, which may be unexpected for user input
+### Content Security Policy (CSP)
 
-## See Also
+UI Patterns does not add inline scripts or styles. Components should follow the same CSP guidelines as any Drupal theme component. If a component needs JavaScript, attach it via the Drupal library system, not inline scripts.
 
-- [Best Practices & Anti-Patterns](best-practices-and-anti-patterns.md)
-- Reference: [Drupal Security Guide](../security/index.md)
+### Common Mistakes
+
+| Mistake | Why It Is Wrong |
+|---|---|
+| Using `Markup::create()` on user input | This marks content as safe, bypassing Twig's autoescape. Only use it on already-sanitized content. UI Patterns' StringPropType does this in `preprocess()` because normalization has already occurred. |
+| Skipping `attributes` on the wrapper element | Drupal modules that add `data-*` attributes for contextual links, quick edit, and accessibility features will silently fail. |
+| Not setting `contentMediaType: text/plain` for plain text props | Without it, string props allow HTML, which may be unexpected if the value comes from user input. |
+
+### See Also
+
+- Drupal Security Guide
+- [Best Practices & Anti-Patterns](#best-practices--anti-patterns)

@@ -1,5 +1,5 @@
 ---
-description: Migrating traditional Twig templates to SDC with theme overrides and field formatters
+description: Strategies for migrating Twig templates to SDC and overriding components
 drupal_version: "11.x"
 ---
 
@@ -9,20 +9,17 @@ drupal_version: "11.x"
 
 > Use this when migrating existing Twig templates to SDC, overriding contrib module/theme components, or implementing field formatters with components.
 
-## Decision: Template Replacement Strategy
+## Decision
 
-| Situation | Pattern | Constraint |
-|-----------|---------|------------|
-| Override theme/module component | `replaces` directive in theme | Must have identical props/slots schemas |
-| Custom field formatter | ComponentFieldFormatter class | Use render arrays with `#type => 'component'` |
-| Migrate traditional template | Create SDC, update includes | Test with schema validation enabled |
-
-**CRITICAL**: Only themes can use `replaces` directive. Modules cannot override components.
+| Method | Use Case | Restriction |
+|--------|----------|-------------|
+| `replaces` directive | Override existing component | Themes only, must have identical schema |
+| Custom field formatter | Component-based field rendering | Requires custom PHP plugin |
+| Include/embed in templates | Gradual migration | No restrictions |
 
 ## Pattern
 
-Theme override with `replaces` (identical schema required):
-
+**Theme Override with `replaces`:**
 ```yaml
 # themes/my_theme/components/enhanced-button/enhanced-button.component.yml
 $schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
@@ -39,12 +36,8 @@ slots:
   # ... identical slots ...
 ```
 
-**WHY identical schemas**: Ensures components are drop-in replacements. Calling code expects same API.
-
-Custom field formatter:
-
+**Custom Field Formatter:**
 ```php
-// Custom field formatter using components
 class ComponentFieldFormatter extends FormatterBase {
 
   public function viewElements(FieldItemListInterface $items, $langcode) {
@@ -71,8 +64,7 @@ class ComponentFieldFormatter extends FormatterBase {
 }
 ```
 
-Migration path from traditional templates:
-
+**Migration Path:**
 1. Create SDC with equivalent structure
 2. Update calling templates to use `include('provider:component')`
 3. Test in development with schema validation enabled
@@ -80,8 +72,8 @@ Migration path from traditional templates:
 
 ## Common Mistakes
 
-- **Wrong**: Trying to override components from modules → **Right**: Only themes can use `replaces` directive. Modules cannot override components.
-- **Wrong**: Changing schema when using `replaces` → **Right**: Replacement must be API-compatible. Schema validation enforces this in development.
+- **Wrong**: Trying to override components from modules → **Right**: Only themes can use `replaces` directive
+- **Wrong**: Changing schema when using `replaces` → **Right**: Replacement must be API-compatible (schema validation enforces this)
 
 ## See Also
 

@@ -1,8 +1,3 @@
----
-description: When you need a view placed in block regions, Layout Builder, or programmatically rendered contexts.
-drupal_version: "11.x"
----
-
 ## 5. Block Display
 
 ### When to Use
@@ -99,3 +94,4 @@ When `exposed_block: true`, a separate block (`views_exposed_filter_block:{view_
 - Section 9: Filters & Exposed Filters — configuring exposed filter blocks
 - Section 12: Pager Configuration — block-appropriate pagers (mini, some)
 - Reference: [ViewsBlock plugin](https://api.drupal.org/api/drupal/core!modules!views!src!Plugin!Block!ViewsBlock.php/11.x)
+

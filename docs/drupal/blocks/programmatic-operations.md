@@ -1,5 +1,5 @@
 ---
-description: Load, create, modify, and place blocks programmatically
+description: Load, create, modify, and place blocks programmatically via code
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Loading, creating, modifying, or placing blocks via code (update hooks, migrations, automated tasks).
+> Use in update hooks, migrations, or automated tasks when you need to load, create, modify, or place blocks via code rather than the UI.
 
 ## Decision
 
@@ -80,21 +80,11 @@ $blocks = \Drupal::entityTypeManager()
   ]);
 ```
 
-**Listing all block plugins:**
-```php
-$plugin_manager = \Drupal::service('plugin.manager.block');
-$definitions = $plugin_manager->getDefinitions();
-foreach ($definitions as $plugin_id => $definition) {
-  $label = $definition['admin_label'];
-}
-```
-
 **Rendering block with wrapper:**
 ```php
 $plugin_manager = \Drupal::service('plugin.manager.block');
 $plugin = $plugin_manager->createInstance('system_branding_block');
 $build = $plugin->build();
-// Add wrapper like BlockViewBuilder does
 $build = [
   '#theme' => 'block',
   '#configuration' => $plugin->getConfiguration(),

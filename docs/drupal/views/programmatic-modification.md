@@ -1,8 +1,3 @@
----
-description: When config-based approach isn't sufficient: runtime view modification, dynamic filter injection, custom display logic.
-drupal_version: "11.x"
----
-
 ## 18. Programmatic View Modification
 
 ### When to Use
@@ -152,3 +147,4 @@ function mymodule_views_pre_view(\Drupal\views\ViewExecutable $view, $display_id
 - Section 17: Views Config Export & Recipes — config-first approach
 - Section 10: Sort & Contextual Filters — argument configuration
 - Reference: [ViewExecutable API](https://api.drupal.org/api/drupal/core!modules!views!src!ViewExecutable.php/11.x)
+

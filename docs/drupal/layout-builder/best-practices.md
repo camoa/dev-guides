@@ -1,7 +1,3 @@
----
-description: Configuration-first best practices for Layout Builder — defaults workflow, block curation, recipes, and editorial governance.
----
-
 ## 16. Best Practices & Patterns
 
 ### When to Use

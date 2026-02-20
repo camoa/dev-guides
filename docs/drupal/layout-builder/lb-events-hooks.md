@@ -1,7 +1,3 @@
----
-description: Layout Builder events and hooks — SectionComponentBuildRenderArrayEvent, PrepareLayoutEvent, and alter hooks for rendering and block control.
----
-
 ## 13. Layout Builder Events & Hooks
 
 ### When to Use

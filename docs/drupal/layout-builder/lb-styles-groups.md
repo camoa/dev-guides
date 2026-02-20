@@ -1,7 +1,3 @@
----
-description: Creating and configuring Layout Builder Style groups — organizing styles into categories with single or multiple selection.
----
-
 ## 11.1. Layout Builder Style Groups
 
 ### When to Use

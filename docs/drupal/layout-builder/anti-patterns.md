@@ -1,7 +1,3 @@
----
-description: Common Layout Builder anti-patterns — what NOT to do with overrides, inline blocks, restrictions, CSS, and layout architecture.
----
-
 ## 17. Anti-Patterns & Common Mistakes
 
 ### When to Use

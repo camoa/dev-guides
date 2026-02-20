@@ -1,7 +1,3 @@
----
-description: How sections work as containers with layout plugins, regions, and section storage types for defaults and overrides.
----
-
 ## 4. Sections & Layouts
 
 ### When to Use

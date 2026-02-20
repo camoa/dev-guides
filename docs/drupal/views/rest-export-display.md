@@ -1,8 +1,3 @@
----
-description: When you need JSON, XML, or other serialized output for APIs, AJAX endpoints, or headless/decoupled applications.
-drupal_version: "11.x"
----
-
 ## 6. REST Export Display
 
 ### When to Use
@@ -104,3 +99,4 @@ rest_export_1:
 - Section 15: Style & Row Plugins — serializer configuration
 - Section 31: Security & Performance — REST export security
 - Reference: [RestExport display plugin](https://api.drupal.org/api/drupal/core!modules!rest!src!Plugin!views!display!RestExport.php/11.x)
+

@@ -1,8 +1,3 @@
----
-description: Quick reference to key classes, files, and code locations for Views configuration.
-drupal_version: "11.x"
----
-
 ## 32. Code Reference Map
 
 ### When to Use
@@ -137,3 +132,4 @@ $render_array = $view->render();
 ### See Also
 - Section 18: Programmatic View Modification — using these classes in code
 - Reference: [Drupal Views API documentation](https://api.drupal.org/api/drupal/core!modules!views/11.x)
+

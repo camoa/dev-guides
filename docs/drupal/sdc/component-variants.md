@@ -1,5 +1,5 @@
 ---
-description: Implementing component variations using enum props, separate components, or the variants API
+description: Strategies for implementing component variants using enums or separate components
 drupal_version: "11.x"
 ---
 
@@ -9,18 +9,17 @@ drupal_version: "11.x"
 
 > Use this when you need multiple visual variations of a component, deciding between prop-based variants vs separate components, or implementing the new variants API (Drupal 11.1+).
 
-## Decision: Variant Strategy
+## Decision
 
-| Situation | Choose | Why |
-|-----------|--------|-----|
-| Variations share same structure/slots, differ only in styling/behavior | Enum Props | Single component handles all variations via props, easier to maintain |
-| Variations have fundamentally different structure/props/slots | Separate Components | Different structures require separate components |
-| Need named variants with titles/descriptions (Drupal 11.1+) | Component Variants API | Non-breaking API for variant metadata |
+| Strategy | Use Case | Why |
+|----------|----------|-----|
+| Enum props | Minor variations (same structure/slots, different styling) | Single component, easier maintenance, design system consistency |
+| Separate components | Major variations (fundamentally different structure/props/slots) | Different structures need separate components |
+| Variants API (11.1+) | Named variants with titles/descriptions | Better admin UX, non-breaking API |
 
 ## Pattern
 
-Pattern 1: Enum Props (recommended for minor variations):
-
+**Pattern 1: Enum Props (Recommended for Minor Variations):**
 ```yaml
 props:
   type: object
@@ -38,8 +37,7 @@ props:
       default: false
 ```
 
-Pattern 2: Separate Components (for major variations):
-
+**Pattern 2: Separate Components (for Major Variations):**
 ```
 components/
 ├── card-basic/
@@ -53,10 +51,8 @@ components/
     └── card-product.twig
 ```
 
-Pattern 3: Component Variants API (Drupal 11.1+):
-
+**Pattern 3: Component Variants API (Drupal 11.1+):**
 ```yaml
-# Component with variants
 name: 'Call to Action'
 variants:
   default:
@@ -82,12 +78,11 @@ $build = [
 
 ## Common Mistakes
 
-- **Wrong**: Creating separate components for minor style variations → **Right**: Duplicates structure and maintenance. Use enum props for variations that differ only in styling.
-- **Wrong**: Using props to handle fundamentally different structures → **Right**: Leads to complex Twig conditionals. Create separate components when structure differs significantly.
+- **Wrong**: Creating separate components for minor style variations → **Right**: Use enum props for variations that differ only in styling
+- **Wrong**: Using props to handle fundamentally different structures → **Right**: Create separate components when structure differs significantly
 
 ## See Also
 
 - Reference: `/themes/contrib/radix/components/button/button.component.yml`
 - [Props vs Slots Decision Framework](props-vs-slots-decision-framework.md)
 - [Component Variants in Core](https://www.thedroptimes.com/49944/drupal-core-single-directory-components-introduce-component-variants)
-- [Component Variants Issue](https://www.drupal.org/project/drupal/issues/3514072)

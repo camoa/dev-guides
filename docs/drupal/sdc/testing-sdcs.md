@@ -1,5 +1,5 @@
 ---
-description: Testing components with schema validation, Storybook, and visual regression
+description: Testing strategies for SDC components including schema validation and visual regression
 drupal_version: "11.x"
 ---
 
@@ -9,19 +9,18 @@ drupal_version: "11.x"
 
 > Use this when setting up component development workflow, testing components in isolation, or implementing visual regression testing.
 
-## Decision: Testing Strategy
+## Decision
 
-| Strategy | Tool/Pattern | Purpose |
-|----------|--------------|---------|
-| Schema validation | `enforce_sdc_schemas: true` in theme.info.yml | Catch prop validation errors in development |
-| Component library | CL Server module | Storybook-style component browsing |
-| Manual testing | Variants, slots, breakpoints checklist | Ensure all combinations work |
-| Visual regression | BackstopJS, Percy, Playwright | Automated screenshot comparison |
+| Testing Method | Use Case | Tools |
+|----------------|----------|-------|
+| Schema validation | Catch prop/slot errors in development | Development environment settings |
+| Storybook integration | Isolated component development | CL Server module |
+| Manual testing | Variant and accessibility testing | Checklist-based approach |
+| Visual regression | Automated screenshot comparison | BackstopJS, Percy, Playwright |
 
 ## Pattern
 
-Development environment validation:
-
+**Development Environment Validation:**
 ```php
 // In settings.local.php
 assert_options(ASSERT_ACTIVE, TRUE);
@@ -34,10 +33,7 @@ ini_set('zend.assertions', 1);
 enforce_sdc_schemas: true
 ```
 
-**WHY**: Schema validation only runs in development (performance). Enables strict prop validation and descriptive errors.
-
-Storybook integration with CL Server:
-
+**Storybook Integration:**
 ```bash
 # Install and enable
 composer require drupal/cl_server drupal/cl_devel --dev
@@ -46,8 +42,7 @@ drush en cl_server cl_devel
 # Access component library at /cl
 ```
 
-Manual testing checklist:
-
+**Manual Testing Checklist:**
 - All defined variants (props enums)
 - With/without optional slots
 - With invalid props (should error in development)
@@ -55,19 +50,14 @@ Manual testing checklist:
 - Keyboard navigation (accessibility)
 - Screen reader compatibility
 
-Visual regression testing tools:
-
-- **BackstopJS** - Screenshot comparison
-- **Percy** - Visual testing platform
-- **Playwright** - End-to-end testing with screenshots
-
 ## Common Mistakes
 
-- **Wrong**: Not testing with schema validation enabled → **Right**: Production doesn't validate schemas. Bugs only surface in production if not tested with validation in development.
-- **Wrong**: Only testing default prop values → **Right**: Variations and edge cases often have bugs. Test all enum values and required/optional prop combinations.
+- **Wrong**: Not testing with schema validation enabled → **Right**: Enable in development to catch issues early (production doesn't validate)
+- **Wrong**: Only testing default prop values → **Right**: Test all enum values and required/optional prop combinations
 
 ## See Also
 
+- Reference: Schema validation documentation
 - [Component YAML Schema](component-yaml-schema.md)
 - [CL Server Module](https://www.drupal.org/project/cl_server)
 - [SDC Styleguide Module](https://www.drupal.org/project/sdc_styleguide)

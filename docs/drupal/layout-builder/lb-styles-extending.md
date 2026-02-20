@@ -1,7 +1,3 @@
----
-description: Programmatically extending Layout Builder Styles — event subscribers, template suggestions, role-based restrictions, and style entity manipulation.
----
-
 ## 11.4. Extending Layout Builder Styles
 
 ### When to Use

@@ -1,7 +1,3 @@
----
-description: Quick reference map of key Layout Builder classes, files, services, and common code patterns for programmatic use.
----
-
 ## 19. Code Reference Map
 
 ### When to Use

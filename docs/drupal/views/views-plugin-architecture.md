@@ -1,8 +1,3 @@
----
-description: When Views UI configuration and programmatic view modification aren't sufficient — you need custom data processing, specialized formatting, or inte...
-drupal_version: "11.x"
----
-
 ## 19. Views Plugin Architecture
 
 ### When to Use
@@ -59,3 +54,4 @@ Reference: `core/modules/views/src/Plugin/views/` — all plugin base classes
 - Section 20-28: Individual plugin type workflows
 - Section 29: Views Data Integration (hook_views_data)
 - Reference: [Views API Overview](https://www.drupal.org/docs/drupal-apis/views-api)
+

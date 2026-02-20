@@ -1,5 +1,5 @@
 ---
-description: Adding interactive behavior with Drupal.behaviors, once(), and progressive enhancement
+description: JavaScript integration with Drupal.behaviors, once(), and progressive enhancement
 drupal_version: "11.x"
 ---
 
@@ -7,39 +7,28 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when adding interactive behavior to components, using Drupal.behaviors pattern, or integrating with `once()` or other Drupal JS APIs.
+> Use this when adding interactive behavior to components, implementing Drupal.behaviors pattern, or integrating with `once()` or other Drupal JS APIs.
 
-## Decision: JavaScript Integration Pattern
+## Decision
 
-| Pattern | Purpose | Why |
-|---------|---------|-----|
-| `Drupal.behaviors` | Standard Drupal JS attachment | Works with AJAX, BigPipe, dynamic content |
+| Pattern | Use Case | Why |
+|---------|----------|-----|
+| Drupal.behaviors | Component initialization | Supports AJAX, BigPipe, and dynamic content |
 | `once()` | Prevent duplicate initialization | Behaviors can attach multiple times |
-| `context` parameter | Scope to new content only | Performance, avoid re-processing |
-| `detach` method | Cleanup when removed | Prevent memory leaks |
+| `context` parameter | Scope queries to new content | Performance optimization |
+| `detach` method | Cleanup on removal | Prevent memory leaks |
 
 ## Pattern
 
-Drupal.behaviors with once():
-
+**Drupal.behaviors with once():**
 ```javascript
-/**
- * @file
- * Component behavior for my-component.
- */
-
 (function (Drupal, once) {
   'use strict';
 
-  /**
-   * Attaches component behavior.
-   */
   Drupal.behaviors.myComponent = {
     attach: function (context, settings) {
-      // Use once() to prevent multiple initialization
       once('my-component', '.my-component', context).forEach(function (element) {
 
-        // Component initialization logic here
         element.addEventListener('click', function (event) {
           // Handle event
         });
@@ -48,7 +37,6 @@ Drupal.behaviors with once():
     },
 
     detach: function (context, settings, trigger) {
-      // Cleanup when behavior is detached
       if (trigger === 'unload') {
         // Remove event listeners, destroy instances
       }
@@ -58,28 +46,25 @@ Drupal.behaviors with once():
 })(Drupal, once);
 ```
 
-Library dependencies in component YAML:
-
+**Library Dependencies in YAML:**
 ```yaml
 libraryOverrides:
   dependencies:
     - core/drupal
     - core/once
-    - core/drupal.ajax
   js:
     my-component.js:
       attributes: { defer: true }
       preprocess: false
 ```
 
-Progressive enhancement (works without JavaScript):
-
+**Progressive Enhancement:**
 ```javascript
 Drupal.behaviors.myComponent = {
   attach: function (context) {
     once('my-component-enhanced', '.my-component', context).forEach(function (element) {
 
-      // Add enhanced functionality marker
+      // Add enhancement marker
       element.classList.add('my-component--js-enhanced');
 
       // Initialize interactive features
@@ -98,9 +83,9 @@ Drupal.behaviors.myComponent = {
 
 ## Common Mistakes
 
-- **Wrong**: Not using `once()` to prevent duplicate initialization → **Right**: Drupal.behaviors can attach multiple times (AJAX, BigPipe). Without `once()`, event listeners get added multiple times, causing bugs.
-- **Wrong**: Querying entire document instead of scoped `context` → **Right**: Drupal passes `context` to limit behavior to new content. Ignoring it causes performance issues and processes elements multiple times.
-- **Wrong**: Not implementing `detach` method → **Right**: Without cleanup, event listeners and instances persist after elements removed, causing memory leaks.
+- **Wrong**: Not using `once()` → **Right**: Always use `once()` to prevent duplicate initialization (behaviors attach multiple times)
+- **Wrong**: Querying entire document → **Right**: Use scoped `context` parameter (`context.querySelectorAll()`)
+- **Wrong**: Missing `detach` method → **Right**: Implement cleanup to prevent memory leaks
 
 ## See Also
 

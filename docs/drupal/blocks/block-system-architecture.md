@@ -1,5 +1,5 @@
 ---
-description: Understanding Drupal's 4-layer block system architecture
+description: Drupal's 4-layer block system — Block Plugin API, placement entities, content entities, Layout Builder
 drupal_version: "11.x"
 ---
 
@@ -7,11 +7,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Understanding the 4 layers of Drupal's block system before starting any block development.
+> Understand the 4 layers before starting any block development. Use this to orient yourself when deciding which layer to work with.
 
 ## Decision
-
-Drupal's block system consists of 4 distinct layers that work together:
 
 | Layer | Purpose | Location | Key Classes |
 |-------|---------|----------|-------------|
@@ -28,8 +26,6 @@ Drupal's block system consists of 4 distinct layers that work together:
 4. **Layout Builder** creates its own block plugins for inline blocks and exposes entity fields as blocks
 
 ## Pattern
-
-Every block plugin extends `BlockBase` and implements the `#[Block]` attribute:
 
 ```php
 use Drupal\Core\Block\Attribute\Block;

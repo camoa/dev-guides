@@ -1,8 +1,3 @@
----
-description: When you need RSS/Atom feeds or attaching views to other display outputs.
-drupal_version: "11.x"
----
-
 ## 7. Feed & Attachment Displays
 
 ### When to Use
@@ -112,3 +107,4 @@ display:
 ### See Also
 - Section 15: Style & Row Plugins — RSS style and row options
 - Section 12: Pager Configuration — limiting feed items
+

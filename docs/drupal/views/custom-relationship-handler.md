@@ -1,8 +1,3 @@
----
-description: Complex JOIN logic beyond standard entity reference relationships: multi-column joins, conditional joins, subquery-based relationships.
-drupal_version: "11.x"
----
-
 ## 24. Custom Relationship Handler
 
 ### When to Use
@@ -85,3 +80,4 @@ Complex JOIN logic beyond standard entity reference relationships: multi-column 
 - Section 11: Relationships — configuration approach
 - Reference: `core/modules/views/src/Plugin/views/relationship/RelationshipPluginBase.php`
 - Reference: `core/modules/comment/src/Plugin/views/relationship/NodeRevisionComment.php` — complex relationship example
+

@@ -1,5 +1,5 @@
 ---
-description: Work with block content entities (fieldable content blocks)
+description: Work with BlockContent entities — load, create, update, and render fieldable content blocks
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Working with instances of block content (content entities created from block types).
+> Use when working programmatically with instances of block content (content entities created from block types). Distinct from Block config entities — `BlockContent` is the content; `Block` is the placement.
 
 ## Decision
 

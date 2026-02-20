@@ -1,8 +1,3 @@
----
-description: When restricting who can view a display based on permissions or roles.
-drupal_version: "11.x"
----
-
 ## 14. Access Control
 
 ### When to Use
@@ -102,3 +97,4 @@ Reference: `core/modules/rest/src/Plugin/views/display/RestExport.php` lines 315
 - Section 6: REST Export Display — authentication configuration
 - Section 31: Security & Performance — access control security
 - Reference: `core/modules/views/config/schema/views.data_types.schema.yml` lines 48-59
+

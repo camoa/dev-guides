@@ -1,5 +1,5 @@
 ---
-description: Export block configuration and use in recipes for deployment
+description: Export block configuration and deploy via config sync or Drupal recipes
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Exporting block configuration for deployment, syncing between environments, or using in recipes.
+> Use when exporting block configuration for deployment, syncing between environments, or using `placeBlock` recipe actions (Drupal 11.1+). Block plugins have no exportable config — only Block config entities do.
 
 ## Decision
 
@@ -62,7 +62,6 @@ drush config:import
 ```php
 use Drupal\block\Entity\Block;
 
-// Create from array
 $block = Block::create([
   'id' => 'olivero_search',
   'plugin' => 'search_form_block',
@@ -71,11 +70,6 @@ $block = Block::create([
   'settings' => ['label' => 'Search'],
 ]);
 $block->save();
-
-// Or modify existing config
-$config = \Drupal::configFactory()->getEditable('block.block.olivero_search');
-$config->set('region', 'sidebar_first');
-$config->save();
 ```
 
 **Recipe example (recipes/myrecipe/recipe.yml):**

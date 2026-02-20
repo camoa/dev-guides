@@ -1,7 +1,3 @@
----
-description: How to add blocks to Layout Builder sections programmatically — creating components, setting regions, and choosing block plugins.
----
-
 ## 6. Block Placement in Layouts
 
 ### When to Use

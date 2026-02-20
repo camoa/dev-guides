@@ -1,8 +1,3 @@
----
-description: When controlling how many items display per page and how users navigate through results.
-drupal_version: "11.x"
----
-
 ## 12. Pager Configuration
 
 ### When to Use
@@ -123,3 +118,4 @@ Reference: `core/modules/comment/config/optional/views.view.comment.yml` lines 5
 - Section 5: Block Display — using `some` pager for blocks
 - Section 6: REST Export Display — paging API responses
 - Section 16: Query Settings — performance impact of pagers
+

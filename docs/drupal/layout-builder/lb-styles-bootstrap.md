@@ -1,7 +1,3 @@
----
-description: Integrating Layout Builder Styles with Bootstrap/Radix themes — mapping styles to utility classes for spacing, colors, effects, and containers.
----
-
 ## 11.3. Layout Builder Styles + Bootstrap Integration
 
 ### When to Use

@@ -1,5 +1,5 @@
 ---
-description: Writing Twig templates for SDCs with props, slots, and attributes object
+description: Twig template patterns for accessing props, rendering slots, and using attributes
 drupal_version: "11.x"
 ---
 
@@ -7,47 +7,43 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when writing component Twig templates, accessing props and rendering slots, or working with the `attributes` object.
+> Use this when writing component Twig templates, accessing props and slots, or working with the `attributes` object.
 
-## Decision: Template Patterns
+## Decision
 
-| Pattern | Use Case | Example |
-|---------|----------|---------|
-| Props as variables | Access component configuration | `{{ variant }}`, `{{ disabled }}` |
-| `{% block %}` syntax | Render slots with `{% embed %}` | `{% block content %}{% endblock %}` |
-| Variables | Render slots with `include()` | `{{ content }}` |
-| `attributes` object | Safe attribute merging | `{{ attributes.addClass('component') }}` |
+| Element | Access Pattern | Use Case |
+|---------|----------------|----------|
+| Props | `{{ variable_name }}` | Typed configuration values |
+| Slots | `{% block slot_name %}{% endblock %}` | Content insertion points |
+| Attributes | `{{ attributes.addClass('class') }}` | Safe attribute manipulation |
+| Conditional slots | `{% if slot_name %}` | Check slot existence before rendering wrapper |
 
 ## Pattern
 
-Accessing props (available as Twig variables):
-
+**Accessing Props:**
 ```twig
-{# Props available as variables #}
+{# Props available as variables directly #}
 {% set button_html_tag = button_html_tag ?? 'button' %}
 {% set size = size ? [size] : [] %}
 {% set disabled_classes = disabled ? ['disabled'] : [] %}
 ```
 
-Rendering slots (via `{% block %}` with `{% embed %}`):
-
+**Rendering Slots:**
 ```twig
-{# Slot rendering with conditional check #}
-<header>
-  {% block prefix %}{% endblock %}
-  <div class="teaser__meta">
-    {% block meta %}{% endblock %}
-  </div>
-</header>
+{# Optional slot with conditional wrapper #}
+{% if header %}
+  <header class="component__header">
+    {% block header %}{% endblock %}
+  </header>
+{% endif %}
 
 {# Required slot #}
-<div class="teaser__content">
+<div class="component__content">
   {% block content %}{% endblock %}
 </div>
 ```
 
-Attributes object (type `Drupal\Core\Template\Attribute`):
-
+**Attributes Object:**
 ```twig
 {# Class addition #}
 <div{{ attributes.addClass('component', 'component--' ~ variant) }}>
@@ -62,24 +58,11 @@ Attributes object (type `Drupal\Core\Template\Attribute`):
   .removeAttribute('id') }}>
 ```
 
-Conditional slot rendering (check before rendering wrapper):
-
-```twig
-{# Check slot before rendering wrapper #}
-{% if header %}
-  <header class="component__header">
-    {{ header }}
-  </header>
-{% endif %}
-
-{# Provide default for missing content #}
-{{ content|default('No content provided.') }}
-```
-
 ## Common Mistakes
 
-- **Wrong**: Not checking if slots are empty before rendering wrapper elements → **Right**: Empty wrapper elements create invalid HTML and accessibility issues. Always use `{% if slot %}` conditionals.
-- **Wrong**: Applying complex logic to slot content → **Right**: Slots contain arbitrary renderables. Only check existence (`if slot`) or count (`if slot|length`). All logic should be in props.
+- **Wrong**: Rendering wrapper without checking slot existence → **Right**: Always use `{% if slot %}` conditionals for optional slots
+- **Wrong**: Applying complex logic to slot content → **Right**: Only check existence (`if slot`) or count (`if slot|length`)
+- **Wrong**: Manual attribute string concatenation → **Right**: Use `Attribute` object methods for safe attribute handling
 
 ## See Also
 

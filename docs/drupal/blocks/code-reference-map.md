@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Quick lookup of key classes, interfaces, and services in Drupal's block system.
+> Quick lookup of key classes, interfaces, and services when building or debugging block code. Knowing which layer owns which class prevents namespace confusion.
 
 ## Decision
 

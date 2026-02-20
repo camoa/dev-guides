@@ -1,8 +1,3 @@
----
-description: When you need to access fields from related entities (entity references, users, taxonomy terms, etc.) or apply filters/sorts on related entity data.
-drupal_version: "11.x"
----
-
 ## 11. Relationships
 
 ### When to Use
@@ -156,3 +151,4 @@ relationships:
 - Section 8: Fields Configuration — using relationship fields
 - Section 9: Filters & Exposed Filters — filtering on relationship data
 - Section 16: Query Settings — DISTINCT to handle multiple relationship matches
+

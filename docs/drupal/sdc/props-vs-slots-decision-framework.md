@@ -1,5 +1,5 @@
 ---
-description: Deciding when to use props (typed data) vs slots (renderable content) in component API design
+description: Decision framework for choosing between props and slots in component design
 drupal_version: "11.x"
 ---
 
@@ -9,21 +9,19 @@ drupal_version: "11.x"
 
 > Use this when designing a component API, deciding if something should be a prop or slot, or debugging schema validation errors.
 
-## Decision: Props or Slots?
+## Decision
 
-| Situation | Choose | Why |
-|-----------|--------|-----|
-| Structured and typed data (string, boolean, number, enum, object, array) | Props | Validates against JSON Schema, drives component logic |
-| Data needs validation | Props | JSON Schema provides type safety and error messages |
-| Scalar or simple objects | Props | Configuration values like `variant: 'primary'`, `disabled: true` |
-| Unstructured renderables (HTML, render arrays, nested components) | Slots | Content type can't be known in advance |
-| Content implements RenderableInterface, MarkupInterface, or Stringable | Slots | No validation needed, only existence check |
-| Main content area, header region, action buttons area | Slots | Arbitrary renderable content |
+| Use Props When | Use Slots When |
+|----------------|----------------|
+| Data is structured and typed (string, boolean, number, enum, object, array) | Content is unstructured renderables (HTML, Drupal render arrays, nested components) |
+| Data needs validation against JSON Schema | Content type cannot be known in advance |
+| Data drives component logic (variants, states, configuration) | Content implements RenderableInterface, MarkupInterface, or Stringable |
+| Data is scalar or simple objects | No validation needed, only existence check |
+| Example: `variant: 'primary'`, `disabled: true` | Example: main content area, header region, action buttons area |
 
 ## Pattern
 
-Props for configuration (strictly typed):
-
+**Props for Configuration:**
 ```yaml
 props:
   type: object
@@ -41,8 +39,7 @@ props:
       default: false
 ```
 
-Slots for content (unstructured renderables):
-
+**Slots for Content:**
 ```yaml
 slots:
   content:
@@ -56,8 +53,7 @@ slots:
     required: false
 ```
 
-Mixed props and slots (most components):
-
+**Mixed Props and Slots:**
 ```yaml
 # Alert component example
 props:
@@ -81,14 +77,14 @@ slots:
 
 ## Common Mistakes
 
-- **Wrong**: Using props for HTML/renderable content → **Right**: Props must validate against JSON Schema. HTML/render arrays don't have predictable schemas. Use slots instead.
-- **Wrong**: Using slots for simple text/boolean/enum values → **Right**: Slots bypass validation. Simple values should be validated props for better error messages and type safety.
-- **Wrong**: Applying logic to slot content in templates beyond existence checks → **Right**: Slots contain arbitrary renderables. Can't reliably check their properties. Only check `if slot` or `slot|length`.
+- **Wrong**: Using props for HTML/renderable content → **Right**: Use slots (props must validate against JSON Schema)
+- **Wrong**: Using slots for simple text/boolean/enum values → **Right**: Use validated props for type safety
+- **Wrong**: Applying logic to slot content beyond existence checks → **Right**: Only check `if slot` or `slot|length`
 
 ## See Also
 
-- Reference: `/themes/contrib/radix/components/button/button.component.yml`
-- Reference: `/core/themes/olivero/components/teaser/teaser.component.yml`
+- Reference: `/themes/contrib/radix/components/button/button.component.yml` - Props example
+- Reference: `/core/themes/olivero/components/teaser/teaser.component.yml` - Slots example
 - [Component YAML Schema](component-yaml-schema.md)
 - [Twig Templates in SDCs](twig-templates-in-sdcs.md)
-- [Props and Slots Documentation](https://www.drupal.org/docs/develop/theming-drupal/using-single-directory-components/what-are-props-and-slots-in-drupal-sdc-theming)
+- [Official Props and Slots Documentation](https://www.drupal.org/docs/develop/theming-drupal/using-single-directory-components/what-are-props-and-slots-in-drupal-sdc-theming)

@@ -1,5 +1,5 @@
 ---
-description: Avoid common pitfalls that lead to bugs, performance issues, or maintenance problems
+description: Avoid common pitfalls that cause bugs, performance issues, or security vulnerabilities in blocks
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Avoiding common pitfalls that lead to bugs, performance issues, or maintenance problems.
+> Reference when reviewing block code or debugging unexpected behavior. Every pattern here has been shipped in production and caused real problems.
 
 ## Decision
 
@@ -55,38 +55,23 @@ public function build() {
 // WRONG - hits database every request
 public function build() {
   $user = User::load(\Drupal::currentUser()->id());
-  return [
-    '#markup' => $user->getDisplayName(),
-    '#cache' => ['max-age' => 0],
-  ];
+  return ['#markup' => $user->getDisplayName(), '#cache' => ['max-age' => 0]];
 }
 
 // RIGHT - cache per user
 public function build() {
   $user = User::load($this->currentUser->id());
-  return [
-    '#markup' => $user->getDisplayName(),
-    '#cache' => ['contexts' => ['user']],
-  ];
+  return ['#markup' => $user->getDisplayName(), '#cache' => ['contexts' => ['user']]];
 }
 ```
 
 **Anti-pattern: HTML in build()**
 ```php
 // WRONG - not themeable, XSS risk
-public function build() {
-  return [
-    '#markup' => '<div class="my-block"><h2>' . $title . '</h2></div>',
-  ];
-}
+return ['#markup' => '<div class="my-block"><h2>' . $title . '</h2></div>'];
 
 // RIGHT - themeable, safe
-public function build() {
-  return [
-    '#theme' => 'my_block',
-    '#title' => $title, // Auto-escaped in template
-  ];
-}
+return ['#theme' => 'my_block', '#title' => $title]; // Auto-escaped in template
 ```
 
 **Anti-pattern: Not handling empty**
@@ -94,44 +79,29 @@ public function build() {
 // WRONG - renders empty wrapper
 public function build() {
   $items = $this->getItems();
-  return [
-    '#theme' => 'item_list',
-    '#items' => $items, // Could be empty array
-  ];
+  return ['#theme' => 'item_list', '#items' => $items];
 }
 
 // RIGHT - no wrapper when empty
 public function build() {
   $items = $this->getItems();
   if (empty($items)) {
-    return []; // No render
+    return [];
   }
-  return [
-    '#theme' => 'item_list',
-    '#items' => $items,
-  ];
+  return ['#theme' => 'item_list', '#items' => $items];
 }
 ```
 
 **Anti-pattern: Forgetting cache merge**
 ```php
 // WRONG - loses parent cache metadata
-public function getCacheTags() {
-  return ['node:1'];
-}
+public function getCacheTags() { return ['node:1']; }
 
 // RIGHT - preserves parent tags
 public function getCacheTags() {
   return Cache::mergeTags(parent::getCacheTags(), ['node:1']);
 }
 ```
-
-**Why these matter:**
-- **Performance:** Poor caching = slow site, expensive hosting
-- **Security:** Unescaped output = XSS vulnerabilities
-- **Maintainability:** Static calls = hard to test, refactor
-- **Flexibility:** Hardcoded values = brittle across environments
-- **User Experience:** Empty wrappers = weird spacing, confusing CSS
 
 ## Common Mistakes
 

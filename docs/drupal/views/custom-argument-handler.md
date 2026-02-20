@@ -1,8 +1,3 @@
----
-description: URL-based filtering with custom logic: argument validation, default values, custom summary views, title overrides.
-drupal_version: "11.x"
----
-
 ## 23. Custom Argument Handler (Contextual Filter)
 
 ### When to Use
@@ -80,3 +75,4 @@ URL-based filtering with custom logic: argument validation, default values, cust
 - Reference: `core/modules/views/src/Plugin/views/argument/ArgumentPluginBase.php`
 - Reference: `core/modules/node/src/Plugin/views/argument/Nid.php` — numeric argument example
 - Reference: `core/modules/user/src/Plugin/views/argument/Uid.php` — entity argument example
+

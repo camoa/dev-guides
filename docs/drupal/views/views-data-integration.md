@@ -1,8 +1,3 @@
----
-description: Exposing custom database tables, altering entity views integration, defining custom handlers for existing fields, adding computed/pseudo-fields.
-drupal_version: "11.x"
----
-
 ## 28. Views Data Integration (hook_views_data)
 
 ### When to Use
@@ -154,3 +149,4 @@ function mymodule_views_data_alter(&$data) {
 - Section 19-27: Plugin types that hook_views_data() references
 - Reference: `core/modules/views/src/EntityViewsData.php` — entity integration base class
 - Reference: `core/modules/node/src/NodeViewsData.php` — entity-specific customization example
+

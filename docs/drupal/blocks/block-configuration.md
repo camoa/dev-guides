@@ -1,5 +1,5 @@
 ---
-description: Add configurable settings to block plugins
+description: Add configurable settings to block plugin instances
 drupal_version: "11.x"
 ---
 
@@ -7,7 +7,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Your block plugin needs configurable settings that site builders can set per block instance.
+> Use when your block plugin needs configurable settings that site builders can set per block instance. Use content block fields instead when editors (not devs) need to manage the values.
 
 ## Decision
 
@@ -50,11 +50,6 @@ public function blockSubmit($form, FormStateInterface $form_state) {
   $this->configuration['items_count'] = $form_state->getValue('items_count');
   $this->configuration['show_images'] = $form_state->getValue('show_images');
 }
-
-public function build() {
-  $show = $this->configuration['show_title'];
-  // Use $show to control output
-}
 ```
 
 **Reference:** `core/modules/system/src/Plugin/Block/SystemBrandingBlock.php` (lines 60-140)
@@ -62,6 +57,7 @@ public function build() {
 ## Common Mistakes
 
 - **Wrong**: Not calling `parent::defaultConfiguration()` → **Right**: Loses base settings like `label`, `label_display`
+- **Wrong**: Forgetting `+ parent::defaultConfiguration()` → **Right**: Same as above
 - **Wrong**: Storing form values without filtering → **Right**: Use `$form_state->getValue()` to get specific values
 - **Wrong**: Not validating user input → **Right**: Implement `blockValidate()` for complex rules
 - **Wrong**: Changing configuration structure without update path → **Right**: Breaks existing block instances; provide update hook

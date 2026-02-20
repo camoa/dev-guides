@@ -1,8 +1,3 @@
----
-description: When managing views as exportable configuration, deploying via config sync, or packaging in recipes.
-drupal_version: "11.x"
----
-
 ## 17. Views Config Export & Recipes
 
 ### When to Use
@@ -133,3 +128,4 @@ config:
 ### See Also
 - Section 2: View Config Schema — understanding YAML structure
 - Reference: [Defining Configuration in Drupal](https://www.drupal.org/docs/develop/creating-modules/defining-and-using-your-own-configuration-in-drupal)
+

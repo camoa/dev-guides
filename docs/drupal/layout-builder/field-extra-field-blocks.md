@@ -1,7 +1,3 @@
----
-description: Exposing entity fields and extra fields (pseudo-fields) as blocks in Layout Builder layouts.
----
-
 ## 8. Field & Extra Field Blocks
 
 ### When to Use

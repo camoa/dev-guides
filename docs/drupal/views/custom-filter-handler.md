@@ -1,8 +1,3 @@
----
-description: When standard filter operators aren't sufficient: custom logic, complex conditions, integration with external validation, multi-field filters.
-drupal_version: "11.x"
----
-
 ## 21. Custom Filter Handler
 
 ### When to Use
@@ -88,3 +83,4 @@ When standard filter operators aren't sufficient: custom logic, complex conditio
 - Reference: `core/modules/views/src/Plugin/views/filter/FilterPluginBase.php`
 - Reference: `core/modules/views/src/Plugin/views/filter/BooleanOperator.php` — simple filter example
 - Reference: `core/modules/taxonomy/src/Plugin/views/filter/TaxonomyIndexTid.php` — complex filter with DI
+

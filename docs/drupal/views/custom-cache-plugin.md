@@ -1,8 +1,3 @@
----
-description: Specialized caching beyond time-based and tag-based: per-user caching, geolocation-based, A/B testing variants, external cache backends.
-drupal_version: "11.x"
----
-
 ## 27. Custom Cache Plugin
 
 ### When to Use
@@ -80,3 +75,4 @@ Specialized caching beyond time-based and tag-based: per-user caching, geolocati
 - Section 13: Caching Configuration — tag-based and time-based strategies
 - Reference: `core/modules/views/src/Plugin/views/cache/CachePluginBase.php`
 - Reference: `core/modules/views/src/Plugin/views/cache/Tag.php` — tag-based cache example
+

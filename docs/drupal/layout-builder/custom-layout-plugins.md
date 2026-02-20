@@ -1,7 +1,3 @@
----
-description: Creating custom layout plugins for Layout Builder — layouts.yml, Twig templates, libraries, and registration.
----
-
 ## 12. Custom Layout Plugins
 
 ### When to Use

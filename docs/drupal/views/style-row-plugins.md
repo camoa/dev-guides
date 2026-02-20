@@ -1,8 +1,3 @@
----
-description: When configuring how Views formats output (style) and renders individual rows (row).
-drupal_version: "11.x"
----
-
 ## 15. Style & Row Plugins
 
 ### When to Use
@@ -179,14 +174,60 @@ row:
   type: fields
 ```
 
+### 15.1 UI Patterns Views Plugins
+
+When the `ui_patterns_views` sub-module is enabled, UI Patterns becomes available as both a views **style plugin** and **row plugin**, enabling component-driven rendering without custom views templates.
+
+**Style plugin** — wraps the entire view output in a component (e.g., grid layout, card deck):
+
+```yaml
+# views.view.my_view.yml
+display:
+  default:
+    display_options:
+      style:
+        type: ui_patterns
+        options:
+          pattern_id: 'my_theme:card_grid'
+          # Component props configured here
+          variants: ''
+```
+
+**Row plugin** — renders each view row as a component, mapping view fields to component props/slots:
+
+```yaml
+row:
+  type: ui_patterns
+  options:
+    pattern_id: 'my_theme:card'
+    # View fields mapped to component props/slots
+    pattern_mapping:
+      title: field_title
+      image: field_image
+      content: body
+```
+
+**When to use UI Patterns views plugins:**
+
+| If you need... | Use... | Why |
+|---|---|---|
+| Each view row rendered as a component | UI Patterns row plugin | Maps view fields to component props, no Twig override needed |
+| View output wrapped in component | UI Patterns style plugin | Component handles grid/list layout |
+| Complex custom views templates | Standard style/row + Twig overrides | Full template control when component mapping is insufficient |
+
+Views field sources automatically map to component inputs in the admin UI.
+
 ### Common Mistakes
 - Table style with entity row → Table expects fields; use `row: fields`
 - Serializer style with fields row when entity serialization intended → Use `row: data_entity` for entity serialization, `data_field` for field-based
 - Not setting `responsive` on table columns → All columns show on mobile; use `priority-low`, `priority-medium` to hide on narrow screens
 - Grid style with odd number of items and `automatic_width: false` → Last row looks broken; use `automatic_width: true`
 - Forgetting `override: true` on table style → Default columns used instead of custom config
+- Using UI Patterns row plugin without defining view fields → The row plugin maps view fields to component props; add fields first, then configure the mapping
 
 ### See Also
 - Section 8: Fields Configuration — configuring fields for fields row
 - Section 6: REST Export Display — serializer configuration
+- `drupal-ui-patterns.md` — full UI Patterns documentation
 - Reference: [views.style schema](https://api.drupal.org/api/drupal/core!modules!views!config!schema!views.data_types.schema.yml/11.x)
+

@@ -1,5 +1,5 @@
 ---
-description: Optimizing component loading with automatic libraries, caching, and lazy loading
+description: Performance optimization strategies for SDC components including caching and asset loading
 drupal_version: "11.x"
 ---
 
@@ -9,29 +9,25 @@ drupal_version: "11.x"
 
 > Use this when optimizing component loading, debugging slow page loads with many components, or implementing caching strategies.
 
-## Decision: Performance Optimization Strategy
+## Decision
 
-| Optimization | Pattern | Why |
-|--------------|---------|-----|
-| Automatic library loading | Components generate asset libraries | Assets only load when component renders |
-| Library dependencies | Declare shared dependencies | Optimize loading order, share common libraries |
-| Render caching | `#cache` in render arrays | Cache component output when possible |
-| Lazy loading | BigPipe for heavy components | Load below-fold/modal components async |
-| CSS optimization | Simple, scoped selectors | Minimize file size and complexity |
+| Optimization | Use Case | Why |
+|--------------|----------|-----|
+| Automatic library loading | Default behavior | Assets only load when component renders |
+| Library dependencies | Share common libraries | Avoid duplicating jQuery, Bootstrap, etc. |
+| Render caching | Static component output | Cache component HTML with proper cache tags |
+| Lazy loading | Below-fold components | Defer non-critical component rendering |
+| CSS/JS aggregation | Production | Reduce HTTP requests |
 
 ## Pattern
 
-Automatic library loading:
-
+**Automatic Library Loading:**
 - Generated format: `core/components.{provider}--{component-name}`
 - Includes matching `.css` and `.js` files
 - Auto-attached when component renders
 - Aggregated with other libraries in production
 
-**WHY automatic is better**: No manual library management. Assets only load when component actually used on page.
-
-Library dependencies for optimized loading:
-
+**Library Dependencies:**
 ```yaml
 libraryDependencies:
   - core/drupal
@@ -44,10 +40,8 @@ libraryOverrides:
       preprocess: true             # Enable aggregation
 ```
 
-Render caching:
-
+**Render Caching:**
 ```php
-// In render array
 $build = [
   '#type' => 'component',
   '#component' => 'my_theme:card',
@@ -61,23 +55,7 @@ $build = [
 ];
 ```
 
-Lazy loading components with BigPipe:
-
-```twig
-{# Use BigPipe for heavy components #}
-{{ attach_library('core/drupal.ajax') }}
-
-<div
-  data-big-pipe-placeholder-id="..."
-  data-drupal-ajax-processor="big_pipe"
->
-  {# Heavy component loads async #}
-  {{ include('my_theme:heavy-component', {...}) }}
-</div>
-```
-
-CSS performance (simple, scoped selectors):
-
+**CSS Performance:**
 ```css
 /* ✓ GOOD: Simple, scoped selectors */
 .my-component { }
@@ -86,14 +64,13 @@ CSS performance (simple, scoped selectors):
 
 /* ✗ BAD: Deep nesting, complex selectors */
 .my-component .wrapper .inner .element .child { }
-.my-component:not(.variant):not(.disabled) > * + * { }
 ```
 
 ## Common Mistakes
 
-- **Wrong**: Including heavy JavaScript libraries in every component → **Right**: Bloats page weight. Use `libraryDependencies` to share common libraries across components.
-- **Wrong**: Not enabling CSS/JS aggregation in production → **Right**: Individual component files create many HTTP requests. Enable aggregation in production settings.
-- **Wrong**: Over-componentizing (components for every small element) → **Right**: Each component has overhead. Group related elements together when they always appear together.
+- **Wrong**: Including heavy JS libraries in every component → **Right**: Use `libraryDependencies` to share common libraries
+- **Wrong**: Not enabling CSS/JS aggregation in production → **Right**: Enable aggregation in production settings
+- **Wrong**: Over-componentizing (components for every small element) → **Right**: Group related elements that always appear together
 
 ## See Also
 
