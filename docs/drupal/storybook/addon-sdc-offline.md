@@ -1,5 +1,5 @@
 ---
-description: storybook-addon-sdc for offline/decoupled Storybook development without a running Drupal instance
+description: storybook-addon-sdc for offline/decoupled Storybook development with interactive Controls, without a running Drupal instance
 drupal_version: "11.x"
 ---
 
@@ -7,23 +7,38 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use `storybook-addon-sdc` when you need offline component development (no running Drupal instance), CI/CD visual testing without a backend, or rapid prototyping without Docker/DDEV overhead. Tradeoff: Drupal-specific Twig functions are NOT available — output may differ from real Drupal rendering.
+> Use `storybook-addon-sdc` when you need interactive Controls without a running Drupal instance — offline development, CI/CD pipelines, or rapid prototyping. Tradeoff: Drupal-specific Twig functions are not available — output may differ from real Drupal rendering.
+
+Use when:
+- You need to develop components offline (no running Drupal instance)
+- CI/CD pipelines need visual component testing without a backend
+- Rapid prototyping without Docker/DDEV overhead
 
 ## Decision
 
-| Need | Use addon-sdc? |
+| Need | Tool |
 |---|---|
-| Offline development, no Drupal instance | Yes |
-| CI/CD pipeline visual component testing | Yes |
-| Rapid prototyping without DDEV overhead | Yes |
-| Components using `drupal_block()` / `url()` / `path()` | No — use `drupal/storybook` module |
-| Final rendering verification before deploy | No — always verify in real Drupal |
+| Interactive Controls, real Drupal rendering | `drupal/storybook` module — requires running Drupal |
+| Interactive Controls, no Drupal required | `storybook-addon-sdc` — Vite + Twig.js |
+| Static variant browsing, zero Node.js | UI Patterns 2 `.story.yml` |
+
+`storybook-addon-sdc` processes SDC `.component.yml` files and renders component stories using **Vite + Twig.js** (a JavaScript port of Twig). Stories are defined inline in `thirdPartySettings.sdcStorybook` inside the component YAML.
+
+### Drupal Twig Feature Availability
+
+| Drupal Twig Feature | Available in addon-sdc? |
+|---|---|
+| `drupal_block()` | No |
+| `drupal_field()` | No |
+| `path()` / `url()` | No |
+| `t()` translation | Partial (mock) |
+| `attach_library()` | No |
+| Standard Twig filters (`|upper`, `|default`) | Yes |
+| Basic `{% include %}` with SDC components | Yes |
 
 ## Pattern
 
-### How Stories Are Defined
-
-Stories go inside `third_party_settings.sdcStorybook` in the `.component.yml` file:
+### How Stories Are Defined (in `.component.yml`)
 
 ```yaml
 # components/card/card.component.yml
@@ -73,30 +88,16 @@ export default {
 };
 ```
 
-### Drupal Twig Feature Availability
-
-| Drupal Twig Feature | Available in addon-sdc? |
-|---|---|
-| `drupal_block()` | No |
-| `drupal_field()` | No |
-| `path()` / `url()` | No |
-| `t()` translation | Partial (mock) |
-| `attach_library()` | No |
-| Standard Twig filters (`\|upper`, `\|default`) | Yes |
-| Basic `{% include %}` with SDC components | Yes |
-
-Never treat addon-sdc output as ground truth. Always verify components against real Drupal rendering before deploying.
-
 ## Common Mistakes
 
-- **Wrong**: Using `drupal_block()`, `drupal_field()`, or `url()` in Twig templates intended for addon-sdc → **Right**: These are PHP functions — Twig.js (JavaScript) throws errors on them
-- **Wrong**: Using addon-sdc output as the sole test environment → **Right**: Use it for speed, but validate in real Drupal before deploying
-- **Wrong**: Storing stories in both `.component.yml` (sdcStorybook) AND `.story.yml` files → **Right**: These are different systems; pick one approach per component
+- **Wrong**: Using `drupal_block()`, `drupal_field()`, or `url()` in Twig templates intended for addon-sdc → **Right**: These are PHP functions — not available in JavaScript (Twig.js) runtime. They throw errors.
+- **Wrong**: Assuming addon-sdc output matches Drupal output → **Right**: Especially differs for components using Drupal-specific preprocessing or hooks. Always verify in real Drupal before deploying.
+- **Wrong**: Using this as the sole test environment → **Right**: Use for development speed, but validate in real Drupal.
+- **Wrong**: Storing stories in `.component.yml` AND writing `.story.yml` files for the same component → **Right**: These are different systems. Pick one approach per component.
 
 ## See Also
 
-- [Tool Landscape & Decision](storybook-landscape.md)
 - [drupal/storybook Module](drupal-storybook-module.md)
 - [DDEV + Storybook Setup](ddev-storybook-setup.md)
-- Reference: https://github.com/iberdinsky-skilld/sdc-addon
+- Reference: `https://github.com/iberdinsky-skilld/sdc-addon`
 - Reference: `drupal-ui-patterns.md` — SDC component structure

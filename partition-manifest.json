@@ -348,7 +348,7 @@
     "guides_extracted": 22
   },
   "drupal/storybook": {
-    "source_hash": "78101f5998858e39e06d6c08b2c0dc8c57055f21fdd42a2d6705e2d0973cfa8c",
+    "source_hash": "b1f2b330c69d08672b28f6c060ff466db746bfb7885fa79d138ee954b05318e2",
     "partitioned": "2026-02-20",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 7

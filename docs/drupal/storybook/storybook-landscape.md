@@ -1,5 +1,5 @@
 ---
-description: Decision guide for choosing between UI Patterns 2 story.yml, drupal/storybook module, storybook-addon-sdc, and sdc_styleguide
+description: Decision guide — UI Patterns 2 story.yml (static browsing, no Node.js, any theme with ui_patterns module) vs Storybook.js tools (interactive Controls) — choose based on whether you need live prop manipulation
 drupal_version: "11.x"
 ---
 
@@ -7,11 +7,13 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use UI Patterns 2 `.story.yml` when you're on a UI Suite DaisyUI / UI Patterns 2 theme — no Node.js required. Use `drupal/storybook` module when you need Storybook.js with real Drupal Twig rendering. Use `storybook-addon-sdc` when you need offline/CI component previews without a running Drupal instance.
+> Use UI Patterns 2 `.story.yml` when you need static variant browsing with zero Node.js setup — works on any theme with the `ui_patterns` module. Use Storybook.js tools (`drupal/storybook` or `storybook-addon-sdc`) when you need interactive Controls — live prop manipulation in the browser.
 
-## Critical Clarification: Two Independent Story Systems
+## Decision
 
-UI Suite DaisyUI already uses `.story.yml` stories on every component. These work WITHOUT the `drupal/storybook` module. They use UI Patterns 2's story format — a YAML-based story system completely independent of Storybook.js.
+### Critical Clarification: Two Independent Story Systems
+
+**UI Suite DaisyUI already uses `.story.yml` stories on every component.** These work WITHOUT the `drupal/storybook` module. They use UI Patterns 2's story format — a YAML-based story system completely independent of Storybook.js. The same is true for any theme with UI Patterns 2 module installed — `.story.yml` is a module feature, not a DaisyUI feature.
 
 | Story system | Format | Requires Storybook.js? | Requires Drupal running? |
 |---|---|---|---|
@@ -20,14 +22,30 @@ UI Suite DaisyUI already uses `.story.yml` stories on every component. These wor
 
 These two systems do not interact and can coexist.
 
-## Decision
+### The Key Capability Difference: Static vs Interactive
+
+**UI Patterns 2 pattern library is static browsing.** You define variants in YAML and the browser shows exactly those — nothing more. You cannot change a prop value without editing the `.story.yml` file.
+
+**Storybook Controls are interactive.** The Controls panel lets you type new text, toggle booleans, pick from enums, change colors — live, in the browser, without touching code.
+
+| Need | Right tool |
+|---|---|
+| Developers browsing and verifying defined component variants | UI Patterns 2 pattern library — sufficient, zero Node.js setup |
+| Any theme with UI Patterns 2 module (not just DaisyUI) | UI Patterns 2 pattern library — works for all SDC components |
+| Designers or clients exploring "what if I change this prop" | Storybook.js (`drupal/storybook` or `storybook-addon-sdc`) |
+| QA checking all defined states | UI Patterns 2 pattern library — sufficient |
+| Design system handoff where non-devs tweak component values | Storybook.js — interactive Controls panel |
+
+Most Drupal projects don't need interactive controls — developers know the props and designers work from Figma. The setup cost of Storybook is only justified when non-developers need to explore component behavior directly.
+
+### All Active Tools
 
 | Tool | Version (2025) | When to Use | Requires Drupal? | Node.js? |
 |---|---|---|---|---|
-| **UI Patterns 2 `.story.yml`** | Part of `ui_patterns` 2.x | UI Suite DaisyUI theme, any UI Patterns 2 component | No — built-in styleguide at `/admin/appearance/ui/components` | No |
-| **`drupal/storybook` module** | 1.0.2 | Custom Twig components needing real Drupal data, Radix-based themes | Yes — server-rendered | Yes (Storybook.js v10+) |
-| **`storybook-addon-sdc`** | 0.21.2 | Offline development, CI/CD, decoupled preview | No — decoupled | Yes (Vite + Twig.js) |
-| **`sdc_styleguide`** | N/A | Simple Drupal-native browser, no Node.js setup | Yes | No |
+| **UI Patterns 2 `.story.yml`** | Part of `ui_patterns` 2.x | Any theme with UI Patterns 2 module — static variant browsing, zero Node.js | No — built-in styleguide at `/admin/appearance/ui/components` | No |
+| **`drupal/storybook` module** | 1.0.2 | Interactive Controls, real Drupal Twig rendering, design system handoff | Yes — server-rendered | Yes (Storybook.js v10+) |
+| **`storybook-addon-sdc`** | 0.21.2 | Interactive Controls offline, CI/CD, decoupled preview | No — decoupled | Yes (Vite + Twig.js) |
+| **`sdc_styleguide`** | N/A | Simple Drupal-native browser, no Node.js, no Controls | Yes | No |
 
 ### Deprecated Tools — Do Not Use
 
@@ -57,15 +75,15 @@ Offline / decoupled / CI:
 
 ## Common Mistakes
 
-- **Wrong**: Installing `drupal/storybook` on a UI Suite DaisyUI theme to browse `.story.yml` stories → **Right**: Use `sdc_styleguide` or the built-in UI Patterns library at `/admin/appearance/ui/components`
-- **Wrong**: Using `cl_server` or `sdc_story_generator` → **Right**: These are deprecated; use `drupal/storybook` module or `storybook-addon-sdc`
-- **Wrong**: Storybook config with `module.exports = {}` on v9+ → **Right**: ESM-only since v9 — use `export default {}`
-- **Wrong**: Conflating "Storybook" (the JS tool) with "stories" (the YAML concept in UI Patterns 2) → **Right**: These are independent naming coincidences
+- **Wrong**: Assuming UI Suite DaisyUI `.story.yml` requires the `drupal/storybook` module → **Right**: Completely separate systems. `.story.yml` is a UI Patterns 2 module feature available to any SDC theme.
+- **Wrong**: Installing `drupal/storybook` just to browse existing component variants → **Right**: UI Patterns 2 pattern library at `/admin/appearance/ui/components` already does this with zero Node.js setup.
+- **Wrong**: Installing Storybook for interactive controls when the team only needs to browse variants → **Right**: The setup cost (Node.js, CORS, Twig cache config) is only justified when you need live prop manipulation.
+- **Wrong**: Using `cl_server` or `sdc_story_generator` → **Right**: Both deprecated, do not use.
+- **Wrong**: Installing Storybook v8+ with the old CJS config format (`module.exports = {}`) → **Right**: ESM-only since v9 (`export default {}`).
+- **Wrong**: Conflating "Storybook" (the JavaScript tool) with "stories" (the YAML concept in UI Patterns 2) → **Right**: Two independent concepts.
 
 ## See Also
 
 - [UI Patterns 2 .story.yml Format](story-yml-format.md)
-- [drupal/storybook Module](drupal-storybook-module.md)
-- [storybook-addon-sdc (Offline)](addon-sdc-offline.md)
 - Reference: `drupal-ui-suite-daisyui.md` — base theme component catalog
 - Reference: `drupal-ui-patterns.md` — UI Patterns 2 full documentation
