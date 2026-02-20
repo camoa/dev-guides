@@ -306,10 +306,10 @@
     "guides_extracted": 15
   },
   "design-systems/jsx-to-twig": {
-    "source_hash": "522ef301ff82a5ab56a325b6efb011a96ed222080d89370a5e00bdf813fff4e2",
-    "partitioned": "2026-02-19",
+    "source_hash": "d759ac25a08fb3ed3bfb70a205af1c5c4197cb6d3bf8b6bebd1534bf7884bda3",
+    "partitioned": "2026-02-20",
     "partitioned_by": "Carlos Ospina",
-    "guides_extracted": 10
+    "guides_extracted": 12
   },
   "design-systems/tailwind-tokens": {
     "source_hash": "9786a7ab932216d19dc5cee6bd15456820ce1eaf743081f5231c92dc2d4cf769",
@@ -346,5 +346,11 @@
     "partitioned": "2026-02-20",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 22
+  },
+  "drupal/storybook": {
+    "source_hash": "78101f5998858e39e06d6c08b2c0dc8c57055f21fdd42a2d6705e2d0973cfa8c",
+    "partitioned": "2026-02-20",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 7
   }
 }

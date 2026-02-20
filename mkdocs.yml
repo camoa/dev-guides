@@ -650,6 +650,13 @@ plugins:
           - drupal/salesforce/performance.md: "Salesforce performance — caching strategy, queue processing for high volume, API call optimization for push and pull"
           - drupal/salesforce/extension-patterns.md: "Salesforce extension patterns — custom auth provider, custom queue processor, custom pull worker"
           - drupal/salesforce/decision-framework.md: "Salesforce decision framework — submodule selection, events vs plugins vs config, when to customize vs configure"
+          - drupal/storybook/index.md: "Storybook and component story tooling for Drupal SDC themes — UI Patterns 2 story.yml, drupal/storybook module, storybook-addon-sdc, and DDEV setup"
+          - drupal/storybook/storybook-landscape.md: "Decision guide — which story tool for which context: UI Patterns 2 story.yml vs drupal/storybook module vs storybook-addon-sdc vs sdc_styleguide"
+          - drupal/storybook/story-yml-format.md: "UI Patterns 2 .story.yml full schema — slot value types, story shorthand, naming conventions, and sub-theme story patterns"
+          - drupal/storybook/drupal-storybook-module.md: "drupal/storybook module setup — CORS config, Twig cache, Storybook.js init, Twig story format"
+          - drupal/storybook/addon-sdc-offline.md: "storybook-addon-sdc for offline Storybook development — component.yml story definition, Vite setup, Twig function limitations"
+          - drupal/storybook/ddev-storybook-setup.md: "DDEV port exposure, ddev-storybook addon, and BrowserSync vs Storybook workflow comparison"
+          - drupal/storybook/subtheme-stories.md: "Writing, overriding, and compositing Storybook stories in Drupal sub-themes"
           - drupal/sdc/index.md: "Single Directory Components (SDC) — component architecture, development patterns, and best practices"
           - drupal/sdc/anti-patterns.md: "Common component development anti-patterns with WHY explanations from code review perspective"
           - drupal/sdc/component-composition.md: "Including components within components using include(), embed, or render arrays"
@@ -1056,6 +1063,8 @@ plugins:
           - design-systems/jsx-to-twig/composition.md: "Convert React component composition patterns to Twig includes and embeds"
           - design-systems/jsx-to-twig/styling.md: "Convert React styling patterns to Twig and SDC scoped CSS"
           - design-systems/jsx-to-twig/typescript-to-component-yml.md: "Step-by-step workflow for converting TypeScript interfaces to component.yml schemas"
+          - design-systems/jsx-to-twig/image-handling.md: "Convert React image patterns (img, Next.js Image, picture/srcset, SVG) to Drupal Twig equivalents"
+          - design-systems/jsx-to-twig/link-handling.md: "Convert React Router Link, Next.js Link, and anchor patterns to Drupal path(), url(), and link field rendering"
           - design-systems/jsx-to-twig/sources-maintenance.md: "Source references and maintenance tracking for JSX to Twig guides"
         "Development Practices":
           - development/index.md: "Development practices guides — TDD, SOLID, DRY, security, and tool-agnostic best practices"
@@ -1829,6 +1838,14 @@ nav:
       - drupal/salesforce/performance.md
       - drupal/salesforce/extension-patterns.md
       - drupal/salesforce/decision-framework.md
+    - Storybook:
+      - drupal/storybook/index.md
+      - drupal/storybook/storybook-landscape.md
+      - drupal/storybook/story-yml-format.md
+      - drupal/storybook/drupal-storybook-module.md
+      - drupal/storybook/addon-sdc-offline.md
+      - drupal/storybook/ddev-storybook-setup.md
+      - drupal/storybook/subtheme-stories.md
     - SDC:
       - drupal/sdc/index.md
       - drupal/sdc/anti-patterns.md
@@ -2256,6 +2273,8 @@ nav:
       - design-systems/jsx-to-twig/composition.md
       - design-systems/jsx-to-twig/styling.md
       - design-systems/jsx-to-twig/typescript-to-component-yml.md
+      - design-systems/jsx-to-twig/image-handling.md
+      - design-systems/jsx-to-twig/link-handling.md
       - design-systems/jsx-to-twig/sources-maintenance.md
   - Development Practices:
     - development/index.md
