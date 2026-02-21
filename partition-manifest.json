@@ -358,5 +358,11 @@
     "partitioned": "2026-02-21",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 21
+  },
+  "drupal/canvas": {
+    "source_hash": "aa9164dc53d1ddf236119c4afd8f02fa3d9adb7381626c1690a1e5ba9313685d",
+    "partitioned": "2026-02-21",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 17
   }
 }

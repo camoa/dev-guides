@@ -657,6 +657,24 @@ plugins:
           - drupal/storybook/addon-sdc-offline.md: "storybook-addon-sdc for offline Storybook development — component.yml story definition, Vite setup, Twig function limitations"
           - drupal/storybook/ddev-storybook-setup.md: "DDEV port exposure, ddev-storybook addon, and BrowserSync vs Storybook workflow comparison"
           - drupal/storybook/subtheme-stories.md: "Writing, overriding, and compositing Storybook stories in Drupal sub-themes"
+          - drupal/canvas/index.md: "Drupal Canvas — decision guides for the React-based visual page builder using SDC and Code Components on Drupal 11.2+"
+          - drupal/canvas/canvas-overview.md: "What Drupal Canvas is, when to use it, its architecture, and key version requirements for Drupal 11.2+"
+          - drupal/canvas/component-types-decision.md: "Decide between SDC (Twig), Code Component (React), and External JS Component types when building for Canvas"
+          - drupal/canvas/sdc-component-format.md: "Full file structure, YAML schema, and Twig template patterns for authoring SDC components compatible with Canvas"
+          - drupal/canvas/sdc-props-reference.md: "Reference for all SDC prop types in Canvas — YAML syntax, Canvas editor widgets, value structures, and gotchas per type"
+          - drupal/canvas/sdc-slots.md: "When and how to use SDC slots in Canvas — defining drop zones where editors can nest other Canvas components"
+          - drupal/canvas/sdc-image-handling.md: "How to render image props correctly in Canvas SDC components using the canvas:image built-in component"
+          - drupal/canvas/code-component-format.md: "File structure, component.yml schema, JSX patterns, and allowed package imports for Canvas Code Components (React/Preact)"
+          - drupal/canvas/canvas-npm-tools.md: "Reference for Canvas npm packages — @drupal-canvas/cli, @drupal-canvas/create, drupal-canvas runtime, and Tailwind CSS 4"
+          - drupal/canvas/canvas-cli.md: "Step-by-step workflow for developing Canvas Code Components locally using the CLI — scaffold, build, push, and pull"
+          - drupal/canvas/acquia-nebula.md: "Acquia Nebula — the official Canvas Code Component development template with Storybook, Vite, ESLint, and AI agent skills preconfigured"
+          - drupal/canvas/design-tokens-and-theming.md: "How Canvas handles design tokens, CSS custom properties, and Tailwind theming for both SDC and Code Components"
+          - drupal/canvas/storybook-integration.md: "How to use Storybook for Canvas Code Component and SDC component development — story formats, setup approaches, and decision by component type"
+          - drupal/canvas/canvas-ai-assistant.md: "How the Canvas AI assistant (canvas_ai submodule) works, setup requirements, and how component metadata affects AI-driven page building"
+          - drupal/canvas/decoupled-frontend-patterns.md: "Patterns for using Canvas with a decoupled JavaScript frontend — component tree API, CLI sync, canvas_extjs, and Lupus Decoupled"
+          - drupal/canvas/canvas-vs-standard-sdc-decision.md: "Architecture decision guide — when to choose Drupal Canvas page builder vs standard SDC theming, Layout Builder, or content types"
+          - drupal/canvas/security-considerations.md: "Security surface, known vulnerabilities, access control, and safe Twig/JSX patterns for Canvas on Drupal production sites"
+          - drupal/canvas/component-creation-workflow.md: "Step-by-step process for creating a new SDC or Code Component for Canvas — from decision through verification in the Canvas editor"
           - drupal/sdc/index.md: "Single Directory Components (SDC) — component architecture, development patterns, and best practices"
           - drupal/sdc/anti-patterns.md: "Common component development anti-patterns with WHY explanations from code review perspective"
           - drupal/sdc/component-composition.md: "Including components within components using include(), embed, or render arrays"
@@ -1868,6 +1886,25 @@ nav:
       - drupal/storybook/addon-sdc-offline.md
       - drupal/storybook/ddev-storybook-setup.md
       - drupal/storybook/subtheme-stories.md
+    - Canvas:
+      - drupal/canvas/index.md
+      - drupal/canvas/canvas-overview.md
+      - drupal/canvas/component-types-decision.md
+      - drupal/canvas/sdc-component-format.md
+      - drupal/canvas/sdc-props-reference.md
+      - drupal/canvas/sdc-slots.md
+      - drupal/canvas/sdc-image-handling.md
+      - drupal/canvas/code-component-format.md
+      - drupal/canvas/canvas-npm-tools.md
+      - drupal/canvas/canvas-cli.md
+      - drupal/canvas/acquia-nebula.md
+      - drupal/canvas/design-tokens-and-theming.md
+      - drupal/canvas/storybook-integration.md
+      - drupal/canvas/canvas-ai-assistant.md
+      - drupal/canvas/decoupled-frontend-patterns.md
+      - drupal/canvas/canvas-vs-standard-sdc-decision.md
+      - drupal/canvas/security-considerations.md
+      - drupal/canvas/component-creation-workflow.md
     - SDC:
       - drupal/sdc/index.md
       - drupal/sdc/anti-patterns.md
