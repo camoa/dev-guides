@@ -151,6 +151,10 @@ The `.storybook/main.js` `stories` glob must match — typically `'../components
 ```bash
 composer require drupal/storybook --dev
 drush en storybook
+
+# Grant anonymous user permission to render stories
+# Remove this permission on production — rendering is Drupal-side, not public
+drush role:perm:add anonymous 'render storybook stories'
 ```
 
 Add to `web/sites/development.services.yml`:
@@ -194,6 +198,25 @@ export default {
   },
 };
 ```
+
+## Drush Commands
+
+The module provides Drush commands to compile `.stories.twig` files to JSON for Storybook.js to consume.
+
+```bash
+# Compile all .stories.twig files in the codebase to JSON
+# Run once after adding or changing story files
+drush storybook:generate-all-stories
+
+# Compile a single story file
+drush storybook:generate-stories path/to/file.stories.twig
+
+# Watch mode — re-compiles automatically on change (Linux / macOS)
+# Requires `watch` utility (pre-installed on Linux; Homebrew on macOS)
+watch --color drush storybook:generate-all-stories
+```
+
+> Drush 12 is required — the module uses PHP Attributes, which Drush 11 does not support.
 
 ## Common Mistakes
 
