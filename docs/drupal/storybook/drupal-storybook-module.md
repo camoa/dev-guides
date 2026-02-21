@@ -146,6 +146,8 @@ The `.storybook/main.js` `stories` glob must match — typically `'../components
 
 ### Setup Sequence
 
+> **DDEV users**: Use the `tyler36/ddev-storybook` addon — it handles port exposure, Node.js, and the `ddev storybook` command without manual config. See [DDEV + Storybook Setup](ddev-storybook-setup.md).
+
 **Drupal side:**
 
 ```bash
