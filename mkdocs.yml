@@ -1166,6 +1166,28 @@ plugins:
           - ai-tooling/figma-mcp/best-practices-and-patterns.md: "Best practices and session patterns for sustainable design-to-code workflows"
           - ai-tooling/figma-mcp/limitations-and-workarounds.md: "Limitations and workarounds — context limits, design updates, and missing states"
           - ai-tooling/figma-mcp/sources-maintenance.md: "Sources and maintenance manifest for Figma MCP server guide"
+        "CSS":
+          - css/modern-css/index.md: "Modern CSS features from 2022–2025 — container queries, @scope, @layer, scroll-driven animations, view transitions, oklch, and more"
+          - css/modern-css/has-selector.md: "Style parents and siblings based on child state — replacing JS class toggling"
+          - css/modern-css/container-queries.md: "Respond to container size with @container — component-level responsive design"
+          - css/modern-css/container-units.md: "Size elements relative to their container with cqi, cqw, cqb units"
+          - css/modern-css/subgrid.md: "Align nested grid items to parent tracks — card footer alignment without JS"
+          - css/modern-css/cascade-layers.md: "Control specificity ordering with @layer — tame third-party CSS conflicts"
+          - css/modern-css/css-scope.md: "Scope styles to a subtree with @scope — replace BEM naming conventions"
+          - css/modern-css/native-nesting.md: "Native CSS nesting without Sass — & selector, nested @media, differences from Sass"
+          - css/modern-css/at-property.md: "Register custom properties with @property — animate CSS variables, enforce types"
+          - css/modern-css/oklch-color.md: "Perceptually uniform color with oklch() and oklab() — better than HSL for design tokens"
+          - css/modern-css/color-mix.md: "Mix colors natively with color-mix() — replace Sass lighten(), darken(), mix()"
+          - css/modern-css/relative-color.md: "Derive color variations with relative color syntax — generate palettes from one base"
+          - css/modern-css/light-dark.md: "Declare light and dark values in one line with light-dark() — no media query duplication"
+          - css/modern-css/scroll-driven-animations.md: "Scroll-linked animations without JS — progress bars, reveal on scroll, parallax"
+          - css/modern-css/starting-style-transitions.md: "Animate elements entering from display:none with @starting-style"
+          - css/modern-css/view-transitions.md: "Smooth transitions between UI states with View Transitions API"
+          - css/modern-css/popover-api.md: "Native dropdowns and overlays with Popover API — built-in light dismiss"
+          - css/modern-css/anchor-positioning.md: "Position tooltips relative to anchors natively — replace Popper.js"
+          - css/modern-css/text-wrap.md: "Balanced headings and orphan-free text with text-wrap: balance and pretty"
+          - css/modern-css/viewport-units.md: "Fix 100vh on mobile with dvh, svh, lvh dynamic viewport units"
+          - css/modern-css/user-valid-invalid.md: "Form validation styling only after user interaction with :user-valid/:user-invalid"
 
 nav:
   - Home: index.md
@@ -2381,6 +2403,29 @@ nav:
       - ai-tooling/figma-mcp/best-practices-and-patterns.md
       - ai-tooling/figma-mcp/limitations-and-workarounds.md
       - ai-tooling/figma-mcp/sources-maintenance.md
+  - CSS:
+    - Modern CSS:
+      - css/modern-css/index.md
+      - css/modern-css/has-selector.md
+      - css/modern-css/container-queries.md
+      - css/modern-css/container-units.md
+      - css/modern-css/subgrid.md
+      - css/modern-css/cascade-layers.md
+      - css/modern-css/css-scope.md
+      - css/modern-css/native-nesting.md
+      - css/modern-css/at-property.md
+      - css/modern-css/oklch-color.md
+      - css/modern-css/color-mix.md
+      - css/modern-css/relative-color.md
+      - css/modern-css/light-dark.md
+      - css/modern-css/scroll-driven-animations.md
+      - css/modern-css/starting-style-transitions.md
+      - css/modern-css/view-transitions.md
+      - css/modern-css/popover-api.md
+      - css/modern-css/anchor-positioning.md
+      - css/modern-css/text-wrap.md
+      - css/modern-css/viewport-units.md
+      - css/modern-css/user-valid-invalid.md
 
 markdown_extensions:
   - tables
