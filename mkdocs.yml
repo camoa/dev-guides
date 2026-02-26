@@ -73,6 +73,21 @@ plugins:
           - drupal/ajax-htmx-migration/hybrid-ajax-htmx-approach.md: "Use AJAX and HTMX together in the same application — coexistence patterns, library dependencies, and integration points"
           - drupal/ajax-htmx-migration/migration-strategy-best-practices.md: "Plan your AJAX to HTMX migration — priorities by risk and ROI, phased workflow, and testing strategy"
           - drupal/ajax-htmx-migration/migration-checklist.md: "Step-by-step verification checklist for each AJAX to HTMX migration — pre-migration, code changes, testing, and post-migration"
+          - drupal/breadcrumbs/index.md: "Drupal Breadcrumbs — decision guides for core builders, Easy Breadcrumb, custom builders, SEO, theming, and caching"
+          - drupal/breadcrumbs/overview-decision.md: "Decide between core PathBasedBreadcrumbBuilder, Easy Breadcrumb module, and custom builders"
+          - drupal/breadcrumbs/core-breadcrumb-architecture.md: "How BreadcrumbManager dispatches to builders — the chain, priority system, and cache metadata merging"
+          - drupal/breadcrumbs/core-breadcrumb-builders.md: "Reference for all core Drupal breadcrumb builders — which routes they handle and their gotchas"
+          - drupal/breadcrumbs/easy-breadcrumb-module.md: "Install and use the Easy Breadcrumb contrib module — title resolution, priority 1003, taxonomy hierarchy, and JSON-LD SEO"
+          - drupal/breadcrumbs/easy-breadcrumb-configuration.md: "Complete reference for all Easy Breadcrumb configuration settings — title resolution, home segment, capitalization, custom paths, and SEO"
+          - drupal/breadcrumbs/custom-breadcrumb-builder.md: "Write a custom BreadcrumbBuilderInterface implementation — applies(), build(), service registration, and priority guidance"
+          - drupal/breadcrumbs/altering-breadcrumbs.md: "Use hook_system_breadcrumb_alter to add, remove, or modify breadcrumb links after a builder runs"
+          - drupal/breadcrumbs/structured-data-seo.md: "Add JSON-LD BreadcrumbList structured data for Google rich results — Easy Breadcrumb built-in vs manual hook_page_attachments"
+          - drupal/breadcrumbs/twig-theming.md: "Override breadcrumb.html.twig for custom markup — accessibility requirements, aria-current, and template discovery"
+          - drupal/breadcrumbs/ui-suite-daisyui-integration.md: "Use the UI Suite DaisyUI breadcrumbs SDC component — template bridge, item mapping, and accessibility notes"
+          - drupal/breadcrumbs/caching.md: "Breadcrumb cache metadata — contexts, tags, applies() merging, and Drupal 12 signature changes"
+          - drupal/breadcrumbs/block-placement.md: "Place the SystemBreadcrumbBlock via block UI or config YAML — regions, visibility conditions, and programmatic rendering"
+          - drupal/breadcrumbs/best-practices-anti-patterns.md: "Security, performance, and development standards for Drupal breadcrumbs — access checks, entity loading, and injection patterns"
+          - drupal/breadcrumbs/common-recipes.md: "Ready-to-apply breadcrumb patterns — entity-type builders, multilingual, per-node title overrides, and hiding breadcrumbs"
           - drupal/blocks/index.md: "Drupal Blocks — atomic guides for block system development"
           - drupal/blocks/anti-patterns.md: "Avoid common pitfalls that lead to bugs, performance issues, or maintenance problems"
           - drupal/blocks/best-practices.md: "Architectural guidance for maintainable, performant, testable block plugins"
@@ -1272,6 +1287,22 @@ nav:
       - drupal/ajax-htmx-migration/hybrid-ajax-htmx-approach.md
       - drupal/ajax-htmx-migration/migration-strategy-best-practices.md
       - drupal/ajax-htmx-migration/migration-checklist.md
+    - Breadcrumbs:
+      - drupal/breadcrumbs/index.md
+      - drupal/breadcrumbs/overview-decision.md
+      - drupal/breadcrumbs/core-breadcrumb-architecture.md
+      - drupal/breadcrumbs/core-breadcrumb-builders.md
+      - drupal/breadcrumbs/easy-breadcrumb-module.md
+      - drupal/breadcrumbs/easy-breadcrumb-configuration.md
+      - drupal/breadcrumbs/custom-breadcrumb-builder.md
+      - drupal/breadcrumbs/altering-breadcrumbs.md
+      - drupal/breadcrumbs/structured-data-seo.md
+      - drupal/breadcrumbs/twig-theming.md
+      - drupal/breadcrumbs/ui-suite-daisyui-integration.md
+      - drupal/breadcrumbs/caching.md
+      - drupal/breadcrumbs/block-placement.md
+      - drupal/breadcrumbs/best-practices-anti-patterns.md
+      - drupal/breadcrumbs/common-recipes.md
     - Blocks:
       - drupal/blocks/index.md
       - drupal/blocks/anti-patterns.md
