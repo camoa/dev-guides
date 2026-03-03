@@ -370,5 +370,11 @@
     "partitioned": "2026-02-26",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 14
+  },
+  "css/css-craft": {
+    "source_hash": "d8e59becaf3beea82f7c2f8e470b2d961287213760288bbeb499c8ec46275b9f",
+    "partitioned": "2026-03-03",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 18
   }
 }

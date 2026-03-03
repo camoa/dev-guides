@@ -1221,6 +1221,26 @@ plugins:
           - css/modern-css/text-wrap.md: "Balanced headings and orphan-free text with text-wrap: balance and pretty"
           - css/modern-css/viewport-units.md: "Fix 100vh on mobile with dvh, svh, lvh dynamic viewport units"
           - css/modern-css/user-valid-invalid.md: "Form validation styling only after user interaction with :user-valid/:user-invalid"
+        "CSS Craft":
+          - css/css-craft/index.md: "CSS Craft — motion tokens, micro-interactions, depth, entrance animations, visual hierarchy, performance, and visual effects"
+          - css/css-craft/motion-design-tokens.md: "Set up a consistent easing and duration token system — MD3-aligned curves, 50ms duration increments"
+          - css/css-craft/micro-interactions.md: "Polish hover, active, and focus states on buttons, cards, links, and toggles"
+          - css/css-craft/elevation-and-shadows.md: "Add realistic multi-layer shadows to cards, modals, and dropdowns — tinted shadow system with dark mode support"
+          - css/css-craft/entrance-animations.md: "Animate elements in as they scroll into view — IntersectionObserver vs CSS scroll-driven, stagger timing"
+          - css/css-craft/opacity-and-visual-hierarchy.md: "Create text and UI hierarchy with alpha channels — primary/secondary/tertiary opacity tokens, color-mix() transparency"
+          - css/css-craft/animation-performance.md: "Know which CSS properties animate at 60fps — compositor-only vs paint vs layout tiers"
+          - css/css-craft/accessibility-and-motion.md: "Handle prefers-reduced-motion, focus rings, and forced-colors — WCAG-compliant motion alternatives"
+          - css/css-craft/modern-css-craft-patterns.md: "Apply @starting-style, @property, scroll-driven animations, and view transitions for polished UI craft"
+          - css/css-craft/parallax-effects.md: "Add depth with scroll parallax — perspective container technique, scroll-driven approach, mobile handling"
+          - css/css-craft/glassmorphism-and-frosted-glass.md: "Create frosted glass panel effects with backdrop-filter — blur values, dark mode, extended header technique"
+          - css/css-craft/blend-modes-and-visual-effects.md: "Apply CSS blend modes for duotone, tinted overlays, knockout text, and background compositing"
+          - css/css-craft/clip-path-and-masks.md: "Shape, reveal, and animate elements with clip-path — wipe reveals, diagonal sections, iris animations, soft masks"
+          - css/css-craft/text-effects.md: "Gradient text, animated gradients, knockout text, and layered text-shadows for display type"
+          - css/css-craft/3d-transforms.md: "Card flips, perspective tilt, and 3D hover effects — preserve-3d setup, mouse-tracked tilt"
+          - css/css-craft/spring-physics-and-advanced-easing.md: "Springy, bouncy animations without JavaScript — CSS linear() easing, generator tools, fallbacks"
+          - css/css-craft/skeleton-and-loading-states.md: "Skeleton loading screens and shimmer animations — explicit dimensions for CLS, dark mode tokens, ARIA markup"
+          - css/css-craft/gradient-craft.md: "Mesh gradients, animated gradients with @property, grainy noise overlays, gradient borders with border-radius"
+          - css/css-craft/quick-reference-recommended-defaults.md: "Complete CSS craft token set — copy-paste easing, duration, shadow, opacity, and skeleton defaults"
 
 nav:
   - Home: index.md
@@ -2494,6 +2514,26 @@ nav:
       - css/modern-css/text-wrap.md
       - css/modern-css/viewport-units.md
       - css/modern-css/user-valid-invalid.md
+  - CSS Craft:
+    - css/css-craft/index.md
+    - css/css-craft/motion-design-tokens.md
+    - css/css-craft/micro-interactions.md
+    - css/css-craft/elevation-and-shadows.md
+    - css/css-craft/entrance-animations.md
+    - css/css-craft/opacity-and-visual-hierarchy.md
+    - css/css-craft/animation-performance.md
+    - css/css-craft/accessibility-and-motion.md
+    - css/css-craft/modern-css-craft-patterns.md
+    - css/css-craft/parallax-effects.md
+    - css/css-craft/glassmorphism-and-frosted-glass.md
+    - css/css-craft/blend-modes-and-visual-effects.md
+    - css/css-craft/clip-path-and-masks.md
+    - css/css-craft/text-effects.md
+    - css/css-craft/3d-transforms.md
+    - css/css-craft/spring-physics-and-advanced-easing.md
+    - css/css-craft/skeleton-and-loading-states.md
+    - css/css-craft/gradient-craft.md
+    - css/css-craft/quick-reference-recommended-defaults.md
 
 markdown_extensions:
   - tables
