@@ -1,5 +1,5 @@
 ---
-description: CSS Craft — motion tokens, micro-interactions, depth, entrance animations, visual hierarchy, performance, visual effects, and container query craft
+description: CSS Craft — motion tokens, micro-interactions, depth, entrance animations, visual hierarchy, performance, visual effects, container query craft, and cinematic effects
 ---
 
 # CSS Craft
@@ -25,3 +25,4 @@ description: CSS Craft — motion tokens, micro-interactions, depth, entrance an
 | Create mesh gradients, animated gradients, noise, or gradient borders | [Gradient Craft](gradient-craft.md) |
 | Copy a ready-to-use token set | [Quick Reference: Recommended Defaults](quick-reference-recommended-defaults.md) |
 | Make components respond to their container width, not the viewport | [Container Query Craft](container-queries-craft.md) |
+| Add border beams, glows, aurora, neon, shimmer, particles, or perspective grids | [Cinematic Effects](cinematic-effects.md) |

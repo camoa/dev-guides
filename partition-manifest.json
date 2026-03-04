@@ -372,10 +372,10 @@
     "guides_extracted": 14
   },
   "css/css-craft": {
-    "source_hash": "0b87ddd3b9a3cc94d737dd814ba4a5d3505a934cc42f68011a85435ea9ecda20",
-    "partitioned": "2026-03-03",
+    "source_hash": "1a694d7b22fb5ac91a925833d00d82694fba73539391912ba833e4e2b2175ead",
+    "partitioned": "2026-03-04",
     "partitioned_by": "Carlos Ospina",
-    "guides_extracted": 19
+    "guides_extracted": 20
   },
   "media/image-media-craft": {
     "source_hash": "065cb1afa8c06f76609162ac64d775838c40bd393022416049ca35c26fe24d66",

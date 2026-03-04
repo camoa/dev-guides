@@ -1242,6 +1242,7 @@ plugins:
           - css/css-craft/gradient-craft.md: "Mesh gradients, animated gradients with @property, grainy noise overlays, gradient borders with border-radius"
           - css/css-craft/quick-reference-recommended-defaults.md: "Complete CSS craft token set — copy-paste easing, duration, shadow, opacity, and skeleton defaults"
           - css/css-craft/container-queries-craft.md: "Container query craft — component layout morphing, adaptive typography with cqi units, style queries, and when NOT to use container queries"
+          - css/css-craft/cinematic-effects.md: "Cinematic CSS effects — border beam, glow, aurora, neon, shimmer sweep, particles, and perspective grid for focal hero moments"
         "JavaScript":
           - js/interaction-craft/index.md: "Interaction Craft — vanilla JS patterns for timing, keyboard accessibility, scroll, drag-and-drop, optimistic UI, touch, clipboard, forms, animations, and performance"
           - js/interaction-craft/debounce-and-throttle.md: "Choose between debounce, throttle, and requestAnimationFrame for rate-limiting events — scroll, resize, search input, and button submission"
@@ -2559,6 +2560,7 @@ nav:
     - css/css-craft/gradient-craft.md
     - css/css-craft/quick-reference-recommended-defaults.md
     - css/css-craft/container-queries-craft.md
+    - css/css-craft/cinematic-effects.md
   - JavaScript:
     - Interaction Craft:
       - js/interaction-craft/index.md
