@@ -376,5 +376,17 @@
     "partitioned": "2026-03-03",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 19
+  },
+  "media/image-media-craft": {
+    "source_hash": "065cb1afa8c06f76609162ac64d775838c40bd393022416049ca35c26fe24d66",
+    "partitioned": "2026-03-04",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 9
+  },
+  "js/interaction-craft": {
+    "source_hash": "8cf60a52902cdc4636f6f15656f90ac84b1771d6fc7632db3af22c4d883c8b44",
+    "partitioned": "2026-03-04",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 10
   }
 }

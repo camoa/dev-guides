@@ -1242,6 +1242,29 @@ plugins:
           - css/css-craft/gradient-craft.md: "Mesh gradients, animated gradients with @property, grainy noise overlays, gradient borders with border-radius"
           - css/css-craft/quick-reference-recommended-defaults.md: "Complete CSS craft token set — copy-paste easing, duration, shadow, opacity, and skeleton defaults"
           - css/css-craft/container-queries-craft.md: "Container query craft — component layout morphing, adaptive typography with cqi units, style queries, and when NOT to use container queries"
+        "JavaScript":
+          - js/interaction-craft/index.md: "Interaction Craft — vanilla JS patterns for timing, keyboard accessibility, scroll, drag-and-drop, optimistic UI, touch, clipboard, forms, animations, and performance"
+          - js/interaction-craft/debounce-and-throttle.md: "Choose between debounce, throttle, and requestAnimationFrame for rate-limiting events — scroll, resize, search input, and button submission"
+          - js/interaction-craft/keyboard-navigation-craft.md: "Trap focus in modals, implement roving tabindex for widget groups, restore focus after close — WCAG keyboard accessibility patterns"
+          - js/interaction-craft/scroll-interaction-patterns.md: "IntersectionObserver for entry detection, scroll-linked state, lazy load, infinite scroll, and scroll position restoration"
+          - js/interaction-craft/drag-and-drop-craft.md: "Choose between HTML Drag API, Pointer Events, and libraries for drag-and-drop — with keyboard accessibility required by WCAG 2.5.7"
+          - js/interaction-craft/optimistic-ui.md: "Update UI immediately before server confirms — when to use optimistic state, rollback patterns, and pending state indicators"
+          - js/interaction-craft/touch-and-gesture-craft.md: "Detect swipes, pinch-to-zoom, and long-press with Pointer Events API — touch-action CSS, passive listeners, and 300ms tap delay"
+          - js/interaction-craft/clipboard-and-copy-patterns.md: "Copy to clipboard with visual feedback, Share API for native mobile share, paste sanitization — Clipboard API patterns"
+          - js/interaction-craft/form-interaction-craft.md: "Validation timing, auto-resize textarea, input masking, autosave, inline editing, and multi-step form state — form UX patterns"
+          - js/interaction-craft/animation-orchestration.md: "Sequence, cancel, and coordinate JS animations — when to use CSS transitions, WAAPI element.animate(), or requestAnimationFrame loops"
+          - js/interaction-craft/performance-and-event-handling.md: "Passive event listeners, layout thrashing prevention, event delegation, breaking up long tasks, and memory leak patterns"
+        "Media":
+          - media/image-media-craft/index.md: "Image & Media Craft — responsive images, format strategy, loading optimization, placeholders, video, SVG, effects, and Drupal pipeline"
+          - media/image-media-craft/responsive-images-craft.md: "Choose picture, srcset, and sizes for responsive images — resolution switching vs art direction, breakpoint strategy"
+          - media/image-media-craft/image-format-strategy.md: "Choose JPEG, WebP, AVIF, PNG, SVG, or video — format decision table, quality settings, and animated image strategy"
+          - media/image-media-craft/loading-and-decode-craft.md: "Set loading, decoding, and fetchpriority correctly for LCP and below-fold images"
+          - media/image-media-craft/placeholder-strategies.md: "Show placeholders while images load — CLS prevention, LQIP blur-up, ThumbHash, skeleton shimmer"
+          - media/image-media-craft/video-and-embed-craft.md: "Embed YouTube/Vimeo with facade pattern, handle video autoplay policies, background video accessibility"
+          - media/image-media-craft/svg-craft.md: "Choose SVG delivery method — CSS mask-image, inline SVG, img tag — with accessibility and SVGO optimization"
+          - media/image-media-craft/image-effects-craft.md: "CSS image effects — object-fit, zoom on hover, reveal animations, before/after sliders, native dialog lightbox"
+          - media/image-media-craft/build-pipeline-optimization.md: "Automated image optimization with Sharp — tool selection, responsive generation, compression budgets, build-time vs CDN"
+          - media/image-media-craft/drupal-media-pipeline.md: "Map front-end image craft into Drupal — responsive image styles, focal point, WebP/AVIF conversion"
 
 nav:
   - Home: index.md
@@ -2536,6 +2559,31 @@ nav:
     - css/css-craft/gradient-craft.md
     - css/css-craft/quick-reference-recommended-defaults.md
     - css/css-craft/container-queries-craft.md
+  - JavaScript:
+    - Interaction Craft:
+      - js/interaction-craft/index.md
+      - js/interaction-craft/debounce-and-throttle.md
+      - js/interaction-craft/keyboard-navigation-craft.md
+      - js/interaction-craft/scroll-interaction-patterns.md
+      - js/interaction-craft/drag-and-drop-craft.md
+      - js/interaction-craft/optimistic-ui.md
+      - js/interaction-craft/touch-and-gesture-craft.md
+      - js/interaction-craft/clipboard-and-copy-patterns.md
+      - js/interaction-craft/form-interaction-craft.md
+      - js/interaction-craft/animation-orchestration.md
+      - js/interaction-craft/performance-and-event-handling.md
+  - Media:
+    - Image & Media Craft:
+      - media/image-media-craft/index.md
+      - media/image-media-craft/responsive-images-craft.md
+      - media/image-media-craft/image-format-strategy.md
+      - media/image-media-craft/loading-and-decode-craft.md
+      - media/image-media-craft/placeholder-strategies.md
+      - media/image-media-craft/video-and-embed-craft.md
+      - media/image-media-craft/svg-craft.md
+      - media/image-media-craft/image-effects-craft.md
+      - media/image-media-craft/build-pipeline-optimization.md
+      - media/image-media-craft/drupal-media-pipeline.md
 
 markdown_extensions:
   - tables
