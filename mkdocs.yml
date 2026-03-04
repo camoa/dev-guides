@@ -1241,6 +1241,7 @@ plugins:
           - css/css-craft/skeleton-and-loading-states.md: "Skeleton loading screens and shimmer animations — explicit dimensions for CLS, dark mode tokens, ARIA markup"
           - css/css-craft/gradient-craft.md: "Mesh gradients, animated gradients with @property, grainy noise overlays, gradient borders with border-radius"
           - css/css-craft/quick-reference-recommended-defaults.md: "Complete CSS craft token set — copy-paste easing, duration, shadow, opacity, and skeleton defaults"
+          - css/css-craft/container-queries-craft.md: "Container query craft — component layout morphing, adaptive typography with cqi units, style queries, and when NOT to use container queries"
 
 nav:
   - Home: index.md
@@ -2534,6 +2535,7 @@ nav:
     - css/css-craft/skeleton-and-loading-states.md
     - css/css-craft/gradient-craft.md
     - css/css-craft/quick-reference-recommended-defaults.md
+    - css/css-craft/container-queries-craft.md
 
 markdown_extensions:
   - tables

@@ -372,9 +372,9 @@
     "guides_extracted": 14
   },
   "css/css-craft": {
-    "source_hash": "d8e59becaf3beea82f7c2f8e470b2d961287213760288bbeb499c8ec46275b9f",
+    "source_hash": "0b87ddd3b9a3cc94d737dd814ba4a5d3505a934cc42f68011a85435ea9ecda20",
     "partitioned": "2026-03-03",
     "partitioned_by": "Carlos Ospina",
-    "guides_extracted": 18
+    "guides_extracted": 19
   }
 }
