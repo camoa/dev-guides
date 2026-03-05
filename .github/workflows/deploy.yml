@@ -7,6 +7,9 @@ on:
       - 'docs/**'
       - 'mkdocs.yml'
       - 'requirements.txt'
+      - 'scripts/**'
+      - 'partition-manifest.json'
+      - 'llms.txt.template'
 
 permissions:
   pages: write
@@ -26,6 +29,7 @@ jobs:
           python-version: '3.12'
       - run: pip install -r requirements.txt
       - run: mkdocs build
+      - run: python scripts/generate_llms.py
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site/
