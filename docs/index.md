@@ -17,6 +17,7 @@ Decision-making guides that answer: "When you need to do X, what should you choo
 
 ## For AI Consumers
 
-- **Index**: [`llms.txt`](llms.txt) — structured index of all guides
+- **Index**: [`llms.txt`](llms.txt) — structured index with per-topic bundles
+- **Per-topic files**: Each topic as a single file that fits in one LLM context window
 - **Navigation**: Index → Topic TOC → Atomic guide (one decision per page)
 - **Format**: Tables, bullets, minimal code. No prose.
