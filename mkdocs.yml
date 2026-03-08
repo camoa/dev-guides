@@ -690,6 +690,34 @@ plugins:
           - drupal/canvas/canvas-vs-standard-sdc-decision.md: "Architecture decision guide — when to choose Drupal Canvas page builder vs standard SDC theming, Layout Builder, or content types"
           - drupal/canvas/security-considerations.md: "Security surface, known vulnerabilities, access control, and safe Twig/JSX patterns for Canvas on Drupal production sites"
           - drupal/canvas/component-creation-workflow.md: "Step-by-step process for creating a new SDC or Code Component for Canvas — from decision through verification in the Canvas editor"
+          - drupal/seo-geo/index.md: "Drupal SEO & GEO — search engine optimization, structured data, meta tags, and generative engine optimization for Drupal 11"
+          - drupal/seo-geo/overview.md: "Drupal SEO & GEO overview — the module stack landscape, two Drupal CMS SEO recipes, decision tree for which modules to install, and how this guide is organized"
+          - drupal/seo-geo/seo-recipe-baseline.md: "Drupal CMS SEO recipes — what drupal_cms_seo_basic and drupal_cms_seo_tools install, decision to apply both vs selective, and what config you get out of the box"
+          - drupal/seo-geo/pathauto-patterns.md: "Pathauto URL alias patterns — token syntax, per-content-type configuration, bulk generation, transliteration, and common mistakes"
+          - drupal/seo-geo/redirect-management.md: "Drupal redirect management — manual redirects, redirect_404 submodule for 404 logging, auto-redirect on alias change, 301 vs 302 decision, and domain migrations"
+          - drupal/seo-geo/breadcrumbs-structured-data.md: "Breadcrumb JSON-LD structured data for SEO — Easy Breadcrumb built-in toggle vs manual hook_page_attachments vs Metatag Schema"
+          - drupal/seo-geo/metatag-architecture.md: "Metatag 2.2.0 module architecture — 11 submodules, attribute-based plugins, cascading inheritance, and token system overview"
+          - drupal/seo-geo/core-meta-tags.md: "Configure title tags, meta descriptions, canonical URLs, and robots meta in Drupal 11 using the Metatag module with token-based defaults"
+          - drupal/seo-geo/open-graph.md: "Configure Open Graph meta tags in Drupal 11 using the metatag_open_graph submodule for Facebook, LinkedIn, WhatsApp, and Slack sharing"
+          - drupal/seo-geo/twitter-cards.md: "Configure Twitter/X Cards in Drupal 11 using the metatag_twitter_cards submodule — card types, token mappings, and OG fallback strategy"
+          - drupal/seo-geo/metatag-multilingual.md: "Configure hreflang tags for multilingual Drupal 11 sites using the metatag_hreflang submodule — automatic generation, x-default, and language-specific overrides"
+          - drupal/seo-geo/structured-data-decision.md: "Choose between Schema Metatag and Schema.org Blueprints for JSON-LD structured data — retrofit vs greenfield, stability vs depth"
+          - drupal/seo-geo/schema-metatag-setup.md: "Install and configure Schema Metatag 3.x for JSON-LD structured data — token mappings for Article, Organization, and WebPage types"
+          - drupal/seo-geo/schema-types-reference.md: "All 25 Schema Metatag supported Schema.org types with key properties, GEO priority types, and field-to-property mapping patterns"
+          - drupal/seo-geo/schemadotorg-blueprints.md: "Schema.org Blueprints (schemadotorg) — schema-first content modeling for Drupal, drush commands, submodules, and alpha stability guidance"
+          - drupal/seo-geo/custom-schema-types.md: "Create custom Schema Metatag plugins for Schema.org types not included in the 25 built-in types — attribute-based plugin system"
+          - drupal/seo-geo/testing-validation.md: "Validate and debug Schema.org JSON-LD structured data — Google Rich Results Test, Schema.org Validator, Chrome DevTools, and common errors"
+          - drupal/seo-geo/xml-sitemap.md: "XML sitemap configuration for Drupal 11 — Simple Sitemap vs XML Sitemap, multilingual hreflang, IndexNow, and image sitemaps"
+          - drupal/seo-geo/robots-txt.md: "robots.txt configuration for Drupal 11 — core file, custom rules, sitemap reference, and AI crawler policies"
+          - drupal/seo-geo/canonical-urls.md: "Canonical URL configuration for Drupal 11 — Metatag canonical, www vs non-www, trailing slashes, Redirect module, and multilingual hreflang"
+          - drupal/seo-geo/performance-core-web-vitals.md: "Core Web Vitals optimization for Drupal 11 — LCP, INP, CLS, caching layers, BigPipe, image optimization, CDN, and CSS/JS aggregation"
+          - drupal/seo-geo/seo-audit-workflow.md: "SEO audit workflow for Drupal 11 — SEO Checklist module, Real-time SEO content scoring, manual audit checklist, and ongoing monitoring"
+          - drupal/seo-geo/geo-overview.md: "What Generative Engine Optimization (GEO) is, how it differs from traditional SEO, and the research behind AI citation patterns"
+          - drupal/seo-geo/content-patterns-ai.md: "Content writing patterns that increase AI citation frequency — answer-first design, statistics, source citations, entity salience"
+          - drupal/seo-geo/llms-txt-implementation.md: "Implementing llms.txt on a Drupal site — static file, custom route, or build script — for AI assistant discoverability"
+          - drupal/seo-geo/ai-crawler-policy.md: "Controlling AI crawler access in robots.txt — block training bots while allowing search and retrieval bots for AI discoverability"
+          - drupal/seo-geo/schema-ai-discovery.md: "Schema.org structured data for AI discoverability — priority types, SpeakableSpecification, schema stacking, and Drupal implementation"
+          - drupal/seo-geo/aeo-module.md: "Drupal AEO module for automated AI search readiness scoring — audits, 0-100 scoring, auto-fix drafts, and optional AI integration"
           - drupal/sdc/index.md: "Single Directory Components (SDC) — component architecture, development patterns, and best practices"
           - drupal/sdc/anti-patterns.md: "Common component development anti-patterns with WHY explanations from code review perspective"
           - drupal/sdc/component-composition.md: "Including components within components using include(), embed, or render arrays"
@@ -1981,6 +2009,35 @@ nav:
       - drupal/canvas/canvas-vs-standard-sdc-decision.md
       - drupal/canvas/security-considerations.md
       - drupal/canvas/component-creation-workflow.md
+    - SEO & GEO:
+      - drupal/seo-geo/index.md
+      - drupal/seo-geo/overview.md
+      - drupal/seo-geo/seo-recipe-baseline.md
+      - drupal/seo-geo/pathauto-patterns.md
+      - drupal/seo-geo/redirect-management.md
+      - drupal/seo-geo/breadcrumbs-structured-data.md
+      - drupal/seo-geo/metatag-architecture.md
+      - drupal/seo-geo/core-meta-tags.md
+      - drupal/seo-geo/open-graph.md
+      - drupal/seo-geo/twitter-cards.md
+      - drupal/seo-geo/metatag-multilingual.md
+      - drupal/seo-geo/structured-data-decision.md
+      - drupal/seo-geo/schema-metatag-setup.md
+      - drupal/seo-geo/schema-types-reference.md
+      - drupal/seo-geo/schemadotorg-blueprints.md
+      - drupal/seo-geo/custom-schema-types.md
+      - drupal/seo-geo/testing-validation.md
+      - drupal/seo-geo/xml-sitemap.md
+      - drupal/seo-geo/robots-txt.md
+      - drupal/seo-geo/canonical-urls.md
+      - drupal/seo-geo/performance-core-web-vitals.md
+      - drupal/seo-geo/seo-audit-workflow.md
+      - drupal/seo-geo/geo-overview.md
+      - drupal/seo-geo/content-patterns-ai.md
+      - drupal/seo-geo/llms-txt-implementation.md
+      - drupal/seo-geo/ai-crawler-policy.md
+      - drupal/seo-geo/schema-ai-discovery.md
+      - drupal/seo-geo/aeo-module.md
     - SDC:
       - drupal/sdc/index.md
       - drupal/sdc/anti-patterns.md
