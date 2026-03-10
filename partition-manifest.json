@@ -400,5 +400,11 @@
     "partitioned": "2026-03-10",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 25
+  },
+  "drupal/group": {
+    "source_hash": "4c5e5295d7a100c7e2da156be73c62b7f562cee15f0433319f86c6b6a950b91b",
+    "partitioned": "2026-03-10",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 16
   }
 }

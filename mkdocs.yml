@@ -314,6 +314,23 @@ plugins:
           - drupal/github-actions/theme-asset-compilation.md: "Build Sass, JavaScript, and optimize assets for Drupal themes in CI/CD pipelines"
           - drupal/github-actions/troubleshooting.md: "Debug common GitHub Actions failures in Drupal workflows"
           - drupal/github-actions/workflow-fundamentals.md: "GitHub Actions workflow triggers, structure, and core concepts for Drupal CI/CD"
+          - drupal/group/index.md: "Drupal Group module 3.x — group types, roles, permissions, access control, membership, GroupRelationType plugins, and contrib integrations"
+          - drupal/group/core-architecture.md: "Group 3.x data model — entities, scopes, v2 vs v3 differences, and key dependencies"
+          - drupal/group/entity-types.md: "All entity types provided by Group 3.x — IDs, base tables, key fields, shared bundle classes, and membership loading"
+          - drupal/group/plugin-system.md: "GroupRelationType plugin — attribute syntax, derivers, handler system, and enforced plugins"
+          - drupal/group/permissions-system.md: "Group permissions — YAML discovery, plugin-generated permissions, scope system, checking permissions, route access, and cache context"
+          - drupal/group/access-control.md: "Group access control — explicit forbid philosophy, access check flow, query access, GroupAccessResult, and custom handlers"
+          - drupal/group/configuration.md: "Group YAML configuration — group type, group role, relationship type, global settings, and plugin config schema"
+          - drupal/group/php-api.md: "Group PHP API — CRUD, adding members, relationships, querying, services reference, and programmatic plugin installation"
+          - drupal/group/views-integration.md: "Group Views integration — base tables, join paths, plugin_id filtering, group_id argument, and access filtering behavior"
+          - drupal/group/hooks-and-events.md: "Group hooks and events — available hooks, event subscribers, reacting to relationship CRUD, and extending permissions"
+          - drupal/group/sub-modules.md: "Group sub-modules — gnode, group_support_revisions, and key contrib modules"
+          - drupal/group/caching.md: "Group caching — cache bins, cache contexts, cache tags, permission hash, and render caching best practices"
+          - drupal/group/when-to-use-group.md: "When to use Group vs Domain Access vs Permissions by Term — decision table and performance considerations"
+          - drupal/group/migration-from-v1v2.md: "Migrating to Group 3.x — version strategy, v1/v2 API changes, v2 to v3 migration options, and custom code update patterns"
+          - drupal/group/common-mistakes.md: "Common Group module mistakes — architecture, access, API, plugin, and Views errors with explanations"
+          - drupal/group/security.md: "Group security — trust model, permission escalation risks, config wrapper security, cache poisoning, and anonymous user cache tags"
+          - drupal/group/group-actions-contrib.md: "Group Actions contrib module — action plugins for VBO, ECA, and token-driven group operations"
           - drupal/icon-api/index.md: "Icon API — unified icon management for Drupal 11+ with SVG, sprites, fonts, and remote sources"
           - drupal/icon-api/caching-strategy.md: "Icon API caching behavior for performance optimization"
           - drupal/icon-api/choosing-extractors.md: "Select the appropriate extractor plugin for your icon source format"
@@ -1639,6 +1656,24 @@ nav:
       - drupal/github-actions/theme-asset-compilation.md
       - drupal/github-actions/troubleshooting.md
       - drupal/github-actions/workflow-fundamentals.md
+    - Group:
+      - drupal/group/index.md
+      - drupal/group/core-architecture.md
+      - drupal/group/entity-types.md
+      - drupal/group/plugin-system.md
+      - drupal/group/permissions-system.md
+      - drupal/group/access-control.md
+      - drupal/group/configuration.md
+      - drupal/group/php-api.md
+      - drupal/group/views-integration.md
+      - drupal/group/hooks-and-events.md
+      - drupal/group/sub-modules.md
+      - drupal/group/caching.md
+      - drupal/group/when-to-use-group.md
+      - drupal/group/migration-from-v1v2.md
+      - drupal/group/common-mistakes.md
+      - drupal/group/security.md
+      - drupal/group/group-actions-contrib.md
     - Icon API:
       - drupal/icon-api/index.md
       - drupal/icon-api/caching-strategy.md
