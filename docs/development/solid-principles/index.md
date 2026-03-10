@@ -1,5 +1,23 @@
 ---
 description: SOLID principles for object-oriented design — decision guides for SRP, OCP, LSP, ISP, and DIP with practical examples in PHP, TypeScript, Python, and Java.
+guide-meta:
+  concepts:
+    - Single Responsibility Principle
+    - Open/Closed Principle
+    - Liskov Substitution Principle
+    - Interface Segregation Principle
+    - Dependency Inversion Principle
+    - SOLID anti-patterns
+    - SOLID code smells
+  not:
+    - Drupal-specific SOLID patterns
+    - DRY principles
+  requires: []
+  complements:
+    - development/dry-principles
+    - development/tdd-spec-driven
+  specializes: ""
+  category: dev-practices
 ---
 
 # SOLID Principles

@@ -1,5 +1,25 @@
 ---
 description: Drupal Custom Field module guides -- compound fields with multiple sub-fields stored in a single table for optimal performance.
+guide-meta:
+  concepts:
+    - Custom Field module
+    - compound fields
+    - sub-field types
+    - custom field widgets
+    - custom field formatters
+    - entity reference sub-fields
+    - single table storage
+  not:
+    - Paragraphs
+    - core field types
+    - Field API development (see drupal/entities)
+  requires:
+    - drupal/entities
+  complements:
+    - drupal/views
+    - drupal/forms
+  specializes: ""
+  category: drupal
 ---
 
 # Custom Field

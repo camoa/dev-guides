@@ -1,5 +1,24 @@
 ---
 description: Decision guides for Test-Driven Development and Spec-Driven Development practices
+guide-meta:
+  concepts:
+    - TDD
+    - Red-Green-Refactor
+    - spec-driven development
+    - test doubles
+    - mocks stubs fakes spies
+    - unit testing
+    - integration testing
+    - test coverage strategy
+  not:
+    - Drupal PHPUnit testing
+    - framework-specific test runners
+  requires: []
+  complements:
+    - development/solid-principles
+    - development/security-practices
+  specializes: ""
+  category: dev-practices
 ---
 
 # TDD & Spec-Driven Development

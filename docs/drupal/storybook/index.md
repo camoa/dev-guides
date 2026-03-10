@@ -1,6 +1,24 @@
 ---
 description: Storybook and component story tooling for Drupal SDC themes — UI Patterns 2 story.yml (static, no Node.js, any theme) vs Storybook.js tools (interactive Controls)
 drupal_version: "11.x"
+guide-meta:
+  concepts:
+    - stories.yml
+    - Storybook.js
+    - component preview
+    - interactive controls
+    - SDC stories
+  not:
+    - story.yml
+    - UI Patterns
+    - prop definitions
+    - source plugins
+  requires:
+    - drupal/sdc
+  complements:
+    - drupal/ui-patterns
+  specializes: ""
+  category: drupal
 ---
 
 # Drupal Storybook & Stories

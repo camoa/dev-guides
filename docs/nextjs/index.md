@@ -1,5 +1,20 @@
 ---
 description: Next.js guides — Drupal integration, chat interfaces, and decoupled frontend patterns
+guide-meta:
+  concepts:
+    - Next.js
+    - decoupled Drupal
+    - Next.js App Router
+  not:
+    - Drupal theming
+    - Gatsby
+    - Remix
+  requires: []
+  complements:
+    - drupal/jsonapi
+    - design-systems/react-design-system
+  specializes: ""
+  category: nextjs
 ---
 
 # Next.js

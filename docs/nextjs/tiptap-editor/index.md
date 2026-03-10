@@ -1,5 +1,28 @@
 ---
 description: TipTap Editor guides for React, Next.js, and Drupal integration
+guide-meta:
+  concepts:
+    - Tiptap v2
+    - ProseMirror
+    - rich text editor
+    - Tiptap extensions
+    - node extensions
+    - mark extensions
+    - custom commands
+    - node views
+    - bubble menu
+    - floating menu
+    - collaborative editing
+  not:
+    - CKEditor (Drupal core)
+    - Quill.js
+    - DeepChat (see nextjs/deepchat-nextjs)
+  requires: []
+  complements:
+    - nextjs/next-drupal
+    - design-systems/react-design-system
+  specializes: ""
+  category: nextjs
 ---
 
 # TipTap Editor

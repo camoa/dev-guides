@@ -1,5 +1,29 @@
 ---
 description: Drupal multilingual and translation system — language setup, content translation, config translation, interface translation, best practices
+guide-meta:
+  concepts:
+    - content translation
+    - config translation
+    - interface translation
+    - language negotiation
+    - TranslatableMarkup
+    - t() function
+    - .po files
+    - multilingual routing
+    - language-aware queries
+    - TMGMT
+  not:
+    - machine translation services
+    - AI translation
+  requires:
+    - drupal/entities
+    - drupal/config-management
+  complements:
+    - drupal/twig
+    - drupal/views
+    - drupal/caching
+  specializes: ""
+  category: drupal
 ---
 
 # Multilingual & Translation

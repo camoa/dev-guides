@@ -1,5 +1,27 @@
 ---
 description: Image & Media Craft — front-end pipeline decisions for responsive images, format strategy, loading optimization, placeholders, video, SVG, effects, and Drupal integration
+guide-meta:
+  concepts:
+    - responsive images HTML
+    - srcset sizes
+    - picture element
+    - image format strategy
+    - loading decoding fetchpriority
+    - LQIP blur-up
+    - video embed lazy loading
+    - SVG inline vs img
+    - object-fit
+    - build pipeline optimization
+  not:
+    - Drupal image styles config (see drupal/image-styles)
+    - Drupal Media Library (see drupal/media-system)
+  requires: []
+  complements:
+    - drupal/image-styles
+    - drupal/media-system
+    - css/css-craft
+  specializes: ""
+  category: media
 ---
 
 # Image & Media Craft

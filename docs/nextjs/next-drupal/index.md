@@ -2,6 +2,26 @@
 description: "Comprehensive guide for integrating Next.js with Drupal using the next-drupal library. Covers architecture decisions, setup, content fetching, rendering strategies, and more."
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
+guide-meta:
+  concepts:
+    - next-drupal library
+    - NextDrupal client
+    - decoupled architecture
+    - draft mode
+    - on-demand revalidation
+    - "JSON:API fetching"
+    - Next.js Drupal auth
+  not:
+    - Drupal Canvas (see drupal/canvas)
+    - Astro or Nuxt integration
+  requires:
+    - drupal/jsonapi
+  complements:
+    - drupal/jsonapi
+    - nextjs/deepchat-nextjs
+    - drupal/multilingual
+  specializes: ""
+  category: nextjs
 ---
 
 # Next.js for Drupal

@@ -1,5 +1,27 @@
 ---
 description: Drupal HTMX — decision guides for native HTMX integration in Drupal 11.3+
+guide-meta:
+  concepts:
+    - HTMX in Drupal
+    - hx-get
+    - hx-post
+    - hx-swap
+    - hx-trigger
+    - HTMX controllers
+    - HTMX response headers
+    - Drupal behaviors HTMX
+    - HTMX asset loading
+  not:
+    - legacy AJAX API (see drupal/ajax)
+    - AJAX to HTMX migration (see drupal/ajax-htmx-migration)
+  requires: []
+  complements:
+    - drupal/ajax
+    - drupal/ajax-htmx-migration
+    - drupal/forms
+    - drupal/routing
+  specializes: ""
+  category: drupal
 ---
 
 # Drupal HTMX

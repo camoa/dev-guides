@@ -1,5 +1,28 @@
 ---
 description: Interaction Craft — vanilla JS patterns for timing, keyboard accessibility, scroll, drag-and-drop, optimistic UI, touch, clipboard, forms, animations, and performance
+guide-meta:
+  concepts:
+    - debounce throttle
+    - keyboard navigation
+    - focus trap
+    - roving tabindex
+    - IntersectionObserver
+    - drag and drop
+    - optimistic UI
+    - touch gestures
+    - clipboard API
+    - animation orchestration
+  not:
+    - Drupal.behaviors (see drupal/js-development)
+    - CSS animations (see css/css-craft)
+    - React event handling
+  requires: []
+  complements:
+    - css/css-craft
+    - drupal/js-development
+    - media/image-media-craft
+  specializes: ""
+  category: js
 ---
 
 # Interaction Craft

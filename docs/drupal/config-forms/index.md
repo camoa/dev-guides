@@ -1,5 +1,25 @@
 ---
 description: Configuration Forms — choose form types, build admin interfaces, implement operations
+guide-meta:
+  concepts:
+    - ConfigFormBase
+    - FormBase admin
+    - ListBuilder
+    - dropbutton operations
+    - configuration schema
+    - settings forms
+  not:
+    - Form API element types (see drupal/forms)
+    - multi-step forms
+    - AJAX form patterns
+  requires:
+    - drupal/forms
+  complements:
+    - drupal/config-management
+    - drupal/entities
+    - drupal/services
+  specializes: ""
+  category: drupal
 ---
 
 # Configuration Forms

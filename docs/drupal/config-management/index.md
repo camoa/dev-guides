@@ -1,5 +1,26 @@
 ---
 description: Drupal Configuration Management — the Config API, simple config vs config entities, schema, storage, synchronization, overrides, Config Split, dependencies, and deployment workflows.
+guide-meta:
+  concepts:
+    - Config API
+    - simple config
+    - config entities
+    - config schema
+    - Config Split
+    - config synchronization
+    - config override system
+    - config dependencies
+    - config deployment
+  not:
+    - content entities (see drupal/entities)
+    - ConfigFormBase (see drupal/config-forms)
+  requires: []
+  complements:
+    - drupal/recipes
+    - drupal/config-forms
+    - drupal/entities
+  specializes: ""
+  category: drupal
 ---
 
 # Drupal Configuration Management

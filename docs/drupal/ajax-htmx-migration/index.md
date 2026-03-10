@@ -1,5 +1,23 @@
 ---
 description: AJAX to HTMX Migration — pattern-by-pattern guide for replacing Drupal AJAX API with core HTMX in Drupal 11.3+
+guide-meta:
+  concepts:
+    - AJAX to HTMX migration
+    - AJAX command equivalents
+    - dependent dropdown migration
+    - multi-step wizard migration
+    - hybrid AJAX-HTMX
+  not:
+    - HTMX from scratch
+    - AJAX framework reference
+  requires:
+    - drupal/ajax
+    - drupal/htmx
+  complements:
+    - drupal/forms
+    - drupal/js-development
+  specializes: ""
+  category: drupal
 ---
 
 # AJAX to HTMX Migration

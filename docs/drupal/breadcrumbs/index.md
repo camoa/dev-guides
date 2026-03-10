@@ -1,5 +1,22 @@
 ---
 description: Drupal Breadcrumbs — decision guides for core builders, Easy Breadcrumb, custom builders, SEO, theming, and caching
+guide-meta:
+  concepts:
+    - breadcrumb builder
+    - Easy Breadcrumb
+    - custom breadcrumb builder
+    - breadcrumb JSON-LD
+    - breadcrumb block
+  not:
+    - navigation menus
+    - routing system
+  requires: []
+  complements:
+    - drupal/seo-geo
+    - drupal/twig
+    - drupal/ui-suite-daisyui
+  specializes: ""
+  category: drupal
 ---
 
 # Drupal Breadcrumbs

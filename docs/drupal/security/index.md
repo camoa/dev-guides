@@ -1,5 +1,29 @@
 ---
 description: Drupal security architecture, access control, XSS/CSRF/SQL injection prevention, authentication, and OWASP best practices.
+guide-meta:
+  concepts:
+    - Drupal access system
+    - permissions and roles
+    - route access checks
+    - AccessResult
+    - entity access control
+    - node grants
+    - XSS prevention
+    - Twig autoescape
+    - CSRF protection
+    - SQL injection prevention
+    - trusted callbacks
+    - security headers
+  not:
+    - tool-agnostic security theory
+    - Klaro consent management
+  requires: []
+  complements:
+    - drupal/routing
+    - drupal/forms
+    - drupal/twig
+  specializes: development/security-practices
+  category: drupal
 ---
 
 # Drupal Security

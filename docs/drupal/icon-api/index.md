@@ -1,5 +1,27 @@
 ---
 description: Icon API - unified system for managing and rendering icons across Drupal 11.1+ sites
+guide-meta:
+  concepts:
+    - Icon API
+    - icon packs
+    - SVG extractor
+    - SVG sprite extractor
+    - font extractor
+    - path extractor
+    - Twig icon function
+    - SDC icon props
+    - IconPackManager
+  not:
+    - Font Awesome module
+    - manual SVG include
+    - CSS icon sprites
+  requires:
+    - drupal/sdc
+  complements:
+    - drupal/twig
+    - drupal/ui-patterns
+  specializes: ""
+  category: drupal
 ---
 
 # Icon API

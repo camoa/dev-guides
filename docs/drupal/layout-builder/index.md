@@ -1,5 +1,30 @@
 ---
 description: Drupal Layout Builder development guides — configuration-first approach to sections, layouts, blocks, styles, and deployment.
+guide-meta:
+  concepts:
+    - Layout Builder
+    - layout sections
+    - layout plugins
+    - inline blocks
+    - reusable blocks
+    - LB Styles
+    - style groups
+    - defaults vs overrides
+    - LB restrictions
+    - custom layout plugins
+  not:
+    - block plugins (see drupal/blocks)
+    - Canvas page builder (see drupal/canvas)
+    - Paragraphs
+  requires:
+    - drupal/blocks
+  complements:
+    - drupal/blocks
+    - drupal/ui-patterns
+    - drupal/sdc
+    - design-systems/radix-sdc
+  specializes: ""
+  category: drupal
 ---
 
 # Layout Builder

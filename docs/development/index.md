@@ -1,5 +1,21 @@
 ---
 description: Development practices guides — TDD, SOLID, DRY, security, and tool-agnostic best practices
+guide-meta:
+  concepts:
+    - development best practices
+    - tool-agnostic principles
+    - software design
+  not:
+    - Drupal-specific practices
+    - framework-specific patterns
+  requires: []
+  complements:
+    - drupal/solid-principles
+    - drupal/tdd
+    - drupal/dry-principles
+    - drupal/security
+  specializes: ""
+  category: dev-practices
 ---
 
 # Development Practices

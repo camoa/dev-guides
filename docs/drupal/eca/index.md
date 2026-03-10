@@ -1,5 +1,25 @@
 ---
 description: ECA (Event-Condition-Action) plugin development — create custom actions, events, and conditions
+guide-meta:
+  concepts:
+    - ECA module
+    - ECA actions
+    - ECA events
+    - ECA conditions
+    - ECA tokens
+    - plugin derivers
+    - ECA workflows
+  not:
+    - Rules module
+    - Drupal core event system (see drupal/services)
+  requires:
+    - drupal/plugins
+    - drupal/services
+  complements:
+    - drupal/entities
+    - drupal/forms
+  specializes: ""
+  category: drupal
 ---
 
 # ECA

@@ -1,5 +1,29 @@
 ---
 description: Drupal caching decision guides — cache metadata, backends, invalidation, and performance
+guide-meta:
+  concepts:
+    - cache tags
+    - cache contexts
+    - cache max-age
+    - cache metadata trinity
+    - cache backends
+    - Redis
+    - Memcache
+    - render caching
+    - lazy builders
+    - BigPipe
+    - Dynamic Page Cache
+    - cache invalidation
+  not:
+    - HTTP caching headers (see drupal/security)
+    - CDN configuration
+  requires: []
+  complements:
+    - drupal/render-api
+    - drupal/blocks
+    - drupal/views
+  specializes: ""
+  category: drupal
 ---
 
 # Drupal Caching

@@ -1,5 +1,24 @@
 ---
 description: Drupal Blocks — block plugins, derivatives, contexts, Layout Builder, render pipeline
+guide-meta:
+  concepts:
+    - block plugin
+    - BlockBase
+    - block_content
+    - block derivatives
+    - block contexts
+    - block placement
+  not:
+    - inline blocks
+    - layout sections
+    - Layout Builder styles
+  requires: []
+  complements:
+    - drupal/layout-builder
+    - drupal/render-api
+    - drupal/plugins
+  specializes: ""
+  category: drupal
 ---
 
 # Drupal Blocks

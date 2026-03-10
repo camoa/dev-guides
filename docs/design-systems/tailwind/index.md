@@ -1,5 +1,27 @@
 ---
 description: Tailwind CSS design system guides — v3/v4 migration, configuration, tokens, variants, responsive, dark mode, CVA, tailwind-merge, performance, accessibility
+guide-meta:
+  concepts:
+    - Tailwind CSS v4
+    - Tailwind CSS v3
+    - CSS-first configuration
+    - "@theme"
+    - utility classes
+    - dark mode
+    - CVA
+    - tailwind-merge
+    - "@apply"
+  not:
+    - design token extraction (see tailwind-tokens)
+    - DaisyUI theming
+    - Bootstrap utilities
+  requires: []
+  complements:
+    - design-systems/tailwind-tokens
+    - design-systems/daisyui
+    - design-systems/react-design-system
+  specializes: ""
+  category: design-systems
 ---
 
 # Tailwind CSS

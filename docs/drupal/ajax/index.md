@@ -1,5 +1,25 @@
 ---
 description: Drupal AJAX Framework — atomic decision guides for forms, commands, routes, security, performance, and accessibility
+guide-meta:
+  concepts:
+    - Drupal AJAX API
+    - AJAX commands
+    - AJAX form callbacks
+    - AJAX modal dialogs
+    - custom AJAX commands
+    - AJAX routes
+    - autocomplete
+  not:
+    - HTMX (see drupal/htmx)
+    - AJAX to HTMX migration
+  requires:
+    - drupal/forms
+  complements:
+    - drupal/htmx
+    - drupal/ajax-htmx-migration
+    - drupal/js-development
+  specializes: ""
+  category: drupal
 ---
 
 # Drupal AJAX

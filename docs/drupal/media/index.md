@@ -1,5 +1,26 @@
 ---
 description: Drupal Media Types — custom media source plugins, metadata systems, oEmbed extensions, and third-party service integrations.
+guide-meta:
+  concepts:
+    - media source plugins
+    - custom media types
+    - oEmbed extensions
+    - metadata attributes
+    - field mapping
+    - thumbnail generation
+    - media validation
+  not:
+    - Media Library widget (see drupal/media-system)
+    - media view modes (see drupal/media-system)
+    - image styles (see drupal/image-styles)
+  requires:
+    - drupal/plugins
+  complements:
+    - drupal/media-system
+    - drupal/image-styles
+    - drupal/entities
+  specializes: ""
+  category: drupal
 ---
 
 # Media Types

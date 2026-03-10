@@ -1,5 +1,21 @@
 ---
 description: Drupal decision guides — forms, SDC components, JavaScript, entities, config, rendering, frontend, architecture
+guide-meta:
+  concepts:
+    - Drupal development
+    - Drupal 11
+    - module development
+    - theme development
+  not:
+    - Next.js frontend
+    - tool-agnostic practices
+  requires: []
+  complements:
+    - development/solid-principles
+    - development/tdd-spec-driven
+    - design-systems/radix-sdc
+  specializes: ""
+  category: drupal
 ---
 
 # Drupal

@@ -1,5 +1,29 @@
 ---
 description: Drupal entities and fields — content types, field development, and entity patterns
+guide-meta:
+  concepts:
+    - content entities
+    - bundle entities
+    - base fields
+    - field types
+    - field widgets
+    - field formatters
+    - view modes
+    - entity references
+    - entity query
+    - computed fields
+  not:
+    - config entities (see drupal/config-management)
+    - Custom Field module (see drupal/custom-field)
+    - taxonomy terms (see drupal/taxonomy)
+  requires: []
+  complements:
+    - drupal/config-management
+    - drupal/views
+    - drupal/forms
+    - drupal/render-api
+  specializes: ""
+  category: drupal
 ---
 
 # Entities and Fields

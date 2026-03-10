@@ -1,5 +1,23 @@
 ---
 description: Drupal Taxonomy — vocabulary and term management, config-first development
+guide-meta:
+  concepts:
+    - taxonomy vocabulary
+    - taxonomy terms
+    - term reference fields
+    - hierarchical taxonomy
+    - taxonomy permissions
+    - term storage querying
+  not:
+    - content entities (see drupal/entities)
+    - Views filters (see drupal/views)
+  requires:
+    - drupal/entities
+  complements:
+    - drupal/views
+    - drupal/config-management
+  specializes: ""
+  category: drupal
 ---
 
 # Taxonomy

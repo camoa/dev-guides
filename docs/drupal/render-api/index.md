@@ -1,5 +1,30 @@
 ---
 description: Drupal Render API decision guides -- render arrays, elements, caching, theming, security, and performance patterns.
+guide-meta:
+  concepts:
+    - render arrays
+    - render elements
+    - "#type"
+    - "#theme"
+    - "#markup"
+    - attachments
+    - lazy builders
+    - placeholders
+    - Renderer service
+    - preprocess functions
+    - theme hooks
+    - template suggestions
+  not:
+    - Twig template syntax (see drupal/twig)
+    - SDC components (see drupal/sdc)
+  requires: []
+  complements:
+    - drupal/twig
+    - drupal/caching
+    - drupal/sdc
+    - drupal/blocks
+  specializes: ""
+  category: drupal
 ---
 
 # Drupal Render API

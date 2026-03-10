@@ -2,6 +2,28 @@
 description: "Comprehensive guide for working with Drupal's JSON:API module (core) and JSON:API Extras (contrib). Covers spec-compliant REST API with filtering, includes, pagination, and customization."
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
+guide-meta:
+  concepts:
+    - "JSON:API"
+    - "JSON:API Extras"
+    - resource types
+    - filtering
+    - includes
+    - sparse fieldsets
+    - pagination
+    - "JSON:API CRUD"
+  not:
+    - REST module
+    - GraphQL
+    - Next.js client setup (see nextjs/next-drupal)
+  requires:
+    - drupal/entities
+  complements:
+    - nextjs/next-drupal
+    - drupal/security
+    - drupal/caching
+  specializes: ""
+  category: drupal
 ---
 
 # Drupal JSON:API

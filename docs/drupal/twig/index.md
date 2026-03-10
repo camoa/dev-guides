@@ -1,5 +1,29 @@
 ---
 description: Drupal Twig theming — template development, field access, preprocess functions, debugging, and contrib tools
+guide-meta:
+  concepts:
+    - Twig templates
+    - template discovery
+    - template hierarchy
+    - field access in Twig
+    - entity reference traversal
+    - attribute system
+    - preprocess functions
+    - template suggestions
+    - Twig functions
+    - Twig filters
+    - twig_tweak
+  not:
+    - SDC component development (see drupal/sdc)
+    - render arrays (see drupal/render-api)
+    - JSX to Twig conversion (see design-systems/jsx-to-twig)
+  requires: []
+  complements:
+    - drupal/render-api
+    - drupal/sdc
+    - design-systems/radix-components
+  specializes: ""
+  category: drupal
 ---
 
 # Drupal Twig Theming

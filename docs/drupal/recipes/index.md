@@ -1,5 +1,25 @@
 ---
 description: Drupal Recipes — reusable configuration patterns for composable site setup
+guide-meta:
+  concepts:
+    - Drupal recipes
+    - recipe.yml
+    - config actions
+    - recipe composition
+    - recipe inputs
+    - default content
+    - extension installation
+    - core recipes catalog
+  not:
+    - Config Split (see drupal/config-management)
+    - install profiles
+  requires:
+    - drupal/config-management
+  complements:
+    - drupal/config-management
+    - drupal/entities
+  specializes: ""
+  category: drupal
 ---
 
 # Drupal Recipes

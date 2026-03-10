@@ -1,5 +1,27 @@
 ---
 description: CSS Craft — motion tokens, micro-interactions, depth, entrance animations, visual hierarchy, performance, visual effects, container query craft, and cinematic effects
+guide-meta:
+  concepts:
+    - motion tokens
+    - micro-interactions
+    - CSS animations
+    - entrance animations
+    - glassmorphism
+    - parallax
+    - clip-path
+    - 3D transforms
+    - cinematic effects
+    - spring physics easing
+  not:
+    - JavaScript animation libraries
+    - CSS architecture (layers, scope, nesting)
+  requires: []
+  complements:
+    - css/modern-css
+    - js/interaction-craft
+    - media/image-media-craft
+  specializes: ""
+  category: css
 ---
 
 # CSS Craft

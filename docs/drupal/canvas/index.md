@@ -1,5 +1,27 @@
 ---
 description: Drupal Canvas — decision guides for the React-based visual page builder using SDC and Code Components on Drupal 11.2+.
+guide-meta:
+  concepts:
+    - Drupal Canvas
+    - visual page builder
+    - Canvas SDC components
+    - Code Components
+    - Canvas CLI
+    - Acquia Nebula
+    - Canvas AI assistant
+    - canvas_extjs
+  not:
+    - Layout Builder
+    - standard Drupal theming
+    - Paragraphs
+  requires:
+    - drupal/sdc
+  complements:
+    - drupal/layout-builder
+    - drupal/storybook
+    - nextjs/next-drupal
+  specializes: ""
+  category: drupal
 ---
 
 # Drupal Canvas

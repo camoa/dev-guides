@@ -1,5 +1,27 @@
 ---
 description: Image styles and responsive images — configuration-first approach to derivatives, effects, breakpoints, and modern format optimization.
+guide-meta:
+  concepts:
+    - image styles
+    - image effects
+    - responsive image styles
+    - breakpoint configuration
+    - art direction
+    - resolution switching
+    - WebP
+    - AVIF
+    - image derivatives
+  not:
+    - Media Library (see drupal/media-system)
+    - media source plugins (see drupal/media)
+    - focal point cropping (see drupal/media-system)
+  requires: []
+  complements:
+    - drupal/media-system
+    - drupal/media
+    - media/image-media-craft
+  specializes: ""
+  category: drupal
 ---
 
 # Image Styles

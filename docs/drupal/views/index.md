@@ -1,5 +1,31 @@
 ---
 description: Drupal Views — query and display entity lists with UI-based configuration
+guide-meta:
+  concepts:
+    - Views configuration
+    - views displays
+    - views fields
+    - views filters
+    - exposed filters
+    - contextual filters
+    - views relationships
+    - views pagers
+    - style plugins
+    - row plugins
+    - custom field handler
+    - custom filter handler
+    - views plugin architecture
+  not:
+    - entity queries in code (see drupal/entities)
+    - REST export API design (see drupal/jsonapi)
+  requires:
+    - drupal/entities
+  complements:
+    - drupal/entities
+    - drupal/caching
+    - drupal/taxonomy
+  specializes: ""
+  category: drupal
 ---
 
 # Views

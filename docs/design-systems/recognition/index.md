@@ -1,5 +1,25 @@
 ---
 description: Design System Recognition — extract tokens and components from HTML/CSS, Figma, or screenshots
+guide-meta:
+  concepts:
+    - design token extraction
+    - atomic design classification
+    - atom recognition
+    - molecule recognition
+    - organism recognition
+    - design system analysis
+    - W3C DTCG
+  not:
+    - Bootstrap mapping implementation
+    - Drupal SDC creation
+    - Tailwind configuration
+  requires: []
+  complements:
+    - design-systems/bootstrap
+    - design-systems/tailwind-tokens
+    - ai-tooling/figma-mcp
+  specializes: ""
+  category: design-systems
 ---
 
 # Design System Recognition

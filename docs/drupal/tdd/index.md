@@ -1,5 +1,27 @@
 ---
 description: Drupal Test-Driven Development guide covering PHPUnit test types, TDD workflow, testing patterns, and quality gates for Drupal 11.x.
+guide-meta:
+  concepts:
+    - Drupal TDD
+    - PHPUnit
+    - UnitTestCase
+    - KernelTestBase
+    - BrowserTestBase
+    - WebDriverTestBase
+    - test traits
+    - spec-driven Drupal
+    - Nightwatch.js
+    - coverage metrics
+  not:
+    - tool-agnostic TDD theory
+    - CI/CD pipeline setup (see drupal/github-actions)
+  requires: []
+  complements:
+    - drupal/testing
+    - drupal/github-actions
+    - drupal/services
+  specializes: development/tdd-spec-driven
+  category: drupal
 ---
 
 # Drupal Test-Driven Development

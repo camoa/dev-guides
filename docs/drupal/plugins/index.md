@@ -1,5 +1,25 @@
 ---
 description: Plugin Architecture - choose between Foundation+Extension, Provider Plugin, and Service Collector patterns
+guide-meta:
+  concepts:
+    - plugin manager
+    - plugin annotations
+    - plugin derivatives
+    - Foundation+Extension pattern
+    - Provider Plugin pattern
+    - Service Collector pattern
+    - plugin configuration
+  not:
+    - specific plugin types (blocks, fields, views)
+    - ECA plugins (see drupal/eca)
+  requires:
+    - drupal/services
+  complements:
+    - drupal/services
+    - drupal/entities
+    - drupal/blocks
+  specializes: ""
+  category: drupal
 ---
 
 # Plugin Architecture

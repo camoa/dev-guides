@@ -1,5 +1,27 @@
 ---
 description: React design system guides — component architecture, props patterns, composition, Tailwind, CVA variants, TypeScript, accessibility, Storybook, performance, testing
+guide-meta:
+  concepts:
+    - React component architecture
+    - compound components
+    - headless components
+    - CVA variants
+    - Radix UI primitives
+    - React props patterns
+    - asChild pattern
+    - cn() utility
+    - design token consumption
+  not:
+    - Drupal SDC components
+    - Twig templates
+    - Next.js page routing
+  requires: []
+  complements:
+    - design-systems/tailwind
+    - design-systems/daisyui
+    - design-systems/jsx-to-twig
+  specializes: ""
+  category: design-systems
 ---
 
 # React Design System

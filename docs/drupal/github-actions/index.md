@@ -1,5 +1,24 @@
 ---
 description: GitHub Actions for Drupal — automated CI/CD workflows for testing, building, and deploying
+guide-meta:
+  concepts:
+    - GitHub Actions
+    - Drupal CI/CD
+    - matrix testing
+    - PHPUnit CI
+    - theme asset compilation
+    - deployment artifacts
+    - secret management
+  not:
+    - GitLab CI
+    - Bitbucket Pipelines
+    - local testing
+  requires: []
+  complements:
+    - drupal/testing
+    - drupal/tdd
+  specializes: ""
+  category: drupal
 ---
 
 # GitHub Actions

@@ -1,5 +1,29 @@
 ---
 description: Design System to Radix SDC Mapping — atomic guides for implementing design systems with Drupal Radix and Single Directory Components
+guide-meta:
+  concepts:
+    - Radix sub-theme
+    - design tokens to Radix
+    - atoms SDC
+    - molecules SDC
+    - organisms SDC
+    - Layout Builder integration
+    - Laravel Mix
+    - Radix CLI
+    - SDC YAML schema
+  not:
+    - Bootstrap mapping theory
+    - DaisyUI components
+    - Tailwind CSS
+  requires:
+    - drupal/sdc
+    - design-systems/bootstrap
+  complements:
+    - design-systems/radix-components
+    - design-systems/recognition
+    - drupal/layout-builder
+  specializes: ""
+  category: design-systems
 ---
 
 # Design System to Radix SDC Mapping

@@ -1,5 +1,25 @@
 ---
 description: Drupal Routing - YAML route definitions, access control, dynamic routes, and security best practices
+guide-meta:
+  concepts:
+    - routing.yml
+    - route definitions
+    - route parameters
+    - access control
+    - custom access checkers
+    - dynamic routes
+    - route subscribers
+    - admin routes
+  not:
+    - menu links
+    - breadcrumbs (see drupal/breadcrumbs)
+  requires: []
+  complements:
+    - drupal/security
+    - drupal/forms
+    - drupal/services
+  specializes: ""
+  category: drupal
 ---
 
 # Drupal Routing

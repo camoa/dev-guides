@@ -1,5 +1,20 @@
 ---
 description: Design system guides — recognition, Bootstrap mapping, Radix SDC implementation, Radix component reference, Tailwind CSS integration, design token extraction
+guide-meta:
+  concepts:
+    - design system pipeline
+    - design-to-code workflow
+    - token extraction
+    - component mapping
+  not:
+    - Drupal theming specifics
+    - CSS features reference
+  requires: []
+  complements:
+    - drupal/sdc
+    - css/modern-css
+  specializes: ""
+  category: design-systems
 ---
 
 # Design Systems

@@ -1,5 +1,29 @@
 ---
 description: Drupal Services & Dependency Injection decision guides — atomic references for defining services, injection patterns, service tags, event subscribers, and container architecture.
+guide-meta:
+  concepts:
+    - services.yml
+    - dependency injection
+    - service container
+    - autowiring
+    - constructor injection
+    - plugin injection
+    - service tags
+    - tagged service collectors
+    - event subscribers
+    - service providers
+    - compiler passes
+    - factory services
+  not:
+    - plugin architecture patterns (see drupal/plugins)
+    - hook system (see drupal/solid-principles)
+  requires: []
+  complements:
+    - drupal/plugins
+    - drupal/solid-principles
+    - drupal/forms
+  specializes: ""
+  category: drupal
 ---
 
 # Drupal Services & Dependency Injection

@@ -1,5 +1,24 @@
 ---
 description: DeepChat + Next.js integration guides covering setup, API routes, streaming, Drupal backend, and security
+guide-meta:
+  concepts:
+    - DeepChat web component
+    - DeepChat connect property
+    - Next.js API routes
+    - SSE streaming
+    - DeepChat message formats
+    - AI provider integration
+    - DeepChat file upload
+  not:
+    - Drupal AI module (see drupal/ai-content)
+    - Tiptap editor (see nextjs/tiptap-editor)
+  requires: []
+  complements:
+    - nextjs/deepchat-drupal-auth
+    - nextjs/next-drupal
+    - drupal/ai-content
+  specializes: ""
+  category: nextjs
 ---
 
 # DeepChat + Next.js

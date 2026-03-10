@@ -1,5 +1,27 @@
 ---
 description: Drupal Salesforce Suite — bidirectional sync between Drupal entities and Salesforce objects, authentication, mapping, events, and Drush operations
+guide-meta:
+  concepts:
+    - Salesforce Suite
+    - OAuth authentication
+    - JWT authentication
+    - entity mapping
+    - push synchronization
+    - pull synchronization
+    - SOQL queries
+    - MappedObject
+    - Salesforce REST client
+  not:
+    - CRM Core
+    - HubSpot integration
+  requires:
+    - drupal/entities
+    - drupal/services
+  complements:
+    - drupal/config-management
+    - drupal/caching
+  specializes: ""
+  category: drupal
 ---
 
 # Drupal Salesforce Suite

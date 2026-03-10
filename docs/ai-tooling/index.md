@@ -1,5 +1,18 @@
 ---
 description: AI tooling guides — MCP servers, AI agent integrations, and design-to-code workflows
+guide-meta:
+  concepts:
+    - MCP servers
+    - AI agent integrations
+    - design-to-code workflows
+  not:
+    - Drupal AI module
+    - AI content generation
+  requires: []
+  complements:
+    - design-systems/recognition
+  specializes: ""
+  category: ai-tooling
 ---
 
 # AI Tooling

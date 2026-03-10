@@ -1,5 +1,26 @@
 ---
 description: JSX to Twig conversion patterns for React → Drupal SDC migration
+guide-meta:
+  concepts:
+    - JSX to Twig
+    - React to Drupal
+    - conditional rendering translation
+    - props to Twig variables
+    - children to Twig blocks
+    - component composition translation
+    - TypeScript to component.yml
+  not:
+    - React component development
+    - Twig template debugging
+    - SDC component creation from scratch
+  requires:
+    - drupal/sdc
+  complements:
+    - design-systems/react-design-system
+    - drupal/twig
+    - design-systems/radix-sdc
+  specializes: ""
+  category: design-systems
 ---
 
 # JSX to Twig

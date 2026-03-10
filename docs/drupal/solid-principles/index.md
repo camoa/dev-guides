@@ -1,5 +1,27 @@
 ---
 description: SOLID principles in Drupal 11 development - services, plugins, entities, forms, hooks, dependency injection
+guide-meta:
+  concepts:
+    - Drupal SOLID
+    - services SRP
+    - plugin system OCP
+    - hooks events OCP
+    - entity hierarchy LSP
+    - form hierarchy LSP
+    - entity interfaces ISP
+    - service container DIP
+    - hook classes
+  not:
+    - tool-agnostic SOLID theory
+    - DRY principles
+  requires:
+    - drupal/services
+  complements:
+    - drupal/services
+    - drupal/plugins
+    - drupal/dry-principles
+  specializes: development/solid-principles
+  category: drupal
 ---
 
 # SOLID Principles in Drupal

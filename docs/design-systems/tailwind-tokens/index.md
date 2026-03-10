@@ -1,5 +1,28 @@
 ---
 description: Tailwind CSS 4 design tokens — decision guides for extraction, mapping, and multi-platform integration
+guide-meta:
+  concepts:
+    - design token extraction
+    - Tailwind v4 @theme
+    - DaisyUI color tokens
+    - brand color mapping
+    - W3C Design Tokens
+    - Figma to Tailwind
+    - token naming conventions
+    - Drupal SDC token integration
+  not:
+    - Tailwind utility class usage
+    - Tailwind configuration setup
+    - design system recognition
+  requires:
+    - design-systems/tailwind
+  complements:
+    - design-systems/recognition
+    - design-systems/daisyui
+    - drupal/ui-suite-daisyui
+    - drupal/sdc
+  specializes: ""
+  category: design-systems
 ---
 
 # Tailwind Tokens

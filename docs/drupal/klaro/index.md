@@ -1,5 +1,23 @@
 ---
 description: Klaro Cookie & Consent Management — GDPR-compliant consent for Drupal sites
+guide-meta:
+  concepts:
+    - Klaro module
+    - cookie consent
+    - GDPR compliance
+    - ePrivacy
+    - consent modes
+    - service configuration
+    - automatic resource attribution
+  not:
+    - EU Cookie Compliance module
+    - CookieBot
+  requires: []
+  complements:
+    - drupal/security
+    - drupal/seo-geo
+  specializes: ""
+  category: drupal
 ---
 
 # Klaro Cookie & Consent Management

@@ -1,5 +1,32 @@
 ---
 description: Modern CSS features from 2022–2025 — container queries, @scope, @layer, scroll-driven animations, view transitions, oklch, and more
+guide-meta:
+  concepts:
+    - container queries
+    - "@scope"
+    - "@layer"
+    - cascade layers
+    - scroll-driven animations
+    - view transitions
+    - oklch
+    - color-mix
+    - ":has() selector"
+    - native CSS nesting
+    - popover API
+    - anchor positioning
+    - "@starting-style"
+    - "@property"
+    - subgrid
+    - light-dark()
+  not:
+    - CSS motion/animation craft (easing, micro-interactions)
+    - SCSS/Sass features
+  requires: []
+  complements:
+    - css/css-craft
+    - design-systems/tailwind
+  specializes: ""
+  category: css
 ---
 
 # Modern CSS

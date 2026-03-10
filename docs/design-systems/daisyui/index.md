@@ -1,5 +1,25 @@
 ---
 description: DaisyUI v5 guides — theming, color tokens, component reference, React integration, customization, accessibility
+guide-meta:
+  concepts:
+    - DaisyUI v5
+    - oklch theming
+    - semantic component classes
+    - DaisyUI themes
+    - CVA variants
+    - DaisyUI React
+  not:
+    - UI Suite DaisyUI Drupal theme
+    - raw Tailwind utility classes
+    - shadcn/ui
+  requires:
+    - design-systems/tailwind
+  complements:
+    - design-systems/tailwind-tokens
+    - design-systems/react-design-system
+    - drupal/ui-suite-daisyui
+  specializes: ""
+  category: design-systems
 ---
 
 # DaisyUI

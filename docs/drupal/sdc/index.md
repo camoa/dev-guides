@@ -1,5 +1,25 @@
 ---
 description: Single Directory Components (SDC) — component architecture, development patterns, and best practices
+guide-meta:
+  concepts:
+    - "*.component.yml"
+    - single directory components
+    - SDC
+    - component schema
+    - Twig components
+    - component libraries
+  not:
+    - UI Patterns
+    - story.yml
+    - source plugins
+    - Storybook.js
+  requires: []
+  complements:
+    - drupal/ui-patterns
+    - drupal/twig
+    - drupal/storybook
+  specializes: ""
+  category: drupal
 ---
 
 # Single Directory Components (SDC)

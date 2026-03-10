@@ -1,5 +1,25 @@
 ---
 description: AI Content - AI-powered content creation, optimization, and management using Drupal AI module
+guide-meta:
+  concepts:
+    - Drupal AI module
+    - AI providers
+    - AI automators
+    - AI content workflow
+    - CKEditor AI
+    - vector databases
+    - RAG
+    - AI content generation
+  not:
+    - Figma MCP server
+    - AI agent tooling
+    - DeepChat web component
+  requires: []
+  complements:
+    - drupal/seo-geo
+    - drupal/caching
+  specializes: ""
+  category: drupal
 ---
 
 # AI Content

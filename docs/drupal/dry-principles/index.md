@@ -1,5 +1,26 @@
 ---
 description: Drupal-specific DRY (Don't Repeat Yourself) principles - config, services, base classes, traits, plugins, templates, SDC, render arrays, hooks, and more.
+guide-meta:
+  concepts:
+    - Drupal DRY patterns
+    - config as single source of truth
+    - services for shared logic
+    - base classes
+    - traits
+    - plugin reuse
+    - Twig template inheritance
+    - SDC component reuse
+    - recipes for reusable config
+  not:
+    - tool-agnostic DRY theory
+    - SOLID principles
+  requires: []
+  complements:
+    - drupal/services
+    - drupal/sdc
+    - drupal/config-management
+  specializes: development/dry-principles
+  category: drupal
 ---
 
 # DRY Principles in Drupal

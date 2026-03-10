@@ -1,5 +1,28 @@
 ---
 description: UI Suite DaisyUI guides — DaisyUI 5 theme integration with Drupal, 51 SDC components, UI Patterns/Styles/Skins, Tailwind 4, starterkit sub-theming
+guide-meta:
+  concepts:
+    - UI Suite DaisyUI
+    - UI Patterns integration
+    - UI Styles
+    - UI Skins
+    - DaisyUI 5 Drupal theme
+    - Vite starterkit
+    - Tailwind CSS 4 Drupal
+    - 51 SDC components
+  not:
+    - DaisyUI library standalone (see design-systems/daisyui)
+    - Radix theme (see design-systems/radix-sdc)
+    - UI Patterns source plugins (see drupal/ui-patterns)
+  requires:
+    - drupal/sdc
+    - drupal/ui-patterns
+  complements:
+    - design-systems/daisyui
+    - design-systems/tailwind-tokens
+    - drupal/layout-builder
+  specializes: ""
+  category: drupal
 ---
 
 # UI Suite DaisyUI

@@ -1,5 +1,24 @@
 ---
 description: DRY (Don't Repeat Yourself), code reuse, and abstraction strategies - when to abstract, when to duplicate, and how to avoid premature abstraction
+guide-meta:
+  concepts:
+    - DRY principle
+    - WET principle
+    - AHA principle
+    - Rule of Three
+    - knowledge duplication
+    - code duplication
+    - abstraction strategies
+    - over-DRY anti-patterns
+  not:
+    - Drupal-specific DRY patterns
+    - SOLID principles
+  requires: []
+  complements:
+    - development/solid-principles
+    - development/tdd-spec-driven
+  specializes: ""
+  category: dev-practices
 ---
 
 # DRY and Code Reuse Principles

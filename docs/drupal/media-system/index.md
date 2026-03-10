@@ -1,5 +1,26 @@
 ---
 description: Drupal Media System configuration guides — media types, view modes, display configuration, Media Library, responsive image delivery, and file storage.
+guide-meta:
+  concepts:
+    - Media Library
+    - media view modes
+    - media display configuration
+    - responsive image strategy
+    - CKEditor media embedding
+    - media reference fields
+    - focal point
+    - media file system
+  not:
+    - custom media source plugins (see drupal/media)
+    - image style effects (see drupal/image-styles)
+  requires: []
+  complements:
+    - drupal/media
+    - drupal/image-styles
+    - drupal/entities
+    - media/image-media-craft
+  specializes: ""
+  category: drupal
 ---
 
 # Media System

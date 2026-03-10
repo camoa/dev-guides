@@ -1,5 +1,22 @@
 ---
 description: DeepChat + Drupal OAuth auth — architecture, CSRF lifecycle, configuration, pitfalls, and debugging
+guide-meta:
+  concepts:
+    - DeepChat Drupal auth
+    - OAuth CSRF flow
+    - CSRF token lifecycle
+    - DeepChat interceptors
+    - SSE streaming auth
+  not:
+    - DeepChat setup (see nextjs/deepchat-nextjs)
+    - Drupal Simple OAuth module
+  requires:
+    - nextjs/deepchat-nextjs
+  complements:
+    - drupal/security
+    - nextjs/next-drupal
+  specializes: ""
+  category: nextjs
 ---
 
 # DeepChat + Drupal OAuth Auth

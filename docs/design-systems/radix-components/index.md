@@ -1,5 +1,24 @@
 ---
 description: Drupal Radix Components — Complete reference for all 57 Radix 6.x Single Directory Components
+guide-meta:
+  concepts:
+    - Radix 6.x SDC
+    - Radix component catalog
+    - component override patterns
+    - Radix sub-theme components
+    - Bootstrap SDC components
+  not:
+    - Radix sub-theme architecture
+    - design token mapping
+    - UI Suite DaisyUI components
+  requires:
+    - drupal/sdc
+  complements:
+    - design-systems/radix-sdc
+    - design-systems/bootstrap
+    - drupal/twig
+  specializes: ""
+  category: design-systems
 ---
 
 # Radix Components

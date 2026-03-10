@@ -1,5 +1,28 @@
 ---
 description: Drupal UI Patterns 2.x guides — SDC plugin architecture, props/slots/source systems, Layout Builder, Views, field formatters, blocks, pattern library, custom source plugins
+guide-meta:
+  concepts:
+    - story.yml
+    - UI Patterns 2.x
+    - prop definitions
+    - slots
+    - source plugins
+    - component mapping
+    - pattern library
+  not:
+    - storybook
+    - stories.yml
+    - Storybook.js
+    - component preview
+  requires:
+    - drupal/sdc
+  complements:
+    - drupal/twig
+    - drupal/blocks
+    - drupal/layout-builder
+    - drupal/views
+  specializes: ""
+  category: drupal
 ---
 
 # UI Patterns 2.x

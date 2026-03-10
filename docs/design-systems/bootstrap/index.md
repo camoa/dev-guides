@@ -1,5 +1,28 @@
 ---
 description: Design system to Bootstrap 5.3 mapping guides using the 6px threshold decision framework
+guide-meta:
+  concepts:
+    - Bootstrap 5.3 mapping
+    - 6px threshold
+    - SCSS variables
+    - design tokens to Bootstrap
+    - atoms to Bootstrap components
+    - molecules to Bootstrap
+    - organisms to Bootstrap
+    - Bootstrap grid
+    - SCSS import order
+    - Bootstrap utility API
+  not:
+    - Radix sub-theme implementation
+    - Tailwind CSS
+    - DaisyUI
+  requires: []
+  complements:
+    - design-systems/recognition
+    - design-systems/radix-sdc
+    - design-systems/radix-components
+  specializes: ""
+  category: design-systems
 ---
 
 # Bootstrap Design System Mapping

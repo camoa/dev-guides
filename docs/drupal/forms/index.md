@@ -1,5 +1,29 @@
 ---
 description: Drupal Form API decision guides - choose the right pattern, element, and approach
+guide-meta:
+  concepts:
+    - Form API
+    - FormBase
+    - ConfigFormBase
+    - ConfirmFormBase
+    - form elements
+    - form validation
+    - form submission
+    - multi-step forms
+    - form alter
+    - "#states"
+    - FormState
+  not:
+    - admin list builders (see drupal/config-forms)
+    - AJAX form callbacks (see drupal/ajax)
+  requires: []
+  complements:
+    - drupal/ajax
+    - drupal/config-forms
+    - drupal/render-api
+    - drupal/services
+  specializes: ""
+  category: drupal
 ---
 
 # Drupal Form API

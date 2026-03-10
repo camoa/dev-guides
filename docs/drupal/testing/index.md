@@ -1,5 +1,24 @@
 ---
 description: Drupal Testing — automated testing frameworks for modules (PHPUnit Unit, Kernel, Functional, FunctionalJavascript, and Gander performance tests)
+guide-meta:
+  concepts:
+    - PHPUnit test types
+    - unit tests
+    - kernel tests
+    - functional tests
+    - FunctionalJavascript tests
+    - Gander performance testing
+    - progressive testing strategy
+    - PHPUnit configuration
+  not:
+    - TDD workflow (see drupal/tdd)
+    - GitHub Actions CI (see drupal/github-actions)
+  requires: []
+  complements:
+    - drupal/tdd
+    - drupal/github-actions
+  specializes: ""
+  category: drupal
 ---
 
 # Drupal Testing

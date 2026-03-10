@@ -1,5 +1,27 @@
 ---
 description: Security best practices for modern web development - tool-agnostic principles covering OWASP Top 10, authentication, cryptography, supply chain security, and secure SDLC.
+guide-meta:
+  concepts:
+    - OWASP Top 10
+    - XSS prevention
+    - SQL injection prevention
+    - CSRF prevention
+    - authentication best practices
+    - authorization
+    - security headers
+    - API security
+    - file upload security
+    - cryptography basics
+    - secure SDLC
+  not:
+    - Drupal-specific security APIs
+    - Drupal access system
+  requires: []
+  complements:
+    - development/solid-principles
+    - development/tdd-spec-driven
+  specializes: ""
+  category: dev-practices
 ---
 
 # Security Best Practices

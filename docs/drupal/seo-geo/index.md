@@ -1,5 +1,27 @@
 ---
 description: Drupal SEO & GEO — search engine optimization, structured data, meta tags, and generative engine optimization for Drupal 11
+guide-meta:
+  concepts:
+    - SEO recipes
+    - Pathauto
+    - Metatag module
+    - Open Graph
+    - Twitter Cards
+    - JSON-LD structured data
+    - Schema.org
+    - sitemap
+    - GEO
+    - generative engine optimization
+  not:
+    - Google Analytics setup
+    - search API indexing
+  requires: []
+  complements:
+    - drupal/breadcrumbs
+    - drupal/multilingual
+    - drupal/recipes
+  specializes: ""
+  category: drupal
 ---
 
 # Drupal SEO & GEO

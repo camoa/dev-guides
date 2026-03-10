@@ -1,5 +1,25 @@
 ---
 description: Drupal 7 to 11 migration — decision guides for Migrate API, content strategy, and performance
+guide-meta:
+  concepts:
+    - Migrate API
+    - migration definitions
+    - process plugins
+    - source plugins
+    - D7 to D11
+    - migration rollback
+    - content migration
+    - config migration
+  not:
+    - content import (see drupal/recipes)
+    - data feeds import
+  requires:
+    - drupal/entities
+  complements:
+    - drupal/config-management
+    - drupal/entities
+  specializes: ""
+  category: drupal
 ---
 
 # Drupal 7 to 11 Migration

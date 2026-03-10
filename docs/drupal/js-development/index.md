@@ -1,5 +1,26 @@
 ---
 description: Drupal JavaScript Development - library-based architecture, behaviors, and modern patterns
+guide-meta:
+  concepts:
+    - Drupal.behaviors
+    - once API
+    - drupalSettings
+    - library definitions
+    - library attachment
+    - JS in SDC components
+    - ES modules in Drupal
+    - JS aggregation
+  not:
+    - AJAX framework (see drupal/ajax)
+    - HTMX (see drupal/htmx)
+    - vanilla JS patterns (see js/interaction-craft)
+  requires: []
+  complements:
+    - drupal/ajax
+    - drupal/sdc
+    - js/interaction-craft
+  specializes: ""
+  category: drupal
 ---
 
 # JavaScript Development

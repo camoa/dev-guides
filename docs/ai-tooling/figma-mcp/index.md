@@ -1,5 +1,25 @@
 ---
 description: Figma MCP Server — design-to-code AI workflows for Claude Code, VS Code, Cursor, and Windsurf
+guide-meta:
+  concepts:
+    - Figma MCP
+    - design-to-code
+    - MCP tools
+    - Code Connect
+    - design tokens extraction
+    - FigJam
+    - selection workflow
+    - link workflow
+  not:
+    - Figma plugin development
+    - Figma REST API direct usage
+  requires: []
+  complements:
+    - design-systems/recognition
+    - design-systems/tailwind-tokens
+    - design-systems/radix-sdc
+  specializes: ""
+  category: ai-tooling
 ---
 
 # Figma MCP Server
