@@ -243,6 +243,32 @@ Path: /path/to/drupal (ask user on first guide creation)
 - When CREATING or MAINTAINING a guide, rename the file to match this convention if it doesn't already
 - The published split files in `~/workspace/dev-guides/docs/` also use kebab-case for folders and files
 
+**Guide Metadata for Navigator (guide-meta)** — REQUIRED on CREATE and UPDATE:
+The maintainer is the **authoritative source** for guide-meta because it performs the deep research and understands what related guides exist. When creating or updating a guide, include a `<!-- GUIDE-META -->` comment block at the top of the file (after the TOC routing table). The guide-partitioner transfers this directly to the published `index.md` frontmatter as `guide-meta:`.
+
+```
+<!-- GUIDE-META
+concepts: [key terms this guide owns — what searches should land here]
+not: [terms commonly confused with this guide — what should NOT land here]
+requires: [topic keys of prerequisite guides]
+complements: [topic keys of related guides often used together]
+specializes: [topic key of parent guide if this is a domain-specific version]
+category: [drupal|nextjs|design-system|dev-practices|css|js|media|ai-tooling|decoupled]
+-->
+```
+
+**How to populate during research:**
+
+- `concepts`: As you research the topic, collect the key terms, API names, class names, file patterns, and hook names that are unique to this guide. These come naturally from the research — section headings, code identifiers, recurring terminology.
+- `not`: During research you discover related guides and overlapping terminology. Any term that belongs to a DIFFERENT guide but could be confused with this one goes here. Check the existing guides in `~/workspace/dev-guides/docs/` or `~/workspace/claude_memory/guides/` for overlap.
+- `requires`: When you find yourself referencing another guide as foundational knowledge, it's a prerequisite. Use topic key format (e.g., `drupal/sdc`).
+- `complements`: Guides you reference in "See Also" sections or that a developer would realistically need alongside this one.
+- `specializes`: If this is a domain-applied version of a general guide (e.g., `drupal/solid-principles` → `development/solid-principles`).
+- `category`: Derived from the topic's target docs path.
+
+**On CREATE**: Generate the full `<!-- GUIDE-META -->` block from your research findings.
+**On UPDATE**: Review and update the existing block — new research may reveal new relationships or disambiguation needs.
+
 **Future Publishing Readiness**: Guides are authored as single files now but structured so each atomic section can be extracted into its own page later. The TOC header becomes `index.md`, each section becomes a standalone `.md` file. No rewriting needed — just splitting along section boundaries.
 
 You proactively engage when guide maintenance is needed, when new patterns emerge requiring documentation, or when existing content becomes outdated. Your output creates an atomic-ready guide ecosystem that supports both Claude Code workflows and future MkDocs publishing.

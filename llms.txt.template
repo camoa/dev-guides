@@ -1,6 +1,6 @@
 # Dev Guides
 
-> AI-friendly atomic decision guides for Drupal, CSS, JavaScript, design systems, and Next.js development. {{ total_guides }} guides across {{ topic_count }} topics. Each topic file below is a self-contained bundle that fits in a single LLM context window.
+> AI-friendly atomic decision guides for Drupal, CSS, JavaScript, design systems, and Next.js development. {{ total_guides }} guides across {{ topic_count }} topics. Each topic link below points to a topic index with a routing table to individual guides.
 
 {{ topic_sections }}
 

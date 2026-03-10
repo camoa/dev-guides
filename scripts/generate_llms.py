@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
-"""Generate per-topic LLMs.txt files and a custom index.
+"""Generate per-topic LLMs.txt files, llms.txt index, and llms.hash.
 
 Reads partition-manifest.json, concatenates all .md files per topic into
-site/llms/{topic-slug}.txt, and writes a custom site/llms.txt index.
+site/llms/{topic-slug}.txt, writes a custom site/llms.txt index pointing
+to topic index pages, and generates site/llms.hash for cache freshness.
 
 Run after `mkdocs build` so site/ exists.
 """
 
+import hashlib
 import json
-import os
 import re
 import sys
 from pathlib import Path
 
-BASE_URL = "https://camoa.github.io/dev-guides/llms"
+import yaml
+
+SITE_BASE_URL = "https://camoa.github.io/dev-guides"
+LLMS_BASE_URL = f"{SITE_BASE_URL}/llms"
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DOCS_DIR = PROJECT_ROOT / "docs"
 SITE_DIR = PROJECT_ROOT / "site"
@@ -57,16 +61,16 @@ def strip_frontmatter(content: str) -> str:
 
 
 def extract_frontmatter(content: str) -> dict:
-    """Extract YAML frontmatter as a simple key-value dict."""
-    meta = {}
+    """Extract YAML frontmatter using yaml.safe_load."""
     if content.startswith("---"):
         end = content.find("---", 3)
         if end != -1:
-            for line in content[3:end].strip().splitlines():
-                if ":" in line:
-                    key, _, val = line.partition(":")
-                    meta[key.strip()] = val.strip().strip('"').strip("'")
-    return meta
+            try:
+                meta = yaml.safe_load(content[3:end])
+                return meta if isinstance(meta, dict) else {}
+            except yaml.YAMLError:
+                return {}
+    return {}
 
 
 def extract_h1(content: str) -> str:
@@ -200,6 +204,7 @@ def build_topic_file(topic_key: str, guide_count: int) -> dict | None:
 
     return {
         "slug": slug,
+        "topic_key": topic_key,
         "title": topic_title,
         "description": topic_desc,
         "guide_count": actual_count,
@@ -227,7 +232,7 @@ def build_index(topics: list[dict]) -> str:
                 continue
             section_lines = [f"## {cat_name}\n"]
             for t in sorted(categories[cat_name], key=lambda x: x["title"]):
-                url = f"{BASE_URL}/{t['slug']}.txt"
+                url = f"{SITE_BASE_URL}/{t['topic_key']}/"
                 desc = t["description"][:100]
                 section_lines.append(
                     f"- [{t['title']}]({url}): {t['guide_count']} guides — {desc}"
@@ -254,18 +259,26 @@ def build_index(topics: list[dict]) -> str:
             continue
         lines.append(f"## {cat_name}\n")
         for t in sorted(categories[cat_name], key=lambda x: x["title"]):
-            url = f"{BASE_URL}/{t['slug']}.txt"
+            url = f"{SITE_BASE_URL}/{t['topic_key']}/"
             desc = t["description"][:100]
             lines.append(f"- [{t['title']}]({url}): {t['guide_count']} guides — {desc}")
         lines.append("")
 
     lines.append("## Optional\n")
     lines.append(
-        f"- [Full documentation]({BASE_URL.rsplit('/', 1)[0]}/llms-full.txt): "
+        f"- [Full documentation]({LLMS_BASE_URL.rsplit('/', 1)[0]}/llms-full.txt): "
         "All guides concatenated (~1.1M tokens — for RAG vectorization, not direct context)\n"
     )
 
     return "\n".join(lines)
+
+
+def build_llms_hash(llms_content: str) -> None:
+    """Generate llms.hash — SHA-256 of llms.txt for cache freshness."""
+    content_hash = hashlib.sha256(llms_content.encode("utf-8")).hexdigest()
+    output_path = SITE_DIR / "llms.hash"
+    output_path.write_text(content_hash, encoding="utf-8")
+    print(f"\nHash: {output_path} ({content_hash[:16]}...)")
 
 
 def main():
@@ -295,6 +308,9 @@ def main():
     total_guides = sum(t["guide_count"] for t in topics)
     total_size = sum(t["size_kb"] for t in topics)
     total_tokens = sum(t["token_estimate"] for t in topics)
+
+    # Generate llms.hash for cache freshness
+    build_llms_hash(index_content)
 
     print(f"\nDone!")
     print(f"  Topics: {len(topics)}")

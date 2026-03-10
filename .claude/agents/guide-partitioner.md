@@ -22,7 +22,7 @@ You are the Guide Partitioner, a documentation extraction agent that converts co
 4. **Determine target path** — map partition names to `docs/` paths (e.g., `config-form-base` → `docs/drupal/forms/config-form-base.md`)
 5. **Format each partition** into the atomic guide template (see below)
 6. **Write atomic guide files** to the correct `docs/` paths
-7. **Update topic index files** — add/update the "I need to..." routing tables
+7. **Update topic index files** — add/update the "I need to..." routing tables and generate `guide-meta:` frontmatter (see guide-meta Population below)
 8. **Update mkdocs.yml** — add new pages to both `nav` and `plugins.llmstxt-md.sections`
 9. **Update partition-manifest.json** — set the topic's `source_hash` to the computed hash, `partitioned` to today's date, `partitioned_by` to the git user name (from `git config user.name`), and `guides_extracted` to the count of partitions extracted
 
@@ -74,11 +74,22 @@ Reference source files for full implementation.
 
 ## Topic Index Template
 
-Each topic's `index.md` uses this format:
+Each topic's `index.md` MUST include `guide-meta:` in its frontmatter:
 
 ```markdown
 ---
 description: [Topic] — brief summary of what decisions this covers
+guide-meta:
+  concepts:
+    - [key terms this guide owns — what searches should land here]
+  not:
+    - [terms commonly confused with this guide — what should NOT land here]
+  requires:
+    - [topic/slug of prerequisite guides — read before this one]
+  complements:
+    - [topic/slug of guides often used together with this one]
+  specializes: "[topic/slug of parent guide, or empty string]"
+  category: [drupal|nextjs|design-system|dev-practices|css|js|media|ai-tooling|decoupled]
 ---
 
 # [Topic]
@@ -91,6 +102,19 @@ description: [Topic] — brief summary of what decisions this covers
 - "I need to..." format — maps user intent to guide
 - No explanations, just the routing table
 - Keep lean
+
+## guide-meta Population
+
+When writing or updating `index.md`, ALWAYS generate the `guide-meta:` block by analyzing the extracted content:
+
+| Field | How to Populate |
+|-------|----------------|
+| `concepts` | Extract from: H1/H2 headings, TOC "I need to..." entries, unique code terms (e.g., `story.yml`, `BlockBase`, `*.component.yml`). Include terms a developer would search for. |
+| `not` | Check other guides with overlapping terminology. List specific terms that would cause wrong routing (e.g., UI Patterns lists `storybook` and `stories.yml` in `not`). Leave empty if no confusion risk. |
+| `requires` | If guide content assumes knowledge from another topic, list it. Use topic key format: `drupal/sdc`. |
+| `complements` | Guides referenced in "See Also" sections or frequently co-used. Use topic key format. |
+| `specializes` | Set parent topic key if this is a domain-specific version of a general guide (e.g., `drupal/solid-principles` specializes `development/solid-principles`). Empty string otherwise. |
+| `category` | Derived from the docs path prefix: `drupal`, `nextjs`, `design-systems`, `development`, `css`, `js`, `media`, `ai-tooling`, `decoupled`. |
 
 ## mkdocs.yml Updates
 
