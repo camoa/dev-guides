@@ -1,0 +1,91 @@
+---
+description: Function calling tools — building custom FunctionCall plugins for AI agents and assistants
+drupal_version: "11.x"
+---
+
+# Function Calling
+
+## When to Use
+
+> Use this guide when building custom tools that agents or assistants can invoke. Use [AI Agents](ai-agents.md) for configuring which tools an agent uses.
+
+## Decision
+
+| Situation | Choose | Why |
+|-----------|--------|-----|
+| Read-only operation | `information_tools` group | Search, lookup — signals safe to auto-run |
+| Write operation | `modification_tools` group | Create, update, delete — signals caution |
+| Organizing tools | `FunctionGroup` plugin | Organizational only — no logic |
+
+## Pattern
+
+```php
+use Drupal\ai\Attribute\FunctionCall;
+use Drupal\Core\Plugin\Context\ContextDefinition;
+
+#[FunctionCall(
+  id: 'mymodule:weather_lookup',
+  function_name: 'get_weather',
+  name: 'Weather Lookup',
+  description: 'LLM reads this to decide when to call the tool.',
+  group: 'information_tools',
+  context_definitions: [
+    'city' => new ContextDefinition(
+      data_type: 'string',
+      label: new TranslatableMarkup('City'),
+      required: TRUE,
+    ),
+  ],
+)]
+class WeatherLookup extends FunctionCallBase {
+
+  public function execute(): void {
+    $city = $this->getContextValue('city');
+    $result = $this->weatherService->lookup($city);
+    $this->setOutput(json_encode($result));
+  }
+}
+```
+
+## Tool Group Registration
+
+```php
+use Drupal\ai\Attribute\FunctionGroup;
+
+#[FunctionGroup(
+  id: 'mymodule:content_tools',
+  label: new TranslatableMarkup('Content Tools'),
+  description: new TranslatableMarkup('Tools for content management'),
+)]
+class ContentTools extends FunctionGroupBase {
+  // Groups are organizational — they don't have logic.
+}
+```
+
+## FunctionCallBase Key Methods
+
+| Method | Purpose |
+|--------|---------|
+| `execute()` | Main logic — call `setOutput()` when done |
+| `getContextValue('param')` | Get LLM-provided parameter |
+| `setOutput($data)` | Set the tool's return value |
+| `getOutput()` | Retrieve output |
+
+## Groups Reference
+
+| Group | Purpose |
+|-------|---------|
+| `information_tools` | Read-only (search, lookup) |
+| `modification_tools` | Write operations (create, update, delete) |
+
+## Common Mistakes
+
+- **Wrong**: Writing vague tool descriptions → **Right**: The LLM reads the description to decide when to call the tool — be specific about what it does and what it doesn't do
+- **Wrong**: No permission check in `execute()` → **Right**: Always check `$this->currentUser->hasPermission()` before performing operations
+- **Wrong**: Using the same ID format as core plugins → **Right**: Prefix with your module name (e.g., `mymodule:tool_name`)
+
+## See Also
+
+- [AI Agents](ai-agents.md)
+- [AI Assistant API](ai-assistant-api.md)
+- Reference: `web/modules/contrib/ai/src/Plugin/AiFunctionCall/`

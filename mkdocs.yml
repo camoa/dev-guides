@@ -55,6 +55,32 @@ plugins:
           - drupal/ai-content/security-privacy.md: "Security and privacy for AI - API key management, prompt injection prevention, PII handling"
           - drupal/ai-content/seo.md: "AI-powered SEO - automated metatags, structured data, E-E-A-T implementation"
           - drupal/ai-content/vector-rag.md: "Vector databases and RAG - semantic search, content similarity, AI chatbots with site context"
+          - drupal/ai-module/index.md: "Drupal AI module — provider abstraction, AI operations, agents, automators, chatbot API, CKEditor, vector search/RAG, guardrails, and all 14 sub-modules"
+          - drupal/ai-module/core-architecture.md: "AI module core architecture — ProviderProxy, core services, module hierarchy, and request lifecycle"
+          - drupal/ai-module/provider-system.md: "AI provider plugins — using, building, and selecting providers for AI operations"
+          - drupal/ai-module/operation-types.md: "AI operation types — chat, embeddings, text-to-image, and all 15 typed Input/Output classes"
+          - drupal/ai-module/ai-chatbot-deepchat.md: "AI Chatbot module — DeepChat frontend, REST API endpoints, streaming, and authentication flow"
+          - drupal/ai-module/ai-assistant-api.md: "AI Assistant API — config entities, runner service, action plugins, and system prompt tokens"
+          - drupal/ai-module/ai-agents.md: "AI Agents — ReAct loop, config entities, tool usage, orchestration, and security"
+          - drupal/ai-module/function-calling.md: "Function calling tools — building custom FunctionCall plugins for AI agents and assistants"
+          - drupal/ai-module/ai-automators.md: "AI Automators — auto-populate entity fields on save using AI, with 52 plugin types and three worker modes"
+          - drupal/ai-module/ai-ckeditor.md: "AI CKEditor module — AI toolbar plugins for CKEditor 5, custom plugin development, and configuration"
+          - drupal/ai-module/ai-search-vector-rag.md: "AI Search — vector database integration, RAG with AI assistants, semantic search via Search API"
+          - drupal/ai-module/ai-translate.md: "AI Translate — deprecated module for AI-powered content and interface translation"
+          - drupal/ai-module/ai-validations.md: "AI Validations — AI-powered field validation using XTRUE/XFALSE protocol and image classification"
+          - drupal/ai-module/field-widget-actions.md: "Field Widget Actions — framework for attaching AI action buttons to entity form field widgets"
+          - drupal/ai-module/ai-observability.md: "AI Observability — production monitoring for AI provider calls via PSR-3 logger and OpenTelemetry"
+          - drupal/ai-module/ai-logging.md: "AI Logging — deprecated entity-based request logging for development debugging only"
+          - drupal/ai-module/ai-api-explorer.md: "AI API Explorer — developer UI for testing AI operations interactively with code examples"
+          - drupal/ai-module/guardrails-system.md: "Guardrails system — pre/post processing plugins for content moderation, PII filtering, and prompt injection detection"
+          - drupal/ai-module/short-term-memory.md: "Short-term memory plugins — manage conversation context within a session"
+          - drupal/ai-module/prompt-system.md: "Prompt system — config entities for reusable prompts with variable substitution"
+          - drupal/ai-module/events-system.md: "AI events system — subscribe to pre/post generation events to modify requests or log responses"
+          - drupal/ai-module/exceptions.md: "AI exception types — catch hierarchy, when each exception fires, and ProviderProxy re-throw behavior"
+          - drupal/ai-module/enums-and-dtos.md: "AI enums and DTOs — AiModelCapability, StructuredOutputSchema, TokenUsageDto, and ChatProviderLimitsDto"
+          - drupal/ai-module/security.md: "AI module security — permissions, checklist, prompt injection, XSS, CSRF, and agent security"
+          - drupal/ai-module/deprecated-modules.md: "Deprecated AI sub-modules — migration paths for ai_eca, ai_external_moderation, ai_logging, and ai_validations"
+          - drupal/ai-module/documentation-gaps.md: "Documentation gaps in Drupal AI 1.3.0-rc2 — undocumented features identified by comparing official docs to source code"
           - drupal/ajax-htmx-migration/index.md: "AJAX to HTMX Migration — pattern-by-pattern guide for replacing Drupal AJAX API with core HTMX in Drupal 11.3+"
           - drupal/ajax-htmx-migration/ajax-vs-htmx-fundamentals.md: "Core architectural differences between Drupal AJAX API and HTMX — choose the right approach before migrating"
           - drupal/ajax-htmx-migration/ajax-command-to-htmx-equivalents.md: "Quick reference mapping every Drupal AJAX command to its HTMX equivalent swap strategy or method"
@@ -1341,6 +1367,33 @@ nav:
       - drupal/ai-content/security-privacy.md
       - drupal/ai-content/seo.md
       - drupal/ai-content/vector-rag.md
+    - AI Module:
+      - drupal/ai-module/index.md
+      - drupal/ai-module/core-architecture.md
+      - drupal/ai-module/provider-system.md
+      - drupal/ai-module/operation-types.md
+      - drupal/ai-module/ai-chatbot-deepchat.md
+      - drupal/ai-module/ai-assistant-api.md
+      - drupal/ai-module/ai-agents.md
+      - drupal/ai-module/function-calling.md
+      - drupal/ai-module/ai-automators.md
+      - drupal/ai-module/ai-ckeditor.md
+      - drupal/ai-module/ai-search-vector-rag.md
+      - drupal/ai-module/ai-translate.md
+      - drupal/ai-module/ai-validations.md
+      - drupal/ai-module/field-widget-actions.md
+      - drupal/ai-module/ai-observability.md
+      - drupal/ai-module/ai-logging.md
+      - drupal/ai-module/ai-api-explorer.md
+      - drupal/ai-module/guardrails-system.md
+      - drupal/ai-module/short-term-memory.md
+      - drupal/ai-module/prompt-system.md
+      - drupal/ai-module/events-system.md
+      - drupal/ai-module/exceptions.md
+      - drupal/ai-module/enums-and-dtos.md
+      - drupal/ai-module/security.md
+      - drupal/ai-module/deprecated-modules.md
+      - drupal/ai-module/documentation-gaps.md
     - AJAX-HTMX Migration:
       - drupal/ajax-htmx-migration/index.md
       - drupal/ajax-htmx-migration/ajax-vs-htmx-fundamentals.md
