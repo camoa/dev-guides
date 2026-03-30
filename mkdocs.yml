@@ -331,6 +331,25 @@ plugins:
           - drupal/group/common-mistakes.md: "Common Group module mistakes — architecture, access, API, plugin, and Views errors with explanations"
           - drupal/group/security.md: "Group security — trust model, permission escalation risks, config wrapper security, cache poisoning, and anonymous user cache tags"
           - drupal/group/group-actions-contrib.md: "Group Actions contrib module — action plugins for VBO, ECA, and token-driven group operations"
+          - drupal/contributing-with-ai/index.md: "Contributing to Drupal with AI — disclosure policy, merge request workflow, coding standards, human review requirements, and responsible AI-assisted development"
+          - drupal/contributing-with-ai/overview.md: "AI contribution overview — Drupal's disclose-and-verify position and the 4 disclosure levels"
+          - drupal/contributing-with-ai/drupal-ai-policy.md: "Drupal AI policy — current state of drupal.org AI rules, active governance issues, and enforcement"
+          - drupal/contributing-with-ai/disclosure-checkboxes.md: "AI disclosure checkboxes — which of the 4 drupal.org checkboxes to select and when multiple apply"
+          - drupal/contributing-with-ai/industry-context.md: "Industry context — how QEMU, Gentoo, Linux kernel, and Apache handle AI policies compared to Drupal"
+          - drupal/contributing-with-ai/issue-creation.md: "Creating drupal.org issues with AI disclosure — workflow, what AI can help with, and verification requirements"
+          - drupal/contributing-with-ai/issue-review-guidelines.md: "Issue review guidelines for AI-flagged contributions — review depth by disclosure level and red flags"
+          - drupal/contributing-with-ai/credit-system.md: "Credit system and AI contributions — who gets credit, credit abuse policy, and genuine contribution standards"
+          - drupal/contributing-with-ai/merge-request-workflow.md: "Merge request workflow with AI disclosure — full drupal.org contribution flow and MR description template"
+          - drupal/contributing-with-ai/coding-standards.md: "Coding standards violations AI tools make — deprecated Drupal patterns and verification commands"
+          - drupal/contributing-with-ai/commit-messages.md: "Commit messages for AI-assisted work — Co-Authored-By, Generated-by, and drupal.org vs own-repo conventions"
+          - drupal/contributing-with-ai/ai-code-review-checklist.md: "Pre-submission checklist for AI-assisted contributions — understanding, API correctness, standards, security, testing, disclosure"
+          - drupal/contributing-with-ai/human-review-requirements.md: "Human review requirements for AI-generated code — what review means, minimum standards by disclosure level, six-question test"
+          - drupal/contributing-with-ai/supervised-ai-workflow.md: "Supervised AI workflow — the four failure modes of unsupervised AI contribution and guardrails for each"
+          - drupal/contributing-with-ai/ai-toolchain-for-contribution.md: "AI toolchain setup for Drupal contribution — essential tools, pre-commit hooks, and context management"
+          - drupal/contributing-with-ai/testing-ai-code.md: "Testing AI-generated Drupal contributions — test type selection, what AI-generated tests miss, and quality evaluation"
+          - drupal/contributing-with-ai/security-considerations.md: "Security considerations for AI-assisted contributions — AI-specific risks, security review sequence, and sanitization APIs"
+          - drupal/contributing-with-ai/decision-trees.md: "Decision trees for AI contribution — flowcharts for disclosure, attribution, and submission readiness"
+          - drupal/contributing-with-ai/resources.md: "Resources for AI contribution — governance issues, contribution workflow docs, industry policies, and tools"
           - drupal/icon-api/index.md: "Icon API — unified icon management for Drupal 11+ with SVG, sprites, fonts, and remote sources"
           - drupal/icon-api/caching-strategy.md: "Icon API caching behavior for performance optimization"
           - drupal/icon-api/choosing-extractors.md: "Select the appropriate extractor plugin for your icon source format"
@@ -1674,6 +1693,26 @@ nav:
       - drupal/group/common-mistakes.md
       - drupal/group/security.md
       - drupal/group/group-actions-contrib.md
+    - Contributing with AI:
+      - drupal/contributing-with-ai/index.md
+      - drupal/contributing-with-ai/overview.md
+      - drupal/contributing-with-ai/drupal-ai-policy.md
+      - drupal/contributing-with-ai/disclosure-checkboxes.md
+      - drupal/contributing-with-ai/industry-context.md
+      - drupal/contributing-with-ai/issue-creation.md
+      - drupal/contributing-with-ai/issue-review-guidelines.md
+      - drupal/contributing-with-ai/credit-system.md
+      - drupal/contributing-with-ai/merge-request-workflow.md
+      - drupal/contributing-with-ai/coding-standards.md
+      - drupal/contributing-with-ai/commit-messages.md
+      - drupal/contributing-with-ai/ai-code-review-checklist.md
+      - drupal/contributing-with-ai/human-review-requirements.md
+      - drupal/contributing-with-ai/supervised-ai-workflow.md
+      - drupal/contributing-with-ai/ai-toolchain-for-contribution.md
+      - drupal/contributing-with-ai/testing-ai-code.md
+      - drupal/contributing-with-ai/security-considerations.md
+      - drupal/contributing-with-ai/decision-trees.md
+      - drupal/contributing-with-ai/resources.md
     - Icon API:
       - drupal/icon-api/index.md
       - drupal/icon-api/caching-strategy.md
