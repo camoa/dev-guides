@@ -331,6 +331,53 @@ plugins:
           - drupal/group/common-mistakes.md: "Common Group module mistakes — architecture, access, API, plugin, and Views errors with explanations"
           - drupal/group/security.md: "Group security — trust model, permission escalation risks, config wrapper security, cache poisoning, and anonymous user cache tags"
           - drupal/group/group-actions-contrib.md: "Group Actions contrib module — action plugins for VBO, ECA, and token-driven group operations"
+          - drupal/better-exposed-filters/index.md: "Better Exposed Filters — replace Views exposed filter dropdowns with checkboxes, radio buttons, links, sliders, date pickers, and custom widgets"
+          - drupal/better-exposed-filters/overview.md: "BEF vs core exposed filters — capabilities, architecture, and when to use Better Exposed Filters"
+          - drupal/better-exposed-filters/installation-setup.md: "Install Better Exposed Filters, enable on a View, and configure the noUiSlider library"
+          - drupal/better-exposed-filters/general-settings.md: "BEF general settings — auto-submit, secondary options panel, reset button, and input-required configuration keys"
+          - drupal/better-exposed-filters/checkboxes-radio-buttons.md: "BEF checkboxes and radio buttons widget — plugin ID, applicable filter types, soft limit, select all/none, and nested hierarchy"
+          - drupal/better-exposed-filters/links-widget.md: "BEF links widget — clickable filter links with AJAX support, toggle behavior, and template variables"
+          - drupal/better-exposed-filters/sliders-widget.md: "BEF sliders widget — noUiSlider configuration, applicable filter types, validation rules, and drupalSettings structure"
+          - drupal/better-exposed-filters/datepickers-widget.md: "BEF date picker widget — HTML5 date input conversion, between operators, date offset handling"
+          - drupal/better-exposed-filters/hidden-special-widgets.md: "BEF hidden, single checkbox, and number widgets — plugin IDs, applicability, and treat_as_false behavior"
+          - drupal/better-exposed-filters/sort-widgets.md: "BEF sort widgets — radio buttons, links, sort combine, combine_param, and rewrite syntax for sort labels"
+          - drupal/better-exposed-filters/pager-widgets.md: "BEF pager widgets — radio buttons and links for items-per-page controls, enabling exposed pager"
+          - drupal/better-exposed-filters/auto-submit.md: "BEF auto-submit — data attributes, debounce configuration, breakpoint-based submit, and JS behavior details"
+          - drupal/better-exposed-filters/secondary-collapsible.md: "BEF secondary options panel and per-filter collapsible details — configuration, nesting, and auto-open behavior"
+          - drupal/better-exposed-filters/option-rewriting-sorting.md: "BEF option rewriting and sorting — label find/replace syntax, rewrite by key, sort methods, and helper class reference"
+          - drupal/better-exposed-filters/theming-templates.md: "BEF theming — available templates, theme suggestions by view/display/field, preprocess functions, and nested hierarchy rendering"
+          - drupal/better-exposed-filters/custom-widget-plugins.md: "Create custom BEF filter, sort, or pager widget plugins — PHP 8.1 attribute syntax, key methods, and plugin discovery alter"
+          - drupal/better-exposed-filters/javascript-behaviors.md: "BEF JavaScript libraries — auto_submit, sliders, select_all_none, soft_limit, links_use_ajax, and drupalSettings structure"
+          - drupal/better-exposed-filters/hooks-alter.md: "BEF hooks — hook_better_exposed_filters_options_alter, plugin info alter, and theme-level alter patterns"
+          - drupal/better-exposed-filters/integration-patterns.md: "BEF integration patterns — Views AJAX, Facets, Search API, Select2, Chosen, and companion contrib modules"
+          - drupal/better-exposed-filters/configuration-schema.md: "BEF configuration schema — YAML structure in Views export, dynamic schema resolution, and config updater migrations"
+          - drupal/better-exposed-filters/common-mistakes.md: "BEF common mistakes, anti-patterns, and debugging checklist — quick-reference issue/cause/solution table"
+          - drupal/facets/index.md: "Drupal Facets — faceted search with Search API, widgets, processors, URL handling, SEO/bot protection, and custom plugin development"
+          - drupal/facets/overview.md: "Facets vs BEF vs core exposed filters — architecture, sub-modules, and when to use each approach"
+          - drupal/facets/installation-setup.md: "Install Facets with Search API, configure prerequisites, and choose block-based vs exposed filter vs REST approach"
+          - drupal/facets/facet-sources.md: "Facet sources — how facets connect to Search API Views displays, auto-generated source IDs, and source configuration"
+          - drupal/facets/facet-configuration.md: "Facet entity configuration keys — field identifier, widget, query operator, processors, hierarchy settings, and programmatic creation"
+          - drupal/facets/processing-pipeline.md: "Facets processing pipeline — PRE_QUERY, POST_QUERY, BUILD, and SORT stages, execution flow, and FacetManager service"
+          - drupal/facets/widgets.md: "Facets built-in widgets — links, checkbox, dropdown, array — configuration options, data attributes, and rendering"
+          - drupal/facets/range-slider.md: "Facets range slider widget — facets_range_widget sub-module, jQuery UI slider, setup, and distinctions from BEF noUiSlider"
+          - drupal/facets/searchbox-widget.md: "Facets searchbox widget — facets_searchbox_widget sub-module for type-to-filter facet items client-side"
+          - drupal/facets/value-transformation-processors.md: "Facets value transformation processors — translate_entity, list_item, boolean_item, date_item, granularity_item, uid_to_username"
+          - drupal/facets/result-filtering-processors.md: "Facets result filtering processors — count_limit, hide_non_narrowing, hide_active_items, exclude_specified_items, dependent_processor"
+          - drupal/facets/sort-processors.md: "Facets sort processors — active_widget_order, count_widget_order, display_value_widget_order, raw_value_widget_order, term_weight_widget_order"
+          - drupal/facets/hierarchy.md: "Facets hierarchy — taxonomy and date hierarchy plugins, Search API index hierarchy processor, hierarchy configuration settings"
+          - drupal/facets/url-processors.md: "Facets URL processors — default query_string format, filter key, URL alias, events for customization, multiple sources on one page"
+          - drupal/facets/query-types.md: "Facets query types — search_api_string, search_api_date, search_api_range, search_api_granular, and how they execute"
+          - drupal/facets/facets-exposed-filters.md: "Facets exposed filters — the recommended 3.x approach using Views filter criteria, native AJAX, and BEF widget integration"
+          - drupal/facets/facets-summary.md: "Facets Summary sub-module — display active facet selections as removable breadcrumbs with processors and views_filters_summary alternative"
+          - drupal/facets/facets-rest.md: "Facets REST sub-module — expose facet data in REST API responses for headless/decoupled frontends using FacetsSerializer"
+          - drupal/facets/seo-bot-protection.md: "Facets SEO and bot protection — layered defense against crawl budget exhaustion and AI scraper abuse, including robots.txt, facet_bot_blocker, Cloudflare WAF, and form-based facets"
+          - drupal/facets/canonical-urls.md: "Facets canonical URLs and duplicate content — parameter order variants, sitemap exclusion, hreflang with facets, and canonical hook pattern"
+          - drupal/facets/theming-templates.md: "Facets theming and templates — available templates, template variables, template suggestions by widget/facet, and HTML structure"
+          - drupal/facets/events.md: "Facets events — available event constants, when they dispatch, and event subscriber pattern for URL and cache customization"
+          - drupal/facets/caching.md: "Facets caching — facets_filter cache context, FacetManager in-memory cache, block cache, and debug mode"
+          - drupal/facets/custom-plugin-development.md: "Facets custom plugin development — custom processors, widgets, URL processors, and facet sources with PHP 8 attribute syntax"
+          - drupal/facets/pretty-paths.md: "Facets Pretty Paths contrib module — cleaner facet URLs as path segments instead of query parameters, SEO benefits, and gotchas"
+          - drupal/facets/common-mistakes.md: "Facets common mistakes, anti-patterns, and debugging checklist — issue/cause/solution table and step-by-step debug process"
           - drupal/contributing-with-ai/index.md: "Contributing to Drupal with AI — disclosure policy, merge request workflow, coding standards, human review requirements, and responsible AI-assisted development"
           - drupal/contributing-with-ai/overview.md: "AI contribution overview — Drupal's disclose-and-verify position and the 4 disclosure levels"
           - drupal/contributing-with-ai/drupal-ai-policy.md: "Drupal AI policy — current state of drupal.org AI rules, active governance issues, and enforcement"
@@ -1693,6 +1740,28 @@ nav:
       - drupal/group/common-mistakes.md
       - drupal/group/security.md
       - drupal/group/group-actions-contrib.md
+    - Better Exposed Filters:
+      - drupal/better-exposed-filters/index.md
+      - drupal/better-exposed-filters/overview.md
+      - drupal/better-exposed-filters/installation-setup.md
+      - drupal/better-exposed-filters/general-settings.md
+      - drupal/better-exposed-filters/checkboxes-radio-buttons.md
+      - drupal/better-exposed-filters/links-widget.md
+      - drupal/better-exposed-filters/sliders-widget.md
+      - drupal/better-exposed-filters/datepickers-widget.md
+      - drupal/better-exposed-filters/hidden-special-widgets.md
+      - drupal/better-exposed-filters/sort-widgets.md
+      - drupal/better-exposed-filters/pager-widgets.md
+      - drupal/better-exposed-filters/auto-submit.md
+      - drupal/better-exposed-filters/secondary-collapsible.md
+      - drupal/better-exposed-filters/option-rewriting-sorting.md
+      - drupal/better-exposed-filters/theming-templates.md
+      - drupal/better-exposed-filters/custom-widget-plugins.md
+      - drupal/better-exposed-filters/javascript-behaviors.md
+      - drupal/better-exposed-filters/hooks-alter.md
+      - drupal/better-exposed-filters/integration-patterns.md
+      - drupal/better-exposed-filters/configuration-schema.md
+      - drupal/better-exposed-filters/common-mistakes.md
     - Contributing with AI:
       - drupal/contributing-with-ai/index.md
       - drupal/contributing-with-ai/overview.md

@@ -412,5 +412,17 @@
     "partitioned": "2026-03-11",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 18
+  },
+  "drupal/better-exposed-filters": {
+    "source_hash": "cbbfea74a6ac1ccfed65577b4cec07633a1afc4b8f454c6fc895676a3f8a39b2",
+    "partitioned": "2026-03-30",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 20
+  },
+  "drupal/facets": {
+    "source_hash": "888c5b9543f32a0fafe6535feb9e94e9187f4309ae3cbbab75d1a39873867770",
+    "partitioned": "2026-03-30",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 25
   }
 }
