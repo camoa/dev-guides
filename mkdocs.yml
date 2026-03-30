@@ -1762,6 +1762,33 @@ nav:
       - drupal/better-exposed-filters/integration-patterns.md
       - drupal/better-exposed-filters/configuration-schema.md
       - drupal/better-exposed-filters/common-mistakes.md
+    - Facets:
+      - drupal/facets/index.md
+      - drupal/facets/overview.md
+      - drupal/facets/installation-setup.md
+      - drupal/facets/facet-sources.md
+      - drupal/facets/facet-configuration.md
+      - drupal/facets/processing-pipeline.md
+      - drupal/facets/widgets.md
+      - drupal/facets/range-slider.md
+      - drupal/facets/searchbox-widget.md
+      - drupal/facets/value-transformation-processors.md
+      - drupal/facets/result-filtering-processors.md
+      - drupal/facets/sort-processors.md
+      - drupal/facets/hierarchy.md
+      - drupal/facets/url-processors.md
+      - drupal/facets/query-types.md
+      - drupal/facets/facets-exposed-filters.md
+      - drupal/facets/facets-summary.md
+      - drupal/facets/facets-rest.md
+      - drupal/facets/seo-bot-protection.md
+      - drupal/facets/canonical-urls.md
+      - drupal/facets/theming-templates.md
+      - drupal/facets/events.md
+      - drupal/facets/caching.md
+      - drupal/facets/custom-plugin-development.md
+      - drupal/facets/pretty-paths.md
+      - drupal/facets/common-mistakes.md
     - Contributing with AI:
       - drupal/contributing-with-ai/index.md
       - drupal/contributing-with-ai/overview.md
