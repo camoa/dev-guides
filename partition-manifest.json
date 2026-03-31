@@ -424,5 +424,11 @@
     "partitioned": "2026-03-30",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 25
+  },
+  "drupal/search-api": {
+    "source_hash": "e893ac1960c2eadce67118f84f65ddbd12084ba231acc9a91ad7347258948368",
+    "partitioned": "2026-03-30",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 25
   }
 }

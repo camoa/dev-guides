@@ -378,6 +378,32 @@ plugins:
           - drupal/facets/custom-plugin-development.md: "Facets custom plugin development — custom processors, widgets, URL processors, and facet sources with PHP 8 attribute syntax"
           - drupal/facets/pretty-paths.md: "Facets Pretty Paths contrib module — cleaner facet URLs as path segments instead of query parameters, SEO benefits, and gotchas"
           - drupal/facets/common-mistakes.md: "Facets common mistakes, anti-patterns, and debugging checklist — issue/cause/solution table and step-by-step debug process"
+          - drupal/search-api/index.md: "Drupal Search API — decision guides for backends, indexing, processors, Views integration, Solr, facets, autocomplete, multilingual, decoupled search, and custom plugins"
+          - drupal/search-api/overview.md: "Search API vs core Search — architecture, 7 plugin types, config entities, and key services"
+          - drupal/search-api/backend-comparison.md: "Choose the right Search API backend — Database, Solr, Elasticsearch, OpenSearch, Typesense, or Meilisearch"
+          - drupal/search-api/installation-setup.md: "Install Search API, create a server and index, and run the initial index via admin UI and Drush"
+          - drupal/search-api/server-configuration.md: "Search API server entity — properties, key methods, and backend-specific settings for Database and Solr"
+          - drupal/search-api/index-configuration.md: "Search API index entity — properties, datasource selection, key methods, and cron_limit tuning"
+          - drupal/search-api/fields-data-types.md: "Search API field data types — choosing Fulltext vs String vs Integer, what to index, boost values, and rendered HTML strategy"
+          - drupal/search-api/processor-architecture.md: "Search API processor pipeline — 6 stages, execution flow, weight system, and ProcessorInterface"
+          - drupal/search-api/processor-recommendations.md: "Which Search API processors to enable — 23 built-in processors by category, and per-backend recommendations for Database vs Solr"
+          - drupal/search-api/relevance-boosting.md: "Search API relevance tuning — field boosts, HTML element boosts, type boost, and Views relevance sort"
+          - drupal/search-api/query-system.md: "Search API query system — programmatic queries, parse modes, condition groups, processing levels, and query tags"
+          - drupal/search-api/views-integration.md: "Search API Views integration — plugin mapping, creating a search View, display types, fulltext filter configuration"
+          - drupal/search-api/indexing-lifecycle.md: "Search API indexing lifecycle — tracking, indexing steps, deletion, reindex flow, and reference tracking"
+          - drupal/search-api/indexing-performance.md: "Search API indexing performance — batch size tuning, cron vs Drush, search_api_fast for large sites, and Solr index-only mode"
+          - drupal/search-api/query-performance.md: "Search API query performance — MySQL InnoDB COUNT problem, Highlight latency, mini pager, Solr index-only mode, and cache warming"
+          - drupal/search-api/autocomplete.md: "Search API autocomplete — search_api_autocomplete module setup, Solr Terms suggester, and min characters configuration"
+          - drupal/search-api/multilingual-search.md: "Search API multilingual — single index per language, language field, language_with_fallback processor, and Solr multilingual"
+          - drupal/search-api/solr-best-practices.md: "Apache Solr with Search API — schema management, jump-start configsets, version compatibility, hosting, and Solr Cloud"
+          - drupal/search-api/decoupled-search.md: "Decoupled search with Search API — jsonapi_search_api for Next.js, Typesense direct, and middleware patterns"
+          - drupal/search-api/content-access-security.md: "Search API content access — Content Access processor, access mechanisms, security caveats, and Solr index-only mode risks"
+          - drupal/search-api/facets-integration.md: "Integrating Facets with Search API — exposed filters approach, String field requirement, and setup pattern"
+          - drupal/search-api/events-system.md: "Search API events — available events, when they dispatch, and event subscriber pattern for query and indexing hooks"
+          - drupal/search-api/custom-plugin-development.md: "Custom Search API plugins — processor development with PHP 8.1 attribute syntax, stage selection, and plugin namespace"
+          - drupal/search-api/theming-templates.md: "Search API theming — available templates, Views templates for search results, and highlighted excerpt access"
+          - drupal/search-api/recommended-module-stacks.md: "Search API module stacks by site size — small (DB), medium (Solr), large/enterprise (Solr Cloud), and decoupled (JSON:API)"
+          - drupal/search-api/common-mistakes.md: "Search API common mistakes — issue/cause/solution table and debugging checklist for sitewide search problems"
           - drupal/contributing-with-ai/index.md: "Contributing to Drupal with AI — disclosure policy, merge request workflow, coding standards, human review requirements, and responsible AI-assisted development"
           - drupal/contributing-with-ai/overview.md: "AI contribution overview — Drupal's disclose-and-verify position and the 4 disclosure levels"
           - drupal/contributing-with-ai/drupal-ai-policy.md: "Drupal AI policy — current state of drupal.org AI rules, active governance issues, and enforcement"
@@ -1789,6 +1815,33 @@ nav:
       - drupal/facets/custom-plugin-development.md
       - drupal/facets/pretty-paths.md
       - drupal/facets/common-mistakes.md
+    - Search API:
+      - drupal/search-api/index.md
+      - drupal/search-api/overview.md
+      - drupal/search-api/backend-comparison.md
+      - drupal/search-api/installation-setup.md
+      - drupal/search-api/server-configuration.md
+      - drupal/search-api/index-configuration.md
+      - drupal/search-api/fields-data-types.md
+      - drupal/search-api/processor-architecture.md
+      - drupal/search-api/processor-recommendations.md
+      - drupal/search-api/relevance-boosting.md
+      - drupal/search-api/query-system.md
+      - drupal/search-api/views-integration.md
+      - drupal/search-api/indexing-lifecycle.md
+      - drupal/search-api/indexing-performance.md
+      - drupal/search-api/query-performance.md
+      - drupal/search-api/autocomplete.md
+      - drupal/search-api/multilingual-search.md
+      - drupal/search-api/solr-best-practices.md
+      - drupal/search-api/decoupled-search.md
+      - drupal/search-api/content-access-security.md
+      - drupal/search-api/facets-integration.md
+      - drupal/search-api/events-system.md
+      - drupal/search-api/custom-plugin-development.md
+      - drupal/search-api/theming-templates.md
+      - drupal/search-api/recommended-module-stacks.md
+      - drupal/search-api/common-mistakes.md
     - Contributing with AI:
       - drupal/contributing-with-ai/index.md
       - drupal/contributing-with-ai/overview.md
