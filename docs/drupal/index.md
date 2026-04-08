@@ -58,3 +58,18 @@ guide-meta:
 | Write and debug Twig templates | [Twig Theming](twig/index.md) |
 | Use SDC components in Drupal's site-builder UI | [UI Patterns 2.x](ui-patterns/index.md) |
 | Use DaisyUI 5 components in Drupal with UI Patterns | [UI Suite DaisyUI](ui-suite-daisyui/index.md) |
+| Customize Views exposed filter widgets | [Better Exposed Filters](better-exposed-filters/index.md) |
+| Add faceted search navigation | [Facets](facets/index.md) |
+| Configure site search with backends and processors | [Search API](search-api/index.md) |
+| Build pages with drag-and-drop, inline editing, nested layouts | [Plus Suite](plus-suite/index.md) |
+| Contribute to Drupal using AI responsibly | [Contributing with AI](contributing-with-ai/index.md) |
+| Build an AI-powered module with Drupal AI | [AI Module](ai-module/index.md) |
+| Build AJAX forms and callbacks | [AJAX](ajax/index.md) |
+| Migrate from AJAX to HTMX | [AJAX-HTMX Migration](ajax-htmx-migration/index.md) |
+| Configure breadcrumbs and navigation paths | [Breadcrumbs](breadcrumbs/index.md) |
+| Use Drupal Canvas (Experience Builder) | [Canvas](canvas/index.md) |
+| Manage group-based content access | [Group](group/index.md) |
+| Use HTMX for progressive enhancement | [HTMX](htmx/index.md) |
+| Integrate Salesforce with Drupal | [Salesforce](salesforce/index.md) |
+| Optimize SEO and GEO for Drupal sites | [SEO & GEO](seo-geo/index.md) |
+| Build component stories with Storybook | [Storybook](storybook/index.md) |
