@@ -404,6 +404,36 @@ plugins:
           - drupal/search-api/theming-templates.md: "Search API theming — available templates, Views templates for search results, and highlighted excerpt access"
           - drupal/search-api/recommended-module-stacks.md: "Search API module stacks by site size — small (DB), medium (Solr), large/enterprise (Solr Cloud), and decoupled (JSON:API)"
           - drupal/search-api/common-mistakes.md: "Search API common mistakes — issue/cause/solution table and debugging checklist for sitewide search problems"
+          - drupal/plus-suite/index.md: "Plus Suite — WYSIWYG page builder on top of Layout Builder with drag-and-drop, inline editing, nested layouts, and pluggable modes/tools"
+          - drupal/plus-suite/overview.md: "Plus Suite overview — what it is, how it differs from core Layout Builder, and key architectural principles"
+          - drupal/plus-suite/installation-setup.md: "Install Plus Suite — recipe vs manual installation, requirements, DropzoneJS repository, and post-install configuration"
+          - drupal/plus-suite/architecture-module-map.md: "Plus Suite module dependency graph, responsibilities, plugin systems, and page-building data flow"
+          - drupal/plus-suite/edit-mode-navigation-plus.md: "Edit Mode and Navigation+ — toolbar configuration, cookie-based state, bundle settings, and ShouldNotEditMode event"
+          - drupal/plus-suite/mode-plugins.md: "Create custom Mode plugins for Plus Suite — PHP 8 attribute syntax, ModeInterface methods, and built-in modes"
+          - drupal/plus-suite/tool-plugins.md: "Create custom Tool plugins for the Edit Mode toolbar — PHP 8 attribute syntax, ToolInterface methods, icon system, and built-in tools"
+          - drupal/plus-suite/place-block-promoted-blocks.md: "PlaceBlock tool and promoted blocks — configure sidebar blocks, custom icons, drag-and-drop flow, and DropZones controller endpoints"
+          - drupal/plus-suite/nested-layouts.md: "Nested layouts (layout blocks) — TreeIndex architecture, NestedAwareSectionStorage, block duplication, and when to use nesting"
+          - drupal/plus-suite/inline-editing.md: "Inline editing with Edit+ — field handle types, data attributes, FieldAttributes events, InlineTextarea, and tempstore save flow"
+          - drupal/plus-suite/tempstore-strategy.md: "Tempstore+ strategy pattern — EntityTempstoreStrategy vs LayoutTempstoreStrategy, workspace keys, and custom strategies"
+          - drupal/plus-suite/field-sample-value.md: "Field Sample Value — built-in generators, per-field configuration, prevent_save validation, and creating custom generator plugins"
+          - drupal/plus-suite/section-library.md: "Section Library — save and reuse Layout Builder sections, deep cloning, SectionLibraryTemplate entity, and LB+ toolbar integration"
+          - drupal/plus-suite/media-handling.md: "Media handling in Plus Suite — desktop drag-and-drop with DropzoneJS, media replacement, and file association settings"
+          - drupal/plus-suite/hotkeys-user-settings.md: "Hotkeys and user settings — default keyboard shortcuts, per-user hotkey storage, SettingsSidebarEvent, and customization"
+          - drupal/plus-suite/sidebar-system.md: "Plus Suite sidebar system — left/right/settings sidebar types, cookie-based visibility, and building custom sidebar content"
+          - drupal/plus-suite/twig-events.md: "Twig Events system — TwigRenderTemplateEvent, entity wrapping with editing attributes, and custom template subscribers"
+          - drupal/plus-suite/workspaces-integration.md: "Plus Suite Workspaces integration — workspace-aware tempstore keys and isolation per workspace"
+          - drupal/plus-suite/custom-block-types.md: "Create Plus Suite-compatible block content types — BlockPropertiesEvent pattern, PlaceBlockEvent defaults, and example blocks"
+          - drupal/plus-suite/theming-templates.md: "Theming and templates in Plus Suite — CSS library map, color configuration, template overrides, and hook implementations"
+          - drupal/plus-suite/javascript-architecture.md: "Plus Suite JavaScript architecture — key modules, AJAX commands, drupalSettings configuration, and extension patterns"
+          - drupal/plus-suite/events-event-subscribers.md: "Complete event catalog for Plus Suite — Navigation+, LB+, Edit+, and Twig Events with extension point reference"
+          - drupal/plus-suite/permissions-access.md: "Plus Suite permissions matrix — Edit Mode access, inline editing, LB+ admin, and minimum permissions per role"
+          - drupal/plus-suite/recipe-structure.md: "Plus Suite recipe structure — dependencies, modules installed, configuration created, config actions, and strict:false behavior"
+          - drupal/plus-suite/plus-suite-vs-canvas.md: "Plus Suite vs Canvas (Experience Builder) — architecture comparison, decision matrix, and coexistence guidance"
+          - drupal/plus-suite/custom-design-system.md: "Integrate a custom design system with Plus Suite — block types, sample values, promoted blocks, block properties, and CSS"
+          - drupal/plus-suite/custom-layout-plugins.md: "Custom Layout plugins for Plus Suite — YAML vs PHP class, icon_map, configurable layouts, and nested layout design"
+          - drupal/plus-suite/end-to-end-component.md: "End-to-end component creation in Plus Suite — complete walkthrough with component checklist"
+          - drupal/plus-suite/ui-patterns-sdc-integration.md: "UI Patterns and SDC integration with Plus Suite — what works, inline editing limitations, and hybrid component pattern"
+          - drupal/plus-suite/common-mistakes-known-issues.md: "Plus Suite common mistakes, known issues, debugging tips, and performance considerations"
           - drupal/contributing-with-ai/index.md: "Contributing to Drupal with AI — disclosure policy, merge request workflow, coding standards, human review requirements, and responsible AI-assisted development"
           - drupal/contributing-with-ai/overview.md: "AI contribution overview — Drupal's disclose-and-verify position and the 4 disclosure levels"
           - drupal/contributing-with-ai/drupal-ai-policy.md: "Drupal AI policy — current state of drupal.org AI rules, active governance issues, and enforcement"
@@ -1842,6 +1872,37 @@ nav:
       - drupal/search-api/theming-templates.md
       - drupal/search-api/recommended-module-stacks.md
       - drupal/search-api/common-mistakes.md
+    - Plus Suite:
+      - drupal/plus-suite/index.md
+      - drupal/plus-suite/overview.md
+      - drupal/plus-suite/installation-setup.md
+      - drupal/plus-suite/architecture-module-map.md
+      - drupal/plus-suite/edit-mode-navigation-plus.md
+      - drupal/plus-suite/mode-plugins.md
+      - drupal/plus-suite/tool-plugins.md
+      - drupal/plus-suite/place-block-promoted-blocks.md
+      - drupal/plus-suite/nested-layouts.md
+      - drupal/plus-suite/inline-editing.md
+      - drupal/plus-suite/tempstore-strategy.md
+      - drupal/plus-suite/field-sample-value.md
+      - drupal/plus-suite/section-library.md
+      - drupal/plus-suite/media-handling.md
+      - drupal/plus-suite/hotkeys-user-settings.md
+      - drupal/plus-suite/sidebar-system.md
+      - drupal/plus-suite/twig-events.md
+      - drupal/plus-suite/workspaces-integration.md
+      - drupal/plus-suite/custom-block-types.md
+      - drupal/plus-suite/theming-templates.md
+      - drupal/plus-suite/javascript-architecture.md
+      - drupal/plus-suite/events-event-subscribers.md
+      - drupal/plus-suite/permissions-access.md
+      - drupal/plus-suite/recipe-structure.md
+      - drupal/plus-suite/plus-suite-vs-canvas.md
+      - drupal/plus-suite/custom-design-system.md
+      - drupal/plus-suite/custom-layout-plugins.md
+      - drupal/plus-suite/end-to-end-component.md
+      - drupal/plus-suite/ui-patterns-sdc-integration.md
+      - drupal/plus-suite/common-mistakes-known-issues.md
     - Contributing with AI:
       - drupal/contributing-with-ai/index.md
       - drupal/contributing-with-ai/overview.md

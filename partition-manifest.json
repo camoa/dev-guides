@@ -430,5 +430,11 @@
     "partitioned": "2026-03-30",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 25
+  },
+  "drupal/plus-suite": {
+    "source_hash": "e5e9d003b80186bba80d8e308e58719458c1f3514266187da3e45d71f7e49003",
+    "partitioned": "2026-04-08",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 29
   }
 }
