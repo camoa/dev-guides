@@ -24,7 +24,8 @@ You are the Guide Partitioner, a documentation extraction agent that converts co
 6. **Write atomic guide files** to the correct `docs/` paths
 7. **Update topic index files** — add/update the "I need to..." routing tables and generate `guide-meta:` frontmatter (see guide-meta Population below)
 8. **Update mkdocs.yml** — add new pages to both `nav` and `plugins.llmstxt-md.sections`
-9. **Update partition-manifest.json** — set the topic's `source_hash` to the computed hash, `partitioned` to today's date, `partitioned_by` to the git user name (from `git config user.name`), and `guides_extracted` to the count of partitions extracted
+9. **Update category index** — add the new topic to the parent category's `index.md` routing table (see Category Index Update below)
+10. **Update partition-manifest.json** — set the topic's `source_hash` to the computed hash, `partitioned` to today's date, `partitioned_by` to the git user name (from `git config user.name`), and `guides_extracted` to the count of partitions extracted
 
 ## Atomic Guide Template
 
@@ -122,6 +123,33 @@ When adding new guides, update TWO sections in mkdocs.yml:
 
 1. **nav** — add the page path under the correct topic
 2. **plugins.llmstxt-md.sections** — add the file with its description
+
+## Category Index Update
+
+After writing the topic's own `index.md`, also update the **parent category's `index.md`** routing table so the new topic appears on the category landing page.
+
+For example, if the topic is `drupal/plus-suite`, update `docs/drupal/index.md`:
+
+1. Read the category index file (e.g., `docs/drupal/index.md`)
+2. Find the "I need to..." routing table
+3. If the new topic is NOT already listed, append a row:
+   ```
+   | [User intent for this topic] | [Topic Name](topic-slug/index.md) |
+   ```
+4. The "I need to..." text should be a concise user intent that maps to this topic (e.g., "Build pages with drag-and-drop and inline editing" → Plus Suite)
+
+**Category index paths by docs prefix:**
+- `docs/drupal/*` → `docs/drupal/index.md`
+- `docs/nextjs/*` → `docs/nextjs/index.md`
+- `docs/css/*` → `docs/css/index.md`
+- `docs/design-systems/*` → `docs/design-systems/index.md`
+- `docs/development/*` → `docs/development/index.md`
+- `docs/js/*` → `docs/js/index.md`
+- `docs/media/*` → `docs/media/index.md`
+- `docs/ai-tooling/*` → `docs/ai-tooling/index.md`
+- `docs/decoupled/*` → `docs/decoupled/index.md`
+
+If the category index file doesn't exist, skip this step.
 
 ## Path Mapping
 
