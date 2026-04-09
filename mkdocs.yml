@@ -1414,6 +1414,12 @@ plugins:
           - css/modern-css/text-wrap.md: "Balanced headings and orphan-free text with text-wrap: balance and pretty"
           - css/modern-css/viewport-units.md: "Fix 100vh on mobile with dvh, svh, lvh dynamic viewport units"
           - css/modern-css/user-valid-invalid.md: "Form validation styling only after user interaction with :user-valid/:user-invalid"
+          - css/modern-css/interpolate-size.md: "Animate height/width to auto and intrinsic sizing keywords — replacing JavaScript scrollHeight measurement"
+          - css/modern-css/field-sizing.md: "Auto-resize textarea, input, and select to fit content with field-sizing — replacing JavaScript scrollHeight scripts"
+          - css/modern-css/scroll-snap.md: "Paged scrolling and carousels with CSS Scroll Snap — mandatory vs proximity, native controls in Chrome 135+"
+          - css/modern-css/discrete-animations.md: "Animate display, overlay, and other discrete properties — entry/exit animations for dialogs and popovers"
+          - css/modern-css/container-scroll-state.md: "Style elements based on scroll container state — stuck, snapped, or scrollable — without JavaScript"
+          - css/modern-css/css-functions.md: "Native CSS @function, if(), and @mixin — reusable logic without a preprocessor (Chromium-first)"
         "CSS Craft":
           - css/css-craft/index.md: "CSS Craft — motion tokens, micro-interactions, depth, entrance animations, visual hierarchy, performance, and visual effects"
           - css/css-craft/motion-design-tokens.md: "Set up a consistent easing and duration token system — MD3-aligned curves, 50ms duration increments"
@@ -1436,6 +1442,8 @@ plugins:
           - css/css-craft/quick-reference-recommended-defaults.md: "Complete CSS craft token set — copy-paste easing, duration, shadow, opacity, and skeleton defaults"
           - css/css-craft/container-queries-craft.md: "Container query craft — component layout morphing, adaptive typography with cqi units, style queries, and when NOT to use container queries"
           - css/css-craft/cinematic-effects.md: "Cinematic CSS effects — border beam, glow, aurora, neon, shimmer sweep, particles, and perspective grid for focal hero moments"
+          - css/css-craft/scroll-snap-carousels.md: "CSS scroll-snap carousel patterns — full-width, multi-item, fade effect, CSS-only controls (Chrome 135+), and cross-browser fallbacks"
+          - css/css-craft/hover-effects-collection.md: "Hover effects cookbook — button lift, ghost fill, card lift, link underline reveal, image overlay, icon circle, table row, and 3D tilt patterns"
         "JavaScript":
           - js/interaction-craft/index.md: "Interaction Craft — vanilla JS patterns for timing, keyboard accessibility, scroll, drag-and-drop, optimistic UI, touch, clipboard, forms, animations, and performance"
           - js/interaction-craft/debounce-and-throttle.md: "Choose between debounce, throttle, and requestAnimationFrame for rate-limiting events — scroll, resize, search input, and button submission"
@@ -2933,6 +2941,12 @@ nav:
       - css/modern-css/text-wrap.md
       - css/modern-css/viewport-units.md
       - css/modern-css/user-valid-invalid.md
+      - css/modern-css/interpolate-size.md
+      - css/modern-css/field-sizing.md
+      - css/modern-css/scroll-snap.md
+      - css/modern-css/discrete-animations.md
+      - css/modern-css/container-scroll-state.md
+      - css/modern-css/css-functions.md
   - CSS Craft:
     - css/css-craft/index.md
     - css/css-craft/motion-design-tokens.md
@@ -2955,6 +2969,8 @@ nav:
     - css/css-craft/quick-reference-recommended-defaults.md
     - css/css-craft/container-queries-craft.md
     - css/css-craft/cinematic-effects.md
+    - css/css-craft/scroll-snap-carousels.md
+    - css/css-craft/hover-effects-collection.md
   - JavaScript:
     - Interaction Craft:
       - js/interaction-craft/index.md

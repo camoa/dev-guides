@@ -1,0 +1,77 @@
+---
+description: Animate height/width to auto and intrinsic sizing keywords — replacing JavaScript scrollHeight measurement
+drupal_version: "11.x"
+---
+
+# interpolate-size — Animate to `height: auto`
+
+## When to Use
+
+> Use `interpolate-size: allow-keywords` when you need to animate height or width to/from `auto`, `min-content`, `max-content`, or `fit-content`. Use JavaScript `scrollHeight` measurement when cross-browser support is required (Firefox and Safari do not support `interpolate-size` yet).
+
+## Decision
+
+| If you need... | Use... | Why |
+|---|---|---|
+| Accordion expand/collapse with smooth animation | `interpolate-size: allow-keywords` on `:root` | One declaration enables all keyword transitions sitewide |
+| Animate to auto height on a single element | `interpolate-size: allow-keywords` on that element | Scoped to just that component |
+| Math on intrinsic sizes | `calc-size(auto, size - 20px)` | Subtract/add from the resolved auto value |
+| Cross-browser accordion animation now | JavaScript `scrollHeight` measurement | Firefox and Safari don't support `interpolate-size` yet |
+
+## Pattern
+
+```css
+/* Enable globally — opt in once */
+:root {
+  interpolate-size: allow-keywords;
+}
+
+/* Accordion panel */
+.accordion-panel {
+  height: 0;
+  overflow: hidden;
+  transition: height 0.35s ease;
+}
+
+.accordion-panel[open],
+.accordion-item.is-open .accordion-panel {
+  height: auto; /* Now animatable! */
+}
+
+/* Details/summary native accordion */
+details {
+  overflow: hidden;
+  transition: height 0.3s ease;
+}
+details:not([open]) {
+  height: 2.5rem; /* Collapsed: just the summary */
+}
+details[open] {
+  height: auto;
+}
+
+/* calc-size for offset from intrinsic */
+.sidebar {
+  width: calc-size(fit-content, size + 2rem);
+  transition: width 0.3s;
+}
+```
+
+`interpolate-size: allow-keywords` tells the browser to resolve `auto` (and other sizing keywords) to their computed pixel value for interpolation. The property inherits, so setting it on `:root` enables it everywhere.
+
+`calc-size()` allows arithmetic on sizing keywords. `calc-size(auto, size - 20px)` means "the computed auto value minus 20px." The `size` keyword inside refers to the resolved intrinsic size.
+
+**Browser support:** Chrome 129+, Edge 129+. Not supported in Firefox or Safari. Use as progressive enhancement — without support, the element snaps to the final state (still functional, not animated).
+
+## Common Mistakes
+
+- **Wrong**: Omitting `overflow: hidden` on the animated element → **Right**: Without it, content is visible outside the collapsing container
+- **Wrong**: Using `interpolate-size` without `transition` or `animation` → **Right**: The property enables interpolation but you still need to declare the transition
+- **Wrong**: Using `calc()` for intrinsic size math → **Right**: Use `calc-size()` specifically; it is a separate function
+- **Wrong**: Setting `height: 0` without `min-height` fallback → **Right**: Consider `min-height: 0` to prevent negative height issues
+
+## See Also
+
+- [@starting-style & Discrete Transitions](starting-style-transitions.md) — for elements entering from `display: none`
+- [Discrete Property Animations](discrete-animations.md) — for transitioning the `display` property itself
+- Reference: [Chrome: Animate to height: auto](https://developer.chrome.com/docs/css-ui/animate-to-height-auto)

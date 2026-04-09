@@ -18,6 +18,17 @@ guide-meta:
     - "@property"
     - subgrid
     - light-dark()
+    - interpolate-size
+    - animate height auto
+    - field-sizing
+    - scroll snap
+    - carousel CSS
+    - discrete animations
+    - allow-discrete
+    - scroll-state container queries
+    - "@function"
+    - "if()"
+    - css mixins
   not:
     - CSS motion/animation craft (easing, micro-interactions)
     - SCSS/Sass features
@@ -59,7 +70,16 @@ Recently-shipped CSS features with decision guidance — when to reach for each,
 ## Animation
 - [Scroll-Driven Animations](scroll-driven-animations.md)
 - [@starting-style & Discrete Transitions](starting-style-transitions.md)
+- [Discrete Property Animations](discrete-animations.md)
 - [View Transitions](view-transitions.md)
+
+## Sizing & Layout Behavior
+- [interpolate-size — Animate to height: auto](interpolate-size.md)
+- [field-sizing: content — Auto-Sizing Form Controls](field-sizing.md)
+
+## Scroll
+- [CSS Scroll Snap](scroll-snap.md)
+- [Container Scroll-State Queries](container-scroll-state.md)
 
 ## Native UI
 - [Popover API](popover-api.md)
@@ -68,3 +88,6 @@ Recently-shipped CSS features with decision guidance — when to reach for each,
 ## Typography & Units
 - [text-wrap: balance / pretty](text-wrap.md)
 - [Dynamic Viewport Units (dvh, svh, lvh)](viewport-units.md)
+
+## Native CSS Logic
+- [CSS @function, if(), and Upcoming Mixins](css-functions.md)

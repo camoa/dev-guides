@@ -1,5 +1,5 @@
 ---
-description: CSS Craft — motion tokens, micro-interactions, depth, entrance animations, visual hierarchy, performance, visual effects, container query craft, and cinematic effects
+description: CSS Craft — motion tokens, micro-interactions, depth, entrance animations, visual hierarchy, performance, visual effects, container query craft, cinematic effects, scroll-snap carousels, and hover effects
 guide-meta:
   concepts:
     - motion tokens
@@ -12,6 +12,10 @@ guide-meta:
     - 3D transforms
     - cinematic effects
     - spring physics easing
+    - scroll-snap carousel
+    - hover effects
+    - card hover
+    - button hover
   not:
     - JavaScript animation libraries
     - CSS architecture (layers, scope, nesting)
@@ -48,3 +52,5 @@ guide-meta:
 | Copy a ready-to-use token set | [Quick Reference: Recommended Defaults](quick-reference-recommended-defaults.md) |
 | Make components respond to their container width, not the viewport | [Container Query Craft](container-queries-craft.md) |
 | Add border beams, glows, aurora, neon, shimmer, particles, or perspective grids | [Cinematic Effects](cinematic-effects.md) |
+| Build a CSS carousel, image gallery, or paginated scroll | [Scroll-Snap Carousels](scroll-snap-carousels.md) |
+| Pick the right hover/active/focus effect for a button, card, link, or image | [Hover Effects Collection](hover-effects-collection.md) |
