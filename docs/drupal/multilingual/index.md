@@ -49,3 +49,4 @@ guide-meta:
 | Follow best practices | [Best Practices](best-practices.md), [Anti-Patterns](anti-patterns.md) |
 | Understand security and performance | [Security, Performance & Caching](security-performance-caching.md) |
 | Find core files and services | [Code Reference Map](code-reference-map.md) |
+| Check source references and maintenance notes | [Sources & Maintenance](sources-maintenance.md) |

@@ -47,3 +47,4 @@ guide-meta:
 | Avoid common mistakes and anti-patterns | [Anti-Patterns & Common Mistakes](anti-patterns.md) |
 | Ensure security and performance | [Security & Performance](security-performance.md) |
 | Find key classes and interfaces | [Code Reference Map](code-reference-map.md) |
+| Check source references and maintenance notes | [Sources & Maintenance](sources-maintenance.md) |

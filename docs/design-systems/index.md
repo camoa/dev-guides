@@ -31,6 +31,7 @@ Guides for the design-to-code pipeline: analyze a design system, map it to Boots
 | Implement a design system with Tailwind CSS v4/v3 | [Tailwind CSS](tailwind/index.md) |
 | Extract and map design tokens across Tailwind, DaisyUI, Figma, and W3C DTCG | [Tailwind Tokens](tailwind-tokens/index.md) |
 | Convert React/JSX components to Drupal Twig templates and SDC | [JSX to Twig](jsx-to-twig/index.md) |
+| Build a React + Tailwind design system from scratch | [React Design System](react-design-system/index.md) |
 
 ## Workflow
 

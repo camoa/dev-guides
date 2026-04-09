@@ -1393,7 +1393,8 @@ plugins:
           - ai-tooling/figma-mcp/limitations-and-workarounds.md: "Limitations and workarounds — context limits, design updates, and missing states"
           - ai-tooling/figma-mcp/sources-maintenance.md: "Sources and maintenance manifest for Figma MCP server guide"
         "CSS":
-          - css/modern-css/index.md: "Modern CSS features from 2022–2025 — container queries, @scope, @layer, scroll-driven animations, view transitions, oklch, and more"
+          - css/index.md: "CSS decision guides — modern CSS features, visual effects, animations, and craft patterns"
+          - css/modern-css/index.md: "Modern CSS features from 2022–2026 — container queries, @scope, @layer, scroll-driven animations, view transitions, oklch, scroll-snap, interpolate-size, and more"
           - css/modern-css/has-selector.md: "Style parents and siblings based on child state — replacing JS class toggling"
           - css/modern-css/container-queries.md: "Respond to container size with @container — component-level responsive design"
           - css/modern-css/container-units.md: "Size elements relative to their container with cqi, cqw, cqb units"
@@ -1444,7 +1445,23 @@ plugins:
           - css/css-craft/cinematic-effects.md: "Cinematic CSS effects — border beam, glow, aurora, neon, shimmer sweep, particles, and perspective grid for focal hero moments"
           - css/css-craft/scroll-snap-carousels.md: "CSS scroll-snap carousel patterns — full-width, multi-item, fade effect, CSS-only controls (Chrome 135+), and cross-browser fallbacks"
           - css/css-craft/hover-effects-collection.md: "Hover effects cookbook — button lift, ghost fill, card lift, link underline reveal, image overlay, icon circle, table row, and 3D tilt patterns"
+          - css/css-craft/css-shapes.md: "CSS shapes and decorative geometry — wave dividers, blobs, diagonal sections, clip-path polygons, and the shape() function"
+          - css/css-craft/shape-outside.md: "shape-outside text flow — wrap text around circular images, custom polygons, and alpha-channel image shapes"
+          - css/css-craft/corner-shapes.md: "Corner shapes — squircle, scooped corners, notched cuts with corner-shape (Chrome 2025+) and clip-path fallbacks"
+          - css/css-craft/motion-path.md: "Motion path animations — orbit, curve-following, scroll-driven path with offset-path"
+          - css/css-craft/scroll-aware-components.md: "Scroll-aware components — shrinking headers, reading progress bars, back-to-top buttons without JavaScript"
+          - css/css-craft/css-counters-progress.md: "CSS counters and progress — animated counting numbers, circular progress rings, step indicators"
+          - css/css-craft/css-only-accordions.md: "CSS-only accordions — details/summary, grid height trick animation, exclusive accordion with name attribute"
+          - css/css-craft/css-only-popovers.md: "CSS-only popovers and tooltips — Popover API, anchor positioning, cross-browser hover tooltip patterns"
+          - css/css-craft/css-only-tabs.md: "CSS-only tabs and toggles — radio input tabs, toggle switches, dark mode toggle with :has()"
+          - css/css-craft/marquee-infinite-scroll.md: "Marquee and infinite scroll — CSS text ribbons, logo tickers, alternating direction, pause-on-hover"
+          - css/css-craft/bento-grid.md: "Bento grid layouts — asymmetric CSS grid tiles, named areas, dense auto-fill, responsive collapse"
+          - css/css-craft/text-reveal.md: "Text reveal animations — line slide-up, clip-path wipe, per-character and word reveals with minimal JS splitter"
+          - css/css-craft/variable-font-animation.md: "Variable font animation — weight and width transitions on hover or scroll with font-variation-settings"
+          - css/css-craft/fluid-typography.md: "Fluid typography — clamp() type scales, fluid spacing systems, container-relative sizing with cqi units"
+          - css/css-craft/svg-line-draw.md: "SVG line draw animations — stroke-dashoffset technique, staggered paths, draw-then-fill, scroll-triggered drawing"
         "JavaScript":
+          - js/index.md: "JavaScript decision guides — interaction patterns, event handling, and CSS-JS coordination"
           - js/interaction-craft/index.md: "Interaction Craft — vanilla JS patterns for timing, keyboard accessibility, scroll, drag-and-drop, optimistic UI, touch, clipboard, forms, animations, and performance"
           - js/interaction-craft/debounce-and-throttle.md: "Choose between debounce, throttle, and requestAnimationFrame for rate-limiting events — scroll, resize, search input, and button submission"
           - js/interaction-craft/keyboard-navigation-craft.md: "Trap focus in modals, implement roving tabindex for widget groups, restore focus after close — WCAG keyboard accessibility patterns"
@@ -1457,6 +1474,7 @@ plugins:
           - js/interaction-craft/animation-orchestration.md: "Sequence, cancel, and coordinate JS animations — when to use CSS transitions, WAAPI element.animate(), or requestAnimationFrame loops"
           - js/interaction-craft/performance-and-event-handling.md: "Passive event listeners, layout thrashing prevention, event delegation, breaking up long tasks, and memory leak patterns"
         "Media":
+          - media/index.md: "Media decision guides — image optimization, responsive images, and media craft patterns"
           - media/image-media-craft/index.md: "Image & Media Craft — responsive images, format strategy, loading optimization, placeholders, video, SVG, effects, and Drupal pipeline"
           - media/image-media-craft/responsive-images-craft.md: "Choose picture, srcset, and sizes for responsive images — resolution switching vs art direction, breakpoint strategy"
           - media/image-media-craft/image-format-strategy.md: "Choose JPEG, WebP, AVIF, PNG, SVG, or video — format decision table, quality settings, and animated image strategy"
@@ -2919,6 +2937,7 @@ nav:
       - ai-tooling/figma-mcp/limitations-and-workarounds.md
       - ai-tooling/figma-mcp/sources-maintenance.md
   - CSS:
+    - css/index.md
     - Modern CSS:
       - css/modern-css/index.md
       - css/modern-css/has-selector.md
@@ -2971,7 +2990,23 @@ nav:
     - css/css-craft/cinematic-effects.md
     - css/css-craft/scroll-snap-carousels.md
     - css/css-craft/hover-effects-collection.md
+    - css/css-craft/css-shapes.md
+    - css/css-craft/shape-outside.md
+    - css/css-craft/corner-shapes.md
+    - css/css-craft/motion-path.md
+    - css/css-craft/scroll-aware-components.md
+    - css/css-craft/css-counters-progress.md
+    - css/css-craft/css-only-accordions.md
+    - css/css-craft/css-only-popovers.md
+    - css/css-craft/css-only-tabs.md
+    - css/css-craft/marquee-infinite-scroll.md
+    - css/css-craft/bento-grid.md
+    - css/css-craft/text-reveal.md
+    - css/css-craft/variable-font-animation.md
+    - css/css-craft/fluid-typography.md
+    - css/css-craft/svg-line-draw.md
   - JavaScript:
+    - js/index.md
     - Interaction Craft:
       - js/interaction-craft/index.md
       - js/interaction-craft/debounce-and-throttle.md
@@ -2985,6 +3020,7 @@ nav:
       - js/interaction-craft/animation-orchestration.md
       - js/interaction-craft/performance-and-event-handling.md
   - Media:
+    - media/index.md
     - Image & Media Craft:
       - media/image-media-craft/index.md
       - media/image-media-craft/responsive-images-craft.md

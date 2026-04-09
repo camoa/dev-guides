@@ -40,3 +40,4 @@ guide-meta:
 | Optimize performance (libraries, caching) | [Performance](performance.md) |
 | Prevent XSS and security issues | [Security](security.md) |
 | Avoid anti-patterns and code review issues | [Anti-Patterns](anti-patterns.md) |
+| Integrate SDC with UI Patterns 2.x | [UI Patterns 2 Integration](ui-patterns-2-integration.md) |

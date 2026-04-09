@@ -47,4 +47,5 @@ Bridges SDC components to Drupal's site-builder UI via a plugin architecture —
 | Write a custom source plugin | [Creating Custom Source Plugins](creating-custom-source-plugins.md) |
 | Follow best practices and avoid anti-patterns | [Best Practices & Anti-Patterns](best-practices-and-anti-patterns.md) |
 | Handle security and accessibility correctly | [Security & Accessibility](security-and-accessibility.md) |
+| Export and review config YAML for components, layouts, blocks | [Config Export Reference](config-export-reference.md) |
 | Check source references and maintenance notes | [Sources & Maintenance](sources-maintenance.md) |

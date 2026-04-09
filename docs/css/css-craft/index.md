@@ -1,5 +1,5 @@
 ---
-description: CSS Craft — motion tokens, micro-interactions, depth, entrance animations, visual hierarchy, performance, visual effects, container query craft, cinematic effects, scroll-snap carousels, and hover effects
+description: CSS Craft — motion tokens, micro-interactions, depth, entrance animations, visual hierarchy, performance, visual effects, container query craft, cinematic effects, scroll-snap carousels, hover effects, CSS shapes, motion path, scroll-aware components, CSS-only UI, and fluid typography
 guide-meta:
   concepts:
     - motion tokens
@@ -16,6 +16,34 @@ guide-meta:
     - hover effects
     - card hover
     - button hover
+    - CSS shapes
+    - blob
+    - wave divider
+    - shape-outside
+    - squircle
+    - corner-shape
+    - motion path
+    - offset-path
+    - scroll-aware
+    - shrinking header
+    - reading progress bar
+    - CSS counters
+    - animated counter
+    - progress ring
+    - CSS accordion
+    - details summary
+    - CSS popover
+    - CSS tabs
+    - marquee
+    - logo ticker
+    - bento grid
+    - text reveal
+    - variable font animation
+    - font-variation-settings
+    - fluid typography
+    - clamp
+    - SVG line draw
+    - stroke-dashoffset
   not:
     - JavaScript animation libraries
     - CSS architecture (layers, scope, nesting)
@@ -54,3 +82,18 @@ guide-meta:
 | Add border beams, glows, aurora, neon, shimmer, particles, or perspective grids | [Cinematic Effects](cinematic-effects.md) |
 | Build a CSS carousel, image gallery, or paginated scroll | [Scroll-Snap Carousels](scroll-snap-carousels.md) |
 | Pick the right hover/active/focus effect for a button, card, link, or image | [Hover Effects Collection](hover-effects-collection.md) |
+| Create wave dividers, blobs, diagonal sections, or organic shapes | [CSS Shapes & Decorative Geometry](css-shapes.md) |
+| Wrap text around a circular image or custom shape (magazine layout) | [Shape Outside & Text Flow](shape-outside.md) |
+| Apply squircle, scooped, or notched corners | [Corner Shapes](corner-shapes.md) |
+| Animate an element along a curved or circular path | [Motion Path](motion-path.md) |
+| Build a shrinking header, reading progress bar, or back-to-top button without JavaScript | [Scroll-Aware Components](scroll-aware-components.md) |
+| Create animated counters, circular progress rings, or step indicators | [CSS Counters & Progress](css-counters-progress.md) |
+| Build an accordion without JavaScript | [CSS-Only Accordions](css-only-accordions.md) |
+| Build a popover or tooltip without JavaScript | [CSS-Only Popovers & Tooltips](css-only-popovers.md) |
+| Build a tab interface or toggle without JavaScript | [CSS-Only Tabs & Toggles](css-only-tabs.md) |
+| Create a scrolling text ribbon or logo ticker | [Marquee & Infinite Scroll](marquee-infinite-scroll.md) |
+| Build an asymmetric Apple-style feature grid | [Bento Grid Layouts](bento-grid.md) |
+| Make headlines animate in with slide-up, wipe, or per-character reveals | [Text Reveal Animations](text-reveal.md) |
+| Animate typography weight or width on hover or scroll | [Variable Font Animation](variable-font-animation.md) |
+| Scale font sizes and spacing fluidly across viewports | [Fluid Typography](fluid-typography.md) |
+| Make an icon or logo draw itself | [SVG Line Draw](svg-line-draw.md) |

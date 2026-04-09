@@ -51,3 +51,4 @@ guide-meta:
 | Know security and performance rules | [Security & Performance](security-performance.md) |
 | Avoid common Twig mistakes | [Anti-Patterns](anti-patterns.md) |
 | Find the relevant core source files | [Code Reference Map](code-reference-map.md) |
+| Check source references and maintenance notes | [Sources & Maintenance](sources-maintenance.md) |
