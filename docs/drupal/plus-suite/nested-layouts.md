@@ -56,15 +56,32 @@ uuid → {
 
 **Programmatic save** — must call `bubbleChangesToRoot()` explicitly when saving nested changes.
 
+## Setting Up Layout Blocks (Manual Setup)
+
+The recipe creates the `layout_block` block type automatically. For manual setup:
+
+1. Go to **Structure → Block Types → Add block type** (`/admin/structure/block-content`)
+2. Name: **"Layout Block"**, machine name: `layout_block`
+3. **Remove the body field** — layout blocks should only contain nested blocks, not their own content
+4. Go to the block type's **Manage Display**
+5. Check **"Use Layout builder"**
+6. Check **"Allow each content item to have its layout customized"**
+7. Click **Save** and configure a **default One Column layout section**
+8. **Critical**: A default layout MUST be configured. Without it → "Undefined array key 'layout_plugin'" error
+9. Go to your content type's **Manage Display** and **promote the Layout Block** in the LB+ promoted blocks section
+
 ## Common Mistakes
 
 - **Wrong**: Nesting more than 2–3 levels → **Right**: Performance degrades and UX becomes confusing; limit depth
 - **Wrong**: Forgetting `bubbleChangesToRoot()` in programmatic code → **Right**: Changes to nested layouts must bubble up to the root entity
 - **Wrong**: Using nested layouts for simple two-column content → **Right**: Use section layouts for column arrangements
+- **Wrong**: Leaving body field on Layout Block type → **Right**: Remove it; it takes up space and serves no purpose inside nested layouts
+- **Wrong**: Skipping default layout configuration on Layout Block type → **Right**: Configure a default One Column layout or get a fatal error
 
 ## See Also
 
 - [Place Block & Promoted Blocks](place-block-promoted-blocks.md)
 - [Section Library](section-library.md)
 - [Tempstore Strategy Pattern](tempstore-strategy.md)
+- [Installation & Setup](installation-setup.md) — Step 7 covers manual Layout Block setup
 - Reference: `lb_plus/src/NestedAwareSectionStorage.php`, `lb_plus/src/TreeIndex.php`

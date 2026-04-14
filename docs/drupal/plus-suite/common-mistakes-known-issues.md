@@ -23,8 +23,33 @@ drupal_version: "11.x"
 | Nesting too deep | Performance issues, confusing UX | Limit to 2–3 levels |
 | Not clearing cache after config changes | Stale tool/mode behavior | `drush cr` after config changes |
 | Forgetting `access inline editing` permission | Edit Mode works but nothing is editable | Grant permission to editor role |
+| No default layout on Layout Block type | "Undefined array key 'layout_plugin'" error | Configure a default One Column layout on block type's Manage Display |
+| Field templates missing wrapper attributes | Edit+ inline editing silently fails | Field templates MUST include `<div{{ attributes }}>` and `<div{{ item.attributes }}>` |
+| Missing `data-drupal-messages-fallback` div | Edit+ AJAX messages don't display | Page template must contain `<div data-drupal-messages-fallback></div>` |
+| Not enabling "Allow each content item..." | Only default layout available, no per-node customization | Check BOTH "Use Layout builder" AND "Allow each content item to have its layout customized" |
+| Layout Block type still has body field | Body field takes up space inside nested layout | Remove the body field from the Layout Block block type |
+| Z-index conflicts with Edit+ sidebar | Sidebar appears behind other page elements | Override sidebar z-index using CSS custom properties |
+| CKEditor floating panel misaligned | Editor toolbar overlaps fixed header | Use `hook_page_attachments()` to set CKEditor viewport offset |
 
 ## Pattern
+
+**Edit+ field template requirement (critical):**
+
+For Edit+ inline editing to work, field templates MUST pass through wrapper and item attributes:
+
+```twig
+{# Correct — attributes are passed through #}
+<div{{ attributes }}>
+  {% for item in items %}
+    <div{{ item.attributes }}>{{ item.content }}</div>
+  {% endfor %}
+</div>
+
+{# Wrong — no attributes, Edit+ cannot correlate form items #}
+<div class="my-wrapper">
+  {{ items[0].content }}
+</div>
+```
 
 **Known issues (as of April 2026):**
 
@@ -51,6 +76,7 @@ drupal_version: "11.x"
 |---------|-----------|
 | `TwigRenderTemplateEvent` on every render | Only active in Edit Mode |
 | TreeIndex for nested layouts | O(1) lookups, built once per request |
+| Multiple AJAX calls during editing | Each tool has optimized JS libraries |
 | Tempstore reads on page load | Param converter only checks when Edit Mode active |
 
 **Upgrade notes:**
