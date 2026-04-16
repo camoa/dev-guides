@@ -86,6 +86,24 @@ When you need to generate URLs, attach libraries, create links, or use other Dru
 {% endif %}
 ```
 
+#### `icon(pack_id, icon_id, settings)`
+**Description:** Returns a render array for the Icon API (Drupal 11+). Renders an icon from a registered icon pack.
+**Usage:**
+```twig
+{{ icon('material_symbols', 'arrow_forward') }}
+{{ icon('my_icons', 'search', {size: 24}) }}
+```
+**Gotchas:** Both `pack_id` and `icon_id` are required — returns empty array if either is missing. Requires an icon pack module to be installed. New in Drupal 11.
+
+#### `dump(variable)`
+**Description:** Debug-dumps a variable using Symfony VarDumper. With no arguments, dumps the entire Twig context.
+**Usage:**
+```twig
+{{ dump() }}         {# Dumps ALL available variables #}
+{{ dump(content) }}  {# Dumps specific variable #}
+```
+**Gotchas:** Only works when Twig debug mode is enabled (`debug: true` in `services.yml`). Remove before production. Different from twig_tweak's `drupal_dump` which uses Devel.
+
 ### Common Mistakes
 - Using `{{ path() }}` without checking if parameters are safe → multiple variable params need extra care
 - Using `{{ active_theme_path() }}` for referencing images/assets → wrong approach; use `#attached` libraries or `file_url()` with the file URI

@@ -270,9 +270,9 @@
     "guides_extracted": 21
   },
   "drupal/twig": {
-    "source_hash": "8804e8b71e096e35c1e27135fa7ffd46bb9ce8141196d91b38f9228a0e8928f7",
-    "partitioned": "2026-02-18",
-    "partitioned_by": "camoa",
+    "source_hash": "6b613f6e576b351cf602ab3bd72cc1054e6ce2b2629582efa7c2fd3819b95183",
+    "partitioned": "2026-04-16",
+    "partitioned_by": "Carlos Ospina",
     "guides_extracted": 21
   },
   "design-systems/daisyui": {

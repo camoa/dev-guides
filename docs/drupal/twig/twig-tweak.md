@@ -104,25 +104,108 @@ When you need to render a view, block, entity, or field from within a Twig templ
 ```
 **Gotchas:** Requires Devel module. Remove before deployment.
 
+#### `drupal_view_result(view_id, display_id, ...args)`
+**Description:** Returns raw result rows from a View (not rendered). Useful for counting or checking if results exist.
+**Usage:**
+```twig
+{% if drupal_view_result('related', 'block_1', node.id())|length > 0 %}
+  {{ drupal_view('related', 'block_1', node.id()) }}
+{% endif %}
+```
+**Gotchas:** Returns `ResultRow[]`, not rendered HTML. Must be processed or counted, not printed directly.
+
+#### `drupal_form(form_id, ...args)`
+**Description:** Builds and returns a form render array by form class name.
+**Usage:**
+```twig
+{{ drupal_form('Drupal\\search\\Form\\SearchBlockForm') }}
+{{ drupal_form('Drupal\\mymodule\\Form\\QuickFeedbackForm') }}
+```
+**Gotchas:** Use the full namespace (double backslashes). Additional args passed to form constructor.
+
+#### `drupal_title()`
+**Description:** Returns the current page's route title as a render array.
+**Usage:**
+```twig
+{{ drupal_title() }}
+```
+
+#### `drupal_url(user_input, options, check_access)`
+**Description:** Returns a `\Drupal\Core\Url` object from a path string.
+**Usage:**
+```twig
+{% set my_url = drupal_url('/node/42') %}
+{% set external = drupal_url('https://example.com') %}
+```
+
+#### `drupal_link(text, user_input, options, check_access)`
+**Description:** Returns a `\Drupal\Core\Link` object.
+**Usage:**
+```twig
+{{ drupal_link('Contact us'|t, '/contact') }}
+{{ drupal_link('Visit site'|t, 'https://example.com', {attributes: {target: '_blank'}}) }}
+```
+
+#### `drupal_messages()`
+**Description:** Returns the status messages render array.
+**Usage:**
+```twig
+{{ drupal_messages() }}
+```
+
+#### `drupal_breadcrumb()`
+**Description:** Returns the current page's breadcrumb render array.
+**Usage:**
+```twig
+{{ drupal_breadcrumb() }}
+```
+
+#### `drupal_contextual_links(id)`
+**Description:** Renders contextual links placeholder for a given ID string.
+**Usage:**
+```twig
+{{ drupal_contextual_links('node:node=42:') }}
+```
+
+#### `drupal_breakpoint()`
+**Description:** Triggers an Xdebug breakpoint — all Twig context variables accessible in debugger.
+**Usage:**
+```twig
+{{ drupal_breakpoint() }}
+```
+**Gotchas:** Requires Xdebug. Does nothing without it.
+
 ### Twig Tweak Filters
 | Filter | Usage | Description |
 |---|---|---|
-| `\|token_replace` | `{{ text\|token_replace }}` | Replaces tokens in a string |
-| `\|image_style` | `{{ 'public://img.jpg'\|image_style('thumbnail') }}` | Returns styled image URL |
-| `\|check_markup` | `{{ text\|check_markup('basic_html') }}` | Applies text format |
-| `\|view` | `{{ entity\|view('teaser') }}` | Renders an entity object |
-| `\|entity_url` | `{{ node\|entity_url }}` | Gets entity canonical URL |
-| `\|entity_link` | `{{ node\|entity_link('Read more'\|t) }}` | Gets entity link render array |
-| `\|file_url` | `{{ 'public://img.jpg'\|file_url }}` | File URI to URL (alias of core) |
-| `\|children` | `{{ content\|children }}` | Returns child render elements only |
-| `\|cache_metadata` | For cache debugging | Extracts cache metadata |
+| `\|token_replace` | `{{ text\|token_replace }}` | Replaces all tokens in a string |
+| `\|image_style` | `{{ 'public://img.jpg'\|image_style('thumbnail') }}` | Returns absolute URL of styled image derivative |
+| `\|check_markup` | `{{ text\|check_markup('basic_html') }}` | Runs text through a Drupal text format |
+| `\|view` | `{{ entity\|view('teaser') }}` | Renders an entity, FieldItemList, or FieldItem object |
+| `\|entity_url` | `{{ node\|entity_url }}` or `{{ node\|entity_url('edit-form') }}` | Gets entity URL object (workaround for sandbox blocking `toUrl()`) |
+| `\|entity_link` | `{{ node\|entity_link('Read more'\|t) }}` | Gets entity Link object |
+| `\|translation` | `{{ media\|translation }}` | Returns entity translation for current/specified language |
+| `\|file_url` | `{{ 'public://img.jpg'\|file_url }}` | File URI to relative URL. `\|file_url(false)` for absolute URL |
+| `\|file_uri` | `{{ media.field_media_image\|file_uri }}` | Extracts file URI from file entity or field item |
+| `\|children` | `{{ content\|children }}` or `{{ content\|children(true) }}` | Returns child render elements only. `true` sorts by `#weight` |
+| `\|with` | `{{ element\|with('#prefix', '<div>') }}` | Adds/sets key in render array. Opposite of `\|without` |
+| `\|cache_metadata` | `{{ content.field_ref\|cache_metadata }}` | Extracts and bubbles cache metadata |
+| `\|preg_replace` | `{{ text\|preg_replace('/\\d+/', '#') }}` | Regex search-and-replace |
+| `\|transliterate` | `{{ text\|transliterate }}` | Unicode to US-ASCII transliteration |
+| `\|truncate` | `{{ text\|truncate(100, true, true) }}` | Safe UTF-8 truncation (max_length, wordsafe, ellipsis) |
+| `\|format_size` | `{{ filesize\|format_size }}` | Human-readable byte size (e.g., "1.5 MB") |
+| `\|data_uri` | `{{ source(directory ~ '/logo.svg')\|data_uri('image/svg+xml') }}` | RFC 2397 data URI encoding (inline SVGs, images) |
+| `\|php` | `{{ 'date("Y")'\|php }}` | Evaluates PHP. **Disabled by default.** Requires `$settings['twig_tweak_enable_php_filter'] = TRUE` in `settings.php` |
 
 ### Common Mistakes
 - Using `drupal_config()` for values that affect rendering → cache metadata not bubbled, stale cache
 - Using `drupal_entity()` to re-render an entity that's already available in the template → use `{{ content.field_ref }}` instead
 - Using `drupal_block()` with the block config entity ID (e.g., `bartik_branding`) instead of plugin ID → must be plugin ID
 - `drupal_view_result()` returns the raw results array, not rendered output — needs further processing
+- Enabling `|php` filter in production → severe security risk, only for development/debugging
+- Missing `|file_uri` when you have a media entity → use `{{ media.field_media_image|file_uri }}` to extract the URI, then `|file_url` for the URL
 
 ### See Also
 - Core field rendering → [Accessing Field Values](accessing-field-values.md)
 - Module source: `modules/contrib/twig_tweak/src/TwigTweakExtension.php`
+- Reference: [Twig Tweak 3.x cheat sheet](https://git.drupalcode.org/project/twig_tweak/-/blob/3.x/docs/cheat-sheet.md)

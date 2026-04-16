@@ -42,8 +42,8 @@ guide-meta:
 | Pass custom data from PHP to a template | [Adding Variables in Preprocess](adding-variables-preprocess.md) |
 | Register a new theme hook | [Theme Hooks & Registration](theme-hooks-registration.md) |
 | Add or override template suggestions | [Template Suggestions](template-suggestions.md) |
-| Use url(), path(), link(), file_url() in Twig | [Drupal Twig Functions](twig-functions.md) |
-| Use \|t, \|without, \|clean_class, \|render in Twig | [Drupal Twig Filters](twig-filters.md) |
+| Use url(), path(), link(), file_url(), icon(), dump() in Twig | [Drupal Twig Functions](twig-functions.md) |
+| Use \|t, \|without, \|clean_class, \|render, \|striptags, and 30+ Twig native filters in Twig | [Drupal Twig Filters](twig-filters.md) |
 | Use twig_tweak to render a view/block/entity | [Twig Tweak Module](twig-tweak.md) |
 | Include an SDC component from a Twig template | [SDC in Templates](sdc-in-templates.md) |
 | Debug which template is being used | [Template Debugging](template-debugging.md) |
