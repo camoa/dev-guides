@@ -1,5 +1,6 @@
 ---
 description: Choose between children, compound dot-notation slots, asChild (Radix), named slot props, and render props for component content regions.
+tldr: "Use when a component needs to render content it doesn't control — layouts, wrappers, trigger+panel pairs."
 ---
 
 # Children and Slot Patterns

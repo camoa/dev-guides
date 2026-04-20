@@ -1,5 +1,6 @@
 ---
 description: Complete reference of all properties available in service definitions — class, arguments, tags, calls, factory, autowire, autoconfigure, shared, lazy, deprecated, and more.
+tldr: "When defining a service in *.services.yml — this reference catalog covers all available properties and their purposes."
 ---
 
 # Service Definition Properties

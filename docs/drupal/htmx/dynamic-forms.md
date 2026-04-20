@@ -1,5 +1,6 @@
 ---
 description: Build Drupal forms with HTMX — cascading selects, OOB updates, and browser history management
+tldr: "Use this when building forms with cascading selects, conditional fields, or form elements that update based on user input without full page reload."
 drupal_version: "11.x"
 ---
 

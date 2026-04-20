@@ -1,5 +1,6 @@
 ---
 description: Media source plugin needs services like HTTP client, logger, cache, file system, or custom services.
+tldr: "Media source plugin needs services like HTTP client, logger, cache, file system, or custom services."
 ---
 
 # Dependency Injection

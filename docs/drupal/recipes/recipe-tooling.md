@@ -1,5 +1,6 @@
 ---
 description: Tools for applying, testing, and developing recipes including Drush commands and core scripts
+tldr: "Use recipe tooling when you need to apply recipes, export content, or integrate recipes into custom workflows."
 drupal_version: "11.x"
 ---
 

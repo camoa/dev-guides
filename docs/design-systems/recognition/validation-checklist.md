@@ -1,5 +1,6 @@
 ---
 description: Design system recognition — 11. validation checklist
+tldr: "You've completed your design system analysis and need to validate You're ensuring nothing was missed in the recognition process You're preparing documentation of your analysis"
 ---
 
 ## 11. Validation Checklist

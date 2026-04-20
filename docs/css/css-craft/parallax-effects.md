@@ -1,5 +1,6 @@
 ---
 description: Add depth with scroll parallax — perspective container technique, scroll-driven approach, scale compensation formula, mobile and accessibility handling
+tldr: "Use parallax for marketing heroes, editorial pages, and portfolio pieces — one or two layers max. Use CSS perspective technique for compositor-safe zero-JS parallax; use scroll-driven for modern browsers with fine-grained control."
 ---
 
 # Parallax Effects

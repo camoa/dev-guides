@@ -1,5 +1,6 @@
 ---
 description: Complete UI Patterns 2 .story.yml schema reference — all slot value types, props, naming conventions, and verbatim examples from ui_suite_daisyui 5.0.x source
+tldr: "Write `.story.yml` files when adding or documenting components for the UI Patterns 2 pattern library — any SDC theme with `ui_patterns_library` enabled. No Node.js or Storybook.js required."
 drupal_version: "11.x"
 ---
 

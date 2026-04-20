@@ -1,5 +1,6 @@
 ---
 description: Optimize image delivery with WebP and AVIF formats using image_convert effects with PHP/GD support checks and fallback strategies
+tldr: "Use this when you need to optimize image delivery with modern formats (WebP, AVIF) while maintaining fallback for older browsers."
 ---
 
 # WebP & AVIF Optimization

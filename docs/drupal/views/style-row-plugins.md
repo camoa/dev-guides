@@ -1,3 +1,7 @@
+---
+tldr: "When configuring how Views formats output (style) and renders individual rows (row)."
+
+---
 ## 15. Style & Row Plugins
 
 ### When to Use

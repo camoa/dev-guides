@@ -1,5 +1,6 @@
 ---
 description: Map Figma components to existing codebase files using Code Connect so AI agents reuse real implementations instead of regenerating them
+tldr: "When your codebase has existing component implementations you want AI agents to reuse rather than regenerate. Code Connect maps Figma components to actual code files, so generated code imports and uses your real components."
 ---
 
 # Code Connect Integration

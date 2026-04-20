@@ -1,5 +1,6 @@
 ---
 description: Use Drupal plugins to extend functionality without modifying existing code
+tldr: "Plugins are Drupal's primary OCP mechanism -- extend functionality without modifying existing code. Use plugins for blocks, field formatters/widgets, views plugins, etc."
 drupal_version: "11.x"
 ---
 

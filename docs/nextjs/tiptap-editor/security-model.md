@@ -1,5 +1,6 @@
 ---
 description: You're storing or displaying user-generated content from Tiptap.
+tldr: "You're storing or displaying user-generated content from Tiptap."
 ---
 
 ## 18.1 Security Model & XSS Prevention

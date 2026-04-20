@@ -1,5 +1,6 @@
 ---
 description: Metatag 2.2.0 module architecture — 11 submodules, attribute-based plugins, cascading inheritance, and token system overview
+tldr: "You are setting up meta tags on a Drupal 11 site. Start here to understand how the Metatag module is structured before configuring individual tags or submodules."
 drupal_version: "11.x"
 ---
 

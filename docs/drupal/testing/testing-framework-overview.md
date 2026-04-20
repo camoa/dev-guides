@@ -1,5 +1,6 @@
 ---
 description: Overview of Drupal's five testing frameworks and when to use each one
+tldr: "Every Drupal module should include automated testing. Use this guide to understand the five testing frameworks Drupal provides and when each is appropriate."
 drupal_version: "11.x"
 ---
 

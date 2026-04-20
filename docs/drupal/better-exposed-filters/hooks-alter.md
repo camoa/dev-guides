@@ -1,5 +1,6 @@
 ---
 description: BEF hooks — hook_better_exposed_filters_options_alter, plugin info alter, and theme-level alter patterns
+tldr: "Use hooks when you need to programmatically modify BEF behavior — changing options, setting slider ranges dynamically, or altering widget availability — without creating a custom widget plugin."
 drupal_version: "11.x"
 ---
 

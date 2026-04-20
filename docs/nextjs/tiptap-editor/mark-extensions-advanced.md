@@ -1,5 +1,6 @@
 ---
 description: You need background highlighting, text colors, font sizes, or custom text styling.
+tldr: "You need background highlighting, text colors, font sizes, or custom text styling."
 ---
 
 ## 6.3 Highlight & Text Style Marks

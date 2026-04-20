@@ -1,5 +1,6 @@
 ---
 description: Adding, removing, and modifying columns in existing custom fields with data using CustomFieldUpdateManager service.
+tldr: "You need to add, remove, or modify columns in a Custom Field that already has data, without losing existing content."
 ---
 
 # Schema Updates & Data Migration

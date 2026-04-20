@@ -1,5 +1,6 @@
 ---
 description: Mix colors natively with color-mix() — replace Sass lighten(), darken(), mix()
+tldr: "Use `color-mix()` to mix two colors natively — the direct replacement for Sass `lighten()`, `darken()`, and `mix()`. Always specify `in oklch` for perceptually uniform results; use `in srgb` only when mixing with `transparent`."
 ---
 
 # color-mix()

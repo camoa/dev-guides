@@ -1,5 +1,6 @@
 ---
 description: Feature detection and graceful degradation for CREATE category features
+tldr: "Use this when implementing CREATE category features (advanced features outside Bootstrap scope) to ensure graceful degradation and browser compatibility."
 ---
 
 # Progressive Enhancement Guidelines

@@ -1,5 +1,6 @@
 ---
 description: Search API processor pipeline — 6 stages, execution flow, weight system, and ProcessorInterface
+tldr: "Use this when you need to understand how Search API processors work — the stages, weights, and execution order."
 drupal_version: "11.x"
 ---
 

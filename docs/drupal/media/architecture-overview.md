@@ -1,5 +1,6 @@
 ---
 description: Understanding how media source plugins fit into Drupal's entity and plugin systems before implementing custom functionality.
+tldr: "Understanding how media source plugins fit into Drupal's entity and plugin systems before implementing custom functionality."
 ---
 
 # Architecture Overview

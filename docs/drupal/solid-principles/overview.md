@@ -1,5 +1,6 @@
 ---
 description: How Drupal 11 architecture embodies SOLID principles - services, plugins, entities, forms, hooks
+tldr: "Understanding how Drupal's architecture embodies SOLID principles guides you to write code that aligns with core patterns rather than fighting them."
 drupal_version: "11.x"
 ---
 

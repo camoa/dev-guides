@@ -1,5 +1,6 @@
 ---
 description: Search API Views integration — plugin mapping, creating a search View, display types, fulltext filter configuration
+tldr: "Use this when building search pages using Views — the most common approach for Search API."
 drupal_version: "11.x"
 ---
 

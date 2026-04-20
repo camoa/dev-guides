@@ -1,5 +1,6 @@
 ---
 description: Migrate AJAX accessibility features — ARIA live regions, screen reader announcements, and focus management for HTMX swaps
+tldr: "Use this when migrating `AnnounceCommand`, `FocusFirstCommand`, and screen reader patterns from AJAX to HTMX. HTMX handles messages automatically but custom announcements need trigger headers."
 drupal_version: "11.x"
 ---
 

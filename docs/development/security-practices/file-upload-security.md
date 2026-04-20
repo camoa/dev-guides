@@ -1,5 +1,6 @@
 ---
 description: Secure file upload handling including magic byte validation, secure storage, malware scanning, filename sanitization, and path traversal prevention.
+tldr: "Any feature that accepts files from users — profile pictures, document uploads, file sharing, import features, email attachments. File uploads are extremely dangerous: remote code execution, stored XSS, DoS, malware distribution."
 ---
 
 # File Upload Security

@@ -1,5 +1,6 @@
 ---
 description: Using autowiring to automatically resolve constructor arguments from type hints — enabling autowire, creating aliases for ambiguous interfaces, and the Autowire attribute.
+tldr: "When you want the container to automatically resolve constructor arguments based on type hints — reduces YAML boilerplate for services with many dependencies."
 ---
 
 # Autowiring

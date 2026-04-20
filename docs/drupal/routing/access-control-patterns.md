@@ -1,5 +1,6 @@
 ---
 description: Drupal route access control - permission, role, and custom access patterns to secure routes
+tldr: "Use when restricting route access to specific users, roles, or custom conditions. Always define access requirements - never leave routes open."
 drupal_version: "11.x"
 ---
 

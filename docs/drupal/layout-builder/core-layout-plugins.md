@@ -1,3 +1,7 @@
+---
+tldr: "When selecting a layout for a section or creating custom layouts based on core patterns."
+
+---
 ## 5. Core Layout Plugins
 
 ### When to Use

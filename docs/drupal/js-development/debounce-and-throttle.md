@@ -1,5 +1,6 @@
 ---
 description: Optimize high-frequency events with debounce and throttle patterns
+tldr: "Use for events that fire rapidly (scroll, resize, input, mousemove) where executing handler every time causes performance issues."
 drupal_version: "10.x/11.x"
 ---
 

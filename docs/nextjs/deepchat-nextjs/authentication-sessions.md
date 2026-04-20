@@ -1,5 +1,6 @@
 ---
 description: NextAuth Bearer token authentication, Drupal OAuth + CSRF flow, session management, and thread persistence
+tldr: "Use NextAuth + Bearer token for user-specific chat. Use OAuth + CSRF flow for Drupal backend."
 ---
 
 # Authentication & Sessions

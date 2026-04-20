@@ -1,5 +1,6 @@
 ---
 description: Skeleton loading screens and shimmer animations — shimmer vs pulse, explicit dimensions for CLS, dark mode tokens, ARIA markup
+tldr: "Use skeleton screens for content-heavy components (cards, feeds, profiles) — they reduce perceived wait by showing the layout shape. Use spinners for actions with indeterminate duration (form submit, file upload)."
 ---
 
 # Skeleton and Loading States

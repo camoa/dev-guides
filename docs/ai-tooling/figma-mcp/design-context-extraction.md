@@ -1,5 +1,6 @@
 ---
 description: Use get_design_context to convert Figma frames into structured data for AI code generation — patterns for link-based and selection-based workflows
+tldr: "Every code generation session starts here. `get_design_context` is the core tool — it converts Figma's visual representation into structured data AI agents can translate into code."
 ---
 
 # Design Context Extraction

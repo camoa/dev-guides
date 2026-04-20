@@ -1,3 +1,7 @@
+---
+tldr: "What NOT to do and WHY."
+
+---
 ## 30. Anti-Patterns & Common Mistakes
 
 ### When to Use

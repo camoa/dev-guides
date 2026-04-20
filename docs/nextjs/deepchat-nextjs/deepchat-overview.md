@@ -1,5 +1,6 @@
 ---
 description: Framework-agnostic web component for AI chat interfaces with built-in streaming, file upload, and voice features
+tldr: "Use DeepChat when you need a drop-in chat widget with minimal configuration. Use Chatbot UI or Vercel AI Chat when you need full control over UI/UX."
 ---
 
 # DeepChat Overview

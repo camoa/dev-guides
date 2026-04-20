@@ -1,5 +1,6 @@
 ---
 description: Building extensible systems with tagged service collectors — service_collector tag, addHandler pattern, tagged_iterator for lazy loading, and named arguments.
+tldr: "When you need to build an extensible system where multiple services can register themselves to be used by a manager service — plugin-like architecture without the plugin API overhead."
 ---
 
 # Tagged Service Collectors

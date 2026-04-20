@@ -1,5 +1,6 @@
 ---
 description: Development standards for maintainable Drupal AJAX — dependency injection, render arrays, error handling, and Drupal.behaviors
+tldr: "Apply these standards to all AJAX code. They prevent the most common sources of bugs, broken tests, and maintenance pain."
 drupal_version: "11.x"
 ---
 

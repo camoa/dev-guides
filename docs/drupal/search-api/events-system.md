@@ -1,5 +1,6 @@
 ---
 description: Search API events — available events, when they dispatch, and event subscriber pattern for query and indexing hooks
+tldr: "Use this when hooking into Search API's query or indexing pipeline without creating full custom processors."
 drupal_version: "11.x"
 ---
 

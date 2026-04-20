@@ -1,5 +1,6 @@
 ---
 description: Salesforce mapping admin UI — sync triggers, field direction, queue options, UI vs code decision
+tldr: "Use the mapping UI for initial setup, simple mappings, and site builder workflows. Use code/config for complex mappings, multi-site deployments, and version-controlled configuration."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: When to use Custom Field vs Paragraphs, entity references, or core multi-value fields for compound data storage in Drupal.
+tldr: "You need to store multiple related values together in a single field without creating entity references or separate content types -- for example, an address with street/city/state/zip, a product with SKU/price/weight/dimensions, or a…"
 ---
 
 # Custom Field Overview

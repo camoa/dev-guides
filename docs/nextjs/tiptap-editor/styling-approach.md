@@ -1,5 +1,6 @@
 ---
 description: You need to style the editor content, UI elements, or integrate with a design system.
+tldr: "You need to style the editor content, UI elements, or integrate with a design system."
 ---
 
 ## 16.1 Styling & Theming Approach

@@ -1,5 +1,6 @@
 ---
 description: Custom display formatters for field values in view modes
+tldr: "When creating custom display output for field values in view modes, requiring specialized rendering beyond core label/plain text formatters."
 drupal_version: "11.x"
 ---
 

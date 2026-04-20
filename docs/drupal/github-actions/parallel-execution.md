@@ -1,5 +1,6 @@
 ---
 description: Run independent GitHub Actions jobs concurrently to reduce total workflow time
+tldr: "Use when running independent jobs concurrently to reduce total workflow time."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Customizing how media source fields are displayed in views and edited in forms when media type is created.
+tldr: "Customizing how media source fields are displayed in views and edited in forms when media type is created."
 ---
 
 # Display Configuration

@@ -1,5 +1,6 @@
 ---
 description: Security best practices (XSS protection, access checks, CSRF) and performance optimization (cache strategies, lazy loading, efficient attachments).
+tldr: "Security best practices (XSS protection, access checks, CSRF) and performance optimization (cache strategies, lazy loading, efficient attachments)."
 ---
 
 # Security & Performance

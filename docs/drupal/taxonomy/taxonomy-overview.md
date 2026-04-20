@@ -1,5 +1,6 @@
 ---
 description: When to use taxonomy vs other content organization approaches
+tldr: "Use taxonomy when you need to categorize, tag, or organize content with reusable terms. Use list fields when you have a fixed list of options specific to one content type."
 drupal_version: "11.x"
 ---
 

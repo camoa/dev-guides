@@ -1,5 +1,6 @@
 ---
 description: Compose granular recipes into complex functionality by declaring dependencies in the recipes key
+tldr: "Use recipe composition when you need to build complex functionality from granular, reusable recipe building blocks."
 drupal_version: "11.x"
 ---
 

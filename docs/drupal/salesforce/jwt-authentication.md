@@ -1,5 +1,6 @@
 ---
 description: Salesforce JWT Bearer Token authentication setup — standard vs GovCloud plugin, RSA key configuration
+tldr: "Use JWT when you need server-to-server authentication without interactive authorization. Use the GovCloud plugin only for Salesforce Government Cloud instances."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Standardized templates for Bootstrap mapping documentation
+tldr: "Use these templates for consistent documentation across Bootstrap mapping projects, ensuring framework compliance and systematic analysis."
 ---
 
 # Documentation Templates

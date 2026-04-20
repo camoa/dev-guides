@@ -1,3 +1,7 @@
+---
+tldr: "When establishing Layout Builder workflows, governance, or making architectural decisions."
+
+---
 ## 16. Best Practices & Patterns
 
 ### When to Use

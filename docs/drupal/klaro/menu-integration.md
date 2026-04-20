@@ -1,5 +1,6 @@
 ---
 description: Add privacy settings links to menus or use floating toggle button for consent management
+tldr: "Provide users a way to modify consent preferences after initial decision. GDPR requires the ability to withdraw consent at any time."
 drupal_version: "11.x"
 ---
 

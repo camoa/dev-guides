@@ -1,5 +1,6 @@
 ---
 description: Identify and fix common config management mistakes — patterns that break deployment, cause data loss, or create security issues.
+tldr: "When you need to identify and fix common config management mistakes — patterns that break deployment, cause data loss, or create security issues."
 ---
 
 # Anti-Patterns & Common Mistakes

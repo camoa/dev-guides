@@ -1,5 +1,6 @@
 ---
 description: Controlling AI crawler access in robots.txt — block training bots while allowing search and retrieval bots for AI discoverability
+tldr: "You need a deliberate policy on which AI crawlers can access your Drupal site and for what purpose. AI crawlers serve three distinct functions — training data collection, search/retrieval indexing, and user-initiated browsing — and should…"
 drupal_version: "11.x"
 ---
 

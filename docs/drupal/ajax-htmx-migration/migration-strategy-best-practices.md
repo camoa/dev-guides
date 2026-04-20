@@ -1,5 +1,6 @@
 ---
 description: Plan your AJAX to HTMX migration — priorities by risk and ROI, phased workflow, and testing strategy
+tldr: "Use this before starting any AJAX to HTMX migration. Plan priorities, rollout phases, and testing to minimize risk."
 drupal_version: "11.x"
 ---
 

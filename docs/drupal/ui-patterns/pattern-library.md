@@ -1,5 +1,6 @@
 ---
 description: Pattern Library — browsable component preview with stories
+tldr: "Pattern Library — browsable component preview with stories"
 drupal_version: "10.3+ / 11"
 ---
 

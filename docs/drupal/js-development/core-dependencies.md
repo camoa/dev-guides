@@ -1,5 +1,6 @@
 ---
 description: Essential Drupal core JavaScript library dependencies and when to use them
+tldr: "Use when defining any JavaScript library. Dependencies ensure required code loads first."
 drupal_version: "10.x/11.x"
 ---
 

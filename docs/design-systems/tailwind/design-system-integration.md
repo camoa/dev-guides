@@ -1,5 +1,6 @@
 ---
 description: Connect Figma or Style Dictionary token pipelines to Tailwind configuration and maintain design-to-code consistency.
+tldr: "Use when connecting a design tool (Figma) or token management system to Tailwind configuration — keeping design and implementation in sync."
 ---
 
 # Design System Integration

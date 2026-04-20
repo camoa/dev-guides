@@ -1,5 +1,6 @@
 ---
 description: AI CKEditor module — AI toolbar plugins for CKEditor 5, custom plugin development, and configuration
+tldr: "Use this guide when adding AI text-generation capabilities to CKEditor 5. Use [AI Automators](ai-automators.md) for field-level automation outside the editor."
 drupal_version: "11.x"
 ---
 

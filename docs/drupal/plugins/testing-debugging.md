@@ -1,5 +1,6 @@
 ---
 description: Test plugin architectures with PHPUnit unit and functional tests
+tldr: "Test plugin architectures at unit level for plugin managers and service collectors. Use functional tests for REST API endpoints and integration workflows."
 drupal_version: "11.x"
 ---
 

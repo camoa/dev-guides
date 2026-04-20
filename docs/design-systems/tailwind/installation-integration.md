@@ -1,5 +1,6 @@
 ---
 description: Choose the right Tailwind installation path for your build tool — Vite plugin, PostCSS, or CLI.
+tldr: "Use when setting up Tailwind in a new or existing project. Choose Vite plugin for Vite-based projects; PostCSS for everything else."
 ---
 
 # Installation & Integration

@@ -1,5 +1,6 @@
 ---
 description: Using the Renderer service to programmatically convert render arrays to HTML -- methods, patterns, and render context management.
+tldr: "When you need to programmatically convert render arrays to HTML strings -- tokens, emails, feeds, AJAX responses, testing, or anywhere outside the normal page rendering flow."
 ---
 
 # The Renderer Service

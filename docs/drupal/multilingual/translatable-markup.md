@@ -1,5 +1,6 @@
 ---
 description: Drupal TranslatableMarkup and t() — translation functions, placeholders, string context, plural forms, render arrays
+tldr: "When translating UI strings in PHP code — form labels, system messages, error messages, navigation text."
 ---
 
 # TranslatableMarkup & t()

@@ -1,3 +1,7 @@
+---
+tldr: "When deciding whether to allow per-entity layout customization or use a single default layout for all entities of a bundle."
+
+---
 ## 9. Defaults vs Overrides
 
 ### When to Use

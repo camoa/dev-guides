@@ -1,5 +1,6 @@
 ---
 description: CSS-only popovers and tooltips — Popover API, anchor positioning, and cross-browser hover tooltip patterns
+tldr: "Use the Popover API (`popover` attribute + `popovertarget`) for click-triggered panels with built-in light dismiss and focus trapping. Use CSS `:hover` + `::after` for simple hover tooltips that need to work everywhere."
 ---
 
 # CSS-Only Popovers & Tooltips

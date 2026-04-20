@@ -1,5 +1,6 @@
 ---
 description: Use grid components as Layout Builder layouts with UI Styles for section and block styling
+tldr: "Use grid components as Layout Builder layouts with UI Styles for section and block styling"
 ---
 
 # Layout Builder Integration

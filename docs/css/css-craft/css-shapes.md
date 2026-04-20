@@ -1,5 +1,6 @@
 ---
 description: CSS shapes and decorative geometry — wave dividers, blobs, diagonal sections, clip-path polygons, and the shape() function
+tldr: "Use `clip-path` when you need precise geometric cuts or responsive curves. Use `border-radius` with uneven values when you need animatable organic blob shapes."
 ---
 
 # CSS Shapes & Decorative Geometry

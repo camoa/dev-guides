@@ -1,5 +1,6 @@
 ---
 description: Securing file uploads with extension whitelists, MIME validation, private file storage, filename sanitization, and directory protection.
+tldr: "Whenever users can upload files -- unrestricted file upload is one of the most dangerous vulnerabilities (remote code execution)."
 ---
 
 # File Upload Security

@@ -1,5 +1,6 @@
 ---
 description: Sync configuration between environments — export from dev, commit to Git, import to staging/production.
+tldr: "When you need to sync configuration between environments — export config from dev, commit to Git, import to staging/production."
 ---
 
 # Config Synchronization

@@ -1,5 +1,6 @@
 ---
 description: Rewrite vs retrofit vs retire strategy for D7 custom modules in D11
+tldr: "D7 custom modules use hooks, procedural code, and deprecated APIs. D11 requires object-oriented plugins, services, event subscribers."
 drupal_version: "11.x"
 ---
 

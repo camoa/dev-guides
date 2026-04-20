@@ -1,5 +1,6 @@
 ---
 description: Code review checklist for SOLID compliance in Drupal modules
+tldr: "Use this checklist during code review to verify SOLID compliance."
 drupal_version: "11.x"
 ---
 

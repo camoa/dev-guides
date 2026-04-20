@@ -1,5 +1,6 @@
 ---
 description: Read FigJam architecture diagrams and user flows with get_figjam, or generate new FigJam diagrams from Mermaid syntax using generate_diagram
+tldr: "When your workflow involves FigJam diagrams — architecture maps, user flows, process diagrams — or when you want to generate new FigJam diagrams from code or descriptions."
 ---
 
 # FigJam and Diagram Tools

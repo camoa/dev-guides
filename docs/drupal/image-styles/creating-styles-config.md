@@ -1,5 +1,6 @@
 ---
 description: Step-by-step workflow for creating image styles via YAML config with UUID generation, file placement, and import verification
+tldr: "Use this when you need to create an image style via YAML config for version control, recipes, or distribution."
 ---
 
 # Creating Image Styles via Config

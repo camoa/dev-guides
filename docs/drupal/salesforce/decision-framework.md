@@ -1,5 +1,6 @@
 ---
 description: Salesforce decision framework — submodule selection, events vs plugins vs config, when to customize vs configure
+tldr: "Use this guide when starting a Salesforce integration to select the right submodules and approach. Return to it when deciding whether to use events, custom plugins, or plain configuration."
 drupal_version: "11.x"
 ---
 

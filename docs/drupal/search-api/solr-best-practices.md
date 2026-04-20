@@ -1,5 +1,6 @@
 ---
 description: Apache Solr with Search API — schema management, jump-start configsets, version compatibility, hosting, and Solr Cloud
+tldr: "Use this when configuring Apache Solr as your Search API backend."
 drupal_version: "11.x"
 ---
 

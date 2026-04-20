@@ -1,5 +1,6 @@
 ---
 description: You need images, tables, code blocks, or other rich content types.
+tldr: "You need images, tables, code blocks, or other rich content types."
 ---
 
 ## 5.3 Media & Interactive Nodes

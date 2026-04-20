@@ -1,5 +1,6 @@
 ---
 description: Complete YAML structure for creating icon packs with all required and optional properties
+tldr: "You're creating a new icon pack in a theme or module and need the complete YAML structure with all required and optional properties."
 drupal_version: "11.x"
 ---
 

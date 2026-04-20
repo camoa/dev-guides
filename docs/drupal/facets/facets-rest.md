@@ -1,5 +1,6 @@
 ---
 description: Facets REST sub-module — expose facet data in REST API responses for headless/decoupled frontends using FacetsSerializer
+tldr: "Use this guide when building a headless or decoupled frontend and you need facet data (values, counts, active states, URLs) in API responses."
 drupal_version: "11.x"
 ---
 

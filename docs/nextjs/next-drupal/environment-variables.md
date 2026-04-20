@@ -1,5 +1,6 @@
 ---
 description: "Configure Next.js connection to Drupal, authentication credentials, and feature flags using environment variables."
+tldr: "Configure Next.js connection to Drupal, authentication credentials, and feature flags using environment variables."
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
 ---

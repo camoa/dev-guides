@@ -1,5 +1,6 @@
 ---
 description: Group sub-modules — gnode, group_support_revisions, and key contrib modules
+tldr: "Reference this when enabling node support, revision support for grouped entities, or looking at how official sub-modules structure their plugins."
 drupal_version: "11.x"
 ---
 

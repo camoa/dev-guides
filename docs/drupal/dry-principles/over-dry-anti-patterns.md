@@ -1,5 +1,6 @@
 ---
 description: Recognize and avoid over-DRY anti-patterns in Drupal - god services, premature base classes, over-configurable plugins, and forced reuse.
+tldr: "When deciding whether to abstract or duplicate. Over-DRY is worse than under-DRY because wrong abstractions are harder to remove than duplication."
 ---
 
 # Over-DRY Anti-Patterns

@@ -1,5 +1,6 @@
 ---
 description: Design system recognition — 7. design system analysis best practices
+tldr: "You're beginning analysis of a design system from any source You need to assess the quality and maturity of a design system You're determining whether a collection of components constitutes a \"system\""
 ---
 
 ## 7. Design System Analysis Best Practices

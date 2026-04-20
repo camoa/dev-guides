@@ -1,5 +1,6 @@
 ---
 description: "Use when creating a new Next.js frontend for an existing Drupal backend. App Router (Next.js 13+) is recommended over Pages Router."
+tldr: "Use when creating a new Next.js frontend for an existing Drupal backend. App Router (Next.js 13+) is recommended over Pages Router."
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
 ---

@@ -1,5 +1,6 @@
 ---
 description: Migrate Drupal AJAX implementations to HTMX — patterns for buttons, forms, multiple updates, and migration checklist
+tldr: "Use this when converting existing AJAX implementations to HTMX, or running both systems in parallel during gradual migration."
 drupal_version: "11.x"
 ---
 

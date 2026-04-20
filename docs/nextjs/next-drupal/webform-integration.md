@@ -1,5 +1,6 @@
 ---
 description: "Submit webforms from Next.js to Drupal using the Webform REST module. Supports client-side and server-side (API route) submission."
+tldr: "Submit webforms from Next.js to Drupal using the Webform REST module. Supports client-side and server-side (API route) submission."
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
 ---

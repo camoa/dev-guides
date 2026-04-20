@@ -1,3 +1,7 @@
+---
+tldr: "Guidelines for building maintainable, performant, secure views."
+
+---
 ## 29. Best Practices & Patterns
 
 ### When to Use

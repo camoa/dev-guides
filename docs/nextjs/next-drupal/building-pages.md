@@ -1,5 +1,6 @@
 ---
 description: "Build statically generated (SSG), server-rendered (SSR), or incrementally static regenerated (ISR) pages from Drupal content. App Router uses native fetch with Next.js cache options."
+tldr: "Build statically generated (SSG), server-rendered (SSR), or incrementally static regenerated (ISR) pages from Drupal content. App Router uses native fetch with Next.js cache options."
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
 ---

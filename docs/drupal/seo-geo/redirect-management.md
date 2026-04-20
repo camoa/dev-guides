@@ -1,5 +1,6 @@
 ---
 description: Drupal redirect management — manual redirects, redirect_404 submodule for 404 logging, auto-redirect on alias change, 301 vs 302 decision, and domain migrations
+tldr: "Use the Redirect module whenever URL aliases change, content moves, or domains migrate. A site without redirect management bleeds SEO equity every time a URL changes — search engines and users hit 404s that could be 301s."
 drupal_version: "11.x"
 ---
 

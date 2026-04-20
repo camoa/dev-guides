@@ -1,5 +1,6 @@
 ---
 description: Choose between Schema Metatag and Schema.org Blueprints for JSON-LD structured data — retrofit vs greenfield, stability vs depth
+tldr: "Drupal has two distinct approaches to outputting Schema.org JSON-LD. Schema Metatag layers structured data on top of existing content using token-mapped metatags — ideal for retrofitting established sites."
 drupal_version: "11.x"
 ---
 

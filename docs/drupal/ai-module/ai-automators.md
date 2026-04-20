@@ -1,5 +1,6 @@
 ---
 description: AI Automators — auto-populate entity fields on save using AI, with 52 plugin types and three worker modes
+tldr: "Use this guide when auto-generating field content on entity save. Use [AI Agents](ai-agents.md) when you need autonomous decision-making rather than fixed field generation."
 drupal_version: "11.x"
 ---
 

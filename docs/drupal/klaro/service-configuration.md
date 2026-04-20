@@ -1,5 +1,6 @@
 ---
 description: Configure services to control external resources (scripts, iframes, cookies) per user consent
+tldr: "Configure a service when you need to control external resources (scripts, iframes, images) that collect data or set cookies. Each third-party integration requires a service definition."
 drupal_version: "11.x"
 ---
 

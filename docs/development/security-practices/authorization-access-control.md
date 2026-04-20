@@ -1,5 +1,6 @@
 ---
 description: Authorization patterns including RBAC, ABAC, ACLs, least privilege, IDOR prevention, and resource ownership checks.
+tldr: "Every operation that accesses resources must check authorization — reading data, modifying data, deleting data, accessing admin features. Authentication answers \"who are you?\", authorization answers \"what can you do?\""
 ---
 
 # Authorization and Access Control

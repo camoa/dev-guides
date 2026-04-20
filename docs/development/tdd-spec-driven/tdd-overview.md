@@ -1,5 +1,6 @@
 ---
 description: What TDD is, why it matters, when to use it, and common mistakes to avoid
+tldr: "You're starting a new feature, fixing a bug, or working on complex business logic where you want to catch errors early and design better code through tests."
 ---
 
 # TDD Overview

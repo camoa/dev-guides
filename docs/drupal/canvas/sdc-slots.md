@@ -1,5 +1,6 @@
 ---
 description: When and how to use SDC slots in Canvas — defining drop zones where editors can nest other Canvas components.
+tldr: "Use slots when your component has a region where editors should place other components — not just edit text or pick an image, but nest whole other Canvas components inside. Use props when you want editors to type text, pick an image, or…"
 drupal_version: "11.x"
 ---
 

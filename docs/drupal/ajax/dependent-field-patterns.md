@@ -1,5 +1,6 @@
 ---
 description: Build dependent form fields that update based on parent field value — category/subcategory, country/state patterns
+tldr: "Use dependent fields when form options must change based on the value of another field (category/subcategory, country/state, product type/options)."
 drupal_version: "11.x"
 ---
 

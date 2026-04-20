@@ -1,5 +1,6 @@
 ---
 description: Define custom brand tokens and extend Tailwind's default theme
+tldr: "Use this when you need tokens beyond Tailwind's defaults -- brand colors, custom spacing, project-specific breakpoints, or semantic aliases."
 ---
 
 # Custom Token Definition

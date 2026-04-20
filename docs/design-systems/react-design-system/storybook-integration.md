@@ -1,5 +1,6 @@
 ---
 description: Document React design system components in Storybook using CSF3, argTypes, and the a11y addon.
+tldr: "Use for all design system components. Storybook is the development environment, living documentation, and visual regression baseline — not optional."
 ---
 
 # Storybook Integration

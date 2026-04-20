@@ -1,3 +1,7 @@
+---
+tldr: "Specialized caching beyond time-based and tag-based: per-user caching, geolocation-based, A/B testing variants, external cache backends."
+
+---
 ## 27. Custom Cache Plugin
 
 ### When to Use

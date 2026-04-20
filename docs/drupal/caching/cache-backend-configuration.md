@@ -1,5 +1,6 @@
 ---
 description: Configure Redis, Memcache, and APCu cache backends in settings.php
+tldr: "When you need to configure cache backends (Redis, Memcache, APCu) in settings.php. Backend configuration determines where cached data is stored and how it's accessed."
 ---
 
 # Cache Backend Configuration

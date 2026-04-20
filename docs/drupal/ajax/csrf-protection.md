@@ -1,5 +1,6 @@
 ---
 description: Protect AJAX endpoints from CSRF attacks using Drupal's token system and request validation
+tldr: "Drupal's Form API handles CSRF automatically. For custom AJAX routes outside Form API, add `_csrf_token: 'TRUE'` and verify request type."
 drupal_version: "11.x"
 ---
 

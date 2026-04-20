@@ -1,5 +1,6 @@
 ---
 description: You need a selection-based menu (appears on text selection) or context menu (right-click).
+tldr: "You need a selection-based menu (appears on text selection) or context menu (right-click)."
 ---
 
 ## 12.1 Bubble Menu & Context Menus

@@ -1,5 +1,6 @@
 ---
 description: Custom container compilation logic — compiler pass types and phases, processing tagged services, validating definitions, collecting service IDs, and core compiler passes.
+tldr: "When you need custom processing of service definitions during container compilation — validate services, process custom tags, or modify the container graph."
 ---
 
 # Compiler Passes

@@ -1,5 +1,6 @@
 ---
 description: Add taxonomy term reference fields to content types via config
+tldr: "Use this workflow to add taxonomy term reference fields to content types, users, or other entities using the config-first approach."
 drupal_version: "11.x"
 ---
 

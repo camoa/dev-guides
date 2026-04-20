@@ -1,5 +1,6 @@
 ---
 description: Query taxonomy terms programmatically with TermStorage methods
+tldr: "Use TermStorage specialized methods for hierarchy operations. Use entity queries for standard term lookups."
 drupal_version: "11.x"
 ---
 

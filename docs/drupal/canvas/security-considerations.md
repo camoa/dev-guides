@@ -1,5 +1,6 @@
 ---
 description: Security surface, known vulnerabilities, access control, and safe Twig/JSX patterns for Canvas on Drupal production sites.
+tldr: "Use this when deploying Canvas on a production site. Covers known vulnerabilities, access control model, and safe patterns for SDC and Code Component development."
 drupal_version: "11.x"
 ---
 

@@ -1,3 +1,7 @@
+---
+tldr: "When tuning the underlying database query for performance, distinct results, or query debugging."
+
+---
 ## 16. Query Settings
 
 ### When to Use

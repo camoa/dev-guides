@@ -1,5 +1,6 @@
 ---
 description: Implementing llms.txt on a Drupal site — static file, custom route, or build script — for AI assistant discoverability
+tldr: "You want AI coding assistants, documentation tools, and LLM-powered search to find and understand your site's content. The llms.txt standard (llmstxt.org, September 2024) is a lightweight convention: place a machine-readable index at…"
 drupal_version: "11.x"
 ---
 

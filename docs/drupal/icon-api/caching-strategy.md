@@ -1,5 +1,6 @@
 ---
 description: Icon API caching behavior to optimize performance and troubleshoot cache-related issues
+tldr: "You need to understand Icon API caching behavior to optimize performance or troubleshoot cache-related issues."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Decide between block plugin, content block, or inline block for your use case
+tldr: "Use block plugins when you need logic, DI, or dynamic content. Use content blocks when editors need to manage content without code changes."
 drupal_version: "11.x"
 ---
 

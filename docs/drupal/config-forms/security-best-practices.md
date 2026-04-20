@@ -1,5 +1,6 @@
 ---
 description: Security patterns for configuration forms
+tldr: "All configuration forms must follow security best practices to prevent vulnerabilities."
 drupal_version: "11.x"
 ---
 

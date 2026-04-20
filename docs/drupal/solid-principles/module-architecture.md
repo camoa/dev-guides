@@ -1,5 +1,6 @@
 ---
 description: Structure a Drupal module following SOLID principles - directory layout and organization
+tldr: "Structure your custom module following SOLID principles. This section shows recommended directory layout and organization patterns."
 drupal_version: "11.x"
 ---
 

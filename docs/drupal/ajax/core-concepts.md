@@ -1,5 +1,6 @@
 ---
 description: Drupal AJAX architecture — three-layer system, workflow, and minimal form pattern
+tldr: "Use Drupal AJAX when maintaining existing codebases, working with contributed modules, or needing backward compatibility. Use HTMX (available in Drupal 11.3+) for new projects — it reduces JavaScript size by up to 71%."
 drupal_version: "11.x"
 ---
 

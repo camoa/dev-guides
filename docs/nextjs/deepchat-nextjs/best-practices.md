@@ -1,5 +1,6 @@
 ---
 description: Component architecture, performance optimization, lazy loading, error handling, and production patterns for DeepChat
+tldr: "Lazy load when chat not immediately visible. Use error boundaries in production."
 ---
 
 # Best Practices & Patterns

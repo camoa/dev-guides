@@ -1,5 +1,6 @@
 ---
 description: Convert JavaScript array methods to Twig for loops
+tldr: "Use this when converting JavaScript array methods (`.map()`, `.filter()`, `.reduce()`, `.slice()`) to Twig `{% for %}` loops and filters."
 drupal_version: "11.x"
 ---
 

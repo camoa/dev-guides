@@ -1,5 +1,6 @@
 ---
 description: Basic Drupal route structure - foundation for all route definitions in *.routing.yml files
+tldr: "Use when defining any new route in a `*.routing.yml` file. This is the foundation for all routing definitions."
 drupal_version: "11.x"
 ---
 

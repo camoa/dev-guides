@@ -1,5 +1,6 @@
 ---
 description: Integrate consumer services with plugin managers and service collectors
+tldr: "Use provider abstraction for internal Drupal services consuming plugins. Use REST API controller pattern for external systems consuming service collectors."
 drupal_version: "11.x"
 ---
 

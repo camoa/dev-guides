@@ -1,5 +1,6 @@
 ---
 description: Configure a Tailwind v4 project using CSS-first @theme blocks — add tokens, override defaults, and define custom utilities.
+tldr: "Use when configuring a Tailwind v4 project. All configuration lives in CSS via `@theme` — no JS config file required."
 ---
 
 # v4 Configuration: CSS-First

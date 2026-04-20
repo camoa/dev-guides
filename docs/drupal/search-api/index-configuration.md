@@ -1,5 +1,6 @@
 ---
 description: Search API index entity — properties, datasource selection, key methods, and cron_limit tuning
+tldr: "Use this when creating or configuring a Search API index — the central entity defining what gets indexed, how it's processed, and where it's stored."
 drupal_version: "11.x"
 ---
 

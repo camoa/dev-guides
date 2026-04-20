@@ -1,5 +1,6 @@
 ---
 description: How BreadcrumbManager dispatches to builders — the chain, priority system, and cache metadata merging
+tldr: "Read this before writing any custom builder or alter hook. The `BreadcrumbManager` is the chain dispatcher; every breadcrumb request routes through it."
 drupal_version: "11.x"
 ---
 

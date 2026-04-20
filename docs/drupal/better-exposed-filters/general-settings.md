@@ -1,5 +1,6 @@
 ---
 description: BEF general settings — auto-submit, secondary options panel, reset button, and input-required configuration keys
+tldr: "Use this guide when configuring BEF's global options that apply to all exposed filters on a View — auto-submit, secondary options panel, reset button, and input-required behavior."
 drupal_version: "11.x"
 ---
 

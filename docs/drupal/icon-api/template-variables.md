@@ -1,5 +1,6 @@
 ---
 description: Available variables in icon pack templates and how to use them effectively
+tldr: "You're writing icon pack templates and need to understand available variables and how to use them effectively."
 drupal_version: "11.x"
 ---
 

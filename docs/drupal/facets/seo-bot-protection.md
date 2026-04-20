@@ -1,5 +1,6 @@
 ---
 description: Facets SEO and bot protection — layered defense against crawl budget exhaustion and AI scraper abuse, including robots.txt, facet_bot_blocker, Cloudflare WAF, and form-based facets
+tldr: "Use this guide when deploying any site with Facets. Facets have ZERO built-in SEO or bot protection."
 drupal_version: "11.x"
 ---
 

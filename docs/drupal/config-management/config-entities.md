@@ -1,5 +1,6 @@
 ---
 description: Create user-manageable config entity types with CRUD operations, dependencies, and admin UI.
+tldr: "When you need to create user-manageable lists of configuration items (like views, image styles, vocabularies) with CRUD operations, dependencies, and admin UI."
 ---
 
 # Config Entities

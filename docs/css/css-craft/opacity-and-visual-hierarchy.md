@@ -1,5 +1,6 @@
 ---
 description: Create text and UI hierarchy with alpha channels — primary/secondary/tertiary opacity tokens, state overlays, color-mix() for token-based transparency
+tldr: "Use color alpha for text hierarchy (primary/secondary/tertiary weight) without changing font size or weight. Use `color-mix()` to create semi-transparent versions of existing tokens."
 ---
 
 # Opacity and Visual Hierarchy

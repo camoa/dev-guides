@@ -1,5 +1,6 @@
 ---
 description: Decision guide — UI Patterns 2 story.yml (static browsing, no Node.js, any theme with ui_patterns module) vs Storybook.js tools (interactive Controls) — choose based on whether you need live prop manipulation
+tldr: "Use UI Patterns 2 `.story.yml` when you need static variant browsing with zero Node.js setup — works on any theme with the `ui_patterns` module. Use Storybook.js tools (`drupal/storybook` or `storybook-addon-sdc`) when you need interactive…"
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Validate and debug Schema.org JSON-LD structured data — Google Rich Results Test, Schema.org Validator, Chrome DevTools, Drupal debugging, and common errors
+tldr: "Run validation immediately after configuring any structured data — before the page is indexed. A single missing required property (like `image` on Article) prevents rich result eligibility."
 drupal_version: "11.x"
 ---
 

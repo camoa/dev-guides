@@ -1,5 +1,6 @@
 ---
 description: Common SOLID anti-patterns — God Object, Modification Cascade, Refused Bequest, Interface Bloat, Service Locator, and more.
+tldr: "Common SOLID anti-patterns — God Object, Modification Cascade, Refused Bequest, Interface Bloat, Service Locator, and more."
 ---
 
 # SOLID Anti-Patterns

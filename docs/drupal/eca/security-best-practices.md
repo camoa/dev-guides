@@ -1,5 +1,6 @@
 ---
 description: Sanitize input, check access, validate API responses, and secure credentials in ECA plugins
+tldr: "Apply security patterns to all plugins that handle user input, external data, API credentials, or entity access. Security is mandatory, not optional."
 drupal_version: "11.x"
 ---
 

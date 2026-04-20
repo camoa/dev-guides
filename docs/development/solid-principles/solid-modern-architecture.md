@@ -1,5 +1,6 @@
 ---
 description: Applying SOLID principles to microservices, component-based frontends, API design, and event-driven architecture.
+tldr: "Applying SOLID principles to microservices, component-based frontends, API design, and event-driven architecture."
 ---
 
 # SOLID in Modern Architecture

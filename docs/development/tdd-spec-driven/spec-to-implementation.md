@@ -1,5 +1,6 @@
 ---
 description: Workflow for generating code from specs using AI tools, with verification and iterative refinement
+tldr: "You have a detailed specification and are ready to generate or write code using AI assistance, or you're manually implementing code that must match a specification."
 ---
 
 # From Spec to Implementation

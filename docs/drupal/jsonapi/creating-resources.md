@@ -1,5 +1,6 @@
 ---
 description: "Creating new entities via the API. Requires authentication and proper permissions."
+tldr: "Creating new entities via the API. Requires authentication and proper permissions."
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 ---

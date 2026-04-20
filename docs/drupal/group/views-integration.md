@@ -1,5 +1,6 @@
 ---
 description: Group Views integration — base tables, join paths, plugin_id filtering, group_id argument, and access filtering behavior
+tldr: "Reference this when building Views that display groups, group members, or content within groups."
 drupal_version: "11.x"
 ---
 

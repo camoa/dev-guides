@@ -1,5 +1,6 @@
 ---
 description: Convert React Router Link, Next.js Link, and anchor patterns to Drupal path(), url(), and link field rendering
+tldr: "When converting React link and routing patterns (`<a href>`, React Router `<Link>`, Next.js `<Link>`, `onClick` navigation, dynamic routes) to Drupal Twig equivalents using `path()`, `url()`, `link()`, and link field formatters."
 drupal_version: "11.x"
 ---
 

@@ -1,3 +1,7 @@
+---
+tldr: "When you want SDC components to serve as Layout Builder section layouts without writing custom `*.layouts.yml` or `LayoutDefault` plugins. Also covers UI Styles module as an alternative to Layout Builder Styles for CSS class management."
+
+---
 ### 11.5 UI Patterns Layouts & UI Styles Integration
 
 #### When to Use

@@ -1,5 +1,6 @@
 ---
 description: "Both JSON:API and GraphQL work with next-drupal. JSON:API is simpler and built into Drupal core. GraphQL requires additional modules but offers more flexibility."
+tldr: "Both JSON:API and GraphQL work with next-drupal. JSON:API is simpler and built into Drupal core."
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
 ---

@@ -1,5 +1,6 @@
 ---
 description: Widget selection reference for all 27 custom field types with 39 available widgets, showing defaults and compatibility.
+tldr: "You need to choose the right widget for collecting data for each sub-field in your custom field."
 ---
 
 # Widget Plugins

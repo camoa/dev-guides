@@ -1,5 +1,6 @@
 ---
 description: Validating user input with Form API, typed data constraints, URL validation, file validation, and output sanitization patterns.
+tldr: "Every point where user input enters the system -- validation ensures data integrity; sanitization prevents injection attacks."
 ---
 
 # Input Validation and Sanitization

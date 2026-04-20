@@ -1,5 +1,6 @@
 ---
 description: "Customize resource names, URLs, field visibility, and field transformations. Requires jsonapi_extras contrib module."
+tldr: "Customize resource names, URLs, field visibility, and field transformations. Requires `jsonapi_extras` contrib module."
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 ---

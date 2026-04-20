@@ -1,5 +1,6 @@
 ---
 description: CSS counters and progress — animated progress rings, CSS-only counting numbers, step indicators, and scroll-driven progress
+tldr: "Use `@property` + `counter()` for animated counting numbers and SVG `stroke-dashoffset` for progress rings — both without JavaScript counting libraries."
 ---
 
 # CSS Counters & Progress

@@ -1,5 +1,6 @@
 ---
 description: "Handle Drupal media entities, image fields, and inline images in body fields using Next.js Image component for optimization."
+tldr: "Handle Drupal media entities, image fields, and inline images in body fields using Next.js Image component for optimization."
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
 ---

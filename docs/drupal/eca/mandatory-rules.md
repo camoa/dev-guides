@@ -1,5 +1,6 @@
 ---
 description: Pre-completion checklist for ECA plugins — all rules are MANDATORY, not optional
+tldr: "Use this checklist before completing ANY ECA plugin. These are not optional - violating these rules will cause bugs or break your plugin."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: "Implement search functionality using Drupal Search API exposed via JSON:API."
+tldr: "Implement search functionality using Drupal Search API exposed via JSON:API."
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
 ---

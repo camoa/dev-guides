@@ -1,5 +1,6 @@
 ---
 description: SEO audit workflow for Drupal 11 — SEO Checklist module, Real-time SEO content scoring, manual audit checklist, Google Search Console, and ongoing monitoring
+tldr: "Run an SEO audit at site launch, after major content migrations, and quarterly thereafter. Drupal provides two complementary module-based audit tools — SEO Checklist for configuration audits and Real-time SEO (Yoast) for per-content…"
 drupal_version: "11.x"
 ---
 

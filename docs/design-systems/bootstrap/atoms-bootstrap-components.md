@@ -1,5 +1,6 @@
 ---
 description: Map atomic design system components (buttons, inputs, badges) to Bootstrap
+tldr: "Use this to map atomic design system components (buttons, inputs, badges) to Bootstrap's component variables and mixins."
 ---
 
 # Atoms → Bootstrap Components

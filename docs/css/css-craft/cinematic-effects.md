@@ -1,5 +1,6 @@
 ---
 description: Cinematic CSS effects — border beam, glow, aurora, neon, shimmer sweep, particles, and perspective grid for focal hero moments
+tldr: "Use cinematic effects on hero sections, primary CTAs, and feature highlights — one or two per page maximum. Do not use on navigation, body copy, form fields, dashboards, or secondary CTAs."
 ---
 
 # Cinematic Effects

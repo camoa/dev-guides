@@ -1,5 +1,6 @@
 ---
 description: All 27 custom field column types organized by category -- text, numeric, date/time, reference, file, and data fields with schema details and gotchas.
+tldr: "All 27 custom field column types organized by category -- text, numeric, date/time, reference, file, and data fields with schema details and gotchas."
 ---
 
 # Column Types

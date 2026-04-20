@@ -1,5 +1,6 @@
 ---
 description: Manage environment-specific configuration with Config Split and settings.php overrides to avoid duplicating config across dev/staging/prod.
+tldr: "When you need different configuration across environments (dev modules in dev only, production API keys in prod only) without duplicating config or managing it manually."
 ---
 
 # Config Split and Environments

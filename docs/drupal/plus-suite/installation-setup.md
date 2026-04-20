@@ -1,5 +1,6 @@
 ---
 description: Install Plus Suite on a new or existing Drupal 11.3+ site — recipe vs manual installation, requirements, and post-install config
+tldr: "Use the DDEV install script for new projects and evaluation. Use manual module installation for existing sites already using Layout Builder."
 drupal_version: "11.x"
 ---
 

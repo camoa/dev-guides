@@ -1,5 +1,6 @@
 ---
 description: You need to make an informed decision between Tiptap, Lexical, and Slate based on specific project requirements.
+tldr: "You need to make an informed decision between Tiptap, Lexical, and Slate based on specific project requirements."
 ---
 
 ## 1.2 Editor Comparison Matrix

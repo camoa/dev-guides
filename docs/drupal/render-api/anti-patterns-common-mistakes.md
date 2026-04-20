@@ -1,5 +1,6 @@
 ---
 description: Anti-patterns to avoid in render arrays -- early rendering, raw HTML, missing cache metadata, XSS vulnerabilities, structural mistakes.
+tldr: "Anti-patterns to avoid in render arrays -- early rendering, raw HTML, missing cache metadata, XSS vulnerabilities, structural mistakes."
 ---
 
 # Anti-Patterns & Common Mistakes

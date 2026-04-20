@@ -1,5 +1,6 @@
 ---
 description: Field validation with custom constraints and business rules
+tldr: "When enforcing data integrity constraints on field values, requiring validation beyond basic required/max_length checks, ensuring data quality and business rule compliance."
 drupal_version: "11.x"
 ---
 

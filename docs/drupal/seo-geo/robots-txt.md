@@ -1,5 +1,6 @@
 ---
 description: robots.txt configuration for Drupal 11 — core file, custom rules, sitemap reference, and AI crawler policies
+tldr: "Configure robots.txt on every Drupal site before launch. It controls which paths search engines crawl."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Secure image derivatives with itok tokens, optimize derivative generation strategies, and manage CDN integration for performance
+tldr: "Use this when you need to secure image derivatives against attacks and optimize image delivery performance."
 ---
 
 # Security & Performance

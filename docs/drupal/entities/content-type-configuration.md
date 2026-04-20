@@ -1,5 +1,6 @@
 ---
 description: Content type YAML configuration for exportable content types
+tldr: "When creating content types via configuration management (YAML files) for deployment across environments, or when exporting existing content types for version control."
 drupal_version: "11.x"
 ---
 

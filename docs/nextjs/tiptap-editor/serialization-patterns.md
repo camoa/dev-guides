@@ -1,5 +1,6 @@
 ---
 description: You need to export editor content to different formats, transform content, or integrate with external systems.
+tldr: "You need to export editor content to different formats, transform content, or integrate with external systems."
 ---
 
 ## 11.1 Content Serialization & Export Patterns

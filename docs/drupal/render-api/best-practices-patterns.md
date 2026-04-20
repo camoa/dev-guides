@@ -1,5 +1,6 @@
 ---
 description: Architectural best practices for render arrays -- dependency injection, cache metadata, access checks, testing, and performance optimization.
+tldr: "Architectural best practices for render arrays -- dependency injection, cache metadata, access checks, testing, and performance optimization."
 ---
 
 # Best Practices & Patterns

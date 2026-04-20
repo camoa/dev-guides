@@ -1,5 +1,6 @@
 ---
 description: Execute Drupal PHPUnit tests locally and in CI/CD with filtering, debugging, and DDEV support.
+tldr: "Executing tests locally, in CI/CD, filtering by group/tag, debugging failures."
 ---
 
 # Running Tests

@@ -1,5 +1,6 @@
 ---
-description: You need the foundational nodes required for any Tiptap document: Document, Paragraph, Text.
+description: "You need the foundational nodes required for any Tiptap document: Document, Paragraph, Text."
+tldr: "You need the foundational nodes required for any Tiptap document: Document, Paragraph, Text."
 ---
 
 ## 5.1 Document Structure Nodes

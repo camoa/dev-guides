@@ -1,5 +1,6 @@
 ---
 description: Facets result filtering processors — count_limit, hide_non_narrowing, hide_active_items, exclude_specified_items, dependent_processor
+tldr: "Use this guide when you need to control which facet items are displayed — hiding items with low counts, removing specific values, or showing only narrowing results."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Understand how Drupal tracks config dependencies — modules, themes, config entities — and how they affect import order and deletion.
+tldr: "When you need to understand how Drupal tracks which modules, themes, and config entities depend on each other, and how dependencies affect import order and deletion."
 ---
 
 # Config Dependencies

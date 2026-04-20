@@ -1,5 +1,6 @@
 ---
 description: Service supports oEmbed protocol but needs custom URL validation, additional metadata extraction, or provider-specific handling.
+tldr: "Service supports oEmbed protocol but needs custom URL validation, additional metadata extraction, or provider-specific handling."
 ---
 
 # Extending OEmbed Sources

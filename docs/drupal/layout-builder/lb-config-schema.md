@@ -1,3 +1,7 @@
+---
+tldr: "When reading, editing, or generating Layout Builder configuration in YAML files, understanding config structure for recipes, programmatic manipulation, or debugging."
+
+---
 ## 3. Layout Builder Configuration Schema
 
 ### When to Use

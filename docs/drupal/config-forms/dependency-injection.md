@@ -1,5 +1,6 @@
 ---
 description: Inject services into forms using dependency injection pattern
+tldr: "Use dependency injection when forms need services (config factory, entity type manager, database, custom services)."
 drupal_version: "11.x"
 ---
 

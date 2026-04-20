@@ -1,5 +1,6 @@
 ---
 description: YAML migration definition structure for source, process, and destination
+tldr: "Migration definitions are YAML files defining source, process, and destination. Core provides templates for D7→D11 migrations."
 drupal_version: "11.x"
 ---
 

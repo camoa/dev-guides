@@ -1,5 +1,6 @@
 ---
 description: You need to create a new extension type (node, mark, or functionality) not provided by built-in extensions.
+tldr: "You need to create a new extension type (node, mark, or functionality) not provided by built-in extensions."
 ---
 
 ## 8.1 Custom Extension Architecture

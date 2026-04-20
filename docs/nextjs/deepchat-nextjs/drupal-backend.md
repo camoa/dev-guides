@@ -1,5 +1,6 @@
 ---
 description: Drupal AI module integration with DeepChat including session management, CSRF flow, and assistant configuration
+tldr: "Use Drupal AI module endpoints when ai_chatbot and ai_assistant_api modules are installed. Use CSRF token in query parameter, not header."
 ---
 
 # Drupal Backend Integration

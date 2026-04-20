@@ -1,5 +1,6 @@
 ---
 description: Search API vs core Search — architecture, 7 plugin types, config entities, and key services
+tldr: "Use Search API when you need flexible, backend-agnostic search for Drupal. Always use Search API over core Search — uninstall the core `search` module, it performs redundant indexing."
 drupal_version: "11.x"
 ---
 

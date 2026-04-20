@@ -1,5 +1,6 @@
 ---
 description: Maximum flexibility for icon content including custom SVG, multiple icons, or complex compositions
+tldr: "Your component needs maximum flexibility for icon content, including custom SVG, multiple icons, or complex icon compositions."
 drupal_version: "11.x"
 ---
 

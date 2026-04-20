@@ -1,5 +1,6 @@
 ---
 description: Reference for DaisyUI layout components — drawer, hero, divider, join, indicator, and stack
+tldr: "Page structure, sidebars, overlays, and content arrangement patterns."
 ---
 
 # Layout Components

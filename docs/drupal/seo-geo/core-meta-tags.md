@@ -1,5 +1,6 @@
 ---
 description: Configure title tags, meta descriptions, canonical URLs, and robots meta in Drupal 11 using the Metatag module with token-based defaults
+tldr: "You need to configure the foundational meta tags — title, description, canonical, and robots — that affect search engine indexing and click-through rates. These are configured in the Metatag module's core submodule (always enabled) at…"
 drupal_version: "11.x"
 ---
 

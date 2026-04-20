@@ -1,5 +1,6 @@
 ---
 description: BEF date picker widget — HTML5 date input conversion, between operators, date offset handling
+tldr: "Use this widget when you have a date filter and want HTML5 `<input type=\"date\">` instead of a text field. Use the hidden widget for date filters you want to set programmatically without user input."
 drupal_version: "11.x"
 ---
 

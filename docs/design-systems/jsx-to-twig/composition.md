@@ -1,5 +1,6 @@
 ---
 description: Convert React component composition patterns to Twig includes and embeds
+tldr: "Use this when converting React patterns for combining components -- nesting, polymorphic elements, higher-order components, context providers, and compound component APIs."
 drupal_version: "11.x"
 ---
 

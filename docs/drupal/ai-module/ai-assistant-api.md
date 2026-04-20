@@ -1,5 +1,6 @@
 ---
 description: AI Assistant API — config entities, runner service, action plugins, and system prompt tokens
+tldr: "Use this guide when creating AI assistants, writing custom action plugins, or calling the runner programmatically. Use [AI Chatbot](ai-chatbot-deepchat.md) for the frontend chatbot configuration."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: "Diagnose and resolve common issues when integrating Next.js with Drupal."
+tldr: "Diagnose and resolve common issues when integrating Next.js with Drupal."
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
 ---

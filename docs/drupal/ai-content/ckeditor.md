@@ -1,5 +1,6 @@
 ---
 description: CKEditor AI integration - in-editor content generation, rewriting, and enhancement
+tldr: "Use CKEditor AI integration for in-editor AI assistance. Use when content creators need real-time content generation, rewriting, and enhancement without leaving the editing interface."
 drupal_version: "11.x"
 ---
 

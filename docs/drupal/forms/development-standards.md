@@ -1,5 +1,6 @@
 ---
 description: Development standards and anti-patterns - opinionated best practices and critical mistakes to avoid
+tldr: "Development standards and anti-patterns - opinionated best practices and critical mistakes to avoid"
 drupal_version: "11.x"
 ---
 

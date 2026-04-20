@@ -1,5 +1,6 @@
 ---
 description: Form element type system - categories, discovery, and universal properties
+tldr: "Choose element types based on data type and UI needs. All elements are plugins discovered from Element/ directory."
 drupal_version: "11.x"
 ---
 

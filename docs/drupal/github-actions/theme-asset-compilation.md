@@ -1,5 +1,6 @@
 ---
 description: Build Sass, JavaScript, and optimize assets for Drupal themes in CI/CD pipelines
+tldr: "Use when building Sass, JavaScript, and optimizing assets for Drupal themes in automated workflows."
 drupal_version: "11.x"
 ---
 

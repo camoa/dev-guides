@@ -1,5 +1,6 @@
 ---
 description: BEF secondary options panel and per-filter collapsible details — configuration, nesting, and auto-open behavior
+tldr: "Use secondary options when you have many exposed filters and want to group less-used ones into a collapsible \"Advanced options\" panel. Use per-filter collapsible when you want individual filters wrapped in their own toggleable details…"
 drupal_version: "11.x"
 ---
 

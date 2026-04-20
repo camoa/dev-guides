@@ -1,5 +1,6 @@
 ---
 description: Entity query optimization for large datasets and high-traffic scenarios
+tldr: "When optimizing entity queries for large datasets, high-traffic scenarios, or complex filtering requirements, requiring careful query construction and caching."
 drupal_version: "11.x"
 ---
 

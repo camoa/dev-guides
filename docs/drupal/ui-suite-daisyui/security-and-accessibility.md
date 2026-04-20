@@ -1,5 +1,6 @@
 ---
 description: Asset pipeline security, Twig escaping, form security, DaisyUI component accessibility, and WCAG concerns
+tldr: "Asset pipeline security, Twig escaping, form security, DaisyUI component accessibility, and WCAG concerns"
 ---
 
 # Security & Accessibility

@@ -1,5 +1,6 @@
 ---
 description: SSRF, mixed content, and availability risks when loading icons from CDNs or external sources
+tldr: "You're loading icons from CDNs or external sources and need to understand SSRF, mixed content, and availability risks."
 drupal_version: "11.x"
 ---
 

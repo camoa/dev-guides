@@ -1,5 +1,6 @@
 ---
 description: Composer install, theme enable, dependency requirements, and post-installation verification
+tldr: "Composer install, theme enable, dependency requirements, and post-installation verification"
 ---
 
 # Installation & Setup

@@ -1,5 +1,6 @@
 ---
 description: Sequence, cancel, and coordinate JS animations — when to use CSS transitions, WAAPI element.animate(), or requestAnimationFrame loops
+tldr: "Use CSS transitions for simple state changes. Use WAAPI (`element.animate()`) when you need JS-driven values, sequencing, or mid-animation cancellation."
 ---
 
 # Animation Orchestration

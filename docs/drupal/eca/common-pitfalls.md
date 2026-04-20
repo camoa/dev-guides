@@ -1,5 +1,6 @@
 ---
 description: Avoid critical ECA plugin mistakes — parent::create pattern, token attributes, negationCheck
+tldr: "Review this section before completing any ECA plugin to avoid the most common mistakes that break plugins or cause maintenance problems."
 drupal_version: "11.x"
 ---
 

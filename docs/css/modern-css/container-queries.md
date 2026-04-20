@@ -1,5 +1,6 @@
 ---
 description: Respond to container size with @container — component-level responsive design
+tldr: "Use `@container` when a component needs to adapt to the space available from its container, not the viewport. Use `@media` when you need page-level breakpoints based on viewport size."
 ---
 
 # Container Queries

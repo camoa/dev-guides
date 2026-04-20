@@ -1,5 +1,6 @@
 ---
 description: You're integrating Tiptap into a Next.js application (App Router or Pages Router).
+tldr: "You're integrating Tiptap into a Next.js application (App Router or Pages Router)."
 ---
 
 ## 13.1 Next.js Integration & SSR Handling

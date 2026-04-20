@@ -1,5 +1,6 @@
 ---
 description: Define the structure and data types for module configuration so Drupal can validate, cast, and translate config values.
+tldr: "When defining the structure and data types for your module's configuration so Drupal can validate, cast, and translate config values."
 ---
 
 # Config Schema YAML

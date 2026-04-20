@@ -1,5 +1,6 @@
 ---
 description: Position tooltips relative to anchors natively — replace Popper.js
+tldr: "Use anchor positioning for tooltips, dropdowns, and overlays that need to follow their trigger across scroll container boundaries. Use `position: relative` + `position: absolute` on a parent when there is no scroll container concern and…"
 ---
 
 # CSS Anchor Positioning

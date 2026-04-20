@@ -1,5 +1,6 @@
 ---
 description: Choose between HTMX and traditional AJAX — decision table for Drupal dynamic content patterns
+tldr: "Use HTMX when replacing content with simple swaps, dependent form fields, load more, or modals. Use traditional AJAX when you need complex command sequences, heavy client-side processing, or contrib module integration."
 drupal_version: "11.x"
 ---
 

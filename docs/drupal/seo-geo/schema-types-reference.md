@@ -1,5 +1,6 @@
 ---
 description: All 25 Schema Metatag supported Schema.org types with key properties, GEO priority types, and field-to-property mapping patterns
+tldr: "Reference this guide when mapping Drupal content types and fields to Schema.org types. Schema Metatag 3.x supports 25 top-level Schema.org types via submodules."
 drupal_version: "11.x"
 ---
 

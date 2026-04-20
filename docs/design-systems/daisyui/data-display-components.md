@@ -1,5 +1,6 @@
 ---
 description: Reference for DaisyUI data display components — badge, alert, card, stat, table, and accordion
+tldr: "Presenting information: status indicators, grouped content, statistics, tables, and collapsible sections."
 ---
 
 # Data Display Components

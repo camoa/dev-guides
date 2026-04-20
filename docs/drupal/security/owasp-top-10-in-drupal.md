@@ -1,5 +1,6 @@
 ---
 description: Mapping OWASP Top 10 2021 vulnerabilities to Drupal-specific mitigations, common pitfalls, and prevention patterns.
+tldr: "When evaluating Drupal applications against industry-standard security risks or conducting security audits."
 ---
 
 # OWASP Top 10 in Drupal

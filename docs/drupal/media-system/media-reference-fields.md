@@ -1,5 +1,6 @@
 ---
 description: Configuring media reference fields on content types — single, multiple, unlimited, and mixed media type references with appropriate widgets and formatters.
+tldr: "You need to add media reference fields to content types, paragraphs, or other entities."
 ---
 
 ## 13. Media Reference Fields

@@ -1,5 +1,6 @@
 ---
 description: Common SDC anti-patterns with explanations from code review perspective
+tldr: "Use this when code reviewing component implementations, debugging component issues, or establishing component development standards."
 drupal_version: "11.x"
 ---
 

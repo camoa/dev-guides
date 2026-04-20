@@ -1,5 +1,6 @@
 ---
 description: Set up the Figma MCP remote server in Claude Code, VS Code, Cursor, or Windsurf — no desktop app required
+tldr: "Starting point for most developers. No Figma desktop app required."
 ---
 
 # Remote Server Setup

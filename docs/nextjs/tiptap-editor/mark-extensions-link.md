@@ -1,5 +1,6 @@
 ---
 description: You need hyperlinks with URL validation and target control.
+tldr: "You need hyperlinks with URL validation and target control."
 ---
 
 ## 6.2 Link Mark & URL Handling

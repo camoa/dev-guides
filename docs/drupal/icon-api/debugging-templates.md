@@ -1,5 +1,6 @@
 ---
 description: Debug when icons render incorrectly, template variables are missing, or SVG markup is malformed
+tldr: "Icons render incorrectly, template variables are missing, or SVG markup is malformed."
 drupal_version: "11.x"
 ---
 

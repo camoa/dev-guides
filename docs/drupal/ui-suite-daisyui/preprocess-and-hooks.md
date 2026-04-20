@@ -1,5 +1,6 @@
 ---
 description: Theme hook implementations in ui_suite_daisyui.theme for pagers, forms, and inputs
+tldr: "Theme hook implementations in ui_suite_daisyui.theme for pagers, forms, and inputs"
 ---
 
 # Preprocess & Hooks

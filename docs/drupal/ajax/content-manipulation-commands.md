@@ -1,5 +1,6 @@
 ---
 description: AJAX commands for updating, adding, removing, and rearranging DOM content — ReplaceCommand, HtmlCommand, AppendCommand and others
+tldr: "Use these commands when you need to update DOM content from AJAX callbacks. Choose the command that matches the specific DOM operation needed."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: You're integrating Tiptap into a React or Next.js application.
+tldr: "You're integrating Tiptap into a React or Next.js application."
 ---
 
 ## 2.2 React Integration & SSR Handling

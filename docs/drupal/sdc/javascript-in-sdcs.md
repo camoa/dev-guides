@@ -1,5 +1,6 @@
 ---
 description: JavaScript integration with Drupal.behaviors, once(), and progressive enhancement
+tldr: "Use this when adding interactive behavior to components, implementing Drupal.behaviors pattern, or integrating with `once()` or other Drupal JS APIs."
 drupal_version: "11.x"
 ---
 

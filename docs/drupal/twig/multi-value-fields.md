@@ -1,4 +1,5 @@
 ---
+tldr: "When a field is configured to allow multiple values and you need to iterate, count, slice, or conditionally access individual items."
 topic: drupal/twig
 guide: multi-value-fields
 ---

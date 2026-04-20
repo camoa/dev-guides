@@ -1,5 +1,6 @@
 ---
 description: Write PHPUnit FunctionalJavascript tests for AJAX interactions, autocomplete, modals, and client-side JavaScript
+tldr: "Write FunctionalJavascript tests only when testing features that require JavaScript execution: AJAX form elements, autocomplete fields, modal dialogs, drag-and-drop interfaces, or client-side validation."
 drupal_version: "11.x"
 ---
 

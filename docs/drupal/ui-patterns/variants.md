@@ -1,5 +1,6 @@
 ---
 description: Variants — pre-defined visual variations for components
+tldr: "Variants — pre-defined visual variations for components"
 drupal_version: "10.3+ / 11"
 ---
 

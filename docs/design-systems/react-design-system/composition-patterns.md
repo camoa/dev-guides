@@ -1,5 +1,6 @@
 ---
 description: Build multi-part components with compound components + Context, ref forwarding, Radix wrappers, and use client directives in Next.js App Router.
+tldr: "Use when building multi-part components (select, tabs, accordion, dialog) where sub-components need to share state without prop drilling."
 ---
 
 # Composition Patterns

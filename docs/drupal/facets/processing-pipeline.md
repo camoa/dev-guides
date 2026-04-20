@@ -1,5 +1,6 @@
 ---
 description: Facets processing pipeline — PRE_QUERY, POST_QUERY, BUILD, and SORT stages, execution flow, and FacetManager service
+tldr: "Use this guide when you need to understand how facets process data from query to rendering, or when debugging unexpected facet behavior."
 drupal_version: "11.x"
 ---
 

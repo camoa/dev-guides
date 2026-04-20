@@ -1,5 +1,6 @@
 ---
 description: Custom bundle entity classes for programmatic content type creation
+tldr: "When building custom content entity types that need bundle support (multiple subtypes with different field configurations), requiring programmatic bundle creation or custom bundle behavior."
 drupal_version: "11.x"
 ---
 

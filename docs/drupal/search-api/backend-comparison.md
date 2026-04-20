@@ -1,5 +1,6 @@
 ---
 description: Choose the right Search API backend — Database, Solr, Elasticsearch, OpenSearch, Typesense, or Meilisearch
+tldr: "Use this when choosing which search engine to use with Search API. Default to Solr for production."
 drupal_version: "11.x"
 ---
 

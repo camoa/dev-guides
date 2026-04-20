@@ -1,5 +1,6 @@
 ---
 description: You're deciding whether logic belongs in Twig or preprocess function
+tldr: "You're deciding whether logic belongs in Twig or preprocess function You need guidance on Twig template inheritance (extend vs include vs embed) You're working with the Drupal attributes object You want performance best practices for Twig…"
 drupal_version: "11.x"
 ---
 

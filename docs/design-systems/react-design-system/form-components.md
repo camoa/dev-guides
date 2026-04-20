@@ -1,5 +1,6 @@
 ---
 description: Build accessible form components with compound FormField, react-hook-form integration, Zod validation, and aria-describedby error linking.
+tldr: "Use when building Input, Select, Checkbox, Textarea, or any form field component. Form components have unique requirements: validation state, error display, accessibility linking, and library integration."
 ---
 
 # Form Components

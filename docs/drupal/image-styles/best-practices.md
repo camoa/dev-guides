@@ -1,5 +1,6 @@
 ---
 description: Naming conventions, standard sizes, lazy loading strategies, and performance patterns for image style configuration and deployment
+tldr: "Use this when you need guidance on naming conventions, standard sizes, performance optimization, and lazy loading patterns."
 ---
 
 # Best Practices & Patterns

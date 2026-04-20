@@ -1,5 +1,6 @@
 ---
 description: Optimizing front-end performance when building/overriding components
+tldr: "Optimizing front-end performance when building/overriding components."
 ---
 
 # Performance Best Practices

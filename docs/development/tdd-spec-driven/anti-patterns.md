@@ -1,5 +1,6 @@
 ---
 description: Classic and modern TDD anti-patterns including The Liar, Excessive Setup, The Giant, and over-mocking
+tldr: "You're practicing TDD or reviewing tests and want to identify common mistakes that reduce test value or create maintenance burden."
 ---
 
 # TDD Anti-Patterns

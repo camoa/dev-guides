@@ -1,5 +1,6 @@
 ---
 description: Use DaisyUI in React with CVA variant management, theme switching, and Radix UI accessibility integration
+tldr: "Building React components that use DaisyUI classes, managing variants with CVA, and integrating DaisyUI theming with React patterns."
 ---
 
 # DaisyUI and React

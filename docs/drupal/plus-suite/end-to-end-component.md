@@ -1,5 +1,6 @@
 ---
 description: End-to-end component creation in Plus Suite — complete 9-step walkthrough creating a Testimonial block with all features integrated
+tldr: "Follow this walkthrough when creating any new Plus Suite component from scratch. Use the checklist at the end to verify completeness."
 drupal_version: "11.x"
 ---
 

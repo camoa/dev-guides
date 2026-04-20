@@ -1,5 +1,6 @@
 ---
 description: Guardrails system — pre/post processing plugins for content moderation, PII filtering, and prompt injection detection
+tldr: "Use guardrails when you need to intercept AI requests before they reach the provider (pre-processing) or after receiving a response (post-processing). Required for user-facing AI features."
 drupal_version: "11.x"
 ---
 

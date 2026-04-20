@@ -1,5 +1,6 @@
 ---
 description: Migrate Load More buttons and infinite scroll patterns — append content using swap beforeend and the revealed trigger
+tldr: "Use this when migrating \"Load More\" buttons or infinite scroll patterns that append new content to a list — content listings, search results, and feeds."
 drupal_version: "11.x"
 ---
 

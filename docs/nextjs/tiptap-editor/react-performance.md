@@ -1,5 +1,6 @@
 ---
 description: Your editor re-renders too frequently, causing lag or poor UX.
+tldr: "Your editor re-renders too frequently, causing lag or poor UX."
 ---
 
 ## 17.1 React Performance Optimization

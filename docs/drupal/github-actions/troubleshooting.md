@@ -1,5 +1,6 @@
 ---
 description: Debug common GitHub Actions failures in Drupal workflows
+tldr: "Use when debugging common GitHub Actions failures in Drupal workflows."
 drupal_version: "11.x"
 ---
 

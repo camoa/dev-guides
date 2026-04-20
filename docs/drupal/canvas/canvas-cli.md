@@ -1,5 +1,6 @@
 ---
 description: Step-by-step workflow for developing Canvas Code Components locally using the CLI — scaffold, build, push, and pull.
+tldr: "Use this when developing Code Components in a local IDE/editor rather than (or in addition to) the Canvas in-browser editor. The CLI enables full local development with version control and CI/CD, while staying in sync with the Canvas…"
 drupal_version: "11.x"
 ---
 

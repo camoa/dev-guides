@@ -1,5 +1,6 @@
 ---
 description: Validating source field values before saving media entities (URL patterns, API connectivity, file types).
+tldr: "Validating source field values before saving media entities (URL patterns, API connectivity, file types)."
 ---
 
 # Validation Constraints

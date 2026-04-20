@@ -1,5 +1,6 @@
 ---
 description: Defining permissions in modules, creating dynamic permissions with callbacks, and grouping them into roles.
+tldr: "Defining what actions users can perform and grouping those permissions into roles."
 ---
 
 # Permissions and Roles

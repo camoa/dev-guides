@@ -1,4 +1,5 @@
 ---
+tldr: "When you need to add, remove, or modify HTML attributes in a template — particularly CSS classes, data attributes, ARIA attributes, and custom element attributes."
 topic: drupal/twig
 guide: attribute-system
 ---

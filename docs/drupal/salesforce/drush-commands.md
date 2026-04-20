@@ -1,5 +1,6 @@
 ---
 description: Salesforce Drush commands reference — push queue, pull queue, mapping maintenance, token management
+tldr: "Use Drush commands for manual queue processing, debugging, maintenance operations, and resyncing data. All commands are namespaced under `salesforce:`, `salesforce_mapping:`, `salesforce_push:`, and `salesforce_pull:`."
 drupal_version: "11.x"
 ---
 

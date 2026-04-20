@@ -1,5 +1,6 @@
 ---
 description: Required and optional SDC component file structure and naming conventions
+tldr: "Use this when creating a new component, debugging \"component not found\" errors, or understanding automatic asset loading."
 drupal_version: "11.x"
 ---
 

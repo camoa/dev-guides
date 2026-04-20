@@ -1,5 +1,6 @@
 ---
 description: Field Widget Actions — framework for attaching AI action buttons to entity form field widgets
+tldr: "Use this guide when adding action buttons to field widgets on entity edit forms. The `field_widget_actions` module is AI-agnostic — it provides the framework; other modules provide the actual AI plugins."
 drupal_version: "11.x"
 ---
 

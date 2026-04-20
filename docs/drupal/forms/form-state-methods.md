@@ -1,5 +1,6 @@
 ---
 description: FormState methods reference - value access, storage, control flags, and error handling
+tldr: "Use getValue() for submitted values (sanitized), set()/get() for persistent storage across rebuilds, setTemporaryValue() for single-request data."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Pre-submission checklist for AI-assisted Drupal contributions — understanding, API correctness, coding standards, security, testing, and disclosure verification
+tldr: "Use this before submitting any AI-assisted code to drupal.org or any Drupal project. Run through every item every time."
 drupal_version: "11.x"
 ---
 

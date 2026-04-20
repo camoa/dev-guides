@@ -1,5 +1,6 @@
 ---
 description: AI API Explorer — developer UI for testing AI operations interactively with code examples
+tldr: "Use `ai_api_explorer` for interactive testing of AI operations during development. **Do not enable on production.** Use [Operation Types](operation-types.md) for the actual PHP API."
 drupal_version: "11.x"
 ---
 

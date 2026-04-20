@@ -1,5 +1,6 @@
 ---
 description: Use ECA traits for form fields, entity saving, lists, and YAML config to avoid code duplication
+tldr: "Use ECA's built-in traits to avoid duplicating complex logic that's already implemented and tested. Traits encapsulate patterns like form field lookup, entity saving, list operations, and YAML configuration."
 drupal_version: "11.x"
 ---
 

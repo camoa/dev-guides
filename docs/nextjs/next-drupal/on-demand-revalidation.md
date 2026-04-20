@@ -1,5 +1,6 @@
 ---
 description: "Automatically update Next.js cached pages when content is created, updated, or deleted in Drupal. Supports path-based and tag-based revalidation."
+tldr: "Automatically update Next.js cached pages when content is created, updated, or deleted in Drupal. Supports path-based and tag-based revalidation."
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
 ---

@@ -1,5 +1,6 @@
 ---
 description: Facets common mistakes, anti-patterns, and debugging checklist — issue/cause/solution table and step-by-step debug process
+tldr: "Use this guide when debugging facet issues or reviewing a faceted search implementation before going to production."
 drupal_version: "11.x"
 ---
 

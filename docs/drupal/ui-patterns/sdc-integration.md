@@ -1,5 +1,6 @@
 ---
 description: SDC integration — how UI Patterns decorates, extends, and maintains SDC compatibility
+tldr: "SDC integration — how UI Patterns decorates, extends, and maintains SDC compatibility"
 drupal_version: "10.3+ / 11"
 ---
 

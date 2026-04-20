@@ -1,5 +1,6 @@
 ---
 description: DDEV port exposure, ddev-storybook addon, and BrowserSync vs Storybook workflow comparison
+tldr: "Use this guide when running `drupal/storybook` or `storybook-addon-sdc` inside a DDEV project and needing the Storybook UI accessible in the browser from outside the container."
 drupal_version: "11.x"
 ---
 

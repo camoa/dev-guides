@@ -1,5 +1,6 @@
 ---
 description: You need semantic block-level elements for structured content.
+tldr: "You need semantic block-level elements for structured content."
 ---
 
 ## 5.2 Content Nodes (Heading, Blockquote, Lists)

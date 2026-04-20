@@ -1,5 +1,6 @@
 ---
 description: Reference for DaisyUI action components — button, dropdown, modal, and swap
+tldr: "Interactive elements that trigger actions: buttons, dropdowns, modals, and content swap toggles."
 ---
 
 # Actions Components

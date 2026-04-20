@@ -1,5 +1,6 @@
 ---
 description: Use Drupal test traits for creating users, nodes, content types, blocks, and random test data.
+tldr: "Reusing common test setup patterns: creating users, nodes, content types, blocks, etc."
 ---
 
 # Test Traits & Utilities

@@ -1,5 +1,6 @@
 ---
 description: drupal/storybook module — complete stories/story Twig tag reference with argTypes Controls, setup sequence, and working examples for interactive Storybook integration
+tldr: "Use `drupal/storybook` when your theme uses custom Twig templates that need real Drupal rendering with interactive Controls. Do NOT use for UI Suite DaisyUI themes — `.story.yml` is the correct tool."
 drupal_version: "11.x"
 ---
 

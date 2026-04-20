@@ -1,5 +1,6 @@
 ---
 description: AI module security — permissions, checklist, prompt injection, XSS, CSRF, and agent security
+tldr: "Use this guide before deploying any user-facing AI feature. All items in the checklist are required for production."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Validate form fields on focusout to provide immediate feedback without form submission
+tldr: "Use live validation when user experience benefits from immediate field-level feedback (email availability checks, username format, real-time constraints). Avoid for simple required-field checks."
 drupal_version: "11.x"
 ---
 

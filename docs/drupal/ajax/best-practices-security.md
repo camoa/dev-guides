@@ -1,5 +1,6 @@
 ---
 description: Security requirements for every Drupal AJAX implementation — access control, XSS prevention, CSRF, input validation
+tldr: "Apply every item in this guide to every AJAX implementation. AJAX callbacks and routes are HTTP endpoints — they require the same security rigor as any web API."
 drupal_version: "11.x"
 ---
 

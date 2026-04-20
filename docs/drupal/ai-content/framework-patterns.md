@@ -1,5 +1,6 @@
 ---
 description: Content framework patterns - AIDA, PAS, BAB, Inverted Pyramid, Storytelling for AI generation
+tldr: "Use content frameworks to structure AI content generation. Choose frameworks based on content goals: persuasion, information delivery, storytelling, or education."
 drupal_version: "11.x"
 ---
 

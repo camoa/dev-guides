@@ -1,5 +1,6 @@
 ---
 description: Filter ECA event triggers by entity type, bundle, or field with wildcard patterns
+tldr: "Use entity-aware events when you need to filter event triggers by entity type, bundle, or field name. This enables precise workflow targeting without evaluating every entity operation."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Understand when and why to use consent management for GDPR and privacy compliance
+tldr: "Use consent management when your Drupal site loads external resources (scripts, iframes, images) that may collect visitor data or set cookies. Required for GDPR, ePrivacy Directive, and similar privacy regulations."
 drupal_version: "11.x"
 ---
 

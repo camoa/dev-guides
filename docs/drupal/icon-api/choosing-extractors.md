@@ -1,5 +1,6 @@
 ---
 description: Select the appropriate extractor plugin for your icon source format and security requirements
+tldr: "You need to select the appropriate extractor plugin for your icon source format and security requirements."
 drupal_version: "11.x"
 ---
 

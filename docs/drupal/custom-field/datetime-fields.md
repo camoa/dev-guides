@@ -1,5 +1,6 @@
 ---
 description: Working with datetime, daterange, time, time_range, and duration sub-fields including widget selection and timezone handling.
+tldr: "Working with date, time, date range, time range, or duration columns in custom fields."
 ---
 
 # Date/Time Sub-Fields

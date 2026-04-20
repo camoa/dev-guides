@@ -1,5 +1,6 @@
 ---
 description: Avoid common pitfalls that cause bugs, performance issues, or security vulnerabilities in blocks
+tldr: "Reference when reviewing block code or debugging unexpected behavior. Every pattern here has been shipped in production and caused real problems."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Package and distribute reusable configuration with Drupal Recipes for composable, version-controlled config distribution across sites.
+tldr: "When you want to package and distribute reusable configuration setups (content types, fields, views, modules) across multiple Drupal sites or projects. Recipes are Drupal 11's successor to installation profiles and features."
 ---
 
 # Recipes for Reusable Config

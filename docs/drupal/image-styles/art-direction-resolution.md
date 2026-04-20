@@ -1,5 +1,6 @@
 ---
 description: Choose between sizes attribute (resolution switching) and picture element (art direction) for responsive images with config examples
+tldr: "Use this when you need to decide whether to use the sizes attribute (resolution switching) or distinct image styles per breakpoint (art direction)."
 ---
 
 # Art Direction vs Resolution Switching

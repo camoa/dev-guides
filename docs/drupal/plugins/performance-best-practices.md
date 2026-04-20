@@ -1,5 +1,6 @@
 ---
 description: Performance optimization for plugin discovery, instantiation, and external API calls
+tldr: "Apply these patterns to any plugin system handling more than a handful of plugins or processing external API calls."
 drupal_version: "11.x"
 ---
 

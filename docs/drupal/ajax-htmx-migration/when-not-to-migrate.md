@@ -1,5 +1,6 @@
 ---
 description: Cases where AJAX is better than HTMX — complex command sequences, dialogs, CSS manipulation, and contrib dependencies
+tldr: "Use AJAX when you need ordered command sequences, the core dialog system, CSS manipulation, jQuery data API, or when contrib modules expect AJAX callbacks."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: FormBase pattern for general-purpose forms with dependency injection
+tldr: "Use FormBase for general-purpose forms with custom business logic. Use ConfigFormBase for settings, EntityForm for entities, ConfirmFormBase for confirmations."
 drupal_version: "11.x"
 ---
 

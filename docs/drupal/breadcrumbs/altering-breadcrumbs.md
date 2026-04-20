@@ -1,5 +1,6 @@
 ---
 description: Use hook_system_breadcrumb_alter to add, remove, or modify breadcrumb links after a builder runs
+tldr: "Use `hook_system_breadcrumb_alter()` for low-overhead adjustments after a builder runs: inserting a segment, removing a specific link, adding cache tags/contexts. For complex logic involving entity loading or routing, write a custom…"
 drupal_version: "11.x"
 ---
 

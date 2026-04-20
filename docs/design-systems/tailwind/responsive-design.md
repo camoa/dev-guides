@@ -1,5 +1,6 @@
 ---
 description: Choose between viewport breakpoints and container queries, and apply mobile-first responsive patterns in Tailwind.
+tldr: "Use viewport breakpoints (`sm:`, `md:`) for layout changes at viewport widths. Use `@container` when a component needs to respond to its own width regardless of placement."
 ---
 
 # Responsive Design & Container Queries

@@ -1,5 +1,6 @@
 ---
 description: React to block operations and alter block behavior with hooks
+tldr: "Use alter hooks to modify block render arrays or access across all blocks or specific plugins. Use preprocess for adding template variables."
 drupal_version: "11.x"
 ---
 

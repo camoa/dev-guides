@@ -1,3 +1,7 @@
+---
+tldr: "When you need to access fields from related entities (entity references, users, taxonomy terms, etc.) or apply filters/sorts on related entity data."
+
+---
 ## 11. Relationships
 
 ### When to Use

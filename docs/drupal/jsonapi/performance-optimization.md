@@ -1,5 +1,6 @@
 ---
 description: "Essential for production deployments, high-traffic APIs, and mobile applications."
+tldr: "Essential for production deployments, high-traffic APIs, and mobile applications."
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 ---

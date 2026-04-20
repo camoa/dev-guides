@@ -1,5 +1,6 @@
 ---
 description: Create custom Schema Metatag plugins for Schema.org types not included in the 25 built-in types — attribute-based plugin system, LocalBusiness example
+tldr: "Schema Metatag ships with 25 top-level Schema.org types. When your content needs a type not in that list — LocalBusiness, MedicalEntity, LegalService, EducationalOrganization, SportsTeam — you create a custom plugin."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Overview of DRY principles in Drupal's architecture - config, services, base classes, traits, plugins, templates, SDC, and render API.
+tldr: "When making architectural decisions about code organization in Drupal projects — deciding between configuration vs code, services vs static calls, base classes vs traits, plugins vs custom implementations, or template inheritance vs…"
 ---
 
 # DRY in Drupal Overview

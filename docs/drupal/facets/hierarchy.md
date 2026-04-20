@@ -1,5 +1,6 @@
 ---
 description: Facets hierarchy — taxonomy and date hierarchy plugins, Search API index hierarchy processor, hierarchy configuration settings
+tldr: "Use this guide when faceting on hierarchical data — taxonomy vocabularies with parent-child relationships or date facets with year → month → day grouping."
 drupal_version: "11.x"
 ---
 

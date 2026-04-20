@@ -1,5 +1,6 @@
 ---
 description: Best practices and anti-patterns — component naming, slot vs prop decisions, and when NOT to use UI Patterns
+tldr: "Best practices and anti-patterns — component naming, slot vs prop decisions, and when NOT to use UI Patterns"
 drupal_version: "10.3+ / 11"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Smart cropping with Focal Point and Crop API — automatic focal-point-based cropping, manual crop per image style, and combined strategies.
+tldr: "You need smart cropping where editors specify the important area of an image (face, product) that must stay visible across all crops."
 ---
 
 ## 16. Focal Point & Crop Integration

@@ -1,5 +1,6 @@
 ---
 description: Progressively render expensive content with BigPipe streaming
+tldr: "When you need to progressively render expensive content. BigPipe sends page skeleton immediately, then streams placeholder replacements as they become ready, improving perceived performance."
 ---
 
 # BigPipe

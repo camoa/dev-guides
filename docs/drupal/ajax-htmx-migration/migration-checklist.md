@@ -1,5 +1,6 @@
 ---
 description: Step-by-step verification checklist for each AJAX to HTMX migration — pre-migration, code changes, testing, and post-migration
+tldr: "Use this checklist for every individual AJAX to HTMX migration to ensure nothing is missed."
 drupal_version: "11.x"
 ---
 

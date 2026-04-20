@@ -1,5 +1,6 @@
 ---
 description: Perceptually uniform color with oklch() and oklab() — better than HSL for design tokens
+tldr: "Use `oklch` for design token systems and color palettes — its perceptually uniform lightness means adjusting `L` gives predictable brightness changes across all hues. Use `hex` or `rgb` for exact brand color matching."
 ---
 
 # oklch() and oklab() — Modern Color Spaces

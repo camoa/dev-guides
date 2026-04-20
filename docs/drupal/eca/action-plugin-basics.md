@@ -1,5 +1,6 @@
 ---
 description: Create custom ECA Action plugins with ConfigurableActionBase for user-configurable operations
+tldr: "Create custom Action plugins when you need to perform operations that existing ECA actions cannot handle, such as integrating with external APIs, processing custom data structures, or implementing specialized business logic."
 drupal_version: "11.x"
 ---
 

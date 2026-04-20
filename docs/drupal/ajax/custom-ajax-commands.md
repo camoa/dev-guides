@@ -1,5 +1,6 @@
 ---
 description: Create custom AJAX commands with CommandInterface for complex DOM manipulation or third-party library integration
+tldr: "Create custom AJAX commands when core commands don't meet your needs: custom animations, third-party library integration, or complex DOM manipulation requiring JavaScript logic."
 drupal_version: "11.x"
 ---
 

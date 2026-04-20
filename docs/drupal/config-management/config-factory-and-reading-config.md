@@ -1,5 +1,6 @@
 ---
 description: Read and write configuration values in custom code — forms, controllers, services, hooks.
+tldr: "When you need to read configuration values in custom code — forms, controllers, services, hooks."
 ---
 
 # Config Factory & Reading Config

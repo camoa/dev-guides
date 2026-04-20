@@ -1,5 +1,6 @@
 ---
 description: Animate height/width to auto and intrinsic sizing keywords — replacing JavaScript scrollHeight measurement
+tldr: "Use `interpolate-size: allow-keywords` when you need to animate height or width to/from `auto`, `min-content`, `max-content`, or `fit-content`. Use JavaScript `scrollHeight` measurement when cross-browser support is required (Firefox and…"
 drupal_version: "11.x"
 ---
 

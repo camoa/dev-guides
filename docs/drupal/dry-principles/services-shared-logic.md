@@ -1,5 +1,6 @@
 ---
 description: Extract shared business logic into Drupal services with dependency injection for testable, reusable code.
+tldr: "When you have business logic, API integrations, calculations, or data transformations that are used in multiple places (controllers, forms, event subscribers, Drush commands)."
 ---
 
 # Services for Shared Logic

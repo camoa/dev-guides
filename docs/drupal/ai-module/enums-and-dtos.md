@@ -1,5 +1,6 @@
 ---
 description: AI enums and DTOs — AiModelCapability, AiProviderCapability, StructuredOutputSchema, TokenUsageDto, and ChatProviderLimitsDto
+tldr: "Use this guide when filtering models by capability, building structured output schemas, or tracking token usage from provider responses."
 drupal_version: "11.x"
 ---
 

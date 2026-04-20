@@ -1,5 +1,6 @@
 ---
 description: Open/Closed Principle — how to make code extensible without modification using polymorphism, composition, and data-driven logic.
+tldr: "When building systems that need to support new features without modifying existing, tested code. Especially critical in libraries, frameworks, and plugin architectures."
 ---
 
 # Open/Closed Principle (OCP)

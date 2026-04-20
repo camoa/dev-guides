@@ -1,5 +1,6 @@
 ---
 description: Building Single Directory Components with configurable icons as props for reusable component APIs
+tldr: "You're building Single Directory Components that need configurable icons as props for reusable, flexible component APIs."
 drupal_version: "11.x"
 ---
 

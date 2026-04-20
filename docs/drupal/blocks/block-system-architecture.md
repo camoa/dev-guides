@@ -1,5 +1,6 @@
 ---
 description: Drupal's 4-layer block system — Block Plugin API, placement entities, content entities, Layout Builder
+tldr: "Understand the 4 layers before starting any block development. Use this to orient yourself when deciding which layer to work with."
 drupal_version: "11.x"
 ---
 

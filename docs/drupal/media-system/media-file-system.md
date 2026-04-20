@@ -1,5 +1,6 @@
 ---
 description: Media file storage configuration — public vs private files, date-organized directories, S3/CDN integration, and oEmbed thumbnail storage.
+tldr: "You need to configure where media files are stored: public vs private, directory structure, CDN integration."
 ---
 
 ## 17. Media File System

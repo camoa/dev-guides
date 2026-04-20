@@ -1,5 +1,6 @@
 ---
 description: CSS-only tabs and toggles — radio input tab patterns, toggle switches, dark mode toggle with :has()
+tldr: "Use radio inputs + `:checked` + sibling selectors for CSS-only tab interfaces. Add ARIA roles for accessibility."
 ---
 
 # CSS-Only Tabs & Toggles

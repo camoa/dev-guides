@@ -1,5 +1,6 @@
 ---
 description: Returning access decisions using AccessResult objects with proper cache metadata, combining logic, and conditional methods.
+tldr: "Returning access decisions from custom access checks, entity access handlers, or any code that determines access."
 ---
 
 # AccessResult Patterns

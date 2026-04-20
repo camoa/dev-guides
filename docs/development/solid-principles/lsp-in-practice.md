@@ -1,5 +1,6 @@
 ---
 description: Detecting and fixing LSP violations — contract testing, covariance/contravariance, composition over inheritance, and refactoring patterns.
+tldr: "Detecting and fixing LSP violations — contract testing, covariance/contravariance, composition over inheritance, and refactoring patterns."
 ---
 
 # LSP in Practice

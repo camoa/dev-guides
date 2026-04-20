@@ -1,5 +1,6 @@
 ---
-description: You need to react to editor state changes: content updates, selection changes, focus/blur, etc.
+description: "You need to react to editor state changes: content updates, selection changes, focus/blur, etc."
+tldr: "You need to react to editor state changes: content updates, selection changes, focus/blur, etc."
 ---
 
 ## 10.1 Editor Events & Lifecycle Hooks

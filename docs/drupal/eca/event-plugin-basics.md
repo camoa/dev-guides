@@ -1,5 +1,6 @@
 ---
 description: Create custom ECA Event plugins with EventBase and derivers for business logic triggers
+tldr: "Create custom Event plugins when you need to trigger ECA workflows based on custom application logic, third-party integrations, or domain-specific business events that core Drupal events don't cover."
 drupal_version: "11.x"
 ---
 

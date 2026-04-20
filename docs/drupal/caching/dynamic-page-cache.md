@@ -1,5 +1,6 @@
 ---
 description: Cache pages for authenticated users with Dynamic Page Cache and placeholders
+tldr: "When you need to cache pages for authenticated users or pages with personalized content. Dynamic Page Cache caches page structure while excluding personalized parts (converted to placeholders)."
 ---
 
 # Dynamic Page Cache

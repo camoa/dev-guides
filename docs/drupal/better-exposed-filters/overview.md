@@ -1,5 +1,6 @@
 ---
 description: BEF vs core exposed filters — capabilities, architecture, and when to use Better Exposed Filters
+tldr: "Use Better Exposed Filters when you need more control over how Views exposed filters are rendered — replacing default select dropdowns with checkboxes, radio buttons, links, sliders, date pickers, or other widgets. Use core exposed filters…"
 drupal_version: "11.x"
 ---
 

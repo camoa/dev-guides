@@ -1,5 +1,6 @@
 ---
 description: Which Search API processors to enable — 23 built-in processors by category, and per-backend recommendations for Database vs Solr
+tldr: "Use this when deciding which processors to enable for your Search API index."
 drupal_version: "11.x"
 ---
 

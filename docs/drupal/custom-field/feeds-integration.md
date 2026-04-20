@@ -1,5 +1,6 @@
 ---
 description: Importing CSV and external data into custom field columns via Feeds module with 28 target handlers and mapping configuration.
+tldr: "You need to import CSV or other data sources into custom field columns via the Feeds module."
 ---
 
 # Feeds Import Integration

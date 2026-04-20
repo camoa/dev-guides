@@ -1,5 +1,6 @@
 ---
 description: BEF configuration schema — YAML structure in Views export, dynamic schema resolution, and config updater migrations
+tldr: "Use this guide when exporting/importing BEF configuration, creating custom widgets that need config schema, or debugging config validation errors."
 drupal_version: "11.x"
 ---
 

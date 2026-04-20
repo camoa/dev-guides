@@ -1,5 +1,6 @@
 ---
 description: Creating media view modes for different display contexts — hero, card, thumbnail, embed — with view display configuration.
+tldr: "You need different displays per usage context: hero images, cards, thumbnails, embedded in text."
 ---
 
 ## 5. Media View Modes

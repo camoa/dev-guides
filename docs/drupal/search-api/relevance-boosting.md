@@ -1,5 +1,6 @@
 ---
 description: Search API relevance tuning — field boosts, HTML element boosts, type boost, and Views relevance sort
+tldr: "Use this when tuning search result relevance — making the most relevant results appear first."
 drupal_version: "11.x"
 ---
 

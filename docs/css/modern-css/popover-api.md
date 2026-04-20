@@ -1,5 +1,6 @@
 ---
 description: Native dropdowns and overlays with Popover API — built-in light dismiss
+tldr: "Use `popover` for tooltips, dropdowns, and non-modal overlays that need light dismiss (closes on outside click or Escape key). Use `<dialog>` when you need a modal with focus trap."
 ---
 
 # Popover API

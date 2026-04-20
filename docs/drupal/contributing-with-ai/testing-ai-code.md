@@ -1,5 +1,6 @@
 ---
 description: Testing AI-generated Drupal contributions — test type selection by contribution type, what AI-generated tests miss, and how to evaluate test quality
+tldr: "Use this when writing or reviewing tests for AI-generated Drupal contributions and you need to ensure adequate test coverage."
 drupal_version: "11.x"
 ---
 

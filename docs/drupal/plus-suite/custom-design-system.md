@@ -1,5 +1,6 @@
 ---
 description: Integrate a custom design system with Plus Suite — block types, sample values, promoted blocks, block properties, CSS, and where to put customizations
+tldr: "Follow this guide when building Plus Suite for a branded site — custom block types, promoted block icons, sample content generators, and block properties that match your design system."
 drupal_version: "11.x"
 ---
 

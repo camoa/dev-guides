@@ -1,5 +1,6 @@
 ---
 description: Common JavaScript mistakes in Drupal and how to avoid them
+tldr: "Use when reviewing code for mistakes and understanding what NOT to do."
 drupal_version: "10.x/11.x"
 ---
 

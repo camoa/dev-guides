@@ -1,5 +1,6 @@
 ---
 description: Set up PHPUnit configuration for Drupal testing with DDEV, local, or CI/CD environments.
+tldr: "Before running any PHPUnit tests in Drupal."
 ---
 
 # PHPUnit Configuration

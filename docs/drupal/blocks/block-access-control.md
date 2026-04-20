@@ -1,5 +1,6 @@
 ---
 description: Control block visibility based on permissions, roles, or custom logic
+tldr: "Use `blockAccess()` for programmatic access control tied to code logic. Use Visibility Conditions for UI-configurable per-placement access (pages, roles, content type)."
 drupal_version: "11.x"
 ---
 

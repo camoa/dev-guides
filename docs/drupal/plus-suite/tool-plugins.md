@@ -1,5 +1,6 @@
 ---
 description: Create custom Tool plugins for the Edit Mode toolbar — PHP 8 attribute syntax, ToolInterface methods, icon system, and built-in tools
+tldr: "Use custom Tool plugins when you need custom toolbar actions beyond built-in tools — e.g., a color picker, annotation tool, or content validation tool."
 drupal_version: "11.x"
 ---
 

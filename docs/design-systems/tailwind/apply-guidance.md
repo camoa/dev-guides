@@ -1,5 +1,6 @@
 ---
 description: Know when @apply is appropriate (CMS content, base elements) versus when it fights the utility-first model.
+tldr: "Use `@apply` only when you don't control the HTML being styled. Avoid it when framework components are available."
 ---
 
 # @apply: When to Use / Avoid

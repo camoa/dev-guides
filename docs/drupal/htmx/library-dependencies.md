@@ -1,5 +1,6 @@
 ---
 description: What core/drupal.htmx loads — JavaScript files, dependencies, and differential asset loading
+tldr: "Reference this when diagnosing asset loading issues or understanding what attaches when you add `core/drupal.htmx`."
 drupal_version: "11.x"
 ---
 

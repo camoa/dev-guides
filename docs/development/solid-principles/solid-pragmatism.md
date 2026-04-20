@@ -1,5 +1,6 @@
 ---
 description: When to bend SOLID rules — balancing principles with YAGNI, KISS, and pragmatic decision-making based on project context.
+tldr: "When to bend SOLID rules — balancing principles with YAGNI, KISS, and pragmatic decision-making based on project context."
 ---
 
 # SOLID vs Pragmatism

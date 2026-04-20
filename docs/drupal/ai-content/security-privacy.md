@@ -1,5 +1,6 @@
 ---
 description: Security and privacy for AI - API key management, prompt injection prevention, PII handling
+tldr: "Security and privacy considerations are MANDATORY for all AI integrations. Every prompt, API call, and data flow must be evaluated for potential vulnerabilities and data exposure."
 drupal_version: "11.x"
 ---
 

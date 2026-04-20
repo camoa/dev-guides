@@ -1,5 +1,6 @@
 ---
 description: Creating event subscribers — implementing EventSubscriberInterface, registering with tags or autoconfigure, kernel events, entity events, and priority ordering.
+tldr: "When you need to react to events in Drupal — kernel events (request, response, exception), entity events (CRUD operations), or custom events."
 ---
 
 # Event Subscribers

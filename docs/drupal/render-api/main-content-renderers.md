@@ -1,5 +1,6 @@
 ---
 description: How Drupal renders different response types -- HTML pages, AJAX, modal dialogs -- and choosing the right response format.
+tldr: "Understanding how Drupal renders different response types -- HTML pages, AJAX, modal dialogs, iframes. Rarely need to interact with these directly, but helpful for advanced use cases."
 ---
 
 # Main Content Renderers

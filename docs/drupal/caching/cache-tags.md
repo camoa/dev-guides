@@ -1,5 +1,6 @@
 ---
 description: Add cache tags to invalidate cached content on entity and config changes
+tldr: "When you need to invalidate cached content when specific data changes. Cache tags declare \"this cached item depends on X\" — when X changes, Drupal automatically invalidates all cache entries with that tag."
 ---
 
 # Cache Tags

@@ -1,3 +1,7 @@
+---
+tldr: "When you need a view placed in block regions, Layout Builder, or programmatically rendered contexts."
+
+---
 ## 5. Block Display
 
 ### When to Use

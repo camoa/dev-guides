@@ -1,5 +1,6 @@
 ---
 description: Style elements based on scroll container state — stuck, snapped, or scrollable — without JavaScript
+tldr: "Use `@container scroll-state()` when you need to style elements based on whether their scroll container is stuck, snapped, or scrollable. Use `IntersectionObserver` when cross-browser support is required — scroll-state queries are Chrome…"
 drupal_version: "11.x"
 ---
 

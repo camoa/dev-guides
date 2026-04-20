@@ -1,5 +1,6 @@
 ---
 description: Register custom properties with @property — animate CSS variables, enforce types
+tldr: "Use `@property` when you need to animate a custom property, enforce a type, prevent inheritance, or guarantee an initial value. Use a regular `--var: value` for non-animated custom properties."
 ---
 
 # @property — Registered Custom Properties

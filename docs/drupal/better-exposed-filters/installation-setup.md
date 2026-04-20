@@ -1,5 +1,6 @@
 ---
 description: Install Better Exposed Filters, enable on a View, and configure the noUiSlider library
+tldr: "Use this guide when installing BEF on a Drupal site and enabling it for Views."
 drupal_version: "11.x"
 ---
 

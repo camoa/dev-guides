@@ -1,5 +1,6 @@
 ---
 description: Integrate existing icon fonts with codepoint metadata files via UI Icons contrib module
+tldr: "You have existing icon fonts (TTF, WOFF, WOFF2) with codepoint metadata files and want to integrate them with Icon API. The font extractor is provided by the **UI Icons** contrib module (not Drupal core)."
 drupal_version: "11.x"
 ---
 

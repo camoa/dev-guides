@@ -1,5 +1,6 @@
 ---
 description: Config import specifies config to copy from extensions, strict mode controls validation of existing config
+tldr: "Use `config.import` to specify config files to copy from extensions. Use `config.strict` to control validation of existing config."
 drupal_version: "11.x"
 ---
 

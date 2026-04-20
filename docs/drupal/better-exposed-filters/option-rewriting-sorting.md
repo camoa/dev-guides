@@ -1,5 +1,6 @@
 ---
 description: BEF option rewriting and sorting — label find/replace syntax, rewrite by key, sort methods, and helper class reference
+tldr: "Use option rewriting when you need to change display labels of filter options or remove options. Use option sorting when you need alphabetical or key-based ordering instead of the default Views order."
 drupal_version: "11.x"
 ---
 

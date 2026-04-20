@@ -1,5 +1,6 @@
 ---
 description: Store and use sensitive credentials for GitHub Actions deployments and third-party services
+tldr: "Use for storing sensitive credentials for deployments, API access, and third-party services."
 drupal_version: "11.x"
 ---
 

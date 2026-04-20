@@ -1,5 +1,6 @@
 ---
 description: Selection and file upload elements - select, radios, checkboxes, file uploads
+tldr: "Choose selection elements based on number of options and whether multiple selections are allowed. Use entity_autocomplete for >50 options."
 drupal_version: "11.x"
 ---
 

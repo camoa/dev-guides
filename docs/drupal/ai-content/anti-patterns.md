@@ -1,5 +1,6 @@
 ---
 description: Common anti-patterns to avoid - trusting AI output, synchronous processing, token limits, hardcoding
+tldr: "Learn from common mistakes to avoid technical debt, security vulnerabilities, poor user experience, and cost overruns. Every anti-pattern includes WHY it's problematic."
 drupal_version: "11.x"
 ---
 

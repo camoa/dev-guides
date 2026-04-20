@@ -1,5 +1,6 @@
 ---
 description: Card flips, perspective tilt, and 3D hover effects — perspective values guide, preserve-3d setup, mouse-tracked tilt with CSS variables
+tldr: "Use CSS 3D transforms for interactive components that benefit from a spatial metaphor: flip cards, showcase elements, hover-responsive cards. Do not apply to body copy, long lists, or navigation."
 ---
 
 # 3D Transforms

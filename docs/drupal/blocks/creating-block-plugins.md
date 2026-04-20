@@ -1,5 +1,6 @@
 ---
 description: Build custom block plugins with programmatic logic and service integration
+tldr: "Use a block plugin when you need programmatic logic, external data, or service integration. Use content blocks when editors need to manage content without code changes."
 drupal_version: "11.x"
 ---
 

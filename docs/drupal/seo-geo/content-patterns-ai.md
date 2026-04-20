@@ -1,5 +1,6 @@
 ---
 description: Content writing patterns that increase AI citation frequency — answer-first design, statistics, source citations, entity salience, and recency signals
+tldr: "You are writing or editing content and want it cited by AI systems (ChatGPT, Google AI Overviews, Perplexity). These patterns are grounded in the Princeton/Georgia Tech GEO research (KDD 2024) and apply to any content type on your Drupal…"
 drupal_version: "11.x"
 ---
 

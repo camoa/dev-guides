@@ -1,5 +1,6 @@
 ---
 description: Test React design system components using React Testing Library for behavior, jest-axe for accessibility, and Storybook for visual regression.
+tldr: "Use for every design system component. Tests protect the API contract — they catch regressions before consumers notice."
 ---
 
 # Testing

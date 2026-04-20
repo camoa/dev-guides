@@ -1,5 +1,6 @@
 ---
 description: You're creating new SDC components from scratch
+tldr: "You're creating new SDC components from scratch You need to define component props, slots, and schemas You're adding JavaScript to components"
 drupal_version: "11.x"
 ---
 

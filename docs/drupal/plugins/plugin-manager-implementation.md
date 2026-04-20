@@ -1,5 +1,6 @@
 ---
 description: Register plugin managers and service collectors for plugin discovery
+tldr: "Use plugin manager for Foundation+Extension and Provider Plugin patterns. Use service collector for Service Collector pattern."
 drupal_version: "11.x"
 ---
 

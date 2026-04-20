@@ -1,5 +1,6 @@
 ---
 description: Implement Server-Sent Events streaming with ReadableStream for AI chat responses in Next.js
+tldr: "Use SSE streaming for AI chat responses. Use ReadableStream with transform for OpenAI/Anthropic."
 ---
 
 # Streaming Responses

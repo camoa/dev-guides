@@ -1,5 +1,6 @@
 ---
 description: Optimize React design system component render performance using React.memo, useMemo, useCallback, and React.lazy with Suspense.
+tldr: "Use when a design system component is causing measurable performance issues, or when designing components that appear in long lists, frequently updating UIs, or high-traffic render paths. Profile first — do not optimize speculatively."
 ---
 
 # Performance

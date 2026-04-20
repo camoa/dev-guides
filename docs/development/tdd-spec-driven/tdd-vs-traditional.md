@@ -1,5 +1,6 @@
 ---
 description: When to use TDD versus traditional testing approaches, with cost-benefit analysis
+tldr: "You're deciding whether to adopt TDD for a project or choosing testing strategy for different parts of your codebase."
 ---
 
 # TDD vs Traditional Testing

@@ -1,5 +1,6 @@
 ---
 description: Config actions for specific entity types derived from ActionMethod attributes on entity methods
+tldr: "Use entity-specific config actions when you need to configure roles, text formats, displays, workflows, or other specialized entity types."
 drupal_version: "11.x"
 ---
 

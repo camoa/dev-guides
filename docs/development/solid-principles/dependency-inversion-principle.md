@@ -1,5 +1,6 @@
 ---
 description: Dependency Inversion Principle — depending on abstractions instead of concrete classes, with dependency injection patterns.
+tldr: "When designing layered architectures, building testable systems, or decoupling high-level business logic from low-level implementation details."
 ---
 
 # Dependency Inversion Principle (DIP)

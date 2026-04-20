@@ -1,5 +1,6 @@
 ---
 description: Security logging and monitoring including structured JSON logging, event types, data redaction, log rotation, real-time alerting, SIEM integration, and audit trails.
+tldr: "Security logging and monitoring are MANDATORY for every application. **A09:2021 Security Logging and Monitoring Failures** — insufficient logging allows breaches to go undetected for months."
 ---
 
 # Logging and Monitoring

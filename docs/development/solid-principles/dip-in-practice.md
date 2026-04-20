@@ -1,5 +1,6 @@
 ---
 description: Practical DIP patterns — IoC containers, constructor/setter/interface injection, Ports and Adapters architecture, and testing with DIP.
+tldr: "Practical DIP patterns — IoC containers, constructor/setter/interface injection, Ports and Adapters architecture, and testing with DIP."
 ---
 
 # DIP in Practice

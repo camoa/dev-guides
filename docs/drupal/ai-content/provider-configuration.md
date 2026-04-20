@@ -1,5 +1,6 @@
 ---
 description: Configure AI providers - authentication, model access, rate limits, and operational settings
+tldr: "Configure AI providers before using any AI features. Use provider configuration when you need to establish authentication, model access, rate limits, and operational settings for AI services."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Provide default configuration that installs when a module is enabled — content types, views, fields, settings.
+tldr: "When your module needs to provide default configuration that's installed when the module is enabled — content types, views, fields, module settings."
 ---
 
 # Config Installer (Module Install)

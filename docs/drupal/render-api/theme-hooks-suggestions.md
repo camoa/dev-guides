@@ -1,5 +1,6 @@
 ---
 description: Creating theme hooks, template suggestions, theme wrappers, and template discovery for custom themed output.
+tldr: "When creating custom themed output that needs a Twig template and preprocessable variables. Theme hooks define the contract between code and templates."
 ---
 
 # Theme Hooks & Suggestions

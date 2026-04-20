@@ -1,5 +1,6 @@
 ---
 description: Field Sample Value — built-in generators, per-field configuration, prevent_save validation, and creating custom sample value generator plugins
+tldr: "Configure field sample value generators for every field on every block content type. Without them, blocks appear empty on placement, defeating Plus Suite's \"drop and see\" UX."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: UI Patterns 2 integration with SDC component.yml schema
+tldr: "Use this when building SDCs that will be exposed to site builders via UI Patterns, making components available as blocks/layouts/views without custom PHP, or understanding how `component.yml` maps to UI Patterns discovery."
 drupal_version: "11.x"
 ---
 

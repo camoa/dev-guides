@@ -1,5 +1,6 @@
 ---
 description: Advanced SCSS patterns for complex Bootstrap customizations including Dart Sass, maps, and accessibility
+tldr: "Use this for complex Bootstrap customizations requiring Dart Sass features, deep map merging, performance optimization, or accessibility patterns."
 ---
 
 # Advanced SCSS Best Practices

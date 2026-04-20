@@ -1,5 +1,6 @@
 ---
 description: AI Observability — production monitoring for AI provider calls via PSR-3 logger and OpenTelemetry
+tldr: "Use `ai_observability` for production monitoring and audit trails. Use [AI Logging](ai-logging.md) only for local development debugging (it is deprecated)."
 drupal_version: "11.x"
 ---
 

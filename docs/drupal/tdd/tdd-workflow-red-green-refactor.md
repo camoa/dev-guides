@@ -1,5 +1,6 @@
 ---
 description: Apply the RED-GREEN-REFACTOR TDD cycle to Drupal module development.
+tldr: "Applying the Test-Driven Development cycle to Drupal module development. Use this workflow when building new features, refactoring existing code, or fixing bugs where the expected behavior can be specified upfront."
 ---
 
 # TDD Workflow: RED-GREEN-REFACTOR

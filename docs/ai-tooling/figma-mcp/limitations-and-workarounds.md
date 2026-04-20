@@ -1,5 +1,6 @@
 ---
 description: Known limitations of Figma MCP code generation — token limits, no visual iteration, missing states, selection-only desktop — and practical workarounds for each
+tldr: "When you hit a wall — token limits, unexpected output, or workflow gaps. Understanding limitations prevents frustration and helps you find the right workaround."
 ---
 
 # Limitations and Workarounds

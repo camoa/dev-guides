@@ -1,5 +1,6 @@
 ---
 description: Defense-in-depth XSS protections including Content Security Policy (CSP), HTML sanitization libraries, template auto-escaping, and HTTPOnly cookies.
+tldr: "Implement these defense-in-depth XSS protections in addition to (not instead of) input validation and output encoding."
 ---
 
 # XSS Prevention Patterns

@@ -1,5 +1,6 @@
 ---
 description: Paged scrolling and carousels with CSS Scroll Snap — mandatory vs proximity, native controls in Chrome 135+
+tldr: "Use CSS Scroll Snap when you need paged scrolling, carousel behavior, or snap-to-item navigation without JavaScript. Use `scroll-snap-type: mandatory` for full-slide carousels; use `proximity` for galleries where stopping between items is…"
 drupal_version: "11.x"
 ---
 

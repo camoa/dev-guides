@@ -1,5 +1,6 @@
 ---
 description: Map design system tokens (colors, typography, spacing, borders, shadows, breakpoints) to Bootstrap SCSS variables
+tldr: "Use this after identifying design tokens to map colors, typography, spacing, borders, shadows, and breakpoints to Bootstrap's SCSS variable system."
 ---
 
 # Design Tokens → Bootstrap Variables

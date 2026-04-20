@@ -1,5 +1,6 @@
 ---
 description: Decision framework for when to abstract vs duplicate in Drupal, with security, performance, testing, and development standards considerations.
+tldr: "When making any decision about abstracting, reusing, or duplicating code in Drupal."
 ---
 
 # Best Practices Decision Framework

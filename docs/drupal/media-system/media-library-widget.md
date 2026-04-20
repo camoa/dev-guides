@@ -1,5 +1,6 @@
 ---
 description: Adding media reference fields with the Media Library widget — field storage, instance config, widget settings, and view display formatters.
+tldr: "You need to add a media reference field to a content type with the Media Library browser."
 ---
 
 ## 9. Media Library Widget

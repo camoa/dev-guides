@@ -1,5 +1,6 @@
 ---
 description: Follow proven caching best practices for maximum cache hit rates
+tldr: "When you need proven patterns for effective caching. These practices maximize cache hit rates, minimize stale content, and maintain performance."
 ---
 
 # Best Practices & Patterns

@@ -1,5 +1,6 @@
 ---
 description: Learn the three pillars of cache metadata — tags, contexts, and max-age
+tldr: "Every time you cache a render array or create a cacheable dependency. All three metadata properties — cache tags, cache contexts, and max-age — must be considered together."
 ---
 
 # Cache Metadata Trinity

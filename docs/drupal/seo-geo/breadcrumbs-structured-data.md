@@ -1,5 +1,6 @@
 ---
 description: Breadcrumb JSON-LD structured data for SEO — Easy Breadcrumb built-in toggle vs manual hook_page_attachments vs Metatag Schema, with decision table and implementation notes
+tldr: "Add JSON-LD `BreadcrumbList` structured data to help Google display breadcrumb trails in search results instead of bare URLs. This is a quick SEO win — one checkbox if you have Easy Breadcrumb installed."
 drupal_version: "11.x"
 ---
 

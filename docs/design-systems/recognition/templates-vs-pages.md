@@ -1,5 +1,6 @@
 ---
 description: Design system recognition — 6. templates vs pages
+tldr: "You need to distinguish between layout structures (templates) and real implementations (pages) You're analyzing page-level patterns in a design system You're documenting layout systems vs actual page instances"
 ---
 
 ## 6. Templates vs Pages

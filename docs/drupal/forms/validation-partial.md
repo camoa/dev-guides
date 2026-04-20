@@ -1,5 +1,6 @@
 ---
 description: Partial validation pattern with #limit_validation_errors for multi-step forms
+tldr: "Use partial validation for multi-step forms with \"Previous\" buttons, \"Save draft\" vs \"Publish\" buttons, or progressive disclosure forms."
 drupal_version: "11.x"
 ---
 

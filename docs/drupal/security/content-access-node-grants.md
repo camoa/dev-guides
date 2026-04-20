@@ -1,5 +1,6 @@
 ---
 description: Implementing node grants for database-level content access filtering based on taxonomy, groups, or user-specific rules.
+tldr: "When entity access handlers are insufficient -- node grants enable database-level access filtering for complex content access rules (e.g., organic groups, taxonomy access, workflow states)."
 ---
 
 # Content Access (Node Grants)

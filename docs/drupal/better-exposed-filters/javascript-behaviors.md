@@ -1,5 +1,6 @@
 ---
 description: BEF JavaScript libraries — auto_submit, sliders, select_all_none, soft_limit, links_use_ajax, and drupalSettings structure
+tldr: "Use this guide when you need to understand or customize BEF's client-side behavior — auto-submit, sliders, select all/none, soft limit, or link AJAX."
 drupal_version: "11.x"
 ---
 

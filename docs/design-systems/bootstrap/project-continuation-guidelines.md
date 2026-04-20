@@ -1,5 +1,6 @@
 ---
 description: Guidelines for resuming Bootstrap mapping projects in new sessions
+tldr: "Use this when resuming a Bootstrap mapping project in a new session to ensure framework consistency and proper context loading."
 ---
 
 # Project Continuation Guidelines

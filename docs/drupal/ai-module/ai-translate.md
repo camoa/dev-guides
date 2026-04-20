@@ -1,5 +1,6 @@
 ---
 description: AI Translate — deprecated module for AI-powered content and interface translation (replaced by standalone project)
+tldr: "**Status: DEPRECATED** — moving to standalone `drupal/ai_translate` project. This guide covers the module as it exists in AI 1.3.0-rc2."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Computed fields — virtual fields with dynamic values from stored data
+tldr: "When creating virtual/derived fields that calculate values from other fields without storing data, requiring dynamic values that update when dependencies change."
 drupal_version: "11.x"
 ---
 

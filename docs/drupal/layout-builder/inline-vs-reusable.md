@@ -1,3 +1,7 @@
+---
+tldr: "When deciding between non-reusable inline blocks (created within Layout Builder) and reusable block content entities."
+
+---
 ## 7. Inline Blocks vs Reusable Blocks
 
 ### When to Use

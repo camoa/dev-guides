@@ -1,5 +1,6 @@
 ---
 description: Use Single Directory Components (SDC) as blocks — Component Block module and UI Patterns auto-registration
+tldr: "Use when exposing Twig SDC components as placeable blocks. Component Block module handles zero-PHP cases."
 drupal_version: "11.x"
 ---
 

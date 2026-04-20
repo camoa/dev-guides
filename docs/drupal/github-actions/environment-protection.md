@@ -1,5 +1,6 @@
 ---
 description: Add approval gates, wait timers, and validation for production deployments
+tldr: "Use when adding approval gates and validation for production deployments to prevent accidental releases."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Abstract diverse service providers under consistent interfaces
+tldr: "Use Provider Plugin when creating new service abstraction across diverse external providers. Use Foundation+Extension when mature plugin ecosystem exists."
 drupal_version: "11.x"
 ---
 

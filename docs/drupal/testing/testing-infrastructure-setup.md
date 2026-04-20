@@ -1,5 +1,6 @@
 ---
 description: Set up directory structure, phpunit.xml configuration, and testing dependencies for Drupal modules
+tldr: "Use this guide when setting up a new module for testing or configuring CI/CD pipelines for automated test execution."
 drupal_version: "11.x"
 ---
 

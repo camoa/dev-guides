@@ -1,5 +1,6 @@
 ---
 description: Map D7 field collections and content architecture to D11 entities
+tldr: "After inventory, map D7 content architecture to D11 entity structure. D7 field collections become D11 paragraphs, D7 nodes may become media entities, taxonomy structure may consolidate."
 drupal_version: "11.x"
 ---
 

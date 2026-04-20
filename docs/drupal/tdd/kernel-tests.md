@@ -1,5 +1,6 @@
 ---
 description: Write kernel tests with KernelTestBase for services, entities, and database operations without HTTP.
+tldr: "Testing services, entities, database operations, and other Drupal integrations without HTTP overhead. Sweet spot for most Drupal testing."
 ---
 
 # Kernel Tests with KernelTestBase

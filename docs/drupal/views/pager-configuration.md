@@ -1,3 +1,7 @@
+---
+tldr: "When controlling how many items display per page and how users navigate through results."
+
+---
 ## 12. Pager Configuration
 
 ### When to Use

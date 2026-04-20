@@ -1,5 +1,6 @@
 ---
 description: Dependency injection, single responsibility, coding standards, and testability checklist
+tldr: "Every development project using TDD or testing. These standards ensure code quality, maintainability, and team consistency."
 ---
 
 # Development Standards

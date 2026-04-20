@@ -1,5 +1,6 @@
 ---
 description: Three-tier validation architecture - element, form, and typed config validation
+tldr: "Use element-level validation for single-field checks, form-level for cross-field validation, typed config for automatic schema validation."
 drupal_version: "11.x"
 ---
 

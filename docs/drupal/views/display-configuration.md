@@ -1,3 +1,7 @@
+---
+tldr: "When configuring common options shared across all display types: title, access, cache, pager, style, fields, filters, sorts."
+
+---
 ## 3. Display Configuration
 
 ### When to Use

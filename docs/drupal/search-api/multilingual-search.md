@@ -1,5 +1,6 @@
 ---
 description: Search API multilingual — single index per language, language field, language_with_fallback processor, and Solr multilingual
+tldr: "Use this when building search for multilingual Drupal sites."
 drupal_version: "11.x"
 ---
 

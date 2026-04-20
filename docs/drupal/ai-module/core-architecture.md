@@ -1,5 +1,6 @@
 ---
 description: Drupal AI module architecture — ProviderProxy, core services, module hierarchy, and request lifecycle
+tldr: "Use this guide to understand how the AI module works before writing any code. Use the [Provider System](provider-system.md) guide when you need to call or build a provider."
 drupal_version: "11.x"
 ---
 

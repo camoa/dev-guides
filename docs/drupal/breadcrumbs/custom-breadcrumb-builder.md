@@ -1,5 +1,6 @@
 ---
 description: Write a custom BreadcrumbBuilderInterface implementation — applies(), build(), service registration, and priority guidance
+tldr: "Use a custom builder when breadcrumbs must be driven by entity relationships (not URL structure), or when you need different logic for specific routes. Use `hook_system_breadcrumb_alter()` instead for minor adjustments."
 drupal_version: "11.x"
 ---
 

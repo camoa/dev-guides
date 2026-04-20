@@ -1,5 +1,6 @@
 ---
 description: You're setting up a new Radix sub-theme
+tldr: "You're setting up a new Radix sub-theme You need to understand how Radix organizes files and loads Bootstrap You're mapping design system files to Radix file structure"
 drupal_version: "11.x"
 ---
 

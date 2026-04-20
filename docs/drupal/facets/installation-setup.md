@@ -1,5 +1,6 @@
 ---
 description: Install Facets with Search API, configure prerequisites, and choose block-based vs exposed filter vs REST approach
+tldr: "Use this guide when setting up Facets on a Drupal site with Search API."
 drupal_version: "11.x"
 ---
 

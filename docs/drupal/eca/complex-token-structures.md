@@ -1,5 +1,6 @@
 ---
 description: Store structured data in tokens with success/error indicators for downstream actions
+tldr: "Store complex data structures in tokens when actions need to pass multiple related values, structured results, or collections to downstream actions and conditions. Tokens can hold arrays, objects, and nested data."
 drupal_version: "11.x"
 ---
 

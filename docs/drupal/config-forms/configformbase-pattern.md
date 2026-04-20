@@ -1,5 +1,6 @@
 ---
 description: Build module settings forms with ConfigFormBase
+tldr: "Use ConfigFormBase when building a module settings page that stores configuration in the config system (database + YML export)."
 drupal_version: "11.x"
 ---
 

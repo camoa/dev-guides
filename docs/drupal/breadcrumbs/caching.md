@@ -1,5 +1,6 @@
 ---
 description: Breadcrumb cache metadata — contexts, tags, applies() merging, and Drupal 12 signature changes
+tldr: "Breadcrumbs render via BigPipe (the `SystemBreadcrumbBlock` uses `createPlaceholder(): true`). Cache metadata on the `Breadcrumb` object directly controls invalidation."
 drupal_version: "11.x"
 ---
 

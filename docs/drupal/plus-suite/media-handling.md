@@ -1,5 +1,6 @@
 ---
 description: Media handling in Plus Suite — desktop drag-and-drop with DropzoneJS, media replacement, file association settings, and related events
+tldr: "Use desktop drag-and-drop for fast media placement. Configure file associations per user to skip the association modal."
 drupal_version: "11.x"
 ---
 

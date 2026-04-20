@@ -1,5 +1,6 @@
 ---
 description: Eight sub-modules for GraphQL, JSON API, Entity Browser, Linkit, Media Library, Search API, Viewfield, and AI integration.
+tldr: "You need extended functionality like GraphQL, JSON:API normalization, Entity Browser, Linkit, Media Library, Search API, or AI integration."
 ---
 
 # Sub-Modules

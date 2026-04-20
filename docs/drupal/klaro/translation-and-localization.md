@@ -1,5 +1,6 @@
 ---
 description: Translate Klaro UI, service descriptions, and purposes for multi-language sites
+tldr: "Translate Klaro's consent interface for multi-language Drupal sites. Requires Configuration Translation module enabled."
 drupal_version: "11.x"
 ---
 

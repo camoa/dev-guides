@@ -1,5 +1,6 @@
 ---
 description: Coding standards violations AI tools make — deprecated Drupal patterns AI introduces, why it happens, and verification commands to catch them
+tldr: "Use this when submitting AI-assisted code to drupal.org and you need to verify it meets Drupal coding standards. AI tools commonly produce code that looks correct but violates specific Drupal conventions."
 drupal_version: "11.x"
 ---
 

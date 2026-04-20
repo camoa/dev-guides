@@ -1,5 +1,6 @@
 ---
 description: Field storage — technical specs for reusable fields across bundles
+tldr: "When creating fields that can be reused across multiple bundles, defining the technical specifications (data type, cardinality, storage schema) independent of bundle-specific settings."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: You need to save/load Tiptap content via Next.js API routes.
+tldr: "You need to save/load Tiptap content via Next.js API routes."
 ---
 
 ## 13.2 Next.js API Routes & Content Persistence

@@ -1,5 +1,6 @@
 ---
 description: JavaScript performance optimization strategies for better user experience and SEO
+tldr: "Use for every JavaScript implementation - performance is not optional. Frontend performance directly impacts user experience and SEO."
 drupal_version: "10.x/11.x"
 ---
 

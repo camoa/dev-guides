@@ -1,5 +1,6 @@
 ---
 description: Enable HTMX in a custom Drupal module — route definition, controller, and library attachment
+tldr: "Use this when creating a custom module and adding HTMX functionality for the first time."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Complete working implementation — Next.js proxy route handler, React ChatWorkspace component, and Drupal setSession controller
+tldr: "Use this guide as the canonical working example for DeepChat + Drupal OAuth integration. Start here when building from scratch or verifying your implementation against a known-good pattern."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: When to use this guide and which extraction method to choose
+tldr: "Use this guide when you have a Tailwind-based design system and need to extract tokens for a Drupal theme (CSS variables for DaisyUI / UI Suite DaisyUI), a Figma design system (token import/export), documentation (design token catalog), or…"
 ---
 
 # Overview & When to Use

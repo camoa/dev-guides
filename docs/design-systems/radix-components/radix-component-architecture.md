@@ -1,5 +1,6 @@
 ---
 description: Understanding Radix's SDC architecture for component selection and customization decisions
+tldr: "Understanding Radix's SDC architecture for component selection and customization decisions."
 ---
 
 # Radix Component Architecture

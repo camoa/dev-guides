@@ -1,5 +1,6 @@
 ---
 description: Injecting services into Drupal plugins (blocks, field formatters, widgets) via ContainerFactoryPluginInterface — parameter order, parent constructors, and formatter examples.
+tldr: "When injecting services into plugins (blocks, field formatters, field widgets, condition plugins, etc.) — plugins receive additional arguments (configuration, plugin_id, plugin_definition) that must be handled."
 ---
 
 # Plugin Injection (ContainerFactoryPluginInterface)

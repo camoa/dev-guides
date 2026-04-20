@@ -1,5 +1,6 @@
 ---
 description: Decide between flat or hierarchical taxonomy structures
+tldr: "Use flat taxonomy for simple tagging (blog tags, keywords). Use hierarchical taxonomy for categorization with subcategories (Geography: Country > State > City)."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Component definition structure — YAML keys, JSON Schema props, and required fields
+tldr: "Component definition structure — YAML keys, JSON Schema props, and required fields"
 drupal_version: "10.3+ / 11"
 ---
 

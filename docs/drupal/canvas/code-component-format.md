@@ -1,5 +1,6 @@
 ---
 description: File structure, component.yml schema, JSX patterns, and allowed package imports for Canvas Code Components (React/Preact).
+tldr: "Use Code Components when you need browser-rendered React/Preact with interactive state, dynamic behavior, or Tailwind CSS styling without a separate Drupal theme build. Use SDC components when you need server-side Drupal field integration."
 drupal_version: "11.x"
 ---
 

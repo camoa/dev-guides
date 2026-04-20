@@ -1,5 +1,6 @@
 ---
 description: Migrating to Group 3.x — version strategy, v1/v2 API changes, v2→v3 migration options, and custom code update patterns
+tldr: "Read this if you are moving an existing Group 1.x or 2.x site to Group 3.x."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Apply CSS blend modes for duotone, tinted overlays, knockout text, and background compositing — isolation, mix-blend-mode vs background-blend-mode
+tldr: "Use CSS blend modes for image color treatment (duotone, tinted overlays), text knockout effects, or creative layering without image editing. Always set `isolation: isolate` on the container to control which stacking context the blend…"
 ---
 
 # Blend Modes and Visual Effects

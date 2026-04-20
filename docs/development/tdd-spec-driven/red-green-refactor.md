@@ -1,5 +1,6 @@
 ---
 description: Step-by-step Red-Green-Refactor workflow with decision points at each phase
+tldr: "Every time you implement a new feature or fix a bug using TDD. This is the core TDD workflow."
 ---
 
 # Red-Green-Refactor Workflow

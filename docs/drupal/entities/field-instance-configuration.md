@@ -1,5 +1,6 @@
 ---
 description: Field instance — bundle-specific field settings and configuration
+tldr: "When attaching a field storage to a specific bundle with bundle-specific settings (label, description, required status, default values, widget/formatter settings)."
 drupal_version: "11.x"
 ---
 

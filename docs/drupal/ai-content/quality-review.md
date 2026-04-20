@@ -1,5 +1,6 @@
 ---
 description: Content quality review with AI - 4 C's framework, automated quality checks, lifecycle management
+tldr: "Use AI-powered quality review to ensure consistency, readability, and effectiveness across all content. Use the 4 C's framework (Clear, Concise, Compelling, Credible) for structured quality assessment."
 drupal_version: "11.x"
 ---
 

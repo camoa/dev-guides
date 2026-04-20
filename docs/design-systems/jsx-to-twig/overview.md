@@ -1,5 +1,6 @@
 ---
 description: When to translate JSX 1:1 vs restructure for Drupal SDC
+tldr: "Use this when you have an existing React/JSX design system and need to build equivalent Drupal SDC components. This applies whether the React source uses Tailwind, DaisyUI, Radix UI, shadcn/ui, MUI, or any other component library."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Declare light and dark values in one line with light-dark() — no media query duplication
+tldr: "Use `light-dark()` to declare both light and dark color values in a single declaration — eliminating duplicated `@media (prefers-color-scheme: dark)` blocks. Use `@media` for non-color properties that change in dark mode."
 ---
 
 # light-dark() Function

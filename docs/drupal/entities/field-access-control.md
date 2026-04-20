@@ -1,5 +1,6 @@
 ---
 description: Field-level access control with cache metadata
+tldr: "When restricting field visibility or editability based on user permissions, entity state, or custom business logic, requiring fine-grained access control beyond entity-level permissions."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Text reveal animations — line slide-up, clip-path wipe, per-character and per-word reveals with minimal JS text splitter
+tldr: "Use CSS `overflow: hidden` + `translateY` for line reveals (no JS). Use a minimal JS text splitter for per-character or per-word reveals — the CSS does the animation, JS only wraps each token in a `<span>`."
 ---
 
 # Text Reveal Animations

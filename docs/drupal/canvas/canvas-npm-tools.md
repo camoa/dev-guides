@@ -1,5 +1,6 @@
 ---
 description: Reference for Canvas npm packages — @drupal-canvas/cli, @drupal-canvas/create, drupal-canvas runtime, and Tailwind CSS 4.
+tldr: "Use this when setting up a local development environment for Canvas Code Components, or when you need to understand which npm packages are part of the Canvas ecosystem and what each one does."
 drupal_version: "11.x"
 ---
 

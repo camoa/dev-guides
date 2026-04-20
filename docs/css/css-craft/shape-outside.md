@@ -1,5 +1,6 @@
 ---
 description: shape-outside text flow — wrap text around circular images, custom polygons, and alpha-channel image shapes
+tldr: "Use `shape-outside` when a client wants the \"magazine layout\" effect — text flowing around a non-rectangular element. Requires `float`; does not work with flexbox or grid."
 ---
 
 # Shape Outside & Text Flow

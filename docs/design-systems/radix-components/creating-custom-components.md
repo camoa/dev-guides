@@ -1,5 +1,6 @@
 ---
 description: Building project-specific UI not in Radix/Bootstrap
+tldr: "Building project-specific UI not in Radix/Bootstrap."
 ---
 
 # Creating Custom Components

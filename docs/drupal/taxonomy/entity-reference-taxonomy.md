@@ -1,5 +1,6 @@
 ---
 description: Configure entity reference field widgets and formatters for taxonomy term fields
+tldr: "Use this guide to configure entity reference field widgets and formatters for taxonomy term fields. Widget choice affects UX and term creation workflow."
 drupal_version: "11.x"
 ---
 

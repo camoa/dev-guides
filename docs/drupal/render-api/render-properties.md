@@ -1,5 +1,6 @@
 ---
 description: Complete reference for render array properties -- universal, lifecycle, and advanced properties with usage examples.
+tldr: "Every render array uses properties -- these control access, caching, theming, HTML attributes, and rendering behavior."
 ---
 
 # Render Properties

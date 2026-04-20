@@ -1,5 +1,6 @@
 ---
 description: "Authentication is required for write operations (POST, PATCH, DELETE) and accessing restricted content."
+tldr: "Authentication is required for write operations (POST, PATCH, DELETE) and accessing restricted content."
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 ---

@@ -1,5 +1,6 @@
 ---
 description: Salesforce class reference — RestClient methods, SFID, SObject, SelectQueryResult, PushParams, MappingConstants, SOAP client
+tldr: "Use this reference when implementing custom code that interacts with the Salesforce module's PHP classes directly. All paths are relative to `/web/modules/contrib/salesforce/`."
 drupal_version: "11.x"
 ---
 

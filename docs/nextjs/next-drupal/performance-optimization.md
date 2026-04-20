@@ -1,5 +1,6 @@
 ---
 description: "Apply these optimizations to reduce build times, improve page load speed, and minimize API requests."
+tldr: "Apply these optimizations to reduce build times, improve page load speed, and minimize API requests."
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
 ---

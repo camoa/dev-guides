@@ -1,5 +1,6 @@
 ---
 description: Drupal AI policy — current state of drupal.org AI contribution rules, active governance issues, enforcement, and the tool-vs-author distinction
+tldr: "Use this when you need to understand the current state of drupal.org's AI contribution policy — what rules exist, what's being proposed, and how enforcement works."
 drupal_version: "11.x"
 ---
 

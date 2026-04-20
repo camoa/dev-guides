@@ -1,5 +1,6 @@
 ---
 description: Drupal to Salesforce push sync — queue architecture, event flow, async vs sync, upsert vs create/update
+tldr: "Use `salesforce_push` when you need to send Drupal entity changes to Salesforce. Use `async = TRUE` for production (queue-based, non-blocking)."
 drupal_version: "11.x"
 ---
 

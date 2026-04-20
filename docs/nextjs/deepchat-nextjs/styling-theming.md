@@ -1,5 +1,6 @@
 ---
 description: Style DeepChat with CSS variables, messageStyles, and shadow DOM techniques including dark mode and custom themes
+tldr: "Use CSS variables for brand colors. Use messageStyles for message bubbles."
 ---
 
 # Styling & Theming

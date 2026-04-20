@@ -1,5 +1,6 @@
 ---
 description: The install key declares modules and themes the recipe requires
+tldr: "Use the `install:` key to declare modules and themes that your recipe requires."
 drupal_version: "11.x"
 ---
 

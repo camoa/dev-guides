@@ -1,5 +1,6 @@
 ---
 description: Components for site navigation, wayfinding, and menu systems
+tldr: "Components for site navigation, wayfinding, and menu systems. Use these for breadcrumbs, tabs, navigation menus, navbars, and pagination across multiple pages."
 ---
 
 # Navigation Components

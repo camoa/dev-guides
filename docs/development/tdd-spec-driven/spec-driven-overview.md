@@ -1,5 +1,6 @@
 ---
 description: What Spec-Driven Development is, how it works, and how it complements TDD for AI-assisted coding
+tldr: "You're using AI coding assistants and want to maintain control over architecture while leveraging AI for implementation. Essential for production-quality code generation with tools like Claude Code, GitHub Copilot, Cursor, or Amazon Kiro."
 ---
 
 # Spec-Driven Development Overview

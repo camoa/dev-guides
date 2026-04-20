@@ -1,5 +1,6 @@
 ---
 description: Customize block appearance through templates, preprocessing, and alter hooks
+tldr: "Use block templates for markup changes, preprocessing for adding template variables, and alter hooks to modify render arrays across blocks. Keep logic out of templates."
 drupal_version: "11.x"
 ---
 

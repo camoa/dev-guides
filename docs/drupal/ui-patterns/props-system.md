@@ -1,5 +1,6 @@
 ---
 description: Prop types — built-in types, JSON Schema compatibility, and normalize/preprocess pipeline
+tldr: "Prop types — built-in types, JSON Schema compatibility, and normalize/preprocess pipeline"
 drupal_version: "10.3+ / 11"
 ---
 

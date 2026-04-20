@@ -1,5 +1,6 @@
 ---
 description: Common mistakes and anti-patterns to avoid in DeepChat + Next.js integration
+tldr: "Common mistakes and anti-patterns to avoid in DeepChat + Next.js integration"
 ---
 
 # Anti-Patterns & Common Mistakes

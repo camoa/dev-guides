@@ -1,5 +1,6 @@
 ---
 description: Migrate Add Another button patterns — use vals() to pass incremented count instead of form state storage
+tldr: "Use this when migrating \"Add Another\" patterns where clicking a button adds a new form field to the form — multi-value fields and repeating field groups."
 drupal_version: "11.x"
 ---
 

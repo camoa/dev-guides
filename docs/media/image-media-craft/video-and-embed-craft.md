@@ -1,5 +1,6 @@
 ---
 description: Embed YouTube/Vimeo with the facade pattern, handle video autoplay policies, and implement background video with accessibility requirements
+tldr: "Use the facade pattern for YouTube/Vimeo embeds on any performance-sensitive page — it saves ~500KB initial load. Use `<video autoplay muted loop playsinline>` for decorative background video."
 ---
 
 # Video and Embed Craft

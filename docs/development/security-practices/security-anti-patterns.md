@@ -1,5 +1,6 @@
 ---
 description: Common security anti-patterns including security through obscurity, blacklist validation, client-side trust, weak passwords, plaintext storage, deprecated crypto, and no rate limiting.
+tldr: "Learn from others' mistakes. These anti-patterns represent the most common security failures that lead to breaches."
 ---
 
 # Common Security Anti-Patterns

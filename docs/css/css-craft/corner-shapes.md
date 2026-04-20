@@ -1,5 +1,6 @@
 ---
 description: Corner shapes — squircle, scooped corners, notched/beveled cuts with corner-shape (Chrome 2025+) and clip-path fallbacks
+tldr: "Use `corner-shape: squircle` for iOS-style superellipse corners on Chrome 2025+. Use `clip-path: polygon()` for notched/beveled corners across all browsers."
 ---
 
 # Corner Shapes

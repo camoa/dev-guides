@@ -1,5 +1,6 @@
 ---
 description: Theming and templates in Plus Suite — CSS library map, color configuration, template overrides, hook implementations, and theme integration
+tldr: "Override color configuration at `/admin/config/content/plus-suite` for brand customization. Override templates only when structural changes are needed."
 drupal_version: "11.x"
 ---
 

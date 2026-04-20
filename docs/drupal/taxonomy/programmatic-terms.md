@@ -1,5 +1,6 @@
 ---
 description: Create, update, or delete terms via code (migrations, imports, install hooks)
+tldr: "Use programmatic approach for migrations, imports, install hooks, drush commands. Complements config-first vocabulary management."
 drupal_version: "11.x"
 ---
 

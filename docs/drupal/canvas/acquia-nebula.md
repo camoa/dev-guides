@@ -1,5 +1,6 @@
 ---
 description: Acquia Nebula — the official Canvas Code Component development template with Storybook, Vite, ESLint, and AI agent skills preconfigured.
+tldr: "Use Nebula when starting a new Canvas Code Component development codebase. It is the official Acquia-maintained template for `@drupal-canvas/create` and the recommended starting point for any Canvas Code Component project."
 drupal_version: "11.x"
 ---
 

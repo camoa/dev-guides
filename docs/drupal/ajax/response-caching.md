@@ -1,5 +1,6 @@
 ---
 description: Cache AJAX responses for public or permission-gated content using CacheableAjaxResponse with tags and contexts
+tldr: "Use CacheableAjaxResponse for AJAX responses containing cacheable data: public content, configuration results, or expensive calculations that don't vary per user. Do not cache user-specific data without proper cache contexts."
 drupal_version: "11.x"
 ---
 

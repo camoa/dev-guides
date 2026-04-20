@@ -1,5 +1,6 @@
 ---
 description: Edit Mode and Navigation+ — toolbar configuration, cookie-based state, bundle settings, and ShouldNotEditMode event
+tldr: "Use Edit Mode for any content type using Layout Builder where editors need WYSIWYG page building. Disable it for read-only, API-sourced, or admin-form-based content types."
 drupal_version: "11.x"
 ---
 

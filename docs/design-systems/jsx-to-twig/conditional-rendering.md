@@ -1,5 +1,6 @@
 ---
 description: Convert JSX conditional expressions to Twig if/else
+tldr: "Use this when converting JSX conditional expressions to Twig. React uses JavaScript expressions inside JSX; Twig uses `{% if %}` tags and filters."
 drupal_version: "11.x"
 ---
 

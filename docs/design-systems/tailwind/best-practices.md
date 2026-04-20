@@ -1,5 +1,6 @@
 ---
 description: Tailwind best practices and anti-patterns — utility-first philosophy, class organization, security, and when to extract abstractions.
+tldr: "Reference before code review, architecture decisions, or when evaluating whether a Tailwind implementation is idiomatic."
 ---
 
 # Best Practices & Anti-Patterns

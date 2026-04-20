@@ -1,5 +1,6 @@
 ---
 description: Understanding what DRY actually means - knowledge duplication vs code duplication
+tldr: "When making architectural decisions about code organization, abstraction, and knowledge representation across your entire software system."
 ---
 
 # DRY Overview

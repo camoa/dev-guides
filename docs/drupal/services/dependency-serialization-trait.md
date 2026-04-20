@@ -1,5 +1,6 @@
 ---
 description: Handling service serialization with DependencySerializationTrait — how it replaces service objects with IDs during serialize and restores them on wakeup.
+tldr: "When your service or class is serialized (stored in cache, queued, etc.) and contains injected service dependencies — this trait prevents serializing the entire service object graph."
 ---
 
 # DependencySerializationTrait

@@ -1,5 +1,6 @@
 ---
 description: BEF hidden, single checkbox, and number widgets — plugin IDs, applicability, and treat_as_false behavior
+tldr: "Use the hidden widget to pre-set filter values without showing them to users. Use the single checkbox widget for boolean filters (on/off)."
 drupal_version: "11.x"
 ---
 

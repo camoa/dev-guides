@@ -1,5 +1,6 @@
 ---
 description: Deprecated AI sub-modules — migration paths for ai_eca, ai_external_moderation, ai_logging, ai_translate, and ai_validations
+tldr: "Use this guide when upgrading to AI 1.3.0-rc2 or planning migrations away from deprecated sub-modules."
 drupal_version: "11.x"
 ---
 

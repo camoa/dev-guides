@@ -1,5 +1,6 @@
 ---
 description: Collect input values interactively via CLI or web forms before applying recipe
+tldr: "Use input collection when you need to gather user-provided values interactively before applying a recipe."
 drupal_version: "11.x"
 ---
 

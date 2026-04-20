@@ -1,5 +1,6 @@
 ---
 description: Drupal language negotiation — URL prefix, domain, session, browser, user preference detection methods and priority
+tldr: "When configuring how Drupal detects the user's language — URL prefix, domain, session, browser, user preference."
 ---
 
 # Language Negotiation

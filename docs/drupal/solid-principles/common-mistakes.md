@@ -1,5 +1,6 @@
 ---
 description: Common SOLID violations in Drupal development with real impact explanations
+tldr: "Recognize these patterns as SOLID violations. Understanding WHY they're bad helps you avoid them and spot them in code review."
 drupal_version: "11.x"
 ---
 

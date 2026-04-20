@@ -1,5 +1,6 @@
 ---
 description: Share logic across Drupal hooks and event subscribers by delegating to services instead of duplicating code in each hook.
+tldr: "When you need to respond to system events (entity operations, form alterations, request processing) without duplicating logic across similar hooks or event subscribers."
 ---
 
 # Hook and Event Reuse

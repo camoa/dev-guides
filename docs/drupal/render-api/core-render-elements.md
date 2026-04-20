@@ -1,5 +1,6 @@
 ---
 description: Reference for built-in render element plugins -- link, table, container, html_tag, inline_template, details, status_messages.
+tldr: "When you need pre-built, reusable output patterns -- links, tables, containers, HTML tags, status messages. Render elements are plugins that encapsulate complex rendering logic."
 ---
 
 # Core Render Elements

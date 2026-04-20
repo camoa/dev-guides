@@ -1,5 +1,6 @@
 ---
 description: Distribute reusable configuration bundles with Recipes — modules, config, and content as a single installable unit.
+tldr: "When you need to distribute reusable configuration bundles (Recipes) that install modules, config, and content together as a single unit for features or starter kits."
 ---
 
 # Config & Recipes Integration

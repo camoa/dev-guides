@@ -1,5 +1,6 @@
 ---
 description: Controlling entity CRUD operations through custom access handlers with proper cache metadata and entity query access checks.
+tldr: "Controlling access to entity operations (view, update, delete, create) through entity access handlers."
 ---
 
 # Entity Access Control

@@ -1,3 +1,7 @@
+---
+tldr: "Style groups organize related styles into categories (e.g., \"Padding\", \"Background Color\", \"Border Style\"). Editors see one form element per group, making the UI manageable when you have many styles."
+
+---
 ## 11.1. Layout Builder Style Groups
 
 ### When to Use

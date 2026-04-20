@@ -1,5 +1,6 @@
 ---
 description: Facet sources — how facets connect to Search API Views displays, auto-generated source IDs, and source configuration
+tldr: "Use this guide when you need to understand how facets connect to your search backend and Views displays, or when a facet source is not appearing."
 drupal_version: "11.x"
 ---
 

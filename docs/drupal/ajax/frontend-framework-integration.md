@@ -1,5 +1,6 @@
 ---
 description: Integrate React, Vue, or other frontend frameworks with Drupal AJAX endpoints using JSON responses and Drupal.behaviors
+tldr: "Use JSON endpoints with React/Vue for fully decoupled sites. Use Drupal AJAX for simple enhancements."
 drupal_version: "11.x"
 ---
 

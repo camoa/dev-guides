@@ -1,5 +1,6 @@
 ---
 description: Systematic folder structure for design system to Bootstrap mapping projects
+tldr: "Use this when starting a design system → Bootstrap mapping project to organize analysis, documentation, and implementation files systematically."
 ---
 
 # Project Organization Principles

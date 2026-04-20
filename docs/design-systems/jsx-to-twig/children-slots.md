@@ -1,5 +1,6 @@
 ---
 description: Convert React children and JSX props to Twig blocks and SDC slots
+tldr: "Use this when converting React's children, named props that accept JSX, render props, or compound component patterns into Twig blocks and SDC slots."
 drupal_version: "11.x"
 ---
 

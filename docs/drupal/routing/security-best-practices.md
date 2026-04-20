@@ -1,5 +1,6 @@
 ---
 description: Drupal routing security - protect routes with access control, input validation, and CSRF protection
+tldr: "Use when designing any route - security must be considered from the start, not added later. Every route is a potential attack vector."
 drupal_version: "11.x"
 ---
 

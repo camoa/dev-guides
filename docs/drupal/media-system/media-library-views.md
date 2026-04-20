@@ -1,5 +1,6 @@
 ---
 description: Customizing the Media Library browser view — filters, sort order, fields, pager settings, and image dimensions display.
+tldr: "You need to customize the Media Library browser: filters, sort order, fields displayed."
 ---
 
 ## 10. Media Library Views

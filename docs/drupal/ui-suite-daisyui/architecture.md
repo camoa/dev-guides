@@ -1,5 +1,6 @@
 ---
 description: How UI Patterns, UI Styles, UI Skins, and UI Icons integrate with DaisyUI components in the theme
+tldr: "How UI Patterns, UI Styles, UI Skins, and UI Icons integrate with DaisyUI components in the theme"
 ---
 
 # Architecture

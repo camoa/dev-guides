@@ -1,3 +1,7 @@
+---
+tldr: "When config-based approach isn't sufficient: runtime view modification, dynamic filter injection, custom display logic."
+
+---
 ## 18. Programmatic View Modification
 
 ### When to Use

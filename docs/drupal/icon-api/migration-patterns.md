@@ -1,5 +1,6 @@
 ---
 description: Migrate from manual icon management, icon fonts, or other icon systems to Icon API
+tldr: "You're migrating from manual icon management, icon fonts, or other icon systems to Icon API."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Custom view modes for specialized display contexts
+tldr: "When creating custom display contexts beyond default/teaser (e.g., 'card', 'embed', 'json_api'), requiring entity-specific formatter configurations."
 drupal_version: "11.x"
 ---
 

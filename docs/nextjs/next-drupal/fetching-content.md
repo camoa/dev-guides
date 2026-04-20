@@ -1,5 +1,6 @@
 ---
 description: "Fetch JSON:API resources from Drupal for rendering in Next.js pages. All methods support filtering, sorting, includes, and sparse fieldsets."
+tldr: "Fetch JSON:API resources from Drupal for rendering in Next.js pages. All methods support filtering, sorting, includes, and sparse fieldsets."
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
 ---

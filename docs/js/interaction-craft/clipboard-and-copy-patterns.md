@@ -1,5 +1,6 @@
 ---
 description: Copy to clipboard with visual feedback, Share API for native mobile share, paste sanitization — Clipboard API patterns
+tldr: "Use `navigator.clipboard.writeText()` as the primary path on HTTPS. Use `navigator.share()` for mobile share sheets."
 ---
 
 # Clipboard and Copy Patterns

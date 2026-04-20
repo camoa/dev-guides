@@ -1,5 +1,6 @@
 ---
 description: Drupal multilingual architecture overview — language types, negotiation, entity translation, field translatability, config translation
+tldr: "When building a site that needs to serve content in multiple languages — either content translation (nodes, terms, media), interface translation (UI strings, labels), or config translation (views, menus, site settings)."
 ---
 
 # Multilingual Overview

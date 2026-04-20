@@ -1,5 +1,6 @@
 ---
 description: Complete catalog of Drupal core's 8 image effect plugins with data schemas, use cases, and gotchas for each transformation type
+tldr: "Use this when you need to configure specific image transformations in an image style. Drupal core provides 8 image effect plugins."
 ---
 
 # Core Image Effects

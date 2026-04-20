@@ -1,5 +1,6 @@
 ---
 description: Code smells that indicate SOLID violations — Large Class, Switch on Type, Empty Override, Feature Envy, Shotgun Surgery, and more with detection and refactoring guidance.
+tldr: "During code reviews, use these smells to detect SOLID violations early."
 ---
 
 # SOLID Code Smells

@@ -1,5 +1,6 @@
 ---
 description: Drupal route parameters - dynamic URL segments with validation and entity auto-loading
+tldr: "Use when routes need dynamic segments (e.g., node IDs, user IDs, custom identifiers). Parameters enable reusable routes for multiple entities or contexts."
 drupal_version: "11.x"
 ---
 

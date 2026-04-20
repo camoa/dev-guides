@@ -1,5 +1,6 @@
 ---
 description: HTTP security headers configuration including CSP, HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, and Permissions-Policy.
+tldr: "Configure security headers on ALL HTTP responses. Headers provide defense-in-depth against XSS, clickjacking, MIME sniffing, and other attacks."
 ---
 
 # Security Headers

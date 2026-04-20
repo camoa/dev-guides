@@ -1,5 +1,6 @@
 ---
 description: Show placeholders while images load — CLS prevention, LQIP blur-up, ThumbHash, skeleton shimmer, and dominant color patterns
+tldr: "Use `width`/`height` attributes on every image to prevent CLS — this is non-negotiable. Add LQIP blur-up for editorial photos where perceived performance matters."
 ---
 
 # Placeholder Strategies

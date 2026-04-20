@@ -1,5 +1,6 @@
 ---
 description: Update UI immediately before server confirms — when to use optimistic state, rollback patterns, and pending state indicators
+tldr: "Use optimistic UI when the expected server response is success and failure is rare. Skip it for destructive, financial, or irreversible actions."
 ---
 
 # Optimistic UI

@@ -1,5 +1,6 @@
 ---
 description: AJAX security, XSS prevention, and advanced patterns like modals
+tldr: "Always use render arrays in AJAX callbacks (auto-escaped). Use AJAX commands for multiple element updates."
 drupal_version: "11.x"
 ---
 

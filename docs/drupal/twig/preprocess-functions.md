@@ -1,4 +1,5 @@
 ---
+tldr: "When you need to prepare data for templates, pass custom variables, modify existing variables, or manipulate the rendering pipeline before a template renders."
 topic: drupal/twig
 guide: preprocess-functions
 ---

@@ -1,5 +1,6 @@
 ---
 description: Use cn() (clsx + tailwind-merge) and CVA for class merging and variant definitions in every Tailwind-based component.
+tldr: "Use `cn()` and CVA in every component that uses Tailwind classes. `cn()` handles merging; CVA handles variant definitions."
 ---
 
 # Tailwind Integration — cn() and CVA

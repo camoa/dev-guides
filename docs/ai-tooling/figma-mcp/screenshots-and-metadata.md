@@ -1,5 +1,6 @@
 ---
 description: Use get_screenshot for visual ground truth and get_metadata to navigate large Figma frames without exceeding context limits
+tldr: "Two complementary tools for handling cases where `get_design_context` alone is insufficient: screenshots provide visual ground truth; metadata provides structure without weight for large frames."
 ---
 
 # Screenshots and Metadata

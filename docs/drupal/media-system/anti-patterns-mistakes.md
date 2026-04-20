@@ -1,5 +1,6 @@
 ---
 description: Media system anti-patterns — architecture, configuration, display, Media Library, access control, and file system mistakes to avoid.
+tldr: "Media system anti-patterns — architecture, configuration, display, Media Library, access control, and file system mistakes to avoid."
 ---
 
 ## 19. Anti-Patterns & Common Mistakes

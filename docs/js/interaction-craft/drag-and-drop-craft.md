@@ -1,5 +1,6 @@
 ---
 description: Choose between HTML Drag API, Pointer Events, and libraries for drag-and-drop — with keyboard accessibility required by WCAG 2.5.7
+tldr: "Use the HTML Drag API for simple desktop-only drag. Use Pointer Events for touch + cross-device support."
 ---
 
 # Drag and Drop Craft

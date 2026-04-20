@@ -1,5 +1,6 @@
 ---
 description: Implement only the entity interfaces your Drupal entity actually needs
+tldr: "Drupal provides role-specific entity interfaces. Implement only the interfaces your entity needs -- don't implement EntityPublishedInterface if your entity can't be published."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Facets caching — facets_filter cache context, FacetManager in-memory cache, block cache, and debug mode
+tldr: "Use this guide when you need to understand or debug facet caching behavior, or when facets show stale data or wrong results after caching."
 drupal_version: "11.x"
 ---
 

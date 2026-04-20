@@ -1,5 +1,6 @@
 ---
 description: Design system recognition — 5. organism recognition
+tldr: "You've identified atoms and molecules, now need to recognize complex sections You're analyzing interface sections that feel like \"complete units\" You need to distinguish organisms from templates"
 ---
 
 ## 5. Organism Recognition

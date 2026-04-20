@@ -1,5 +1,6 @@
 ---
 description: Tempstore+ strategy pattern — EntityTempstoreStrategy vs LayoutTempstoreStrategy, workspace keys, custom strategies, and param converter integration
+tldr: "Use Tempstore+ when you need workspace-aware temporary storage for entities or layout sections. Do not bypass it with core tempstore directly."
 drupal_version: "11.x"
 ---
 

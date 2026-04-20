@@ -1,5 +1,6 @@
 ---
 description: Use Class Variance Authority (CVA) to manage component variants with type-safe, structured class generation.
+tldr: "Use CVA when a component has 2+ orthogonal variant dimensions, needs compound variants, or requires TypeScript autocompletion on variant props."
 ---
 
 # Class Variance Authority (CVA)

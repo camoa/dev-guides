@@ -1,5 +1,6 @@
 ---
 description: Configure cookie vs localStorage, expiration, and domain scope for consent storage
+tldr: "Configure how Klaro stores user consent decisions. Storage method and duration affect user experience, browser compatibility, and compliance requirements."
 drupal_version: "11.x"
 ---
 

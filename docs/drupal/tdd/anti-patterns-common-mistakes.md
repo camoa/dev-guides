@@ -1,5 +1,6 @@
 ---
 description: Avoid common Drupal testing anti-patterns including wrong test types, over-mocking, implementation testing, and shared state.
+tldr: "Avoid these patterns that lead to slow, brittle, unmaintainable tests."
 ---
 
 # Anti-Patterns & Common Mistakes

@@ -1,5 +1,6 @@
 ---
 description: Liskov Substitution Principle — when subtypes break substitutability, behavioral contracts, and the classic Rectangle/Square violation.
+tldr: "When designing inheritance hierarchies, implementing interfaces, or using polymorphism. LSP ensures subtypes don't break expectations set by base types."
 ---
 
 # Liskov Substitution Principle (LSP)

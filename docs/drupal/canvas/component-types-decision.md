@@ -1,5 +1,6 @@
 ---
 description: Decide between SDC (Twig), Code Component (React), and External JS Component types when building for Canvas.
+tldr: "Use this when creating a new component for Canvas and you need to decide which component type to use. Canvas supports three distinct types, each with different authoring patterns, capabilities, and tradeoffs."
 drupal_version: "11.x"
 ---
 

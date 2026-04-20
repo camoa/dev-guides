@@ -1,5 +1,6 @@
 ---
 description: Admin route configuration - use admin theme and integrate with Drupal's administrative UI patterns
+tldr: "Use when creating administrative interfaces that should use the admin theme and integrate with Drupal's admin UI patterns."
 drupal_version: "11.x"
 ---
 

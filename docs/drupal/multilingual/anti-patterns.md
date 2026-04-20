@@ -1,5 +1,6 @@
 ---
 description: Drupal multilingual anti-patterns — translating user input, concatenating strings, hardcoding language codes, missing cache contexts
+tldr: "When reviewing code or debugging multilingual issues — learn what NOT to do and why."
 ---
 
 # Anti-Patterns & Common Mistakes

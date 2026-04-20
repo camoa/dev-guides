@@ -1,5 +1,6 @@
 ---
 description: Facets built-in widgets — links, checkbox, dropdown, array — configuration options, data attributes, and rendering
+tldr: "Use this guide when choosing how facet results should be rendered to the user."
 drupal_version: "11.x"
 ---
 

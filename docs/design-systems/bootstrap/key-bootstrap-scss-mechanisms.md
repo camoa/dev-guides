@@ -1,5 +1,6 @@
 ---
 description: Bootstrap's internal SCSS architecture including !default flag, map merging, and mixins
+tldr: "Use this to understand Bootstrap's internal architecture, troubleshoot customization issues, and leverage built-in systems effectively."
 ---
 
 # Key Bootstrap SCSS Mechanisms

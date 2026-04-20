@@ -1,5 +1,6 @@
 ---
 description: Robert C. Martin's three laws of TDD and the rapid test-first discipline cycle
+tldr: "You're practicing strict TDD and need the precise discipline to maintain test-first workflow."
 ---
 
 # The Three Laws of TDD

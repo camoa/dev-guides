@@ -1,5 +1,6 @@
 ---
 description: CSS scoping strategies, BEM methodology, and Bootstrap/Radix integration
+tldr: "Use this when adding styles to components, ensuring proper CSS scoping, or importing Bootstrap variables in Radix sub-themes."
 drupal_version: "11.x"
 ---
 

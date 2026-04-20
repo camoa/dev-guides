@@ -1,5 +1,6 @@
 ---
 description: Drupal core HTMX implementation file index — PHP classes, JavaScript files, configuration, production examples, and test files
+tldr: "Use this to locate Drupal core HTMX implementation files for deeper understanding or debugging."
 drupal_version: "11.x"
 ---
 

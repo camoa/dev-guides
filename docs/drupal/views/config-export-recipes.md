@@ -1,3 +1,7 @@
+---
+tldr: "When managing views as exportable configuration, deploying via config sync, or packaging in recipes."
+
+---
 ## 17. Views Config Export & Recipes
 
 ### When to Use

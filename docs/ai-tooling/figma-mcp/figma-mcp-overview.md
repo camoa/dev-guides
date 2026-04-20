@@ -1,5 +1,6 @@
 ---
 description: Understand what the Figma MCP server does and which server type (remote vs desktop) to use for your workflow
+tldr: "When you want AI agents to generate code directly from Figma designs — using structured layout data, design tokens, and component mappings rather than screenshots alone."
 ---
 
 # Figma MCP Overview

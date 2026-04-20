@@ -1,3 +1,7 @@
+---
+tldr: "**Style Plugin**: Custom result set formatting (calendar, timeline, accordion) that standard Table/Grid/List can't achieve. **Row Plugin**: Custom per-row rendering (entity cards, custom templates) reusable across multiple views."
+
+---
 ## 26. Custom Style & Row Plugins
 
 ### When to Use

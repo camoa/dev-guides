@@ -1,5 +1,6 @@
 ---
 description: Bento grid layouts — asymmetric CSS grid tiles, named areas, dense auto-fill, and responsive collapse patterns
+tldr: "Use CSS Grid with `span` values or `grid-template-areas` for bento layouts. Asymmetry (varying tile sizes) is what defines bento — equal-sized tiles are just a grid."
 ---
 
 # Bento Grid Layouts

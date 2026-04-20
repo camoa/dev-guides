@@ -1,5 +1,6 @@
 ---
 description: Facet entity configuration keys — field identifier, widget, query operator, processors, hierarchy settings, and programmatic creation
+tldr: "Use this guide when creating or configuring a facet entity — selecting the source, field, widget, operators, and processors."
 drupal_version: "11.x"
 ---
 

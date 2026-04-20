@@ -1,5 +1,6 @@
 ---
 description: Custom Search API plugins — processor development with PHP 8.1 attribute syntax, stage selection, and plugin namespace
+tldr: "Use this when you need a custom processor, backend, datasource, or other Search API plugin."
 drupal_version: "11.x"
 ---
 

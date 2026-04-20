@@ -1,5 +1,6 @@
 ---
 description: Facets searchbox widget — facets_searchbox_widget sub-module for type-to-filter facet items client-side
+tldr: "Use this guide when a facet has many items and you want users to type to filter the visible options client-side."
 drupal_version: "11.x"
 ---
 

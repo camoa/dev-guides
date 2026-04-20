@@ -1,5 +1,6 @@
 ---
 description: Validation and testing strategy throughout migration lifecycle
+tldr: "Test throughout migration, not just at the end. Use small batches, validate content structure, verify relationships, check for data loss."
 drupal_version: "11.x"
 ---
 

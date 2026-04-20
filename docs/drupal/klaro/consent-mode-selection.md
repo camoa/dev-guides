@@ -1,5 +1,6 @@
 ---
 description: Choose between Silent, Notice, or Modal consent modes based on regulatory requirements
+tldr: "Choose consent mode based on your site's regulatory requirements and user experience priorities. Configure at **Administration > Configuration > User interface > Klaro!"
 drupal_version: "11.x"
 ---
 

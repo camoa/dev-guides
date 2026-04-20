@@ -1,5 +1,6 @@
 ---
 description: BEF auto-submit — data attributes, debounce configuration, breakpoint-based submit, and JS behavior details
+tldr: "Use auto-submit when you want the View to refresh automatically when users change filter values, without requiring a manual \"Apply\" button click. Avoid auto-submit on mobile without a breakpoint guard."
 drupal_version: "11.x"
 ---
 

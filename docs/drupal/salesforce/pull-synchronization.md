@@ -1,5 +1,6 @@
 ---
 description: Salesforce to Drupal pull sync — queue handler, SOQL query, event flow, pull trigger date, WHERE clause filtering
+tldr: "Use `salesforce_pull` when you need to import Salesforce object changes into Drupal. Use `pull_trigger_date` for incremental sync of large datasets."
 drupal_version: "11.x"
 ---
 

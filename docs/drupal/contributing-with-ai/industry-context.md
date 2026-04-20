@@ -1,5 +1,6 @@
 ---
 description: Industry context for AI contribution — how QEMU, Gentoo, Linux kernel, and Apache handle AI policies compared to Drupal, plus legal landscape and attribution mechanisms
+tldr: "Use this when you want to understand how Drupal's approach compares to other major open source projects, or when you need to make arguments for or against specific AI policies in governance discussions."
 drupal_version: "11.x"
 ---
 

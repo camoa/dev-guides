@@ -1,5 +1,6 @@
 ---
 description: MappedObject programmatic API — load by SFID, by entity, by mapping, create records
+tldr: "Use the `MappedObjectStorage` service when you need to programmatically query or manage the link between Drupal entities and Salesforce records — checking sync status, loading by SFID, or creating links manually."
 drupal_version: "11.x"
 ---
 

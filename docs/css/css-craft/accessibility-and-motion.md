@@ -1,5 +1,6 @@
 ---
 description: Handle prefers-reduced-motion, focus rings, and forced-colors — WCAG-compliant motion alternatives and keyboard accessibility patterns
+tldr: "Apply reduced-motion handling to every animation pattern. WCAG 2.1 SC 2.3.3 requires it."
 ---
 
 # Accessibility and Motion

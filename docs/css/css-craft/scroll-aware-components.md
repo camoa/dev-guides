@@ -1,5 +1,6 @@
 ---
 description: Scroll-aware components — shrinking headers, reading progress bars, back-to-top buttons, and scroll fade-ins without JavaScript
+tldr: "Use scroll-driven animations when a client wants headers that shrink on scroll, progress indicators, or scroll-triggered reveals — all without JavaScript scroll listeners."
 ---
 
 # Scroll-Aware Components

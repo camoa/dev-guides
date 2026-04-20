@@ -1,5 +1,6 @@
 ---
 description: Standard Migrate API rebuild vs wizard vs retrofit for D7 to D11 migrations
+tldr: "Drupal 7 to 11 is a complete rebuild, not an upgrade. No 1:1 mapping exists for core modules, themes, content types, or custom code."
 drupal_version: "11.x"
 ---
 

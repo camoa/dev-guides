@@ -1,5 +1,6 @@
 ---
 description: Build entity collection admin pages with ListBuilder
+tldr: "Use ListBuilder when building entity collection admin pages with standard CRUD operations."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Structure and schema of *.services.yml files — top-level keys, _defaults, service IDs, and YAML schema validation for IDE support.
+tldr: "When you need to understand the structure of *.services.yml files — the foundational configuration format for Drupal services."
 ---
 
 # services.yml Schema

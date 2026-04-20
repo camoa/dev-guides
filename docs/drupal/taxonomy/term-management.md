@@ -1,5 +1,6 @@
 ---
 description: Create, edit, or bulk-manage taxonomy terms via UI, Drush, or code
+tldr: "Use UI for manual term creation. Use Drush or code for bulk operations or programmatic term management."
 drupal_version: "11.x"
 ---
 

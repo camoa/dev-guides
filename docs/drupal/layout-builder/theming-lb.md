@@ -1,3 +1,7 @@
+---
+tldr: "When styling Layout Builder admin UI, layout frontend output, or section/component markup."
+
+---
 ## 15. Theming Layout Builder
 
 ### When to Use

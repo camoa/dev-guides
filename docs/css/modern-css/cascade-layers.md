@@ -1,5 +1,6 @@
 ---
 description: Control specificity ordering with @layer — tame third-party CSS conflicts
+tldr: "Use `@layer` when managing specificity conflicts between resets, base styles, third-party CSS (Bootstrap, Drupal base themes), components, and utilities. Use unlayered styles when you need to guarantee an override without `!important`."
 ---
 
 # @layer — Cascade Layers

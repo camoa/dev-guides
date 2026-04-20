@@ -1,5 +1,6 @@
 ---
 description: Announce dynamic AJAX content changes to screen readers using AnnounceCommand, MessageCommand, and ARIA live regions
+tldr: "Every AJAX content update must be announced to screen reader users. Silence after a dynamic update is a WCAG failure."
 drupal_version: "11.x"
 ---
 

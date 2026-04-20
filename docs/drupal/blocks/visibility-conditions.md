@@ -1,5 +1,6 @@
 ---
 description: Control block visibility based on pages, roles, content types, or custom condition plugins
+tldr: "Use visibility conditions for UI-configurable placement rules (pages, roles, node type). Use `blockAccess()` for programmatic logic that can't be expressed in conditions."
 drupal_version: "11.x"
 ---
 

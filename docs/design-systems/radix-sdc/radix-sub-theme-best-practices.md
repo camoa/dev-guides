@@ -1,5 +1,6 @@
 ---
 description: You're setting up a new Radix sub-theme
+tldr: "You're setting up a new Radix sub-theme You need to understand override strategy (when to override vs extend vs create) You're managing SCSS variables and compilation You want guidance on starterkit usage and library management"
 drupal_version: "11.x"
 ---
 

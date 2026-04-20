@@ -1,5 +1,6 @@
 ---
 description: Testing and debugging Drupal routes - validate YAML syntax and troubleshoot routing issues
+tldr: "Always test routes after creation or modification. Routing errors can crash sites, so validation is critical before deployment."
 drupal_version: "11.x"
 ---
 

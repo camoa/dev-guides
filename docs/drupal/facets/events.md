@@ -1,5 +1,6 @@
 ---
 description: Facets events — available event constants, when they dispatch, and event subscriber pattern for URL and cache customization
+tldr: "Use this guide when you need to hook into the facets processing pipeline without creating a full custom processor — for example, modifying URL formats, overriding active filter detection, or adjusting cache metadata."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: You're setting up build tools for a new Radix sub-theme
+tldr: "You're setting up build tools for a new Radix sub-theme You need to configure Laravel Mix for SCSS/JS compilation You want to optimize production builds with PurgeCSS You're setting up live reload with BrowserSync"
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: CSS-only accordions — semantic details/summary, animated height with grid trick, exclusive accordion with name attribute
+tldr: "Use `<details>`/`<summary>` for all accordion patterns — they handle toggle, accessibility, and keyboard for free. Add animation with the grid height trick (cross-browser) or `interpolate-size` (Chrome 129+)."
 ---
 
 # CSS-Only Accordions

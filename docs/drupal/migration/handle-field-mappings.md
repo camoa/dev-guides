@@ -1,5 +1,6 @@
 ---
 description: Process plugins for transforming source data to destination format
+tldr: "Process plugins transform source data to destination format. Core provides 50+ plugins for common transformations."
 drupal_version: "11.x"
 ---
 

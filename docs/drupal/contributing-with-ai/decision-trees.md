@@ -1,5 +1,6 @@
 ---
 description: Decision trees for AI contribution — quick flowcharts for disclosure checkbox selection, whether to disclose, git attribution context, and submission readiness
+tldr: "Use this when you need quick answers to common AI contribution questions without reading the full guides."
 drupal_version: "11.x"
 ---
 

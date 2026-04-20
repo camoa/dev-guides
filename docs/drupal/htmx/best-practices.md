@@ -1,5 +1,6 @@
 ---
 description: HTMX best practices in Drupal — security, performance, accessibility, progressive enhancement, and coding standards
+tldr: "Reference this when implementing HTMX features and wanting to follow security, performance, accessibility, and development standards."
 drupal_version: "11.x"
 ---
 

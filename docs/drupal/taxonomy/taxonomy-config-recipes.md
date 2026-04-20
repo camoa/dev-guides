@@ -1,5 +1,6 @@
 ---
 description: Package taxonomy vocabulary config for reuse or deployment via recipes
+tldr: "Use this guide when packaging taxonomy vocabulary config for reuse, distribution via modules, or deployment via recipes."
 drupal_version: "11.x"
 ---
 

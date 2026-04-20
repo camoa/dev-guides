@@ -1,5 +1,6 @@
 ---
 description: Trap focus in modals, implement roving tabindex for widget groups, restore focus after close — WCAG keyboard accessibility patterns
+tldr: "Use native HTML for single elements (buttons, links). Use roving tabindex for groups of related controls (tabs, toolbars, menus)."
 ---
 
 # Keyboard Navigation Craft

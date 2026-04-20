@@ -1,5 +1,6 @@
 ---
 description: Avoid common caching mistakes that cause bugs, stale content, and performance issues
+tldr: "When you need to avoid common caching mistakes that cause bugs, performance issues, or stale content."
 ---
 
 # Anti-Patterns & Common Mistakes

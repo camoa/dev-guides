@@ -1,5 +1,6 @@
 ---
 description: Migrate custom JavaScript AJAX event hooks to HTMX events — beforeSend, success, error equivalents
+tldr: "Use this when migrating custom JavaScript that hooks into AJAX events for preprocessing, validation, or post-processing."
 drupal_version: "11.x"
 ---
 

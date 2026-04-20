@@ -1,5 +1,6 @@
 ---
 description: Six field-level formatters for rendering custom field output -- stacked, inline, list, table, flipped table, and token template.
+tldr: "You need to control how the entire custom field (all sub-fields together) is displayed on the view."
 ---
 
 # Field-Level Formatters

@@ -1,5 +1,6 @@
 ---
 description: Implement proper caching for block performance and correctness
+tldr: "Ensure blocks are cached properly for performance while varying by necessary contexts and invalidating when data changes. Wrong caching = slow site or incorrect content shown to users."
 drupal_version: "11.x"
 ---
 

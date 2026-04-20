@@ -1,5 +1,6 @@
 ---
 description: Media source fields and metadata mapping — field types, image validation settings, and field_map configuration.
+tldr: "You need to understand how source fields store media and how metadata maps to media entity fields."
 ---
 
 ## 4. Media Fields & Field Mapping

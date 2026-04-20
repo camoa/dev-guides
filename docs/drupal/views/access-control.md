@@ -1,3 +1,7 @@
+---
+tldr: "When restricting who can view a display based on permissions or roles."
+
+---
 ## 14. Access Control
 
 ### When to Use

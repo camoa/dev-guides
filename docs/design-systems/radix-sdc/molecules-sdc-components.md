@@ -1,5 +1,6 @@
 ---
 description: You've identified molecules using the Design System Recognition Guide
+tldr: "You've identified molecules using the Design System Recognition Guide You need to compose multiple atoms into a reusable molecule You're implementing composite patterns like search bars, card content, form fields"
 drupal_version: "11.x"
 ---
 

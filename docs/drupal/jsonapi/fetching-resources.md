@@ -1,5 +1,6 @@
 ---
 description: "Retrieving entity data from Drupal. Applies to collections (multiple entities) and individual entities."
+tldr: "Retrieving entity data from Drupal. Applies to collections (multiple entities) and individual entities."
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 ---

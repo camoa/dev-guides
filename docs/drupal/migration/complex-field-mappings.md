@@ -1,5 +1,6 @@
 ---
 description: Multi-step process pipelines for paragraphs and entity references with revisions
+tldr: "Paragraphs, entity references with revisions, and nested structures require multi-step process pipelines. Understand target field structure before mapping."
 drupal_version: "11.x"
 ---
 

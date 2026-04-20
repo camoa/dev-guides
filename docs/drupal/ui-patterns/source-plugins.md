@@ -1,5 +1,6 @@
 ---
 description: Source plugins — widgets, API sources, and context-dependent data for component props/slots
+tldr: "Source plugins — widgets, API sources, and context-dependent data for component props/slots"
 drupal_version: "10.3+ / 11"
 ---
 

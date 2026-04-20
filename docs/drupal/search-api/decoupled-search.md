@@ -1,5 +1,6 @@
 ---
 description: Decoupled search with Search API — jsonapi_search_api for Next.js, Typesense direct, and middleware patterns
+tldr: "Use this when building headless/decoupled frontends (Next.js, React, etc.) that need search functionality."
 drupal_version: "11.x"
 ---
 

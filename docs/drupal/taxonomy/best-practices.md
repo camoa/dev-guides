@@ -1,5 +1,6 @@
 ---
 description: Taxonomy architecture, naming conventions, and maintenance strategies
+tldr: "Use these guidelines when planning taxonomy architecture, naming conventions, and maintenance strategies."
 drupal_version: "11.x"
 ---
 

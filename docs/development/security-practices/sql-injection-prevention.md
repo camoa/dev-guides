@@ -1,5 +1,6 @@
 ---
 description: SQL injection prevention using parameterized queries, ORM safe patterns, dynamic identifier handling, and stored procedures.
+tldr: "EVERY database query that includes any untrusted data — user input, URL parameters, cookies, HTTP headers, data from external APIs, even data read from your own database (defense in depth)."
 ---
 
 # SQL Injection Prevention

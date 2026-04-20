@@ -1,5 +1,6 @@
 ---
 description: Step-by-step guide to creating config schema for new modules with simple config or config entities.
+tldr: "When creating a new module with config (simple or entity) and you need to define schema so Drupal validates and casts config values correctly."
 ---
 
 # Writing Config Schema

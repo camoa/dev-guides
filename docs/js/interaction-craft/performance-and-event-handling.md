@@ -1,5 +1,6 @@
 ---
 description: Passive event listeners, layout thrashing prevention, event delegation, breaking up long tasks, and memory leak patterns
+tldr: "Apply these patterns to every JS interaction. Passive listeners, read/write batching, event delegation, and AbortController cleanup are baselines — not optimizations."
 ---
 
 # Performance and Event Handling

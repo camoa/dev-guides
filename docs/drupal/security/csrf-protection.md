@@ -1,5 +1,6 @@
 ---
 description: Protecting state-changing operations from Cross-Site Request Forgery using Form API tokens, route-level CSRF, and AJAX token headers.
+tldr: "Protecting state-changing operations (create, update, delete) from Cross-Site Request Forgery attacks where malicious sites trick users into performing unwanted actions."
 ---
 
 # CSRF Protection

@@ -1,5 +1,6 @@
 ---
 description: Write PHPUnit Unit tests for pure PHP logic with no Drupal dependencies
+tldr: "Write Unit tests for pure PHP logic that has no Drupal dependencies: calculations, data transformations, validation logic, utility functions, and algorithm implementations."
 drupal_version: "11.x"
 ---
 

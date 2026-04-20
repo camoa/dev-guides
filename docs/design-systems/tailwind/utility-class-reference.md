@@ -1,5 +1,6 @@
 ---
 description: Quick-reference for Tailwind utility categories — layout, spacing, typography, color, sizing, effects, and state variants.
+tldr: "Use as a quick lookup for utility categories and patterns. Tailwind generates utilities for every theme token; this covers key classes and patterns."
 ---
 
 # Utility Class Reference

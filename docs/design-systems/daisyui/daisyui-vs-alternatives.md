@@ -1,5 +1,6 @@
 ---
 description: Decide whether to use DaisyUI, raw Tailwind, shadcn/ui, or Radix UI for a project
+tldr: "Use DaisyUI when you need multi-theme support or a full design system out of the box. Use raw Tailwind when you need full design control."
 ---
 
 # DaisyUI vs Alternatives

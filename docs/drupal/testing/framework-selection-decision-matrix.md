@@ -1,5 +1,6 @@
 ---
 description: Decision matrix for selecting the right testing framework based on module complexity and component type
+tldr: "Use this guide when planning testing coverage for a new module or deciding which test type to write for specific functionality."
 drupal_version: "11.x"
 ---
 

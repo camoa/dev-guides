@@ -1,5 +1,6 @@
 ---
 description: Group YAML configuration — group type, group role, relationship type, global settings, and plugin config schema
+tldr: "Reference this when writing or exporting configuration YAML for group types, group roles, relationship types, or plugin config."
 drupal_version: "11.x"
 ---
 

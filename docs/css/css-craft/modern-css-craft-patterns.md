@@ -1,5 +1,6 @@
 ---
 description: Apply @starting-style, @property, scroll-driven animations, and view transitions for polished UI craft — application patterns with feature cross-references
+tldr: "Use this guide for applying modern CSS features to craft and polish. Feature syntax and browser support live in [modern-css.md](../modern-css/index.md)."
 ---
 
 # Modern CSS Craft Patterns

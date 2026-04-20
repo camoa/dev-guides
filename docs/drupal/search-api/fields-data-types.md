@@ -1,5 +1,6 @@
 ---
 description: Search API field data types — choosing Fulltext vs String vs Integer, what to index, boost values, and rendered HTML strategy
+tldr: "Use this when adding fields to a Search API index and choosing the correct data type for each."
 drupal_version: "11.x"
 ---
 

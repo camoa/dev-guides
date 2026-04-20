@@ -1,5 +1,6 @@
 ---
 description: Step-by-step workflow for converting TypeScript interfaces to component.yml schemas
+tldr: "Use this when you have a TypeScript interface or Props type definition and need to produce a complete SDC `component.yml` schema. This is a step-by-step workflow for the most common translation task."
 drupal_version: "11.x"
 ---
 

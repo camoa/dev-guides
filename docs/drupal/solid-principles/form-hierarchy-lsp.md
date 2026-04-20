@@ -1,5 +1,6 @@
 ---
 description: Choose the right Drupal form base class to honor LSP behavioral contracts
+tldr: "Drupal form base classes follow LSP -- extend the right base for your use case. ConfigFormBase adds config-specific behavior; SettingsForm adds protected config behavior."
 drupal_version: "11.x"
 ---
 

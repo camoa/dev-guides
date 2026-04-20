@@ -1,5 +1,6 @@
 ---
 description: Safe refactoring workflow under test coverage, code smells, and when to refactor
+tldr: "Code works but is messy, duplicated, or hard to understand. You want to improve structure without breaking behavior."
 ---
 
 # Refactoring with Confidence

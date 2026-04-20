@@ -1,5 +1,6 @@
 ---
 description: Displaying media collections in Views — galleries, grids, contextual filters, and rendered entity display with view modes.
+tldr: "You need to display collections of media: galleries, media listings, search results."
 ---
 
 ## 15. Media in Views

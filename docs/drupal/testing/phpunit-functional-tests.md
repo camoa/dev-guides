@@ -1,5 +1,6 @@
 ---
 description: Write PHPUnit Functional tests for complete user workflows, admin forms, and HTTP request/response testing
+tldr: "Write Functional tests for complete user workflows: admin configuration forms, content creation/editing, user registration/login, permission testing, and any feature requiring HTTP requests and responses."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: "Fetch related entities in a single request (compound documents) and request only needed fields to reduce response size and processing time."
+tldr: "**Includes:** Fetch related entities in a single request (compound documents). Reduces HTTP round trips."
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 ---

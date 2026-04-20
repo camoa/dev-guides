@@ -1,5 +1,6 @@
 ---
 description: Choose JPEG, WebP, AVIF, PNG, SVG, or video — format decision table, quality settings by use case, and animated image strategy
+tldr: "Use this when deciding what format to produce and serve. Choosing the wrong format is the single biggest avoidable image performance mistake."
 ---
 
 # Image Format Strategy

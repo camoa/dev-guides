@@ -1,5 +1,6 @@
 ---
 description: AI Automator system - field-level content generation with 50+ automator types
+tldr: "Use AI Automators when you need consistent, automated content generation for specific fields without custom code. Use for field-level automation triggered on entity create or update."
 drupal_version: "11.x"
 ---
 

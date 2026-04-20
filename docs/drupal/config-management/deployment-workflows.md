@@ -1,5 +1,6 @@
 ---
 description: Deploy configuration changes safely from development to staging to production with rollback capability.
+tldr: "When deploying configuration changes from development to staging to production, ensuring safe, repeatable, rollback-capable deployments."
 ---
 
 # Deployment Workflows

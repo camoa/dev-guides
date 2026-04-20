@@ -1,5 +1,6 @@
 ---
 description: Smooth transitions between UI states with View Transitions API
+tldr: "Use View Transitions for smooth animated transitions between UI states — page navigations, tab switches, content updates — without JS animation libraries. Use a JS library when you need complex choreographed sequencing."
 ---
 
 # View Transitions

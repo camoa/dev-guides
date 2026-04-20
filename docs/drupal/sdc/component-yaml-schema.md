@@ -1,5 +1,6 @@
 ---
 description: Component YAML schema definition for props, slots, and dependencies
+tldr: "Use this when defining component metadata, specifying props and slots, or configuring library dependencies."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Write JavaScript tests with WebDriverTestBase for AJAX, DOM manipulation, and real browser interactions.
+tldr: "Testing JavaScript interactions, AJAX callbacks, dynamic DOM manipulation requiring a real browser."
 ---
 
 # JavaScript Tests with WebDriverTestBase

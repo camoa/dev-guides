@@ -1,5 +1,6 @@
 ---
 description: Understanding Drupal's defense-in-depth security model with multiple layers of protection against different attack vectors.
+tldr: "Understanding Drupal's defense-in-depth security model when architecting applications, evaluating modules, or responding to security advisories."
 ---
 
 # Security Overview

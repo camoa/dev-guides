@@ -1,5 +1,6 @@
 ---
 description: Ready-to-apply breadcrumb patterns — entity-type builders, menu-based breadcrumbs, per-node title overrides, multilingual, and hiding breadcrumbs
+tldr: "Ready-to-apply patterns for the most frequent breadcrumb requirements. Each recipe is self-contained."
 drupal_version: "11.x"
 ---
 

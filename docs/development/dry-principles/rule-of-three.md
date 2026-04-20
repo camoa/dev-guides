@@ -1,5 +1,6 @@
 ---
 description: Deciding when to refactor duplicated code into an abstraction using the three strikes rule
+tldr: "When deciding whether it's time to refactor duplicated code into an abstraction."
 ---
 
 # Rule of Three

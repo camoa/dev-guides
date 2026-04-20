@@ -1,5 +1,6 @@
 ---
 description: "Choose decoupled Drupal with Next.js when you need modern frontend performance, independent backend/frontend development teams, or flexibility to serve multiple frontends from one Drupal backend."
+tldr: "Choose decoupled Drupal with Next.js when you need modern frontend performance, independent backend/frontend development teams, or flexibility to serve multiple frontends from one Drupal backend."
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
 ---

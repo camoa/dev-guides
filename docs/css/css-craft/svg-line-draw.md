@@ -1,5 +1,6 @@
 ---
 description: SVG line draw animations — stroke-dashoffset technique, staggered multi-path draw, draw-then-fill, and scroll-triggered drawing
+tldr: "Use `stroke-dasharray` + `stroke-dashoffset` animation when a client wants icons, logos, or illustrations that draw themselves. Pure CSS on SVG strokes — no JavaScript needed."
 ---
 
 # SVG Line Draw

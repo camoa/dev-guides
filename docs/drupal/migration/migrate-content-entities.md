@@ -1,5 +1,6 @@
 ---
 description: Execute migrations in dependency order with Drush commands
+tldr: "Execute migrations in dependency order: users first, then taxonomy, files, then nodes. Use Drush commands for batch processing."
 drupal_version: "11.x"
 ---
 

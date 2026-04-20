@@ -1,3 +1,7 @@
+---
+tldr: "New output channel beyond Page/Block/REST: CLI output, email rendering, queue processing, specialized API formats."
+
+---
 ## 25. Custom Display Plugin
 
 ### When to Use

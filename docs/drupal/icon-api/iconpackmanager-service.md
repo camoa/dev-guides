@@ -1,5 +1,6 @@
 ---
 description: Programmatic access to icon packs and icons in PHP for controllers, services, forms, and preprocess
+tldr: "You need programmatic access to icon packs and icons in PHP (controllers, services, forms, preprocess) rather than templates."
 drupal_version: "11.x"
 ---
 

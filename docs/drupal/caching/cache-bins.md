@@ -1,5 +1,6 @@
 ---
 description: Understand cache bins and their purposes for different types of cached data
+tldr: "When you need to understand where different types of cached data are stored. Cache bins are logical containers for cache data — each bin can use a different backend, have different expiration policies, and serve different purposes."
 ---
 
 # Cache Bins

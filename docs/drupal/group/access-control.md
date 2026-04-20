@@ -1,5 +1,6 @@
 ---
 description: Group access control — explicit forbid philosophy, access check flow, query access, GroupAccessResult, custom handlers, and revision access
+tldr: "Read this when diagnosing access issues, understanding the \"explicit forbid\" pattern, or writing custom access control for group-related entities."
 drupal_version: "11.x"
 ---
 

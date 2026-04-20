@@ -1,5 +1,6 @@
 ---
 description: Facets canonical URLs and duplicate content — parameter order variants, sitemap exclusion, hreflang with facets, and canonical hook pattern
+tldr: "Use this guide when faceted pages create duplicate content issues — the same results appearing at multiple URLs due to different facet parameter ordering or pagination combinations."
 drupal_version: "11.x"
 ---
 

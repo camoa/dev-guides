@@ -1,5 +1,6 @@
 ---
 description: Adding cache keys, contexts, tags, and max-age to render arrays for correct caching and invalidation.
+tldr: "Every render array that depends on dynamic data (entities, config, user context, time) needs cache metadata to ensure correct caching and cache invalidation."
 ---
 
 # Cache Metadata in Render Arrays

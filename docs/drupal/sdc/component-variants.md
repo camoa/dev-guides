@@ -1,5 +1,6 @@
 ---
 description: Strategies for implementing component variants using enums or separate components
+tldr: "Use this when you need multiple visual variations of a component, deciding between prop-based variants vs separate components, or implementing the new variants API (Drupal 11.1+)."
 drupal_version: "11.x"
 ---
 

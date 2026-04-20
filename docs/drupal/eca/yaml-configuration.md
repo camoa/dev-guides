@@ -1,5 +1,6 @@
 ---
 description: Use YAML config fields for complex structured settings with YamlParser validation
+tldr: "Use YAML configuration fields when plugins need complex, structured configuration that's too cumbersome for multiple form fields, such as API client options, nested settings, or dynamic key-value pairs."
 drupal_version: "11.x"
 ---
 

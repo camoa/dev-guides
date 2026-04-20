@@ -1,5 +1,6 @@
 ---
 description: Facets exposed filters — the recommended 3.x approach using Views filter criteria, native AJAX, and BEF widget integration
+tldr: "Use facets_exposed_filters when you want facets integrated into the Views exposed form — the recommended approach in Facets 3.x. This gives you native Views AJAX, BEF widget support, and simpler configuration."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Media system best practices — naming conventions, view mode strategy, config management, Media Library optimization, security, and performance patterns.
+tldr: "Media system best practices — naming conventions, view mode strategy, config management, Media Library optimization, security, and performance patterns."
 ---
 
 ## 18. Best Practices & Patterns

@@ -1,5 +1,6 @@
 ---
 description: Test pyramid vs trophy vs diamond strategies, what to test at each level, and integration test structure
+tldr: "Your unit tests verify individual components work correctly, and now you need to verify they work together correctly. Essential for multi-component systems, APIs, databases, and microservices."
 ---
 
 # Integration Testing Strategy

@@ -1,5 +1,6 @@
 ---
 description: Complete CSS craft token set — copy-paste easing, duration, shadow, opacity, state overlay, and skeleton defaults for any project
+tldr: "Copy this complete token set into any project as a starting point. All values are based on MD3 motion tokens, cross-design-system opacity standards, and layered shadow methodology."
 ---
 
 # Quick Reference: Recommended Defaults

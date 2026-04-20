@@ -1,5 +1,6 @@
 ---
 description: Pre-ship checklist and anti-pattern catalog for React design system components covering API design, security, performance, and code review standards.
+tldr: "Use before shipping a component to design system consumers, and during code review."
 ---
 
 # Best Practices and Anti-Patterns

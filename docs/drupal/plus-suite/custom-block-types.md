@@ -1,5 +1,6 @@
 ---
 description: Create Plus Suite-compatible block content types — BlockPropertiesEvent pattern, example blocks, and PlaceBlockEvent defaults
+tldr: "Create custom block types for every design component. Use event subscribers to set placement defaults and add design options."
 drupal_version: "11.x"
 ---
 

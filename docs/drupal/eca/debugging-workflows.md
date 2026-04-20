@@ -1,5 +1,6 @@
 ---
 description: Debug ECA workflows with logging, token inspection, and drush watchdog commands
+tldr: "Debug ECA workflows when actions don't execute as expected, tokens have unexpected values, or conditions evaluate incorrectly. Use logging, watchdog, and token inspection."
 drupal_version: "11.x"
 ---
 

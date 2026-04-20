@@ -1,5 +1,6 @@
 ---
 description: Preventing SQL injection using Database API placeholders, Entity Query, Query Builder, and safe identifier escaping.
+tldr: "Every database query -- SQL injection allows attackers to manipulate queries and access/modify unauthorized data."
 ---
 
 # SQL Injection Prevention

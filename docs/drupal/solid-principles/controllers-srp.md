@@ -1,5 +1,6 @@
 ---
 description: Keep controllers thin and forms focused - delegate business logic to services
+tldr: "Controllers should only handle HTTP request/response. Business logic belongs in services."
 drupal_version: "11.x"
 ---
 

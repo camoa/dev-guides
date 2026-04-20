@@ -1,5 +1,6 @@
 ---
 description: Programmatic form submission for batch operations, testing, and automation
+tldr: "Use programmatic submission for batch operations, migrations, automated testing, and cron jobs. Never for user-submitted forms."
 drupal_version: "11.x"
 ---
 

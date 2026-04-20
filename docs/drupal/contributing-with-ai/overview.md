@@ -1,5 +1,6 @@
 ---
 description: AI contribution overview — Drupal's disclose-and-verify position, the 4 disclosure levels, and how the community treats AI-assisted code
+tldr: "Read this first. It maps the landscape of AI contribution policies, why disclosure matters, and how Drupal's \"disclose and verify\" position works before you touch any issue or merge request."
 drupal_version: "11.x"
 ---
 

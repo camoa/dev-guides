@@ -1,5 +1,6 @@
 ---
 description: "Choose the right API approach based on your project's requirements and constraints."
+tldr: "Choose the right API approach based on your project's requirements and constraints."
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 ---

@@ -1,5 +1,6 @@
 ---
 description: Default sources provide fallback values from literal values, config references, or environment variables
+tldr: "Use default sources to provide fallback values when inputs aren't explicitly collected from users."
 drupal_version: "11.x"
 ---
 

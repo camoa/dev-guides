@@ -1,5 +1,6 @@
 ---
 description: Harden taxonomy against security vulnerabilities and optimize for scale
+tldr: "Use this guide when hardening taxonomy implementations against security vulnerabilities and optimizing for large-scale performance."
 drupal_version: "11.x"
 ---
 

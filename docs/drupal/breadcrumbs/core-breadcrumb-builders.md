@@ -1,5 +1,6 @@
 ---
 description: Reference for all core Drupal breadcrumb builders — which routes they handle and their gotchas
+tldr: "Know which builder handles which route so you can decide where to inject custom logic. All core builders register at priority 0 except where noted."
 drupal_version: "11.x"
 ---
 

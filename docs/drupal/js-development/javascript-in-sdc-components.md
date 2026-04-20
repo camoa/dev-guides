@@ -1,5 +1,6 @@
 ---
 description: Add interactive behavior to Single Directory Components with automatic library discovery
+tldr: "Use when adding interactive behavior to Single Directory Components (Drupal core feature since 10.3)."
 drupal_version: "10.3+"
 ---
 

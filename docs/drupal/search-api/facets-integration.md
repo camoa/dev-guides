@@ -1,5 +1,6 @@
 ---
 description: Integrating Facets with Search API — exposed filters approach, String field requirement, and setup pattern
+tldr: "Use this when adding faceted search navigation to your Search API-powered search page."
 drupal_version: "11.x"
 ---
 

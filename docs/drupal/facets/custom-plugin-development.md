@@ -1,5 +1,6 @@
 ---
 description: Facets custom plugin development — custom processors, widgets, URL processors, and facet sources with PHP 8 attribute syntax
+tldr: "Use this guide when you need a custom processor, widget, query type, or URL processor that doesn't exist in the built-in set."
 drupal_version: "11.x"
 ---
 

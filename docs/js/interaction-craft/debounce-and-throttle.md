@@ -1,5 +1,6 @@
 ---
 description: Choose between debounce, throttle, and requestAnimationFrame for rate-limiting events — scroll, resize, search input, and button submission
+tldr: "Use `throttle` or `requestAnimationFrame` when you want continuous updates (scroll, mousemove, progress). Use `debounce` when you want to react once after the user stops (resize, search input, async validation)."
 ---
 
 # Debounce and Throttle

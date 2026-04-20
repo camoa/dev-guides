@@ -1,5 +1,6 @@
 ---
 description: Export existing content entities to YAML for bundling with recipes
+tldr: "Use content export when you need to bundle existing content entities with a recipe for demo or starter content."
 drupal_version: "11.x"
 ---
 

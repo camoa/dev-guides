@@ -1,5 +1,6 @@
 ---
 description: Creating custom source plugins — widgets, API sources, and derivers
+tldr: "Creating custom source plugins — widgets, API sources, and derivers"
 drupal_version: "10.3+ / 11"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: "Transform field values during normalization (entity to JSON) and denormalization (JSON to entity). Requires jsonapi_extras module."
+tldr: "Transform field values during normalization (entity to JSON) and denormalization (JSON to entity). Requires `jsonapi_extras` module."
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 ---

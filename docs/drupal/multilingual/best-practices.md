@@ -1,5 +1,6 @@
 ---
 description: Drupal multilingual best practices — config-first setup, deployment workflows, performance optimization, security, accessibility
+tldr: "When planning multilingual architecture, deployment workflows, or optimizing translation management."
 ---
 
 # Best Practices & Patterns

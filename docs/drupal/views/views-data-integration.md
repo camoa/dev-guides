@@ -1,3 +1,7 @@
+---
+tldr: "Exposing custom database tables, altering entity views integration, defining custom handlers for existing fields, adding computed/pseudo-fields."
+
+---
 ## 28. Views Data Integration (hook_views_data)
 
 ### When to Use

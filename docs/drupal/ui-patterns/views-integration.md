@@ -1,5 +1,6 @@
 ---
 description: Views integration — row and style plugins for rendering Views results as components
+tldr: "Views integration — row and style plugins for rendering Views results as components"
 drupal_version: "10.3+ / 11"
 ---
 

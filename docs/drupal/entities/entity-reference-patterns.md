@@ -1,5 +1,6 @@
 ---
 description: Entity reference fields for relationships with referential integrity
+tldr: "When creating relationships between entities (nodes ↔ taxonomy, nodes ↔ users, nodes ↔ nodes), requiring referential integrity and access-controlled relationships."
 drupal_version: "11.x"
 ---
 

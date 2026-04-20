@@ -1,5 +1,6 @@
 ---
 description: You need to choose a rich text editor framework for a React/Next.js application or headless CMS integration.
+tldr: "You need to choose a rich text editor framework for a React/Next.js application or headless CMS integration."
 ---
 
 ## 1.1 Tiptap Overview

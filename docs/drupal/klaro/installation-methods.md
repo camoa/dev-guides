@@ -1,5 +1,6 @@
 ---
 description: Install Klaro module and klaro-js library via Composer or manual methods
+tldr: "Install Klaro module and klaro-js JavaScript library before configuration. Choose installation method based on your Drupal project's dependency management approach."
 drupal_version: "11.x"
 ---
 

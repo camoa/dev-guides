@@ -1,5 +1,6 @@
 ---
 description: Custom access checking for routes - implement complex business logic beyond built-in permission checks
+tldr: "Use when built-in access checks (`_permission`, `_role`, `_entity_access`) are insufficient. Complex business logic, multi-factor checks, or context-dependent access require custom checkers."
 drupal_version: "11.x"
 ---
 

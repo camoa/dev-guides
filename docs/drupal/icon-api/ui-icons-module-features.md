@@ -1,5 +1,6 @@
 ---
 description: Icon integration beyond rendering - field types, menu icons, CKEditor embedding, and browsing UI for content editors
+tldr: "You need icon integration beyond rendering in templates: icon field types, menu icons, CKEditor embedding, or icon browsing UI for content editors. UI Icons is a contrib module that extends core Icon API functionality."
 drupal_version: "11.x"
 ---
 

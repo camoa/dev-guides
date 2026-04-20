@@ -1,5 +1,6 @@
 ---
 description: Salesforce configuration management — mapping export paths, auth secrets handling, global settings, environment deployment workflow
+tldr: "Use Drupal's standard config management (drush config:export/import) for mappings. Never commit auth credentials to version control — consumer secrets are not exported and must be configured per environment."
 drupal_version: "11.x"
 ---
 

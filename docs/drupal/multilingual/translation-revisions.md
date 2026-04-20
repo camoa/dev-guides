@@ -1,5 +1,6 @@
 ---
 description: Drupal translation and revisions — revision handling with translations, content moderation per language, latest revision queries
+tldr: "When working with revisionable entities (nodes, media, custom entities) that support both translation and revision tracking."
 ---
 
 # Translation & Revisions

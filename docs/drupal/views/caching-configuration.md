@@ -1,3 +1,7 @@
+---
+tldr: "When optimizing view performance by caching query results and rendered output."
+
+---
 ## 13. Caching Configuration
 
 ### When to Use

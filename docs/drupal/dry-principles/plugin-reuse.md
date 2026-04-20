@@ -1,5 +1,6 @@
 ---
 description: Reuse patterns in Drupal's plugin system - extending base plugins, creating shared bases, and using derivatives for dynamic generation.
+tldr: "When you need extensible, discoverable, swappable components (blocks, field types, filters, conditions, actions), or when multiple plugins share common patterns."
 ---
 
 # Plugin Reuse Patterns

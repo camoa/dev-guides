@@ -1,5 +1,6 @@
 ---
 description: Salesforce mapping framework — SalesforceMapping config entity, MappedObject content entity, field mapping plugins
+tldr: "Use `salesforce_mapping` for any entity sync between Drupal and Salesforce. It provides the `SalesforceMapping` config entity (defines the relationship) and `MappedObject` content entity (tracks individual record links)."
 drupal_version: "11.x"
 ---
 

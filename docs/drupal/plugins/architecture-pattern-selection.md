@@ -1,5 +1,6 @@
 ---
 description: Choose between Foundation+Extension, Provider Plugin, or Service Collector patterns
+tldr: "Choose the pattern that matches your integration context. Foundation+Extension when mature plugin ecosystems exist."
 drupal_version: "11.x"
 ---
 

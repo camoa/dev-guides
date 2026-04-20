@@ -1,5 +1,6 @@
 ---
 description: Supply chain security including 7-day dependency cooldown, lock files, vulnerability scanning, dependency pruning, SRI, and private registries.
+tldr: "Every project uses third-party dependencies — npm packages, PyPI libraries, Maven artifacts, gems, Go modules. **Supply chain attacks** are the fastest-growing threat in 2025."
 ---
 
 # Dependency Security

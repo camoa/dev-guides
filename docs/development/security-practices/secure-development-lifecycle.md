@@ -1,5 +1,6 @@
 ---
 description: Integrating security into every development phase - threat modeling (STRIDE), SAST, DAST, security code review, penetration testing, secure CI/CD, and secrets management.
+tldr: "Integrate security into every phase of software development — from requirements gathering to deployment and maintenance. Security is not a gate at the end; it's woven throughout the entire process."
 ---
 
 # Secure Development Lifecycle

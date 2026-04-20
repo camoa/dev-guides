@@ -1,5 +1,6 @@
 ---
 description: Show messages, alerts, and screen reader announcements after AJAX operations using MessageCommand, AlertCommand, and AnnounceCommand
+tldr: "Use MessageCommand for all user-facing messages. Use AnnounceCommand to notify screen readers of content changes."
 drupal_version: "11.x"
 ---
 

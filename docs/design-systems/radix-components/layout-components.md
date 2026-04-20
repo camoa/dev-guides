@@ -1,5 +1,6 @@
 ---
 description: Components for organizing and containing content in structured layouts
+tldr: "Components for organizing and containing content in structured layouts. These components help create interactive, collapsible, and organized content presentations including accordions, cards, carousels, modals, and data tables."
 ---
 
 # Layout Components

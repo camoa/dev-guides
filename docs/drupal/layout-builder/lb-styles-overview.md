@@ -1,3 +1,7 @@
+---
+tldr: "When you need to apply CSS classes to Layout Builder sections (layouts) or components (blocks) without creating custom plugins. Layout Builder Styles provides a config entity system for defining reusable style options that editors select…"
+
+---
 ## 11. Layout Builder Styles Overview
 
 ### When to Use

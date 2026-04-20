@@ -1,5 +1,6 @@
 ---
 description: How to structure specifications with behavior, acceptance criteria, edge cases, and constraints
+tldr: "Before implementing any feature using AI code generation or when you want specifications to serve as living documentation and development contract."
 ---
 
 # Writing Effective Specifications

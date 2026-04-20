@@ -1,5 +1,6 @@
 ---
 description: Add configurable settings to block plugin instances
+tldr: "Use when your block plugin needs configurable settings that site builders can set per block instance. Use content block fields instead when editors (not devs) need to manage the values."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: When a class has too many responsibilities and how to identify SRP violations using the "one reason to change" test.
+tldr: "When designing classes, modules, or functions -- especially when you notice code becoming harder to test, change, or understand."
 ---
 
 # Single Responsibility Principle (SRP)

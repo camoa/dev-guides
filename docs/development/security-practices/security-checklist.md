@@ -1,5 +1,6 @@
 ---
 description: Comprehensive pre-deployment security checklist covering authentication, input validation, XSS, CSRF, cryptography, API security, file uploads, dependencies, headers, logging, and compliance.
+tldr: "Use this checklist for security code reviews, deployment readiness assessments, and security audits. This is a quick reference distilling all sections into actionable items."
 ---
 
 # Security Checklist

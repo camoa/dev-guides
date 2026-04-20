@@ -1,5 +1,6 @@
 ---
 description: Map brand guidelines to DaisyUI semantic color system
+tldr: "Use this when you receive brand guidelines (hex colors, Pantone, etc.) and need to map them to DaisyUI's semantic color system."
 ---
 
 # Brand Color Mapping Workflow

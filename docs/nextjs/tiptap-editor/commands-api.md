@@ -1,5 +1,6 @@
 ---
 description: You need to programmatically modify editor content, selection, or state.
+tldr: "You need to programmatically modify editor content, selection, or state."
 ---
 
 ## 9.1 Commands API & Command Chaining

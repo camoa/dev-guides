@@ -1,5 +1,6 @@
 ---
 description: Creating custom render element plugins and form element plugins with proper plugin structure and pre-render callbacks.
+tldr: "When you have complex rendering logic that you reuse across multiple places -- voting widgets, custom table formatters, specialized containers, elements with default behaviors."
 ---
 
 # Custom Render Elements

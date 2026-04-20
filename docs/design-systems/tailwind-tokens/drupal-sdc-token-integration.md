@@ -1,5 +1,6 @@
 ---
 description: Map design tokens to Drupal SDC component props
+tldr: "Use this when mapping design tokens to Drupal Single Directory Component (SDC) props so component consumers can select token-based values."
 ---
 
 # Drupal SDC Token Integration

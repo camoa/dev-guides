@@ -1,5 +1,6 @@
 ---
 description: Configure granular permissions for taxonomy term operations
+tldr: "Use per-vocabulary permissions for granular term CRUD control. Grant `administer taxonomy` only to trusted site administrators."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Enabling CKEditor media embedding — text format filters, CKEditor 5 toolbar config, view mode selection, and the drupal-media tag.
+tldr: "You need to let editors embed media (images, videos) directly in WYSIWYG content."
 ---
 
 ## 11. CKEditor Media Embedding

@@ -1,5 +1,6 @@
 ---
 description: Common mistakes and anti-patterns to avoid when configuring image styles, responsive images, and format conversions
+tldr: "Use this when you need to understand what NOT to do and WHY to avoid costly mistakes."
 ---
 
 # Anti-Patterns & Common Mistakes

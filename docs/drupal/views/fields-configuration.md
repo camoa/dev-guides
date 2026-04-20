@@ -1,3 +1,7 @@
+---
+tldr: "When configuring field output, labels, formatters, rewriting, and CSS classes in views using fields-based rows."
+
+---
 ## 8. Fields Configuration
 
 ### When to Use

@@ -1,5 +1,6 @@
 ---
 description: Preventing Cross-Site Scripting attacks using Twig autoescape, Xss::filter(), Html::escape(), and safe markup patterns.
+tldr: "Whenever displaying user-generated content or building HTML output -- XSS (Cross-Site Scripting) is one of the most common web vulnerabilities."
 ---
 
 # XSS Prevention

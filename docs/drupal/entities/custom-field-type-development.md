@@ -1,5 +1,6 @@
 ---
 description: Building custom field types with custom storage and validation
+tldr: "When core field types don't meet your data structure needs, requiring custom storage schema, validation, or business logic for a specific data pattern."
 drupal_version: "11.x"
 ---
 

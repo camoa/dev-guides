@@ -1,5 +1,6 @@
 ---
 description: Facets value transformation processors — translate_entity, list_item, boolean_item, date_item, granularity_item, uid_to_username
+tldr: "Use this guide when facet raw values need to be converted to human-readable labels — entity IDs to names, boolean values to Yes/No, dates to formatted strings."
 drupal_version: "11.x"
 ---
 

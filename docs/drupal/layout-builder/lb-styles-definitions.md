@@ -1,3 +1,7 @@
+---
+tldr: "Individual styles define CSS classes to apply, which blocks/sections can use them, and which group they belong to. Styles are config entities exported as YAML for deployment via config sync."
+
+---
 ## 11.2. Layout Builder Style Definitions
 
 ### When to Use

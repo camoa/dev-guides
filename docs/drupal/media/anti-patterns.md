@@ -1,5 +1,6 @@
 ---
 description: Avoiding common mistakes that lead to maintenance problems, security issues, or performance degradation.
+tldr: "Avoiding common mistakes that lead to maintenance problems, security issues, or performance degradation."
 ---
 
 # Anti-Patterns

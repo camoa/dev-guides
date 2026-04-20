@@ -1,5 +1,6 @@
 ---
 description: Core Drupal JavaScript pattern for AJAX-compatible DOM manipulation and initialization
+tldr: "**Always** for DOM manipulation in Drupal. Behaviors are the foundation of Drupal JavaScript - they work with AJAX, BigPipe, and dynamic content loading."
 drupal_version: "10.x/11.x"
 ---
 

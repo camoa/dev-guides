@@ -1,5 +1,6 @@
 ---
 description: "Essential for all JSON:API deployments, especially production environments and public-facing APIs."
+tldr: "Essential for all JSON:API deployments, especially production environments and public-facing APIs."
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 ---

@@ -1,3 +1,7 @@
+---
+tldr: "When deploying Layout Builder configuration across environments, creating reusable layout patterns, or managing LB config in version control."
+
+---
 ## 14. Configuration Export & Recipes
 
 ### When to Use

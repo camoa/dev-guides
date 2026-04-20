@@ -1,5 +1,6 @@
 ---
 description: BEF pager widgets — radio buttons and links for items-per-page controls, enabling exposed pager
+tldr: "Use this guide when you have an exposed pager (items per page) and want to render it as radio buttons or links instead of a dropdown."
 drupal_version: "11.x"
 ---
 

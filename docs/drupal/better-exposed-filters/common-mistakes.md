@@ -1,5 +1,6 @@
 ---
 description: BEF common mistakes, anti-patterns, and debugging checklist — quick-reference issue/cause/solution table
+tldr: "Use this guide when debugging BEF issues or reviewing BEF configuration for problems."
 drupal_version: "11.x"
 ---
 

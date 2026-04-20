@@ -1,4 +1,5 @@
 ---
+tldr: "When you need to render a view, block, entity, or field from within a Twig template without a preprocess function — particularly useful for CMS-style layouts and quick embeds."
 topic: drupal/twig
 guide: twig-tweak
 ---

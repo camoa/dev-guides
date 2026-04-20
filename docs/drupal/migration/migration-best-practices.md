@@ -1,5 +1,6 @@
 ---
 description: Critical success factors and patterns from community migration experience
+tldr: "Follow these patterns to avoid common migration pitfalls. Based on community experience migrating hundreds of D7 sites."
 drupal_version: "11.x"
 ---
 

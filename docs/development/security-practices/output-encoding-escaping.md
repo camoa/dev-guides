@@ -1,5 +1,6 @@
 ---
 description: Context-specific output escaping for HTML, JavaScript, URL, and CSS contexts, plus template engine auto-escaping behavior.
+tldr: "Escape ALL output that includes untrusted data before rendering in HTML, JavaScript, CSS, URLs, SQL queries, OS commands, or any interpreter context. Different contexts require different escaping rules."
 ---
 
 # Output Encoding and Escaping

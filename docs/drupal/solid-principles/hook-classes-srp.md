@@ -1,5 +1,6 @@
 ---
 description: Organize Drupal 11 OOP hook classes by domain concern, not by hook type
+tldr: "Drupal 11.1+ supports OOP hooks using class methods with `#[Hook]` attributes. Organize hook classes by domain concern, not by hook type."
 drupal_version: "11.x"
 ---
 

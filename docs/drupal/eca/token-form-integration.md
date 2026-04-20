@@ -1,5 +1,6 @@
 ---
 description: Add token replacement, reference, and selection to ECA form fields
+tldr: "Add token integration to form fields whenever users need to reference dynamic values from the workflow. Tokens enable accessing event data, global values, and previous action results."
 drupal_version: "11.x"
 ---
 

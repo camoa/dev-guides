@@ -1,5 +1,6 @@
 ---
 description: Optimize icon rendering performance for large-scale sites with many icons or slow networks
+tldr: "You're optimizing icon rendering performance for large-scale sites with many icons or slow networks."
 drupal_version: "11.x"
 ---
 

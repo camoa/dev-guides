@@ -1,5 +1,6 @@
 ---
 description: Handling knowledge duplication across microservices, frontend/backend, multiple languages, and separate repositories
+tldr: "When dealing with knowledge duplication across system boundaries: microservices, frontend/backend, multiple programming languages, or separate repositories."
 ---
 
 # DRY Across Boundaries

@@ -1,5 +1,6 @@
 ---
 description: Security patterns for plugin architectures protecting against code injection and privilege escalation
+tldr: "Apply these security patterns to every plugin architecture implementation. Plugin systems are vulnerable because they load and execute code dynamically."
 drupal_version: "11.x"
 ---
 

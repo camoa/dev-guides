@@ -1,5 +1,6 @@
 ---
 description: Logging, verbose output, and debugging techniques for migration failures
+tldr: "Migrations fail for many reasons: missing dependencies, data type mismatches, plugin errors. Use logging, verbose output, and incremental testing to isolate issues."
 drupal_version: "11.x"
 ---
 

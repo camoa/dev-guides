@@ -1,5 +1,6 @@
 ---
 description: You need a complete set of common extensions without installing each individually.
+tldr: "You need a complete set of common extensions without installing each individually."
 ---
 
 ## 7.1 StarterKit Bundle & Core Functionality

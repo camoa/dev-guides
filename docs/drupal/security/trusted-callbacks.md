@@ -1,5 +1,6 @@
 ---
 description: Declaring trusted callbacks for render arrays using TrustedCallbackInterface and the TrustedCallback attribute to prevent arbitrary code execution.
+tldr: "When using callbacks in render arrays (`#pre_render`, `#post_render`, `#lazy_builder`) -- Drupal requires explicit trust declaration to prevent arbitrary code execution."
 ---
 
 # Trusted Callbacks

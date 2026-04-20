@@ -1,5 +1,6 @@
 ---
 description: Understanding Drupal's three-layer access control architecture for routes, entities, and fields.
+tldr: "When designing routes, controllers, or entities that require access control -- understanding the architecture prevents security gaps."
 ---
 
 # Access System Architecture

@@ -1,5 +1,6 @@
 ---
 description: Make AJAX interactions accessible to keyboard users and screen readers — WCAG 2.1 Level AA patterns
+tldr: "Apply these patterns to every AJAX implementation. Accessibility is not optional — WCAG 2.1 Level AA is the standard for Drupal sites."
 drupal_version: "11.x"
 ---
 

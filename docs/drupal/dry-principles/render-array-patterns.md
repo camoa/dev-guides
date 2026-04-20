@@ -1,5 +1,6 @@
 ---
 description: Create reusable render patterns with structured render arrays, theme hooks, and render element plugins instead of duplicating markup.
+tldr: "When you need consistent rendering patterns across multiple controllers, blocks, or preprocess functions. Render arrays are Drupal's structured way to describe renderable content."
 ---
 
 # Render Array Patterns

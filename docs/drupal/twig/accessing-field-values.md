@@ -1,4 +1,5 @@
 ---
+tldr: "This is the most critical section for day-to-day theming. Whenever you need to output, check, or manipulate field data in a Twig template."
 topic: drupal/twig
 guide: accessing-field-values
 ---

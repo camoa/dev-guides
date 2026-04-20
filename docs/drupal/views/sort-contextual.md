@@ -1,3 +1,7 @@
+---
+tldr: "When ordering results (sorts) or filtering based on URL parameters (contextual filters/arguments)."
+
+---
 ## 10. Sort & Contextual Filters (Arguments)
 
 ### When to Use

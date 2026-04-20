@@ -1,5 +1,6 @@
 ---
 description: BEF links widget — clickable filter links with AJAX support, toggle behavior, and template variables
+tldr: "Use this widget when you want filters rendered as clickable links instead of form elements — useful for faceted navigation style where each option is a URL. Use checkboxes when form-based interaction (submit button) is preferred."
 drupal_version: "11.x"
 ---
 

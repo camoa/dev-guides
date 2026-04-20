@@ -1,5 +1,6 @@
 ---
 description: Set up a consistent easing and duration token system for all UI animations — MD3-aligned curves, 50ms duration increments
+tldr: "Use motion tokens when you need a shared vocabulary for animation timing and easing across a project. Without tokens, developers pick arbitrary values (`300ms ease`, `0.5s linear`) creating inconsistent, untuneable motion."
 ---
 
 # Motion Design Tokens

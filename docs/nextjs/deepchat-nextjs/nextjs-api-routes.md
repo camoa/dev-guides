@@ -1,5 +1,6 @@
 ---
 description: Next.js API route handlers for DeepChat with proxy pattern, authentication, and CSRF token management for Drupal
+tldr: "Use proxy pattern for Drupal/external backends. Use CSRF flow for Drupal with OAuth + CSRF."
 ---
 
 # Next.js API Route Handlers

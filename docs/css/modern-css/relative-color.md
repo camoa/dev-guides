@@ -1,5 +1,6 @@
 ---
 description: Derive color variations with relative color syntax — generate palettes from one base
+tldr: "Use relative color syntax to derive color variations from a base color variable — the native replacement for Sass color manipulation libraries. Use a literal color value when no derivation is needed."
 ---
 
 # Relative Color Syntax

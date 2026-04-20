@@ -1,5 +1,6 @@
 ---
 description: Map typography decisions to Tailwind v4 and DaisyUI token systems
+tldr: "Use this when mapping typography decisions (font families, sizes, weights) into the Tailwind v4 / DaisyUI token system."
 ---
 
 # Typography Token Mapping

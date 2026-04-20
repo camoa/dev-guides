@@ -1,5 +1,6 @@
 ---
 description: View display — formatter selection and field visibility in view modes
+tldr: "When controlling how fields appear in entity view modes (full, teaser, RSS, etc.), including formatter selection, label display, and field visibility."
 drupal_version: "11.x"
 ---
 

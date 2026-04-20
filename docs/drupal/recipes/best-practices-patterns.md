@@ -1,5 +1,6 @@
 ---
 description: Follow these patterns to create maintainable, reusable, testable recipes
+tldr: "Apply these practices when creating recipes to ensure maintainability, reusability, and testability."
 drupal_version: "11.x"
 ---
 

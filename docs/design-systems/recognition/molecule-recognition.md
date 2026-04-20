@@ -1,5 +1,6 @@
 ---
 description: Design system recognition — 4. molecule recognition
+tldr: "You've identified atoms and now need to find grouped patterns You're analyzing composite components that combine 2-3 atoms You need to determine if a component is a molecule vs organism"
 ---
 
 ## 4. Molecule Recognition

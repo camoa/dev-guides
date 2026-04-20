@@ -1,5 +1,6 @@
 ---
 description: Size elements relative to their container with cqi, cqw, cqb units
+tldr: "Use container query units when you need to size elements relative to their container, not the viewport — fluid typography or scaling elements inside components without any breakpoints."
 ---
 
 # Container Query Units

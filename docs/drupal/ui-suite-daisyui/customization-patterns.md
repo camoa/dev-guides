@@ -1,5 +1,6 @@
 ---
 description: Add custom components, override DaisyUI tokens, and extend base components
+tldr: "Add custom components, override DaisyUI tokens, and extend base components"
 ---
 
 # Customization Patterns

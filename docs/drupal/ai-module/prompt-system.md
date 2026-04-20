@@ -1,5 +1,6 @@
 ---
 description: Prompt system — config entities for reusable prompts with variable substitution
+tldr: "Use the prompt system when you need reusable, deployable prompts with variable substitution. For one-off prompts in code, string interpolation is simpler."
 drupal_version: "11.x"
 ---
 

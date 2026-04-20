@@ -1,5 +1,6 @@
 ---
 description: Diagnose consent modal, script blocking, and configuration issues
+tldr: "Diagnose and resolve common Klaro configuration issues, script blocking failures, and modal rendering problems."
 drupal_version: "11.x"
 ---
 

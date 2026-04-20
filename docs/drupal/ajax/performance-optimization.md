@@ -1,5 +1,6 @@
 ---
 description: Reduce AJAX response times — minimal DOM updates, batch processing, query limits, and CacheableAjaxResponse
+tldr: "Apply these patterns when AJAX requests are slow, causing excessive database queries, large DOM updates, or timeouts on large operations."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Defining what information a media source can provide and implementing the extraction logic.
+tldr: "Defining what information a media source can provide and implementing the extraction logic."
 ---
 
 # Metadata System

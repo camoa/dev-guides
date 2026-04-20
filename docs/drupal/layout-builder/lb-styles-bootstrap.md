@@ -1,3 +1,7 @@
+---
+tldr: "When using Bootstrap-based themes (Radix, Bootstrap Barrio), map Layout Builder Styles to Bootstrap utility classes for consistent design system integration. Avoids custom CSS for common patterns."
+
+---
 ## 11.3. Layout Builder Styles + Bootstrap Integration
 
 ### When to Use

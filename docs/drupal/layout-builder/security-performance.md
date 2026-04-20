@@ -1,3 +1,7 @@
+---
+tldr: "When hardening Layout Builder against security issues, optimizing performance, or auditing for vulnerabilities."
+
+---
 ## 18. Security & Performance
 
 ### When to Use

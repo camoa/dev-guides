@@ -1,5 +1,6 @@
 ---
 description: Drupal development best practices for extending, theming, and testing Klaro
+tldr: "Follow Drupal and Klaro development best practices when extending, theming, or integrating Klaro into custom code."
 drupal_version: "11.x"
 ---
 

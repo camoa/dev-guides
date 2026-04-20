@@ -1,5 +1,6 @@
 ---
 description: 22 Drupal template overrides that delegate to DaisyUI SDC components
+tldr: "22 Drupal template overrides that delegate to DaisyUI SDC components"
 ---
 
 # Template Overrides

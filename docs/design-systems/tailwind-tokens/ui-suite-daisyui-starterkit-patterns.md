@@ -1,5 +1,6 @@
 ---
 description: UI Suite DaisyUI starterkit token organization and customization
+tldr: "Use this when building a Drupal theme with UI Suite DaisyUI and need to understand how the starterkit organizes tokens and configuration."
 ---
 
 # UI Suite DaisyUI Starterkit Patterns

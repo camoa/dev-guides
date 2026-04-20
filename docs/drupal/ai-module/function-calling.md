@@ -1,5 +1,6 @@
 ---
 description: Function calling tools — building custom FunctionCall plugins for AI agents and assistants
+tldr: "Use this guide when building custom tools that agents or assistants can invoke. Use [AI Agents](ai-agents.md) for configuring which tools an agent uses."
 drupal_version: "11.x"
 ---
 

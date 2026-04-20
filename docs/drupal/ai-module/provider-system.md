@@ -1,5 +1,6 @@
 ---
 description: AI provider plugins — using, building, and selecting providers for AI operations
+tldr: "Use this guide when calling a specific provider, building a custom provider plugin, or working with the provider/model selection form. Use [Operation Types](operation-types.md) for the typed Input/Output classes."
 drupal_version: "11.x"
 ---
 

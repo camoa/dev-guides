@@ -1,5 +1,6 @@
 ---
 description: Use Drupal's configuration system as the single source of truth for site settings, entity definitions, and environment-portable values.
+tldr: "Whenever you need to store site settings, entity definitions, field configurations, view definitions, or any setting that should be consistent across environments."
 ---
 
 # Config as Single Source of Truth

@@ -1,5 +1,6 @@
 ---
 description: Integrate external APIs, YAML config, dynamic forms, and structured error handling in ECA actions
+tldr: "Use advanced action patterns when integrating with external APIs, processing complex data structures with YAML configuration, validating external service responses, or implementing sophisticated error handling."
 drupal_version: "11.x"
 ---
 

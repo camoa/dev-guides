@@ -1,5 +1,6 @@
 ---
 description: Maintaining code quality, security, maintainability
+tldr: "Maintaining code quality, security, maintainability."
 ---
 
 # Development Standards

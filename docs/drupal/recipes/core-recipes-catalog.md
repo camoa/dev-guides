@@ -1,5 +1,6 @@
 ---
 description: Drupal core ships with 28 recipes as reusable building blocks and pattern examples
+tldr: "Browse core recipes when you need reusable building blocks or want to learn recipe patterns from tested examples."
 drupal_version: "11.x"
 ---
 

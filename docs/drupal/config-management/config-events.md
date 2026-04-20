@@ -1,5 +1,6 @@
 ---
 description: React to config changes via event subscribers — save, delete, import, rename events.
+tldr: "When you need to react to config changes — save, delete, import, rename — via event subscribers."
 ---
 
 # Config Events

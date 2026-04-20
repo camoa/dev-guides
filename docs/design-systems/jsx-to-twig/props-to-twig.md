@@ -1,5 +1,6 @@
 ---
 description: Map React component props to SDC component.yml and Twig variables
+tldr: "Use this when mapping React component props to SDC `component.yml` properties and Twig template variables. This is the core translation step for every component."
 drupal_version: "11.x"
 ---
 

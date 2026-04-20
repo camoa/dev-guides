@@ -1,5 +1,6 @@
 ---
 description: Writing, overriding, and compositing Storybook stories in Drupal sub-themes
+tldr: "Write sub-theme stories when your sub-theme adds new components or needs specific variant documentation not covered by the base theme. Skip stories when using a base theme component as-is — the base theme's stories already document it."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: What Drupal Canvas is, when to use it, its architecture, and key version requirements for Drupal 11.2+.
+tldr: "Use Canvas when you need a visual page-building experience for non-technical editors on Drupal 11.2+. Use standard content types + SDC theming when layouts are fixed or developer-managed."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: ConfigFormBase pattern with #config_target for automatic configuration sync
+tldr: "Use ConfigFormBase for admin settings and system configuration. Use FormBase for non-configuration data or temporary workflow data."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Deciding whether to use base component, override, or create custom
+tldr: "Deciding whether to use base component, override, or create custom."
 ---
 
 # Component Selection Strategy

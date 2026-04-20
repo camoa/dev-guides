@@ -1,5 +1,6 @@
 ---
 description: "Configure the NextDrupal client to customize API prefix, authentication, caching, deserialization, and other client behaviors."
+tldr: "Configure the NextDrupal client to customize API prefix, authentication, caching, deserialization, and other client behaviors."
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
 ---

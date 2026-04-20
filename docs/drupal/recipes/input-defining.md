@@ -1,5 +1,6 @@
 ---
 description: Define user-provided values that vary per environment to enable recipe portability
+tldr: "Use inputs when you need to externalize site-specific data that varies per environment, making recipes portable and reusable."
 drupal_version: "11.x"
 ---
 

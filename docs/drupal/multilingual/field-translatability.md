@@ -1,5 +1,6 @@
 ---
 description: Drupal field translatability — configuring translatable vs non-translatable fields, field synchronization across translations
+tldr: "When configuring which fields should have separate values per language vs shared values across all translations."
 ---
 
 # Field Translatability

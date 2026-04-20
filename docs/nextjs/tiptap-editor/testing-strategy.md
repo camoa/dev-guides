@@ -1,5 +1,6 @@
 ---
 description: You're building custom extensions or complex editor logic and need automated tests.
+tldr: "You're building custom extensions or complex editor logic and need automated tests."
 ---
 
 ## 19.1 Testing Extensions & Editor Logic

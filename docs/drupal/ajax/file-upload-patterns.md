@@ -1,5 +1,6 @@
 ---
 description: Upload files via AJAX using managed_file with validation, progress indicators, and preview callbacks
+tldr: "Use `#type => 'managed_file'` with AJAX for file uploads that need immediate preview or feedback (avatars, attachments, media galleries). Always configure upload validators."
 drupal_version: "11.x"
 ---
 

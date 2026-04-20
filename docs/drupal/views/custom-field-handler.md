@@ -1,3 +1,7 @@
+---
+tldr: "When you need custom field output: computed values, external API data, complex formatting that can't be achieved with field templates or rewrite rules."
+
+---
 ## 20. Custom Field Handler
 
 ### When to Use

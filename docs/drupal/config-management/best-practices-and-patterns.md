@@ -1,5 +1,6 @@
 ---
 description: Config management patterns, architecture decisions, and proven approaches for maintainable config workflows.
+tldr: "When you need guidance on config management patterns, architecture decisions, and proven approaches for maintainable config workflows."
 ---
 
 # Best Practices & Patterns

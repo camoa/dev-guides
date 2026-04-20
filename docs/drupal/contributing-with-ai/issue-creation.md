@@ -1,5 +1,6 @@
 ---
 description: Creating drupal.org issues with AI disclosure — when to check which boxes, the full issue creation workflow, and what AI can and cannot reliably help with
+tldr: "Use this when creating a new issue on drupal.org and AI tools were used in any part of the process — researching the problem, writing the summary, analyzing code, or drafting a patch."
 drupal_version: "11.x"
 ---
 

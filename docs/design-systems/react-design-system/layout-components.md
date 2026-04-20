@@ -1,5 +1,6 @@
 ---
 description: Build Stack, Flex, Grid, and Container layout primitives that standardize spacing and remove repetitive Tailwind class sets from feature code.
+tldr: "Use when building reusable spacing, flex, and grid primitives. Layout components standardize spacing and remove repetitive Tailwind class sets from feature code."
 ---
 
 # Layout Components

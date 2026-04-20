@@ -1,5 +1,6 @@
 ---
 description: Ensuring media source plugin works correctly across different scenarios and preventing regressions.
+tldr: "Ensuring media source plugin works correctly across different scenarios and preventing regressions."
 ---
 
 # Testing Strategies

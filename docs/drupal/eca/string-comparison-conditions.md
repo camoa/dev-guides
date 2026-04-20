@@ -1,5 +1,6 @@
 ---
 description: Compare values with StringComparisonBase — override getLeftValue/getRightValue, NOT evaluate
+tldr: "Use StringComparisonBase when comparing two values using standard operators (equals, contains, starts with, regex, etc.). The base class provides operator selection and comparison logic; you only implement value retrieval."
 drupal_version: "11.x"
 ---
 

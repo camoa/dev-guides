@@ -1,5 +1,6 @@
 ---
 description: Develop custom extractor plugins for icon sources not supported by core extractors
+tldr: "Core extractors (SVG, SVG Sprite, Path, Font) don't support your icon source (API, database, generated icons, external service)."
 drupal_version: "11.x"
 ---
 

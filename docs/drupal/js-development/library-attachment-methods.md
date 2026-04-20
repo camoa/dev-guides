@@ -1,5 +1,6 @@
 ---
 description: Methods for attaching JavaScript libraries via PHP render arrays and hooks
+tldr: "Use when deciding how to attach libraries to pages based on context and conditions."
 drupal_version: "10.x/11.x"
 ---
 

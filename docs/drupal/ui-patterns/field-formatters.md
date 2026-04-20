@@ -1,5 +1,6 @@
 ---
 description: Field formatters — rendering fields through components at items or per-item granularity
+tldr: "Field formatters — rendering fields through components at items or per-item granularity"
 drupal_version: "10.3+ / 11"
 ---
 

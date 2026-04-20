@@ -1,5 +1,6 @@
 ---
 description: Web sources, code sources, and version history for the security best practices guide.
+tldr: "Web sources, code sources, and version history for the security best practices guide."
 ---
 
 # Sources and Maintenance Manifest

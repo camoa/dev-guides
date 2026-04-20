@@ -1,4 +1,5 @@
 ---
+tldr: "Code review checklist. Review your templates against these patterns before committing."
 topic: drupal/twig
 guide: anti-patterns
 ---

@@ -1,5 +1,6 @@
 ---
 description: Plus Suite recipe structure — dependencies, modules installed, configuration created, config actions, and strict:false behavior
+tldr: "Reference this when troubleshooting recipe application, understanding what gets installed, or deciding whether to use recipe vs manual installation."
 drupal_version: "11.x"
 ---
 

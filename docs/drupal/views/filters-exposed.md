@@ -1,3 +1,7 @@
+---
+tldr: "When restricting query results via fixed criteria (filters) or user-selectable criteria (exposed filters)."
+
+---
 ## 9. Filters & Exposed Filters
 
 ### When to Use

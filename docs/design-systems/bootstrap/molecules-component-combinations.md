@@ -1,5 +1,6 @@
 ---
 description: Map molecule-level component combinations (input groups, card content) to Bootstrap
+tldr: "Use this for mapping molecules (2-3 atoms working together) like input groups and card content to Bootstrap's component combinations."
 ---
 
 # Molecules → Component Combinations

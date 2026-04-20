@@ -1,5 +1,6 @@
 ---
 description: Step-by-step process for creating a new SDC or Code Component for Canvas — from decision through verification in the Canvas editor.
+tldr: "Use this when building a new component for a Canvas site from scratch. Covers the full process for both SDC (Twig) and Code Components (React) — from deciding which type to use through verifying it works in the Canvas editor."
 drupal_version: "11.x"
 ---
 

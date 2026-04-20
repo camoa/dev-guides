@@ -1,5 +1,6 @@
 ---
 description: Message structure, request/response formats, history management, and agent continuation patterns for DeepChat
+tldr: "Send only current message + thread_id for Drupal/session backends. Send full history for stateless backends."
 ---
 
 # Message Formats & History

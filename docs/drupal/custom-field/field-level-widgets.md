@@ -1,5 +1,6 @@
 ---
 description: Stacked and flexbox layout widgets for controlling how the entire custom field displays on the edit form.
+tldr: "You need to control how the entire custom field (all sub-fields together) is laid out on the edit form."
 ---
 
 # Field-Level Widgets

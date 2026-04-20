@@ -1,5 +1,6 @@
 ---
 description: W3C Design Tokens (DTCG) format for vendor-neutral token interchange
+tldr: "Use this when you need a vendor-neutral interchange format for sharing tokens across tools (Figma, Style Dictionary, Tailwind, native apps). The DTCG specification reached its first stable version (2025.10) in October 2025."
 ---
 
 # W3C Design Tokens Format

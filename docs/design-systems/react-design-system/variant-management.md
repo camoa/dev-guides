@@ -1,5 +1,6 @@
 ---
 description: Manage component size, color, and state variants with CVA compoundVariants and tailwind-variants slots.
+tldr: "Use when a component has multiple dimensions of variation (size, color/intent, state) that combine in predictable ways. CVA makes these combinations type-safe and conflict-free."
 ---
 
 # Variant Management with CVA

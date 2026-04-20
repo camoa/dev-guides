@@ -1,5 +1,6 @@
 ---
 description: Install Search API, create a server and index, and run the initial index via admin UI and Drush
+tldr: "Use this when installing Search API and creating your first server and index."
 drupal_version: "11.x"
 ---
 

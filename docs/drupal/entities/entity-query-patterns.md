@@ -1,5 +1,6 @@
 ---
 description: Entity query API for efficient database queries with access control
+tldr: "When querying entities by field values, properties, or relationships, requiring performant database queries with access control and cache invalidation."
 drupal_version: "11.x"
 ---
 

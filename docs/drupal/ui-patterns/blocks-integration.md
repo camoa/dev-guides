@@ -1,5 +1,6 @@
 ---
 description: Blocks integration — exposing components as block plugins and embedding blocks in slots
+tldr: "Blocks integration — exposing components as block plugins and embedding blocks in slots"
 drupal_version: "10.3+ / 11"
 ---
 

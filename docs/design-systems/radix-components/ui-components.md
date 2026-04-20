@@ -1,5 +1,6 @@
 ---
 description: Components for interactive elements, user feedback, and visual indicators
+tldr: "Components for interactive elements, user feedback, and visual indicators. Use these to provide contextual information, loading states, and user interaction controls."
 ---
 
 # UI Components

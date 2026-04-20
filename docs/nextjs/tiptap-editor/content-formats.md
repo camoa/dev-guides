@@ -1,5 +1,6 @@
 ---
 description: You need to decide how to store, retrieve, or transfer editor content.
+tldr: "You need to decide how to store, retrieve, or transfer editor content."
 ---
 
 ## 4.2 Content Formats & Serialization

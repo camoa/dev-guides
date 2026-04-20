@@ -1,5 +1,6 @@
 ---
 description: Search API content access — Content Access processor, access mechanisms, security caveats, and Solr index-only mode risks
+tldr: "Use this when you need to ensure search results respect content access permissions. Search API does NOT restrict access by default."
 drupal_version: "11.x"
 ---
 

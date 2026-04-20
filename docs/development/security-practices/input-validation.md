@@ -1,5 +1,6 @@
 ---
 description: Input validation strategies including allowlist validation, type checking, length limits, and multi-layer validation patterns.
+tldr: "Validate ALL input from untrusted sources: HTTP requests (parameters, headers, body), file uploads, API calls, database reads (yes, even database — consider SQL injection into another app), message queues, external APIs, environment…"
 ---
 
 # Input Validation

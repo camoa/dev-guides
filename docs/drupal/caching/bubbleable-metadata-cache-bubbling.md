@@ -1,5 +1,6 @@
 ---
 description: Handle cache metadata bubbling from child to parent render arrays
+tldr: "When you need to propagate cache metadata from child render arrays to parent. Cache bubbling ensures that when a parent element is cached, it includes all cacheability requirements from its children."
 ---
 
 # BubbleableMetadata & Cache Bubbling

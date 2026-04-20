@@ -1,5 +1,6 @@
 ---
 description: Step-by-step OAuth + CSRF authentication flow for DeepChat + Drupal — dual-auth challenge and sequence
+tldr: "Use this guide to understand why OAuth and CSRF must work together and to trace each request in the flow. Use [CSRF Token Lifecycle](csrf-token-lifecycle.md) to understand the internal token mechanics."
 drupal_version: "11.x"
 ---
 

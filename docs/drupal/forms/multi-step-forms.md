@@ -1,5 +1,6 @@
 ---
 description: Multi-step form pattern with state persistence and navigation
+tldr: "Use multi-step forms for complex workflows requiring user input across multiple pages. Always enable caching with setCached(TRUE)."
 drupal_version: "11.x"
 ---
 

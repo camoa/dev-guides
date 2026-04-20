@@ -1,5 +1,6 @@
 ---
 description: Security best practices for SDC components including XSS prevention and input sanitization
+tldr: "Use this when handling user-generated content in components, passing data from untrusted sources, or working with attributes and HTML markup."
 drupal_version: "11.x"
 ---
 

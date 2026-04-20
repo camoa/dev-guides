@@ -1,5 +1,6 @@
 ---
 description: Define breakpoints in theme/module YAML files with media queries, weights, and multipliers for responsive image mappings
+tldr: "Use this when you need to define breakpoints in your theme or module for responsive image style mappings."
 ---
 
 # Breakpoint Configuration

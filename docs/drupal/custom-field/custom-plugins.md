@@ -1,5 +1,6 @@
 ---
 description: Creating custom field type, widget, and formatter plugins with PHP attribute-based discovery and required base class methods.
+tldr: "You need to create custom field type, widget, or formatter plugins specific to your application."
 ---
 
 # Custom Plugin Development

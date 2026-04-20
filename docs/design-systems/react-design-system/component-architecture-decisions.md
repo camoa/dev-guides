@@ -1,5 +1,6 @@
 ---
 description: Choose between flat props, compound components, headless, controlled, or polymorphic patterns for a new React component.
+tldr: "Use flat props for simple single-purpose UI. Use compound components when the caller needs to place named slots (header/body/footer) in their markup."
 ---
 
 # Component Architecture Decisions

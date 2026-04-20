@@ -1,5 +1,6 @@
 ---
 description: Configure Tailwind v3 using tailwind.config.js — understand extend vs override, content paths, and preset sharing.
+tldr: "Use for projects running Tailwind v3, or when using `@config` in v4 to load a JS config during gradual migration."
 ---
 
 # v3 Configuration: tailwind.config.js

@@ -1,5 +1,6 @@
 ---
 description: Configure image, image_url, and responsive_image field formatters with settings for lazy loading, linking, and style selection
+tldr: "Use this when you need to configure how image fields display in view modes."
 ---
 
 # Image Field Formatters

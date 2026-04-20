@@ -1,5 +1,6 @@
 ---
 description: Choose between picture, srcset, and sizes for responsive images — resolution switching vs art direction, breakpoint strategy, and sizes calculation
+tldr: "Use `srcset`+`sizes` on `<img>` when serving the same crop at different sizes. Use `<picture>` with `<source media>` when you need different crops or compositions per breakpoint (art direction)."
 ---
 
 # Responsive Images Craft

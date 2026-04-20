@@ -1,5 +1,6 @@
 ---
 description: "Removing entities from Drupal. Requires authentication and delete permissions. Irreversible without backups."
+tldr: "Removing entities from Drupal. Requires authentication and delete permissions."
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 ---

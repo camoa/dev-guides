@@ -1,5 +1,6 @@
 ---
 description: DaisyUI v5 semantic color roles and component mapping
+tldr: "Use this when building with DaisyUI v5 (used by UI Suite DaisyUI in Drupal). DaisyUI adds a semantic color layer on top of Tailwind's raw color palette, mapping brand intentions to CSS variables."
 ---
 
 # DaisyUI v5 Color Token System

@@ -1,5 +1,6 @@
 ---
 description: "Understanding JSON:API's purpose and determining if it fits your project requirements. JSON:API is a spec-compliant implementation built into Drupal core since 8.7."
+tldr: "Understanding JSON:API's purpose helps determine if it fits your project requirements. JSON:API is a spec-compliant implementation built into Drupal core since 8.7."
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 ---

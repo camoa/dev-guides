@@ -1,3 +1,7 @@
+---
+tldr: "When you need to understand how sections work, what layout plugins provide, and how regions structure content within a section."
+
+---
 ## 4. Sections & Layouts
 
 ### When to Use

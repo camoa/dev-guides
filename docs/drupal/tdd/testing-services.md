@@ -1,5 +1,6 @@
 ---
 description: Test Drupal services with unit mocks, kernel container integration, and service replacement patterns.
+tldr: "Verifying service logic, dependency injection, container integration."
 ---
 
 # Testing Services

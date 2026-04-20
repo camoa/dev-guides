@@ -1,5 +1,6 @@
 ---
 description: YAML escaping rules for Drupal routing - single backslashes in single quotes prevent fatal site crashes
+tldr: "Use single backslashes in single quotes for controller/form class references. This is CRITICAL - incorrect escaping causes fatal site crashes during cache rebuild."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Core Web Vitals optimization for Drupal 11 — LCP, INP, CLS, caching layers, BigPipe, image optimization, CDN, and CSS/JS aggregation
+tldr: "Address Core Web Vitals before other SEO work — Google uses them as ranking signals and poor scores actively suppress rankings regardless of content quality. Drupal's caching stack, when configured correctly, solves most performance issues…"
 drupal_version: "11.x"
 ---
 

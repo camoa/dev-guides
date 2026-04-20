@@ -1,5 +1,6 @@
 ---
 description: Choose the right Drupal test type based on what you're testing and the level of infrastructure required.
+tldr: "Choose the right test type based on what you're testing and the level of Drupal infrastructure required."
 ---
 
 # Test Type Decision Matrix

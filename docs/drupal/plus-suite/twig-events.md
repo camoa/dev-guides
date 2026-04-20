@@ -1,5 +1,6 @@
 ---
 description: Twig Events system — TwigRenderTemplateEvent, entity wrapping with editing attributes, and creating custom template subscribers
+tldr: "Use Twig Events to intercept template rendering without overriding templates. Be aware it fires on every template render — use sparingly."
 drupal_version: "11.x"
 ---
 

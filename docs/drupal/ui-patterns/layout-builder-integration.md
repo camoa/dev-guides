@@ -1,5 +1,6 @@
 ---
 description: Layout Builder integration — exposing components as layout plugins with slot regions
+tldr: "Layout Builder integration — exposing components as layout plugins with slot regions"
 drupal_version: "10.3+ / 11"
 ---
 

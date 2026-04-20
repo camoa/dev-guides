@@ -1,5 +1,6 @@
 ---
 description: Testing strategies for SDC components including schema validation and visual regression
+tldr: "Use this when setting up component development workflow, testing components in isolation, or implementing visual regression testing."
 drupal_version: "11.x"
 ---
 

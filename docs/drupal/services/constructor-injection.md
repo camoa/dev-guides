@@ -1,5 +1,6 @@
 ---
 description: Injecting services into controllers and forms via ContainerInjectionInterface — the create() pattern, AutowireTrait shortcut, and form injection examples.
+tldr: "When injecting services into controllers, forms, or any class that implements `ContainerInjectionInterface` — the standard Drupal dependency injection pattern."
 ---
 
 # Constructor Injection (ContainerInjectionInterface)

@@ -1,5 +1,6 @@
 ---
 description: Animate elements entering from display:none with @starting-style
+tldr: "Use `@starting-style` with `transition-behavior: allow-discrete` to animate elements entering from `display: none` — dialogs, drawers, popovers. Use a JS animation library when you need complex multi-step choreography."
 ---
 
 # @starting-style and Discrete Transitions

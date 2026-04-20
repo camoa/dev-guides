@@ -1,5 +1,6 @@
 ---
 description: Understanding Twig automatic XSS protection, Markup objects, translation placeholders, and avoiding double-escaping issues.
+tldr: "Understanding Twig's automatic XSS protection when building themes or rendering output."
 ---
 
 # Twig Autoescape and Safe Markup

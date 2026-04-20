@@ -1,5 +1,6 @@
 ---
 description: Complete YAML schema for responsive_image.styles.*.yml with breakpoint mappings, sizes attributes, and image style references
+tldr: "Use this when you need to configure a responsive image style that maps breakpoints to image styles for adaptive image delivery."
 ---
 
 # Responsive Image Style Config

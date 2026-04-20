@@ -1,5 +1,6 @@
 ---
 description: Placing media in Layout Builder — inline blocks, custom block types with media fields, and view mode selection in layouts.
+tldr: "You need to place media in Layout Builder sections using inline blocks or custom blocks."
 ---
 
 ## 14. Media in Layout Builder

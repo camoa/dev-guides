@@ -1,5 +1,6 @@
 ---
 description: Identify and fix problematic taxonomy implementation patterns
+tldr: "Use this guide when reviewing taxonomy implementations to identify and fix problematic patterns."
 drupal_version: "11.x"
 ---
 

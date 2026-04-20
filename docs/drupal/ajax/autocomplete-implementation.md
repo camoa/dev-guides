@@ -1,5 +1,6 @@
 ---
 description: Implement autocomplete on text fields with custom route, controller, and minimum character threshold
+tldr: "Use `#autocomplete_route_name` for dynamic suggestions as users type. Use core's `system.entity_autocomplete` for existing entity types."
 drupal_version: "11.x"
 ---
 

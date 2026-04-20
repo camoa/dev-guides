@@ -1,5 +1,6 @@
 ---
 description: Facets range slider widget — facets_range_widget sub-module, jQuery UI slider, setup, and distinctions from BEF noUiSlider
+tldr: "Use this guide when you have numeric facets (price, rating, year) and want a visual slider interface."
 drupal_version: "11.x"
 ---
 

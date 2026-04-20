@@ -1,5 +1,6 @@
 ---
 description: Aggregate stateless services via tagged service collection with REST API-first architecture
+tldr: "Use Service Collector for REST API-first external integrations with stateless services. Use Provider Plugin for internal Drupal service abstraction."
 drupal_version: "11.x"
 ---
 

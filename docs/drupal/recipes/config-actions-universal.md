@@ -1,5 +1,6 @@
 ---
 description: Config actions that work on ANY config entity or simple config for generic config updates
+tldr: "Use universal config actions when you need to update simple config or config entities without entity-type-specific methods."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: How Drupal's service container works — lifecycle phases, lazy instantiation, compilation vs runtime, and the role of ServiceProviders and compiler passes.
+tldr: "When you need to understand how Drupal's service container works under the hood — essential for debugging, optimization, and advanced patterns."
 ---
 
 # Service Container Architecture

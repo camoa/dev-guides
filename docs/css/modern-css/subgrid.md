@@ -1,5 +1,6 @@
 ---
 description: Align nested grid items to parent tracks — card footer alignment without JS
+tldr: "Use `subgrid` when children of a grid item need to align to the parent grid's tracks. Use regular grid when layout is single-level with no nested alignment requirements."
 ---
 
 # CSS Subgrid

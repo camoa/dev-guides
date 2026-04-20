@@ -1,5 +1,6 @@
 ---
 description: You need real-time collaborative editing (multiple users editing simultaneously, like Google Docs).
+tldr: "You need real-time collaborative editing (multiple users editing simultaneously, like Google Docs)."
 ---
 
 ## 15.1 Collaborative Editing Architecture

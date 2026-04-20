@@ -1,5 +1,6 @@
 ---
 description: Every media source plugin must implement security measures to prevent common vulnerabilities.
+tldr: "Every media source plugin must implement security measures to prevent common vulnerabilities."
 ---
 
 # Security Best Practices

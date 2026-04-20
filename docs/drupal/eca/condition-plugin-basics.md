@@ -1,5 +1,6 @@
 ---
 description: Create custom ECA Condition plugins with ConditionBase for business logic evaluation
+tldr: "Create custom Condition plugins when you need to evaluate business logic that existing conditions don't support, such as checking external API state, validating complex data structures, or implementing domain-specific rules."
 drupal_version: "11.x"
 ---
 

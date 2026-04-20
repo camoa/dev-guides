@@ -1,5 +1,6 @@
 ---
 description: Configure the #ajax property on any form element — callbacks, wrappers, events, and progress indicators
+tldr: "Use the `#ajax` property on any form element when you need server-driven content updates triggered by user interaction without a full page reload."
 drupal_version: "11.x"
 ---
 

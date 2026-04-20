@@ -1,5 +1,6 @@
 ---
 description: XSS prevention, API key management, file upload validation, rate limiting, and CSP for secure DeepChat implementation
+tldr: "Always sanitize AI output on server. Never expose API keys client-side."
 ---
 
 # Security

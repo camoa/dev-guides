@@ -1,5 +1,6 @@
 ---
 description: Configure PHP, MySQL/PostgreSQL, and Composer for Drupal testing environments
+tldr: "Use when configuring the runtime environment for Drupal testing and builds in GitHub Actions."
 drupal_version: "11.x"
 ---
 

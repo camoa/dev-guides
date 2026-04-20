@@ -1,5 +1,6 @@
 ---
 description: Build reusable UI components with Drupal Single Directory Components (SDC) using props, slots, and component composition.
+tldr: "When you need reusable UI components (buttons, cards, modals, forms) used across multiple pages, content types, or blocks. SDCs (Single Directory Components) are Drupal's native component system (core since 10.3)."
 ---
 
 # SDC Component Reuse

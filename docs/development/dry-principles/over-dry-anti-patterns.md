@@ -1,5 +1,6 @@
 ---
 description: Recognizing when abstractions hurt more than help and when to choose duplication over the wrong abstraction
+tldr: "When evaluating whether an abstraction is helping or hurting, and when to choose duplication over the wrong abstraction."
 ---
 
 # Over-DRY Anti-Patterns

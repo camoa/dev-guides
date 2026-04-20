@@ -1,5 +1,6 @@
 ---
 description: Recipes automatically import default content from content directory during application
+tldr: "Recipes automatically import default content from the `content/` directory during recipe application via RecipeRunner."
 drupal_version: "11.x"
 ---
 

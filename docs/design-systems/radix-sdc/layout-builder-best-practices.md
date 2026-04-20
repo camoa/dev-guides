@@ -1,5 +1,6 @@
 ---
 description: You're deciding between Layout Builder, Paragraphs, or page templates
+tldr: "You're deciding between Layout Builder, Paragraphs, or page templates You need guidance on when Layout Builder makes sense vs traditional theming You're implementing Layout Builder with SDC components You want to balance editorial…"
 drupal_version: "11.x"
 ---
 

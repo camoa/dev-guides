@@ -1,5 +1,6 @@
 ---
 description: XSS attack types (stored, reflected, DOM-based, mutation), attack scenarios, real-world impact, and prevention strategies.
+tldr: "Understand XSS attack vectors whenever your application displays user-generated content, accepts URL parameters, or renders data from any untrusted source."
 ---
 
 # Cross-Site Scripting (XSS)

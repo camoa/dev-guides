@@ -1,4 +1,5 @@
 ---
+tldr: "When writing or reviewing Twig templates and preprocess functions — these rules apply to all template work."
 topic: drupal/twig
 guide: security-performance
 ---

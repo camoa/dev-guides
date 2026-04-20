@@ -1,5 +1,6 @@
 ---
 description: Documentation gaps in Drupal AI 1.3.0-rc2 — undocumented features identified by comparing official docs to source code
+tldr: "Use this guide when the official documentation doesn't match actual behavior. These gaps were identified by comparing official docs to source code in AI 1.3.0-rc2."
 drupal_version: "11.x"
 ---
 

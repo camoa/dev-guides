@@ -1,3 +1,7 @@
+---
+tldr: "When writing or editing views.view.*.yml files directly, or understanding config structure for recipes and exports."
+
+---
 ## 2. View Config Schema (views.view.*.yml)
 
 ### When to Use

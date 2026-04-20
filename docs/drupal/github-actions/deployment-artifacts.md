@@ -1,5 +1,6 @@
 ---
 description: Package and upload Drupal builds for deployment to staging or production
+tldr: "Use when packaging builds for deployment to staging or production environments."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Implement multi-theme support, light/dark mode, and custom brand themes using DaisyUI's data-theme system
+tldr: "Use DaisyUI theming for multi-theme support, light/dark mode switching, brand color customization, or white-labeling. The `data-theme` attribute switches the entire palette with no JavaScript class manipulation required."
 ---
 
 # Theming System

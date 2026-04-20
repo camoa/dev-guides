@@ -1,5 +1,6 @@
 ---
 description: Common migration failures that cause project delays and technical debt
+tldr: "Learn from common migration failures. These patterns consistently cause project delays, cost overruns, and technical debt."
 drupal_version: "11.x"
 ---
 

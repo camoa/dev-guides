@@ -1,5 +1,6 @@
 ---
 description: Providing thumbnails for Media Library display and media entity views.
+tldr: "Providing thumbnails for Media Library display and media entity views."
 ---
 
 # Thumbnail Generation

@@ -1,5 +1,6 @@
 ---
 description: Base fields that exist on all bundles of an entity type
+tldr: "When adding fields that exist on ALL bundles of an entity type (e.g., title on all nodes, uid on all content), or creating non-configurable fields that store critical entity data."
 drupal_version: "11.x"
 ---
 

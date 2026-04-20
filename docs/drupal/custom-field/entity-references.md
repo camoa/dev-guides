@@ -1,5 +1,6 @@
 ---
 description: Configuring and using entity reference sub-fields with autocomplete, select, radios, and hierarchical widgets.
+tldr: "You need to reference entities (taxonomy terms, nodes, users, media) from within a custom field column."
 ---
 
 # Entity Reference Sub-Fields

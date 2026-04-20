@@ -1,5 +1,6 @@
 ---
 description: Drupal custom module translation — translatable strings, config schema, .po files, JavaScript translation, custom entities
+tldr: "When developing custom modules that need to support multilingual sites — providing translatable strings, config, and .po files."
 ---
 
 # Translating Custom Modules

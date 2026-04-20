@@ -1,5 +1,6 @@
 ---
 description: Salesforce queue processing — cron vs standalone endpoints, configuration, scheduling decisions
+tldr: "Use cron-based processing for standard setups. Use standalone endpoints when you need higher-frequency processing, custom scheduling (Jenkins, external cron), or separation from Drupal's cron run."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Security best practices - CSRF, XSS, SQL injection, and file upload security
+tldr: "Security best practices - CSRF, XSS, SQL injection, and file upload security"
 drupal_version: "11.x"
 ---
 

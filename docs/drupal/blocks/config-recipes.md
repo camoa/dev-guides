@@ -1,5 +1,6 @@
 ---
 description: Export block configuration and deploy via config sync or Drupal recipes
+tldr: "Use when exporting block configuration for deployment, syncing between environments, or using `placeBlock` recipe actions (Drupal 11.1+). Block plugins have no exportable config — only Block config entities do."
 drupal_version: "11.x"
 ---
 

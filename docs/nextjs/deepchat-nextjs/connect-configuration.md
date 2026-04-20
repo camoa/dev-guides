@@ -1,5 +1,6 @@
 ---
 description: Configure DeepChat API connection and request/response interceptors for dynamic context injection
+tldr: "Use `connect` property to define API endpoint and headers. Use interceptors to inject context, track threads, or modify requests/responses."
 ---
 
 # Connect Configuration

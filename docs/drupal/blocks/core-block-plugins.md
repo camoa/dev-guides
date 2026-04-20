@@ -1,5 +1,6 @@
 ---
 description: Reference of core block plugins available in Drupal — system, user, views, layout_builder
+tldr: "Check here before creating a custom block. Many common needs (menus, branding, login, search, views) are covered by core plugins."
 drupal_version: "11.x"
 ---
 

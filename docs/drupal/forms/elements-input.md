@@ -1,5 +1,6 @@
 ---
 description: Input form elements - text, numeric, password, and date/time fields
+tldr: "Choose specific input types for HTML5 validation and mobile keyboard hints. Use textfield for generic text, email for emails, number for numeric input."
 drupal_version: "11.x"
 ---
 

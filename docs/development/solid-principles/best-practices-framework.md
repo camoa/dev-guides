@@ -1,5 +1,6 @@
 ---
 description: Daily SOLID decision framework — decision tree, apply-or-skip matrix, security and performance best practices, and anti-pattern avoidance checklist.
+tldr: "Daily SOLID decision framework — decision tree, apply-or-skip matrix, security and performance best practices, and anti-pattern avoidance checklist."
 ---
 
 # Best Practices Decision Framework

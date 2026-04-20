@@ -1,5 +1,6 @@
 ---
 description: You've identified design tokens using the Design System Recognition Guide
+tldr: "You've identified design tokens using the Design System Recognition Guide You've mapped tokens to Bootstrap variables using the Bootstrap Mapping Guide You need to know WHERE to put variable overrides in Radix"
 drupal_version: "11.x"
 ---
 

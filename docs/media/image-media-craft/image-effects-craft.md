@@ -1,5 +1,6 @@
 ---
 description: CSS image effects — object-fit cropping, zoom on hover, reveal animations, before/after sliders, and native dialog lightbox
+tldr: "Use `object-fit: cover` with an explicit container height for card and hero images. Use `transform: scale(1.05)` for hover zoom — keep scale under 1.06."
 ---
 
 # Image Effects Craft

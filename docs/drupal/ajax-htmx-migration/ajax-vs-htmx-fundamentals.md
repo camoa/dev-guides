@@ -1,5 +1,6 @@
 ---
 description: Core architectural differences between Drupal AJAX API and HTMX — choose the right approach before migrating
+tldr: "Use AJAX when you need command sequences, modal dialogs, or contrib integration. Use HTMX when you want declarative form interactions, CSS selector targeting, or built-in browser history support."
 drupal_version: "11.x"
 ---
 

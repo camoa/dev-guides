@@ -1,5 +1,6 @@
 ---
 description: "Follow these practices for all Next.js + Drupal implementations to prevent common security vulnerabilities."
+tldr: "Follow these practices for all Next.js + Drupal implementations to prevent common security vulnerabilities."
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
 ---

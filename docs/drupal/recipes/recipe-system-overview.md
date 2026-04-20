@@ -1,5 +1,6 @@
 ---
 description: Drupal Recipes compose reusable functionality into packages for shareable, tested configuration patterns
+tldr: "Use Drupal Recipes (core since 10.3.0, May 2024) when you need shareable, tested configuration patterns that can be applied to any Drupal site. Use distributions for full site builds, config split for environment-specific config."
 drupal_version: "11.x"
 ---
 

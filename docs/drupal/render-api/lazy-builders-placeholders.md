@@ -1,5 +1,6 @@
 ---
 description: Deferring expensive or personalized rendering with lazy builders, auto-placeholdering, and Big Pipe integration.
+tldr: "When part of your render array is **expensive to generate** or **highly dynamic** (personalized, uncacheable, time-sensitive) but the rest of the page can be cached. Lazy builders defer that part's rendering until after the page is…"
 ---
 
 # Lazy Builders & Placeholders

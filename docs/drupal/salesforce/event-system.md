@@ -1,5 +1,6 @@
 ---
 description: Salesforce event system — all available push/pull/delete events, EventSubscriber pattern, service definition
+tldr: "Use EventSubscriber pattern for all Salesforce customization. The legacy hook system is deprecated."
 drupal_version: "11.x"
 ---
 

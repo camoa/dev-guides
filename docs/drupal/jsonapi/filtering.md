@@ -1,5 +1,6 @@
 ---
 description: "Narrow down collection results based on field values. Essential for search, listing published content, filtering by author, date ranges, and complex queries."
+tldr: "Narrow down collection results based on field values. Essential for search, listing published content, filtering by author, date ranges, and complex queries."
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 ---

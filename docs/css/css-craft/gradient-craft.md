@@ -1,5 +1,6 @@
 ---
 description: Mesh gradients, animated gradients with @property, grainy noise overlays, and gradient borders that work with border-radius
+tldr: "Use gradient craft techniques for mesh-like layered backgrounds, animated color transitions, grainy texture overlays, and gradient borders. Avoid animating mesh gradients directly — each radial gradient triggers repaint; use a static mesh…"
 ---
 
 # Gradient Craft

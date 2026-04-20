@@ -1,5 +1,6 @@
 ---
 description: Hotkeys and user settings — default keyboard shortcuts, per-user hotkey storage, SettingsSidebarEvent, and customization
+tldr: "Configure hotkeys during initial setup. Users can customize per-user via the Settings sidebar."
 drupal_version: "11.x"
 ---
 

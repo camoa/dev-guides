@@ -1,5 +1,6 @@
 ---
 description: Create custom Mode plugins for Plus Suite — PHP 8 attribute syntax, ModeInterface methods, and built-in modes
+tldr: "Use custom Mode plugins when you need editing modes beyond Edit Mode — e.g., a Preview mode, Help mode, or workflow-specific mode."
 drupal_version: "11.x"
 ---
 

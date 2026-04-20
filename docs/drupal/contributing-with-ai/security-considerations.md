@@ -1,5 +1,6 @@
 ---
 description: Security considerations for AI-assisted Drupal contributions — AI-specific risks (hallucinated APIs, missing sanitization, access bypass, CSRF), the security review sequence, and sanitization APIs
+tldr: "Use this when reviewing AI-generated code for security issues, or when you need to understand the security risks specific to AI-assisted Drupal development."
 drupal_version: "11.x"
 ---
 

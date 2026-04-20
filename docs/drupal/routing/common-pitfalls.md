@@ -1,5 +1,6 @@
 ---
 description: Common Drupal routing pitfalls - avoid site crashes and security vulnerabilities
+tldr: "Reference this before committing routing YAML or when debugging routing issues. These are real-world errors that crash sites or create security vulnerabilities."
 drupal_version: "11.x"
 ---
 

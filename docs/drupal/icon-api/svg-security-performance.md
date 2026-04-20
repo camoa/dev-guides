@@ -1,5 +1,6 @@
 ---
 description: Security implications and optimization techniques for working with SVG icons
+tldr: "You're working with SVG icons and need to understand security implications and optimization techniques."
 drupal_version: "11.x"
 ---
 

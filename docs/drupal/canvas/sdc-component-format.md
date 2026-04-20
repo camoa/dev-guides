@@ -1,5 +1,6 @@
 ---
 description: Full file structure, YAML schema, and Twig template patterns for authoring SDC components compatible with Canvas.
+tldr: "Use this when creating a Canvas-compatible component using Drupal's Single Directory Component (SDC) system. This produces a server-side-rendered Twig component with Drupal field widget integration in the Canvas editor."
 drupal_version: "11.x"
 ---
 

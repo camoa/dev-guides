@@ -1,5 +1,6 @@
 ---
 description: Create frosted glass / blurred panel effects with backdrop-filter — blur values, dark mode, extended header technique, and accessibility fallbacks
+tldr: "Use frosted glass when there is rich, colorful content behind the element — navigation bars over hero images, floating cards over gradients. On a plain white background it just looks like a blurry rectangle."
 ---
 
 # Glassmorphism and Frosted Glass

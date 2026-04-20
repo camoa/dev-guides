@@ -1,5 +1,6 @@
 ---
 description: Create vocabularies for deployment via config management or module installation
+tldr: "Use config-first approach for vocabularies to ensure consistent structure across environments. Create YAML files for module installation or config sync."
 drupal_version: "11.x"
 ---
 

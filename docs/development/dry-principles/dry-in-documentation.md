@@ -1,5 +1,6 @@
 ---
 description: Writing and maintaining technical documentation using code as the single source of truth
+tldr: "When writing and maintaining technical documentation, API docs, code comments, and system documentation."
 ---
 
 # DRY in Documentation

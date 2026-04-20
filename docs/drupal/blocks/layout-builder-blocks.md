@@ -1,5 +1,6 @@
 ---
 description: Inline blocks, field blocks, and extra field blocks in Layout Builder
+tldr: "Use Layout Builder blocks when placing content within layouts. Use inline blocks for one-off content, field blocks to display entity fields, and extra field blocks for pseudo-fields."
 drupal_version: "11.x"
 ---
 

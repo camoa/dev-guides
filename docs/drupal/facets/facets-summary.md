@@ -1,5 +1,6 @@
 ---
 description: Facets Summary sub-module — display active facet selections as removable breadcrumbs with processors and views_filters_summary alternative
+tldr: "Use this guide when you want to display active facet selections as removable breadcrumbs — \"Color: Blue (x) | Size: Large (x) | Reset all\"."
 drupal_version: "11.x"
 ---
 

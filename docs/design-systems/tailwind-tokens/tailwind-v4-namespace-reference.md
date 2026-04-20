@@ -1,5 +1,6 @@
 ---
 description: Complete reference of Tailwind v4 @theme namespaces and generated utilities
+tldr: "Use this when you need to know which @theme variable prefix maps to which utility classes. Every namespace corresponds to one or more utility class APIs."
 ---
 
 # Tailwind v4 Namespace Reference

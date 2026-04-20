@@ -1,5 +1,6 @@
 ---
 description: Salesforce module suite architecture — core components, service IDs, storage objects, and submodule responsibilities
+tldr: "Use the Salesforce module suite when you need bidirectional synchronization between Drupal entities and Salesforce objects. The base module is always required; submodules are added based on sync direction and features needed."
 drupal_version: "11.x"
 ---
 

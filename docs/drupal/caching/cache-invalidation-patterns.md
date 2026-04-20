@@ -1,5 +1,6 @@
 ---
 description: Invalidate caches when data changes using tags, bins, and time-based expiration
+tldr: "When you need to clear cached data when source data changes. Cache invalidation removes stale cache entries using cache tags, programmatic deletion, or time-based expiration."
 ---
 
 # Cache Invalidation Patterns

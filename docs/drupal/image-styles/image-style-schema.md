@@ -1,5 +1,6 @@
 ---
 description: Complete YAML schema for image.style.*.yml config files including all required fields and effect structure
+tldr: "Use this when you need to write or validate image.style.*.yml config files manually."
 ---
 
 # Image Style Config Schema

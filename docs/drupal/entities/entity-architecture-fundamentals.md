@@ -1,5 +1,6 @@
 ---
 description: Entity architecture — two-layer system separating configuration from content
+tldr: "When starting any Drupal entity or field development work, you need to understand the two-layer architecture that separates configuration from content and how entity types relate to bundles."
 drupal_version: "11.x"
 ---
 

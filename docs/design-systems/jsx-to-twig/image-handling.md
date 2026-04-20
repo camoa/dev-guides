@@ -1,5 +1,6 @@
 ---
 description: Convert React image patterns (<img>, Next.js Image, picture/srcset, SVG) to Drupal Twig equivalents
+tldr: "When converting React image components (`<img>`, Next.js `<Image>`, `<picture>` / srcset, CSS background-image, inline SVG) to Drupal Twig equivalents using managed media, image styles, and the Drupal file/media entity system."
 drupal_version: "11.x"
 ---
 

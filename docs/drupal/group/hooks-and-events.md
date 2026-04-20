@@ -1,5 +1,6 @@
 ---
 description: Group hooks and events — available hooks, event subscribers, reacting to relationship CRUD, and extending permissions
+tldr: "Reference this when looking for extension points to react to Group events without altering core Group logic."
 drupal_version: "11.x"
 ---
 

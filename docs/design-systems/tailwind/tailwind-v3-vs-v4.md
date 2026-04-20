@@ -1,5 +1,6 @@
 ---
 description: Choose between Tailwind v3 and v4 based on browser requirements, project stage, and framework integration needs.
+tldr: "Use v4 for new projects targeting modern browsers. Use v3 when you need legacy browser support or have an existing stable v3 project."
 ---
 
 # Tailwind v3 vs v4

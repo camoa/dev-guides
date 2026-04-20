@@ -1,3 +1,7 @@
+---
+tldr: "When you need to know what NOT to do — these are patterns that seem logical but cause problems."
+
+---
 ## 17. Anti-Patterns & Common Mistakes
 
 ### When to Use

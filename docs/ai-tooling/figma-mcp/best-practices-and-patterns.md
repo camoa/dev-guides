@@ -1,5 +1,6 @@
 ---
 description: Sustainable design-to-code workflow patterns — session setup sequence, per-frame workflow, large frame handling, performance and security considerations
+tldr: "When setting up a sustainable design-to-code workflow. These practices apply across all clients and server types."
 ---
 
 # Best Practices and Patterns

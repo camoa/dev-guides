@@ -1,5 +1,6 @@
 ---
 description: "Authentication is required for draft mode, creating/updating content, and accessing unpublished resources. Choose the pattern based on your security requirements and Drupal configuration."
+tldr: "Authentication is required for draft mode, creating/updating content, and accessing unpublished resources. Choose the pattern based on your security requirements and Drupal configuration."
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
 ---

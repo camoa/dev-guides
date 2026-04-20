@@ -1,5 +1,6 @@
 ---
 description: How Drupal CSRF tokens are generated and validated — seed storage, HMAC computation, and root causes of validation failure
+tldr: "Use this guide to understand the internals of `CsrfTokenGenerator::get()` and `validate()`. Use [Common Pitfalls](common-pitfalls.md) for actionable fixes when validation fails."
 drupal_version: "11.x"
 ---
 

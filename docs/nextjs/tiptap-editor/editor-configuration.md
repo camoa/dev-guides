@@ -1,5 +1,6 @@
 ---
 description: You need to configure editor instance behavior, initial content, autofocus, editability, or event handlers.
+tldr: "You need to configure editor instance behavior, initial content, autofocus, editability, or event handlers."
 ---
 
 ## 4.1 Editor Configuration Options

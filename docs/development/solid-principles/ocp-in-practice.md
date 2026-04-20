@@ -1,5 +1,6 @@
 ---
 description: Practical OCP patterns — plugin systems, middleware, data-driven configuration, and when to apply or skip OCP.
+tldr: "Practical OCP patterns — plugin systems, middleware, data-driven configuration, and when to apply or skip OCP."
 ---
 
 # OCP in Practice

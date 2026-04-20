@@ -1,5 +1,6 @@
 ---
 description: Salesforce extension patterns — custom auth provider, custom queue processor, custom pull worker
+tldr: "Use these extension points when built-in auth providers, queue processors, or pull workers cannot meet your requirements — for example, custom SSO auth, bulk API processing, or complex pull transformations not achievable via events."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Measure code coverage with PCOV or Xdebug, set coverage targets by code type, and avoid coverage anti-patterns.
+tldr: "Measuring how much of your code is executed during tests, identifying untested code paths, setting coverage targets for CI/CD."
 ---
 
 # Coverage Metrics Strategy

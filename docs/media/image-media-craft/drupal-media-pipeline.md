@@ -1,5 +1,6 @@
 ---
 description: Map front-end image craft into Drupal's pipeline — responsive image styles, focal point, WebP/AVIF conversion, and media library guidance
+tldr: "Use responsive image styles (not image styles) for any image that appears at different sizes across breakpoints. Use focal point module on any editorial site where editors upload images at multiple aspect ratios."
 drupal_version: "11.x"
 ---
 

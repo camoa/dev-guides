@@ -1,5 +1,6 @@
 ---
 description: Follow this workflow to create a minimal working recipe from scratch
+tldr: "Follow this workflow to create a minimal working recipe from scratch."
 drupal_version: "11.x"
 ---
 

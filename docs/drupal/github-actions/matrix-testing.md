@@ -1,5 +1,6 @@
 ---
 description: Test Drupal across multiple versions, PHP versions, and database types using matrix strategy
+tldr: "Use matrix testing when you need to verify compatibility across multiple Drupal versions, PHP versions, or database types."
 drupal_version: "11.x"
 ---
 

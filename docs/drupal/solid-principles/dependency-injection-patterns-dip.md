@@ -1,5 +1,6 @@
 ---
 description: Drupal dependency injection patterns - constructor injection, autowiring, service decorators
+tldr: "Inject all dependencies through constructor. Use autowiring in Drupal 10.2+ to reduce boilerplate."
 drupal_version: "11.x"
 ---
 

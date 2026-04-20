@@ -1,5 +1,6 @@
 ---
 description: Hover effects cookbook — button lift, ghost fill, card lift, link underline reveal, image overlay, icon circle, table row, 3D tilt, and magnetic hover patterns
+tldr: "Use this guide when you need the right hover/active/focus effect for a specific UI element. This is the cookbook companion to [Micro-Interactions](micro-interactions.md), which covers the underlying principles and easing tokens."
 drupal_version: "11.x"
 ---
 

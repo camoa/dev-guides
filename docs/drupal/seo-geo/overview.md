@@ -1,5 +1,6 @@
 ---
 description: Drupal SEO & GEO overview — the module stack landscape, two Drupal CMS SEO recipes, decision tree for which modules to install, and how this guide is organized
+tldr: "Read this guide first. It maps the entire SEO/GEO module landscape, explains why GEO extends rather than replaces traditional SEO, and gives you the decision tree for which modules to install before you touch configuration."
 drupal_version: "11.x"
 ---
 

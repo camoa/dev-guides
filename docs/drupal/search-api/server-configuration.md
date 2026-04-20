@@ -1,5 +1,6 @@
 ---
 description: Search API server entity — properties, key methods, and backend-specific settings for Database and Solr
+tldr: "Use this when creating or configuring a Search API server entity."
 drupal_version: "11.x"
 ---
 

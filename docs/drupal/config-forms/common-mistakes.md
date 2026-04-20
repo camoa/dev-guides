@@ -1,5 +1,6 @@
 ---
 description: Common configuration form mistakes and how to fix them
+tldr: "Reference when debugging form issues or reviewing code."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: When to use the \Drupal static helper vs dependency injection — acceptable uses in procedural code, refactoring patterns, and anti-pattern examples.
+tldr: "When you understand when the \\Drupal static helper is appropriate versus when dependency injection is required."
 ---
 
 # The \Drupal Global Helper

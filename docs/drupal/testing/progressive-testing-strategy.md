@@ -1,5 +1,6 @@
 ---
 description: Progressive approach to building testing coverage from MVP to production-ready modules
+tldr: "Use this progressive approach when building testing coverage for a new module or improving coverage for an existing module. Start simple and add complexity as the module matures."
 drupal_version: "11.x"
 ---
 

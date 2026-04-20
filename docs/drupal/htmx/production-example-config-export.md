@@ -1,5 +1,6 @@
 ---
 description: Complete HTMX production example — ConfigSingleExportForm with cascading selects, OOB updates, and history management
+tldr: "Reference this when you want a complete, production-ready HTMX implementation demonstrating cascading selects, OOB updates, and history management — all from Drupal core."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: XML sitemap configuration for Drupal 11 — Simple Sitemap vs XML Sitemap, multilingual hreflang, IndexNow, and image sitemaps
+tldr: "Configure an XML sitemap whenever you launch a Drupal site. Search engines use sitemaps to discover and prioritize content."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: GDPR, ePrivacy, and legal requirements for consent management configuration
+tldr: "Understand legal requirements before implementing consent management to ensure your configuration meets regulatory standards for GDPR, ePrivacy Directive, and other privacy laws."
 drupal_version: "11.x"
 ---
 

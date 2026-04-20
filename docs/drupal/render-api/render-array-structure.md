@@ -1,5 +1,6 @@
 ---
 description: Render array structure fundamentals -- properties vs children, nesting, weight-based ordering.
+tldr: "Whenever you're building any render array -- understanding structure is foundational to using the Render API."
 ---
 
 # Render Array Structure

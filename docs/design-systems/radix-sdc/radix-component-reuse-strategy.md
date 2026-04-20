@@ -1,5 +1,6 @@
 ---
 description: You're evaluating whether to reuse, override, or create components
+tldr: "You're evaluating whether to reuse, override, or create components You need a catalog of existing Radix SDC components You want to extend Radix components in your sub-theme"
 drupal_version: "11.x"
 ---
 

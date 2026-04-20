@@ -1,5 +1,6 @@
 ---
 description: Form validation styling only after user interaction with :user-valid/:user-invalid
+tldr: "Use `:user-invalid` and `:user-valid` for form validation styling that only appears after the user has interacted with a field. Use `:invalid` / `:valid` only when immediate page-load validation is intentional."
 ---
 
 # :user-valid and :user-invalid

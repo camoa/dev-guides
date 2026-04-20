@@ -1,5 +1,6 @@
 ---
 description: Convert React styling patterns to Twig and SDC scoped CSS
+tldr: "Use this when converting React styling patterns -- `className`, CSS Modules, Tailwind utilities, `cn()`/`clsx()`, `cva()` (class-variance-authority), inline styles -- to Twig and SDC equivalents."
 drupal_version: "11.x"
 ---
 

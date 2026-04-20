@@ -1,5 +1,6 @@
 ---
 description: Choosing the right abstraction mechanism to eliminate duplication - functions, classes, composition, and configuration
+tldr: "When deciding how to eliminate duplication through abstraction — choosing the right abstraction mechanism for the situation."
 ---
 
 # Abstraction Strategies

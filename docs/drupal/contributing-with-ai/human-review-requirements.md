@@ -1,5 +1,6 @@
 ---
 description: Human review requirements for AI-generated code — what review IS vs IS NOT, minimum standards by disclosure level, and the six-question senior developer test
+tldr: "Use this when you need to understand what \"human review\" actually means for AI-generated code — the minimum standard before you can honestly say you've reviewed the code."
 drupal_version: "11.x"
 ---
 

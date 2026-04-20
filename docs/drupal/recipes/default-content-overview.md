@@ -1,5 +1,6 @@
 ---
 description: Default content ships demo or starter content with recipes as YAML files for initial site setup
+tldr: "Use default content when you need demo or starter content bundled with your recipe. For ongoing content staging, use Workspaces or Migrate API."
 drupal_version: "11.x"
 ---
 

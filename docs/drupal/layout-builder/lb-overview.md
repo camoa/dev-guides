@@ -1,3 +1,7 @@
+---
+tldr: "When you need visual layout control for entity displays — sections, multiple columns, block-based composition, per-entity or per-bundle layouts."
+
+---
 ## 1. Layout Builder Overview
 
 ### When to Use

@@ -1,5 +1,6 @@
 ---
 description: Implement TokenReceiverInterface to preserve event tokens across workflow execution
+tldr: "Implement `TokenReceiverInterface` when your event plugin needs to preserve specific tokens across the entire workflow execution, ensuring token data survives even after actions complete."
 drupal_version: "11.x"
 ---
 

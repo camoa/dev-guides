@@ -1,5 +1,6 @@
 ---
 description: Catalog of commonly used Drupal core services — database, entity_type.manager, config.factory, cache, logger, request_stack, current_user, renderer, file_system, messenger, state, and more.
+tldr: "When you need to know what core services are available for injection — this catalog covers the most commonly used Drupal services."
 ---
 
 # Core Services Reference

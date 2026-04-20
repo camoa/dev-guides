@@ -1,5 +1,6 @@
 ---
 description: Disable Klaro on admin pages, previews, or specific URL patterns using regex
+tldr: "Disable Klaro on specific URL patterns where consent management isn't needed (admin pages, previews) or interferes with functionality."
 drupal_version: "11.x"
 ---
 

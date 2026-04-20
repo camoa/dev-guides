@@ -1,5 +1,6 @@
 ---
 description: Ensure Tailwind produces minimal CSS, builds fast, and doesn't generate unused styles — class detection and bundle size guidance.
+tldr: "Use when diagnosing large CSS bundles, slow builds, or missing classes at runtime."
 ---
 
 # Performance & Optimization

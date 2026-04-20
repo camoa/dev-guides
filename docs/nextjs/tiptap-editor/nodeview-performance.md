@@ -1,5 +1,6 @@
 ---
 description: You have React node views and experiencing performance issues.
+tldr: "You have React node views and experiencing performance issues."
 ---
 
 ## 17.2 Node View Performance Considerations

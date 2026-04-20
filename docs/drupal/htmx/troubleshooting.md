@@ -1,5 +1,6 @@
 ---
 description: Debug HTMX issues in Drupal — attributes not working, content not swapping, missing JS behaviors, and request debugging
+tldr: "Use this when HTMX isn't working as expected — attributes not applying, content not swapping, behaviors not running, or history not updating."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: AI Search — vector database integration, RAG with AI assistants, semantic search via Search API
+tldr: "Use this guide when setting up semantic search or Retrieval-Augmented Generation (RAG) with vector databases. Use [AI Assistant API](ai-assistant-api.md) to wire the `rag_action` into an assistant."
 drupal_version: "11.x"
 ---
 

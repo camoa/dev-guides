@@ -1,5 +1,6 @@
 ---
 description: You need to install Tiptap in a JavaScript/TypeScript project.
+tldr: "You need to install Tiptap in a JavaScript/TypeScript project."
 ---
 
 ## 2.1 Installation & Package Structure

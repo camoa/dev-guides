@@ -1,5 +1,6 @@
 ---
 description: The OWASP Top 10 (2021) vulnerabilities with attack scenarios, real-world impact, and prevention strategies for each.
+tldr: "The OWASP Top 10 is the industry-standard baseline for web application security. Use this as your minimum security checklist — if your application is vulnerable to any Top 10 item, you have critical work to do."
 ---
 
 # OWASP Top 10 (2021)

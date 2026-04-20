@@ -1,5 +1,6 @@
 ---
 description: Architectural guidance for maintainable, performant, testable block plugins
+tldr: "Apply these patterns when building any block plugin. These are the architectural decisions that keep blocks maintainable, testable, and performant."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: BEF checkboxes and radio buttons widget — plugin ID, applicable filter types, soft limit, select all/none, and nested hierarchy
+tldr: "Use this widget when you want to replace a select dropdown with checkboxes (multi-select) or radio buttons (single-select) on an exposed filter. Use the Links widget when you want clickable URL-based navigation instead."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: You need a menu that appears in empty blocks or triggered by `/` (slash commands).
+tldr: "You need a menu that appears in empty blocks or triggered by `/` (slash commands)."
 ---
 
 ## 12.2 Floating Menu & Slash Commands

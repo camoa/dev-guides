@@ -1,5 +1,6 @@
 ---
 description: BEF sliders widget — noUiSlider configuration, applicable filter types, validation rules, and drupalSettings structure
+tldr: "Use this widget when you have a numeric filter (price, quantity, rating) and want a visual range slider instead of text inputs. Use the number widget for simple min/max inputs without visual slider."
 drupal_version: "11.x"
 ---
 

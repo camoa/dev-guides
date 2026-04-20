@@ -1,5 +1,6 @@
 ---
 description: Choose header or footer placement for JavaScript loading based on criticality
+tldr: "Use when JavaScript affects critical rendering or initial page display. Otherwise, use default footer loading."
 drupal_version: "10.x/11.x"
 ---
 

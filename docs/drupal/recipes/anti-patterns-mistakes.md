@@ -1,5 +1,6 @@
 ---
 description: Avoid these patterns that lead to brittle, untestable, or unmaintainable recipes
+tldr: "Avoid these anti-patterns when creating recipes to prevent brittle, untestable, or unmaintainable code."
 drupal_version: "11.x"
 ---
 

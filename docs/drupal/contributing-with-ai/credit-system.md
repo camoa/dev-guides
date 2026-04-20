@@ -1,5 +1,6 @@
 ---
 description: Credit system and AI contributions — who gets credit, credit abuse policy, what counts as genuine contribution, and how organizational credit applies
+tldr: "Use this when you need to understand how drupal.org credits work in the context of AI-assisted contributions, or when you have questions about credit attribution."
 drupal_version: "11.x"
 ---
 

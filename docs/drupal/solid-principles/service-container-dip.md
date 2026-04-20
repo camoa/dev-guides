@@ -1,5 +1,6 @@
 ---
 description: Use Drupal service container to depend on abstractions, not concrete implementations
+tldr: "The service container is Drupal's DIP foundation. Depend on abstractions (interfaces) defined in core.services.yml, not concrete implementations."
 drupal_version: "11.x"
 ---
 

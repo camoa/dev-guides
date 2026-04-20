@@ -1,5 +1,6 @@
 ---
 description: "Control result order and break large result sets into pages. Essential for chronological listings, alphabetical lists, and unbounded collections."
+tldr: "**Sorting:** Control result order. Essential for chronological listings, alphabetical lists, and custom ordering."
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 ---

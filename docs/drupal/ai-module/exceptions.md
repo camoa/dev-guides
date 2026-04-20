@@ -1,5 +1,6 @@
 ---
 description: AI exception types — catch hierarchy, when each exception fires, and ProviderProxy re-throw behavior
+tldr: "Use this guide when handling errors from AI provider calls. Always catch specific exceptions before the generic `AiExceptionInterface`."
 drupal_version: "11.x"
 ---
 

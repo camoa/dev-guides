@@ -1,5 +1,6 @@
 ---
 description: You're optimizing theme performance
+tldr: "You're optimizing theme performance You need guidance on caching strategies You're implementing responsive images and modern formats You want to optimize asset loading"
 drupal_version: "11.x"
 ---
 

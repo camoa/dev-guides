@@ -1,5 +1,6 @@
 ---
 description: Search API autocomplete — search_api_autocomplete module setup, Solr Terms suggester, and min characters configuration
+tldr: "Use this when adding search-as-you-type suggestions to search forms."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: UI Patterns and SDC integration with Plus Suite — what works, inline editing limitations, recommended architecture, and hybrid components
+tldr: "Use UI Patterns layouts as structural section layouts and block_content for content blocks that need inline editing. Do not use UI Patterns blocks as your primary strategy if inline editing is a requirement."
 drupal_version: "11.x"
 ---
 

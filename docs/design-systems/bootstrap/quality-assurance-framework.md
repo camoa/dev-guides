@@ -1,5 +1,6 @@
 ---
 description: Validation checklists and success metrics for Bootstrap mapping decisions
+tldr: "Use this to validate Bootstrap accommodation decisions, review code for SCSS compliance, and ensure quality standards before deployment."
 ---
 
 # Quality Assurance Framework

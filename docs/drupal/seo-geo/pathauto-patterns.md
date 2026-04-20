@@ -1,5 +1,6 @@
 ---
 description: Pathauto URL alias patterns — token syntax, per-content-type configuration, bulk generation, transliteration, and common mistakes
+tldr: "Configure Pathauto when you need clean, SEO-friendly URL aliases generated automatically from content fields. Pathauto runs on every node/term/user save and applies your token-based pattern to produce the alias — no manual entry required."
 drupal_version: "11.x"
 ---
 

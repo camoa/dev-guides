@@ -1,5 +1,6 @@
 ---
 description: Write kernel tests for ECA plugins to verify configuration, execution, and token handling
+tldr: "Write kernel tests for all ECA plugins to verify configuration, execution logic, token handling, and integration with Drupal services. Kernel tests run faster than browser tests and provide sufficient coverage for most plugin logic."
 drupal_version: "11.x"
 ---
 

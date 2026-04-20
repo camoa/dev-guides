@@ -1,5 +1,6 @@
 ---
 description: Drupal translation workflows — TMGMT module, translation jobs, external services like DeepL and Google Translate
+tldr: "When implementing translation processes beyond basic UI — professional translation services, translation jobs, external translators, automated workflows."
 ---
 
 # Translation Workflows

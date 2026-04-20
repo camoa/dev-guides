@@ -1,5 +1,6 @@
 ---
 description: Extract design tokens from Tailwind v3 config files
+tldr: "Use this when working with a Tailwind v3 project and need to extract tokens as CSS variables or a token catalog."
 ---
 
 # Tailwind v3 Token Extraction

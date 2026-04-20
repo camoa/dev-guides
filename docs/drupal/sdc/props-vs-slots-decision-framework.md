@@ -1,5 +1,6 @@
 ---
 description: Decision framework for choosing between props and slots in component design
+tldr: "Use this when designing a component API, deciding if something should be a prop or slot, or debugging schema validation errors."
 drupal_version: "11.x"
 ---
 

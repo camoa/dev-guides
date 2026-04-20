@@ -1,5 +1,6 @@
 ---
 description: Pre-compiled CSS library, CKEditor 5 integration, and Heroicon pack configuration
+tldr: "Pre-compiled CSS library, CKEditor 5 integration, and Heroicon pack configuration"
 ---
 
 # Libraries & Assets

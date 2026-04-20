@@ -1,5 +1,6 @@
 ---
 description: Drupal content translation setup — enabling entity translation per bundle for nodes, terms, media, blocks, custom entities
+tldr: "When enabling entity translation for nodes, taxonomy terms, media, blocks, menu links, or custom entities."
 ---
 
 # Content Translation Setup

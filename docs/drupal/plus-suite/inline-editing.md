@@ -1,5 +1,6 @@
 ---
 description: Inline editing with Edit+ — field handle types, data attributes, FieldAttributes events, InlineTextarea, and tempstore save flow
+tldr: "Enable inline editing on fields that editors change frequently. Disable it on computed, read-only, or complex-validation fields."
 drupal_version: "11.x"
 ---
 

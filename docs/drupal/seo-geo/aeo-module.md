@@ -1,5 +1,6 @@
 ---
 description: Drupal AEO module for automated AI search readiness scoring — audits, 0-100 scoring categories, auto-fix drafts, and optional AI integration
+tldr: "You want to audit and score your Drupal content for AI search readiness systematically — not page by page manually. The AEO (AI Engine Optimization) module at drupal.org/project/aeo runs automated content audits against GEO criteria,…"
 drupal_version: "11.x"
 ---
 

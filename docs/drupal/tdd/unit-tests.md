@@ -1,5 +1,6 @@
 ---
 description: Write unit tests with UnitTestCase for pure PHP logic with no Drupal dependencies.
+tldr: "Testing pure PHP logic with no Drupal dependencies: utility classes, value objects, algorithms, data transformations."
 ---
 
 # Unit Tests with UnitTestCase

@@ -1,5 +1,6 @@
 ---
 description: Use Drupal core traits and custom traits to share cross-cutting concerns like translation, logging, and messaging across unrelated classes.
+tldr: "When you need to share functionality across classes that don't share the same inheritance hierarchy, or when you want to compose behaviors without deep inheritance."
 ---
 
 # Traits for Cross-Cutting Concerns

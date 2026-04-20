@@ -1,5 +1,6 @@
 ---
 description: Defer expensive rendering with placeholders using lazy builders
+tldr: "When you need to defer expensive or user-specific rendering until after the main page is cached. Lazy builders create placeholders in cached content that are replaced with personalized or dynamic content during rendering."
 ---
 
 # Lazy Builders

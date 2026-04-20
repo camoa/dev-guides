@@ -1,5 +1,6 @@
 ---
 description: FIRST principles for unit tests and characteristics of good unit tests
+tldr: "Writing any unit test, whether in TDD workflow or traditional testing approach. These principles define what makes a good unit test."
 ---
 
 # Unit Testing Fundamentals

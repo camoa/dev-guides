@@ -1,5 +1,6 @@
 ---
 description: Practical ISP patterns — adapter pattern for third-party interfaces, interface inheritance, granularity decisions, and refactoring fat interfaces.
+tldr: "Practical ISP patterns — adapter pattern for third-party interfaces, interface inheritance, granularity decisions, and refactoring fat interfaces."
 ---
 
 # ISP in Practice

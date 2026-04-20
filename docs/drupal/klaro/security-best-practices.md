@@ -1,5 +1,6 @@
 ---
 description: Prevent XSS vulnerabilities and secure consent configuration
+tldr: "Secure Klaro configuration to prevent XSS vulnerabilities, injection attacks, and unauthorized consent manipulation."
 drupal_version: "11.x"
 ---
 

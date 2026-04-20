@@ -1,5 +1,6 @@
 ---
 description: DaisyUI accessibility gaps, required ARIA attributes, keyboard navigation status, and security considerations
+tldr: "Every component implementation. Accessibility and security are part of shipping correct code, not optional steps."
 ---
 
 # Security and Accessibility

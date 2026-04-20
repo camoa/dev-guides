@@ -1,5 +1,6 @@
 ---
 description: Enable automatic detection and blocking of external resources without manual HTML attributes
+tldr: "Enable automatic detection and blocking of external resources without manually adding HTML attributes. Critical for preventing pre-consent tracking."
 drupal_version: "11.x"
 ---
 

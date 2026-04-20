@@ -1,5 +1,6 @@
 ---
 description: Build HTMX-enabled Drupal controllers — conditional responses, route options, and render array patterns
+tldr: "Use this when building controller routes that return dynamic content for HTMX requests."
 drupal_version: "11.x"
 ---
 

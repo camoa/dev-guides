@@ -1,5 +1,6 @@
 ---
 description: Step-by-step debugging guide for CSRF failures in DeepChat + Drupal OAuth — curl commands, log inspection, session verification
+tldr: "Use this guide when diagnosing `csrf_token URL query argument is invalid` or 403 errors in production. Use [Common Pitfalls](common-pitfalls.md) for known causes and fixes."
 drupal_version: "11.x"
 ---
 

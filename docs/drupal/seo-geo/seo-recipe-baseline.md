@@ -1,5 +1,6 @@
 ---
 description: Drupal CMS SEO recipes — what drupal_cms_seo_basic and drupal_cms_seo_tools install, decision to apply both vs selective, and what config you get out of the box
+tldr: "Start here when setting up SEO for any Drupal 11.3+ site. The two Drupal CMS SEO recipes give you a battle-tested module stack with sane defaults in minutes."
 drupal_version: "11.x"
 ---
 

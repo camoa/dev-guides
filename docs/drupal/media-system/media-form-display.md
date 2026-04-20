@@ -1,5 +1,6 @@
 ---
 description: Configuring media upload and edit forms — field widgets, image previews, Media Library form mode, and form optimization.
+tldr: "You need to configure the media upload and edit form: field order, widgets, help text."
 ---
 
 ## 8. Media Form Display

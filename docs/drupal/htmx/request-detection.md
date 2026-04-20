@@ -1,5 +1,6 @@
 ---
 description: Detect HTMX requests and access request metadata using HtmxRequestInfoTrait in controllers and forms
+tldr: "Use this when you need to detect if a request is from HTMX and access metadata (triggering element, target, prompt) in controllers or forms."
 drupal_version: "11.x"
 ---
 

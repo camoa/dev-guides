@@ -1,5 +1,6 @@
 ---
 description: "Follow this workflow when setting up a new Drupal backend for Next.js or adding Next.js support to an existing Drupal site."
+tldr: "Follow this workflow when setting up a new Drupal backend for Next.js or adding Next.js support to an existing Drupal site."
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
 ---

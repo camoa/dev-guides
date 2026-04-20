@@ -1,5 +1,6 @@
 ---
 description: Style parents and siblings based on child state — replacing JS class toggling
+tldr: "Use `:has()` when you need to style a parent based on its children or descendants, or a preceding sibling based on what follows — logic that previously required JavaScript class toggling."
 ---
 
 # :has() — The Parent Selector

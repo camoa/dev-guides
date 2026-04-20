@@ -1,5 +1,6 @@
 ---
 description: Security best practices organized by domain covering access control, code security, input/output, authentication, and infrastructure hardening.
+tldr: "When establishing security standards for a project or conducting code reviews."
 ---
 
 # Best Practices and Patterns

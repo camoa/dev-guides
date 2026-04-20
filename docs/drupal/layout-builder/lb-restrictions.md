@@ -1,3 +1,7 @@
+---
+tldr: "When you need to limit which blocks, layouts, or sections editors can add in Layout Builder to prevent overwhelming choices or enforce content governance."
+
+---
 ## 10. Layout Builder Restrictions
 
 ### When to Use

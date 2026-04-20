@@ -1,5 +1,6 @@
 ---
 description: Understand Drupal's caching layers and when to use each one
+tldr: "When you need to understand which caching layer to use for different scenarios — page cache for anonymous users, dynamic page cache for authenticated users, render cache for reusable components, or programmatic cache bins for custom data."
 ---
 
 # Cache System Overview

@@ -1,5 +1,6 @@
 ---
 description: Schema.org structured data for AI discoverability — priority types, SpeakableSpecification, schema stacking, and Drupal implementation with schema_metatag
+tldr: "You want structured data to improve how AI systems understand, extract, and cite your content — beyond traditional Google rich results. Google AI Overviews, Microsoft Copilot, and ChatGPT are confirmed to use structured data for entity…"
 drupal_version: "11.x"
 ---
 

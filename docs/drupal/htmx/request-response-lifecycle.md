@@ -1,5 +1,6 @@
 ---
 description: How HTMX requests flow through Drupal's render pipeline — 8-step lifecycle with decision points
+tldr: "Reference this when debugging HTMX issues or building custom integrations that need to hook into specific lifecycle stages."
 drupal_version: "11.x"
 ---
 

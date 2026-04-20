@@ -1,5 +1,6 @@
 ---
 description: Schema.org Blueprints (schemadotorg) — schema-first content modeling for Drupal, drush commands, submodules, and alpha stability guidance
+tldr: "Schema.org Blueprints inverts the normal Drupal workflow: instead of creating content types and then mapping them to Schema.org, you declare a Schema.org type and the module generates the Drupal content type, fields, and JSON-LD output…"
 drupal_version: "11.x"
 ---
 

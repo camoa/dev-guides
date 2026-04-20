@@ -1,5 +1,6 @@
 ---
 description: Install and use the Easy Breadcrumb contrib module — title resolution, priority 1003, taxonomy hierarchy, and JSON-LD SEO
+tldr: "Use Easy Breadcrumb when core produces ugly URL-slug titles (e.g., \"my-blog-post\" instead of \"My Blog Post\"), when you need the current page title as the last crumb, or when you need built-in JSON-LD SEO output. It is the de facto standard…"
 drupal_version: "11.x"
 ---
 

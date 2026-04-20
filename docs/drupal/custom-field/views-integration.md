@@ -1,5 +1,6 @@
 ---
 description: Querying, filtering, sorting, and displaying custom field data in Views with custom field, date, and entity reference plugins.
+tldr: "You need to query, filter, sort, or display custom field data in Views."
 ---
 
 # Views Integration

@@ -1,5 +1,6 @@
 ---
 description: Polish hover, active, and focus states on buttons, cards, links, and toggles — the difference between a flat prototype and a production interface
+tldr: "Use micro-interactions on every interactive element (buttons, cards, links, toggles). These are the difference between a flat prototype and a production interface."
 ---
 
 # Micro-Interactions

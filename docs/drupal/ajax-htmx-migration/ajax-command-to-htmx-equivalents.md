@@ -1,5 +1,6 @@
 ---
 description: Quick reference mapping every Drupal AJAX command to its HTMX equivalent swap strategy or method
+tldr: "Use this reference when converting existing AJAX commands to HTMX patterns. Find the HTMX equivalent of a specific AJAX command before rewriting."
 drupal_version: "11.x"
 ---
 

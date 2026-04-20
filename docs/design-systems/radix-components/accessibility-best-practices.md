@@ -1,5 +1,6 @@
 ---
 description: Ensuring WCAG 2.2 Level AA compliance
+tldr: "Ensuring WCAG 2.2 Level AA compliance."
 ---
 
 # Accessibility Best Practices

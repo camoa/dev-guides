@@ -1,5 +1,6 @@
 ---
 description: Interface Segregation Principle — splitting fat interfaces into focused role interfaces so clients only implement what they need.
+tldr: "When designing interfaces, APIs, or contracts that multiple clients will implement. ISP prevents forcing clients to depend on methods they don't use."
 ---
 
 # Interface Segregation Principle (ISP)

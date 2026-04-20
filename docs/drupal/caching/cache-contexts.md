@@ -1,5 +1,6 @@
 ---
 description: Vary cached content by URL, user, language, and other request contexts
+tldr: "When cached content varies based on request context. Cache contexts create separate cache entries for different variations — e.g., one cached version per language, per user role, per URL path."
 ---
 
 # Cache Contexts

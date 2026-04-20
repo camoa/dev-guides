@@ -1,5 +1,6 @@
 ---
 description: Speed up GitHub Actions workflows by caching Composer, npm, and Drupal dependencies
+tldr: "Use to speed up workflow execution by reusing dependencies and build outputs between runs."
 drupal_version: "11.x"
 ---
 

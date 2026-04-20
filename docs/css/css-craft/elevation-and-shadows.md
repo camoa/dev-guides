@@ -1,5 +1,6 @@
 ---
 description: Add realistic multi-layer shadows to cards, modals, and dropdowns — tinted shadow system with dark mode support
+tldr: "Use elevation shadows when components need visual depth — cards resting on a surface, modals floating above content, dropdowns popping over elements. Shadows establish spatial relationships in a flat medium."
 ---
 
 # Elevation and Shadows

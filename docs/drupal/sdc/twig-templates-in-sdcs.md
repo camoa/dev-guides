@@ -1,5 +1,6 @@
 ---
 description: Twig template patterns for accessing props, rendering slots, and using attributes
+tldr: "Use this when writing component Twig templates, accessing props and slots, or working with the `attributes` object."
 drupal_version: "11.x"
 ---
 

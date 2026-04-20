@@ -1,5 +1,6 @@
 ---
 description: Imposed, inadvertent, impatient, and interdeveloper duplication - identifying and addressing each type
+tldr: "When analyzing whether duplication in your codebase is problematic and deciding how to address it."
 ---
 
 # Four Types of Duplication

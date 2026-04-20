@@ -1,5 +1,6 @@
 ---
 description: Auto-resize textarea, input, and select to fit content with field-sizing — replacing JavaScript scrollHeight scripts
+tldr: "Use `field-sizing: content` when you need a `<textarea>`, `<input>`, or `<select>` to automatically resize to fit its content. Use JavaScript `scrollHeight` or `ResizeObserver` when cross-browser support is required (Safari does not…"
 drupal_version: "11.x"
 ---
 

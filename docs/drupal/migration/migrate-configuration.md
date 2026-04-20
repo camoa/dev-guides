@@ -1,5 +1,6 @@
 ---
 description: Migrate content types, views, and configuration from D7 to D11
+tldr: "Configuration migration transfers content types, field definitions, views, image styles from D7 to D11. Unlike content, configuration often requires manual recreation due to structural changes."
 drupal_version: "11.x"
 ---
 

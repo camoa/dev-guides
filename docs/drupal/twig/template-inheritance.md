@@ -1,4 +1,5 @@
 ---
+tldr: "When you want to share template structure across multiple templates, or include a sub-template/component as part of a larger template."
 topic: drupal/twig
 guide: template-inheritance
 ---

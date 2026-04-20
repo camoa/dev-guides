@@ -1,5 +1,6 @@
 ---
 description: "Access specific entity revisions or translations via JSON:API."
+tldr: "Access specific entity revisions or translations via JSON:API."
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 ---

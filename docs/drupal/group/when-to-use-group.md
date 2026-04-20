@@ -1,5 +1,6 @@
 ---
 description: When to use Group vs Domain Access vs Permissions by Term — decision table and performance considerations
+tldr: "Read this before starting a project to choose the right access control approach. Picking the wrong module early is expensive to change."
 drupal_version: "11.x"
 ---
 

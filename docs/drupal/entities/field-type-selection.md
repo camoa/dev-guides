@@ -1,5 +1,6 @@
 ---
 description: Choosing the right field type for your data structure
+tldr: "When adding fields to content types or entities, you must choose the appropriate field type that matches your data structure and validation requirements."
 drupal_version: "11.x"
 ---
 

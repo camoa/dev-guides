@@ -1,5 +1,6 @@
 ---
 description: Facets Pretty Paths contrib module — cleaner facet URLs as path segments instead of query parameters, SEO benefits, and gotchas
+tldr: "Use this guide when you want cleaner facet URLs — `/search/color/blue/size/large` instead of `?f[0]=color:blue&f[1]=size:large`."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Design system recognition — 10. standards & specifications
+tldr: "You need to validate your token structure against W3C standards You're implementing a design token system You need to ensure cross-tool compatibility"
 ---
 
 ## 10. Standards & Specifications

@@ -1,5 +1,6 @@
 ---
 description: Choose between simple config (singleton YAML) and config entities (multiple instances with CRUD and UI).
+tldr: "When deciding whether to implement config as simple config (singleton YAML) or config entities (multiple instances, CRUD, UI)."
 ---
 
 # Simple Config vs Config Entities

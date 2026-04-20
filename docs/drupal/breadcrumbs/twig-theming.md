@@ -1,5 +1,6 @@
 ---
 description: Override breadcrumb.html.twig for custom markup — accessibility requirements, aria-current, and template discovery
+tldr: "Override the default breadcrumb template when you need custom markup: different HTML structure, additional CSS classes, aria attributes, or schema microdata. The template override requires no PHP — just create the file in the right place."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Choose and configure a cache backend — Redis, Memcache, APCu, or database
+tldr: "When you need to choose where cached data is stored. Cache backends determine storage mechanism — database (default), memory (APCu, Redis, Memcache), or specialized backends (chained, null)."
 ---
 
 # Cache Backends

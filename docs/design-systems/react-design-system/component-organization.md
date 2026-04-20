@@ -1,5 +1,6 @@
 ---
 description: Structure React design system files using flat folders (small systems) or atomic design (large systems) with explicit barrel exports.
+tldr: "Use when setting up a design system repository or deciding where to put a new component."
 ---
 
 # Component Organization

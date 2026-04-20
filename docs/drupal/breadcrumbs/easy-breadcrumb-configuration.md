@@ -1,5 +1,6 @@
 ---
 description: Complete reference for all Easy Breadcrumb configuration settings — title resolution, home segment, capitalization, custom paths, and SEO
+tldr: "After installing Easy Breadcrumb, configure at `admin/config/user-interface/easy-breadcrumb`. All settings map to `easy_breadcrumb.settings.yml` which can be exported and version-controlled."
 drupal_version: "11.x"
 ---
 

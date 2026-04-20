@@ -1,3 +1,7 @@
+---
+tldr: "When core layouts don't provide the regions or structure you need, or when you want theme-specific layouts."
+
+---
 ## 12. Custom Layout Plugins
 
 ### When to Use

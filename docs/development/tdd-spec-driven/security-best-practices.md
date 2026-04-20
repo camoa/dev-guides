@@ -1,5 +1,6 @@
 ---
 description: Security testing for authentication, authorization, injection, XSS, and a security test checklist
+tldr: "Writing tests for any code that handles authentication, authorization, user input, sensitive data, or external integrations. Security must be tested, not assumed."
 ---
 
 # Security Best Practices

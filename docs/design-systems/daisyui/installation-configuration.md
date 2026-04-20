@@ -1,5 +1,6 @@
 ---
 description: Install and configure DaisyUI with Tailwind v4 (CSS-first) or Tailwind v3 (JS config)
+tldr: "Setting up DaisyUI in a new or existing Tailwind project."
 ---
 
 # Installation and Configuration

@@ -1,5 +1,6 @@
 ---
 description: Components for Drupal Views output and grid layouts
+tldr: "Components for Drupal Views output and grid layouts. Use these when rendering Views lists, grids, and tables with Radix styling patterns."
 ---
 
 # Views Components

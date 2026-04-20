@@ -1,5 +1,6 @@
 ---
 description: Figma MCP rate limits by plan and seat type — daily and per-minute call limits, desktop server access requirements, and feature availability by server type
+tldr: "Before committing to a workflow. Rate limits differ dramatically between plans — Starter plan users hit the monthly cap in a single session."
 ---
 
 # Rate Limits and Access Tiers

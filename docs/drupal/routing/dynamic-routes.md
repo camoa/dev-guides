@@ -1,5 +1,6 @@
 ---
 description: Dynamic routes in Drupal - programmatic route generation based on configuration or runtime conditions
+tldr: "Use when routes need to be generated programmatically based on configuration, content, or runtime conditions. Prefer static YAML routes when possible - use dynamic routes only when necessary."
 drupal_version: "11.x"
 ---
 

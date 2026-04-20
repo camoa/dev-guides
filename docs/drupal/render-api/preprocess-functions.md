@@ -1,5 +1,6 @@
 ---
 description: Using preprocess functions to modify or add variables before Twig templates -- render arrays, cache metadata, pre-render callbacks.
+tldr: "When you need to modify or add variables before they reach a Twig template -- add render arrays, compute values, restructure data, add cache metadata."
 ---
 
 # Preprocess Functions

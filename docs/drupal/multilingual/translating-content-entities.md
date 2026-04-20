@@ -1,5 +1,6 @@
 ---
 description: Drupal content entity translation — UI workflow for translating nodes, terms, media, managing translation status
+tldr: "When creating or managing translations for nodes, taxonomy terms, media, blocks, menu links."
 ---
 
 # Translating Content Entities

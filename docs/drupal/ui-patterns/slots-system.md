@@ -1,5 +1,6 @@
 ---
 description: Slots — renderables, multiple sources, and normalization for component placeholders
+tldr: "Slots — renderables, multiple sources, and normalization for component placeholders"
 drupal_version: "10.3+ / 11"
 ---
 

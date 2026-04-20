@@ -1,5 +1,6 @@
 ---
 description: Inject services into ECA plugins using parent::create pattern (NEVER new static)
+tldr: "Inject services when your plugin needs functionality beyond what the base class provides, such as HTTP clients, external APIs, database access, or custom business logic services."
 drupal_version: "11.x"
 ---
 

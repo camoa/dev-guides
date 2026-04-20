@@ -1,5 +1,6 @@
 ---
 description: Migrate a parent select that updates child select options — the most common Drupal AJAX pattern
+tldr: "Use this when migrating a parent select element that dynamically updates a child select element's options based on the parent's value."
 drupal_version: "11.x"
 ---
 

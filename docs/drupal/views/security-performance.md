@@ -1,3 +1,7 @@
+---
+tldr: "Critical security and performance considerations for production views."
+
+---
 ## 31. Security & Performance
 
 ### When to Use

@@ -1,5 +1,6 @@
 ---
 description: Custom Layout plugins for Plus Suite — YAML vs PHP class, icon_map, configurable layouts with Configure tool, and nested layout design
+tldr: "Create custom layout plugins when core's basic one/two/three column layouts don't match your design system's grid. YAML covers most cases; use PHP class only when per-section configuration is needed."
 drupal_version: "11.x"
 ---
 

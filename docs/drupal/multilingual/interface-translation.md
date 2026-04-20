@@ -1,5 +1,6 @@
 ---
 description: Drupal interface translation — importing .po files, custom module translations, generating .pot templates, locale management
+tldr: "When translating UI strings, system messages, form labels, module-provided text — anything wrapped in `t()` or `TranslatableMarkup`."
 ---
 
 # Interface Translation

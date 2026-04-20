@@ -1,5 +1,6 @@
 ---
 description: Facets sort processors — active_widget_order, count_widget_order, display_value_widget_order, raw_value_widget_order, term_weight_widget_order
+tldr: "Use this guide when you need to control the order of facet result items."
 drupal_version: "11.x"
 ---
 

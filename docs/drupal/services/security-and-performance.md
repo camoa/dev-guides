@@ -1,5 +1,6 @@
 ---
 description: Security and performance implications of service design — avoiding user input in definitions, lazy services, tagged iterators, constructor dependency limits, container caching, and profiling.
+tldr: "When you need to understand the security and performance implications of service design and dependency injection patterns."
 ---
 
 # Security & Performance

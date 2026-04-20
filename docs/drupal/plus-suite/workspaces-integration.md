@@ -1,5 +1,6 @@
 ---
 description: Plus Suite Workspaces integration — workspace-aware tempstore keys, isolation per workspace, and known compatibility
+tldr: "Use Plus Suite with Drupal Workspaces when you need staged content publishing. Tempstore+ handles workspace isolation automatically via key suffixes."
 drupal_version: "11.x"
 ---
 

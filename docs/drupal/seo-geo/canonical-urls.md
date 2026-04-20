@@ -1,5 +1,6 @@
 ---
 description: Canonical URL configuration for Drupal 11 — Metatag canonical, www vs non-www, trailing slashes, Redirect module, multilingual hreflang, and pagination
+tldr: "Configure canonical URLs whenever a page is accessible at more than one URL — this is the norm in Drupal, not the exception. Drupal generates clean aliases via Pathauto but the same node is also reachable at `/node/123`."
 drupal_version: "11.x"
 ---
 

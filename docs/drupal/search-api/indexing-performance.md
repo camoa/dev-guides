@@ -1,5 +1,6 @@
 ---
 description: Search API indexing performance — batch size tuning, cron vs Drush, search_api_fast for large sites, and Solr index-only mode
+tldr: "Use this when optimizing how fast content gets indexed, especially for large sites or initial indexing."
 drupal_version: "11.x"
 ---
 

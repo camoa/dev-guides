@@ -1,5 +1,6 @@
 ---
 description: Cryptography fundamentals including AES-256-GCM encryption, RSA asymmetric encryption, Argon2id password hashing, HMAC, secure random generation, and key rotation.
+tldr: "Cryptography protects data confidentiality (encryption), integrity (hashing), and authenticity (signatures). Use for sensitive data at rest and in transit, password storage, message authentication, and digital signatures."
 ---
 
 # Cryptography Basics

@@ -1,5 +1,6 @@
 ---
 description: Search API indexing lifecycle — tracking, indexing steps, deletion, reindex flow, and reference tracking
+tldr: "Use this when you need to understand how content gets tracked, indexed, and maintained in the search engine."
 drupal_version: "11.x"
 ---
 

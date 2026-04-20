@@ -1,5 +1,6 @@
 ---
 description: Security and performance considerations specific to recipes including permission audits and optimization
+tldr: "Apply security and performance best practices when creating recipes to ensure safe and efficient recipe application."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: BEF integration patterns — Views AJAX, Facets, Search API, Select2, Chosen, and companion contrib modules
+tldr: "Use this guide when combining BEF with other Drupal modules — Views AJAX, Facets, Search API, Select2, or Chosen."
 drupal_version: "11.x"
 ---
 

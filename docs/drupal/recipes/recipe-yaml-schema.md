@@ -1,5 +1,6 @@
 ---
 description: Every recipe requires a recipe.yml file defining metadata, dependencies, extensions, configuration, inputs, and content
+tldr: "Every recipe requires a `recipe.yml` file defining metadata, dependencies, extensions, configuration, inputs, and content."
 drupal_version: "11.x"
 ---
 

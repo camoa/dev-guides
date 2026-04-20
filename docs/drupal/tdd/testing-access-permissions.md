@@ -1,5 +1,6 @@
 ---
 description: Test permission checks, role-based access, entity access, and route access in Drupal.
+tldr: "Verifying permission checks, role-based access, entity access, route access."
 ---
 
 # Testing Access & Permissions

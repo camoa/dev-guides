@@ -1,5 +1,6 @@
 ---
 description: Complete reference of all 51 DaisyUI components with props, slots, variants, and usage examples
+tldr: "Complete reference of all 51 DaisyUI components with props, slots, variants, and usage examples"
 ---
 
 # Theme Components Catalog

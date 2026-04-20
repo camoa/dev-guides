@@ -1,5 +1,6 @@
 ---
 description: Write browser tests with BrowserTestBase for full user workflows, form submission, and access control.
+tldr: "Testing complete user workflows: page rendering, form submission, access control, multi-step processes requiring HTTP."
 ---
 
 # Browser Tests with BrowserTestBase

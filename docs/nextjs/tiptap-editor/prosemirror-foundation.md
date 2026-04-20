@@ -1,5 +1,6 @@
 ---
 description: You need to understand Tiptap's underlying architecture to build custom extensions or debug complex issues.
+tldr: "You need to understand Tiptap's underlying architecture to build custom extensions or debug complex issues."
 ---
 
 ## 3.1 ProseMirror Foundation & Concepts

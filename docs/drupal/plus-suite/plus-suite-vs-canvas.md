@@ -1,5 +1,6 @@
 ---
 description: Plus Suite vs Canvas (Experience Builder) — architecture comparison, decision matrix, and coexistence guidance
+tldr: "Use Plus Suite when you have existing Layout Builder investment or a PHP-only team. Use Canvas for new Drupal CMS projects prioritizing long-term core alignment."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Detect swipes, pinch-to-zoom, and long-press with Pointer Events API — touch-action CSS, passive listeners, and 300ms tap delay
+tldr: "Use Pointer Events API for all gestures — it handles mouse, touch, and pen uniformly. Use `touch-action` CSS to declare which axes you own so the browser can optimize scrolling."
 ---
 
 # Touch and Gesture Craft

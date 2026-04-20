@@ -1,5 +1,6 @@
 ---
 description: Media system security and performance — file upload validation, access control, oEmbed security, CSP, image delivery optimization, caching, and CDN integration.
+tldr: "Media system security and performance — file upload validation, access control, oEmbed security, CSP, image delivery optimization, caching, and CDN integration."
 ---
 
 ## 20. Security & Performance

@@ -1,4 +1,5 @@
 ---
+tldr: "When you need to pass data from PHP to a Twig template that is not available through the default variable set."
 topic: drupal/twig
 guide: adding-variables-preprocess
 ---

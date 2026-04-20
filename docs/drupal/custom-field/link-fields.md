@@ -1,5 +1,6 @@
 ---
 description: Link sub-fields with URL, title, attributes, Linkit integration, and security considerations for target_blank links.
+tldr: "You need full link functionality (URL + title + attributes) within a custom field column."
 ---
 
 # Link Sub-Fields

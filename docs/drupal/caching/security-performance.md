@@ -1,5 +1,6 @@
 ---
 description: Ensure cache security against data leakage and optimize cache performance
+tldr: "When you need to ensure cache security and optimal performance. Caching affects both security (sensitive data leakage) and performance (cache hit rates, memory usage)."
 ---
 
 # Security & Performance

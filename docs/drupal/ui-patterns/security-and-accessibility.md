@@ -1,5 +1,6 @@
 ---
 description: Security and accessibility — XSS protection, sanitization, and a11y considerations
+tldr: "Security and accessibility — XSS protection, sanitization, and a11y considerations"
 drupal_version: "10.3+ / 11"
 ---
 

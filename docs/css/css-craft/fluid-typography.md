@@ -1,5 +1,6 @@
 ---
 description: Fluid typography — clamp() type scales, fluid spacing systems, and container-relative sizing with cqi units
+tldr: "Use `clamp()` for font sizes and spacing that scale smoothly between viewport sizes with no jarring breakpoint jumps. Use `cqi` units for component-relative scaling inside container queries."
 ---
 
 # Fluid Typography

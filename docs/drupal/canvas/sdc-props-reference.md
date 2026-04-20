@@ -1,5 +1,6 @@
 ---
 description: Reference for all SDC prop types in Canvas — YAML syntax, Canvas editor widgets, value structures, and gotchas per type.
+tldr: "Use this when defining props in a `*.component.yml` file and you need the exact YAML syntax for each prop type, what Canvas editor widget each produces, and Canvas-specific annotations (`$ref`, `contentMediaType`, `x-formatting-context`)."
 drupal_version: "11.x"
 ---
 

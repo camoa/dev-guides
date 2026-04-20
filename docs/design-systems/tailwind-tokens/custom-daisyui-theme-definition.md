@@ -1,5 +1,6 @@
 ---
 description: Create branded DaisyUI themes with Tailwind v4 syntax
+tldr: "Use this when you need to create a branded DaisyUI theme for your project."
 ---
 
 # Custom DaisyUI Theme Definition

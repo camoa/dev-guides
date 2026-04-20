@@ -1,5 +1,6 @@
 ---
 description: Security, performance, and development standards best practices for writing maintainable Drupal tests
+tldr: "Consult this guide when writing tests, reviewing code, or establishing testing standards for your team."
 drupal_version: "11.x"
 ---
 

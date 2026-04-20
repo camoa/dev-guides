@@ -1,5 +1,6 @@
 ---
 description: Integrate plugin architectures with Drupal event system
+tldr: "Use Provider pattern events for internal Drupal workflow integration. Use Service Collector polling events for external system integration via REST API."
 drupal_version: "11.x"
 ---
 

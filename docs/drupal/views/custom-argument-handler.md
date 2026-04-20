@@ -1,3 +1,7 @@
+---
+tldr: "URL-based filtering with custom logic: argument validation, default values, custom summary views, title overrides."
+
+---
 ## 23. Custom Argument Handler (Contextual Filter)
 
 ### When to Use

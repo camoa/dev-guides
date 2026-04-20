@@ -1,5 +1,6 @@
 ---
 description: Configuring Content Security Policy, CORS, HSTS, and other HTTP security headers to prevent clickjacking, MIME sniffing, and XSS.
+tldr: "Configuring HTTP security headers to prevent clickjacking, MIME sniffing, XSS, and control cross-origin requests."
 ---
 
 # Security Headers (CSP, CORS)

@@ -1,5 +1,6 @@
 ---
 description: Drupal routing performance - optimize route definitions, access checks, and dynamic route generation
+tldr: "Use when routes are high-traffic, when using dynamic routes or custom access checkers, or when routes load significant data. Performance issues in routing affect every page load."
 drupal_version: "11.x"
 ---
 

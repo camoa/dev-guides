@@ -1,5 +1,6 @@
 ---
 description: Build wizard-style multi-step forms with AJAX navigation using form_state step tracking
+tldr: "Use multi-step AJAX forms for wizard-style workflows where users navigate sequential steps without page reloads. Use standard forms for simple one-page submissions."
 drupal_version: "11.x"
 ---
 

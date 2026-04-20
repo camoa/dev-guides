@@ -1,5 +1,6 @@
 ---
 description: Salesforce troubleshooting — auth failures, push not triggering, pull not creating entities, field mapping issues, stuck queues, API limits
+tldr: "Use this guide when sync is not working as expected. Enable `salesforce_logger` first to capture errors."
 drupal_version: "11.x"
 ---
 

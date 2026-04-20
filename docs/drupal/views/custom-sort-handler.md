@@ -1,3 +1,7 @@
+---
+tldr: "Custom sort logic: computed fields, weighted sorting, multi-column sorts, integration with external ranking systems."
+
+---
 ## 22. Custom Sort Handler
 
 ### When to Use

@@ -1,5 +1,6 @@
 ---
 description: Implement dark mode in Tailwind — choose between automatic system preference, class-based toggle, or design token approach.
+tldr: "Use the default `dark:` variant for automatic system preference. Use class or data-attribute strategy when a manual toggle is required."
 ---
 
 # Dark Mode

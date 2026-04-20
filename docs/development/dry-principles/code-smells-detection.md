@@ -1,5 +1,6 @@
 ---
 description: Detecting duplication through code review, automated tools, and metrics - plus identifying wrong abstractions
+tldr: "When reviewing code, performing maintenance, or evaluating technical debt related to duplication."
 ---
 
 # Code Smells and Detection

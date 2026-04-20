@@ -1,5 +1,6 @@
 ---
 description: Set up automated quality gates at pre-commit, pre-push, and CI/CD stages with GrumPHP, PHPStan, and PHPCS.
+tldr: "Establishing automated quality checks at different stages of development to catch issues early, enforce standards, and prevent broken code from reaching production."
 ---
 
 # Quality Gates & Audit Checklist

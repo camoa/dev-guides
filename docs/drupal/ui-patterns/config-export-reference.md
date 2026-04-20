@@ -1,5 +1,6 @@
 ---
 description: Config export reference — ui_patterns_component schema, source types, and integration file locations
+tldr: "When you need to understand, construct, or debug UI Patterns configuration YAML for deployment, recipes, config management, or programmatic setup. This section documents the core schema that all four integrations share and provides a…"
 drupal_version: "10.3+ / 11"
 ---
 

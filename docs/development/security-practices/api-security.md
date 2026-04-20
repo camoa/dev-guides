@@ -1,5 +1,6 @@
 ---
 description: API security covering authentication (JWT, API keys), rate limiting, input validation, CORS, mass assignment prevention, and GraphQL security.
+tldr: "Every API endpoint — REST, GraphQL, gRPC, webhooks — requires security controls. APIs are a prime attack vector: programmatic access, often less monitored than web UIs, frequently exposed to the internet."
 ---
 
 # API Security

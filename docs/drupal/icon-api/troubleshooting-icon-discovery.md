@@ -1,5 +1,6 @@
 ---
 description: Debug when icons aren't appearing, pack definitions aren't loading, or icon IDs aren't resolving
+tldr: "Icons aren't appearing, pack definitions aren't loading, or icon IDs aren't resolving correctly."
 drupal_version: "11.x"
 ---
 

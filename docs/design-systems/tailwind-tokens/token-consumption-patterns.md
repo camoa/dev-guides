@@ -1,5 +1,6 @@
 ---
 description: Access design tokens from CSS, Twig, JavaScript, and Drupal preprocess
+tldr: "Use this when you need to access design tokens from CSS, Twig templates, JavaScript, or Drupal preprocess functions."
 ---
 
 # Token Consumption Patterns

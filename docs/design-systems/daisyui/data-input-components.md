@@ -1,5 +1,6 @@
 ---
 description: Reference for DaisyUI form input components — input, fieldset, select, textarea, checkbox, toggle, range, and rating
+tldr: "Form elements: text fields, selections, toggles, and form structure."
 ---
 
 # Data Input Components

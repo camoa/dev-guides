@@ -1,5 +1,6 @@
 ---
 description: Create test modules for fixtures, mock services, test-specific config, and hook testing.
+tldr: "Providing fixtures, mock services, test-specific config, or hooks for testing custom modules."
 ---
 
 # Test Modules

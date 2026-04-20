@@ -1,5 +1,6 @@
 ---
 description: Drupal programmatic entity translation — addTranslation, getTranslation, hasTranslation API, translation metadata
+tldr: "When creating or managing entity translations in code — migrations, import scripts, automated workflows, REST API endpoints."
 ---
 
 # Programmatic Entity Translation

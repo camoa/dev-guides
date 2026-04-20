@@ -1,5 +1,6 @@
 ---
 description: Design system recognition — 9. reference design systems
+tldr: "You're comparing your analysis to established design systems You need examples of token structures and component hierarchies You're learning patterns from industry-leading systems"
 ---
 
 ## 9. Reference Design Systems

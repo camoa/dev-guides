@@ -1,5 +1,6 @@
 ---
 description: Install DeepChat in Next.js and configure dynamic import to avoid SSR errors
+tldr: "Use dynamic import with `ssr: false` for all DeepChat instances in Next.js. DeepChat is a web component that requires browser APIs."
 ---
 
 # Installation & Setup

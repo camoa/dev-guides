@@ -1,5 +1,6 @@
 ---
 description: Load, create, modify, and place blocks programmatically via code
+tldr: "Use in update hooks, migrations, or automated tasks when you need to load, create, modify, or place blocks via code rather than the UI."
 drupal_version: "11.x"
 ---
 

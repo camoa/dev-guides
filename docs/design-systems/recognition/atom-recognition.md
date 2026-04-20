@@ -1,5 +1,6 @@
 ---
 description: Design system recognition — 3. atom recognition
+tldr: "You're analyzing a UI and need to identify the smallest functional building blocks You're extracting foundational elements from HTML, Figma, or screenshots You need to catalog all atoms before identifying molecules"
 ---
 
 ## 3. Atom Recognition

@@ -1,5 +1,6 @@
 ---
 description: 8-stage AI content workflow - from strategic planning to publishing and discovery optimization
+tldr: "Use the 8-stage AI content workflow when creating, managing, or optimizing content at scale. Use when you need consistent quality, SEO optimization, and strategic alignment."
 drupal_version: "11.x"
 ---
 

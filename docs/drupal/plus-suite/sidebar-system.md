@@ -1,5 +1,6 @@
 ---
 description: Plus Suite sidebar system — left/right/settings sidebar types, cookie-based visibility, JS architecture, and building custom sidebar content
+tldr: "Build custom sidebar content in tool plugins. Avoid heavy content in sidebars — they rebuild on every tool switch."
 drupal_version: "11.x"
 ---
 

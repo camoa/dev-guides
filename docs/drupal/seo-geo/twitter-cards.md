@@ -1,5 +1,6 @@
 ---
 description: Configure Twitter/X Cards in Drupal 11 using the metatag_twitter_cards submodule — card types, token mappings, and OG fallback strategy
+tldr: "You need content shared on Twitter/X to display a rich card preview rather than a bare link. Enable the `metatag_twitter_cards` submodule."
 drupal_version: "11.x"
 ---
 

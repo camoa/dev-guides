@@ -1,5 +1,6 @@
 ---
 description: Drupal Twig translation — t filter, trans block, plural forms, field output, preprocess translation patterns
+tldr: "When translating text in Twig templates — theme templates, custom template files, template suggestions."
 ---
 
 # Twig Translation

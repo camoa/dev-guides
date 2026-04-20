@@ -1,3 +1,7 @@
+---
+tldr: "When Views UI configuration and programmatic view modification aren't sufficient — you need custom data processing, specialized formatting, or integration with non-standard data sources."
+
+---
 ## 19. Views Plugin Architecture
 
 ### When to Use

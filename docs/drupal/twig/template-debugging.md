@@ -1,4 +1,5 @@
 ---
+tldr: "When you need to identify which template is rendering, what variables are available, or why output looks wrong."
 topic: drupal/twig
 guide: template-debugging
 ---

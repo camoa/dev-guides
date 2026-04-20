@@ -1,5 +1,6 @@
 ---
 description: Store and manage plugin configuration across patterns
+tldr: "Store plugin configuration in entities for Foundation pattern. Use config objects for Provider pattern."
 drupal_version: "11.x"
 ---
 

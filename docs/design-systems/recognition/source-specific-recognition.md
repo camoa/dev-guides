@@ -1,5 +1,6 @@
 ---
 description: Design system recognition — 8. source-specific recognition
+tldr: "You're analyzing an HTML design system or component library You need to extract design tokens from CSS custom properties You're reverse-engineering an existing website's design system"
 ---
 
 ## 8. Source-Specific Recognition

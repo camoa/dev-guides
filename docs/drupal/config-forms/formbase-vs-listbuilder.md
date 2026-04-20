@@ -1,5 +1,6 @@
 ---
 description: Choose between FormBase and ListBuilder for admin interfaces
+tldr: "Use FormBase/ConfigFormBase when building settings pages or custom admin forms. Use ListBuilder when displaying entity collections with standard CRUD operations."
 drupal_version: "11.x"
 ---
 

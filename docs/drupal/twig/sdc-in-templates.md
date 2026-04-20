@@ -1,4 +1,5 @@
 ---
+tldr: "When including or rendering Single Directory Components from Twig templates, or when a component needs to embed another SDC component."
 topic: drupal/twig
 guide: sdc-in-templates
 ---

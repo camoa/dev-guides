@@ -1,5 +1,6 @@
 ---
 description: Search API module stacks by site size — small (DB), medium (Solr), large/enterprise (Solr Cloud), and decoupled (JSON:API)
+tldr: "Use this when planning which modules to install for your site's search functionality."
 drupal_version: "11.x"
 ---
 

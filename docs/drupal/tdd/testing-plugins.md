@@ -1,5 +1,6 @@
 ---
 description: Test Drupal plugins including blocks, field types, formatters, widgets, and views plugins.
+tldr: "Testing blocks, field types, field formatters, field widgets, views plugins, and other plugin derivatives."
 ---
 
 # Testing Plugins

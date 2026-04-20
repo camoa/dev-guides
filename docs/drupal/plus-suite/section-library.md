@@ -1,5 +1,6 @@
 ---
 description: Section Library — save and reuse Layout Builder sections, deep cloning, SectionLibraryTemplate entity, and LB+ toolbar integration
+tldr: "Use Section Library to save reusable section templates (with all their blocks) that content editors can drag into any page. Skip it for one-off layouts."
 drupal_version: "11.x"
 ---
 

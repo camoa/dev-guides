@@ -1,5 +1,6 @@
 ---
 description: IntersectionObserver for entry detection, scroll-linked state, lazy load, infinite scroll, and scroll position restoration
+tldr: "Use `IntersectionObserver` for threshold-based events (entering viewport, lazy load, infinite scroll). Use `scroll` + rAF for continuous position-linked updates (parallax, progress bars)."
 ---
 
 # Scroll Interaction Patterns

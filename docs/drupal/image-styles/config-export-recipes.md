@@ -1,5 +1,6 @@
 ---
 description: Export image styles for version control and create distribution recipes with config dependencies and import strategies
+tldr: "Use this when you need to export image styles for version control or create a recipe to distribute image styles as reusable config."
 ---
 
 # Config Export & Recipes

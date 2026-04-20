@@ -1,5 +1,6 @@
 ---
 description: Salesforce optional submodules — logger, example, webform, address, SOAP — when to enable each
+tldr: "Enable optional submodules only when you need their specific functionality. The `salesforce_example` module is for development reference only — never enable in production."
 drupal_version: "11.x"
 ---
 

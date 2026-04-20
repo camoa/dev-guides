@@ -1,5 +1,6 @@
 ---
 description: You've identified organisms using the Design System Recognition Guide
+tldr: "You've identified organisms using the Design System Recognition Guide You're building complex sections like navbars, heroes, card grids You need to integrate organisms with Layout Builder"
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Critical SCSS patterns and anti-patterns for Bootstrap customization
+tldr: "Use this when writing SCSS for Bootstrap customization. Apply these patterns to prevent technical debt and maintain upgrade compatibility."
 ---
 
 # SCSS Best Practices

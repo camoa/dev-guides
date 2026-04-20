@@ -1,5 +1,6 @@
 ---
 description: Drupal entity type hierarchy follows LSP - subtypes can substitute for base types
+tldr: "Drupal's entity system follows LSP -- any ContentEntityBase subclass (Node, User, Term) can be used wherever ContentEntityBase is expected. Behavioral contracts must be preserved."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Test config schema validation, default config values, config forms, and config overrides in Drupal.
+tldr: "Testing config schema, config import/export, default config, config overrides."
 ---
 
 # Testing Configuration

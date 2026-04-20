@@ -1,5 +1,6 @@
 ---
 description: Enable JavaScript aggregation and minification for production performance
+tldr: "Use in production environments - always enable JavaScript aggregation for performance."
 drupal_version: "10.x/11.x"
 ---
 

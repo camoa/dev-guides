@@ -1,5 +1,6 @@
 ---
 description: Reuse business logic between web controllers and Drush CLI commands by extracting shared logic into services.
+tldr: "When you need to perform operations via command line (cron, batch processing, deployments) and want to reuse the same business logic that exists in web controllers/forms."
 ---
 
 # Drush and CLI Reuse

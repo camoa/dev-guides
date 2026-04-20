@@ -1,5 +1,6 @@
 ---
 description: Components for displaying Drupal content entities, fields, media, and user profiles
+tldr: "Components for displaying Drupal content entities, fields, media, and user profiles. Use these when rendering nodes, blocks, taxonomy terms, comments, media items, images, or user profiles in various view modes."
 ---
 
 # Content Display Components

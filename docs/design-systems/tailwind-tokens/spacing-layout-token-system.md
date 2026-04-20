@@ -1,5 +1,6 @@
 ---
 description: Build semantic spacing and layout tokens for consistent vertical rhythm
+tldr: "Use this when building semantic spacing and layout tokens for consistent vertical rhythm, grid gaps, and container widths."
 ---
 
 # Spacing & Layout Token System

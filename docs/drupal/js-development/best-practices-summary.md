@@ -1,5 +1,6 @@
 ---
 description: JavaScript development standards checklist for Drupal projects
+tldr: "Use as a code review checklist and development standards reference."
 drupal_version: "10.x/11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Short-term memory plugins — manage conversation context within a session
+tldr: "Use short-term memory plugins when you need to manage conversation context within a session beyond the default history mechanism in `ai_assistant_api`. For most cases, set `allow_history` on the `ai_assistant` config entity instead."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Strategies for migrating Twig templates to SDC and overriding components
+tldr: "Use this when migrating existing Twig templates to SDC, overriding contrib module/theme components, or implementing field formatters with components."
 drupal_version: "11.x"
 ---
 

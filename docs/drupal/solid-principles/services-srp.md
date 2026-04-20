@@ -1,5 +1,6 @@
 ---
 description: Keep Drupal services focused on a single responsibility - one reason to change per service
+tldr: "Every service should have one reason to change. If a service handles node access grants AND email notifications, split it."
 drupal_version: "11.x"
 ---
 

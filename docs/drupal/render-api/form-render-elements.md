@@ -1,5 +1,6 @@
 ---
 description: Using form elements outside forms as render-only elements -- textfield, select, checkboxes, radios, tableselect.
+tldr: "Form elements can be used **outside of forms** as render-only elements when you need their HTML structure but not their input functionality. Inside forms, they become interactive with validation and submission handling."
 ---
 
 # Form Render Elements

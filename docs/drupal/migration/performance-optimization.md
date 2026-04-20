@@ -1,5 +1,6 @@
 ---
 description: Memory management and batch processing for large-scale migrations
+tldr: "Large migrations (10,000+ nodes) require memory management, batch processing, and query optimization. Monitor PHP memory, database connections, and migration speed."
 drupal_version: "11.x"
 ---
 

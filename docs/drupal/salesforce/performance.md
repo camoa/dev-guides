@@ -1,5 +1,6 @@
 ---
 description: Salesforce performance — caching strategy, queue processing for high volume, API call optimization for push and pull
+tldr: "Optimize Salesforce sync performance when experiencing high API usage, slow entity saves, or large queue backlogs. The primary levers are: caching object metadata, async queue processing, and selective field/record queries."
 drupal_version: "11.x"
 ---
 

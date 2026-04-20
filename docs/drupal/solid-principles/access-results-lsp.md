@@ -1,5 +1,6 @@
 ---
 description: Combine Drupal AccessResult objects correctly following LSP substitutability
+tldr: "AccessResult follows LSP via three immutable subclasses: Allowed, Forbidden, Neutral. They can be combined with `orIf()`/`andIf()` and always produce valid AccessResultInterface."
 drupal_version: "11.x"
 ---
 

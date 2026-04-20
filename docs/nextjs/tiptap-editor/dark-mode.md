@@ -1,5 +1,6 @@
 ---
 description: You need to support light and dark themes.
+tldr: "You need to support light and dark themes."
 ---
 
 ## 16.2 Dark Mode & Theme Switching

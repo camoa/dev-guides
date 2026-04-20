@@ -1,5 +1,6 @@
 ---
 description: Recognizing and avoiding dangerous security anti-patterns in Drupal including missing access checks, SQL injection, XSS holes, and CSRF bypass.
+tldr: "During code review or when debugging security issues -- recognize dangerous patterns to avoid them."
 ---
 
 # Anti-Patterns and Common Mistakes

@@ -1,5 +1,6 @@
 ---
 description: Convert React event handlers to Drupal behaviors and server-side patterns
+tldr: "Use this when converting React event handlers (`onClick`, `onChange`, `onSubmit`, etc.) to Drupal's server-rendered architecture. React events have NO direct Twig equivalent."
 drupal_version: "11.x"
 ---
 

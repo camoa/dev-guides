@@ -1,5 +1,6 @@
 ---
 description: Test custom routes, controller methods, route parameters, and JSON responses in Drupal.
+tldr: "Testing custom routes, controller methods, route parameters, response codes."
 ---
 
 # Testing Routes & Controllers

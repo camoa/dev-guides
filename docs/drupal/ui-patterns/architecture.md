@@ -1,5 +1,6 @@
 ---
 description: UI Patterns plugin system — managers, services, and rendering pipeline
+tldr: "UI Patterns plugin system — managers, services, and rendering pipeline"
 drupal_version: "10.3+ / 11"
 ---
 

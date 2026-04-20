@@ -1,5 +1,6 @@
 ---
 description: How Drupal loads CSS/JS for HTMX responses — differential loading, drupalSettings merge, and history cleanup
+tldr: "Reference this when debugging missing assets in HTMX responses or understanding how differential loading works."
 drupal_version: "11.x"
 ---
 

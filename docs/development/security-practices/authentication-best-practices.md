@@ -1,5 +1,6 @@
 ---
 description: Secure authentication covering password hashing (Argon2id, bcrypt), rate limiting, MFA, session management, and OAuth 2.0 with PKCE.
+tldr: "Every system that identifies users needs secure authentication. This covers password-based authentication, multi-factor authentication, session management, and modern authentication protocols."
 ---
 
 # Authentication Best Practices

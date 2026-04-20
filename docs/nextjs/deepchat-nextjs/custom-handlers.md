@@ -1,5 +1,6 @@
 ---
 description: Implement custom request handlers, transform requests/responses, and add retry logic with DeepChat
+tldr: "Use custom handler for complex request flow or retry logic. Use interceptors for simple transforms."
 ---
 
 # Custom Request/Response Handlers

@@ -1,5 +1,6 @@
 ---
 description: Complete reference of all 28 DaisyUI v5 CSS variables
+tldr: "Use this when you need to know every CSS variable that DaisyUI v5 provides. This is the complete reference for theming."
 ---
 
 # DaisyUI CSS Variable Reference

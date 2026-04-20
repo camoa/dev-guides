@@ -1,5 +1,6 @@
 ---
 description: Switch between 35 DaisyUI themes and customize 28 CSS design tokens via the admin UI
+tldr: "Switch between 35 DaisyUI themes and customize 28 CSS design tokens via the admin UI"
 ---
 
 # UI Skins Integration

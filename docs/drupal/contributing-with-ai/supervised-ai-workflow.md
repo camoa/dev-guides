@@ -1,5 +1,6 @@
 ---
 description: Supervised AI workflow — the four failure modes of unsupervised AI contribution (no memory, context poisoning, confident-but-wrong, training data bias) and guardrails for each
+tldr: "Use this when you want to understand why unsupervised AI contribution fails and how to build guardrails into your AI-assisted development workflow."
 drupal_version: "11.x"
 ---
 

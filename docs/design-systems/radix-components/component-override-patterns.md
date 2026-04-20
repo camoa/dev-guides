@@ -1,5 +1,6 @@
 ---
 description: Modifying Radix base component for sub-theme
+tldr: "Modifying Radix base component for sub-theme."
 ---
 
 # Component Override Patterns

@@ -1,3 +1,7 @@
+---
+tldr: "Complex JOIN logic beyond standard entity reference relationships: multi-column joins, conditional joins, subquery-based relationships."
+
+---
 ## 24. Custom Relationship Handler
 
 ### When to Use

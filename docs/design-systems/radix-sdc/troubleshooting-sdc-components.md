@@ -1,5 +1,6 @@
 ---
 description: Your SDC component isn't being discovered by Drupal
+tldr: "Your SDC component isn't being discovered by Drupal Bootstrap classes aren't being applied correctly in your component You need to debug component registration or rendering issues You've replaced/overridden a Radix component and it's not…"
 drupal_version: "11.x"
 ---
 

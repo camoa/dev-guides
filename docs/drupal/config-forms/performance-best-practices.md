@@ -1,5 +1,6 @@
 ---
 description: Optimize configuration forms to avoid performance bottlenecks
+tldr: "Optimize configuration forms to avoid performance bottlenecks, especially forms with many operations or large datasets."
 drupal_version: "11.x"
 ---
 

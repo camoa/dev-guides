@@ -1,5 +1,6 @@
 ---
 description: CSS scroll-snap carousel patterns — full-width, multi-item, fade effect, CSS-only controls (Chrome 135+), and cross-browser fallbacks
+tldr: "Use CSS scroll-snap when you need a carousel, image gallery, slider, or paginated scrolling experience with native browser physics. Use JavaScript carousel libraries when you need infinite looping — CSS scroll-snap does not support it…"
 drupal_version: "11.x"
 ---
 

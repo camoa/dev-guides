@@ -1,5 +1,6 @@
 ---
 description: Coverage targets by context, what to test vs skip, branch vs line coverage, and coverage tools
+tldr: "You're deciding what to test, how much to test, and evaluating whether your test suite is adequate. Coverage metrics are tools for finding gaps, not goals to hit."
 ---
 
 # Test Coverage Strategy

@@ -1,3 +1,7 @@
+---
+tldr: "When you need a full page with a dedicated URL, menu integration, and optional admin theme."
+
+---
 ## 4. Page Display
 
 ### When to Use

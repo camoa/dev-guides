@@ -1,5 +1,6 @@
 ---
 description: Migrate AJAX button or link that loads dynamic content into a container — replace AjaxResponse with render arrays
+tldr: "Use this when migrating a button or link that loads dynamic content into a container on click — \"Load More\", \"Refresh\", or content panel patterns."
 drupal_version: "11.x"
 ---
 

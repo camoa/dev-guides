@@ -1,5 +1,6 @@
 ---
 description: Media access control and permissions — role-based permissions, type-specific grants, and programmatic access checking.
+tldr: "You need to control who can create, edit, delete, and view media."
 ---
 
 ## 12. Media Access & Permissions

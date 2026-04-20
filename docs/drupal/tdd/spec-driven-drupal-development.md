@@ -1,5 +1,6 @@
 ---
 description: Apply TDD spec-driven workflow to Drupal module development with specification, test, implement, refactor cycle.
+tldr: "Applying TDD principles to Drupal module development: write specification, write test, implement feature."
 ---
 
 # Spec-Driven Drupal Development

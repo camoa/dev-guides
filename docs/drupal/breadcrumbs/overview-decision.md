@@ -1,5 +1,6 @@
 ---
 description: Decide between core PathBasedBreadcrumbBuilder, Easy Breadcrumb module, and custom builders for Drupal breadcrumbs
+tldr: "Use core `PathBasedBreadcrumbBuilder` when basic path-hierarchy breadcrumbs are sufficient. Use Easy Breadcrumb when you need real page titles, current page as final segment, or JSON-LD SEO output."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: "Support multiple languages in your Next.js site backed by multilingual Drupal content."
+tldr: "Support multiple languages in your Next.js site backed by multilingual Drupal content."
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
 ---

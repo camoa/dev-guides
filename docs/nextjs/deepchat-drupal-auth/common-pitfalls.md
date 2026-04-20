@@ -1,5 +1,6 @@
 ---
 description: Common CSRF and session pitfalls in DeepChat + Drupal OAuth — mismatched auth contexts, missing session start, wrong token placement
+tldr: "Use this guide when CSRF validation is failing (`csrf_token URL query argument is invalid`) or chat requests return 403. Use [Debugging Checklist](debugging-checklist.md) for systematic curl-based diagnosis."
 drupal_version: "11.x"
 ---
 

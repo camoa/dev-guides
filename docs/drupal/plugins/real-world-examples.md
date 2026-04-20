@@ -1,5 +1,6 @@
 ---
 description: Real-world implementation patterns from Commerce, AI, and Orchestration modules
+tldr: "Reference these patterns when implementing similar plugin architectures. Commerce Payment for Foundation pattern, AI module for Provider pattern, Orchestration module for Service Collector pattern."
 drupal_version: "11.x"
 ---
 

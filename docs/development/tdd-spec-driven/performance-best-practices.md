@@ -1,5 +1,6 @@
 ---
 description: Test suite speed targets, making tests fast, performance testing strategy, and identifying bottlenecks
+tldr: "Writing performance-critical code, optimizing slow tests, or ensuring your test suite runs fast enough to be run frequently."
 ---
 
 # Performance Best Practices

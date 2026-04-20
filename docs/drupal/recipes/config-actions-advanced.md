@@ -1,5 +1,6 @@
 ---
 description: Complex config action scenarios including wildcards, optional config, chaining, and input substitution
+tldr: "Use advanced config action patterns when you need wildcards for bulk operations, optional config handling, chaining multiple actions, or input substitution."
 drupal_version: "11.x"
 ---
 

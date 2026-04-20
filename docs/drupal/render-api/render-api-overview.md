@@ -1,5 +1,6 @@
 ---
 description: When to use render arrays vs other approaches for generating HTML output in Drupal.
+tldr: "When you need to generate HTML output in Drupal -- controllers, blocks, forms, field formatters, views, any module that produces page content."
 ---
 
 # Render API Overview

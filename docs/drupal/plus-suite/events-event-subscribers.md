@@ -1,5 +1,6 @@
 ---
 description: Complete event catalog for Plus Suite — Navigation+, LB+, Edit+, and Twig Events with extension point reference
+tldr: "Subscribe to Plus Suite events to customize behavior without overriding core module code. Check this catalog before writing new hooks or overrides."
 drupal_version: "11.x"
 ---
 

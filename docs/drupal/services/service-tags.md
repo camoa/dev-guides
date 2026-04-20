@@ -1,5 +1,6 @@
 ---
 description: Catalog of core service tags — event_subscriber, cache.context, cache.bin, access_check, breadcrumb_builder, service_collector, theme_negotiator, path processors, and more.
+tldr: "When you need to mark a service for special processing by compiler passes — tags group services by purpose and enable extensible architectures."
 ---
 
 # Service Tags

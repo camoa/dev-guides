@@ -1,3 +1,7 @@
+---
+tldr: "When you need to programmatically alter which styles are available, modify CSS classes before rendering, or integrate custom logic into the style selection process."
+
+---
 ## 11.4. Extending Layout Builder Styles
 
 ### When to Use

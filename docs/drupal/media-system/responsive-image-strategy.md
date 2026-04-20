@@ -1,5 +1,6 @@
 ---
 description: The key pattern connecting media view modes to responsive image delivery — breakpoints, image styles, responsive image styles, and the full delivery chain.
+tldr: "You need to deliver optimized images across devices and screen densities. This pattern connects media display configuration to responsive image delivery."
 ---
 
 ## 7. The Responsive Image Strategy

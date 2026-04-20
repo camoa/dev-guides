@@ -1,5 +1,6 @@
 ---
 description: Salesforce OAuth 2.0 Web Server authentication setup — when to use OAuth vs JWT, Connected App configuration
+tldr: "Use OAuth when interactive user authorization is needed or for single-org integrations. Use JWT when server-to-server automation is required, no interactive auth is possible, or multiple orgs are involved."
 drupal_version: "11.x"
 ---
 

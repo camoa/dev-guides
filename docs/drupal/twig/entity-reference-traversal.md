@@ -1,4 +1,5 @@
 ---
+tldr: "When a field references another entity (taxonomy term, media, user, paragraph, another node) and you need to access the referenced entity's data in Twig."
 topic: drupal/twig
 guide: entity-reference-traversal
 ---

@@ -1,5 +1,6 @@
 ---
 description: Use config overrides to change configuration values without modifying stored config
+tldr: "Config overrides let you change configuration values without modifying stored config. Use for environment-specific settings (dev/staging/prod)."
 drupal_version: "11.x"
 ---
 

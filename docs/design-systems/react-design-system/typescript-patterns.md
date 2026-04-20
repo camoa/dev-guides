@@ -1,5 +1,6 @@
 ---
 description: Type React design system components with ComponentPropsWithoutRef, VariantProps, discriminated unions, and React 19 ref patterns.
+tldr: "Use in every design system component. TypeScript is how the system communicates its API to consumers — it's not optional."
 ---
 
 # TypeScript Patterns

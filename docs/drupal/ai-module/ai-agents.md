@@ -1,5 +1,6 @@
 ---
 description: AI Agents — ReAct loop, config entities, tool usage, orchestration, and security
+tldr: "Use this guide when building autonomous AI agents that make decisions. Use [AI Automators](ai-automators.md) for fixed field-population workflows that don't need autonomous decision-making."
 drupal_version: "11.x"
 ---
 

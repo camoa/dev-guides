@@ -1,5 +1,6 @@
 ---
 description: storybook-addon-sdc for offline/decoupled Storybook development with interactive Controls, without a running Drupal instance
+tldr: "Use `storybook-addon-sdc` when you need interactive Controls without a running Drupal instance — offline development, CI/CD pipelines, or rapid prototyping. Tradeoff: Drupal-specific Twig functions are not available — output may differ…"
 drupal_version: "11.x"
 ---
 

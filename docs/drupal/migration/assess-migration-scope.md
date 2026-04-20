@@ -1,5 +1,6 @@
 ---
 description: Inventory and timeline estimation for D7 to D11 migration projects
+tldr: "Before writing any migration code, complete a comprehensive inventory of your D7 site. Assessment phase prevents mid-migration surprises, scope creep, and timeline failures."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Animate elements in as they scroll into view — IntersectionObserver vs CSS scroll-driven, stagger timing, professional distance ranges
+tldr: "Use entrance animations for content appearing on scroll to signal freshness and guide the eye. Use IntersectionObserver for wide browser support and precise control; use scroll-driven `animation-timeline: view()` for pure CSS progressive…"
 ---
 
 # Entrance Animations

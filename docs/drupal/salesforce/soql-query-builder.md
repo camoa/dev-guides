@@ -1,5 +1,6 @@
 ---
 description: SOQL query builder — SelectQuery properties, conditions, operators, pagination, raw SOQL with SelectQueryRaw
+tldr: "Use `SelectQuery` for programmatic SOQL queries with conditions. Use `SelectQueryRaw` for complex queries with subqueries or syntax not supported by the builder."
 drupal_version: "11.x"
 ---
 

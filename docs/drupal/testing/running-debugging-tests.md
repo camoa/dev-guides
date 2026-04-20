@@ -1,5 +1,6 @@
 ---
 description: Command-line patterns for running and debugging PHPUnit tests in Drupal modules
+tldr: "Use this guide when executing tests locally or in CI/CD, or when debugging failing tests."
 drupal_version: "11.x"
 ---
 

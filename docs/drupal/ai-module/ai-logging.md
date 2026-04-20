@@ -1,5 +1,6 @@
 ---
 description: AI Logging — deprecated entity-based request logging for development debugging only
+tldr: "**Status: DEPRECATED** — use [AI Observability](ai-observability.md) for production monitoring. `ai_logging` is development/debugging only and stores AI requests as `ai_log` entities in the database."
 drupal_version: "11.x"
 ---
 

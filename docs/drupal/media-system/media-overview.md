@@ -1,5 +1,6 @@
 ---
 description: When to use Drupal's Media subsystem vs direct file/image fields — architecture, decision criteria, and common mistakes.
+tldr: "You're deciding whether to use the Media subsystem or direct file/image fields on your content types."
 ---
 
 ## 1. Media System Overview

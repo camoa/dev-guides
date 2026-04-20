@@ -1,5 +1,6 @@
 ---
 description: Understanding Drupal's authentication providers including cookie-based auth, API keys, OAuth, and custom authentication implementation.
+tldr: "Understanding how Drupal identifies users and when to implement custom authentication providers (OAuth, SAML, LDAP, API keys)."
 ---
 
 # Authentication System

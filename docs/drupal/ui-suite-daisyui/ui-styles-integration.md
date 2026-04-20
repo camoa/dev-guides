@@ -1,5 +1,6 @@
 ---
 description: Apply 30+ utility class styles to blocks, Layout Builder sections, and pattern instances
+tldr: "Apply 30+ utility class styles to blocks, Layout Builder sections, and pattern instances"
 ---
 
 # UI Styles Integration

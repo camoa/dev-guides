@@ -1,5 +1,6 @@
 ---
 description: "Understanding the architecture is essential when customizing JSON:API behavior, debugging issues, or extending functionality."
+tldr: "Understanding the architecture is essential when customizing JSON:API behavior, debugging issues, or extending functionality."
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 ---

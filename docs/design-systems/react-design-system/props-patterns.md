@@ -1,5 +1,6 @@
 ---
 description: Design component prop APIs using discriminated unions, polymorphic as props, spread rest, and TypeScript defaults.
+tldr: "Use these patterns when defining the public API of a component. Well-designed props prevent breaking changes and communicate intent clearly."
 ---
 
 # Props Patterns

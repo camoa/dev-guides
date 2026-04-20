@@ -1,5 +1,6 @@
 ---
 description: AI-powered SEO - automated metatags, structured data, E-E-A-T implementation
+tldr: "Use AI-powered SEO automation to generate optimized meta tags, descriptions, structured data, and content that ranks well in both traditional search engines and AI-powered discovery tools (ChatGPT, Perplexity, Google SGE)."
 drupal_version: "11.x"
 ---
 

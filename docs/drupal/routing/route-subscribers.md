@@ -1,5 +1,6 @@
 ---
 description: Route subscribers - alter existing core or contrib routes without patching
+tldr: "Use when you need to alter existing routes from core or contrib modules. Do NOT use to create routes - use `route_callbacks` or static YAML instead."
 drupal_version: "11.x"
 ---
 

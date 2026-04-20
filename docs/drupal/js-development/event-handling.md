@@ -1,5 +1,6 @@
 ---
 description: Handle user interactions with addEventListener, event delegation, and debouncing
+tldr: "Use when responding to user interactions (clicks, input changes, scrolling) or custom application events."
 drupal_version: "10.x/11.x"
 ---
 

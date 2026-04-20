@@ -1,5 +1,6 @@
 ---
 description: Group permissions — YAML discovery, plugin-generated permissions, scope system, checking permissions, route access, and cache context
+tldr: "Read this when you need to define custom group permissions, understand the scope system, or programmatically grant/check permissions."
 drupal_version: "11.x"
 ---
 

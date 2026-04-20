@@ -1,5 +1,6 @@
 ---
 description: Use tailwind-merge and clsx together as cn() to safely merge Tailwind classes at runtime, resolving conflicts.
+tldr: "Use `clsx` alone for conditional class joining with no override conflicts. Use `twMerge` (via `cn()`) when a consumer needs to override component-internal classes."
 ---
 
 # tailwind-merge & clsx

@@ -1,5 +1,6 @@
 ---
 description: Restrict AJAX callbacks and routes with permission checks, custom access callbacks, and triggering element validation
+tldr: "Every AJAX callback and route is an HTTP endpoint and requires access control. AJAX callbacks are not protected by the UI alone — attackers can call them directly."
 drupal_version: "11.x"
 ---
 

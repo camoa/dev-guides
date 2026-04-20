@@ -1,5 +1,6 @@
 ---
 description: Understand anonymous page caching with Drupal's Internal Page Cache
+tldr: "When you need to cache full HTML pages for anonymous users. Page Cache (Internal Page Cache module) stores complete rendered pages, serving them without bootstrapping Drupal."
 ---
 
 # Page Cache

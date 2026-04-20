@@ -1,5 +1,6 @@
 ---
 description: Practical refactoring strategies for Single Responsibility Principle — when to split, detection patterns, and when NOT to split.
+tldr: "Practical refactoring strategies for Single Responsibility Principle — when to split, detection patterns, and when NOT to split."
 ---
 
 # SRP in Practice

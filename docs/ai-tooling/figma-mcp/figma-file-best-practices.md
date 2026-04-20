@@ -1,5 +1,6 @@
 ---
 description: Prepare Figma files for AI-assisted code generation — layer naming, components, variables, auto layout, and annotation practices that improve MCP output quality
+tldr: "When preparing a Figma file for AI-assisted code generation. The quality of MCP output is directly proportional to how well the Figma file is structured."
 ---
 
 # Figma File Best Practices

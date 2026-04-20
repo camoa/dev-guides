@@ -1,5 +1,6 @@
 ---
 description: AJAX form architecture - core system, element properties, callbacks, and commands
+tldr: "Use AJAX when you need server-side logic or dynamic options. Use #states for simple show/hide (faster, client-side only)."
 drupal_version: "11.x"
 ---
 

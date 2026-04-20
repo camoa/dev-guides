@@ -1,5 +1,6 @@
 ---
 description: Tailwind v4 @theme block architecture and utility class generation
+tldr: "Use @theme {} when starting a new Tailwind v4 project or migrating from v3. Tailwind v4 is CSS-first -- the @theme block IS your design token definition."
 ---
 
 # Tailwind v4 Token Architecture

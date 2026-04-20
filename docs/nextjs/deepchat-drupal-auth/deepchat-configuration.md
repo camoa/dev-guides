@@ -1,5 +1,6 @@
 ---
 description: Configure deep-chat-react for Next.js proxy — connect, requestInterceptor, responseInterceptor, SSE streaming, and useChatSession hook
+tldr: "Use this guide to configure `deep-chat-react` in Next.js with the proxy pattern. Use [Reference Implementation](reference-implementation.md) for the complete working example including the Next.js route handler."
 drupal_version: "11.x"
 ---
 

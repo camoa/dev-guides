@@ -1,3 +1,7 @@
+---
+tldr: "You need to query and display lists of content, users, taxonomy terms, or other entities with filtering, sorting, and display formatting."
+
+---
 ## 1. Views System Overview
 
 ### When to Use

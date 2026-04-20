@@ -1,5 +1,6 @@
 ---
 description: Springy, bouncy animations without JavaScript — CSS linear() easing, generator tools, fallbacks, and when JS springs are better
+tldr: "Use CSS `linear()` for spring-like bounce in drawers, modals, toggle switches, and toasts. Use JS spring libraries when animations are frequently interrupted — CSS springs handle interrupts unnaturally because they require a fixed duration."
 ---
 
 # Spring Physics and Advanced Easing

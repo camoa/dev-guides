@@ -1,5 +1,6 @@
 ---
 description: Drupal multilingual security, performance, and caching — access control, cache contexts, CDN configuration, database optimization
+tldr: "When optimizing multilingual site performance, securing translation access, or debugging cache issues."
 ---
 
 # Security, Performance & Caching

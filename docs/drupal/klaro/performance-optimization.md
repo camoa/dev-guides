@@ -1,5 +1,6 @@
 ---
 description: Optimize Klaro for fast page load, minimal render blocking, and efficient resource management
+tldr: "Optimize Klaro for fast page load times, minimal render blocking, and efficient resource management."
 drupal_version: "11.x"
 ---
 

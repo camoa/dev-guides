@@ -1,5 +1,6 @@
 ---
 description: Facets query types — search_api_string, search_api_date, search_api_range, search_api_granular, and how they execute
+tldr: "Use this guide when you need to understand how facet selections are translated into search backend queries, or when facets are not filtering correctly for a field type."
 drupal_version: "11.x"
 ---
 

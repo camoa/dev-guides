@@ -1,5 +1,6 @@
 ---
 description: What Generative Engine Optimization (GEO) is, how it differs from traditional SEO, and the research behind AI citation patterns
+tldr: "You are preparing content or a Drupal site for discovery by AI systems — ChatGPT, Google AI Overviews, Perplexity, Claude — not just traditional search crawlers. GEO addresses how AI language models select, summarize, and cite web content."
 drupal_version: "11.x"
 ---
 

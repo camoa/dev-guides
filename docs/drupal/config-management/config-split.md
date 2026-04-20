@@ -1,5 +1,6 @@
 ---
 description: Manage environment-specific configuration with Config Split — dev modules, production settings, conditional overrides.
+tldr: "When you need to manage environment-specific configuration (dev modules, production settings) that should not be deployed to all environments."
 ---
 
 # Config Split

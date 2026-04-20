@@ -1,5 +1,6 @@
 ---
 description: Write PHPUnit Kernel tests for service integration, database operations, and entity CRUD without full Drupal installation
+tldr: "Write Kernel tests when you need to test integration with Drupal services, database operations, entity CRUD, or service container interactions without needing a full Drupal installation."
 drupal_version: "11.x"
 ---
 

@@ -1,3 +1,7 @@
+---
+tldr: "When you need to alter layout rendering, modify section/component behavior, or integrate custom logic during layout building."
+
+---
 ## 13. Layout Builder Events & Hooks
 
 ### When to Use

@@ -1,5 +1,6 @@
 ---
 description: Form alter hook system - execution order, alter patterns, and cache contexts
+tldr: "Use specific form alter hooks (hook_form_FORM_ID_alter) for performance. Use generic hook_form_alter only when altering multiple forms."
 drupal_version: "11.x"
 ---
 

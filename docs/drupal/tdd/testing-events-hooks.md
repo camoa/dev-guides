@@ -1,5 +1,6 @@
 ---
 description: Test event subscribers, hook implementations, and alter hooks in Drupal.
+tldr: "Verifying event subscribers work, hooks fire correctly, alter hooks modify data as expected."
 ---
 
 # Testing Events & Hooks

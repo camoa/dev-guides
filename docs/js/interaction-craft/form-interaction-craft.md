@@ -1,5 +1,6 @@
 ---
 description: Validation timing, auto-resize textarea, input masking, autosave, inline editing, and multi-step form state — form UX patterns
+tldr: "Validate on blur for the first time. After the first error, switch to live validation."
 ---
 
 # Form Interaction Craft

@@ -1,5 +1,6 @@
 ---
 description: Build custom admin forms with FormBase
+tldr: "Use FormBase when building custom admin forms that don't fit ConfigFormBase (bulk operations, complex workflows, non-config data)."
 drupal_version: "11.x"
 ---
 

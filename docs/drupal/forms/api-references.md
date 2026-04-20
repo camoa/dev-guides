@@ -1,5 +1,6 @@
 ---
 description: API references, core files, documentation links, and community resources
+tldr: "API references, core files, documentation links, and community resources"
 drupal_version: "11.x"
 ---
 

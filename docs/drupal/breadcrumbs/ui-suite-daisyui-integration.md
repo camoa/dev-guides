@@ -1,5 +1,6 @@
 ---
 description: Use the UI Suite DaisyUI breadcrumbs SDC component — template bridge, item mapping, direct SDC usage, and accessibility notes
+tldr: "When your theme extends `ui_suite_daisyui`, the theme's `breadcrumb.html.twig` delegates to the `ui_suite_daisyui:breadcrumbs` SDC automatically. You get DaisyUI breadcrumb styling with no extra code."
 drupal_version: "11.x"
 ---
 

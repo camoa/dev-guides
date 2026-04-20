@@ -1,5 +1,6 @@
 ---
 description: Eliminating repeated setup, data creation, and assertion patterns in test suites without sacrificing clarity
+tldr: "When writing test suites and encountering repeated setup, teardown, or assertion patterns across tests."
 ---
 
 # DRY in Testing

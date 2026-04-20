@@ -1,5 +1,6 @@
 ---
 description: Set up the Figma MCP desktop server for selection-based workflow — requires Dev or Full seat on a paid plan
+tldr: "When you want selection-based workflow: select frames in Figma, then prompt your agent to implement your current selection — no link copying needed. Requires Dev or Full seat on a paid Figma plan."
 ---
 
 # Desktop Server Setup

@@ -1,5 +1,6 @@
 ---
 description: GitHub Actions workflow triggers, structure, and core concepts for Drupal CI/CD
+tldr: "Use GitHub Actions workflows to automate testing, builds, and deployments. Choose triggers based on when automation should run."
 drupal_version: "11.x"
 ---
 

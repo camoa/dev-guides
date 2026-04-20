@@ -1,5 +1,6 @@
 ---
 description: Search API query performance — MySQL InnoDB COUNT problem, Highlight latency, mini pager, Solr index-only mode, and cache warming
+tldr: "Use this when optimizing search query speed and reducing server load."
 drupal_version: "11.x"
 ---
 

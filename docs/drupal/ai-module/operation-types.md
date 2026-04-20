@@ -1,5 +1,6 @@
 ---
 description: AI operation types — chat, embeddings, text-to-image, and all 15 typed Input/Output classes
+tldr: "Use this guide when calling a specific AI operation. Use [Provider System](provider-system.md) when you need to select or build providers."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Non-blocking JavaScript loading with defer and async attributes
+tldr: "Use as default for most JavaScript - improves page load performance by allowing non-blocking script loading."
 drupal_version: "10.x/11.x"
 ---
 

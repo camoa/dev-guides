@@ -1,5 +1,6 @@
 ---
 description: Animate display, overlay, and other discrete properties — entry/exit animations for dialogs and popovers
+tldr: "Use `transition-behavior: allow-discrete` when you need to animate properties that were previously impossible to transition — `display`, `overlay`, `content-visibility`. Pair with `@starting-style` for entry animations."
 drupal_version: "11.x"
 ---
 

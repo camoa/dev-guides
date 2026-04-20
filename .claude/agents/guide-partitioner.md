@@ -34,7 +34,13 @@ Every extracted guide MUST follow this structure:
 ```markdown
 ---
 description: One-line summary for llms.txt index
+tldr: One to two sentences stating the decision, the primary pattern, and the main gotcha. Dense enough to reason from without reading the full guide.
 drupal_version: "11.x"
+# Optional deprecation fields (omit entirely if guide is current):
+# deprecated: true
+# deprecated_since: "2026-04-20"
+# superseded_by: new-guide-slug.md
+# reason: "Drupal 12 removed this API — use the new service"
 ---
 
 # [Topic Name]
@@ -63,6 +69,25 @@ Reference source files for full implementation.
 - [Related guide](../related.md)
 - Reference: [source file path or documentation URL]
 ```
+
+## Frontmatter Fields
+
+| Field | Required | Purpose |
+|-------|----------|---------|
+| `description` | Yes | One-line summary for `llms.txt` index and search/SEO |
+| `tldr` | Yes (new) | 1-2 sentence dense summary — enables bulk-loading guide overviews without fetching full content. Derive from the "When to Use" blockquote plus the primary pattern name. |
+| `drupal_version` | When applicable | Drupal version this guide targets (e.g., `"11.x"`) |
+| `deprecated` | Optional | `true` if the guide's pattern is no longer recommended |
+| `deprecated_since` | Optional | ISO date the deprecation was marked (e.g., `"2026-04-20"`) |
+| `superseded_by` | Optional | Filename of the replacement guide (e.g., `new-pattern.md`) |
+| `reason` | Optional | Short explanation of why the guide is deprecated |
+
+**Generating `tldr`:** When extracting a partition, compose `tldr` from:
+1. The decision stated in "When to Use" (what problem it solves, when to apply)
+2. The primary pattern name or key identifier from the Pattern section
+3. If there's a critical gotcha in Common Mistakes, include it
+
+Keep it under 240 characters. No code, no links — plain text.
 
 ## Formatting Rules
 

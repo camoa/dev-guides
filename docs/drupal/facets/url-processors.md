@@ -1,5 +1,6 @@
 ---
 description: Facets URL processors — default query_string format, filter key, URL alias, events for customization, multiple sources on one page
+tldr: "Use this guide when you need to understand how facet selections are represented in URLs, or when customizing URL behavior."
 drupal_version: "11.x"
 ---
 

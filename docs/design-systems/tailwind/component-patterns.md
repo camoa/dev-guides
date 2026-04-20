@@ -1,5 +1,6 @@
 ---
 description: Decide when to keep utilities inline, extract to a framework component, or create a component class — the Tailwind extraction decision.
+tldr: "Use when deciding how to handle repeated style patterns — when to extract into a component class, when to use a framework component, and when utilities directly in markup are correct."
 ---
 
 # Component Patterns & Style Reuse

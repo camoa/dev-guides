@@ -1,5 +1,6 @@
 ---
 description: Configure hreflang tags for multilingual Drupal 11 sites using the metatag_hreflang submodule — automatic generation, x-default, and language-specific overrides
+tldr: "You have a multilingual Drupal 11 site with content translated into multiple languages. Without hreflang tags, Google may treat translated pages as duplicate content or serve the wrong language to users."
 drupal_version: "11.x"
 ---
 

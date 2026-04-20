@@ -1,5 +1,6 @@
 ---
 description: "Uploading binary files (images, documents) to entity file/image fields. Separate operation from entity creation."
+tldr: "Uploading binary files (images, documents) to entity file/image fields. Separate operation from entity creation."
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 ---

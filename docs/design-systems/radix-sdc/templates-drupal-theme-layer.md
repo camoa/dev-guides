@@ -1,5 +1,6 @@
 ---
 description: You're implementing page-level layouts (templates)
+tldr: "You're implementing page-level layouts (templates) You need to override Drupal's default page structure You're composing organisms into complete pages"
 drupal_version: "11.x"
 ---
 

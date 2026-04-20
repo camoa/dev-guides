@@ -1,5 +1,6 @@
 ---
 description: Place the SystemBreadcrumbBlock via block UI or config YAML — regions, visibility conditions, and programmatic rendering
+tldr: "The `SystemBreadcrumbBlock` (plugin ID `system_breadcrumb_block`) is the only standard way to render breadcrumbs in a region. Place via the Block UI or via config YAML for themes, recipes, or installation profiles."
 drupal_version: "11.x"
 ---
 

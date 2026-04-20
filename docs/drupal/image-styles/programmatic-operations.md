@@ -1,5 +1,6 @@
 ---
 description: Load image styles, generate derivatives, flush caches, and create custom image effect plugins programmatically via PHP
+tldr: "Use this when you need to load image styles, generate derivatives, flush caches, or create custom image effects programmatically."
 ---
 
 # Programmatic Image Operations

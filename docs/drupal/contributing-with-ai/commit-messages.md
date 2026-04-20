@@ -1,5 +1,6 @@
 ---
 description: Commit messages for AI-assisted work — attribution trailers, drupal.org vs own-repo conventions, Co-Authored-By and Generated-by formats
+tldr: "Use this when committing AI-assisted code and you want to properly attribute AI involvement — either to a drupal.org issue fork or to your own contrib/custom project."
 drupal_version: "11.x"
 ---
 

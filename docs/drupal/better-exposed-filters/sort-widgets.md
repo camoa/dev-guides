@@ -1,5 +1,6 @@
 ---
 description: BEF sort widgets — radio buttons, links, sort combine, combine_param, and rewrite syntax for sort labels
+tldr: "Use this guide when you have exposed sort criteria and want radio buttons or links instead of dropdowns, or want to combine sort_by and sort_order into a single control."
 drupal_version: "11.x"
 ---
 

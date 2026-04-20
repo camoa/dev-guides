@@ -1,5 +1,6 @@
 ---
 description: Custom Field plugin architecture with three plugin managers, key services, hook classes, and extensibility patterns.
+tldr: "You need to understand how Custom Field's plugin system works to extend it with custom field types, widgets, or formatters, or to debug plugin discovery issues."
 ---
 
 # Architecture & Plugin System

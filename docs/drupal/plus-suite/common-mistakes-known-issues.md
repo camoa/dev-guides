@@ -1,5 +1,6 @@
 ---
 description: Plus Suite common mistakes, known issues, debugging tips, and performance considerations as of April 2026
+tldr: "Read this before starting any Plus Suite implementation and when troubleshooting problems."
 drupal_version: "11.x"
 ---
 

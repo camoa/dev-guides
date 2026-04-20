@@ -1,5 +1,6 @@
 ---
 description: Search API query system — programmatic queries, parse modes, condition groups, processing levels, and query tags
+tldr: "Use this when building Search API queries programmatically or understanding how the query system works."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Group PHP API — CRUD, adding members, relationships, querying, services reference, and programmatic plugin installation
+tldr: "Reference this when writing PHP code to create groups, add members, relate content, or query group data programmatically."
 drupal_version: "11.x"
 ---
 

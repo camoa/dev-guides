@@ -1,5 +1,6 @@
 ---
 description: Test JavaScript functionality with Nightwatch.js for AJAX, accessibility, and browser compatibility
+tldr: "Use when verifying JavaScript functionality, especially AJAX interactions, accessibility, and cross-browser compatibility."
 drupal_version: "10.x/11.x"
 ---
 

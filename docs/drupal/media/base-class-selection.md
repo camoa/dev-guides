@@ -1,5 +1,6 @@
 ---
 description: Building a custom media source plugin and choosing which base class to extend (MediaSourceBase, File, or OEmbed).
+tldr: "Building a custom media source plugin and choosing which base class to extend (MediaSourceBase, File, or OEmbed)."
 ---
 
 # Base Class Selection

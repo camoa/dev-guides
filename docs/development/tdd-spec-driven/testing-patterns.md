@@ -1,5 +1,6 @@
 ---
 description: Arrange-Act-Assert, Given-When-Then, naming conventions, parameterized tests, and setup/teardown
+tldr: "Structuring any test - unit, integration, or end-to-end. These patterns create readable, maintainable tests."
 ---
 
 # Testing Patterns

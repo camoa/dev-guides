@@ -1,5 +1,6 @@
 ---
 description: Debug AJAX failures using browser DevTools, server-side logging, and a structured troubleshooting checklist
+tldr: "Use these techniques when AJAX requests fail, return unexpected results, or produce errors. Start with the browser DevTools Network tab before adding server-side logging."
 drupal_version: "11.x"
 ---
 

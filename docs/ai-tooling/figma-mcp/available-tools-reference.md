@@ -1,5 +1,6 @@
 ---
 description: Reference for all 13 Figma MCP tools — what each returns, when to trigger it explicitly, and what prompts activate it
+tldr: "Look up a specific tool when you need to understand what it returns, when to trigger it explicitly, or what prompt phrasing activates it. Agents call most tools automatically — explicit triggers are for precision."
 ---
 
 # Available Tools Reference

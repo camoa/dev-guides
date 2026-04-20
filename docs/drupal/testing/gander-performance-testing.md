@@ -1,5 +1,6 @@
 ---
 description: Write Gander performance tests to measure site-wide performance impact using OpenTelemetry tracing
+tldr: "Write Gander performance tests for modules with site-wide performance impact: event subscribers that fire on every request, cache invalidation logic, bulk operations, or features that execute complex queries."
 drupal_version: "11.x"
 ---
 

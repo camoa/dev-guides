@@ -1,5 +1,6 @@
 ---
 description: Implement accessible focus rings, screen reader utilities, reduced motion, ARIA state variants, and color contrast in Tailwind.
+tldr: "Apply to every interactive component. Accessibility is a correctness requirement, not an optional feature."
 ---
 
 # Accessibility

@@ -1,5 +1,6 @@
 ---
 description: Plus Suite permissions matrix — Edit Mode access, inline editing, LB+ admin, and minimum permissions per role
+tldr: "Apply this permission matrix when setting up roles for content editors and site builders."
 drupal_version: "11.x"
 ---
 

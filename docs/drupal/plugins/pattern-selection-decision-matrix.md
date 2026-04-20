@@ -1,5 +1,6 @@
 ---
 description: Decision matrix for choosing Foundation+Extension, Provider Plugin, or Service Collector patterns
+tldr: "Use this matrix when starting a new plugin architecture to choose the correct pattern. Consider infrastructure, integration needs, and complexity tradeoffs."
 drupal_version: "11.x"
 ---
 

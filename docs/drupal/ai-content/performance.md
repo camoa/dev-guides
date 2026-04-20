@@ -1,5 +1,6 @@
 ---
 description: Performance optimization for AI - rate limiting, caching, queue processing, cost management
+tldr: "Performance optimization is critical for AI features because API calls are slow (1-30+ seconds) and expensive. Optimize from day one to prevent poor user experience and cost overruns."
 drupal_version: "11.x"
 ---
 

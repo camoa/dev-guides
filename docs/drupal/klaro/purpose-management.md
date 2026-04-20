@@ -1,5 +1,6 @@
 ---
 description: Group related services into purposes (categories) for clearer consent choices
+tldr: "Create purposes to group related services into categories. Purposes appear as sections in the consent modal and allow users to enable/disable entire groups at once."
 drupal_version: "11.x"
 ---
 

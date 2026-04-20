@@ -1,5 +1,6 @@
 ---
 description: Make React design system components accessible using Radix primitives, ARIA prop forwarding, focus management, and icon-only button patterns.
+tldr: "Use in every interactive component. Accessibility is a correctness requirement — a design system that ships inaccessible components ships broken components."
 ---
 
 # Accessibility Patterns

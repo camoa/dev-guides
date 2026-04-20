@@ -1,5 +1,6 @@
 ---
 description: Native CSS nesting without Sass — & selector, nested @media, differences from Sass
+tldr: "Use native CSS nesting when you want Sass-style nesting without a build step. Keep Sass when you need `@extend`, `@mixin`, or functions — native CSS does not cover these."
 ---
 
 # Native CSS Nesting

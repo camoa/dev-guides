@@ -1,5 +1,6 @@
 ---
 description: Foundation of Drupal services and dependency injection — what they are, when to use DI vs static helpers, and basic service definition patterns.
+tldr: "When you need to understand the foundation of modern Drupal architecture — services provide reusable functionality, dependency injection eliminates hard-coded dependencies."
 ---
 
 # Services & DI Overview

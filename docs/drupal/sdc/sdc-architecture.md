@@ -1,5 +1,6 @@
 ---
 description: How Drupal discovers and loads SDC components via plugin system
+tldr: "Use this when you need to understand how Drupal discovers and loads components, debug component registration issues, or plan component organization across modules/themes."
 drupal_version: "11.x"
 ---
 

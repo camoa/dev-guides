@@ -1,5 +1,6 @@
 ---
 description: Shape, reveal, and animate elements with clip-path — wipe reveals, diagonal sections, iris animations, mask-image soft edges, comparison sliders
+tldr: "Use `clip-path` for shaped containers, animated reveals (wipes, sweeps, iris), comparison sliders, and creative transitions. It is compositor-accelerated and produces no layout shifts."
 ---
 
 # Clip-Path and Masks

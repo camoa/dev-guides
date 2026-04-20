@@ -1,5 +1,6 @@
 ---
 description: Open, close, and configure modal dialogs, off-canvas panels, and non-modal dialogs via AJAX commands
+tldr: "Use OpenModalDialogCommand when you need to block page interaction. Use OpenDialogCommand for non-blocking side panels."
 drupal_version: "11.x"
 ---
 

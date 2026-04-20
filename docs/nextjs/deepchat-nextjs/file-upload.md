@@ -1,5 +1,6 @@
 ---
 description: Configure file upload, handle FormData requests, and integrate with AI vision models for image analysis
+tldr: "Use `images` for image upload/analysis. Use `mixedFiles` for any file type (PDFs, docs)."
 ---
 
 # File Upload & Attachments

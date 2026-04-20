@@ -1,5 +1,6 @@
 ---
 description: Merge request workflow with AI disclosure — the full drupal.org contribution flow, MR description template, issue fork commands, and common CI failure causes
+tldr: "Use this when you are ready to submit code to a drupal.org project and need to follow the full contribution workflow with AI disclosure at each step."
 drupal_version: "11.x"
 ---
 

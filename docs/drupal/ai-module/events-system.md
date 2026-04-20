@@ -1,5 +1,6 @@
 ---
 description: AI events system — subscribe to pre/post generation events to modify requests, log responses, or add custom behavior
+tldr: "Use events when you need to intercept AI requests or responses across all operations without modifying providers. Use [Guardrails](guardrails-system.md) when you need content filtering."
 drupal_version: "11.x"
 ---
 

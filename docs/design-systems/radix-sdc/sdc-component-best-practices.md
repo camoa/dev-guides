@@ -1,5 +1,6 @@
 ---
 description: You're deciding component granularity (too small vs too large)
+tldr: "You're deciding component granularity (too small vs too large) You need guidance on props vs slots architecture You're questioning whether a Bootstrap class is sufficient vs creating an SDC You want senior themer guidance on component…"
 drupal_version: "11.x"
 ---
 

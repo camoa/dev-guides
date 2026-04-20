@@ -1,5 +1,6 @@
 ---
 description: Components for form inputs, form structure, and form element wrappers
+tldr: "Components for form inputs, form structure, and form element wrappers. Use these components to build accessible, Bootstrap-styled forms in Drupal with Radix theme."
 ---
 
 # Form Components

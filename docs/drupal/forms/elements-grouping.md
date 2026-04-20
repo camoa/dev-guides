@@ -1,5 +1,6 @@
 ---
 description: Grouping and action elements - containers, fieldsets, buttons for form organization
+tldr: "Use grouping elements to organize form structure and improve UX. Choose containers for AJAX wrappers, fieldsets for visual grouping, details for collapsible sections."
 drupal_version: "11.x"
 ---
 

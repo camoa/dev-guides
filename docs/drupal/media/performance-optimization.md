@@ -1,5 +1,6 @@
 ---
 description: Media source plugin causes slow page loads, high API usage, or database performance issues.
+tldr: "Media source plugin causes slow page loads, high API usage, or database performance issues."
 ---
 
 # Performance Optimization

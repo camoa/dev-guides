@@ -1,5 +1,6 @@
 ---
 description: You need quick reference to key Tiptap packages, classes, and imports.
+tldr: "You need quick reference to key Tiptap packages, classes, and imports."
 ---
 
 ## 20.1 Code Reference Map

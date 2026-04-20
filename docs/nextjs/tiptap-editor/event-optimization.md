@@ -1,5 +1,6 @@
 ---
 description: You need to optimize expensive operations triggered by editor events (auto-save, API calls, analytics).
+tldr: "You need to optimize expensive operations triggered by editor events (auto-save, API calls, analytics)."
 ---
 
 ## 10.2 Debouncing & Throttling Editor Events

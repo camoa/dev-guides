@@ -1,5 +1,6 @@
 ---
 description: Common Group module mistakes — architecture, access, API, plugin, and Views errors with explanations
+tldr: "Review this before shipping group-related code to catch frequent errors."
 drupal_version: "11.x"
 ---
 

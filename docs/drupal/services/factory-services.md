@@ -1,5 +1,6 @@
 ---
 description: Using factories for complex service instantiation — factory classes, static factory methods, YAML factory configuration, and the core logger factory pattern.
+tldr: "When a service requires complex instantiation logic, runtime parameters, or conditional creation — factories encapsulate creation logic."
 ---
 
 # Factory Services

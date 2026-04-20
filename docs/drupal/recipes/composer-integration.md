@@ -1,5 +1,6 @@
 ---
 description: Publish recipes as Composer packages for distribution and versioning
+tldr: "Use Composer packaging when you need to distribute recipes with version management and dependency resolution."
 drupal_version: "11.x"
 ---
 

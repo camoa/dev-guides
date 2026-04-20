@@ -1,5 +1,6 @@
 ---
 description: Protecting routes from unauthorized access using permission checks, entity access, and custom access check services.
+tldr: "Protecting routes (URLs) from unauthorized access before the controller executes."
 ---
 
 # Route Access Checks

@@ -1,5 +1,6 @@
 ---
 description: Generate multiple plugin instances from one class using DeriverBase and ContainerDeriverInterface
+tldr: "Use plugin derivers to generate multiple plugin instances from a single class definition. This enables creating variant plugins based on external data (like tamper plugins, field widgets, or AI models) without code duplication."
 drupal_version: "11.x"
 ---
 

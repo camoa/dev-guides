@@ -1,5 +1,6 @@
 ---
 description: Run Drupal behaviors on HTMX-loaded content — custom events, lifecycle hooks, and double-processing prevention
+tldr: "Use this when you need to run JavaScript behaviors on content loaded via HTMX, or clean up when content is removed."
 drupal_version: "11.x"
 ---
 

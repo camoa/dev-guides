@@ -1,5 +1,6 @@
 ---
 description: Core media types in Drupal — Image, Document, Remote Video, Audio, Video — their source plugins, config, and field mappings.
+tldr: "You need to understand what core provides before creating custom media types."
 ---
 
 ## 2. Core Media Types

@@ -1,5 +1,6 @@
 ---
 description: Custom input widgets for field types in entity forms
+tldr: "When creating custom input interfaces for field types in entity forms, requiring specialized UI controls beyond core textfields/selects/checkboxes."
 drupal_version: "11.x"
 ---
 

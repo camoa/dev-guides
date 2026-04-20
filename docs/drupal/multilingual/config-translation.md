@@ -1,5 +1,6 @@
 ---
 description: Drupal config translation — translating views, menus, field labels, site name via config schema and translation UI
+tldr: "When translating configuration entities and simple config: views, menus, field labels, site name, content type labels, block labels."
 ---
 
 # Config Translation

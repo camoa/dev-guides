@@ -1,5 +1,6 @@
 ---
 description: Set how long cached content remains valid using max-age expiration
+tldr: "When you need to set expiration on cached content. Max-age is the third pillar of cache metadata (alongside tags and contexts) and controls how long cached data remains valid."
 ---
 
 # Cache Max-Age

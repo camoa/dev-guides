@@ -1,3 +1,7 @@
+---
+tldr: "When you need RSS/Atom feeds or attaching views to other display outputs."
+
+---
 ## 7. Feed & Attachment Displays
 
 ### When to Use

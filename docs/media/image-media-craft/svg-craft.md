@@ -1,5 +1,6 @@
 ---
 description: Choose SVG delivery method — CSS mask-image, inline SVG, img tag, or sprite sheet — with accessibility patterns and SVGO optimization
+tldr: "Use `css mask-image` for single-color icon systems — it separates shape from color and works with dark mode. Use inline `<svg>` with `currentColor` for multi-color icons or when you need animation."
 ---
 
 # SVG Craft

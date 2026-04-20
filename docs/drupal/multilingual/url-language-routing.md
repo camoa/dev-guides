@@ -1,5 +1,6 @@
 ---
 description: Drupal URL and language routing — path prefixes, domains, hreflang tags, path aliases, language switcher
+tldr: "When configuring multilingual URLs — path prefixes, domains, path aliases, hreflang tags for SEO."
 ---
 
 # URL & Language Routing

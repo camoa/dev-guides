@@ -1,5 +1,6 @@
 ---
 description: Create reusable fieldable block types managed by content editors
+tldr: "Use custom block types when content editors need to manage block content with custom fields without code changes. Use block plugins instead for logic-driven or dynamic content."
 drupal_version: "11.x"
 ---
 

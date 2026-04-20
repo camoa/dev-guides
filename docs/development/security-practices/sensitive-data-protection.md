@@ -1,5 +1,6 @@
 ---
 description: Protecting sensitive data with encryption at rest (AES-256-GCM), encryption in transit (TLS 1.3), key management, tokenization, and data minimization.
+tldr: "Protecting Personally Identifiable Information (PII), payment card data, health records, authentication credentials, business secrets, and any data that would cause harm if exposed."
 ---
 
 # Sensitive Data Protection

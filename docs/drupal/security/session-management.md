@@ -1,5 +1,6 @@
 ---
 description: Securing sessions with cookie settings, trusted host patterns, session regeneration, flood control, and proper logout implementation.
+tldr: "Understanding session security to prevent session fixation, hijacking, and ensure proper session lifecycle."
 ---
 
 # Session Management

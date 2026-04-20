@@ -1,5 +1,6 @@
 ---
 description: You need to define or customize the document structure rules (which nodes can contain which children, which marks are allowed).
+tldr: "You need to define or customize the document structure rules (which nodes can contain which children, which marks are allowed)."
 ---
 
 ## 3.2 Schema Architecture & Document Structure

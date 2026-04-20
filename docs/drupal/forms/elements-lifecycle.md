@@ -1,5 +1,6 @@
 ---
 description: Element lifecycle callbacks - #process, #after_build, #pre_render, and validation callbacks
+tldr: "Use #process for adding child elements, #after_build for accessing complete tree, #pre_render for final display modifications."
 drupal_version: "11.x"
 ---
 

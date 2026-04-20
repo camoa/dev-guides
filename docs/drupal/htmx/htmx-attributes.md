@@ -1,5 +1,6 @@
 ---
 description: Complete HTMX attribute reference for Drupal — request, content, trigger, history, and OOB attributes via the Htmx class
+tldr: "Reference this when configuring how HTMX elements make requests, where content goes, and how it swaps. The `Htmx` class provides 30+ attribute methods."
 drupal_version: "11.x"
 ---
 

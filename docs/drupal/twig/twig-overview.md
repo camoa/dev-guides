@@ -1,4 +1,5 @@
 ---
+tldr: "When you need to understand how the Twig template engine integrates with Drupal's theme system before diving into specific template work."
 topic: drupal/twig
 guide: twig-overview
 ---

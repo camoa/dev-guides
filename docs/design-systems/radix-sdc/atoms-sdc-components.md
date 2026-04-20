@@ -1,5 +1,6 @@
 ---
 description: You've identified atoms using the Design System Recognition Guide
+tldr: "You've identified atoms using the Design System Recognition Guide You need to decide when to create an atom SDC vs use Bootstrap classes You're creating foundational UI components"
 drupal_version: "11.x"
 ---
 

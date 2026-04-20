@@ -1,5 +1,6 @@
 ---
 description: Performance optimization strategies for SDC components including caching and asset loading
+tldr: "Use this when optimizing component loading, debugging slow page loads with many components, or implementing caching strategies."
 drupal_version: "11.x"
 ---
 

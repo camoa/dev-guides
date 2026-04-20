@@ -1,3 +1,7 @@
+---
+tldr: "When adding blocks to Layout Builder sections programmatically, understanding component structure, or manipulating block configuration."
+
+---
 ## 6. Block Placement in Layouts
 
 ### When to Use

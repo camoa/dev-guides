@@ -1,5 +1,6 @@
 ---
 description: Security, performance, and development standards for Drupal breadcrumbs — access checks, entity loading, caching, and injection patterns
+tldr: "Read this before writing any breadcrumb-related code. These are the patterns that cause production issues and the ones that solve them."
 drupal_version: "11.x"
 ---
 

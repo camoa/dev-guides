@@ -1,5 +1,6 @@
 ---
 description: Translate design tokens from Figma, Style Dictionary, or a design spec into Tailwind v4 or v3 configuration.
+tldr: "Use after running the Design System Recognition Guide to identify tokens. Maps primitive and semantic token layers to Tailwind configuration."
 ---
 
 # Design Token Mapping

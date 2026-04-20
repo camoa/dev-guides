@@ -1,5 +1,6 @@
 ---
 description: Migrate Drupal behaviors for HTMX swaps — behaviors work identically, update from jQuery.once to the once() API
+tldr: "Use this when migrating Drupal behaviors that attach/detach on AJAX swaps. Behaviors work identically with HTMX — the `htmx:drupal:load` and `htmx:drupal:unload` events trigger `Drupal.attachBehaviors()` and `Drupal.detachBehaviors()`…"
 drupal_version: "11.x"
 ---
 

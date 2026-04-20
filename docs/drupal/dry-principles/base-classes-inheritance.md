@@ -1,5 +1,6 @@
 ---
 description: Extend Drupal core base classes and create project-specific base classes to eliminate duplication across entities, forms, and blocks.
+tldr: "When you have multiple classes of the same type (entities, forms, blocks, controllers) that share common patterns or need to override specific base functionality."
 ---
 
 # Base Classes and Inheritance

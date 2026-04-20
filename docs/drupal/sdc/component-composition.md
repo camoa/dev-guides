@@ -1,5 +1,6 @@
 ---
 description: Methods for including, embedding, and nesting components
+tldr: "Use this when including one component in another, deciding between `include()`, `embed`, or render arrays, or nesting components."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Run unit, kernel, functional, and JavaScript tests with PHPUnit in GitHub Actions
+tldr: "Use for automated unit, kernel, functional, and JavaScript tests for Drupal modules."
 drupal_version: "11.x"
 ---
 

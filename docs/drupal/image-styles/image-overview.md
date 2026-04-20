@@ -1,5 +1,6 @@
 ---
 description: Understand the difference between image styles (single derivative) and responsive images (multiple derivatives for different contexts)
+tldr: "Use image styles for fixed-size images. Use responsive image styles when you need different sizes for different devices/viewports."
 ---
 
 # Image System Overview

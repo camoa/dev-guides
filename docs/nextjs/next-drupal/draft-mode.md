@@ -1,5 +1,6 @@
 ---
 description: "Enable content editors to preview unpublished content and revisions in an iframe within Drupal before publishing."
+tldr: "Enable content editors to preview unpublished content and revisions in an iframe within Drupal before publishing."
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
 ---

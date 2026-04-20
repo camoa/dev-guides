@@ -1,5 +1,6 @@
 ---
 description: Cache render arrays and understand how render caching stores rendered HTML
+tldr: "When you need to cache rendered output of render arrays. Render caching stores the final rendered HTML along with cache metadata, avoiding expensive re-rendering on subsequent requests."
 ---
 
 # Render Caching

@@ -1,5 +1,6 @@
 ---
 description: CSRF attack mechanics and prevention using SameSite cookies, CSRF tokens, double submit cookie pattern, and Origin/Referer validation.
+tldr: "Protect ALL state-changing operations: POST/PUT/DELETE requests, password changes, money transfers, profile updates, admin actions. GET requests should NEVER change state (by design, GET = read-only)."
 ---
 
 # CSRF Prevention

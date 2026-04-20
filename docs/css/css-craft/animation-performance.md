@@ -1,5 +1,6 @@
 ---
 description: Know which CSS properties animate at 60fps — compositor-only vs paint vs layout tiers, practical property mapping
+tldr: "Before animating any CSS property, know its rendering cost. The difference between animating `transform` and `width` is the difference between 60fps and dropped frames."
 ---
 
 # Animation Performance

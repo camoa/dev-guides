@@ -1,5 +1,6 @@
 ---
 description: You're self-hosting collaborative editing with Y.js and need a WebSocket server.
+tldr: "You're self-hosting collaborative editing with Y.js and need a WebSocket server."
 ---
 
 ## 15.2 Hocuspocus Server Setup

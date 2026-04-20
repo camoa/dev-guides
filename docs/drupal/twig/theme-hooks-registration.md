@@ -1,4 +1,5 @@
 ---
+tldr: "When your module or theme needs to register a new template (not override an existing one), define the variables it accepts, and specify the default template file."
 topic: drupal/twig
 guide: theme-hooks-registration
 ---

@@ -1,5 +1,6 @@
 ---
 description: Migrate field-level validation on blur — email availability checks and format verification without form submission
+tldr: "Use this when migrating field-level validation that runs on blur (focusout) without submitting the form — email availability checks, username validation, format verification."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Choosing between DRY, WET (Write Everything Twice), and AHA (Avoid Hasty Abstractions) approaches
+tldr: "When deciding whether to abstract duplicated code or let it remain duplicated, especially early in a feature's lifecycle."
 ---
 
 # DRY vs WET vs AHA

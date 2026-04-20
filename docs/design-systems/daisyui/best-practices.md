@@ -1,5 +1,6 @@
 ---
 description: DaisyUI best practices and anti-patterns — when to use component classes vs Tailwind utilities, performance, and team conventions
+tldr: "Code review, architecture decisions, and onboarding guidance for DaisyUI projects."
 ---
 
 # Best Practices

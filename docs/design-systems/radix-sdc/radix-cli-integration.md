@@ -1,5 +1,6 @@
 ---
 description: You're creating new SDC components using Radix CLI
+tldr: "You're creating new SDC components using Radix CLI You want to import existing Radix components into your sub-theme You need consistent component structure and Bootstrap integration"
 drupal_version: "11.x"
 ---
 

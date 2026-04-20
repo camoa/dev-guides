@@ -1,5 +1,6 @@
 ---
 description: Security controls for SQL injection, XSS, and access bypass in migrations
+tldr: "Migration introduces security risks: SQL injection in custom sources, XSS in migrated content, access bypass during imports. Apply security controls at source, process, and destination layers."
 drupal_version: "11.x"
 ---
 

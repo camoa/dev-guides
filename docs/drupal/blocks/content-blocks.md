@@ -1,5 +1,6 @@
 ---
 description: Work with BlockContent entities — load, create, update, and render fieldable content blocks
+tldr: "Use when working programmatically with instances of block content (content entities created from block types). Distinct from Block config entities — `BlockContent` is the content; `Block` is the placement."
 drupal_version: "11.x"
 ---
 

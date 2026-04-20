@@ -1,5 +1,6 @@
 ---
 description: Generate a persistent design system rules file using create_design_system_rules to align AI agent behavior with your tech stack across all sessions
+tldr: "At the start of a project or after onboarding a new design system. `create_design_system_rules` generates a persistent rules file that tells your AI agent how to translate designs in your specific technology stack — component preferences,…"
 ---
 
 # Design System Rules

@@ -1,5 +1,6 @@
 ---
 description: File and image fields with security validation and performance optimization
+tldr: "When handling file uploads (documents, images, media) requiring file validation, storage organization, and derivative generation."
 drupal_version: "11.x"
 ---
 

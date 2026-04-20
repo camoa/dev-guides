@@ -1,5 +1,6 @@
 ---
 description: Performance optimization, security hardening, dependency injection, and coding standards for custom field development.
+tldr: "Performance optimization, security hardening, dependency injection, and coding standards for custom field development."
 ---
 
 # Best Practices

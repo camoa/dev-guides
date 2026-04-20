@@ -1,5 +1,6 @@
 ---
 description: Use hooks and event subscribers to extend Drupal behavior without modifying existing code
+tldr: "Hooks and event subscribers let you extend behavior without modifying existing code. Use `hook_alter()` for data modification, events for architectural extension points."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Drupal Form API overview - declarative render array system for building secure forms
+tldr: "Use Form API when you need user input with validation and CSRF protection. Use render arrays for display-only content."
 drupal_version: "11.x"
 ---
 

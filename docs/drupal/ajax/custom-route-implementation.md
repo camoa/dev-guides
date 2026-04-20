@@ -1,5 +1,6 @@
 ---
 description: Build custom AJAX endpoints outside Form API with nojs/ajax route parameters and graceful degradation
+tldr: "Use custom AJAX routes when you need AJAX endpoints outside Form API: autocomplete, search, content loading, or API-style endpoints. Always implement the `nojs` fallback for JavaScript-disabled environments."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Validate plugin config in access() before execution with AccessResult patterns
+tldr: "Implement `access()` to validate plugin configuration before execution. This prevents workflows from running with invalid settings, provides clear error messages, and catches problems early."
 drupal_version: "11.x"
 ---
 

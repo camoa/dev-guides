@@ -1,5 +1,6 @@
 ---
 description: Form submission architecture - handler priority, redirect patterns, and state storage
+tldr: "Understand submission handler priority to control execution order. Always redirect after successful submit to prevent form resubmission."
 drupal_version: "11.x"
 ---
 

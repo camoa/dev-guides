@@ -1,5 +1,6 @@
 ---
 description: Leverage Twig template inheritance (extends, block, parent, include, embed) to reuse markup structure and avoid template duplication.
+tldr: "When you need to override theme templates but want to reuse most of the structure, changing only specific sections."
 ---
 
 # Twig Template Inheritance

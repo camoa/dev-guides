@@ -1,5 +1,6 @@
 ---
 description: Resources for AI contribution — drupal.org governance issues, contribution workflow documentation, coding standards links, industry AI policies, and related dev-guides
+tldr: "Use this when you need links to drupal.org governance issues, contribution workflow documentation, coding standards, or industry AI policies."
 drupal_version: "11.x"
 ---
 

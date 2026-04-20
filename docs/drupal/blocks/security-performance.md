@@ -1,5 +1,6 @@
 ---
 description: Ensure blocks don't introduce security vulnerabilities or performance bottlenecks
+tldr: "Apply these patterns when blocks handle user input, load entities, or call external APIs. Security issues in blocks affect every page they appear on."
 drupal_version: "11.x"
 ---
 

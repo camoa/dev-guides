@@ -1,5 +1,6 @@
 ---
 description: Fix 100vh on mobile with dvh, svh, lvh dynamic viewport units
+tldr: "Use `dvh` for hero sections that should fill the visible screen on mobile. Use `svh` for the app shell root container."
 ---
 
 # Dynamic Viewport Units

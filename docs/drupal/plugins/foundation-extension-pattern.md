@@ -1,5 +1,6 @@
 ---
 description: Extend mature plugin ecosystems with specialized implementations
+tldr: "Use Foundation+Extension when mature plugin ecosystem exists (Commerce, Views). Use Provider Plugin when creating new service abstraction from scratch."
 drupal_version: "11.x"
 ---
 

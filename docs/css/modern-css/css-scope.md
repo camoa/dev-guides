@@ -1,5 +1,6 @@
 ---
 description: Scope styles to a subtree with @scope — replace BEM naming conventions
+tldr: "Use `@scope` when you need styles that only apply within a specific DOM subtree — replacing BEM naming conventions or CSS Modules for visual scoping. Use Shadow DOM when you need behavioral encapsulation and JS isolation."
 ---
 
 # @scope — Scoped Styles

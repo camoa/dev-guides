@@ -1,5 +1,6 @@
 ---
 description: Direct OpenAI and Anthropic API integration with streaming support for DeepChat
+tldr: "Use Drupal AI module when available. Use direct provider integration for simple Next.js apps."
 ---
 
 # AI Provider Integration

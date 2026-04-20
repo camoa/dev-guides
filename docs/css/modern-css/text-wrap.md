@@ -1,5 +1,6 @@
 ---
-description: Balanced headings and orphan-free text with text-wrap: balance and pretty
+description: "Balanced headings and orphan-free text with text-wrap: balance and pretty"
+tldr: "Use `text-wrap: balance` on headings (up to ~6 lines) for even line breaks. Use `text-wrap: pretty` on body copy to prevent orphaned last words."
 ---
 
 # text-wrap: balance and pretty

@@ -1,5 +1,6 @@
 ---
 description: When to reuse base components, override with replaces key, or create new components
+tldr: "When deciding whether to use a base theme component as-is, override it in your sub-theme, or create a new component from scratch."
 ---
 
 # Component Reuse Decision Tree

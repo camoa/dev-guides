@@ -1,5 +1,6 @@
 ---
-description: Design system recognition — 1. foundation layer: design tokens
+description: "Design system recognition — 1. foundation layer: design tokens"
+tldr: "You're looking at ANY design system source and need to identify the foundational values You need to extract design decisions from CSS custom properties, Figma styles, or JSON files You're mapping visual patterns to a structured token system"
 ---
 
 ## 1. Foundation Layer: Design Tokens

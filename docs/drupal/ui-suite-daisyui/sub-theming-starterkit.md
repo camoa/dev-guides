@@ -1,5 +1,6 @@
 ---
 description: Generate a sub-theme with Vite, Tailwind CSS 4, DaisyUI 5, component overrides, and custom utilities
+tldr: "Create a sub-theme when you need to customize the base theme's components, add new components, override UI Styles, or set up a proper Tailwind/DaisyUI build pipeline. Alpha6 ships a full starterkit with Vite, Tailwind CSS 4, DaisyUI 5, and…"
 ---
 
 # Sub-theming (Starterkit)

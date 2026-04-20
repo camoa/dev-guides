@@ -1,5 +1,6 @@
 ---
 description: Group 3.x data model — entities, scopes, v2 vs v3 differences, and key dependencies
+tldr: "Read this when you need to understand Group 3.x's data model and how it differs from earlier versions before writing any code."
 drupal_version: "11.x"
 ---
 

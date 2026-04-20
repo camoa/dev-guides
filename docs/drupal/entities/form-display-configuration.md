@@ -1,5 +1,6 @@
 ---
 description: Form display — widget selection and field ordering in entity edit forms
+tldr: "When controlling how fields appear in entity edit forms, including widget selection, field order, and visibility across different form modes."
 drupal_version: "11.x"
 ---
 

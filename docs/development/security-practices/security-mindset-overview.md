@@ -1,5 +1,6 @@
 ---
 description: Core security principles including defense in depth, least privilege, zero trust, and threat modeling basics using STRIDE.
+tldr: "Every developer must adopt a security-first mindset from day one. Security is not a feature you add later — it's a fundamental requirement woven into every design decision, code commit, and deployment."
 ---
 
 # Security Mindset Overview

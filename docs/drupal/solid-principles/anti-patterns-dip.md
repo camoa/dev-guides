@@ -1,5 +1,6 @@
 ---
 description: Recognize and fix dependency injection anti-patterns that violate DIP in Drupal
+tldr: "Recognize these patterns as violations of DIP. They create tight coupling, prevent testability, and make code fragile."
 drupal_version: "11.x"
 ---
 

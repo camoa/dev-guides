@@ -1,5 +1,6 @@
 ---
 description: Issue review guidelines for AI-flagged contributions — review depth by disclosure level, red flags for AI-generated patches, and how to evaluate contributor understanding
+tldr: "Use this when you are reviewing an AI-flagged issue, or when you want to understand how your AI-assisted contribution will be evaluated by maintainers."
 drupal_version: "11.x"
 ---
 

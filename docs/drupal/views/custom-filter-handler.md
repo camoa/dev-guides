@@ -1,3 +1,7 @@
+---
+tldr: "When standard filter operators aren't sufficient: custom logic, complex conditions, integration with external validation, multi-field filters."
+
+---
 ## 21. Custom Filter Handler
 
 ### When to Use

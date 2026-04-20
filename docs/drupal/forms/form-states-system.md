@@ -1,5 +1,6 @@
 ---
 description: Form states system - client-side conditional field behavior with #states
+tldr: "Use #states for client-side show/hide and enable/disable. Use AJAX when server-side logic or dynamic options needed."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Container query craft — component layout morphing, adaptive typography with cqi units, style queries, and when NOT to use container queries
+tldr: "Use `@container` when a reusable component needs to change its layout based on the space its container gives it. Use `@media` for page-level structure, device preferences (dark mode, reduced motion), and print styles."
 ---
 
 # Container Query Craft

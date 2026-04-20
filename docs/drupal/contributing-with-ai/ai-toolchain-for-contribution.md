@@ -1,5 +1,6 @@
 ---
 description: AI toolchain setup for Drupal contribution — essential tools (phpcs, phpstan, pre-commit hooks), context management strategies, and mapping workflows to disclosure levels
+tldr: "Use this when setting up your AI development environment for Drupal contribution and you want to configure tools for responsible, well-guarded AI-assisted development."
 drupal_version: "11.x"
 ---
 

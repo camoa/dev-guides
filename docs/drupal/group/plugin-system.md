@@ -1,5 +1,6 @@
 ---
 description: GroupRelationType plugin — attribute syntax, derivers, handler system, and enforced plugins
+tldr: "Read this when creating a custom group relation type plugin to allow a new entity type (or bundle) to be added to groups."
 drupal_version: "11.x"
 ---
 

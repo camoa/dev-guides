@@ -1,5 +1,6 @@
 ---
 description: Group caching — cache bins, cache contexts, cache tags, permission hash, and render caching best practices
+tldr: "Read this when debugging stale cached output for group-aware content, or when optimizing the performance of group membership and permission lookups."
 drupal_version: "11.x"
 ---
 

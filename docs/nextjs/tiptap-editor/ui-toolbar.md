@@ -1,5 +1,6 @@
 ---
 description: You need a persistent toolbar (always visible, not context-dependent).
+tldr: "You need a persistent toolbar (always visible, not context-dependent)."
 ---
 
 ## 12.3 Fixed Toolbar Patterns

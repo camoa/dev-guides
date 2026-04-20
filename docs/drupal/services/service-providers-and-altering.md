@@ -1,5 +1,6 @@
 ---
 description: Altering existing services and adding services programmatically — ServiceProviderBase, alter() vs register(), decorating services, conditional registration, and compiler pass integration.
+tldr: "When you need to alter existing service definitions, add new services programmatically, or register compiler passes — advanced container manipulation beyond YAML."
 ---
 
 # Service Providers & Altering

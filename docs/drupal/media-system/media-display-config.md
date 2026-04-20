@@ -1,5 +1,6 @@
 ---
 description: Configuring media display formatters — responsive image, single image style, oEmbed video, file download, and thumbnail formatters.
+tldr: "You need to configure how media renders: image formatters, video players, file download links."
 ---
 
 ## 6. Media Display Configuration

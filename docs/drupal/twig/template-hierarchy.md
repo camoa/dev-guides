@@ -1,4 +1,5 @@
 ---
+tldr: "When you need to understand the full rendering chain — which template wraps which — and where to override at each level."
 topic: drupal/twig
 guide: template-hierarchy
 ---

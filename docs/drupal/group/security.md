@@ -1,5 +1,6 @@
 ---
 description: Group security — trust model, permission escalation risks, config wrapper security, cache poisoning, and anonymous user cache tags
+tldr: "Review this before deploying a Group-based site to production to understand the trust model and potential vulnerabilities."
 drupal_version: "11.x"
 ---
 

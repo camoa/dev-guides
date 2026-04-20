@@ -1,5 +1,6 @@
 ---
 description: Implement CleanupInterface to restore state after event actions complete (account switching, locks)
+tldr: "Implement `CleanupInterface` when your event plugin needs to perform cleanup operations after all successor actions complete, such as restoring switched user accounts, releasing resources, or processing accumulated state."
 drupal_version: "11.x"
 ---
 

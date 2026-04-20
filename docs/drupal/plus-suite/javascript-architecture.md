@@ -1,5 +1,6 @@
 ---
 description: Plus Suite JavaScript architecture — key modules, AJAX commands, drupalSettings configuration, and extension patterns
+tldr: "Reference this when extending Plus Suite with custom JS, debugging client-side issues, or understanding AJAX command flow."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: AJAX commands for CSS properties, jQuery method invocation, data attributes, and dynamic CSS loading
+tldr: "Use CSS styling commands for dynamic visual changes triggered by AJAX responses. Prefer adding classes over inline styles."
 drupal_version: "11.x"
 ---
 

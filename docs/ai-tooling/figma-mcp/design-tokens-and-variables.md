@@ -1,5 +1,6 @@
 ---
 description: Extract design tokens and variable names from Figma for token-aware code generation using get_variable_defs
+tldr: "When generating code that should reference design system tokens (colors, spacing, typography, border radius) by name rather than hardcoded values. Requires variables to be defined in Figma's Variables panel and applied to elements in the…"
 ---
 
 # Design Tokens and Variables

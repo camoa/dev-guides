@@ -1,5 +1,6 @@
 ---
 description: You need Markdown-style shortcuts (e.g., `**bold**` converts to bold) or custom paste handling.
+tldr: "You need Markdown-style shortcuts (e.g., `**bold**` converts to bold) or custom paste handling."
 ---
 
 ## 8.2 Input Rules & Paste Rules

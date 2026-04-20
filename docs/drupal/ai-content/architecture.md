@@ -1,5 +1,6 @@
 ---
 description: AI module architecture - provider layer, model types, plugin system, and service layer
+tldr: "Use AI module architecture knowledge before implementing any AI functionality. Understanding the provider layer, model types, and plugin system is essential for choosing the right approach for your use case."
 drupal_version: "11.x"
 ---
 

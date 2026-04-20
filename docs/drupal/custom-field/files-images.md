@@ -1,5 +1,6 @@
 ---
 description: File upload and image sub-fields with widget configuration, extended properties for alt/title/dimensions, and media library integration.
+tldr: "You need file uploads or images within a custom field column."
 ---
 
 # Files and Images

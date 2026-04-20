@@ -1,5 +1,6 @@
 ---
 description: Connect design tokens to React components using CSS custom properties and Tailwind v4 CSS-first @theme inline configuration.
+tldr: "Use when connecting design tokens (colors, spacing, typography scales) from a design tool or token file into React components. Tailwind v4 changes the approach significantly — there is no `tailwind.config.ts`."
 ---
 
 # Design Token Consumption

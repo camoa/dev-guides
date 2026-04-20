@@ -1,5 +1,6 @@
 ---
 description: Add action links (Edit, Delete) to table rows with operations render element
+tldr: "Use #type operations when adding action links (Edit, Delete, etc.) to table rows in FormBase or customizing operations in ListBuilder."
 drupal_version: "11.x"
 ---
 

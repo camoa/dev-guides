@@ -1,5 +1,6 @@
 ---
 description: Add JSON-LD BreadcrumbList structured data for Google rich results — Easy Breadcrumb built-in vs manual hook_page_attachments implementation
+tldr: "Add JSON-LD breadcrumb structured data to help Google display breadcrumbs in search results instead of the raw URL. This is a meaningful SEO win for content-heavy sites."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Migrate custom AJAX CommandInterface classes to HTMX trigger headers that fire custom JavaScript events
+tldr: "Use this when migrating custom AJAX commands (`CommandInterface` classes) that perform specialized JavaScript operations. HTMX handles these via trigger headers."
 drupal_version: "11.x"
 ---
 

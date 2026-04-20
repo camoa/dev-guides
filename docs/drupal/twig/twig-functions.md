@@ -1,4 +1,5 @@
 ---
+tldr: "When you need to generate URLs, attach libraries, create links, or use other Drupal-specific functions from within a Twig template."
 topic: drupal/twig
 guide: twig-functions
 ---

@@ -1,5 +1,6 @@
 ---
 description: Follow best practices for test organization, data, performance, security, reliability, and maintainability in Drupal testing.
+tldr: "Writing maintainable, fast, reliable tests that verify behavior, not implementation."
 ---
 
 # Best Practices & Patterns

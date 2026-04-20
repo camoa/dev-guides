@@ -1,5 +1,6 @@
 ---
 description: Add custom utilities, variants, animations, and shared themes beyond what design tokens alone provide in Tailwind v4.
+tldr: "Use when adding project-specific utilities, custom variants, animations, or sharing a theme across a monorepo."
 ---
 
 # Custom Theme Extension

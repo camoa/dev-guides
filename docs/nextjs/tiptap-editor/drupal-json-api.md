@@ -1,5 +1,6 @@
 ---
 description: You're building a decoupled Drupal frontend with Next.js and need to edit Drupal content via Tiptap.
+tldr: "You're building a decoupled Drupal frontend with Next.js and need to edit Drupal content via Tiptap."
 ---
 
 ## 14.1 Drupal JSON API Integration

@@ -1,5 +1,6 @@
 ---
 description: Creating custom media types in Drupal — oEmbed providers, custom source plugins, field config, and naming conventions.
+tldr: "Core media types don't fit your needs — you need a custom media type for a specific use case."
 ---
 
 ## 3. Custom Media Type Configuration

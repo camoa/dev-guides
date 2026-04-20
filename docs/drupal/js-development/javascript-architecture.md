@@ -1,5 +1,6 @@
 ---
 description: Drupal's library-based JavaScript architecture with behaviors, drupalSettings, and AJAX system
+tldr: "Use this understanding before implementing any JavaScript functionality in Drupal. This is foundational knowledge for all Drupal JS work."
 drupal_version: "10.x/11.x"
 ---
 

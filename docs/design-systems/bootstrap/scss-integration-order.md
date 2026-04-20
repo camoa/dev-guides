@@ -1,5 +1,6 @@
 ---
 description: Critical SCSS import sequence for Bootstrap customization
+tldr: "Use this when setting up SCSS file structure or troubleshooting variable override issues. Import order is critical for Bootstrap customization."
 ---
 
 # SCSS Integration Order

@@ -1,5 +1,6 @@
 ---
 description: Design system recognition — 2. component classification framework
+tldr: "You need to categorize UI components into atoms, molecules, organisms, templates, or pages You're analyzing an existing design system and mapping its component hierarchy You're unsure if something is a molecule vs organism"
 ---
 
 ## 2. Component Classification Framework

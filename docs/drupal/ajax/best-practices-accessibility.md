@@ -1,5 +1,6 @@
 ---
 description: Accessibility requirements for every Drupal AJAX implementation — WCAG 2.1 Level AA checklist and patterns
+tldr: "Every AJAX implementation must meet WCAG 2.1 Level AA. This is not optional — it's a legal and ethical requirement."
 drupal_version: "11.x"
 ---
 

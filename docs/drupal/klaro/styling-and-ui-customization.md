@@ -1,5 +1,6 @@
 ---
 description: Customize Klaro appearance with CSS variables, positioning, and HTML in descriptions
+tldr: "Customize Klaro's appearance to match your site's branding, position elements, and control HTML rendering in descriptions."
 drupal_version: "11.x"
 ---
 

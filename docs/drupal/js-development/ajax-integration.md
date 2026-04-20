@@ -1,5 +1,6 @@
 ---
 description: Integrate JavaScript with Drupal's AJAX framework for dynamic content updates
+tldr: "Use when loading content dynamically without full page refresh, or when JavaScript needs to respond to Drupal AJAX events."
 drupal_version: "10.x/11.x"
 ---
 

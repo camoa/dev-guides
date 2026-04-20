@@ -1,5 +1,6 @@
 ---
 description: You need to avoid common pitfalls and bad practices.
+tldr: "You need to avoid common pitfalls and bad practices."
 ---
 
 ## 19.2 Anti-Patterns & Common Mistakes

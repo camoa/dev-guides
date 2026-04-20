@@ -1,5 +1,6 @@
 ---
 description: Use AJAX and HTMX together in the same application — coexistence patterns, library dependencies, and integration points
+tldr: "Use both AJAX and HTMX in the same application when you need AJAX for specific features (dialogs, contrib) but want HTMX for new form interactions. They coexist without conflict."
 drupal_version: "11.x"
 ---
 

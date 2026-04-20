@@ -1,5 +1,6 @@
 ---
 description: Architecture overview for DeepChat + Next.js + Drupal OAuth — component stack and key file locations
+tldr: "Use this guide when integrating `deep-chat-react` in a Next.js frontend against Drupal's AI chatbot module with OAuth Bearer token authentication. Use the [Authentication Flow](dual-authentication-flow.md) guide when you need to trace the…"
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: Variable font animation — weight/width hover transitions, scroll-linked font-variation-settings, and per-character weight wave
+tldr: "Use `font-variation-settings` transitions for typography that changes weight, width, or slant on interaction. Requires a variable font — standard fonts ignore these properties."
 ---
 
 # Variable Font Animation

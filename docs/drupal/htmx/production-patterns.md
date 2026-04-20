@@ -1,5 +1,6 @@
 ---
 description: Proven HTMX patterns for Drupal — load more, infinite scroll, modals, real-time polling, and live search
+tldr: "Reference this for proven HTMX implementations of common UI patterns: load more, infinite scroll, modals, real-time updates, and live search."
 drupal_version: "11.x"
 ---
 

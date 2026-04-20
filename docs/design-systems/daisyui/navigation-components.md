@@ -1,5 +1,6 @@
 ---
 description: Reference for DaisyUI navigation components — navbar, menu, tabs, breadcrumbs, and steps
+tldr: "Site navigation, wayfinding, and multi-section navigation patterns."
 ---
 
 # Navigation Components

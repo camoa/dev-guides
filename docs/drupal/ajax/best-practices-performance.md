@@ -1,5 +1,6 @@
 ---
 description: Performance standards for Drupal AJAX — DOM minimization, query limits, Batch API thresholds, and asset optimization
+tldr: "Apply these standards to every AJAX implementation. Slow AJAX destroys UX."
 drupal_version: "11.x"
 ---
 

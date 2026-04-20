@@ -1,3 +1,7 @@
+---
+tldr: "When you want to enable Layout Builder on a content type, custom entity type, or specific view mode."
+
+---
 ## 2. Enabling Layout Builder
 
 ### When to Use

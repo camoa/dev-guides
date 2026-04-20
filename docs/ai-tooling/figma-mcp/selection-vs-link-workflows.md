@@ -1,5 +1,6 @@
 ---
 description: Choose between selection-based workflow (desktop server, no link copying) and link-based workflow (remote or desktop server) for Figma design context
+tldr: "Every Figma MCP session requires choosing how to provide design context. This decision affects which server type you need and how fluid your workflow feels."
 ---
 
 # Selection vs Link Workflows

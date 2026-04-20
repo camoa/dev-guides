@@ -1,5 +1,6 @@
 ---
 description: All entity types provided by Group 3.x — IDs, base tables, key fields, shared bundle classes, and membership loading
+tldr: "Reference this when you need to know the exact entity type IDs, base tables, bundle systems, and key fields of every entity Group provides."
 drupal_version: "11.x"
 ---
 

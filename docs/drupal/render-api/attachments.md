@@ -1,5 +1,6 @@
 ---
 description: Attaching CSS/JS libraries, drupalSettings, HTML head elements, and HTTP headers to render arrays.
+tldr: "When your render array needs CSS, JavaScript, drupalSettings, HTTP headers, HTML `<head>` elements, or placeholders. Attachments bubble up from children to parents to page level."
 ---
 
 # Attachments (#attached)

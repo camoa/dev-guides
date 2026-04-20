@@ -1,5 +1,6 @@
 ---
 description: Optimal performance with single-file loading for large icon sets in SVG sprite format
+tldr: "You have large icon sets (50+ icons) in SVG sprite format and want optimal performance with single-file loading."
 drupal_version: "11.x"
 ---
 

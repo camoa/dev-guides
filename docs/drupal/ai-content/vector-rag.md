@@ -1,5 +1,6 @@
 ---
 description: Vector databases and RAG - semantic search, content similarity, AI chatbots with site context
+tldr: "Use vector databases for semantic search, content similarity analysis, and RAG (Retrieval-Augmented Generation) workflows. Use when you need to find conceptually similar content, power AI chatbots with site context, or analyze content…"
 drupal_version: "11.x"
 ---
 

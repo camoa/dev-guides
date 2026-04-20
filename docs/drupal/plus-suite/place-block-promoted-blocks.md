@@ -1,5 +1,6 @@
 ---
 description: PlaceBlock tool and promoted blocks — configure sidebar blocks, custom icons, drag-and-drop flow, and DropZones controller endpoints
+tldr: "Configure Promoted Blocks to curate the drag-and-drop sidebar. All available blocks still appear under the \"Other\" tab; promoted blocks are just surfaced first with custom icons."
 drupal_version: "11.x"
 ---
 

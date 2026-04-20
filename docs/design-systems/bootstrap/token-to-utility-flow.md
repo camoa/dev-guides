@@ -1,5 +1,6 @@
 ---
 description: How Bootstrap generates utility classes from SCSS tokens and maps
+tldr: "Use this to understand how Bootstrap auto-generates utility classes from tokens and how to extend the utility system with custom maps."
 ---
 
 # Token to Utility Flow

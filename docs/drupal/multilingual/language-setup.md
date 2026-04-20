@@ -1,5 +1,6 @@
 ---
 description: Drupal language setup and configuration — adding languages via config YAML, programmatically, setting default language
+tldr: "When initializing a multilingual site — adding languages, setting default language, configuring language fallback."
 ---
 
 # Language Setup & Configuration

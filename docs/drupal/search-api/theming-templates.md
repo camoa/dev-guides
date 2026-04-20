@@ -1,5 +1,6 @@
 ---
 description: Search API theming — available templates, Views templates for search results, and highlighted excerpt access
+tldr: "Use this when customizing the display of search results or search-related elements."
 drupal_version: "11.x"
 ---
 

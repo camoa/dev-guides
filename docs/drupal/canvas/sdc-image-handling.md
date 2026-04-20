@@ -1,5 +1,6 @@
 ---
 description: How to render image props correctly in Canvas SDC components using the canvas:image built-in component.
+tldr: "Use this when your SDC component has an image prop (using `$ref: 'json-schema-definitions://canvas.module/image'`) and you need to render it correctly in the Twig template — with responsive images, lazy loading, performance attributes, and…"
 drupal_version: "11.x"
 ---
 

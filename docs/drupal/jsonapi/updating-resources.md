@@ -1,5 +1,6 @@
 ---
 description: "Modifying existing entities. Requires authentication, entity UUID, and update permissions."
+tldr: "Modifying existing entities. Requires authentication, entity UUID, and update permissions."
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 ---

@@ -1,5 +1,6 @@
 ---
 description: Nested layouts (layout blocks) — TreeIndex architecture, NestedAwareSectionStorage, block duplication, and when to use nesting
+tldr: "Use nested layouts when you need blocks-within-blocks as a reusable unit. Use section layouts for simple column arrangements."
 drupal_version: "11.x"
 ---
 

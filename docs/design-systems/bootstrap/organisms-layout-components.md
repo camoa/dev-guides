@@ -1,5 +1,6 @@
 ---
 description: Map organism-level components (navbars, complete cards, forms) to Bootstrap
+tldr: "Use this for mapping organisms (complex UI sections combining multiple molecules and atoms) like navbars and complete cards to Bootstrap's component system."
 ---
 
 # Organisms → Layout + Components

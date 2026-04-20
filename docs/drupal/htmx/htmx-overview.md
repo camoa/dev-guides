@@ -1,5 +1,6 @@
 ---
 description: HTMX in Drupal 11.3+ — core concepts, benefits, and when to use declarative HTML-driven interactions
+tldr: "Use HTMX when you're building interactive Drupal features that update page regions without full page reloads and want a simpler approach than traditional AJAX. Use traditional AJAX when you need complex command sequences or contrib module…"
 drupal_version: "11.x"
 ---
 

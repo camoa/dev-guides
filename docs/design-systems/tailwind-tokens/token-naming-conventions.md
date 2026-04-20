@@ -1,5 +1,6 @@
 ---
 description: Choose the right token naming convention for your use case
+tldr: "Use this when establishing naming conventions for tokens across platforms or when choosing between multiple standards."
 ---
 
 # Token Naming Conventions

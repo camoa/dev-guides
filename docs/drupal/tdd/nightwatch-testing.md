@@ -1,5 +1,6 @@
 ---
 description: Use Nightwatch.js for JavaScript functional testing, accessibility testing, and cross-browser testing in Drupal.
+tldr: "JavaScript functional testing for complex UI interactions, accessibility testing, cross-browser testing."
 ---
 
 # Nightwatch.js Testing

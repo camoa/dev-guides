@@ -1,5 +1,6 @@
 ---
 description: Token replacement for custom field values in Pathauto, Rules, and email templates with correct separator syntax.
+tldr: "You need to use custom field values in token replacement contexts (Pathauto, Rules, email templates)."
 ---
 
 # Token Support

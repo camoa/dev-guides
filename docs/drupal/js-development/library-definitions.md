@@ -1,5 +1,6 @@
 ---
 description: Define JavaScript libraries in *.libraries.yml with dependencies and configuration
+tldr: "Use every time you add JavaScript to a module or theme. All JS must be defined in a library."
 drupal_version: "10.x/11.x"
 ---
 

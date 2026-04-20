@@ -1,5 +1,6 @@
 ---
 description: Integrating a third-party API or custom service that doesn't support oEmbed and no contrib module exists.
+tldr: "Integrating a third-party API or custom service that doesn't support oEmbed and no contrib module exists."
 ---
 
 # Custom Media Source Plugin

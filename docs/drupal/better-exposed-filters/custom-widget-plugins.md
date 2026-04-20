@@ -1,5 +1,6 @@
 ---
 description: Create custom BEF filter, sort, or pager widget plugins — PHP 8.1 attribute syntax, key methods, and plugin discovery alter
+tldr: "Use this guide when the built-in BEF widgets don't meet your needs and you want to create a custom filter, sort, or pager widget. Use `hook_better_exposed_filters_options_alter()` for simpler runtime changes that don't require a new plugin."
 drupal_version: "11.x"
 ---
 

@@ -1,3 +1,7 @@
+---
+tldr: "When you need JSON, XML, or other serialized output for APIs, AJAX endpoints, or headless/decoupled applications."
+
+---
 ## 6. REST Export Display
 
 ### When to Use

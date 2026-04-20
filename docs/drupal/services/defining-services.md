@@ -1,5 +1,6 @@
 ---
 description: Step-by-step guide to registering a new service — creating the class, writing the YAML definition, clearing cache, and choosing service IDs and visibility.
+tldr: "When you need to register a new service with the Drupal container."
 ---
 
 # Defining Services

@@ -1,5 +1,6 @@
 ---
 description: Migrate multi-step wizard forms to HTMX — bookmarkable steps with browser back/forward support via route parameters
+tldr: "Use this when migrating multi-step wizard forms where each step is driven by AJAX navigation. HTMX enables bookmarkable steps with browser back/forward button support."
 drupal_version: "11.x"
 ---
 

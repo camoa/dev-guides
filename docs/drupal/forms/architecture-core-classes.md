@@ -1,5 +1,6 @@
 ---
 description: Core Form API classes and interfaces - base classes, services, and selection criteria
+tldr: "Choose the appropriate base class based on your form's purpose. Use FormBase for general forms, ConfigFormBase for settings, ConfirmFormBase for confirmations."
 drupal_version: "11.x"
 ---
 

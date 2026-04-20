@@ -1,5 +1,6 @@
 ---
 description: ConfirmFormBase pattern for delete operations and destructive actions
+tldr: "Use ConfirmFormBase for delete operations and irreversible actions. Use FormBase for forms with additional input fields."
 drupal_version: "11.x"
 ---
 

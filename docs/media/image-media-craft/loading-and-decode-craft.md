@@ -1,5 +1,6 @@
 ---
 description: Set loading, decoding, and fetchpriority correctly for LCP and below-fold images — the right combination per image position
+tldr: "Use `fetchpriority=\"high\"` on the one LCP image. Use `loading=\"lazy\"` + `decoding=\"async\"` on all below-fold images."
 ---
 
 # Loading and Decode Craft

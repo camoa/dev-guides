@@ -1,5 +1,6 @@
 ---
 description: Map template-level page layouts to Bootstrap's grid system
+tldr: "Use this for mapping templates (page layouts, content structures) to Bootstrap's grid system for responsive page structures."
 ---
 
 # Templates → Bootstrap Grid

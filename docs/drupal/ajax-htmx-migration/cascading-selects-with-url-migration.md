@@ -1,5 +1,6 @@
 ---
 description: Migrate multiple dependent selects with browser URL sync — bookmarkable state via pushUrlHeader and swapOob
+tldr: "Use this when migrating multiple dependent selects where each selection updates the next dropdown AND the browser URL (bookmarkable state)."
 drupal_version: "11.x"
 ---
 

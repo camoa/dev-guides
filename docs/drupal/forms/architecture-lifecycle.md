@@ -1,5 +1,6 @@
 ---
 description: Form request lifecycle and state management - build, validate, submit flow
+tldr: "Understand the lifecycle to know when to cache forms (multi-step, AJAX) and where to place logic (buildForm vs submitForm)."
 drupal_version: "11.x"
 ---
 

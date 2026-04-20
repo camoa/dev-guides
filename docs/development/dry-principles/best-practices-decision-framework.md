@@ -1,5 +1,6 @@
 ---
 description: Practical decision framework for abstraction, duplication, and code organization including security and performance
+tldr: "When making architectural decisions about abstraction, duplication, and code organization."
 ---
 
 # Best Practices Decision Framework

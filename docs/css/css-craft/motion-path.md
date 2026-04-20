@@ -1,5 +1,6 @@
 ---
 description: Motion path animations — orbit, curve-following, scroll-driven path, and staggered multi-element paths with offset-path
+tldr: "Use `offset-path` when a client wants an element to animate along a curve, orbit, or custom path — loading animations, decorative elements, flight paths. No JavaScript needed."
 ---
 
 # Motion Path

@@ -1,5 +1,6 @@
 ---
 description: Components for HTML structure, page layout, and regions
+tldr: "Components for HTML structure, page layout, and regions. Use these for rendering the complete HTML document, page wrapper, regions, and block wrappers in Drupal templates."
 ---
 
 # Page Structure Components

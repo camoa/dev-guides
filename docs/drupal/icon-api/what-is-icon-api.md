@@ -1,5 +1,6 @@
 ---
 description: Unified system for managing and rendering icons across Drupal 11.1+ sites with support for SVG, sprites, fonts, and remote sources
+tldr: "You need a unified, performant system for managing icons across your Drupal 11.1+ site rather than manually handling SVG files, icon fonts, or external resources in templates and CSS. Icon API provides the core infrastructure; the UI Icons…"
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: PHPCS, PHPStan, deprecation detection, and security audits for Drupal code
+tldr: "Use before running tests to validate code standards, security, and static analysis."
 drupal_version: "11.x"
 ---
 

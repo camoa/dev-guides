@@ -1,5 +1,6 @@
 ---
 description: Extend DaisyUI components with Tailwind utilities, CSS variable overrides, and global layer overrides
+tldr: "Extending DaisyUI components with project-specific styles, overriding defaults, and creating custom components that follow DaisyUI conventions."
 ---
 
 # Customization Patterns

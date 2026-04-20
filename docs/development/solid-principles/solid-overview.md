@@ -1,5 +1,6 @@
 ---
 description: What SOLID means, why it matters, and when to learn each principle across career stages.
+tldr: "What SOLID means, why it matters, and when to learn each principle across career stages."
 ---
 
 # SOLID Overview

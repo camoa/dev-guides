@@ -1,5 +1,6 @@
 ---
 description: Ensuring business rules, validation logic, and domain knowledge exist in only one authoritative place
+tldr: "When ensuring business rules, validation logic, data schemas, and domain knowledge exist in only one authoritative place."
 ---
 
 # Knowledge Duplication

@@ -1,5 +1,6 @@
 ---
 description: Create and invalidate custom cache tags for non-entity data
+tldr: "When you need to invalidate cached content based on non-entity data. Custom cache tags let you create invalidation triggers for API data, computed values, or external resources."
 ---
 
 # Custom Cache Tags

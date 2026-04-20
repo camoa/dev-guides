@@ -1,5 +1,6 @@
 ---
 description: Search API common mistakes — issue/cause/solution table and debugging checklist for sitewide search problems
+tldr: "Use this when debugging search issues or reviewing a Search API implementation."
 drupal_version: "11.x"
 ---
 

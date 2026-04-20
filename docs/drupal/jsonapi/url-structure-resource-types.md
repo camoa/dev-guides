@@ -1,5 +1,6 @@
 ---
 description: "Understanding URL patterns and resource type naming is fundamental for all API operations."
+tldr: "Understanding URL patterns and resource type naming is fundamental for all API operations."
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 ---

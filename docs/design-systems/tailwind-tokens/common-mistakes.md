@@ -1,5 +1,6 @@
 ---
 description: Common token extraction and naming mistakes to avoid
+tldr: "Use this to avoid common pitfalls in token extraction, naming, and workflow."
 ---
 
 # Common Mistakes

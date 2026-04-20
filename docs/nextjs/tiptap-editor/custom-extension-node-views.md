@@ -1,5 +1,6 @@
 ---
-description: You need custom DOM rendering for a node: interactive widgets, React components, or complex layouts.
+description: "You need custom DOM rendering for a node: interactive widgets, React components, or complex layouts."
+tldr: "You need custom DOM rendering for a node: interactive widgets, React components, or complex layouts."
 ---
 
 ## 8.3 Node Views & Custom Rendering

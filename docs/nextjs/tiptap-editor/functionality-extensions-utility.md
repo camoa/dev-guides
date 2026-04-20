@@ -1,5 +1,6 @@
 ---
 description: You need editor enhancements like placeholders, character counts, or file upload handling.
+tldr: "You need editor enhancements like placeholders, character counts, or file upload handling."
 ---
 
 ## 7.2 Utility Extensions (Placeholder, CharacterCount, FileHandler)

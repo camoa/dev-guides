@@ -1,5 +1,6 @@
 ---
 description: Facets theming and templates — available templates, template variables, template suggestions by widget/facet, and HTML structure
+tldr: "Use this guide when customizing the HTML output of facets in your theme."
 drupal_version: "11.x"
 ---
 

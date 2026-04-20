@@ -1,5 +1,6 @@
 ---
 description: Prompt patterns for getting accurate framework-targeted code output from Figma MCP tools — framework targeting, component reuse, file placement, and multi-step workflows
+tldr: "When you want to get better code output from the MCP tools. Prompt specificity directly correlates with output quality — vague prompts produce generic React + Tailwind regardless of your stack."
 ---
 
 # Prompting Strategies

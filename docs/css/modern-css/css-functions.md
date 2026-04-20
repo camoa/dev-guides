@@ -1,5 +1,6 @@
 ---
 description: Native CSS @function, if(), and @mixin — reusable logic without a preprocessor (Chromium-first)
+tldr: "Use `@function` (Chrome 141+) for reusable computed values, `if()` (Chrome 137+) for inline conditionals. Both are Chromium-only."
 drupal_version: "11.x"
 ---
 

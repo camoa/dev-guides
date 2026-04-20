@@ -1,5 +1,6 @@
 ---
 description: Passing render arrays to Twig templates -- automatic rendering, conditional output, filters, and read-only array behavior.
+tldr: "Render arrays are designed to work seamlessly with Twig -- pass them as variables and Twig renders them automatically. This is the standard pattern for theming in Drupal."
 ---
 
 # Twig Integration

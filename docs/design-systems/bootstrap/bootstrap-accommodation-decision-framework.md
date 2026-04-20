@@ -1,5 +1,6 @@
 ---
 description: Core decision-making methodology for Bootstrap mapping using the 6px threshold
+tldr: "Use this framework when deciding whether to ACCOMMODATE, EXTEND, CUSTOMIZE, or CREATE. Use the 6px threshold to systematically evaluate visual differences."
 ---
 
 # Bootstrap Accommodation Decision Framework

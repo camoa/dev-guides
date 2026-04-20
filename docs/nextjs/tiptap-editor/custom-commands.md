@@ -1,5 +1,6 @@
 ---
 description: You need to create reusable command logic for your extensions or application.
+tldr: "You need to create reusable command logic for your extensions or application."
 ---
 
 ## 9.2 Creating Custom Commands

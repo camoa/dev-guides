@@ -1,5 +1,6 @@
 ---
 description: Available core data types for config schema — scalars, containers, extended types, and special types.
+tldr: "When writing config schema and you need to know which core data types are available for scalars (string, integer, boolean), containers (mapping, sequence), and specialized types (email, uri, label)."
 ---
 
 # Core Data Types Schema

@@ -1,5 +1,6 @@
 ---
 description: Common render array patterns -- progressive enhancement, conditional access, weighted ordering, entity views, item lists, AJAX responses, debugging.
+tldr: "Common scenarios have established patterns -- use these proven approaches rather than reinventing solutions."
 ---
 
 # Render Array Patterns

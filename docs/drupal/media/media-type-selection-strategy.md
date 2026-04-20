@@ -1,5 +1,6 @@
 ---
 description: Starting a media integration project and deciding whether to use core media types, contrib modules, or build a custom media source plugin.
+tldr: "Starting a media integration project and deciding whether to use core media types, contrib modules, or build a custom media source plugin."
 ---
 
 # Media Type Selection Strategy

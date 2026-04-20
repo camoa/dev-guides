@@ -1,5 +1,6 @@
 ---
 description: Identifying and deciding how to address duplicated code blocks - true vs incidental duplication
+tldr: "When identifying and deciding how to address duplicated code blocks in your codebase."
 ---
 
 # Code Duplication

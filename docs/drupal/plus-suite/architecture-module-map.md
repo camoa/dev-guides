@@ -1,5 +1,6 @@
 ---
 description: Plus Suite module dependency graph, responsibilities, plugin systems, and page-building data flow
+tldr: "Reference this when you need to understand which module provides which functionality, or when debugging issues."
 drupal_version: "11.x"
 ---
 

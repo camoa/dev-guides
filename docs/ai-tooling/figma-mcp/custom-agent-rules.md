@@ -1,5 +1,6 @@
 ---
 description: Create and maintain a project-level rules file for consistent AI agent behavior across all Figma-to-code sessions — component imports, token mapping, file placement, and workflow constraints
+tldr: "When you want consistent AI agent behavior across all Figma-to-code sessions in a project — same component imports, same token naming conventions, same file placement rules. Rules files persist between sessions and prevent agents from…"
 ---
 
 # Custom Agent Rules

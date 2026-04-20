@@ -1,5 +1,6 @@
 ---
 description: JavaScript security best practices for XSS prevention and CSP compliance
+tldr: "Use any time JavaScript handles user input, manipulates DOM, or processes data from external sources."
 drupal_version: "10.x/11.x"
 ---
 

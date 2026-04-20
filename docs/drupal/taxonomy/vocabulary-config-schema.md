@@ -1,5 +1,6 @@
 ---
 description: Complete schema for taxonomy.vocabulary.*.yml config files
+tldr: "Use this schema when creating or modifying vocabulary YAML config files. These are the complete properties for `taxonomy.vocabulary.*.yml`."
 drupal_version: "11.x"
 ---
 

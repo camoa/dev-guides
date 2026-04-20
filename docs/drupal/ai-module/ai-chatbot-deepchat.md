@@ -1,5 +1,6 @@
 ---
 description: AI Chatbot module — DeepChat frontend, REST API endpoints, streaming, and authentication flow
+tldr: "Use this guide when integrating the DeepChat chatbot frontend with Drupal. Use [AI Assistant API](ai-assistant-api.md) when building the backend assistant logic or custom actions."
 drupal_version: "11.x"
 ---
 

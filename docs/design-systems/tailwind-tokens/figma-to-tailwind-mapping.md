@@ -1,5 +1,6 @@
 ---
 description: Map Figma variables to Tailwind tokens via automated pipeline
+tldr: "Use this when your design team maintains tokens in Figma variables and you need to consume them in a Tailwind project."
 ---
 
 # Figma to Tailwind Mapping

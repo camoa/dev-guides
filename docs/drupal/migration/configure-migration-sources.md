@@ -1,5 +1,6 @@
 ---
 description: Configure D7 database connection and source plugins for Migrate API
+tldr: "Set up D7 database connection as migration source. Core provides source plugins for D7 nodes, users, taxonomy, files."
 drupal_version: "11.x"
 ---
 

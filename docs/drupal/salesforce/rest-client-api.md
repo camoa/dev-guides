@@ -1,5 +1,6 @@
 ---
 description: Salesforce REST client programmatic API — objectCreate, objectUpdate, objectUpsert, query, direct API calls, binary fetch
+tldr: "Use `salesforce.client` (`RestClient`) when you need programmatic, non-mapping-driven access to Salesforce objects — direct CRUD, raw SOQL queries, custom Apex REST calls, or fetching binary attachments."
 drupal_version: "11.x"
 ---
 

@@ -1,4 +1,5 @@
 ---
+tldr: "When you need to know exactly what variables are available in a specific template type."
 topic: drupal/twig
 guide: variables-by-template-level
 ---

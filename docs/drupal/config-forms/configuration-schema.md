@@ -1,5 +1,6 @@
 ---
 description: Define structure and validation constraints for configuration
+tldr: "Use configuration schema when defining structure and validation constraints for configuration stored by ConfigFormBase."
 drupal_version: "11.x"
 ---
 

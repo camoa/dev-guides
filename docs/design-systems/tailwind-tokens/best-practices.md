@@ -1,5 +1,6 @@
 ---
 description: Token management best practices for design systems
+tldr: "Use this as a reference for token architecture, color management, multi-platform strategy, and Drupal/DaisyUI specifics."
 ---
 
 # Best Practices

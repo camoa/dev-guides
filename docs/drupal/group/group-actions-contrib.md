@@ -1,5 +1,6 @@
 ---
 description: Group Actions contrib module — action plugins for VBO, ECA, and token-driven group operations
+tldr: "Read this when you need to automate group operations — adding/removing members or content — via Views Bulk Operations (VBO), ECA workflows, or any Drupal action-based system."
 drupal_version: "11.x"
 ---
 

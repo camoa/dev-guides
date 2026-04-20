@@ -1,5 +1,6 @@
 ---
 description: Marquee and infinite scroll — CSS text ribbons, logo tickers, alternating direction rows, and pause-on-hover
+tldr: "Use CSS `@keyframes translateX` with duplicated content for seamless infinite scrolling ribbons. Always pause on hover and respect `prefers-reduced-motion`."
 ---
 
 # Marquee & Infinite Scroll

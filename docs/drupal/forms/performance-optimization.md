@@ -1,5 +1,6 @@
 ---
 description: Form performance optimization - rendering, caching, validation, and AJAX performance
+tldr: "Optimize forms when buildForm() takes >200ms, AJAX callbacks >300ms, or you have >50 options. Target: <1s load, <2s submit."
 drupal_version: "11.x"
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: HTMX response headers in Drupal — redirect, trigger events, retarget, reswap, and history management
+tldr: "Use this when you need to control client-side behavior after a response — redirect, trigger events, change swap strategy, or update browser history."
 drupal_version: "11.x"
 ---
 

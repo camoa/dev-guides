@@ -1,5 +1,6 @@
 ---
 description: Test entity CRUD operations, field values, entity references, and validation in Drupal.
+tldr: "Testing entity CRUD, field values, entity references, computed fields, validation."
 ---
 
 # Testing Entities

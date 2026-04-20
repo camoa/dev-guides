@@ -1,5 +1,6 @@
 ---
 description: BEF theming — available templates, theme suggestions by view/display/field, preprocess functions, and nested hierarchy rendering
+tldr: "Use this guide when you need to customize the HTML output of BEF widgets in your theme."
 drupal_version: "11.x"
 ---
 

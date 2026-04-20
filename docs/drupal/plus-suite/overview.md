@@ -1,5 +1,6 @@
 ---
 description: Plus Suite overview — WYSIWYG page builder recipe on top of Layout Builder with drag-and-drop, inline editing, and nested layouts
+tldr: "Use Plus Suite when you need a WYSIWYG page builder on top of core Layout Builder with drag-and-drop, inline editing, and nested layouts. Use core Layout Builder when you only need basic block placement via the sidebar form."
 drupal_version: "11.x"
 ---
 

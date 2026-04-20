@@ -1,5 +1,6 @@
 ---
 description: When and how to use mocks, stubs, fakes, spies, and dummies in tests
+tldr: "You need to test code that depends on external systems (databases, APIs, file systems) or collaborating objects that are slow, unavailable, or difficult to set up in tests."
 ---
 
 # Test Doubles

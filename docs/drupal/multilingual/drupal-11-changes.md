@@ -1,5 +1,6 @@
 ---
 description: Drupal 11 multilingual changes — content_translation.admin.inc deprecation, compatibility checking, migration paths
+tldr: "When upgrading to Drupal 11 or maintaining modules compatible with Drupal 11.x."
 ---
 
 # Drupal 11 Changes & Deprecations

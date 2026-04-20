@@ -1,5 +1,6 @@
 ---
 description: Configure Open Graph meta tags in Drupal 11 using the metatag_open_graph submodule for Facebook, LinkedIn, WhatsApp, and Slack sharing
+tldr: "You need content shared on Facebook, LinkedIn, WhatsApp, or Slack to display a rich preview with title, image, and description instead of a bare URL. Enable the `metatag_open_graph` submodule and configure token-based defaults for each…"
 drupal_version: "11.x"
 ---
 

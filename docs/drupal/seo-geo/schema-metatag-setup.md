@@ -1,5 +1,6 @@
 ---
 description: Install and configure Schema Metatag 3.x for JSON-LD structured data — token mappings for Article, Organization, and WebPage types
+tldr: "Schema Metatag extends the Metatag module to output Schema.org JSON-LD via the same token-based admin UI. Configure once at the content type level and every node inherits correct structured data automatically."
 drupal_version: "11.x"
 ---
 

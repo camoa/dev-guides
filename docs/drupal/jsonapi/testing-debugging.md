@@ -1,5 +1,6 @@
 ---
 description: "Development, troubleshooting, and quality assurance of JSON:API implementations."
+tldr: "Development, troubleshooting, and quality assurance of JSON:API implementations."
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 ---

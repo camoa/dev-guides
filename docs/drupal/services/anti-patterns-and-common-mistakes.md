@@ -1,5 +1,6 @@
 ---
 description: Common DI anti-patterns to avoid — container injection, constructor logic, \Drupal in classes, eager collection, concrete type hints, circular dependencies, public properties, and missing AutowireTrait.
+tldr: "When you want to avoid the most common mistakes developers make with Drupal services and dependency injection."
 ---
 
 # Anti-Patterns & Common Mistakes

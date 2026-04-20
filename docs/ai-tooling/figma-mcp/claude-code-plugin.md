@@ -1,5 +1,6 @@
 ---
 description: Install the Figma MCP server via the Claude Code plugin for the fastest setup with bundled design-to-code skills
+tldr: "When you want the fastest Claude Code setup — one command installs the server and pre-built skills for common Figma workflows. The plugin bundles the MCP server with curated skill definitions."
 ---
 
 # Claude Code Plugin

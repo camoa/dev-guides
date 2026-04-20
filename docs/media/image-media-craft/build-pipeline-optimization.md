@@ -1,5 +1,6 @@
 ---
 description: Set up automated image optimization with Sharp — tool selection, responsive image generation, compression budgets, and build-time vs CDN decision
+tldr: "Use Sharp for any Node.js build pipeline — it is the default choice. Use CDN transforms (Cloudinary, imgix) for user-uploaded CMS media where image dimensions are unpredictable."
 ---
 
 # Build Pipeline Optimization

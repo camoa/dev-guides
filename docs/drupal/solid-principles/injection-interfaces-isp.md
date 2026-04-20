@@ -1,5 +1,6 @@
 ---
 description: Use the correct focused Drupal injection interface for dependency injection
+tldr: "Drupal provides focused interfaces for dependency injection. Use ContainerInjectionInterface for static::create() factory method, or AutowireTrait for automatic dependency resolution."
 drupal_version: "11.x"
 ---
 

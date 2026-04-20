@@ -1,5 +1,6 @@
 ---
-description: You need context-aware UI elements: selection menus, slash commands, or floating toolbars.
+description: "You need context-aware UI elements: selection menus, slash commands, or floating toolbars."
+tldr: "You need context-aware UI elements: selection menus, slash commands, or floating toolbars."
 ---
 
 ## 7.3 UI Extensions (BubbleMenu, FloatingMenu)

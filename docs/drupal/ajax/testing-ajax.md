@@ -1,5 +1,6 @@
 ---
 description: Write automated AJAX tests with WebDriverTestBase — assertWaitOnAjaxRequest, session interaction, and common pitfalls
+tldr: "Use WebDriverTestBase (FunctionalJavascript namespace) for AJAX tests — it drives a real browser. Use BrowserTestBase only for non-JavaScript tests."
 drupal_version: "11.x"
 ---
 

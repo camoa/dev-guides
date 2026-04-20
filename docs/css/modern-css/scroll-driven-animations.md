@@ -1,5 +1,6 @@
 ---
 description: Scroll-linked animations without JS — progress bars, reveal on scroll, parallax
+tldr: "Use scroll-driven animations for scroll-linked effects — progress bars, reveal-on-scroll, parallax — without JavaScript. Use `@supports` for progressive enhancement and always treat effects as decorative."
 ---
 
 # Scroll-Driven Animations

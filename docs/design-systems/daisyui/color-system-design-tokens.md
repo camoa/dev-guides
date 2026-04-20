@@ -1,5 +1,6 @@
 ---
 description: Reference for DaisyUI CSS variables, semantic color tokens, and how to use them as Tailwind utility classes
+tldr: "Use this guide when you need to understand which CSS variables control which visual properties, and how to use DaisyUI semantic colors as Tailwind utility classes."
 ---
 
 # Color System and Design Tokens

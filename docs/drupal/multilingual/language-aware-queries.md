@@ -1,5 +1,6 @@
 ---
 description: Drupal language-aware queries — entity queries by language, Views language filters, known issues with latestRevision
+tldr: "When querying entities by language — Views filters, entity queries, getting content in specific language."
 ---
 
 # Language-Aware Queries

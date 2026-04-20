@@ -1,5 +1,6 @@
 ---
 description: Cache API calls, batch entity loading, and optimize token access in ECA plugins
+tldr: "Apply performance optimizations when plugins perform expensive operations like external API calls, complex calculations, or repeated database queries. Cache results, batch operations, and avoid N+1 queries."
 drupal_version: "11.x"
 ---
 

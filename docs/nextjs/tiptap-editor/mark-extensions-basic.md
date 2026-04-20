@@ -1,5 +1,6 @@
 ---
-description: You need inline text formatting: bold, italic, underline, strikethrough.
+description: "You need inline text formatting: bold, italic, underline, strikethrough."
+tldr: "You need inline text formatting: bold, italic, underline, strikethrough."
 ---
 
 ## 6.1 Basic Text Formatting Marks

@@ -1,5 +1,6 @@
 ---
 description: Gradient text, animated gradients, knockout text, and layered text-shadows for display type — background-clip technique, @property animation, blend mode knockout
+tldr: "Use text effects on display type only: hero headlines, pull quotes, section titles. Body copy with gradient text or heavy shadows destroys readability."
 ---
 
 # Text Effects

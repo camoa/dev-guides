@@ -1,5 +1,6 @@
 ---
 description: AI disclosure checkboxes — which of the 4 drupal.org checkboxes to select, when multiple apply, and the responsible path for AI-assisted contributions
+tldr: "Use this when creating or updating a drupal.org issue and you need to determine which AI disclosure checkboxes to select."
 drupal_version: "11.x"
 ---
 

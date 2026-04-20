@@ -1,5 +1,6 @@
 ---
 description: Established Drupal community standards for services and DI — interface injection, constructor simplicity, autoconfigure, AutowireTrait, testing considerations, and performance patterns.
+tldr: "When you want to follow established Drupal community standards for services and dependency injection."
 ---
 
 # Best Practices & Patterns
