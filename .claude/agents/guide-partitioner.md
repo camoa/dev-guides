@@ -36,11 +36,6 @@ Every extracted guide MUST follow this structure:
 description: One-line summary for llms.txt index
 tldr: One to two sentences stating the decision, the primary pattern, and the main gotcha. Dense enough to reason from without reading the full guide.
 drupal_version: "11.x"
-# Optional deprecation fields (omit entirely if guide is current):
-# deprecated: true
-# deprecated_since: "2026-04-20"
-# superseded_by: new-guide-slug.md
-# reason: "Drupal 12 removed this API — use the new service"
 ---
 
 # [Topic Name]
@@ -77,10 +72,6 @@ Reference source files for full implementation.
 | `description` | Yes | One-line summary for `llms.txt` index and search/SEO |
 | `tldr` | Yes (new) | 1-2 sentence dense summary — enables bulk-loading guide overviews without fetching full content. Derive from the "When to Use" blockquote plus the primary pattern name. |
 | `drupal_version` | When applicable | Drupal version this guide targets (e.g., `"11.x"`) |
-| `deprecated` | Optional | `true` if the guide's pattern is no longer recommended |
-| `deprecated_since` | Optional | ISO date the deprecation was marked (e.g., `"2026-04-20"`) |
-| `superseded_by` | Optional | Filename of the replacement guide (e.g., `new-pattern.md`) |
-| `reason` | Optional | Short explanation of why the guide is deprecated |
 
 **Generating `tldr`:** When extracting a partition, compose `tldr` from:
 1. The decision stated in "When to Use" (what problem it solves, when to apply)
@@ -89,16 +80,7 @@ Reference source files for full implementation.
 
 Keep it under 240 characters. No code, no links — plain text. If "When to Use" starts with a markdown table or code fence, fall back to the `description:` field from the source guide's frontmatter (if present).
 
-**Reading deprecation markers:** The source guide may contain HTML comment markers inside a partition. Transfer these into the atomic guide's frontmatter:
-
-| Source marker | Frontmatter field |
-|---------------|-------------------|
-| `<!-- DEPRECATED: true -->` | `deprecated: true` |
-| `<!-- DEPRECATED_SINCE: YYYY-MM-DD -->` | `deprecated_since: "YYYY-MM-DD"` |
-| `<!-- SUPERSEDED_BY: filename.md -->` | `superseded_by: filename.md` |
-| `<!-- REASON: short explanation -->` | `reason: "short explanation"` |
-
-Omit all four fields from frontmatter if none of the markers are present.
+**Handling outdated content:** Guides are a living document — when a pattern changes, **update or delete the guide**. Do not keep parallel "old vs new" versions. Version-specific guidance belongs in the `drupal_version:` field; historical context belongs in git history.
 
 ## Formatting Rules
 

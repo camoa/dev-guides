@@ -127,19 +127,7 @@ def extract_topic_metadata(topic_key: str, guide_count: int) -> dict | None:
     topic_desc = extract_summary(index_content) or f"Decision guides for {topic_title}"
     actual_count = len(md_files)
 
-    # Detect deprecated guides within this topic.
-    deprecated = []
-    for f in md_files:
-        fm = extract_frontmatter(f.read_text(encoding="utf-8"))
-        if fm.get("deprecated") is True:
-            deprecated.append({
-                "guide": f.name,
-                "deprecated_since": fm.get("deprecated_since", ""),
-                "superseded_by": fm.get("superseded_by", ""),
-                "reason": fm.get("reason", ""),
-            })
-
-    print(f"  {topic_key} — {actual_count} guides" + (f" ({len(deprecated)} deprecated)" if deprecated else ""))
+    print(f"  {topic_key} — {actual_count} guides")
 
     return {
         "topic_key": topic_key,
@@ -147,7 +135,6 @@ def extract_topic_metadata(topic_key: str, guide_count: int) -> dict | None:
         "description": topic_desc,
         "guide_count": actual_count,
         "category": get_category(topic_key),
-        "deprecated": deprecated,
     }
 
 
@@ -240,44 +227,9 @@ def main():
     # Generate llms.hash for cache freshness
     build_llms_hash(index_content)
 
-    # Aggregate deprecated guides into a single manifest for navigator consumption.
-    deprecated_manifest = {}
-    total_deprecated = 0
-    for t in topics:
-        if t["deprecated"]:
-            deprecated_manifest[t["topic_key"]] = t["deprecated"]
-            total_deprecated += len(t["deprecated"])
-
-    if deprecated_manifest:
-        dep_path = SITE_DIR / "deprecated-guides.json"
-        dep_path.write_text(
-            json.dumps(deprecated_manifest, indent=2, ensure_ascii=False),
-            encoding="utf-8",
-        )
-        print(f"\nDeprecated guides: {dep_path} ({total_deprecated} across {len(deprecated_manifest)} topics)")
-
-    # Mirror deprecation info into partition-manifest.json under each topic.
-    manifest_changed = False
-    for topic_key in list(manifest.keys()):
-        topic = next((t for t in topics if t["topic_key"] == topic_key), None)
-        if not topic:
-            continue
-        current_dep = manifest[topic_key].get("deprecated_guides", [])
-        new_dep = topic["deprecated"]
-        if current_dep != new_dep:
-            manifest[topic_key]["deprecated_guides"] = new_dep
-            manifest_changed = True
-    if manifest_changed:
-        MANIFEST_PATH.write_text(
-            json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
-            encoding="utf-8",
-        )
-        print(f"Updated {MANIFEST_PATH} with deprecated_guides fields")
-
     print(f"\nDone!")
     print(f"  Topics: {len(topics)}")
     print(f"  Total guides: {total_guides}")
-    print(f"  Deprecated: {total_deprecated}")
     print(f"  Index: {index_path}")
 
 
