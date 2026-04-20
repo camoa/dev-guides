@@ -19,7 +19,7 @@ drupal_version: "11.x"
 | Drupal site, content changes frequently | Custom route that generates file dynamically | Medium |
 | Large site with many content types | Build script — generate from MkDocs/CMS on deploy | Medium |
 | You want full page content for RAG | Also generate `llms-full.txt` with page body | Medium |
-| AI assistants are your primary audience | llms.txt as entry point to per-topic bundles | Dev docs pattern |
+| AI assistants are your primary audience | llms.txt as a topic catalog linking to per-guide `.md` files | Dev docs pattern |
 
 ## The llms.txt Format
 
@@ -130,9 +130,11 @@ public function index(): Response {
 
 The controller queries published nodes by content type and builds the Markdown index. Cache with Drupal's render cache or a dedicated cache bin — regenerating on every request is expensive on large sites.
 
-## Pattern: Per-Topic Bundling (Dev Docs Sites)
+## Pattern: Topic Catalog + Per-Guide Fetch (Dev Docs Sites)
 
-This project's own llms.txt implementation uses per-topic bundles rather than a single flat file. The main `/llms.txt` is a directory of topics, each linking to `/llms/topic-name.txt` — a full content bundle for that topic.
+For dev documentation with many atomic guides, use `llms.txt` as a **topic catalog** pointing to topic index pages. Each topic's index page carries a routing table and KG metadata (concepts, disambiguation) that an AI navigator uses to pick a specific guide. The AI fetches only the guide(s) relevant to the task — no monolithic bundles.
+
+This is the pattern this project uses (see [dev-guides-navigator](https://github.com/camoa/claude-skills) for a reference implementation):
 
 ```markdown
 # Dev Guides
@@ -141,11 +143,18 @@ This project's own llms.txt implementation uses per-topic bundles rather than a 
 
 ## Drupal
 
-- [Drupal SEO & GEO](https://example.com/llms/drupal-seo-geo.txt): 27 guides covering SEO, structured data, and GEO for Drupal 11
-- [Drupal Forms](https://example.com/llms/drupal-forms.txt): Form API, validation, AJAX, and form alter patterns
+- [Drupal SEO & GEO](https://example.com/drupal/seo-geo/): 27 guides covering SEO, structured data, and GEO for Drupal 11
+- [Drupal Forms](https://example.com/drupal/forms/): Form API, validation, AJAX, and form alter patterns
 ```
 
-Each `/llms/topic-name.txt` file contains all guides for that topic concatenated with section markers, making it efficient for AI assistants to load one file and get the full context for a domain.
+**Retrieval flow:**
+
+1. `llms.hash` — tiny SHA-256 for cache invalidation (64 bytes)
+2. `llms.txt` — topic catalog (~15KB)
+3. `{topic}/index.md` — routing table ("I need to..." → guide.md) + `guide-meta:` frontmatter
+4. `{topic}/{guide}.md` — the specific atomic guide (5-20KB)
+
+Each atomic guide is fetched independently, keeping AI context windows lean. Compare with per-topic concatenated bundles (5K-41K tokens each): bundles load too much content when the user only needs one decision answered. The per-guide approach is more efficient when the catalog has 1,000+ guides across 70+ topics.
 
 ## llms-full.txt for RAG
 
