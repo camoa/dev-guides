@@ -1,5 +1,6 @@
 ---
 description: UI Patterns 2.x overview — when to use SDC plugins vs standalone SDC
+tldr: "UI Patterns 2.x overview — when to use SDC plugins vs standalone SDC"
 drupal_version: "10.3+ / 11"
 ---
 

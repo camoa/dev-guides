@@ -243,31 +243,18 @@ Path: /path/to/drupal (ask user on first guide creation)
 - When CREATING or MAINTAINING a guide, rename the file to match this convention if it doesn't already
 - The published split files in `~/workspace/dev-guides/docs/` also use kebab-case for folders and files
 
-**Guide Metadata for Navigator (guide-meta)** — REQUIRED on CREATE and UPDATE:
-The maintainer is the **authoritative source** for guide-meta because it performs the deep research and understands what related guides exist. When creating or updating a guide, include a `<!-- GUIDE-META -->` comment block at the top of the file (after the TOC routing table). The guide-partitioner transfers this directly to the published `index.md` frontmatter as `guide-meta:`.
+**Guide Metadata for Navigator (guide-meta)** — populated by the partitioner, informed by source content:
 
-```
-<!-- GUIDE-META
-concepts: [key terms this guide owns — what searches should land here]
-not: [terms commonly confused with this guide — what should NOT land here]
-requires: [topic keys of prerequisite guides]
-complements: [topic keys of related guides often used together]
-specializes: [topic key of parent guide if this is a domain-specific version]
-category: [drupal|nextjs|design-system|dev-practices|css|js|media|ai-tooling|decoupled]
--->
-```
+The partitioner generates the `guide-meta:` block in each published topic's `index.md` frontmatter by analyzing the source guide. Source content should make this easy by using clear, distinctive terminology in headings and examples.
 
-**How to populate during research:**
+Fields the partitioner infers (see `.claude/agents/guide-partitioner.md` for full schema):
+- `concepts` — distinctive terms, API names, class names, hook names. Use these consistently across your guide's headings and code examples.
+- `not` — disambiguation terms (what should NOT route here). The partitioner detects these by cross-referencing other topics; if you know of a specific confusing term, mention it in a "Not to be confused with..." note.
+- `requires`, `complements` — derived from the "See Also" references at the bottom of each section. Cross-link generously.
+- `specializes` — set only if this guide is a domain-specific version of a general one (e.g., Drupal SOLID specializes general SOLID).
+- `category` — derived from docs path prefix.
 
-- `concepts`: As you research the topic, collect the key terms, API names, class names, file patterns, and hook names that are unique to this guide. These come naturally from the research — section headings, code identifiers, recurring terminology.
-- `not`: During research you discover related guides and overlapping terminology. Any term that belongs to a DIFFERENT guide but could be confused with this one goes here. Check the existing guides in `~/workspace/dev-guides/docs/` or `~/workspace/claude_memory/guides/` for overlap.
-- `requires`: When you find yourself referencing another guide as foundational knowledge, it's a prerequisite. Use topic key format (e.g., `drupal/sdc`).
-- `complements`: Guides you reference in "See Also" sections or that a developer would realistically need alongside this one.
-- `specializes`: If this is a domain-applied version of a general guide (e.g., `drupal/solid-principles` → `development/solid-principles`).
-- `category`: Derived from the topic's target docs path.
-
-**On CREATE**: Generate the full `<!-- GUIDE-META -->` block from your research findings.
-**On UPDATE**: Review and update the existing block — new research may reveal new relationships or disambiguation needs.
+The maintainer's job is NOT to author this metadata inline — it's to write content with distinctive, searchable terminology so the partitioner's analysis yields good metadata.
 
 **Published Guide Frontmatter** — the partitioner auto-generates a `tldr:` field per atomic guide. Write source content with this in mind:
 

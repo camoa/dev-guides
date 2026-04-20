@@ -3,7 +3,3 @@
 > AI-friendly atomic decision guides for Drupal, CSS, JavaScript, design systems, and Next.js development. {{ total_guides }} guides across {{ topic_count }} topics. Each topic link below points to a topic index with a routing table to individual guides.
 
 {{ topic_sections }}
-
-## Optional
-
-- [Full documentation](https://camoa.github.io/dev-guides/llms-full.txt): All guides concatenated (~1.1M tokens — for RAG vectorization, not direct context)

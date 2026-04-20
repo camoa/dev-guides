@@ -39,12 +39,6 @@ WHEN_TO_USE_RE = re.compile(
     r"(?=\n\n#{1,4}\s|\n\Z|\Z)",  # until next heading or EOF
     re.DOTALL | re.IGNORECASE,
 )
-DECISION_HEADER_RE = re.compile(r"##\s+Decision\s*\n", re.IGNORECASE)
-PATTERN_HEADER_RE = re.compile(r"##\s+Pattern\s*\n", re.IGNORECASE)
-# Extract the first decision row (anchor of the guide's recommendation)
-DECISION_ROW_RE = re.compile(
-    r"\|[^\n]+\|[^\n]+\|[^\n]+\|\n\|[-:\s|]+\|\n\|([^\n]+)\|", re.MULTILINE
-)
 
 
 def parse_frontmatter(content: str):
@@ -165,8 +159,11 @@ def process_file(path: Path, dry_run: bool = False) -> str:
     if has_fm and frontmatter_has_field(fm_text, "tldr"):
         return "already-has-tldr"
 
-    # Primary source: "When to Use" section.
+    # Primary source: "When to Use" section. Reject if it's a markdown table
+    # or code block (happens when the section opens with a decision table).
     when_to_use = extract_when_to_use(body)
+    if when_to_use and looks_like_table_or_code(when_to_use):
+        when_to_use = ""  # force fallback
 
     # Fallback: description: from frontmatter.
     if not when_to_use and has_fm:
@@ -174,10 +171,6 @@ def process_file(path: Path, dry_run: bool = False) -> str:
 
     if not when_to_use:
         return "no-source"
-
-    # Reject markdown tables / code picked up accidentally.
-    if looks_like_table_or_code(when_to_use):
-        return "non-prose-content"
 
     tldr = compose_tldr(when_to_use)
     if not tldr:

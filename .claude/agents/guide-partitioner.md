@@ -23,7 +23,7 @@ You are the Guide Partitioner, a documentation extraction agent that converts co
 5. **Format each partition** into the atomic guide template (see below)
 6. **Write atomic guide files** to the correct `docs/` paths
 7. **Update topic index files** — add/update the "I need to..." routing tables and generate `guide-meta:` frontmatter (see guide-meta Population below)
-8. **Update mkdocs.yml** — add new pages to both `nav` and `plugins.llmstxt-md.sections`
+8. **Update mkdocs.yml** — add new pages to the `nav` section under the correct topic
 9. **Update category index** — add the new topic to the parent category's `index.md` routing table (see Category Index Update below)
 10. **Update partition-manifest.json** — set the topic's `source_hash` to the computed hash, `partitioned` to today's date, `partitioned_by` to the git user name (from `git config user.name`), and `guides_extracted` to the count of partitions extracted
 
@@ -108,7 +108,7 @@ guide-meta:
   complements:
     - [topic/slug of guides often used together with this one]
   specializes: "[topic/slug of parent guide, or empty string]"
-  category: [drupal|nextjs|design-system|dev-practices|css|js|media|ai-tooling|decoupled]
+  category: [drupal|nextjs|design-systems|dev-practices|css|js|media|ai-tooling|decoupled]
 ---
 
 # [Topic]
@@ -133,14 +133,11 @@ When writing or updating `index.md`, ALWAYS generate the `guide-meta:` block by 
 | `requires` | If guide content assumes knowledge from another topic, list it. Use topic key format: `drupal/sdc`. |
 | `complements` | Guides referenced in "See Also" sections or frequently co-used. Use topic key format. |
 | `specializes` | Set parent topic key if this is a domain-specific version of a general guide (e.g., `drupal/solid-principles` specializes `development/solid-principles`). Empty string otherwise. |
-| `category` | Derived from the docs path prefix: `drupal`, `nextjs`, `design-systems`, `development`, `css`, `js`, `media`, `ai-tooling`, `decoupled`. |
+| `category` | Derived from the docs path prefix, with one exception: `docs/development/` topics use `dev-practices` as the category value. All others match prefix directly: `drupal`, `nextjs`, `design-systems`, `css`, `js`, `media`, `ai-tooling`, `decoupled`. |
 
 ## mkdocs.yml Updates
 
-When adding new guides, update TWO sections in mkdocs.yml:
-
-1. **nav** — add the page path under the correct topic
-2. **plugins.llmstxt-md.sections** — add the file with its description
+When adding new guides, update the `nav:` section — add the page path under the correct topic. The `llmstxt-md` plugin serves per-page `.md` files automatically; no other mkdocs.yml changes are required.
 
 ## Category Index Update
 

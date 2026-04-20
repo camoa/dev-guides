@@ -172,10 +172,12 @@ def build_index(topics: list[dict]) -> str:
 
     # Fallback: generate without template
     lines = ["# Dev Guides\n"]
+    total_guides = sum(t["guide_count"] for t in topics)
     lines.append(
-        "> AI-friendly atomic decision guides for Drupal, CSS, JavaScript, "
-        "design systems, and Next.js development. Each topic file below is a "
-        "self-contained bundle that fits in a single LLM context window.\n"
+        f"> AI-friendly atomic decision guides for Drupal, CSS, JavaScript, "
+        f"design systems, and Next.js development. {total_guides} guides across "
+        f"{len(topics)} topics. Each topic link below points to a topic index "
+        f"with a routing table to individual guides.\n"
     )
 
     for cat_name in CATEGORY_ORDER:

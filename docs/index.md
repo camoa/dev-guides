@@ -25,8 +25,8 @@ This site is built for **targeted, on-demand retrieval** — not monolithic cont
 |------|----------|---------|
 | 1. Cache check | [`llms.hash`](llms.hash) | Tiny SHA-256 of `llms.txt` — fetch first to check if cache is fresh |
 | 2. Topic catalog | [`llms.txt`](llms.txt) | ~1,500-line index of all topics with URLs to topic index pages and guide counts |
-| 3. Routing table | `docs/{topic}/index.md` | Each topic's `index.md` contains a "I need to..." routing table + `guide-meta:` frontmatter (concepts/not/requires/complements) for intent disambiguation |
-| 4. Atomic guide | `docs/{topic}/{guide}.md` | Individual decision guide — one decision per page, token-efficient |
+| 3. Routing table | `docs/{topic}/index.md` | Each topic's `index.md` contains a "I need to..." routing table + `guide-meta:` frontmatter (concepts/not/requires/complements/specializes/category) for intent disambiguation |
+| 4. Atomic guide | `docs/{topic}/{guide}.md` | Individual decision guide with `tldr:` summary — one decision per page, token-efficient |
 
 **For raw markdown (bypasses MkDocs HTML rendering):**
 
@@ -40,6 +40,13 @@ We deliberately avoid a monolithic `llms-full.txt` or per-topic `.txt` bundles. 
 
 ### Format Conventions
 
-- **Atomic guides**: One decision per file. YAML frontmatter → H1 → When to Use → Decision table → Pattern → Common Mistakes → See Also
-- **`guide-meta:` frontmatter** on topic index pages: `concepts` (keywords that map here), `not` (disambiguation terms), `requires` (prerequisite topics), `complements` (related topics)
+- **Atomic guides**: One decision per file. YAML frontmatter (`description`, `tldr`, `drupal_version`) → H1 → When to Use → Decision table → Pattern → Common Mistakes → See Also
+- **`tldr:`** on every atomic guide: 1-2 sentence dense summary. Enables bulk-loading guide overviews to reason about which full guide to fetch.
+- **`guide-meta:` frontmatter** on topic index pages:
+  - `concepts` — keywords that should route here
+  - `not` — disambiguation terms that should NOT route here
+  - `requires` — prerequisite topics (load first)
+  - `complements` — related topics often used together
+  - `specializes` — parent topic if this is a domain-specific version
+  - `category` — one of: `drupal`, `nextjs`, `design-systems`, `dev-practices`, `css`, `js`, `media`, `ai-tooling`, `decoupled`
 - **Content style**: Tables, bullets, minimal code. No prose paragraphs.
