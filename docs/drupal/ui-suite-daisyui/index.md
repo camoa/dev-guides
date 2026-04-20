@@ -29,21 +29,21 @@ guide-meta:
 
 Drupal theme integrating DaisyUI 5 component library via UI Patterns 2, UI Styles, UI Skins, and UI Icons. Provides 51 Single Directory Components, 35 theme variants, Tailwind CSS 4 integration, and a Vite-based starterkit for sub-theming.
 
-| I need to... | Guide |
-|-------------|-------|
-| Decide if UI Suite DaisyUI fits my project | [Overview & Decision](overview-and-decision.md) |
-| Understand how UI Patterns, Styles, Skins, and Icons integrate | [Architecture](architecture.md) |
-| Install the theme and verify setup | [Installation & Setup](installation-and-setup.md) |
-| Find a DaisyUI component and its props/slots | [Theme Components Catalog](theme-components-catalog.md) |
-| Apply utility styles to blocks or Layout Builder sections | [UI Styles Integration](ui-styles-integration.md) |
-| Switch DaisyUI themes or customize CSS variables | [UI Skins Integration](ui-skins-integration.md) |
-| Override a system template with DaisyUI styling | [Template Overrides](template-overrides.md) |
-| Understand theme preprocess hooks and form styling | [Preprocess & Hooks](preprocess-and-hooks.md) |
-| Create a sub-theme with Vite and Tailwind 4 | [Sub-theming Starterkit](sub-theming-starterkit.md) |
-| Decide whether to reuse, override, or create a component | [Component Reuse Decision Tree](component-reuse-decision-tree.md) |
-| Use DaisyUI components with Layout Builder | [Layout Builder Integration](layout-builder-integration.md) |
-| Understand the CSS/JS asset pipeline | [Libraries & Assets](libraries-and-assets.md) |
-| Add custom components or override DaisyUI tokens | [Customization Patterns](customization-patterns.md) |
-| Follow best practices and avoid common mistakes | [Best Practices & Anti-Patterns](best-practices-and-anti-patterns.md) |
-| Address security and accessibility concerns | [Security & Accessibility](security-and-accessibility.md) |
-| Find source references and maintenance info | [Sources & Maintenance](sources-maintenance.md) |
+| I need to... | Guide | Summary |
+|-------------|-------|---------|
+| Decide if UI Suite DaisyUI fits my project | [Overview & Decision](overview-and-decision.md) | When to use UI Suite DaisyUI vs alternatives like Radix, custom Tailwind themes, or UI Suite Bootstrap |
+| Understand how UI Patterns, Styles, Skins, and Icons integrate | [Architecture](architecture.md) | How UI Patterns, UI Styles, UI Skins, and UI Icons integrate with DaisyUI components in the theme |
+| Install the theme and verify setup | [Installation & Setup](installation-and-setup.md) | Composer install, theme enable, dependency requirements, and post-installation verification |
+| Find a DaisyUI component and its props/slots | [Theme Components Catalog](theme-components-catalog.md) | Complete reference of all 51 DaisyUI components with props, slots, variants, and usage examples |
+| Apply utility styles to blocks or Layout Builder sections | [UI Styles Integration](ui-styles-integration.md) | Apply 30+ utility class styles to blocks, Layout Builder sections, and pattern instances |
+| Switch DaisyUI themes or customize CSS variables | [UI Skins Integration](ui-skins-integration.md) | Switch between 35 DaisyUI themes and customize 28 CSS design tokens via the admin UI |
+| Override a system template with DaisyUI styling | [Template Overrides](template-overrides.md) | 22 Drupal template overrides that delegate to DaisyUI SDC components |
+| Understand theme preprocess hooks and form styling | [Preprocess & Hooks](preprocess-and-hooks.md) | Theme hook implementations in ui_suite_daisyui.theme for pagers, forms, and inputs |
+| Create a sub-theme with Vite and Tailwind 4 | [Sub-theming Starterkit](sub-theming-starterkit.md) | Create a sub-theme when you need to customize the base theme's components, add new components, override UI Styles, or set up a proper Tailwind/DaisyUI build pipeline. Alpha6 ships a full starterkit with Vite, Tailwind CSS 4, DaisyUI 5, and… |
+| Decide whether to reuse, override, or create a component | [Component Reuse Decision Tree](component-reuse-decision-tree.md) | When deciding whether to use a base theme component as-is, override it in your sub-theme, or create a new component from scratch. |
+| Use DaisyUI components with Layout Builder | [Layout Builder Integration](layout-builder-integration.md) | Use grid components as Layout Builder layouts with UI Styles for section and block styling |
+| Understand the CSS/JS asset pipeline | [Libraries & Assets](libraries-and-assets.md) | Pre-compiled CSS library, CKEditor 5 integration, and Heroicon pack configuration |
+| Add custom components or override DaisyUI tokens | [Customization Patterns](customization-patterns.md) | Add custom components, override DaisyUI tokens, and extend base components |
+| Follow best practices and avoid common mistakes | [Best Practices & Anti-Patterns](best-practices-and-anti-patterns.md) | When UI Suite DaisyUI fits, recommended patterns, anti-patterns to avoid, and performance considerations |
+| Address security and accessibility concerns | [Security & Accessibility](security-and-accessibility.md) | Asset pipeline security, Twig escaping, form security, DaisyUI component accessibility, and WCAG concerns |
+| Find source references and maintenance info | [Sources & Maintenance](sources-maintenance.md) |  |

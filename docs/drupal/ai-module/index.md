@@ -45,30 +45,30 @@ guide-meta:
 
 Provider-agnostic AI abstraction for Drupal 11. Covers provider setup, all 15 operation types, agents, automators, the DeepChat chatbot, CKEditor integration, vector search/RAG, guardrails, and the complete sub-module ecosystem.
 
-| I need to... | Guide |
-|-------------|-------|
-| Understand the AI module architecture and request lifecycle | [Core Architecture](core-architecture.md) |
-| Work with AI providers (Anthropic, OpenAI, Ollama, etc.) | [Provider System](provider-system.md) |
-| Call an AI operation (chat, embeddings, TTS, etc.) | [Operation Types](operation-types.md) |
-| Build a REST chat API or embed a chatbot | [AI Chatbot (DeepChat)](ai-chatbot-deepchat.md) |
-| Create AI assistants with action plugins | [AI Assistant API](ai-assistant-api.md) |
-| Build autonomous AI agents | [AI Agents](ai-agents.md) |
-| Create custom tools/functions for agents | [Function Calling](function-calling.md) |
-| Auto-generate field content on entity save | [AI Automators](ai-automators.md) |
-| Add AI features to CKEditor 5 | [AI CKEditor](ai-ckeditor.md) |
-| Set up vector search / RAG | [AI Search (Vector/RAG)](ai-search-vector-rag.md) |
-| Translate content with AI | [AI Translate](ai-translate.md) |
-| Add AI validation to fields | [AI Validations](ai-validations.md) |
-| Add action buttons to field widgets | [Field Widget Actions](field-widget-actions.md) |
-| Monitor AI usage and costs in production | [AI Observability](ai-observability.md) |
-| Log AI requests for local debugging | [AI Logging](ai-logging.md) |
-| Test AI operations interactively | [AI API Explorer](ai-api-explorer.md) |
-| Add guardrails (pre/post processing) | [Guardrails System](guardrails-system.md) |
-| Use short-term memory plugins | [Short-Term Memory](short-term-memory.md) |
-| Work with prompts and prompt types | [Prompt System](prompt-system.md) |
-| Subscribe to AI events | [Events System](events-system.md) |
-| Handle AI-specific exceptions | [Exceptions](exceptions.md) |
-| Work with enums, DTOs, structured output | [Enums & DTOs](enums-and-dtos.md) |
-| Follow security best practices | [Security](security.md) |
-| Plan migrations from deprecated modules | [Deprecated Modules](deprecated-modules.md) |
-| Identify gaps in official documentation | [Documentation Gaps](documentation-gaps.md) |
+| I need to... | Guide | Summary |
+|-------------|-------|---------|
+| Understand the AI module architecture and request lifecycle | [Core Architecture](core-architecture.md) | Use this guide to understand how the AI module works before writing any code. Use the [Provider System](provider-system.md) guide when you need to call or build a provider. |
+| Work with AI providers (Anthropic, OpenAI, Ollama, etc.) | [Provider System](provider-system.md) | Use this guide when calling a specific provider, building a custom provider plugin, or working with the provider/model selection form. Use [Operation Types](operation-types.md) for the typed Input/Output classes. |
+| Call an AI operation (chat, embeddings, TTS, etc.) | [Operation Types](operation-types.md) | Use this guide when calling a specific AI operation. Use [Provider System](provider-system.md) when you need to select or build providers. |
+| Build a REST chat API or embed a chatbot | [AI Chatbot (DeepChat)](ai-chatbot-deepchat.md) | Use this guide when integrating the DeepChat chatbot frontend with Drupal. Use [AI Assistant API](ai-assistant-api.md) when building the backend assistant logic or custom actions. |
+| Create AI assistants with action plugins | [AI Assistant API](ai-assistant-api.md) | Use this guide when creating AI assistants, writing custom action plugins, or calling the runner programmatically. Use [AI Chatbot](ai-chatbot-deepchat.md) for the frontend chatbot configuration. |
+| Build autonomous AI agents | [AI Agents](ai-agents.md) | Use this guide when building autonomous AI agents that make decisions. Use [AI Automators](ai-automators.md) for fixed field-population workflows that don't need autonomous decision-making. |
+| Create custom tools/functions for agents | [Function Calling](function-calling.md) | Use this guide when building custom tools that agents or assistants can invoke. Use [AI Agents](ai-agents.md) for configuring which tools an agent uses. |
+| Auto-generate field content on entity save | [AI Automators](ai-automators.md) | Use this guide when auto-generating field content on entity save. Use [AI Agents](ai-agents.md) when you need autonomous decision-making rather than fixed field generation. |
+| Add AI features to CKEditor 5 | [AI CKEditor](ai-ckeditor.md) | Use this guide when adding AI text-generation capabilities to CKEditor 5. Use [AI Automators](ai-automators.md) for field-level automation outside the editor. |
+| Set up vector search / RAG | [AI Search (Vector/RAG)](ai-search-vector-rag.md) | Use this guide when setting up semantic search or Retrieval-Augmented Generation (RAG) with vector databases. Use [AI Assistant API](ai-assistant-api.md) to wire the `rag_action` into an assistant. |
+| Translate content with AI | [AI Translate](ai-translate.md) | **Status: DEPRECATED** — moving to standalone `drupal/ai_translate` project. This guide covers the module as it exists in AI 1.3.0-rc2. |
+| Add AI validation to fields | [AI Validations](ai-validations.md) | **Status: DEPRECATED** — moving to standalone `drupal/ai_validations` project. Use when you need AI-powered field validation constraints with the Field Validation module (>=3.0.0-beta3). |
+| Add action buttons to field widgets | [Field Widget Actions](field-widget-actions.md) | Use this guide when adding action buttons to field widgets on entity edit forms. The `field_widget_actions` module is AI-agnostic — it provides the framework; other modules provide the actual AI plugins. |
+| Monitor AI usage and costs in production | [AI Observability](ai-observability.md) | Use `ai_observability` for production monitoring and audit trails. Use [AI Logging](ai-logging.md) only for local development debugging (it is deprecated). |
+| Log AI requests for local debugging | [AI Logging](ai-logging.md) | **Status: DEPRECATED** — use [AI Observability](ai-observability.md) for production monitoring. `ai_logging` is development/debugging only and stores AI requests as `ai_log` entities in the database. |
+| Test AI operations interactively | [AI API Explorer](ai-api-explorer.md) | Use `ai_api_explorer` for interactive testing of AI operations during development. **Do not enable on production.** Use [Operation Types](operation-types.md) for the actual PHP API. |
+| Add guardrails (pre/post processing) | [Guardrails System](guardrails-system.md) | Use guardrails when you need to intercept AI requests before they reach the provider (pre-processing) or after receiving a response (post-processing). Required for user-facing AI features. |
+| Use short-term memory plugins | [Short-Term Memory](short-term-memory.md) | Use short-term memory plugins when you need to manage conversation context within a session beyond the default history mechanism in `ai_assistant_api`. For most cases, set `allow_history` on the `ai_assistant` config entity instead. |
+| Work with prompts and prompt types | [Prompt System](prompt-system.md) | Use the prompt system when you need reusable, deployable prompts with variable substitution. For one-off prompts in code, string interpolation is simpler. |
+| Subscribe to AI events | [Events System](events-system.md) | Use events when you need to intercept AI requests or responses across all operations without modifying providers. Use [Guardrails](guardrails-system.md) when you need content filtering. |
+| Handle AI-specific exceptions | [Exceptions](exceptions.md) | Use this guide when handling errors from AI provider calls. Always catch specific exceptions before the generic `AiExceptionInterface`. |
+| Work with enums, DTOs, structured output | [Enums & DTOs](enums-and-dtos.md) | Use this guide when filtering models by capability, building structured output schemas, or tracking token usage from provider responses. |
+| Follow security best practices | [Security](security.md) | Use this guide before deploying any user-facing AI feature. All items in the checklist are required for production. |
+| Plan migrations from deprecated modules | [Deprecated Modules](deprecated-modules.md) | Use this guide when upgrading to AI 1.3.0-rc2 or planning migrations away from deprecated sub-modules. |
+| Identify gaps in official documentation | [Documentation Gaps](documentation-gaps.md) | Use this guide when the official documentation doesn't match actual behavior. These gaps were identified by comparing official docs to source code in AI 1.3.0-rc2. |

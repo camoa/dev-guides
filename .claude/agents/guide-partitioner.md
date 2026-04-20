@@ -113,12 +113,13 @@ guide-meta:
 
 # [Topic]
 
-| I need to... | Guide |
-|-------------|-------|
-| [user intent] | [Guide Name](file.md) |
+| I need to... | Guide | Summary |
+|-------------|-------|---------|
+| [user intent] | [Guide Name](file.md) | [Paste the guide's `tldr:` value here — 1-2 sentence dense summary] |
 ```
 
 - "I need to..." format — maps user intent to guide
+- **Summary column**: copy the target guide's `tldr:` frontmatter value verbatim. This gives the navigator a pre-filter signal without a second fetch.
 - No explanations, just the routing table
 - Keep lean
 

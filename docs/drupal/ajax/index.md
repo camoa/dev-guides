@@ -26,31 +26,31 @@ guide-meta:
 
 > As of Drupal 11.3, HTMX is available in core and is the recommended approach for new projects. This guide covers the legacy AJAX framework, which remains essential for existing codebases and contributed module patterns.
 
-| I need to... | Guide |
-|-------------|-------|
-| Understand the AJAX system architecture | [Core Concepts](core-concepts.md) |
-| Add AJAX to a form element | [Form Element AJAX Configuration](form-element-ajax-configuration.md) |
-| Create dependent fields (category/subcategory) | [Dependent Field Patterns](dependent-field-patterns.md) |
-| Build a multi-step wizard form | [Multi-Step Form Workflows](multi-step-form-workflows.md) |
-| Validate fields as user types | [Live Field Validation](live-field-validation.md) |
-| Update, append, or remove DOM content | [Content Manipulation Commands](content-manipulation-commands.md) |
-| Add CSS classes or invoke jQuery methods | [CSS Styling Commands](css-styling-commands.md) |
-| Open or close modal dialogs | [Dialog Commands](dialog-commands.md) |
-| Show messages or screen reader alerts | [Feedback Commands](feedback-commands.md) |
-| Create a custom AJAX command | [Custom AJAX Commands](custom-ajax-commands.md) |
-| Build a custom AJAX route (non-Form API) | [Custom Route Implementation](custom-route-implementation.md) |
-| Handle file uploads via AJAX | [File Upload Patterns](file-upload-patterns.md) |
-| Implement autocomplete suggestions | [Autocomplete Implementation](autocomplete-implementation.md) |
-| Restrict access to AJAX callbacks | [Access Control Patterns](access-control-patterns.md) |
-| Protect AJAX endpoints from CSRF | [CSRF Protection](csrf-protection.md) |
-| Optimize slow AJAX requests | [Performance Optimization](performance-optimization.md) |
-| Cache AJAX responses | [Response Caching](response-caching.md) |
-| Make AJAX meet WCAG 2.1 AA | [WCAG Compliance Patterns](wcag-compliance-patterns.md) |
-| Announce updates to screen readers | [Screen Reader Support](screen-reader-support.md) |
-| Debug failing AJAX requests | [Debugging Techniques](debugging-techniques.md) |
-| Write automated AJAX tests | [Testing AJAX](testing-ajax.md) |
-| Integrate React or Vue with Drupal | [Frontend Framework Integration](frontend-framework-integration.md) |
-| Apply security best practices | [Best Practices: Security](best-practices-security.md) |
-| Apply performance best practices | [Best Practices: Performance](best-practices-performance.md) |
-| Follow Drupal development standards | [Best Practices: Development Standards](best-practices-development.md) |
-| Meet accessibility requirements | [Best Practices: Accessibility](best-practices-accessibility.md) |
+| I need to... | Guide | Summary |
+|-------------|-------|---------|
+| Understand the AJAX system architecture | [Core Concepts](core-concepts.md) | Use Drupal AJAX when maintaining existing codebases, working with contributed modules, or needing backward compatibility. Use HTMX (available in Drupal 11.3+) for new projects — it reduces JavaScript size by up to 71%. |
+| Add AJAX to a form element | [Form Element AJAX Configuration](form-element-ajax-configuration.md) | Use the `#ajax` property on any form element when you need server-driven content updates triggered by user interaction without a full page reload. |
+| Create dependent fields (category/subcategory) | [Dependent Field Patterns](dependent-field-patterns.md) | Use dependent fields when form options must change based on the value of another field (category/subcategory, country/state, product type/options). |
+| Build a multi-step wizard form | [Multi-Step Form Workflows](multi-step-form-workflows.md) | Use multi-step AJAX forms for wizard-style workflows where users navigate sequential steps without page reloads. Use standard forms for simple one-page submissions. |
+| Validate fields as user types | [Live Field Validation](live-field-validation.md) | Use live validation when user experience benefits from immediate field-level feedback (email availability checks, username format, real-time constraints). Avoid for simple required-field checks. |
+| Update, append, or remove DOM content | [Content Manipulation Commands](content-manipulation-commands.md) | Use these commands when you need to update DOM content from AJAX callbacks. Choose the command that matches the specific DOM operation needed. |
+| Add CSS classes or invoke jQuery methods | [CSS Styling Commands](css-styling-commands.md) | Use CSS styling commands for dynamic visual changes triggered by AJAX responses. Prefer adding classes over inline styles. |
+| Open or close modal dialogs | [Dialog Commands](dialog-commands.md) | Use OpenModalDialogCommand when you need to block page interaction. Use OpenDialogCommand for non-blocking side panels. |
+| Show messages or screen reader alerts | [Feedback Commands](feedback-commands.md) | Use MessageCommand for all user-facing messages. Use AnnounceCommand to notify screen readers of content changes. |
+| Create a custom AJAX command | [Custom AJAX Commands](custom-ajax-commands.md) | Create custom AJAX commands when core commands don't meet your needs: custom animations, third-party library integration, or complex DOM manipulation requiring JavaScript logic. |
+| Build a custom AJAX route (non-Form API) | [Custom Route Implementation](custom-route-implementation.md) | Use custom AJAX routes when you need AJAX endpoints outside Form API: autocomplete, search, content loading, or API-style endpoints. Always implement the `nojs` fallback for JavaScript-disabled environments. |
+| Handle file uploads via AJAX | [File Upload Patterns](file-upload-patterns.md) | Use `#type => 'managed_file'` with AJAX for file uploads that need immediate preview or feedback (avatars, attachments, media galleries). Always configure upload validators. |
+| Implement autocomplete suggestions | [Autocomplete Implementation](autocomplete-implementation.md) | Use `#autocomplete_route_name` for dynamic suggestions as users type. Use core's `system.entity_autocomplete` for existing entity types. |
+| Restrict access to AJAX callbacks | [Access Control Patterns](access-control-patterns.md) | Every AJAX callback and route is an HTTP endpoint and requires access control. AJAX callbacks are not protected by the UI alone — attackers can call them directly. |
+| Protect AJAX endpoints from CSRF | [CSRF Protection](csrf-protection.md) | Drupal's Form API handles CSRF automatically. For custom AJAX routes outside Form API, add `_csrf_token: 'TRUE'` and verify request type. |
+| Optimize slow AJAX requests | [Performance Optimization](performance-optimization.md) | Apply these patterns when AJAX requests are slow, causing excessive database queries, large DOM updates, or timeouts on large operations. |
+| Cache AJAX responses | [Response Caching](response-caching.md) | Use CacheableAjaxResponse for AJAX responses containing cacheable data: public content, configuration results, or expensive calculations that don't vary per user. Do not cache user-specific data without proper cache contexts. |
+| Make AJAX meet WCAG 2.1 AA | [WCAG Compliance Patterns](wcag-compliance-patterns.md) | Apply these patterns to every AJAX implementation. Accessibility is not optional — WCAG 2.1 Level AA is the standard for Drupal sites. |
+| Announce updates to screen readers | [Screen Reader Support](screen-reader-support.md) | Every AJAX content update must be announced to screen reader users. Silence after a dynamic update is a WCAG failure. |
+| Debug failing AJAX requests | [Debugging Techniques](debugging-techniques.md) | Use these techniques when AJAX requests fail, return unexpected results, or produce errors. Start with the browser DevTools Network tab before adding server-side logging. |
+| Write automated AJAX tests | [Testing AJAX](testing-ajax.md) | Use WebDriverTestBase (FunctionalJavascript namespace) for AJAX tests — it drives a real browser. Use BrowserTestBase only for non-JavaScript tests. |
+| Integrate React or Vue with Drupal | [Frontend Framework Integration](frontend-framework-integration.md) | Use JSON endpoints with React/Vue for fully decoupled sites. Use Drupal AJAX for simple enhancements. |
+| Apply security best practices | [Best Practices: Security](best-practices-security.md) | Apply every item in this guide to every AJAX implementation. AJAX callbacks and routes are HTTP endpoints — they require the same security rigor as any web API. |
+| Apply performance best practices | [Best Practices: Performance](best-practices-performance.md) | Apply these standards to every AJAX implementation. Slow AJAX destroys UX. |
+| Follow Drupal development standards | [Best Practices: Development Standards](best-practices-development.md) | Apply these standards to all AJAX code. They prevent the most common sources of bugs, broken tests, and maintenance pain. |
+| Meet accessibility requirements | [Best Practices: Accessibility](best-practices-accessibility.md) | Every AJAX implementation must meet WCAG 2.1 Level AA. This is not optional — it's a legal and ethical requirement. |
