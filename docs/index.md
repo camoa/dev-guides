@@ -17,7 +17,29 @@ Decision-making guides that answer: "When you need to do X, what should you choo
 
 ## For AI Consumers
 
-- **Index**: [`llms.txt`](llms.txt) — structured index with per-topic bundles
-- **Per-topic files**: Each topic as a single file that fits in one LLM context window
-- **Navigation**: Index → Topic TOC → Atomic guide (one decision per page)
-- **Format**: Tables, bullets, minimal code. No prose.
+This site is built for **targeted, on-demand retrieval** — not monolithic context loading. Every guide is a standalone atomic decision document (5-20KB) fetched individually as needed.
+
+### Discovery & Retrieval Flow
+
+| Step | Endpoint | Purpose |
+|------|----------|---------|
+| 1. Cache check | [`llms.hash`](llms.hash) | Tiny SHA-256 of `llms.txt` — fetch first to check if cache is fresh |
+| 2. Topic catalog | [`llms.txt`](llms.txt) | ~1,500-line index of all topics with URLs to topic index pages and guide counts |
+| 3. Routing table | `docs/{topic}/index.md` | Each topic's `index.md` contains a "I need to..." routing table + `guide-meta:` frontmatter (concepts/not/requires/complements) for intent disambiguation |
+| 4. Atomic guide | `docs/{topic}/{guide}.md` | Individual decision guide — one decision per page, token-efficient |
+
+**For raw markdown (bypasses MkDocs HTML rendering):**
+
+```
+https://raw.githubusercontent.com/camoa/dev-guides/main/docs/{topic}/{guide}.md
+```
+
+### Why No Giant Bundle?
+
+We deliberately avoid a monolithic `llms-full.txt` or per-topic `.txt` bundles. The navigator plugin pattern fetches only the guides relevant to the current task, keeping context windows lean. See [dev-guides-navigator](https://github.com/camoa/claude-skills) for a reference implementation of this retrieval pattern.
+
+### Format Conventions
+
+- **Atomic guides**: One decision per file. YAML frontmatter → H1 → When to Use → Decision table → Pattern → Common Mistakes → See Also
+- **`guide-meta:` frontmatter** on topic index pages: `concepts` (keywords that map here), `not` (disambiguation terms), `requires` (prerequisite topics), `complements` (related topics)
+- **Content style**: Tables, bullets, minimal code. No prose paragraphs.

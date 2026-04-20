@@ -12,6 +12,8 @@ plugins:
   - search
   - llmstxt-md:
       enable_copy_button: false
+      enable_llms_txt: false
+      enable_llms_full: false
       sections:
         "Drupal":
           - drupal/index.md: "Drupal decision guides — forms, SDC components, JavaScript, entities, config, rendering, frontend, architecture"
