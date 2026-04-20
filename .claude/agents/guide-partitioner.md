@@ -87,7 +87,18 @@ Reference source files for full implementation.
 2. The primary pattern name or key identifier from the Pattern section
 3. If there's a critical gotcha in Common Mistakes, include it
 
-Keep it under 240 characters. No code, no links — plain text.
+Keep it under 240 characters. No code, no links — plain text. If "When to Use" starts with a markdown table or code fence, fall back to the `description:` field from the source guide's frontmatter (if present).
+
+**Reading deprecation markers:** The source guide may contain HTML comment markers inside a partition. Transfer these into the atomic guide's frontmatter:
+
+| Source marker | Frontmatter field |
+|---------------|-------------------|
+| `<!-- DEPRECATED: true -->` | `deprecated: true` |
+| `<!-- DEPRECATED_SINCE: YYYY-MM-DD -->` | `deprecated_since: "YYYY-MM-DD"` |
+| `<!-- SUPERSEDED_BY: filename.md -->` | `superseded_by: filename.md` |
+| `<!-- REASON: short explanation -->` | `reason: "short explanation"` |
+
+Omit all four fields from frontmatter if none of the markers are present.
 
 ## Formatting Rules
 

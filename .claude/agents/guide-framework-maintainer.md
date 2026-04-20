@@ -269,6 +269,19 @@ category: [drupal|nextjs|design-system|dev-practices|css|js|media|ai-tooling|dec
 **On CREATE**: Generate the full `<!-- GUIDE-META -->` block from your research findings.
 **On UPDATE**: Review and update the existing block — new research may reveal new relationships or disambiguation needs.
 
+**Published Guide Frontmatter** — the partitioner auto-generates two fields per atomic guide. Write source content with this in mind:
+
+- **`tldr:`** (auto-generated) — 1-2 sentence dense summary. The partitioner extracts this from the "### When to Use" subsection. **Write "When to Use" as a clean, concise prose paragraph (1-2 sentences stating the decision and primary trade-off).** Avoid starting "When to Use" with a markdown table or bullet list — the tldr extractor works best on prose.
+
+- **`deprecated:`** (manual) — mark a section as deprecated when its pattern is superseded. Add a marker comment in the source:
+  ```
+  <!-- DEPRECATED: true -->
+  <!-- DEPRECATED_SINCE: 2026-04-20 -->
+  <!-- SUPERSEDED_BY: new-section-slug.md -->
+  <!-- REASON: Drupal 12 removed this API; use the new service instead -->
+  ```
+  The partitioner transfers these into the atomic guide's frontmatter as `deprecated: true`, etc. Prefer deprecation over deletion — keeps context for anyone following an old pattern.
+
 **Future Publishing Readiness**: Guides are authored as single files now but structured so each atomic section can be extracted into its own page later. The TOC header becomes `index.md`, each section becomes a standalone `.md` file. No rewriting needed — just splitting along section boundaries.
 
 You proactively engage when guide maintenance is needed, when new patterns emerge requiring documentation, or when existing content becomes outdated. Your output creates an atomic-ready guide ecosystem that supports both Claude Code workflows and future MkDocs publishing.
