@@ -436,5 +436,11 @@
     "partitioned": "2026-04-08",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 29
+  },
+  "development/reading-strategy": {
+    "source_hash": "482115d75f9a622e636dc858cc295bd953896a14d7b4e71cbb12d57467ca2047",
+    "partitioned": "2026-04-23",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 8
   }
 }

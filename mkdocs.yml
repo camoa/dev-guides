@@ -1442,6 +1442,16 @@ nav:
       - development/tdd-spec-driven/three-laws-tdd.md
       - development/tdd-spec-driven/unit-testing-fundamentals.md
       - development/tdd-spec-driven/writing-specs.md
+    - Reading Strategy:
+      - development/reading-strategy/index.md
+      - development/reading-strategy/overview.md
+      - development/reading-strategy/task-type-a-targeted-edits.md
+      - development/reading-strategy/task-type-b-comprehensive-understanding.md
+      - development/reading-strategy/task-type-c-large-exploration.md
+      - development/reading-strategy/what-grep-misses.md
+      - development/reading-strategy/token-warning-interpretation.md
+      - development/reading-strategy/pre-completion-checklist.md
+      - development/reading-strategy/quick-reference.md
   - AI Tooling:
     - ai-tooling/index.md
     - Figma MCP Server:
