@@ -39,6 +39,12 @@ WHEN_TO_USE_RE = re.compile(
     r"(?=\n\n#{1,4}\s|\n\Z|\Z)",  # until next heading or EOF
     re.DOTALL | re.IGNORECASE,
 )
+# Playbook rules use **What:** ... as the rule statement.
+# Matches: **What:** rule statement here.
+WHAT_RE = re.compile(
+    r"\*\*What:\*\*\s+(.+?)(?=\n\n|\n\*\*|\Z)",
+    re.DOTALL,
+)
 
 
 def parse_frontmatter(content: str):
@@ -67,6 +73,17 @@ def extract_description(fm_text: str) -> str:
     ):
         val = val[1:-1]
     return val.strip()
+
+
+def extract_what(body: str) -> str:
+    """Pull the **What:** rule statement (playbook rule format)."""
+    m = WHAT_RE.search(body)
+    if not m:
+        return ""
+    text = m.group(1).strip()
+    # Collapse whitespace.
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
 
 
 def extract_when_to_use(body: str) -> str:
@@ -165,7 +182,11 @@ def process_file(path: Path, dry_run: bool = False) -> str:
     if when_to_use and looks_like_table_or_code(when_to_use):
         when_to_use = ""  # force fallback
 
-    # Fallback: description: from frontmatter.
+    # Playbook-rule fallback: **What:** rule statement.
+    if not when_to_use:
+        when_to_use = extract_what(body)
+
+    # Last fallback: description: from frontmatter.
     if not when_to_use and has_fm:
         when_to_use = extract_description(fm_text)
 

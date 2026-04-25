@@ -1107,6 +1107,28 @@ nav:
       - drupal/views/views-data-integration.md
       - drupal/views/views-overview.md
       - drupal/views/views-plugin-architecture.md
+    - "Best Practices — camoa":
+      - drupal/best-practices/camoa/index.md
+      - drupal/best-practices/camoa/use-bootstrap-before-custom-css.md
+      - drupal/best-practices/camoa/never-replace-bootstrap-maps.md
+      - drupal/best-practices/camoa/font-sizing-always-use-rfs.md
+      - drupal/best-practices/camoa/mobile-first-breakpoints.md
+      - drupal/best-practices/camoa/no-direct-child-selectors-with-layout-builder.md
+      - drupal/best-practices/camoa/lb-styles-must-not-override-component-internals.md
+      - drupal/best-practices/camoa/media-view-mode-to-responsive-image-style.md
+      - drupal/best-practices/camoa/responsive-image-sizing-per-context.md
+      - drupal/best-practices/camoa/sizes-based-vs-breakpoint-based.md
+      - drupal/best-practices/camoa/no-hardcoded-content-in-templates.md
+      - drupal/best-practices/camoa/config-over-code.md
+      - drupal/best-practices/camoa/field-descriptions-via-base-field-overrides.md
+      - drupal/best-practices/camoa/bef-ajax-over-js-toggles.md
+      - drupal/best-practices/camoa/block-to-sdc-via-block-template.md
+      - drupal/best-practices/camoa/sdc-libraries.md
+      - drupal/best-practices/camoa/window-width-at-click-time.md
+      - drupal/best-practices/camoa/per-environment-module-exclusion.md
+      - drupal/best-practices/camoa/metatag-per-bundle.md
+      - drupal/best-practices/camoa/composer-module-removal-order.md
+      - drupal/best-practices/camoa/hiding-features-for-launch.md
   - "Next.js":
     - nextjs/index.md
     - Next Drupal:

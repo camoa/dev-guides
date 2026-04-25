@@ -73,3 +73,4 @@ guide-meta:
 | Integrate Salesforce with Drupal | [Salesforce](salesforce/index.md) |
 | Optimize SEO and GEO for Drupal sites | [SEO & GEO](seo-geo/index.md) |
 | Build component stories with Storybook | [Storybook](storybook/index.md) |
+| Apply opinionated project rules (Bootstrap, LB, responsive images, SDC, config) | [Best Practices — camoa](best-practices/camoa/index.md) |
