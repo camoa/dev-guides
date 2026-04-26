@@ -1107,6 +1107,25 @@ nav:
       - drupal/views/views-data-integration.md
       - drupal/views/views-overview.md
       - drupal/views/views-plugin-architecture.md
+    - Mailgun:
+      - drupal/mailgun/index.md
+      - drupal/mailgun/module-decision.md
+      - drupal/mailgun/dns-setup.md
+      - drupal/mailgun/region-selection.md
+      - drupal/mailgun/module-installation.md
+      - drupal/mailgun/settings-configuration.md
+      - drupal/mailgun/mail-routing.md
+      - drupal/mailgun/ui-configuration.md
+      - drupal/mailgun/api-key-storage.md
+      - drupal/mailgun/programmatic-sending.md
+      - drupal/mailgun/mailgun-specific-params.md
+      - drupal/mailgun/queue-vs-direct-send.md
+      - drupal/mailgun/webhook-handling.md
+      - drupal/mailgun/bounce-complaint-handling.md
+      - drupal/mailgun/verification-testing.md
+      - drupal/mailgun/common-errors.md
+      - drupal/mailgun/alternatives-comparison.md
+      - drupal/mailgun/pricing-tier-selection.md
     - "Best Practices — camoa":
       - drupal/best-practices/camoa/index.md
       - drupal/best-practices/camoa/use-bootstrap-before-custom-css.md

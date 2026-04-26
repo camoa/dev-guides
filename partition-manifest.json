@@ -448,5 +448,11 @@
     "partitioned": "2026-04-24",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 20
+  },
+  "drupal/mailgun": {
+    "source_hash": "8b43e1fad12c200657e27636802d850d8c4de4be962597b44246f9898b5b7a70",
+    "partitioned": "2026-04-26",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 17
   }
 }
