@@ -1,14 +1,22 @@
 ---
-description: A custom module is the last resort, not the first tool. Try CSS, Twig template overrides, theme preprocess, or contrib before creating custom code. When a module is necessary, minimize its security surface.
-tldr: A custom module is the last resort — try CSS, Twig template overrides (before preprocess hooks), config-only solutions, and existing contrib before creating custom code. Templates beat preprocess because they have no PHP runtime cost, no caching risk, and no maintenance surface.
+description: A custom module is the last resort, not the first tool. Apply reuse, extend, create in order — CSS, config, existing contrib, Twig template, preprocess, then custom module. When a module is necessary, minimize its security surface.
+tldr: Apply reuse, extend, create in order — CSS/config/existing-contrib first (reuse), then Twig template override and preprocess hooks (extend), then custom module (create). Contrib is shared infrastructure; your template is yours to patch forever.
 drupal_version: "11.x"
 ---
 
 # Avoid Unnecessary Custom Modules
 
-**What:** A custom module is the last resort, not the first tool. Try in order: (1) CSS in the theme, (2) Twig template overrides, (3) theme preprocess hooks (only when templates alone can't do it), (4) extend/reuse existing core or contrib via config, (5) only then a custom module. When a custom module is genuinely necessary, minimize its security surface.
+**What:** A custom module is the last resort, not the first tool. Apply the **reuse, extend, create** principle in order: (1) CSS in the theme, (2) Drupal config (Manage Display, view modes, permissions, blocks), (3) reuse — existing core or contrib module that solves the problem (often via its own config UI), (4) extend through the theme layer — Twig template override, (5) extend through preprocess — theme preprocess hook (only when templates alone can't do it; you need to compute or transform data), (6) create — custom module (last resort). When a custom module is genuinely necessary, minimize its security surface.
 
-**Rationale:** Every custom module is a permanent maintenance liability — security patching, upgrade testing, code review on every change, and a new attack surface (controllers, forms, services, AJAX endpoints, permissions). CSS and theme changes are isolated, easy to roll back, and don't require module-level concerns. **Templates before preprocess**: Twig template overrides are pure presentation with no PHP runtime cost or side effects; preprocess hooks run on every render of every entity of that type and add a maintenance surface. Reach for preprocess only when the template alone genuinely can't do it. Config-only solutions are exportable, reviewable, and survive module changes. The "extend, reuse, create" principle: extend what exists (templates, preprocess, config) before reusing (contrib modules), and create (custom code) only when both fail. A contrib module already used by hundreds of sites has been audited, fuzz-tested, and security-patched in ways your custom code never will be.
+**Rationale:** Every custom module is a permanent maintenance liability — security patching, upgrade testing, code review on every change, and a new attack surface (controllers, forms, services, AJAX endpoints, permissions). The **reuse, extend, create** principle ranks options by maintenance cost:
+
+- **Reuse first**: a contrib module already used by thousands of sites has been audited, fuzz-tested, security-patched, and documented in ways your custom code never will be. Adding a well-maintained contrib dependency carries less long-term cost than writing the equivalent yourself — even if "writing the equivalent" is just a Twig template.
+- **Extend second**: when no module fits, extend the system through its supported extension points — config, templates, preprocess hooks. These layers are isolated, theme-scoped, and don't introduce new module surface.
+- **Create last**: write custom modules only when reuse and extension both fail. Custom code is what you'll be maintaining at 2 AM in three years.
+
+**Templates before preprocess**: Twig template overrides are pure presentation with no PHP runtime cost or side effects; preprocess hooks run on every render of every entity of that type and add a PHP maintenance surface. Reach for preprocess only when the template alone genuinely can't do it (you need to compute, transform, or fetch additional data).
+
+**Config and CSS are "reuse" not "create"**: setting `display_label: hidden` in Manage Display is reusing Drupal's display system; writing `.field--name { display: none }` is reusing the CSS cascade. Neither creates new code paths.
 
 **When it applies:** Every "we need to customize X" decision. Especially when the request is presentation-only (use CSS), display-tweaking (theme template/preprocess), or behavior available via existing contrib (search drupal.org first). Also during refactoring — audit existing custom modules for ones that could be retired in favor of config + theme.
 
@@ -60,19 +68,35 @@ Need: Process an incoming external API webhook
 
 ```
 Need a customization?
-├─ Is it visual only (color, spacing, layout)?
+│
+├─ REUSE — Is it visual only (color, spacing, layout)?
 │   └─ YES → CSS in theme. Done.
-├─ Is it config (fields, view displays, permissions, blocks)?
+│
+├─ REUSE — Is it config (fields, view displays, permissions, blocks)?
 │   └─ YES → Config UI + drush cex. Done.
-├─ Is it markup arrangement, conditional display, or output structure?
+│
+├─ REUSE — Does an existing core or contrib module solve it?
+│   └─ YES → Install/configure it (its config UI is reuse, not creation).
+│            Done.
+│
+├─ EXTEND — Is it markup arrangement, conditional display, or output
+│           structure that no contrib provides?
 │   ├─ Can a Twig template override do it (no computed values needed)?
 │   │   └─ YES → Template override (node--TYPE--VIEW.html.twig). Done.
 │   └─ Need to compute or transform variables before render?
 │       └─ YES → Theme preprocess hook (last theme-layer option). Done.
-├─ Does an existing core or contrib module solve it?
-│   └─ YES → Use it. Possibly extend via hooks. Done.
-└─ NO to all → Custom module justified. Minimize attack surface.
+│
+└─ CREATE — None of the above? Custom module justified.
+            Minimize attack surface (see security checklist above).
 ```
+
+**Why reuse before extend**: a contrib module is shared infrastructure.
+Maintainers respond to security advisories, ship Drupal-version
+compatibility, and absorb edge cases hundreds of sites have hit. Your
+template override is yours alone — you ship it, you patch it, you
+re-test it on every Drupal upgrade. If a contrib does 80% of what you
+need with config, that's almost always a better trade than 100% in a
+template you own.
 
 **Why templates before preprocess**: a `.html.twig` override is pure
 presentation. It has no PHP runtime cost, no side effects, can't break
