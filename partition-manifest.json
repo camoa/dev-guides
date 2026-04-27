@@ -444,7 +444,7 @@
     "guides_extracted": 8
   },
   "drupal/best-practices/camoa": {
-    "source_hash": "3498fd98e2e84634ccea9ed30316dd00db220a063cceecfdca5a3a6bd91a70d2",
+    "source_hash": "7d80cce2982d318af4980346acfe52c36127511f70b9816bdbd78b32f7fa08f1",
     "partitioned": "2026-04-27",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 22
