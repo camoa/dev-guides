@@ -444,10 +444,10 @@
     "guides_extracted": 8
   },
   "drupal/best-practices/camoa": {
-    "source_hash": "6f9cad15ccdacdc0ffccdcd4957cd21474fe0c3af2728ab43e2ad5750f4fefe2",
-    "partitioned": "2026-04-24",
+    "source_hash": "7143bb1312ae31652b3e6409c2641abb5002317b71a749ec0dee38b99b6c66e9",
+    "partitioned": "2026-04-27",
     "partitioned_by": "Carlos Ospina",
-    "guides_extracted": 20
+    "guides_extracted": 21
   },
   "drupal/mailgun": {
     "source_hash": "7aaa59a3f44e21f3071ccc5b9e92bce544e4bce4cb1b1fa541248462f338dc78",

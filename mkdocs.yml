@@ -1148,6 +1148,7 @@ nav:
       - drupal/best-practices/camoa/metatag-per-bundle.md
       - drupal/best-practices/camoa/composer-module-removal-order.md
       - drupal/best-practices/camoa/hiding-features-for-launch.md
+      - drupal/best-practices/camoa/drush-commands-before-php-eval.md
   - "Next.js":
     - nextjs/index.md
     - Next Drupal:
