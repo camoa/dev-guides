@@ -1,12 +1,12 @@
 ---
-description: Always check whether a Drush command exists for the operation before reaching for `drush php:eval`, `drush php:script`, or `drush sql:query`. `php:eval` is the fallback for genuinely missing commands, not the default.
+description: Always use built-in Drush commands instead of php:eval, php:script, sql:query, or hand-written PHP snippets. Custom PHP is the fallback for genuinely missing commands, not the default.
+tldr: Check whether a Drush command exists before reaching for php:eval or php:script. Built-in commands are tested, idempotent, flag-aware, and self-documenting; php:eval bypasses all of that and accumulates as brittle copy-paste debt.
 drupal_version: "11.x"
-tldr: Always check whether a Drush command exists for the operation before reaching for `drush php:eval`, `drush php:script`, or `drush sql:query`. `php:eval` is the fallback for genuinely missing commands, not the default.
 ---
 
-# Use Drush Commands Before php:eval
+# Prefer Drush Commands Over Custom PHP
 
-**What:** Always check whether a Drush command exists for the operation before reaching for `drush php:eval`, `drush php:script`, `drush sql:query`, or hand-written PHP. `php:eval` is the fallback for genuinely missing commands, not the default.
+**What:** Always check whether a Drush command exists for the operation before reaching for `drush php:eval`, `drush php:script`, `drush sql:query`, or hand-written PHP. Custom PHP is the fallback for genuinely missing commands, not the default.
 
 **Rationale:** Built-in Drush commands are tested, idempotent, support standard flags (`--yes`, `--simulate`, `--uri`, `--debug`, `--root`), produce structured output (`--format=json|yaml|csv|table`), integrate with `drush help` and tab completion, and document themselves. `php:eval` bypasses all of that — no help text, no idempotency guarantees, no flags, no shell-quoting safety. Worse, php-eval snippets tend to accumulate as copy-paste artifacts in deploy scripts and READMEs, drifting from current API patterns and hiding bugs (missing cache invalidation, missing dependency resolution, wrong service IDs after refactors).
 
@@ -50,4 +50,4 @@ drush cache:rebuild
 drush php:eval "echo \Drupal::service('my_module.diagnostics')->snapshot();"
 ```
 
-When you DO need `php:eval` (no Drush equivalent exists), prefer `php:script` with a versioned `.php` file in the repo over inline strings — it's reviewable, diffable, testable, and survives shell-quoting hell.
+When you DO need custom PHP (no Drush equivalent exists), prefer `drush php:script` with a versioned `.php` file in the repo over `php:eval` inline strings — it's reviewable, diffable, testable, and survives shell-quoting hell.
