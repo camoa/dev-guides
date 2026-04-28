@@ -1,47 +1,31 @@
 ---
 description: Field formatters — rendering fields through components at items or per-item granularity
-tldr: "Field formatters — rendering fields through components at items or per-item granularity"
+tldr: Two formatters — ui_patterns_component (multi-value) and ui_patterns_component_per_item (per-item). Per-item scopes sources to the trigger field only; reach sibling fields via entity_field context switcher. field_property source IDs are field_property:{entity_type}:{field_name}:{column} — no bundle segment. For 5+ slots reading different fields, Twig include() is often cleaner.
 drupal_version: "10.3+ / 11"
 ---
 
-## Field Formatters
+# Field Formatters
 
-**Sub-module:** `ui_patterns_field_formatters`
-**Dependencies:** `ui_patterns`
+## When to Use
 
-### What It Does
+> Use `ui_patterns_component_per_item` when a single field value should render as one component instance. Use `ui_patterns_component` when all field items should be passed to one component. Use Twig `include()` instead when the component reads 5+ sibling fields — the 3-level `entity_field` nesting per slot becomes hard to maintain.
 
-Provides field formatter plugins that render field output through SDC components. Two formatters are available:
+## Decision
 
-| Formatter | ID | Cardinality | Context |
-|---|---|---|---|
-| `ComponentFormatter` | `ui_patterns_component` | Multi-value (>1 or unlimited) | `field_granularity:items` |
-| `ComponentFormatterSingle` | `ui_patterns_component_per_item` | Any | `field_granularity:item` |
+| Situation | Choose | Why |
+|-----------|--------|-----|
+| Single field value → one component instance | `ui_patterns_component_per_item` | Per-item granularity; Drupal iterates |
+| All field values → one component | `ui_patterns_component` | Multi-value; component handles iteration |
+| Single-cardinality field | `ui_patterns_component_per_item` | Multi-value formatter won't appear for cardinality = 1 |
+| Component reads 5+ sibling fields | Twig `include()` pattern | Each slot needs `entity_field` 3-level nesting; block template is cleaner |
+| Per-instance variants needed | Twig `include()` pattern | Formatters cannot read LB block `configuration` array |
 
-The formatter is registered for `entity_reference` fields but is dynamically made available for **all field types** via `ui_patterns_field_formatters_field_formatter_info_alter()`.
+## Pattern
 
-### How It Works
-
-1. Select "Component (UI Patterns)" as the field formatter in Manage Display
-2. Choose a component from the component selector
-3. Map the field's properties to component props and slots
-4. The formatter builds a component render array with entity + field context
-
-The `ComponentFormatterBase` uses `ComponentSettingsFormBuilderTrait` which provides the standard component configuration form. Context includes the entity, bundle, field items, and field index (for per-item rendering).
-
-### Granularity: Items vs Item
-
-- **`ComponentFormatter`** (multi-value) receives all field items at once. The component handles iteration. Best for list components (e.g., an image gallery component that receives all images).
-- **`ComponentFormatterSingle`** (per-item) receives one field item at a time. Drupal iterates. Best for simple formatters where each field value gets its own component instance.
-
-### Config YAML
-
-Field formatter configuration is stored in the entity view display. After `drush config:export`, find it in `core.entity_view_display.{entity_type}.{bundle}.{view_mode}.yml` under the `content` key for the field:
+Field formatter configuration lives in `core.entity_view_display.{entity_type}.{bundle}.{view_mode}.yml`:
 
 ```yaml
-# In core.entity_view_display.node.article.default.yml
 content:
-  # Per-item formatter: each field value rendered as a card
   field_image:
     type: ui_patterns_component_per_item
     label: hidden
@@ -53,79 +37,53 @@ content:
           source:
             value: default
         props:
-          heading_level:
-            source_id: select
-            source:
-              value: '3'
-          size:
-            source_id: select
-            source:
-              value: md
           url:
-            source_id: 'field_property:node:article:field_link'
+            source_id: 'field_property:node:field_link:uri'
             source:
               type: uri
         slots:
-          image:
-            sources:
-              - source_id: 'field_property:node:article:field_image'
-                source:
-                  type: entity
-                _weight: '0'
           title:
             sources:
-              - source_id: 'field_property:node:article:title'
+              - source_id: 'field_property:node:title:value'
                 source:
                   type: value
                 _weight: '0'
-          text:
+          # Sibling field — requires entity_field context switcher:
+          body:
             sources:
-              - source_id: 'field_property:node:article:body'
+              - source_id: entity_field
                 source:
-                  type: text_processed
+                  derivable_context: 'field:node:article:body'
+                  'field:node:article:body':
+                    value:
+                      sources:
+                        - source_id: 'field_property:node:body:value'
+                          source:
+                            type: text_processed
+                          _weight: '0'
                 _weight: '0'
-    third_party_settings: {}
-    weight: 0
-    region: content
-
-  # Multi-value formatter: all items passed to one component
-  field_tags:
-    type: ui_patterns_component
-    label: above
-    settings:
-      ui_patterns:
-        component_id: 'ui_suite_daisyui:badge'
-        variant_id:
-          source_id: select
-          source:
-            value: ''
-        props: {}
-        slots:
-          text:
-            sources:
-              - source_id: 'field_property:node:article:field_tags'
-                source:
-                  type: entity_label
-                _weight: '0'
-    third_party_settings: {}
-    weight: 5
-    region: content
 ```
 
-Key observations:
-- The formatter type is `ui_patterns_component_per_item` (per-item) or `ui_patterns_component` (multi-value).
-- Settings follow the standard `field.formatter.settings.ui_patterns` schema: `settings.ui_patterns` maps to `ui_patterns_component`.
-- Field property source IDs follow the pattern `field_property:{entity_type}:{bundle}:{field_name}`, with the `source.type` specifying which property to extract (e.g., `value`, `uri`, `entity`, `text_processed`, `entity_label`).
-- The outer `label`, `weight`, `region`, `third_party_settings` are standard Drupal field display properties.
+**`field_property` format**: `field_property:{entity_type}:{field_name}:{column}` — **no bundle segment**. Bundle is implicit from the view display. The `column` (last segment) names which storage property to read (`value`, `uri`, `target_id`, `entity`); `source.type` controls how it's rendered (`value`, `text_processed`, `entity_label`).
 
-### Common Mistakes
+### Source Scoping in Per-Item Formatters
 
-| Mistake | Why It Is Wrong |
-|---|---|
-| Using multi-value formatter on single-cardinality fields | `ComponentFormatter` requires cardinality >1 or unlimited. It will not appear for single-value fields. Use `ComponentFormatterSingle` instead. |
-| Expecting non-field sources in the formatter context | The formatter context is scoped to the entity + field. Global sources (menus, paths) are still available, but the primary use case is field property mapping. |
+`ui_patterns_component_per_item` scopes the source context to the trigger field only:
 
-### See Also
+- `field_property` and `field_formatter` sources appear **only for the trigger field**
+- Sibling field sources are **not in the dropdown** — use `entity_field` context switcher to reach them
+- Widget sources (`textfield`, `token`, `select`) are always available
+- Context-independent sources (`entity_link`, `path`, `breadcrumb`, `menu`) work without field context
 
-- [Source Plugins](#source-plugins)
+## Common Mistakes
+
+- **Wrong**: `field_property:node:article:field_name` (bundle segment) → **Right**: `field_property:node:field_name:value` (field name + column, no bundle)
+- **Wrong**: Expecting sibling-field sources in per-item dropdowns → **Right**: Use `entity_field` context switcher (3-level nesting) to reach other fields on the same entity
+- **Wrong**: Using multi-value formatter on single-cardinality fields → **Right**: `ComponentFormatter` requires cardinality >1; use `ComponentFormatterSingle` for single-value fields
+- **Wrong**: Per-item formatter for a 6-slot component reading 6 different fields → **Right**: Each slot needs `entity_field` 3-level config — block template with `{% include %}` is usually more maintainable
+
+## See Also
+
+- [Source Plugins](source-plugins.md) — `entity_field` context switcher pattern
+- [drupal/ui-suite-daisyui — SDC Rendering Decision](../ui-suite-daisyui/sdc-rendering-decision.md) — trade-off matrix for UI Patterns wiring vs Twig include()
 - Drupal Custom Field Guide

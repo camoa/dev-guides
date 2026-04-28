@@ -733,6 +733,7 @@ nav:
       - drupal/ui-suite-daisyui/sub-theming-starterkit.md
       - drupal/ui-suite-daisyui/component-reuse-decision-tree.md
       - drupal/ui-suite-daisyui/layout-builder-integration.md
+      - drupal/ui-suite-daisyui/sdc-rendering-decision.md
       - drupal/ui-suite-daisyui/libraries-and-assets.md
       - drupal/ui-suite-daisyui/customization-patterns.md
       - drupal/ui-suite-daisyui/best-practices-and-anti-patterns.md

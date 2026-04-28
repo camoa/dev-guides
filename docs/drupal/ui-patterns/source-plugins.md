@@ -1,38 +1,26 @@
 ---
-description: Source plugins — widgets, API sources, and context-dependent data for component props/slots
-tldr: "Source plugins — widgets, API sources, and context-dependent data for component props/slots"
+description: Source plugins — widgets, API sources, and context-switcher sources for component props/slots in UI Patterns 2
+tldr: Source plugins bridge Drupal data (entity fields, menus, user input) to component props/slots. Three categories — widgets (direct input), API sources (Drupal data), and context switchers (entity_field, entity_reference) that unlock sibling-field sources via a mandatory 3-level colon-keyed YAML nesting.
 drupal_version: "10.3+ / 11"
 ---
 
-## Source Plugins
+# Source Plugins
 
-### What Sources Are
+## When to Use
 
-Source plugins provide data to props and slots. They are the mechanism by which Drupal's data (entity fields, menus, blocks, user input) flows into component props and slots. Every prop and slot value in a UI Patterns configuration comes from a source plugin.
+> Use source plugins whenever you need to map Drupal data to a component prop or slot. Use context switchers (`entity_field`, `entity_reference`) when you need data from a field that is not the formatter's trigger field.
 
-Sources fall into three categories:
+## Decision
 
-1. **Widgets** -- Direct user input (textfield, checkbox, select, number, URL, WYSIWYG). Tagged `widget`. Store values directly in configuration.
-2. **Drupal API sources** -- Pull data from Drupal systems. Context-independent (menu, breadcrumb, path) or context-dependent (entity fields, entity links, field labels, field formatters, blocks).
-3. **Context switchers** -- Change the available context without providing a value themselves (e.g., selecting an entity reference field switches context to the referenced entity, making its fields available as sources).
+| Situation | Choose | Why |
+|-----------|--------|-----|
+| Manual text/number/boolean input | Widget source (`textfield`, `number`, `checkbox`) | Stores value directly in config |
+| Entity field value (same entity, same field) | `field_property:{entity_type}:{field_name}:{column}` | Derived source, no nesting needed |
+| Sibling field on same entity (per-item formatter) | `entity_field` context switcher | Scopes context to that field, then nest inner source |
+| Referenced entity's fields | `entity_reference` context switcher | Follows the reference, then nest sources |
+| Field rendered via a formatter (image, file) | `field_formatter` as inner source inside `entity_field` | Returns renderable slot output |
 
-### Source Discovery and Matching
-
-The `SourcePluginManager` filters available sources for each prop/slot based on:
-
-1. **Prop type compatibility** -- Sources declare `prop_types` in their `#[Source]` attribute. Only sources matching the prop's type (or a convertible type) appear.
-2. **Context requirements** -- Sources can require specific contexts (entity, bundle, field items) via `context_requirements`. Only sources whose context is satisfied appear.
-3. **Tag filtering** -- Sources are filtered by tags (e.g., `widget` sources are excluded from some contexts).
-
-```php
-// Source attribute example:
-#[Source(
-  id: 'textfield',
-  label: new TranslatableMarkup('Textfield'),
-  prop_types: ['string', 'identifier'],  // Works with these prop types
-  tags: ['widget']                         // Categorization tag
-)]
-```
+## Pattern
 
 ### Built-in Source Plugins
 
@@ -59,37 +47,66 @@ The `SourcePluginManager` filters available sources for each prop/slot based on:
 | `field_formatter` | Source | slot | Entity + Field | Field rendered through formatter |
 | `field_label` | Source | string | Entity + Field | Field label text |
 | `entity_link` | Source | url, links | Entity | Entity canonical/edit URLs |
-| `entity_field` | Source | slot | Entity + Field | Entity field rendered as slot content |
-| `entity_reference` | Source | (derived) | Entity + Field | Switches context to a referenced entity |
+| `entity_field` | Source | slot | Entity + Field | Context switcher — field on same entity |
+| `entity_reference` | Source | (derived) | Entity + Field | Context switcher — follows reference |
 
-### Context System
+### Context Switcher Sources (`entity_field`, `entity_reference`)
 
-Sources that need entity data rely on Drupal's context system. Contexts are passed through `#source_contexts` in the render array:
+Context switchers don't return values — they change the active context so inner sources can read data from a different field. The structure is **3 levels deep** with an unusual colon-keyed middle nesting that must exactly match `derivable_context`:
 
-```php
-$build = [
-  '#type' => 'component',
-  '#component' => 'my_theme:card',
-  '#ui_patterns' => $configuration,
-  '#source_contexts' => [
-    'entity' => EntityContext::fromEntity($entity),
-    'bundle' => new Context(ContextDefinition::create('string'), $entity->bundle()),
-  ],
-];
+```yaml
+slots:
+  label:
+    sources:
+      - source_id: entity_field
+        source:
+          # Level 1: which field to switch context to
+          derivable_context: 'field:block_content:hero:field_label'
+          # Level 2: key MUST equal derivable_context value (quote it — contains colons)
+          'field:block_content:hero:field_label':
+            value:
+              # Level 3: actual source that produces the value
+              sources:
+                - source_id: 'field_property:block_content:field_label:value'
+                  source:
+                    type: value
+                  _weight: '0'
+        _weight: '0'
 ```
 
-The `ChainContextEntityResolver` service attempts to discover entity context automatically in Layout Builder and Field Layout integrations.
+For image/file fields that need rendered output, use `field_formatter` as the inner source:
 
-### Common Mistakes
+```yaml
+slots:
+  image:
+    sources:
+      - source_id: entity_field
+        source:
+          derivable_context: 'field:block_content:hero:field_image'
+          'field:block_content:hero:field_image':
+            value:
+              sources:
+                - source_id: 'field_formatter:block_content:field_image'
+                  source:
+                    type: responsive_image
+                    formatter:
+                      responsive_image_style: hero_responsive
+                  _weight: '0'
+        _weight: '0'
+```
 
-| Mistake | Why It Is Wrong |
-|---|---|
-| Expecting field sources without entity context | Field-based sources are derived per entity type + bundle + field. They only appear when entity context is available (Layout Builder, field formatters, Views with entity base). |
-| Confusing prop_types with JSON Schema types | Source `prop_types` refer to UI Patterns prop type plugin IDs (`string`, `url`, `boolean`), not JSON Schema types (`string`, `number`, `integer`). |
-| Not understanding source derivation | Field sources use derivers (`FieldPropertySourceDeriver`, `FieldFormatterSourceDeriver`) to create one source plugin per entity-type/bundle/field combination. The base source ID is just the template. |
+`entity_reference` uses the same 3-level structure: pick the reference field, repeat the colon-key, then nest sources that read from the referenced entity.
 
-### See Also
+## Common Mistakes
 
-- [Creating Custom Source Plugins](#creating-custom-source-plugins)
-- [Props System](#props-system)
-- [Slots System](#slots-system)
+- **Wrong**: Omitting the colon-keyed middle nesting in `entity_field` → **Right**: The literal `'field:entity_type:bundle:field_name'` key is required. Without it, the inner source is never reached and the slot renders empty.
+- **Wrong**: Configuring `entity_field` by hand from scratch → **Right**: Configure via Manage Display first, export, then study the YAML.
+- **Wrong**: Expecting field sources without entity context → **Right**: Field-based sources only appear when entity context is available (Layout Builder, field formatters, Views with entity base).
+- **Wrong**: Mixing UI Patterns prop type IDs with JSON Schema types → **Right**: Source `prop_types` are UI Patterns IDs (`string`, `url`, `boolean`), not JSON Schema types.
+
+## See Also
+
+- [Field Formatters](field-formatters.md) — Source Scoping in Per-Item Formatters
+- [Variants](variants.md) — Per-Instance Variants in Layout Builder
+- [Creating Custom Source Plugins](creating-custom-source-plugins.md)
+- Reference: `ui_patterns/src/Plugin/UiPatterns/Source/`

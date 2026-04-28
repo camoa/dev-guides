@@ -106,19 +106,19 @@ display:
             slots:
               title:
                 sources:
-                  - source_id: 'field_property:node:article:title'
+                  - source_id: 'field_property:node:title:value'
                     source:
                       type: value
                     _weight: '0'
               text:
                 sources:
-                  - source_id: 'field_property:node:article:body'
+                  - source_id: 'field_property:node:body:value'
                     source:
                       type: text_processed
                     _weight: '0'
               image:
                 sources:
-                  - source_id: 'field_property:node:article:field_image'
+                  - source_id: 'field_property:node:field_image:entity'
                     source:
                       type: entity
                     _weight: '0'
@@ -127,7 +127,7 @@ display:
 Key observations:
 - The style plugin has **double nesting**: `options.ui_patterns.ui_patterns` (the outer `ui_patterns` is the Views sub-key, the inner is the `ui_patterns_component` schema). This matches the `views.ui_patterns_configuration` schema.
 - The row plugin has **single nesting**: `options.ui_patterns` maps directly to `ui_patterns_component`.
-- Row-level entity field sources use derived source IDs like `field_property:node:article:title` because entity context is available per row.
+- Row-level entity field sources use derived source IDs like `field_property:node:title:value`. The format is `field_property:{entity_type}:{field_name}:{column}` — bundle is implicit from the view's row context.
 - The style plugin wraps all rows; the rendered rows are injected into the component's slot via the `ui_patterns_views:rows` context.
 
 ### Common Mistakes
