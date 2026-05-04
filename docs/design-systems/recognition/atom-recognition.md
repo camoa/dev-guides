@@ -78,6 +78,8 @@ tldr: "You're analyzing a UI and need to identify the smallest functional buildi
 - Avatar
 - Logo
 
+> **Image atoms carry a use-case classification, not just an `<img>` placeholder.** Each image atom should be declared as a typed entry — `name`, `aspectRatio`, `maxWidth`, optional `purpose` and `formatPriority` — so downstream consumers (responsive image generation, CMS view modes, frontend `<picture>` markup) can make deterministic decisions instead of reverse-engineering them from rendered pages. The same-crop-different-sizes vs different-crops-per-breakpoint distinction belongs at the atom layer, not at the rendering layer. See [Responsive Images Craft](../../media/image-media-craft/responsive-images-craft.md) for rendering-time consumption and [Drupal Media Pipeline](../../media/image-media-craft/drupal-media-pipeline.md) for CMS pipeline integration.
+
 **Indicator Atoms:**
 - Badge (notification count)
 - Tag/chip

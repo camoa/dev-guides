@@ -59,15 +59,31 @@ tldr: "Use `srcset`+`sizes` on `<img>` when serving the same crop at different s
 
 `sizes` does not control layout — CSS controls layout. Mismatching `sizes` and CSS wastes bandwidth.
 
+## Named Image Use Cases
+
+The same-crop-different-sizes (`srcset`+`sizes`) vs different-crops-per-breakpoint (`<picture>`+`source media`) decision benefits from being captured **upstream** as a named typed declaration on the design system, not re-decided at every render site.
+
+A design-system-level image atom declaration — `{ name, aspectRatio, maxWidth, purpose, formatPriority? }` — pre-resolves the mode for each use case:
+
+| Declared atom (example) | aspectRatio behaviour | Mode this implies |
+|---|---|---|
+| `card_thumb` (fixed 4:3 across breakpoints) | Same crop everywhere | `srcset`+`sizes` on `<img>` |
+| `hero_full` (16:9 desktop, 4:5 mobile) | Crop changes per breakpoint | `<picture>` + `<source media>` |
+| `avatar` (1:1, fixed pixel size) | Same crop, fixed density | `srcset` with density descriptors |
+
+Capturing the use case once at the atom layer means rendering code reads the declaration rather than re-deriving the decision from layout context. Downstream pipelines (CMS responsive image styles, `<picture>` markup generators) consume the same artifact deterministically. See [Atom Recognition — Media Atoms](../../design-systems/recognition/atom-recognition.md).
+
 ## Common Mistakes
 
 - **Wrong**: density descriptors (`2x`) for layout images → **Right**: use width descriptors (`w`); density descriptors are for fixed-size UI elements only
 - **Wrong**: `sizes="100vw"` on a card that's 33vw on desktop → **Right**: match `sizes` to the actual rendered width
 - **Wrong**: omitting `width` and `height` attributes → **Right**: always include; browser needs them to reserve space and prevent CLS
 - **Wrong**: `<picture>` for resolution switching → **Right**: `srcset`+`sizes` on `<img>` is simpler; `<picture>` is for art direction or format fallback
+- **Wrong**: re-deriving the `<picture>` vs `<img>` decision at every render site → **Right**: read it from a declared atom; the decision is a property of the use case, not the placement
 
 ## See Also
 
+- [Atom Recognition — Media Atoms](../../design-systems/recognition/atom-recognition.md) — declare image use cases upstream as typed atoms
 - [Image Format Strategy](image-format-strategy.md) — combine `<picture>` type sources with format fallbacks
 - [Loading and Decode Craft](loading-and-decode-craft.md) — add `loading`, `fetchpriority` after choosing the right element
 - [Drupal Media Pipeline](drupal-media-pipeline.md) — how Drupal generates these patterns via responsive image styles

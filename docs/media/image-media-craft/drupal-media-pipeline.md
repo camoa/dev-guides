@@ -72,7 +72,7 @@ effects:
 - **Option 2 (contrib, for AVIF)**: Install `imageapi_optimize` + `imageapi_optimize_avif_webp`. Create pipeline with AVIF (quality 68) and WebP (quality 82) processors. Requires PHP 8.1+ with ImageMagick with AVIF support.
 
 **Breakpoint-to-image-style mapping workflow**:
-1. Identify image contexts: hero (full-bleed), card grid (33–50% wide), sidebar (25% wide)
+1. Identify image contexts: hero (full-bleed), card grid (33–50% wide), sidebar (25% wide). When the source design system declares image use cases as named typed atoms (see [Atom Recognition — Media Atoms](../../design-systems/recognition/atom-recognition.md)), this step becomes a 1:1 read of those declarations rather than inference from page measurements — each declared atom (`name`, `aspectRatio`, `maxWidth`) maps to one Drupal responsive image style.
 2. For each context, define image widths at each layout breakpoint
 3. Create image styles for each distinct width across all contexts
 4. Create a responsive image style per context, mapping breakpoints to image styles

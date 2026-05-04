@@ -204,8 +204,8 @@
     "guides_extracted": 16
   },
   "design-systems/recognition": {
-    "source_hash": "f5db7cbb809d5d654577e93b3025c4bf74fe5b20cb3291fc62886a4150352684",
-    "partitioned": "2026-02-19",
+    "source_hash": "3c71e9c393871d518d2435e207e3ae77454af4b07e4869aff92f0334d5a28103",
+    "partitioned": "2026-05-04",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 12
   },
@@ -378,8 +378,8 @@
     "guides_extracted": 37
   },
   "media/image-media-craft": {
-    "source_hash": "065cb1afa8c06f76609162ac64d775838c40bd393022416049ca35c26fe24d66",
-    "partitioned": "2026-03-04",
+    "source_hash": "515213a78d97c96614d99e1cf6895627970e7ab89b6d2782d370b6523099b625",
+    "partitioned": "2026-05-04",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 9
   },
