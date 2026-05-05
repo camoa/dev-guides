@@ -148,4 +148,4 @@ Components:  background: var(--color-background); color: var(--color-text);
 #### See Also
 - [1. Foundation Layer: Design Tokens](#1-foundation-layer-design-tokens)
 - [2. Atomic Design Hierarchy](#2-atomic-design-hierarchy)
-- [11. Validation Checklist](#11-validation-checklist)
+- [12. Validation Checklist](validation-checklist.md)

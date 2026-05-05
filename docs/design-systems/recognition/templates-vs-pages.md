@@ -132,6 +132,7 @@ Reference: [Atomic Design in Practice](https://www.mykolaaleksandrov.dev/posts/2
 - **Confusing with organisms** — Organisms are reusable sections; templates are full-page layouts
 
 #### See Also
-- [5. Organism Recognition](#5-organism-recognition)
-- [8. Source-Specific Recognition](#8-source-specific-recognition)
-- [11. Validation Checklist](#11-validation-checklist)
+- [5. Organism Recognition](organism-recognition.md)
+- [7. Styleguide Format](styleguide-format.md)
+- [9. Source-Specific Recognition](source-specific-recognition.md)
+- [12. Validation Checklist](validation-checklist.md)

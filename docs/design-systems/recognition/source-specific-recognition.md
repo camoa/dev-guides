@@ -152,7 +152,7 @@ Or class-based:
 #### See Also
 - [1. Foundation Layer: Design Tokens](#1-foundation-layer-design-tokens)
 - [2. Component Classification Framework](#2-component-classification-framework)
-- [10. Standards & Specifications](#10-standards-specifications)
+- [11. Standards & Specifications](standards-specifications.md)
 
 ---
 
@@ -495,7 +495,7 @@ Look for:
 #### See Also
 - [1. Foundation Layer: Design Tokens](#1-foundation-layer-design-tokens)
 - [2. Component Classification Framework](#2-component-classification-framework)
-- [9. Reference Design Systems](#9-reference-design-systems)
+- [10. Reference Design Systems](reference-design-systems.md)
 
 ---
 
