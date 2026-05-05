@@ -1307,6 +1307,7 @@ nav:
       - design-systems/recognition/molecule-recognition.md
       - design-systems/recognition/organism-recognition.md
       - design-systems/recognition/templates-vs-pages.md
+      - design-systems/recognition/styleguide-format.md
       - design-systems/recognition/design-system-analysis-best-practices.md
       - design-systems/recognition/source-specific-recognition.md
       - design-systems/recognition/reference-design-systems.md
@@ -1324,6 +1325,8 @@ nav:
       - design-systems/daisyui/navigation-components.md
       - design-systems/daisyui/data-input-components.md
       - design-systems/daisyui/layout-components.md
+      - design-systems/daisyui/mockup-components.md
+      - design-systems/daisyui/feedback-components.md
       - design-systems/daisyui/customization-patterns.md
       - design-systems/daisyui/daisyui-react.md
       - design-systems/daisyui/best-practices.md

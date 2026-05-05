@@ -204,10 +204,10 @@
     "guides_extracted": 16
   },
   "design-systems/recognition": {
-    "source_hash": "3c71e9c393871d518d2435e207e3ae77454af4b07e4869aff92f0334d5a28103",
-    "partitioned": "2026-05-04",
+    "source_hash": "3a9d92faf3e2c574046d38c484e42940c472792c3ecab99d918959e5408dc64c",
+    "partitioned": "2026-05-05",
     "partitioned_by": "Carlos Ospina",
-    "guides_extracted": 12
+    "guides_extracted": 13
   },
   "design-systems/bootstrap": {
     "source_hash": "7b97291a322efc309f59abd96008a643ee390078259c03b37036638c20682d1c",
@@ -276,10 +276,10 @@
     "guides_extracted": 21
   },
   "design-systems/daisyui": {
-    "source_hash": "d1dc2d4acb2fdb8c964c93605e41581170a0307437523bb720c6c6fd7e9acbfd",
-    "partitioned": "2026-02-19",
+    "source_hash": "796419b63346f956c54d7eefa8877fb5817c54835881c85ca773ec2932bba630",
+    "partitioned": "2026-05-05",
     "partitioned_by": "Carlos Ospina",
-    "guides_extracted": 14
+    "guides_extracted": 16
   },
   "design-systems/react-design-system": {
     "source_hash": "02534ecc113fcb9da1d3ebb425e660ea46814dde8fc9c436086a2f8b4c28215c",
@@ -312,8 +312,8 @@
     "guides_extracted": 12
   },
   "design-systems/tailwind-tokens": {
-    "source_hash": "9786a7ab932216d19dc5cee6bd15456820ce1eaf743081f5231c92dc2d4cf769",
-    "partitioned": "2026-02-19",
+    "source_hash": "1e633876964e98324a60f798ee9db1c2122b4d38073341abdb26dcaee0bac79f",
+    "partitioned": "2026-05-05",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 20
   },

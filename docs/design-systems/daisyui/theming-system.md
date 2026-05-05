@@ -1,6 +1,6 @@
 ---
-description: Implement multi-theme support, light/dark mode, and custom brand themes using DaisyUI's data-theme system
-tldr: "Use DaisyUI theming for multi-theme support, light/dark mode switching, brand color customization, or white-labeling. The `data-theme` attribute switches the entire palette with no JavaScript class manipulation required."
+description: Implement multi-theme support, light/dark mode, per-page themes, and custom brand themes using DaisyUI's data-theme system
+tldr: "Use DaisyUI theming for multi-theme support, light/dark mode switching, brand color customization, or white-labeling. The `data-theme` attribute switches the entire palette with no JavaScript class manipulation required. All themes must be registered at build time; per-page scoping works by placing `data-theme` on any container element."
 ---
 
 # Theming System
@@ -16,7 +16,8 @@ tldr: "Use DaisyUI theming for multi-theme support, light/dark mode switching, b
 | Switching theme globally | `data-theme` on `<html>` | Entire page switches at once |
 | Scoping a theme to one section | `data-theme` on any container | CSS variable scope is inherited by descendants |
 | CSS-only theme toggle | `.theme-controller` on checkbox/select | DaisyUI handles the `:root:has(...)` selector |
-| Persisting theme across sessions | JS + `localStorage` + `setAttribute` | DaisyUI reads attribute; persistence is your responsibility |
+| Per-page / per-section stable identity | `data-theme` on page wrapper element | Different product lines or audience landing pages with distinct, non-user-toggled palettes |
+| Persisting theme across sessions | JS + `localStorage` + `setAttribute` | DaisyUI reads the attribute; persistence is your responsibility |
 
 ## Pattern
 
@@ -59,6 +60,49 @@ tldr: "Use DaisyUI theming for multi-theme support, light/dark mode switching, b
 
 DaisyUI uses `:root:has(input.theme-controller[value=dark]:checked)` to apply the theme.
 
+**Per-page theme scoping:**
+
+```html
+<!-- Global theme stays on <html> -->
+<html data-theme="brand">
+
+  <!-- Product section uses a distinct registered theme -->
+  <div data-theme="brand-dark">
+    <!-- All DaisyUI components here render with brand-dark palette -->
+    <button class="btn btn-primary">Buy Now</button>
+  </div>
+
+  <!-- About section uses the global brand theme — no data-theme needed -->
+  <div>
+    <button class="btn btn-primary">Learn More</button>
+  </div>
+
+</html>
+```
+
+All themes used for per-page scoping must be registered in the build config:
+
+```css
+@plugin "daisyui" {
+  themes: brand --default, brand-dark, brand-enterprise;
+}
+```
+
+For per-page theme token definitions, see `design-systems/tailwind-tokens/custom-daisyui-theme-definition.md`.
+
+## When to Use Per-Page Theme Scoping
+
+Use for:
+- Product-line differentiation (each product line has a registered theme applied to its page wrapper)
+- Audience-specific landing pages with distinct palettes
+- Sections with stable, non-user-toggled visual identity
+
+Do NOT use for:
+- User-toggled light/dark mode — use the `.theme-controller` toggle pattern above
+- Runtime theme switching based on user preference — use JS + `localStorage`
+
+A nested `data-theme` fully overrides the parent scope for all variables; there is no partial inheritance between theme scopes.
+
 ## Built-in Themes (35 in v5)
 
 `light` `dark` `cupcake` `bumblebee` `emerald` `corporate` `synthwave` `retro` `cyberpunk` `valentine` `halloween` `garden` `forest` `aqua` `lofi` `pastel` `fantasy` `wireframe` `black` `luxury` `dracula` `cmyk` `autumn` `business` `acid` `lemonade` `night` `coffee` `winter` `dim` `nord` `sunset` `caramellatte` `abyss` `silk`
@@ -68,9 +112,12 @@ DaisyUI uses `:root:has(input.theme-controller[value=dark]:checked)` to apply th
 - **Wrong**: Using hex/rgb colors in custom themes — **Right**: DaisyUI v5 uses `oklch()` exclusively; other color spaces break internal `color-mix()` calculations
 - **Wrong**: Defining only primary/secondary and leaving base undefined — **Right**: Base colors (`base-100`, `base-content`) control backgrounds, text, and borders across all components
 - **Wrong**: Missing `color-scheme: light|dark` in custom themes — **Right**: This tells the browser whether scrollbars and OS-level elements should render light or dark
+- **Wrong**: Using a theme in per-page scoping without registering it in the build config — **Right**: All themes must be registered at build time; `data-theme` on a container won't resolve without it
 
 ## See Also
 
 - [Color System and Design Tokens](color-system-design-tokens.md)
 - [Installation and Configuration](installation-configuration.md)
+- Reference: `design-systems/tailwind-tokens/custom-daisyui-theme-definition.md`
+- Reference: `design-systems/tailwind-tokens/daisyui-css-variable-reference.md`
 - Reference: `design-system-tailwind.md` Section 9 — dark mode in Tailwind
