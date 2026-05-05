@@ -720,6 +720,24 @@ nav:
       - drupal/ui-patterns/best-practices-and-anti-patterns.md
       - drupal/ui-patterns/security-and-accessibility.md
       - drupal/ui-patterns/sources-maintenance.md
+    - UI Styles:
+      - drupal/ui-styles/index.md
+      - drupal/ui-styles/overview.md
+      - drupal/ui-styles/installation.md
+      - drupal/ui-styles/definition-format.md
+      - drupal/ui-styles/source-plugins.md
+      - drupal/ui-styles/block-layout.md
+      - drupal/ui-styles/layout-builder.md
+      - drupal/ui-styles/ckeditor5.md
+      - drupal/ui-styles/views.md
+      - drupal/ui-styles/page-region.md
+      - drupal/ui-styles/ui-patterns-sdc.md
+      - drupal/ui-styles/theme-authoring.md
+      - drupal/ui-styles/stylesheet-generation.md
+      - drupal/ui-styles/overriding.md
+      - drupal/ui-styles/programmatic.md
+      - drupal/ui-styles/anti-patterns.md
+      - drupal/ui-styles/code-reference.md
     - UI Suite DaisyUI:
       - drupal/ui-suite-daisyui/index.md
       - drupal/ui-suite-daisyui/overview-and-decision.md
@@ -739,6 +757,39 @@ nav:
       - drupal/ui-suite-daisyui/best-practices-and-anti-patterns.md
       - drupal/ui-suite-daisyui/security-and-accessibility.md
       - drupal/ui-suite-daisyui/sources-maintenance.md
+    - UI Skins:
+      - drupal/ui-skins/index.md
+      - drupal/ui-skins/ui-skins-overview.md
+      - drupal/ui-skins/ui-skins-installation.md
+      - drupal/ui-skins/ui-skins-css-variable-definition.md
+      - drupal/ui-skins/ui-skins-variable-types.md
+      - drupal/ui-skins/ui-skins-variable-scopes.md
+      - drupal/ui-skins/ui-skins-theme-definition.md
+      - drupal/ui-skins/ui-skins-theme-targets-keys.md
+      - drupal/ui-skins/ui-skins-theme-dependencies.md
+      - drupal/ui-skins/ui-skins-theme-authoring.md
+      - drupal/ui-skins/ui-skins-render-pipeline.md
+      - drupal/ui-skins/ui-skins-with-ui-styles.md
+      - drupal/ui-skins/ui-skins-anti-patterns.md
+      - drupal/ui-skins/ui-skins-code-reference.md
+    - UI Icons:
+      - drupal/ui-icons/index.md
+      - drupal/ui-icons/overview.md
+      - drupal/ui-icons/installation.md
+      - drupal/ui-icons/pack-format.md
+      - drupal/ui-icons/extractors.md
+      - drupal/ui-icons/settings-rendering.md
+      - drupal/ui-icons/field-api.md
+      - drupal/ui-icons/ckeditor5.md
+      - drupal/ui-icons/patterns.md
+      - drupal/ui-icons/menu.md
+      - drupal/ui-icons/twig.md
+      - drupal/ui-icons/media.md
+      - drupal/ui-icons/library-admin.md
+      - drupal/ui-icons/authoring.md
+      - drupal/ui-icons/pack-catalog.md
+      - drupal/ui-icons/anti-patterns.md
+      - drupal/ui-icons/code-reference.md
     - HTMX:
       - drupal/htmx/index.md
       - drupal/htmx/htmx-overview.md

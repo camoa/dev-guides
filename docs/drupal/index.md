@@ -57,7 +57,10 @@ guide-meta:
 | Build a multilingual site with translations | [Multilingual](multilingual/index.md) |
 | Write and debug Twig templates | [Twig Theming](twig/index.md) |
 | Use SDC components in Drupal's site-builder UI | [UI Patterns 2.x](ui-patterns/index.md) |
+| Apply curated CSS class choices to blocks, sections, Views, and CKEditor via Drupal's admin UI | [UI Styles](ui-styles/index.md) |
 | Use DaisyUI 5 components in Drupal with UI Patterns | [UI Suite DaisyUI](ui-suite-daisyui/index.md) |
+| Expose CSS tokens and theme variants as site-builder settings | [UI Skins](ui-skins/index.md) |
+| Register icon packs and expose icon pickers across fields, CKEditor, UI Patterns, and menus | [UI Icons](ui-icons/index.md) |
 | Customize Views exposed filter widgets | [Better Exposed Filters](better-exposed-filters/index.md) |
 | Add faceted search navigation | [Facets](facets/index.md) |
 | Configure site search with backends and processors | [Search API](search-api/index.md) |

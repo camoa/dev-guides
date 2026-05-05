@@ -454,5 +454,23 @@
     "partitioned": "2026-04-26",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 17
+  },
+  "drupal/ui-skins": {
+    "source_hash": "6fa785f24de8c96257ecf1af3636f949d30dd5aaca7c7e61855ff3d08814fe1a",
+    "partitioned": "2026-05-05",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 13
+  },
+  "drupal/ui-styles": {
+    "source_hash": "94a8685b149d91ac52a3599ca7ed1521f67e6ab58f3986eb7f3d611d19c45c90",
+    "partitioned": "2026-05-05",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 16
+  },
+  "drupal/ui-icons": {
+    "source_hash": "ebbf3833039de108eadc288b656d1a921d3952fe4c029540fb2755a7b146b21f",
+    "partitioned": "2026-05-05",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 16
   }
 }
