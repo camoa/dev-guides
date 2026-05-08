@@ -1,5 +1,5 @@
 ---
-description: Testing — decision guides for visual regression, automated testing workflows, and test suite design.
+description: Testing — decision guides for visual regression, automated testing workflows, ATK Drupal E2E testing, and test suite design.
 guide-meta:
   concepts:
     - visual regression testing
@@ -7,6 +7,9 @@ guide-meta:
     - Playwright
     - test suite design
     - baseline management
+    - automated_testing_kit
+    - ATK
+    - Drupal E2E testing
   not:
     - PHPUnit (see drupal/tdd)
     - Drupal-specific unit tests (see drupal/tdd)
@@ -26,3 +29,5 @@ guide-meta:
 | Configure Playwright for VR — setup, APIs, projects, viewports, stability | [Playwright for Visual Regression](visual-regression/playwright/index.md) |
 | Understand and tune pixelmatch — algorithm, threshold, API, CLI, alternatives | [Pixelmatch](visual-regression/pixelmatch/index.md) |
 | Configure, view, navigate, and share the Playwright HTML triage report | [HTML Report](visual-regression/html-report/index.md) |
+| Use ATK's curated catalog of Drupal-aware E2E tests | [Automated Testing Kit (ATK)](atk/index.md) |
+| Write functional E2E tests with locators, auth, fixtures, API testing, and CI sharding | [Playwright (E2E)](playwright/index.md) |

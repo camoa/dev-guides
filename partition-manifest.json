@@ -496,5 +496,17 @@
     "partitioned": "2026-05-08",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 15
+  },
+  "testing/atk": {
+    "source_hash": "aba498a0d71775f38f6aec415fe584fb0101d19323b53b429fe7580a69a8e08f",
+    "partitioned": "2026-05-08",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 18
+  },
+  "testing/playwright": {
+    "source_hash": "869418b04efc94254f19add4d45fc22b46b2511766cf7a768e57d769e673408d",
+    "partitioned": "2026-05-08",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 14
   }
 }

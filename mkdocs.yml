@@ -1737,6 +1737,42 @@ nav:
         - testing/visual-regression/html-report/pw-report-running-modes.md
         - testing/visual-regression/html-report/pw-report-anti-patterns.md
         - testing/visual-regression/html-report/pw-report-reporter-combos.md
+    - Automated Testing Kit (ATK):
+      - testing/atk/index.md
+      - testing/atk/atk-overview.md
+      - testing/atk/atk-ecosystem.md
+      - testing/atk/atk-cypress-vs-playwright.md
+      - testing/atk/atk-versions.md
+      - testing/atk/atk-installation.md
+      - testing/atk/atk-runner-config.md
+      - testing/atk/atk-preflight.md
+      - testing/atk/atk-selector-hooks.md
+      - testing/atk/atk-test-catalog.md
+      - testing/atk/atk-helper-functions.md
+      - testing/atk/atk-custom-tests.md
+      - testing/atk/atk-testor.md
+      - testing/atk/atk-ci-integration.md
+      - testing/atk/atk-fedramp.md
+      - testing/atk/atk-cypress-to-playwright-migration.md
+      - testing/atk/atk-visual-regression-layering.md
+      - testing/atk/atk-anti-patterns.md
+      - testing/atk/atk-code-reference.md
+    - Playwright (E2E):
+      - testing/playwright/index.md
+      - testing/playwright/pw-e2e-layer-selection.md
+      - testing/playwright/pw-e2e-locators.md
+      - testing/playwright/pw-e2e-assertions.md
+      - testing/playwright/pw-e2e-fixtures.md
+      - testing/playwright/pw-e2e-authentication.md
+      - testing/playwright/pw-e2e-network-mocking.md
+      - testing/playwright/pw-e2e-api-testing.md
+      - testing/playwright/pw-e2e-test-organization.md
+      - testing/playwright/pw-e2e-debugging.md
+      - testing/playwright/pw-e2e-ci-patterns.md
+      - testing/playwright/pw-e2e-drupal-patterns.md
+      - testing/playwright/pw-e2e-atk-integration.md
+      - testing/playwright/pw-e2e-anti-patterns.md
+      - testing/playwright/pw-e2e-code-reference.md
 
 markdown_extensions:
   - tables
