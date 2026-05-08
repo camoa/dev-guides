@@ -34,6 +34,7 @@ CATEGORY_MAP = {
     "development": "Development Practices",
     "ai-tooling": "AI Tooling",
     "decoupled": "Decoupled",
+    "testing": "Testing",
 }
 
 # Category display order
@@ -47,6 +48,7 @@ CATEGORY_ORDER = [
     "Development Practices",
     "AI Tooling",
     "Decoupled",
+    "Testing",
 ]
 
 
