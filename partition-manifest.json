@@ -472,5 +472,29 @@
     "partitioned": "2026-05-05",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 16
+  },
+  "testing/visual-regression/workflow": {
+    "source_hash": "b95256306ed5f16fb85a0be34963afac0cf21f926ed4f1590e43ef4432e6df17",
+    "partitioned": "2026-05-08",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 14
+  },
+  "testing/visual-regression/playwright": {
+    "source_hash": "08f5e01eea47d26573a282f0a837fa85a5e8bc315eafdf7313400e29a0b80eff",
+    "partitioned": "2026-05-08",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 14
+  },
+  "testing/visual-regression/pixelmatch": {
+    "source_hash": "f6df8008f92722585bca267130b20e324fa1565c2b93a53d774ff6bc86def8ff",
+    "partitioned": "2026-05-08",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 13
+  },
+  "testing/visual-regression/html-report": {
+    "source_hash": "92efc1a5e164cfb3f1e8540dbb9369fa0a0d9eb126d0a43796a6d3ec1c657192",
+    "partitioned": "2026-05-08",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 15
   }
 }

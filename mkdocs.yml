@@ -1670,6 +1670,74 @@ nav:
       - media/image-media-craft/build-pipeline-optimization.md
       - media/image-media-craft/drupal-media-pipeline.md
 
+  - Testing:
+    - testing/index.md
+    - Visual Regression:
+      - Workflow:
+        - testing/visual-regression/workflow/index.md
+        - testing/visual-regression/workflow/vr-what-its-for.md
+        - testing/visual-regression/workflow/vr-when-to-add.md
+        - testing/visual-regression/workflow/vr-what-to-capture.md
+        - testing/visual-regression/workflow/vr-matrix-design.md
+        - testing/visual-regression/workflow/vr-baseline-management.md
+        - testing/visual-regression/workflow/vr-stability-checklist.md
+        - testing/visual-regression/workflow/vr-threshold-tuning.md
+        - testing/visual-regression/workflow/vr-authoring-patterns.md
+        - testing/visual-regression/workflow/vr-baseline-update-workflow.md
+        - testing/visual-regression/workflow/vr-triaging-false-positives.md
+        - testing/visual-regression/workflow/vr-debt-and-hygiene.md
+        - testing/visual-regression/workflow/vr-drupal-ddev-procedure.md
+        - testing/visual-regression/workflow/vr-anti-patterns.md
+        - testing/visual-regression/workflow/vr-reference-program.md
+      - Playwright:
+        - testing/visual-regression/playwright/index.md
+        - testing/visual-regression/playwright/pw-vr-setup.md
+        - testing/visual-regression/playwright/pw-vr-screenshot-apis.md
+        - testing/visual-regression/playwright/pw-vr-browser-projects.md
+        - testing/visual-regression/playwright/pw-vr-viewport-matrix.md
+        - testing/visual-regression/playwright/pw-vr-screenshot-options.md
+        - testing/visual-regression/playwright/pw-vr-baseline-files.md
+        - testing/visual-regression/playwright/pw-vr-stability-controls.md
+        - testing/visual-regression/playwright/pw-vr-determinism.md
+        - testing/visual-regression/playwright/pw-vr-test-organization.md
+        - testing/visual-regression/playwright/pw-vr-config-walkthrough.md
+        - testing/visual-regression/playwright/pw-vr-cli-cheatsheet.md
+        - testing/visual-regression/playwright/pw-vr-anti-patterns.md
+        - testing/visual-regression/playwright/pw-vr-programmatic.md
+        - testing/visual-regression/playwright/pw-vr-drupal-ddev.md
+      - Pixelmatch:
+        - testing/visual-regression/pixelmatch/index.md
+        - testing/visual-regression/pixelmatch/pixelmatch-overview.md
+        - testing/visual-regression/pixelmatch/pixelmatch-algorithm.md
+        - testing/visual-regression/pixelmatch/pixelmatch-threshold.md
+        - testing/visual-regression/pixelmatch/pixelmatch-other-options.md
+        - testing/visual-regression/pixelmatch/pixelmatch-api.md
+        - testing/visual-regression/pixelmatch/pixelmatch-cli.md
+        - testing/visual-regression/pixelmatch/pixelmatch-reading-pngs.md
+        - testing/visual-regression/pixelmatch/pixelmatch-same-size.md
+        - testing/visual-regression/pixelmatch/pixelmatch-performance.md
+        - testing/visual-regression/pixelmatch/pixelmatch-inside-playwright.md
+        - testing/visual-regression/pixelmatch/pixelmatch-standalone.md
+        - testing/visual-regression/pixelmatch/pixelmatch-limitations.md
+        - testing/visual-regression/pixelmatch/pixelmatch-tuning-recipes.md
+      - HTML Report:
+        - testing/visual-regression/html-report/index.md
+        - testing/visual-regression/html-report/pw-report-overview.md
+        - testing/visual-regression/html-report/pw-report-enabling.md
+        - testing/visual-regression/html-report/pw-report-generation.md
+        - testing/visual-regression/html-report/pw-report-viewing.md
+        - testing/visual-regression/html-report/pw-report-navigation.md
+        - testing/visual-regression/html-report/pw-report-vr-diff-panel.md
+        - testing/visual-regression/html-report/pw-report-per-test-detail.md
+        - testing/visual-regression/html-report/pw-report-trace-viewer.md
+        - testing/visual-regression/html-report/pw-report-multiple-projects.md
+        - testing/visual-regression/html-report/pw-report-baseline-updates.md
+        - testing/visual-regression/html-report/pw-report-sharing.md
+        - testing/visual-regression/html-report/pw-report-configuration.md
+        - testing/visual-regression/html-report/pw-report-running-modes.md
+        - testing/visual-regression/html-report/pw-report-anti-patterns.md
+        - testing/visual-regression/html-report/pw-report-reporter-combos.md
+
 markdown_extensions:
   - tables
   - admonition
