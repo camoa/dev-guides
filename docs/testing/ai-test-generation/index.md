@@ -8,7 +8,7 @@ guide-meta:
     - Generator agent
     - Healer agent
     - Playwright MCP
-    - @playwright/mcp
+    - "@playwright/mcp"
     - test plan
     - specs/ directory
     - plan-first
