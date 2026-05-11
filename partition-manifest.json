@@ -508,5 +508,11 @@
     "partitioned": "2026-05-08",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 14
+  },
+  "testing/ai-test-generation": {
+    "source_hash": "e5c1f383b45fbb1ae633b778ba948ef61439ffbb8486707e2633f116862ad386",
+    "partitioned": "2026-05-11",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 18
   }
 }

@@ -1773,6 +1773,26 @@ nav:
       - testing/playwright/pw-e2e-atk-integration.md
       - testing/playwright/pw-e2e-anti-patterns.md
       - testing/playwright/pw-e2e-code-reference.md
+    - AI Test Generation:
+      - testing/ai-test-generation/index.md
+      - testing/ai-test-generation/ai-testgen-overview.md
+      - testing/ai-test-generation/ai-testgen-four-phase-pattern.md
+      - testing/ai-test-generation/ai-testgen-plan-format.md
+      - testing/ai-test-generation/ai-testgen-plan-vs-code.md
+      - testing/ai-test-generation/ai-testgen-acceptance-criteria.md
+      - testing/ai-test-generation/ai-testgen-negative-assertions.md
+      - testing/ai-test-generation/ai-testgen-input-code.md
+      - testing/ai-test-generation/ai-testgen-input-user-stories.md
+      - testing/ai-test-generation/ai-testgen-input-raw-prompt.md
+      - testing/ai-test-generation/ai-testgen-targeted-scope.md
+      - testing/ai-test-generation/ai-testgen-crawled-site.md
+      - testing/ai-test-generation/ai-testgen-hybrid-inputs.md
+      - testing/ai-test-generation/ai-testgen-playwright-test-agents.md
+      - testing/ai-test-generation/ai-testgen-playwright-mcp.md
+      - testing/ai-test-generation/ai-testgen-end-to-end-workflow.md
+      - testing/ai-test-generation/ai-testgen-drupal-atk-notes.md
+      - testing/ai-test-generation/ai-testgen-anti-patterns.md
+      - testing/ai-test-generation/ai-testgen-code-reference.md
 
 markdown_extensions:
   - tables
