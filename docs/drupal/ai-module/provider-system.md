@@ -1,6 +1,6 @@
 ---
 description: AI provider plugins — using, building, and selecting providers for AI operations
-tldr: "Use this guide when calling a specific provider, building a custom provider plugin, or working with the provider/model selection form. Use [Operation Types](operation-types.md) for the typed Input/Output classes."
+tldr: "Use this guide when calling a specific provider, building a custom provider plugin, or working with the provider/model selection form. Extend OpenAiBasedProviderClientBase when your provider's API is OpenAI-compatible — you get chat, embeddings, TTS, STT, and T2I for free. Key gotcha: always call isUsable() before createInstance()."
 drupal_version: "11.x"
 ---
 
@@ -73,15 +73,26 @@ class MyProvider extends AiProviderClientBase implements ChatInterface {
 
 ## Provider Matrix
 
-| Provider | Chat | Embeddings | Moderation | TTS | STT | T2I |
-|----------|------|-----------|------------|-----|-----|-----|
-| Anthropic | Yes | | | | | |
-| OpenAI | Yes | Yes | Yes | Yes | Yes | Yes |
-| Google/Gemini | Yes | | | | | |
-| Ollama | Yes | Yes | | | | |
-| AWS Bedrock | Yes | Yes | | | | Yes |
-| Azure | Yes | Yes | Yes | Yes | Yes | Yes |
-| LiteLLM | Yes | Yes | Yes | Yes | Yes | Yes |
+| Provider | Chat | Embeddings | Moderation | TTS | STT | T2I | Translation |
+|----------|------|-----------|------------|-----|-----|-----|-------------|
+| Anthropic | Yes | | | | | | |
+| OpenAI | Yes | Yes | Yes | Yes | Yes | Yes | |
+| Google/Gemini | Yes | | | | | | |
+| Ollama | Yes | Yes | | | | | |
+| AWS Bedrock | Yes | Yes | | | | Yes | |
+| Azure | Yes | Yes | Yes | Yes | Yes | Yes | |
+| LiteLLM | Yes | Yes | Yes | Yes | Yes | Yes | |
+| DeepL | | | | | | | Yes |
+| Vertex AI | Yes | Yes | | | | | Yes |
+
+## Base Classes
+
+| Class | Use When |
+|-------|----------|
+| `AiProviderClientBase` | Custom provider with unique API |
+| `OpenAiBasedProviderClientBase` | Provider with OpenAI-compatible API (e.g., Ollama, LiteLLM) |
+
+`OpenAiBasedProviderClientBase` implements `ChatInterface`, `ModerationInterface`, `EmbeddingsInterface`, `TextToSpeechInterface`, `SpeechToTextInterface`, and `TextToImageInterface` out of the box. It handles streaming, token usage extraction into `TokenUsageDto`, rate limit parsing into `ChatProviderLimitsDto`, and standard error mapping. Only `loadClient()` needs to be provided.
 
 ## Key AiProviderInterface Methods
 
@@ -90,9 +101,10 @@ class MyProvider extends AiProviderClientBase implements ChatInterface {
 | `getAvailableConfiguration($op, $model)` | Returns configurable parameters for model config UI |
 | `getDefaultConfigurationValues($op, $model)` | Default parameter values |
 | `setAuthentication($auth)` | Override authentication at runtime |
-| `getSupportedCapabilities()` | Returns `AiModelCapability[]` the provider supports |
+| `getSupportedCapabilities()` | Returns `AiModelCapability[]` or `AiProviderCapability[]` the provider supports |
 | `getSetupData()` | Returns `key_config_name` (Key module) + `default_models` |
 | `setTag($tag)` / `getTags()` | Tag management for logging/filtering |
+| `setDebugData($key, $value)` / `getDebugData()` | Attach debug metadata to requests |
 
 ## Common Mistakes
 

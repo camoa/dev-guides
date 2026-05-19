@@ -1,6 +1,6 @@
 ---
-description: Documentation gaps in Drupal AI 1.3.0-rc2 — undocumented features identified by comparing official docs to source code
-tldr: "Use this guide when the official documentation doesn't match actual behavior. These gaps were identified by comparing official docs to source code in AI 1.3.0-rc2."
+description: Documentation gaps in Drupal AI 1.3.5 — undocumented features identified by comparing official docs to source code
+tldr: "Use this guide when the official documentation doesn't match actual behavior. Gaps verified against 1.3.5 source code. New in 1.4.0-rc1 and not yet in official docs: ChatProcessor plugin system, global guardrails, and AiExceptionEvent."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when the official documentation doesn't match actual behavior. These gaps were identified by comparing official docs to source code in AI 1.3.0-rc2.
+> Use this guide when the official documentation doesn't match actual behavior. These gaps were identified by comparing official docs to source code through 1.3.5. New in 1.4.0-rc1 and not yet in official docs: ChatProcessor plugin system, global guardrails, and `AiExceptionEvent`.
 
 ## Core Module
 
@@ -17,7 +17,12 @@ drupal_version: "11.x"
 | ProviderProxy wrapping pattern | [Core Architecture](core-architecture.md) |
 | Guardrails system developer guide | [Guardrails System](guardrails-system.md) |
 | Short-term memory plugin system | [Short-Term Memory](short-term-memory.md) |
+| `AiDataTypeConverter` plugin system | — (undocumented) |
 | Prompt config entity system (`ai.ai_prompt`) | [Prompt System](prompt-system.md) |
+| `ai.text_chunker` service | — (undocumented) |
+| ChatProcessor plugin type (1.4) | [Core Architecture](core-architecture.md) |
+| `AiExceptionEvent` (1.4) | [Events System](events-system.md) |
+| Global guardrails in `ai.settings` (1.4) | [Guardrails System](guardrails-system.md) |
 
 ## ai_assistant_api
 
@@ -44,6 +49,7 @@ drupal_version: "11.x"
 | `AutomatorsTool` entity and function-calling integration | [AI Automators](ai-automators.md) |
 | All 4 events (`AutomatorConfigEvent`, etc.) | [AI Automators](ai-automators.md) |
 | Full 52-plugin inventory | [AI Automators](ai-automators.md) |
+| `$settings['ai_automator_advanced_mode_enabled']` | [AI Automators](ai-automators.md) |
 
 ## ai_ckeditor
 
@@ -68,6 +74,7 @@ drupal_version: "11.x"
 | Drush commands (`ai:translate-entity`, `ai:translate-text`) | [AI Translate](ai-translate.md) |
 | `hook_ai_translate_translation_alter` | [AI Translate](ai-translate.md) |
 | Layout Builder translation integration | [AI Translate](ai-translate.md) |
+| `ChatTranslationProvider` plugin | [AI Translate](ai-translate.md) |
 
 ## ai_observability
 
@@ -75,6 +82,8 @@ drupal_version: "11.x"
 |-----|------------|
 | All config settings | [AI Observability](ai-observability.md) |
 | `AiObservabilityUtils` | [AI Observability](ai-observability.md) |
+| OpenTelemetry spans and metrics | [AI Observability](ai-observability.md) |
+| `fallback_log_message_mode` config option | [AI Observability](ai-observability.md) |
 
 ## ai_validations
 
@@ -91,7 +100,20 @@ drupal_version: "11.x"
 | `FillEditorCommand`/`FillSimpleFieldCommand` | [Field Widget Actions](field-widget-actions.md) |
 | Config Action for Recipes pattern | [Field Widget Actions](field-widget-actions.md) |
 
+## ai_eca
+
+| Gap | Note |
+|-----|------|
+| Docs describe a working module | Actual code is a deprecated migration stub |
+
+## ai_logging
+
+| Gap | Note |
+|-----|------|
+| `prompt_logging_excluded_tags` undocumented | Covered in [AI Logging](ai-logging.md) |
+| Deprecation notice missing from docs | Module is deprecated; use `ai_observability` |
+
 ## See Also
 
-- Reference: https://project.pages.drupalcode.org/ai/
+- Reference: https://project.pages.drupalcode.org/ai/1.3.x/
 - Reference: https://git.drupalcode.org/project/ai

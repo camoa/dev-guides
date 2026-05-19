@@ -47,12 +47,6 @@
     "partitioned_by": "camoa",
     "guides_extracted": 23
   },
-  "drupal/ai-content": {
-    "source_hash": "1a5234d4d5e116dffc9235abc17c0a4dcbbf6af05a94b0ed4f2ed92ac3e23225",
-    "partitioned": "2026-02-12",
-    "partitioned_by": "camoa",
-    "guides_extracted": 12
-  },
   "drupal/media": {
     "source_hash": "8fc3a7b3b278b1088e63755fc404d1304bb39b26818af773cd7bed89182568ae",
     "partitioned": "2026-02-16",
@@ -396,8 +390,8 @@
     "guides_extracted": 27
   },
   "drupal/ai-module": {
-    "source_hash": "4307056ba93593de2799fb18d9b56e9033a4f6fd9ce85fdb971fcf4fc4336351",
-    "partitioned": "2026-03-10",
+    "source_hash": "328b5131ac4d6b0033ff78d2ee05d3064cea87b5d65df07753df24b8dc0ede80",
+    "partitioned": "2026-05-19",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 25
   },

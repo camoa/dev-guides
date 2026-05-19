@@ -1,6 +1,6 @@
 ---
 description: AI Automators — auto-populate entity fields on save using AI, with 52 plugin types and three worker modes
-tldr: "Use this guide when auto-generating field content on entity save. Use [AI Agents](ai-agents.md) when you need autonomous decision-making rather than fixed field generation."
+tldr: "Use this guide when auto-generating field content on entity save. Use [AI Agents](ai-agents.md) when you need autonomous decision-making rather than fixed field generation. AutomatorsTool config entity exposes automator chains as function-calling tools."
 drupal_version: "11.x"
 ---
 
@@ -47,10 +47,12 @@ class MyStringGenerator extends RuleBase {
 | Field | Description |
 |-------|-------------|
 | `rule` | AiAutomatorType plugin ID |
+| `input_mode` | `basic` or `token` |
 | `worker_type` | `direct` (sync), `batch` (JS), `queue` (cron) |
 | `edit_mode` | If false, only generate when field is empty |
 | `base_field` | Source field to read from |
 | `prompt` | Prompt template (supports tokens) |
+| `plugin_config` | Provider, model, and plugin-specific settings |
 
 ## Workers
 
@@ -60,20 +62,26 @@ class MyStringGenerator extends RuleBase {
 | `batch` | JS-driven batch UI | Interactive saves with progress bar |
 | `queue` | Cron queue | Background processing, high volume |
 
-## Built-in Plugin Types (52 total)
+## Rule Runner Flow
 
-- **Text/String**: `LlmSimpleString`, `LlmString`, `LlmTextWithSummary`, `LlmTextCreateSummary`
-- **Reference**: `LlmEntityReference`, `LlmTaxonomy`, `VectorSearchEntityReference`
-- **Media**: `LlmImageGeneration`, `LlmImageAltText`, `LlmMediaAudioGeneration`
-- **Audio/Video**: `LlmAudioToStringLong`, `LlmVideoToHtml`, `LlmVideoToVideo`
-- **Numeric**: `LlmBoolean`, `LlmInteger`, `LlmDecimal`
-- **JSON**: `LlmJsonField`, `LlmJsonNative`
-- **Contrib**: `LlmCustomField`, `LlmMetatag`, `LlmModerationState`
+`AiAutomatorRuleRunner` orchestrates each rule:
+1. Calls `ruleIsAllowed()` — checks entity state, field emptiness, edit mode
+2. Calls `generate()` — sends prompt to AI provider, gets raw values
+3. Calls `verifyValue()` — validates generated values (e.g., taxonomy terms exist)
+4. Calls `storeValues()` — sets values on the entity fields
+5. Fires `ValuesChangeEvent` before final storage
+
+## AutomatorsTool (Function Calling Integration)
+
+The `automators_tool` config entity exposes an automator workflow as a function-calling tool. Each tool wraps an automator chain type and registers it as an `AiFunctionCall` plugin via `AutomatorPluginDeriver`. Allows assistants to invoke automator workflows during conversations.
 
 ## Automator Chains (Programmatic API)
 
 ```php
 $service = \Drupal::service('ai_automator.automate');
+
+// List available workflows.
+$workflows = $service->getWorkflows();
 
 // Run a chain — creates temp entity, runs automators, returns results.
 $output = $service->run('my_chain_machine_name', [
@@ -82,14 +90,32 @@ $output = $service->run('my_chain_machine_name', [
 // $output['field_output_text'] contains the generated value.
 ```
 
+## Built-in Plugin Types (52 total)
+
+- **Text/String**: `LlmSimpleString`, `LlmSimpleStringLong`, `LlmString`, `LlmTextWithSummary`, `LlmTextCreateSummary`, `LlmSummarizeToStringLong`
+- **Reference**: `LlmEntityReference`, `LlmTaxonomy`, `VectorSearchEntityReference`, `VectorSearchText`
+- **Media**: `LlmImageGeneration`, `LlmMediaImageGeneration`, `LlmImageAltText`, `LlmRewriteImageFilename`, `LlmMediaAudioGeneration`, `LlmChartFromText`
+- **Audio/Video**: `LlmAudioToStringLong`, `LlmVideoToHtml`, `LlmVideoToImage`, `LlmVideoToVideo`, `LlmSpeechGeneration`
+- **Numeric**: `LlmBoolean`, `LlmInteger`, `LlmDecimal`, `LlmFloat`, `LlmListFloat`, `LlmListInteger`, `LlmListString`
+- **JSON**: `LlmJsonField`, `LlmJsonNative`, `LlmJsonNativeBinary`
+- **Contact/Link**: `LlmAddress`, `LlmEmail`, `LlmLink`, `LlmTelephone`
+- **Contrib**: `LlmCustomField`, `LlmFaqField`, `LlmMetatag`, `LlmModerationState`, `LlmOfficeHours`
+- **External**: `ViewsExtractor`
+
 ## Events
 
 | Event | Purpose |
 |-------|---------|
 | `AutomatorConfigEvent` | Alter config before rule runs |
+| `ProcessFieldEvent` | Force-process or force-skip a field |
 | `ValuesChangeEvent` | Alter generated values before verify/store |
 | `RuleIsAllowedEvent` | Override whether a rule should run |
-| `ProcessFieldEvent` | Force-process or force-skip a field |
+
+## Settings.php
+
+```php
+$settings['ai_automator_advanced_mode_enabled'] = TRUE; // Show token mode + provider selection
+```
 
 ## Common Mistakes
 
@@ -101,4 +127,5 @@ $output = $service->run('my_chain_machine_name', [
 
 - [AI Agents](ai-agents.md)
 - [AI CKEditor](ai-ckeditor.md)
+- [Function Calling](function-calling.md)
 - Reference: `web/modules/contrib/ai/modules/ai_automators/`

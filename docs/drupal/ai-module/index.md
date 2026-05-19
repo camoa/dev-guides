@@ -1,5 +1,5 @@
 ---
-description: Drupal AI module — provider abstraction, AI operations, agents, automators, chatbot API, CKEditor, vector search/RAG, guardrails, and all 14 sub-modules
+description: Drupal AI module — provider abstraction, AI operations, agents, automators, chatbot API, CKEditor, vector search/RAG, guardrails, and all 14 sub-modules (1.3.5 stable, 1.4.0-rc1 callouts)
 guide-meta:
   concepts:
     - Drupal AI module
@@ -43,7 +43,7 @@ guide-meta:
 
 # Drupal AI Module
 
-Provider-agnostic AI abstraction for Drupal 11. Covers provider setup, all 15 operation types, agents, automators, the DeepChat chatbot, CKEditor integration, vector search/RAG, guardrails, and the complete sub-module ecosystem.
+Provider-agnostic AI abstraction for Drupal 11. Covers provider setup, all 16 operation types, agents, automators, the DeepChat chatbot, CKEditor integration, vector search/RAG, guardrails, and the complete sub-module ecosystem. Based on AI module 1.3.5 stable with "Changed in 1.4" callouts for 1.4.0-rc1 APIs.
 
 | I need to... | Guide | Summary |
 |-------------|-------|---------|
@@ -57,7 +57,7 @@ Provider-agnostic AI abstraction for Drupal 11. Covers provider setup, all 15 op
 | Auto-generate field content on entity save | [AI Automators](ai-automators.md) | Use this guide when auto-generating field content on entity save. Use [AI Agents](ai-agents.md) when you need autonomous decision-making rather than fixed field generation. |
 | Add AI features to CKEditor 5 | [AI CKEditor](ai-ckeditor.md) | Use this guide when adding AI text-generation capabilities to CKEditor 5. Use [AI Automators](ai-automators.md) for field-level automation outside the editor. |
 | Set up vector search / RAG | [AI Search (Vector/RAG)](ai-search-vector-rag.md) | Use this guide when setting up semantic search or Retrieval-Augmented Generation (RAG) with vector databases. Use [AI Assistant API](ai-assistant-api.md) to wire the `rag_action` into an assistant. |
-| Translate content with AI | [AI Translate](ai-translate.md) | **Status: DEPRECATED** — moving to standalone `drupal/ai_translate` project. This guide covers the module as it exists in AI 1.3.0-rc2. |
+| Translate content with AI | [AI Translate](ai-translate.md) | **Status: DEPRECATED** — moving to standalone `drupal/ai_translate` project. No replacement announced. This guide covers the module as it exists in AI 1.3.5. |
 | Add AI validation to fields | [AI Validations](ai-validations.md) | **Status: DEPRECATED** — moving to standalone `drupal/ai_validations` project. Use when you need AI-powered field validation constraints with the Field Validation module (>=3.0.0-beta3). |
 | Add action buttons to field widgets | [Field Widget Actions](field-widget-actions.md) | Use this guide when adding action buttons to field widgets on entity edit forms. The `field_widget_actions` module is AI-agnostic — it provides the framework; other modules provide the actual AI plugins. |
 | Monitor AI usage and costs in production | [AI Observability](ai-observability.md) | Use `ai_observability` for production monitoring and audit trails. Use [AI Logging](ai-logging.md) only for local development debugging (it is deprecated). |
@@ -70,5 +70,5 @@ Provider-agnostic AI abstraction for Drupal 11. Covers provider setup, all 15 op
 | Handle AI-specific exceptions | [Exceptions](exceptions.md) | Use this guide when handling errors from AI provider calls. Always catch specific exceptions before the generic `AiExceptionInterface`. |
 | Work with enums, DTOs, structured output | [Enums & DTOs](enums-and-dtos.md) | Use this guide when filtering models by capability, building structured output schemas, or tracking token usage from provider responses. |
 | Follow security best practices | [Security](security.md) | Use this guide before deploying any user-facing AI feature. All items in the checklist are required for production. |
-| Plan migrations from deprecated modules | [Deprecated Modules](deprecated-modules.md) | Use this guide when upgrading to AI 1.3.0-rc2 or planning migrations away from deprecated sub-modules. |
-| Identify gaps in official documentation | [Documentation Gaps](documentation-gaps.md) | Use this guide when the official documentation doesn't match actual behavior. These gaps were identified by comparing official docs to source code in AI 1.3.0-rc2. |
+| Plan migrations from deprecated modules | [Deprecated Modules](deprecated-modules.md) | Use this guide when planning migrations away from deprecated sub-modules. All deprecations remain in 1.3.5 and 1.4.0-rc1; removal planned for AI 2.0.0. |
+| Identify gaps in official documentation | [Documentation Gaps](documentation-gaps.md) | Use this guide when the official documentation doesn't match actual behavior. Gaps verified against 1.3.5; new 1.4.0-rc1 gaps (ChatProcessor, global guardrails, AiExceptionEvent) also listed. |

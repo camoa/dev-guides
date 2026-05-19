@@ -1,6 +1,6 @@
 ---
 description: AI exception types — catch hierarchy, when each exception fires, and ProviderProxy re-throw behavior
-tldr: "Use this guide when handling errors from AI provider calls. Always catch specific exceptions before the generic `AiExceptionInterface`."
+tldr: "Use this guide when handling errors from AI provider calls. Always catch specific exceptions before the generic AiExceptionInterface. Changed in 1.4: ProviderProxy also dispatches AiExceptionEvent before re-throwing — subscribe to inject fallback output instead of surfacing errors to users."
 drupal_version: "11.x"
 ---
 
@@ -20,6 +20,7 @@ drupal_version: "11.x"
 | Content blocked | `AiUnsafePromptException` | Guardrail or moderation blocked |
 | Bad API key / setup | `AiSetupFailureException` | Known broken setup |
 | Provider doesn't support feature | `AiMissingFeatureException` | e.g., streaming on non-streaming provider |
+| Graceful failover on any error | `AiExceptionEvent` subscriber (1.4) | Inject cached/fallback response before re-throw |
 
 ## Pattern
 
@@ -45,7 +46,7 @@ try {
 
 | Exception | When Thrown |
 |-----------|------------|
-| `AiBadRequestException` | Malformed request, missing model ID, or unclassified provider error |
+| `AiBadRequestException` | Malformed request, missing model ID, client invocation error, or unclassified provider error |
 | `AiRateLimitException` | Provider reports rate limiting |
 | `AiQuotaException` | Provider reports exhausted credits/quota |
 | `AiAccessDeniedException` | Provider denies access (e.g., model-level restriction) |
@@ -58,7 +59,7 @@ try {
 | `AiOperationTypeMissingException` | Called an operation type the provider doesn't implement |
 | `AiToolsValidationException` | Tool/function call validation failed |
 | `AiFunctionCallingExecutionError` | Error during tool/function execution |
-| `ChunkingTooSmallException` | Text chunk smaller than minimum constraints |
+| `ChunkingTooSmallException` | Text chunk smaller than minimum constraints (embedding strategy) |
 
 ## ProviderProxy Re-throw Behavior
 
@@ -67,10 +68,13 @@ try {
 - `ClientExceptionInterface` (PSR HTTP) — wrapped in `AiBadRequestException`
 - Any other `\Exception` — wrapped in `AiRequestErrorException`
 
+**Changed in 1.4:** Before re-throwing, the proxy dispatches `AiExceptionEvent`. Subscribers can inject a forced recovery output via `setForcedOutputObject()` — the proxy uses this instead of re-throwing. See [Events System](events-system.md).
+
 ## Common Mistakes
 
 - **Wrong**: Catching only `\Exception` → **Right**: Catch `AiExceptionInterface` to specifically handle AI errors
 - **Wrong**: Not catching `AiUnsafePromptException` in user-facing features → **Right**: This exception is thrown when guardrails block content; handle gracefully
+- **Wrong**: Not using `AiExceptionEvent` for rate limit fallback (1.4) → **Right**: Subscribe to `AiExceptionEvent` to inject cached responses when providers fail
 
 ## See Also
 

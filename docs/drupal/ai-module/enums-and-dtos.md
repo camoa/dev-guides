@@ -1,6 +1,6 @@
 ---
 description: AI enums and DTOs — AiModelCapability, AiProviderCapability, StructuredOutputSchema, TokenUsageDto, and ChatProviderLimitsDto
-tldr: "Use this guide when filtering models by capability, building structured output schemas, or tracking token usage from provider responses."
+tldr: "Use this guide when filtering models by capability, building structured output schemas, or tracking token usage from provider responses. Deprecated in 1.4: ChatInput::setChatStrictSchema() — set strict: TRUE on StructuredOutputSchema instead."
 drupal_version: "11.x"
 ---
 
@@ -19,21 +19,36 @@ drupal_version: "11.x"
 | Track token costs | `TokenUsageDto` | Extracted from provider response |
 | Check rate limit headers | `ChatProviderLimitsDto` | Parsed from provider response headers |
 
-## AiModelCapability (Chat)
+## AiModelCapability — Chat
 
 | Case | Value | Description |
 |------|-------|-------------|
 | `ChatWithImageVision` | `chat_with_image_vision` | Model accepts image inputs |
+| `ChatWithAudio` | `chat_with_audio` | Model accepts audio inputs |
+| `ChatWithVideo` | `chat_with_video` | Model accepts video inputs |
 | `ChatSystemRole` | `chat_system_role` | Model supports system role |
 | `ChatJsonOutput` | `chat_json_output` | Reliable complex JSON output |
 | `ChatStructuredResponse` | `chat_structured_response` | Native structured/schema responses |
 | `ChatTools` | `chat_tools` | Native tool/function calling |
-| `ChatCombinedToolsAndStructuredResponse` | combined | Tools + structured response in one call |
+| `ChatCombinedToolsAndStructuredResponse` | `chat_combined_tools_and_structured_response` | Tools + structured response in one call |
 
 ```php
 // Get models that support vision.
 $models = $provider->getConfiguredModels('chat', [AiModelCapability::ChatWithImageVision]);
 ```
+
+## AiModelCapability — Image-to-Image
+
+`ImageToImageUpscale`, `ImageToImageOutpaint`, `ImageToImageInpaint`, `ImageToImageErase`, `ImageToImageSearchReplace`, `ImageToImageSearchRecolor`, `ImageToImageRemoveBackground`, `ImageToImageSketch`, `ImageToImageStyleGuide`, `ImageToImageStyleTransfer`
+
+Each case has `getBaseOperationType()`, `getTitle()`, and `getDescription()`.
+
+## AiProviderCapability (Provider-level)
+
+| Case | Value | Description |
+|------|-------|-------------|
+| `StreamChatOutput` | `stream_chat_output` | Provider supports chat streaming |
+| `ChatFiberSupport` | `chat_fiber_support` | Provider supports PHP Fibers for streaming |
 
 ## StructuredOutputSchema DTO
 
@@ -56,7 +71,9 @@ $input = new ChatInput([new ChatMessage('user', 'What is the weather?')]);
 $input->setChatStructuredJsonSchema($schema);
 ```
 
-Validation: `name` must match `/^[a-z0-9_-]+$/`; `json_schema` must have a `properties` key.
+Validation: `name` must match `/^[a-z0-9_-]+$/`; `json_schema` must have a `properties` key. `fromArray()` throws `\InvalidArgumentException` on failure.
+
+**Deprecated in 1.4:** `ChatInput::setChatStrictSchema(bool $strict)` and `getChatStrictSchema()` — set `strict: TRUE` on the `StructuredOutputSchema` DTO instead. `setChatStructuredJsonSchema()` accepts both array and `StructuredOutputSchema` instances.
 
 ## TokenUsageDto
 
@@ -68,21 +85,33 @@ Validation: `name` must match `/^[a-z0-9_-]+$/`; `json_schema` must have a `prop
 | `reasoning` | `?int` | Reasoning tokens (e.g., o1 models) |
 | `cached` | `?int` | Cached tokens |
 
-## AiProviderCapability (Provider-level)
+## ChatProviderLimitsDto
 
-| Case | Value | Description |
-|------|-------|-------------|
-| `StreamChatOutput` | `stream_chat_output` | Provider supports chat streaming |
-| `ChatFiberSupport` | `chat_fiber_support` | Provider supports PHP Fibers |
+| Property | Type | Description |
+|----------|------|-------------|
+| `rateLimitMaxRequests` | `?int` | Max requests allowed |
+| `rateLimitMaxTokens` | `?int` | Max tokens allowed |
+| `rateLimitRemainingRequests` | `?int` | Remaining requests |
+| `rateLimitRemainingTokens` | `?int` | Remaining tokens |
+| `rateLimitResetRequests` | `?int` | Seconds until request limit resets |
+| `rateLimitResetTokens` | `?int` | Seconds until token limit resets |
 
-## VdbSimilarityMetrics
+Both DTOs use `DtoBaseMethodsTrait` providing `create(array $values)` (factory) and `toArray()`.
 
-`CosineSimilarity`, `EuclideanDistance`, `InnerProduct`
+## Other Enums
+
+| Enum | Values |
+|------|--------|
+| `VdbSimilarityMetrics` | `CosineSimilarity`, `EuclideanDistance`, `InnerProduct` |
+| `VdbCapability` | `GroupBy` |
+| `EmbeddingStrategyCapability` | `MultipleMainContent` |
+| `EmbeddingStrategyIndexingOptions` | `MainContent`, `ContextualContent`, `Attributes`, `Ignore` |
 
 ## Common Mistakes
 
 - **Wrong**: Using `StructuredOutputSchema` with `name` containing uppercase or spaces → **Right**: Name must match `/^[a-z0-9_-]+$/`
 - **Wrong**: Assuming all providers support `ChatTools` → **Right**: Check `AiModelCapability::ChatTools` via `getConfiguredModels()` first
+- **Wrong**: Calling `setChatStrictSchema()` in 1.4.x → **Right**: Deprecated; set `strict: TRUE` on `StructuredOutputSchema` DTO
 
 ## See Also
 

@@ -1,6 +1,6 @@
 ---
 description: AI Translate — deprecated module for AI-powered content and interface translation (replaced by standalone project)
-tldr: "**Status: DEPRECATED** — moving to standalone `drupal/ai_translate` project. This guide covers the module as it exists in AI 1.3.0-rc2."
+tldr: "**Status: DEPRECATED** — moving to standalone `drupal/ai_translate` project (issue #3570275). No replacement announced yet. This guide covers the module as it exists in AI 1.3.5."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> **Status: DEPRECATED** — moving to standalone `drupal/ai_translate` project. This guide covers the module as it exists in AI 1.3.0-rc2. See https://www.drupal.org/node/3570275 for the migration plan.
+> **Status: DEPRECATED** — moving to standalone `drupal/ai_translate` project. No replacement has been announced. See https://www.drupal.org/node/3570275 for the migration plan. This guide covers the module as it exists in AI 1.3.5.
 
 ## Decision
 
@@ -26,6 +26,7 @@ drupal_version: "11.x"
 | `use_ai_translate` | `true` | Override translate tab with AI links |
 | `entity_reference_depth` | `1` | Max recursion for references (0=unlimited) |
 | `translation_status` | `keep_original` | `keep_original` or `create_draft` |
+| `redirect_after_create` | `list` | `list` or `edit` |
 | `language_settings` | `{}` | Per-language model/prompt overrides |
 
 ## Drush Commands
@@ -40,6 +41,10 @@ drush ai:translate-text "Hello world" en fr    # Translate a text string
 ```php
 hook_ai_translate_translation_alter(&$messages, &$provider_id, &$model_id)
 ```
+
+## ChatTranslationProvider
+
+The module wraps the AI chat operation to implement the `translate_text` operation type. `ChatTranslationProvider` takes text, source language, and target language, constructs a chat prompt, and returns the translated text. Allows any chat provider to serve as a translation backend.
 
 ## Custom FieldTextExtractor
 
@@ -65,10 +70,14 @@ class MyFieldExtractor extends FieldExtractorBase {
 | `layout_builder` | layout_section | Inline blocks (symmetric + asymmetric) |
 | `entity_reference` | entity_reference | Referenced entities recursively |
 
+## Entity Reference Translation
+
+Per-field translation of referenced entities is controlled via third-party settings on entity reference fields: `ai_translate:translate_references`. When enabled, the translator recursively processes referenced entities up to `entity_reference_depth` levels.
+
 ## Common Mistakes
 
 - **Wrong**: Setting `entity_reference_depth: 0` without performance testing → **Right**: Unlimited depth can translate the entire entity graph recursively; set conservatively
-- **Wrong**: Using `ai_translate` for new projects → **Right**: Module is deprecated; wait for the standalone replacement
+- **Wrong**: Using `ai_translate` for new projects → **Right**: Module is deprecated; plan for the standalone replacement
 
 ## See Also
 
