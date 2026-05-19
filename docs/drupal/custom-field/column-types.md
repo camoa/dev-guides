@@ -363,4 +363,5 @@ Universally unique identifier.
 
 ## See Also
 
+- [Polymorphic Compound Fields](polymorphic-compound.md) — the canonical custom_field use case: data with ≥2 mutually-exclusive sub-shapes. Apply the polymorphism test before reaching for a single core field type.
 - Reference: `/modules/contrib/custom_field/src/Plugin/CustomField/FieldType/`

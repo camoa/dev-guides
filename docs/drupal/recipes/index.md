@@ -27,6 +27,7 @@ guide-meta:
 | I need to... | Guide | Summary |
 |-------------|-------|---------|
 | Understand what recipes replace | [Recipe System Overview](recipe-system-overview.md) | Use Drupal Recipes (core since 10.3.0, May 2024) when you need shareable, tested configuration patterns that can be applied to any Drupal site. Use distributions for full site builds, config split for environment-specific config. |
+| Group config into recipes — what to split, install order | [Recipe Boundaries Strategy](recipe-boundaries-strategy.md) | Five-recipe layout for greenfield sites: foundation + tier1_sections + tier1_pages + tier2_{entity} + site. Topological install order, assignment rules per config item type, spanning-concerns escalation, worked examples. Strategy companion to recipe-yaml-schema (mechanism). |
 | Create my first recipe | [Creating Your First Recipe](creating-first-recipe.md) | Follow this workflow to create a minimal working recipe from scratch. |
 | Understand recipe.yml structure | [Recipe YAML Schema](recipe-yaml-schema.md) | Every recipe requires a `recipe.yml` file defining metadata, dependencies, extensions, configuration, inputs, and content. |
 | Compose multiple recipes | [Recipe Composition & Dependencies](recipe-composition.md) | Use recipe composition when you need to build complex functionality from granular, reusable recipe building blocks. |

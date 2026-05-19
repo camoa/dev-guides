@@ -56,6 +56,8 @@ drush config:import --partial --source=modules/custom/my_module/config/install/
 
 ## See Also
 
+- [Cross-Cutting Classification](cross-cutting-classification.md) — decide if a field should be a taxonomy (vs list_string vs entity reference to a content type) BEFORE creating a vocabulary
+
 - [Vocabulary Configuration Schema](vocabulary-config-schema.md)
 - [Term Reference Field Configuration](term-reference-config.md)
 - Reference: `/core/recipes/tags_taxonomy/config/taxonomy.vocabulary.tags.yml`

@@ -66,5 +66,6 @@ Reference: `/core/modules/layout_builder/src/Plugin/Block/InlineBlock.php` for i
 
 - Section 6: Block Placement (creating components)
 - Section 18: Security & Performance (orphan cleanup, caching)
+- [Multi-Block Sections](multi-block-sections.md) — inline blocks can co-exist in ONE LB section via multiple SectionComponent entries; useful when blocks share section-level styling
 - Reference: `/core/modules/layout_builder/src/InlineBlockUsage.php` (orphan tracking)
 - Web: [Layout Builder created blocks do not clean up](https://www.drupal.org/project/drupal/issues/3042418)
