@@ -73,6 +73,8 @@ Reference: `/core/modules/field/src/Entity/FieldStorageConfig.php`
 
 ## See Also
 
+- [Storage Decision Tree](storage-decision-tree.md) — ordered Q1–Q6 ruleset for picking a field pattern before reaching for a field type
+- [Shared Field Storage Strategy](shared-field-storage-strategy.md) — when N bundles share a concern, emit ONE storage + N instances; generic naming, cardinality reconciliation, dependency ordering
 - [Field Type Selection](field-type-selection.md)
 - [Field Instance Configuration](field-instance-configuration.md)
 - Reference: [Field storage configuration](https://git.drupalcode.org/project/drupal/-/blob/11.x/core/modules/field/config/schema/field.schema.yml)

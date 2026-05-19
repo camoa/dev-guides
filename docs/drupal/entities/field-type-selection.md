@@ -76,6 +76,7 @@ Reference: `/core/lib/Drupal/Core/Field/Plugin/Field/FieldType/`
 
 ## See Also
 
+- [Storage Decision Tree](storage-decision-tree.md) — apply this BEFORE choosing a field type; it commits to a pattern (custom_field / shared / taxonomy / wrapper / entity reference / private), then field-type-selection narrows within the pattern
 - [Base Field Definitions](base-field-definitions.md)
 - [Field Storage Configuration](field-storage-configuration.md)
 - Reference: [Field types overview](https://www.drupal.org/docs/drupal-apis/entity-api/fieldtypes-fieldwidgets-and-fieldformatters)
