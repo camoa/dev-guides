@@ -1,6 +1,6 @@
 ---
 description: Group access control — explicit forbid philosophy, access check flow, query access, GroupAccessResult, custom handlers, and revision access
-tldr: "Read this when diagnosing access issues, understanding the \"explicit forbid\" pattern, or writing custom access control for group-related entities."
+tldr: "Read this when diagnosing access issues, understanding the \"explicit forbid\" pattern, or writing custom access control for group-related entities. In 4.x the entity_access hook is implemented as EntityHooks::entityAccess() (OOP), not group_entity_access() (procedural)."
 drupal_version: "11.x"
 ---
 
@@ -57,11 +57,14 @@ class MyAccessControl implements AccessControlInterface {
 }
 ```
 
+**4.x access flow note:** The entity access check is implemented in `EntityHooks::entityAccess()` (an OOP hook class tagged `#[Hook('entity_access')]`), not the procedural `group_entity_access()` function that 3.x used. The "explicit forbid" semantics and `GroupAccessResult` are identical.
+
 ## Common Mistakes
 
 - **Wrong**: Assuming ungrouped entities are affected by Group → **Right**: Group only checks entities that have at least one `group_relationship` record. Ungrouped entities return neutral.
 - **Wrong**: Checking access on new (unsaved) entities → **Right**: Group explicitly returns neutral for new entities — they have no ID and cannot have relationships.
 - **Wrong**: Disabling `disable_sql_rewrite` in Views for group-aware content → **Right**: Group hooks into Views query via `hook_views_query_alter()`. Disabling SQL rewrite removes Group's access filtering.
+- **Wrong**: Calling `group_entity_access()` directly in 4.x → **Right**: The procedural function no longer exists. Group has no `.module` file in 4.x; all hooks are OOP methods in `src/Hook/`.
 
 ## See Also
 

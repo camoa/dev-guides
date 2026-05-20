@@ -1,6 +1,6 @@
 ---
-description: All entity types provided by Group 3.x — IDs, base tables, key fields, shared bundle classes, and membership loading
-tldr: "Reference this when you need to know the exact entity type IDs, base tables, bundle systems, and key fields of every entity Group provides."
+description: All entity types provided by Group 4.x — IDs, base tables, key fields, shared bundle classes, and membership loading
+tldr: "Reference this when you need to know the exact entity type IDs, base tables, bundle systems, and key fields of every entity Group provides. In 4.x the $roles filter on loadByGroup() and loadByUser() must be an array."
 drupal_version: "11.x"
 ---
 
@@ -44,14 +44,15 @@ $memberships = GroupMembership::loadByUser($account);
 // Load all memberships for a group.
 $members = GroupMembership::loadByGroup($group);
 
-// Load filtered by role.
-$editors = GroupMembership::loadByGroup($group, 'project-editor');
+// Load filtered by role — 4.x: the $roles filter must be an array.
+$editors = GroupMembership::loadByGroup($group, ['project-editor']);
 ```
 
 ## Common Mistakes
 
 - **Wrong**: Calling `GroupRelationshipType::label()` and displaying it to users → **Right**: It is labeled "INTERNAL USE ONLY". Use the plugin's label instead.
 - **Wrong**: Querying `group_relationship` with `accessCheck(TRUE)` in non-user-context code → **Right**: Use `accessCheck(FALSE)` in backend operations and apply manual authorization checks. Full permission calculation is expensive.
+- **Wrong**: Passing a string to `loadByGroup($group, 'role_id')` as the roles filter → **Right**: In 4.x the filter must be an array: `loadByGroup($group, ['role_id'])`.
 
 ## See Also
 

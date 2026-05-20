@@ -1,6 +1,6 @@
 ---
-description: Group 3.x data model — entities, scopes, v2 vs v3 differences, and key dependencies
-tldr: "Read this when you need to understand Group 3.x's data model and how it differs from earlier versions before writing any code."
+description: Group 4.x data model — entities, scopes, v3 vs v4 differences, and key dependencies
+tldr: "Group 4.x uses the same data model as 3.x (group_relationship, scopes, GroupRelationBase) but drops all contrib dependencies — permission calculation moved to Drupal core's Access Policy API and all hooks became OOP classes."
 drupal_version: "11.x"
 ---
 
@@ -8,15 +8,16 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Read this when you need to understand Group 3.x's data model and how it differs from earlier versions before writing any code.
+> Read this when you need to understand Group 4.x's data model and how it differs from earlier versions before writing any code.
 
 ## Decision
 
 | Situation | Choose | Why |
 |---|---|---|
-| New site, Drupal 10.3+/11 | Group 3.x | Active maintenance, PHP 8 attributes |
-| Existing site on Drupal 9/10 with Group 2.x | Stay on 2.x | No in-place upgrade to 3.x exists |
-| Migrating from Group 1.x | Upgrade to 2.x first | 1.x→2.x has an upgrade path; 2.x→3.x does not |
+| New site, Drupal 11.2+ | Group 4.x | No contrib dependencies, Access Policy API, OOP hooks |
+| Existing site on Drupal 10 | Group 3.3.5 | 4.x requires Drupal 11.2+; 3.x is the latest stable for Drupal 10 |
+| Existing site on Drupal 11.2+ with Group 3.x | Upgrade to 4.x | Normal module update — same data model and machine names |
+| Migrating from Group 2.x | Upgrade to 3.x first | Same data model as 3.x; then upgrade core to 11.2+ and upgrade to 4.x |
 
 ## Pattern
 
@@ -43,10 +44,16 @@ group_type (config entity, bundle of group)
 | Individual | A specific member with an explicitly assigned role | `PermissionScopeInterface::INDIVIDUAL_ID` |
 | Anonymous | Unauthenticated user (subset of outsider scope) | — |
 
+**v4 key dependencies** (core only — no contrib required):
+
+- **Access Policy API (core 11.2+)** — replaces `flexible_permissions` contrib. Group registers `IndividualGroupRoleAccessPolicy` (priority -100) and `SynchronizedGroupRoleAccessPolicy` (priority -50) tagged `access_policy`.
+- **Revision UI (core)** — replaces `drupal/entity` contrib.
+
 ## Common Mistakes
 
-- **Wrong**: Treating Group 3.x like Group 1.x → **Right**: `GroupContent`, `addContent()`, and `GroupContentEnabler` are gone. Everything is now `GroupRelationship`, `addRelationship()`, and `GroupRelationBase`.
-- **Wrong**: Installing v3 over v2 data → **Right**: There is no in-place upgrade. Migrate data or use the `group2to3` contrib module.
+- **Wrong**: Treating Group 4.x like Group 1.x → **Right**: `GroupContent`, `addContent()`, and `GroupContentEnabler` are gone since 3.x. Use `GroupRelationship`, `addRelationship()`, and `GroupRelationBase`.
+- **Wrong**: Registering a `flexible_permissions_calculator`-tagged service → **Right**: In 4.x the tag is `access_policy`. Re-implement custom calculators as `AccessPolicyBase` subclasses.
+- **Wrong**: Installing Group 4.x on Drupal 10 or Drupal 11.0/11.1 → **Right**: Group 4.x requires Drupal 11.2+ for the Access Policy API.
 
 ## See Also
 

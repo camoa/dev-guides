@@ -19,7 +19,7 @@ drupal_version: "11.x"
 | Group-level roles and permissions | **Yes** | Limited | No | Partial |
 | Sub-site / multi-domain model | No | **Yes** | No | No |
 | Taxonomy-based content restriction | No | No | **Yes** | No |
-| Config entities in groups | **Yes (v3)** | No | No | No |
+| Config entities in groups | **Yes** | No | No | No |
 | Complex nested group hierarchy | Via Subgroup contrib | No | No | No |
 | Simple "hide content from role" | Overkill | Overkill | **Yes** | Overkill |
 | Groups with their own menus | Via group_content_menu | No | No | No |

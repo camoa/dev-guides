@@ -1,6 +1,6 @@
 ---
-description: Group permissions — YAML discovery, plugin-generated permissions, scope system, checking permissions, route access, and cache context
-tldr: "Read this when you need to define custom group permissions, understand the scope system, or programmatically grant/check permissions."
+description: Group permissions — YAML discovery, plugin-generated permissions, scope system, Access Policy API, checking permissions, route access, and cache context
+tldr: "Group 4.x calculates permissions via Drupal core's Access Policy API (IndividualGroupRoleAccessPolicy + SynchronizedGroupRoleAccessPolicy); custom calculators must be re-implemented as AccessPolicyBase subclasses tagged access_policy."
 drupal_version: "11.x"
 ---
 
@@ -21,6 +21,7 @@ drupal_version: "11.x"
 | Scope: non-members | `outsider` role + `global_role` | Applies to all authenticated users not in the group |
 | Scope: members | `insider` role + `global_role` | Applies to all authenticated members |
 | Scope: specific role | `individual` role (no `global_role`) | Manually assigned to members |
+| Custom permission source (4.x) | `AccessPolicyBase` subclass tagged `access_policy` | Replaces `flexible_permissions_calculator` from 3.x |
 
 ## Pattern
 
@@ -55,11 +56,19 @@ mymodule.group.custom_page:
     _group_permission: 'manage features'
 ```
 
+**4.x permission calculation services:**
+
+| Scope | Access policy class | Tag / priority |
+|---|---|---|
+| `individual` | `IndividualGroupRoleAccessPolicy` | `access_policy` / -100 |
+| `outsider`, `insider` | `SynchronizedGroupRoleAccessPolicy` | `access_policy` / -50 |
+
 ## Common Mistakes
 
 - **Wrong**: Using `AccessResult::allowedIfHasPermission()` for group permissions → **Right**: Use `GroupAccessResult::allowedIfHasGroupPermission()`. The former checks global Drupal permissions only.
 - **Wrong**: Not adding `user.group_permissions` cache context when rendering group-permission-dependent content → **Right**: Always add it or use `GroupAccessResult` which adds it automatically.
 - **Wrong**: Setting scope without `global_role` on outsider/insider roles → **Right**: Outsider and insider roles require `global_role`. Individual roles must NOT have `global_role`.
+- **Wrong**: Registering a `flexible_permissions_calculator`-tagged service in 4.x → **Right**: Re-implement as an `AccessPolicyBase` subclass tagged `access_policy`.
 
 ## See Also
 

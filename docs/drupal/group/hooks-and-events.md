@@ -1,6 +1,6 @@
 ---
-description: Group hooks and events — available hooks, event subscribers, reacting to relationship CRUD, and extending permissions
-tldr: "Reference this when looking for extension points to react to Group events without altering core Group logic."
+description: Group hooks and events — OOP hooks in 4.x, available hooks, event subscribers, reacting to relationship CRUD, and extending permissions
+tldr: "Reference this when looking for extension points to react to Group events without altering core Group logic. In 4.x Group has no .module file — all hooks are OOP methods in src/Hook/; do not call group_entity_access() or other procedural Group functions."
 drupal_version: "11.x"
 ---
 
@@ -18,6 +18,7 @@ drupal_version: "11.x"
 | React to relationship create/delete | `hook_ENTITY_TYPE_insert/delete` on `group_relationship` | No dedicated Group event for relationship CRUD |
 | Dynamic permissions | `permission_callbacks` in `.group.permissions.yml` | Called at permission cache build time |
 | Alter routes | Event subscriber on `RoutingEvents::ALTER` | Standard Symfony routing |
+| Custom permission source | `AccessPolicyBase` subclass tagged `access_policy` | 4.x replaces `flexible_permissions_calculator` |
 
 ## Pattern
 
@@ -53,6 +54,8 @@ class MyModuleGroupPermissions {
 }
 ```
 
+**4.x note:** Group 4.x has no `.module` file. All hook implementations are OOP methods in `src/Hook/` (`CoreHooks`, `EntityHooks`, `FieldHooks`, `FormHooks`, `QueryHooks`, etc.), each tagged with `#[Hook('hook_name')]`. Your own module can still use either procedural `.module` functions or OOP hook classes — the change only affects Group's own hooks.
+
 Registered event subscribers by Group core:
 
 | Service ID | Listens to | Purpose |
@@ -64,6 +67,7 @@ Registered event subscribers by Group core:
 
 - **Wrong**: Listening to Group-specific Symfony events for relationship changes → **Right**: Group does not dispatch custom Symfony events for relationship changes. Use entity hooks instead.
 - **Wrong**: Not reacting before deletion → **Right**: If you need pre-deletion logic, implement `hook_ENTITY_TYPE_predelete` on the entity type being removed from the group (not on `group_relationship`).
+- **Wrong**: Calling `group_entity_access()` directly in 4.x → **Right**: The procedural function no longer exists in 4.x. The equivalent is `EntityHooks::entityAccess()` inside Group's codebase, which you should not call directly.
 
 ## See Also
 
