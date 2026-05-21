@@ -1,6 +1,6 @@
 ---
-description: Debug ECA workflows with logging, token inspection, and drush watchdog commands
-tldr: "Debug ECA workflows when actions don't execute as expected, tokens have unexpected values, or conditions evaluate incorrectly. Use logging, watchdog, and token inspection."
+description: Debug ECA workflows with logging, token inspection, drush watchdog, and the ECA 3.1 built-in Process Debugger
+tldr: "Debug ECA workflows when actions don't execute as expected, tokens have unexpected values, or conditions evaluate incorrectly. In ECA 3.1 reach for the built-in Process Debugger first; use logger statements for custom plugin observability and production."
 drupal_version: "11.x"
 ---
 
@@ -19,6 +19,11 @@ drupal_version: "11.x"
 | Check action execution | Logger in execute() | `$this->logger->info('Action started')` |
 | Verify configuration | Logger in access() | `$this->logger->debug('Config: @config', ['@config' => json_encode($this->configuration)])` |
 | Trace workflow path | ECA UI | View execution history in ECA admin |
+| Trace a full model run (events, conditions, actions, recursion) | ECA Process Debugger (3.1) | Enable debug mode; inspect the recorded trace / replay it in the modeller |
+
+## ECA 3.1: Built-in Process Debugger
+
+ECA 3.1 ships a **Process Debugger** (`Drupal\eca\ProcessDebugger`) with a **Replay Mode**. When debug mode is enabled, ECA records a detailed execution trace for every model run — event start, each successor evaluation (including the condition IDs that were checked), every action execution, access denials, exceptions, and recursion detection. The Modeler API's **Test Mode** lets you trigger and replay these traces directly in the modeller UI. For diagnosing *why a workflow behaved as it did*, this is now the first tool to reach for — ahead of hand-placed logger statements. The manual logging patterns below remain valuable inside custom plugin code, for production observability, and for data the trace does not capture.
 
 ## Pattern
 

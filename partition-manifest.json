@@ -60,9 +60,9 @@
     "guides_extracted": 16
   },
   "drupal/eca": {
-    "source_hash": "8ae4ceff0784b5fcb052d047130f82a8b4f3bddbe88eb19379aa28a3316e45ad",
-    "partitioned": "2026-02-12",
-    "partitioned_by": "camoa",
+    "source_hash": "72f342799cfdec495c182e4e2167005e52c50dc85fe05aa255bf4e8bcd33656b",
+    "partitioned": "2026-05-20",
+    "partitioned_by": "Carlos Ospina",
     "guides_extracted": 21
   },
   "drupal/klaro": {
@@ -508,5 +508,17 @@
     "partitioned": "2026-05-11",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 18
+  },
+  "drupal/modeler-api": {
+    "source_hash": "00160d2d7fb90828395604e87093f06082419ec82520af2f80dfb042b20b7e25",
+    "partitioned": "2026-05-20",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 11
+  },
+  "drupal/orchestration": {
+    "source_hash": "f069d7529935a7cfc993475bfc0897c3af535597c3208a2f40f96b8b8cbc43da",
+    "partitioned": "2026-05-20",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 12
   }
 }

@@ -1,5 +1,5 @@
 ---
-description: ECA (Event-Condition-Action) plugin development — create custom actions, events, and conditions
+description: ECA 3.1 (Event-Condition-Action) plugin development — create custom actions, events, and conditions for Drupal ^11.3 / ^12.0
 guide-meta:
   concepts:
     - ECA module
@@ -44,6 +44,6 @@ guide-meta:
 | Cache expensive operations | [Performance Patterns](performance-patterns.md) | Apply performance optimizations when plugins perform expensive operations like external API calls, complex calculations, or repeated database queries. Cache results, batch operations, and avoid N+1 queries. |
 | Secure external API integrations | [Security Best Practices](security-best-practices.md) | Apply security patterns to all plugins that handle user input, external data, API credentials, or entity access. Security is mandatory, not optional. |
 | Test ECA plugins | [Kernel Testing](kernel-testing.md) | Write kernel tests for all ECA plugins to verify configuration, execution logic, token handling, and integration with Drupal services. Kernel tests run faster than browser tests and provide sufficient coverage for most plugin logic. |
-| Debug workflows | [Debugging Workflows](debugging-workflows.md) | Debug ECA workflows when actions don't execute as expected, tokens have unexpected values, or conditions evaluate incorrectly. Use logging, watchdog, and token inspection. |
+| Debug workflows | [Debugging Workflows](debugging-workflows.md) | Debug ECA workflows when actions don't execute as expected, tokens have unexpected values, or conditions evaluate incorrectly. In ECA 3.1 reach for the built-in Process Debugger first; use logger statements for custom plugin observability and production. |
 | Avoid common mistakes | [Common Pitfalls](common-pitfalls.md) | Review this section before completing any ECA plugin to avoid the most common mistakes that break plugins or cause maintenance problems. |
 | Understand mandatory rules | [Mandatory Rules](mandatory-rules.md) | Use this checklist before completing ANY ECA plugin. These are not optional - violating these rules will cause bugs or break your plugin. |

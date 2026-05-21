@@ -337,6 +337,33 @@ nav:
       - drupal/group/common-mistakes.md
       - drupal/group/security.md
       - drupal/group/group-actions-contrib.md
+    - Modeler API:
+      - drupal/modeler-api/index.md
+      - drupal/modeler-api/architecture-owners-vs-modelers.md
+      - drupal/modeler-api/when-to-use.md
+      - drupal/modeler-api/component-model.md
+      - drupal/modeler-api/registering-model-owner.md
+      - drupal/modeler-api/building-a-modeler.md
+      - drupal/modeler-api/data-model-entity-storage.md
+      - drupal/modeler-api/routes-permissions.md
+      - drupal/modeler-api/yaml-plugin-definitions.md
+      - drupal/modeler-api/import-export-recipe.md
+      - drupal/modeler-api/modeler-landscape.md
+      - drupal/modeler-api/drush-commands.md
+    - Orchestration:
+      - drupal/orchestration/index.md
+      - drupal/orchestration/what-orchestration-is.md
+      - drupal/orchestration/architecture.md
+      - drupal/orchestration/installation-and-setup.md
+      - drupal/orchestration/eca-services-provider.md
+      - drupal/orchestration/ai-agents-and-ai-function-providers.md
+      - drupal/orchestration/tool-api-provider.md
+      - drupal/orchestration/webhooks-and-outbound-events.md
+      - drupal/orchestration/orchestration-api-reference.md
+      - drupal/orchestration/authentication-and-permissions.md
+      - drupal/orchestration/connecting-activepieces.md
+      - drupal/orchestration/custom-services-provider.md
+      - drupal/orchestration/security-considerations.md
     - Better Exposed Filters:
       - drupal/better-exposed-filters/index.md
       - drupal/better-exposed-filters/overview.md

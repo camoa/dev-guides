@@ -71,6 +71,8 @@ guide-meta:
 | Configure breadcrumbs and navigation paths | [Breadcrumbs](breadcrumbs/index.md) |
 | Use Drupal Canvas (Experience Builder) | [Canvas](canvas/index.md) |
 | Manage group-based content access | [Group](group/index.md) |
+| Register config entities as visual workflow editors, build Model Owner or Modeler plugins | [Modeler API](modeler-api/index.md) |
+| Expose ECA workflows, AI agents, and Tool plugins to external automation platforms via HTTP | [Orchestration](orchestration/index.md) |
 | Use HTMX for progressive enhancement | [HTMX](htmx/index.md) |
 | Integrate Salesforce with Drupal | [Salesforce](salesforce/index.md) |
 | Optimize SEO and GEO for Drupal sites | [SEO & GEO](seo-geo/index.md) |
