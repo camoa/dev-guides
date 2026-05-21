@@ -49,4 +49,5 @@ Issue creation workflow:
 - [Disclosure Checkboxes](disclosure-checkboxes.md)
 - [Issue Review Guidelines](issue-review-guidelines.md)
 - [Merge Request Workflow](merge-request-workflow.md)
+- [Drupal Issue Lifecycle](../contributing/drupal-issue-lifecycle.md) — general issue-creation mechanics (this guide covers the AI-specific angle only)
 - Reference: [Drupal issue workflow](https://www.drupal.org/docs/develop/issues)

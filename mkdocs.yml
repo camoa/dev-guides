@@ -471,6 +471,18 @@ nav:
       - drupal/plus-suite/end-to-end-component.md
       - drupal/plus-suite/ui-patterns-sdc-integration.md
       - drupal/plus-suite/common-mistakes-known-issues.md
+    - Contribution:
+      - drupal/contributing/index.md
+      - drupal/contributing/three-contribution-workflows-compared.md
+      - drupal/contributing/drupalci-pipeline-gitlab-templates.md
+      - drupal/contributing/reproducing-drupalci-failures-locally.md
+      - drupal/contributing/drupal-coding-standards-ci-parity.md
+      - drupal/contributing/ddev-contribution-environment.md
+      - drupal/contributing/contrib-project-scaffolding.md
+      - drupal/contributing/drupal-issue-lifecycle.md
+      - drupal/contributing/issue-forks-merge-requests.md
+      - drupal/contributing/contribution-etiquette-rtbc-credit.md
+      - drupal/contributing/module-theme-maintainer.md
     - Contributing with AI:
       - drupal/contributing-with-ai/index.md
       - drupal/contributing-with-ai/overview.md
@@ -489,6 +501,8 @@ nav:
       - drupal/contributing-with-ai/ai-toolchain-for-contribution.md
       - drupal/contributing-with-ai/testing-ai-code.md
       - drupal/contributing-with-ai/security-considerations.md
+      - drupal/contributing-with-ai/evidence-over-assertion.md
+      - drupal/contributing-with-ai/ai-best-practices-and-evals.md
       - drupal/contributing-with-ai/decision-trees.md
       - drupal/contributing-with-ai/resources.md
     - Icon API:

@@ -26,7 +26,7 @@ guide-meta:
 
 # Drupal Test-Driven Development
 
-**Drupal 11.x** | **PHPUnit 10.5+**
+**Drupal 11.x** | **PHPUnit 11+ (^11.5.50 via drupal/core-dev)**
 
 ## I need to...
 
@@ -34,7 +34,7 @@ guide-meta:
 |-------------|-------|---------|
 | Choose the right test type | [Test Type Decision Matrix](test-type-decision-matrix.md) | Choose the right test type based on what you're testing and the level of Drupal infrastructure required. |
 | Apply RED-GREEN-REFACTOR cycle | [TDD Workflow: RED-GREEN-REFACTOR](tdd-workflow-red-green-refactor.md) | Applying the Test-Driven Development cycle to Drupal module development. Use this workflow when building new features, refactoring existing code, or fixing bugs where the expected behavior can be specified upfront. |
-| Set up PHPUnit configuration | [PHPUnit Configuration](phpunit-configuration.md) | Before running any PHPUnit tests in Drupal. |
+| Set up PHPUnit configuration | [PHPUnit Configuration](phpunit-configuration.md) | Before running any PHPUnit tests in Drupal, copy /core/phpunit.xml.dist and set SIMPLETEST_BASE_URL and SIMPLETEST_DB. PHPUnit resolves transitively from drupal/core-dev — Drupal 11 requires ^11.5.50, Drupal 10 requires ^9.x. Never declare phpunit/phpunit directly in your module's composer.json. |
 | Write a unit test | [Unit Tests with UnitTestCase](unit-tests.md) | Testing pure PHP logic with no Drupal dependencies: utility classes, value objects, algorithms, data transformations. |
 | Write a kernel test | [Kernel Tests with KernelTestBase](kernel-tests.md) | Testing services, entities, database operations, and other Drupal integrations without HTTP overhead. Sweet spot for most Drupal testing. |
 | Write a browser test | [Browser Tests with BrowserTestBase](browser-tests.md) | Testing complete user workflows: page rendering, form submission, access control, multi-step processes requiring HTTP. |

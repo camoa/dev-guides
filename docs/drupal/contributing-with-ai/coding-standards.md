@@ -52,4 +52,5 @@ drupal-check web/modules/custom/
 - [Merge Request Workflow](merge-request-workflow.md)
 - [AI Code Review Checklist](ai-code-review-checklist.md)
 - [Security Considerations](security-considerations.md)
+- [Drupal Coding Standards at CI Parity](../contributing/drupal-coding-standards-ci-parity.md) — CI-parity gate setup, phpcs rulesets, phpstan config (this guide covers the AI-specific angle only)
 - Reference: [Drupal coding standards](https://www.drupal.org/docs/develop/standards)

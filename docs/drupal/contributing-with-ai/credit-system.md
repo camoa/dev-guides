@@ -47,4 +47,5 @@ Credits are public, visible on user profiles, and serve as reputation currency i
 - [Drupal AI Policy](drupal-ai-policy.md)
 - [Disclosure Checkboxes](disclosure-checkboxes.md)
 - [Merge Request Workflow](merge-request-workflow.md)
+- [Contribution Etiquette, RTBC & Credit](../contributing/contribution-etiquette-rtbc-credit.md) — how the Contribution Records system works in full (this guide covers the AI-specific angle only)
 - Reference: [Fair credit policy](https://www.drupal.org/drupalorg/blog/ensuring-a-fair-drupal-contribution-credit-system)

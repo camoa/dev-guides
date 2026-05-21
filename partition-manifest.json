@@ -1,4 +1,10 @@
 {
+  "drupal/contributing": {
+    "source_hash": "20a4e15b072f94105019f972d374b21d8eb035d2032bc340e9d297c7de4e5c72",
+    "partitioned": "2026-05-21",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 10
+  },
   "drupal/forms": {
     "source_hash": "82796f56b50464e93a56594f435d93c3b31a07fa4ff3f24e9927dff0d135ada3",
     "partitioned": "2026-02-12",
@@ -78,9 +84,9 @@
     "guides_extracted": 13
   },
   "drupal/testing": {
-    "source_hash": "a7e4995483ce4cfb00564302aed5dcb7497c115f92c87cd41ce113949a7d9ff5",
-    "partitioned": "2026-02-12",
-    "partitioned_by": "camoa",
+    "source_hash": "f4b082b501fa6deffbafbbf25e4a0d66fcaa49457a196a0c46c04197eb16316a",
+    "partitioned": "2026-05-21",
+    "partitioned_by": "Carlos Ospina",
     "guides_extracted": 11
   },
   "drupal/blocks": {
@@ -180,9 +186,9 @@
     "guides_extracted": 19
   },
   "drupal/tdd": {
-    "source_hash": "98db7ac8cf6ee545b682db1aaa3d314ffad6adf3d8497a04189ddff8b524b42c",
-    "partitioned": "2026-02-15",
-    "partitioned_by": "camoa",
+    "source_hash": "0a74f7c7a4d3d9efe6a5219c6e72c5342689ce3c9b4adac9449124fcb6c732ee",
+    "partitioned": "2026-05-21",
+    "partitioned_by": "Carlos Ospina",
     "guides_extracted": 25
   },
   "drupal/solid-principles": {
@@ -402,10 +408,10 @@
     "guides_extracted": 16
   },
   "drupal/contributing-with-ai": {
-    "source_hash": "fb8242228854012c09d437b1e215d903808fa05e7f5392e6a64cfc94be1f5513",
-    "partitioned": "2026-03-11",
+    "source_hash": "97ebf38faa6b613f2fe87290f82cad98cf3abb110a6ec31ee6418d2d5e43c88b",
+    "partitioned": "2026-05-21",
     "partitioned_by": "Carlos Ospina",
-    "guides_extracted": 18
+    "guides_extracted": 20
   },
   "drupal/better-exposed-filters": {
     "source_hash": "cbbfea74a6ac1ccfed65577b4cec07633a1afc4b8f454c6fc895676a3f8a39b2",

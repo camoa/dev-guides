@@ -1,6 +1,6 @@
 ---
-description: AI disclosure checkboxes — which of the 4 drupal.org checkboxes to select, when multiple apply, and the responsible path for AI-assisted contributions
-tldr: "Use this when creating or updating a drupal.org issue and you need to determine which AI disclosure checkboxes to select."
+description: AI disclosure checkboxes — which drupal.org issue checkboxes to select, the significant-portion threshold, and the required disclosure comment format
+tldr: "Check the box matching your actual AI involvement level: AI Assisted Issue (text/research), AI Assisted Code (suggestions reviewed line-by-line), AI Generated Code (substantial generation you reviewed), or Vibe Coded. Multiple boxes can apply. When significant code was generated, also add an AI-Generated: Yes (...) comment."
 drupal_version: "11.x"
 ---
 
@@ -8,53 +8,72 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when creating or updating a drupal.org issue and you need to determine which AI disclosure checkboxes to select.
+> Use this when creating or updating a drupal.org issue and you need to determine which AI disclosure checkboxes to select and what to include in the disclosure comment.
 
-## Decision
+## Decision: The "Significant Portion" Threshold
+
+The adopted policy sets a clear threshold — disclosure is **required** when AI generated a **significant portion** of the work:
+
+| Requires Disclosure | Does NOT Require Disclosure |
+|---|---|
+| AI wrote entire functions or classes | Standard single-line autocomplete suggestions |
+| AI generated architectural scaffolding | Basic syntax corrections from an AI IDE plugin |
+| AI wrote extensive documentation blocks | AI reformatted your code without changing logic |
+| AI generated a whole patch you reviewed | AI suggested a variable name you typed yourself |
+
+**When in doubt:** Disclose. The cost of over-disclosing is trivial; the cost of under-disclosing is trust erosion and potential credit revocation.
+
+## Decision: Which Checkbox to Check
 
 | Checkbox | Definition | Example | Review Impact |
-|----------|-----------|---------|---------------|
-| **AI Assisted Issue** | AI helped research, write, or analyze the problem | Used Claude to research a core API, draft steps to reproduce, or analyze a backtrace | Minimal — issue quality still evaluated normally |
-| **AI Assisted Code** | Human wrote code with AI suggestions/completions; human reviewed every line | Used Copilot for autocomplete, asked Claude to suggest an approach, then wrote and reviewed the code yourself | Normal review — reviewer trusts the human understands the code |
-| **AI Generated Code** | AI generated substantial portions of the code; human reviewed and tested | Asked AI to write a patch, then carefully reviewed every line, tested edge cases, verified APIs exist | Enhanced review — reviewer may probe understanding, test more thoroughly |
-| **Vibe Coded** | AI generated most/all code with minimal human review | Gave AI a prompt, submitted the output with little to no modification | Maximum scrutiny — expect questions about every line, likely rejection if contributor can't explain |
+|---|---|---|---|
+| **AI Assisted Issue** | AI helped research, write the issue summary, or analyze the problem | Used Claude to research a core API, draft steps to reproduce, or analyze a backtrace | Minimal — issue quality still evaluated normally |
+| **AI Assisted Code** | Human wrote code with AI suggestions; human reviewed every line | Used Copilot for completion hints, then wrote and reviewed the code yourself | Normal review — reviewer trusts the human understands the code |
+| **AI Generated Code** | AI generated substantial portions (functions, classes, scaffolding) that you reviewed and tested | Asked AI to write a patch, then carefully reviewed every line, tested edge cases, verified APIs exist | Enhanced review — reviewer may probe understanding, test more thoroughly |
+| **Vibe Coded** | AI generated most/all code with minimal human review | Gave AI a prompt, submitted the output with little to no modification or understanding | Maximum scrutiny — expect questions about every line, likely rejection if contributor can't explain |
 
-## Pattern
+## Pattern: Disclosure Comment Format
+
+When AI generated significant portions, append a disclosure statement to your issue comment or MR description:
+
+```
+AI-Generated: Yes (Used Claude Code to generate the cache invalidation logic
+and entity query boilerplate; I reviewed all generated code, verified API calls
+against Drupal 11 docs, and added the access control checks manually.)
+```
+
+Format: `AI-Generated: Yes (Used <tool> to help generate <component>.)` — be specific about which tool, which component, and what human review was done.
+
+## Pattern: Decision Flow
 
 ```
 Did AI help with the issue text (summary, research, analysis)?
   → Yes → Check "AI Assisted Issue"
 
-Did you write code with AI assistance?
-  → I used AI for suggestions but wrote/reviewed every line myself
+Did AI help with code?
+  → Only trivial autocomplete / single-line suggestions
+    → No code checkbox needed (below the threshold)
+  → AI wrote significant code I reviewed and tested thoroughly
+    → Check "AI Generated Code" + add disclosure comment
+  → AI wrote most/all with minimal review
+    → Check "Vibe Coded" (reconsider submitting)
+  → In between — AI suggestions I shaped and reviewed line by line
     → Check "AI Assisted Code"
-  → AI generated substantial code that I reviewed thoroughly
-    → Check "AI Generated Code"
-  → AI wrote most of it and I didn't review deeply
-    → Check "Vibe Coded"
 
 Multiple can apply:
-  → AI helped write the issue AND assisted with code
-    → Check both "AI Assisted Issue" + "AI Assisted Code"
+  → AI helped write the issue AND generated significant code
+    → Check both "AI Assisted Issue" + "AI Generated Code"
 ```
-
-The responsible path — **AI Assisted Code** with thorough human review:
-1. Understand the problem before involving AI
-2. Guide the AI toward the right approach
-3. AI helps with implementation details
-4. Review every line and understand why it's there
-5. Test the result, including edge cases
-6. Defend every technical decision in review
 
 ## Common Mistakes
 
-- **Wrong**: Underdisclosing — checking "AI Assisted Code" when AI wrote most of the patch → **Right**: Be honest about the level of AI involvement
-- **Wrong**: Overdisclosing out of fear — checking "AI Generated Code" for one autocomplete suggestion → **Right**: Match the checkbox to the actual level of AI involvement
-- **Wrong**: Not checking any box after using AI → **Right**: If you used AI at any point, disclose — even autocomplete is "AI Assisted Code"
+- **Wrong**: Checking "AI Assisted Code" when AI wrote entire functions → **Right**: Be honest about the level and scale; use the significant-portion test
+- **Wrong**: "It's just autocomplete" for whole-function generation → **Right**: The tool type doesn't matter; the portion threshold does
+- **Wrong**: Skipping the disclosure comment when significant portions were generated → **Right**: Checking the box is not enough; add the `AI-Generated: Yes (...)` comment with specifics
 - **Wrong**: Thinking "AI Assisted Issue" covers code too → **Right**: Issue assistance and code assistance are separate disclosures; check both if both apply
 
 ## See Also
 
-- [Drupal AI Policy](drupal-ai-policy.md)
-- [Issue Creation](issue-creation.md)
-- [Decision Trees](decision-trees.md)
+- [Drupal AI Policy](drupal-ai-policy.md) — the full policy and its rules
+- [Issue Creation](issue-creation.md) — full issue creation workflow
+- [Decision Trees](decision-trees.md) — quick flowcharts

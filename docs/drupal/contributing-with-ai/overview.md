@@ -1,6 +1,6 @@
 ---
 description: AI contribution overview — Drupal's disclose-and-verify position, the 4 disclosure levels, and how the community treats AI-assisted code
-tldr: "Read this first. It maps the landscape of AI contribution policies, why disclosure matters, and how Drupal's \"disclose and verify\" position works before you touch any issue or merge request."
+tldr: "Drupal's position is disclose-and-verify: AI is welcome with mandatory disclosure and the human contributor takes full responsibility. Four disclosure levels exist; the responsible path is AI Assisted Code with thorough human review."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Read this first. It maps the landscape of AI contribution policies, why disclosure matters, and how Drupal's "disclose and verify" position works before you touch any issue or merge request.
+> Use this when you are about to contribute to any Drupal project using AI coding tools and need to understand the landscape, why disclosure matters, and how Drupal's "disclose and verify" position works.
 
 ## Decision
 
@@ -34,14 +34,14 @@ Drupal's four disclosure levels:
 The responsible path: **AI Assisted Code** with thorough human review.
 
 Core principles:
-1. Disclosure is mandatory — every issue and MR must indicate AI involvement
-2. The human is responsible — contributor takes full responsibility regardless of how code was produced
-3. Review expectations scale with AI involvement — Vibe Coded triggers maximum scrutiny
-4. Policy is evolving — check drupal.org for the latest governance decisions
+1. **Disclosure is mandatory** — Issues and MRs must disclose AI involvement when AI generated a significant portion
+2. **The human is responsible** — Contributor takes full responsibility regardless of how code was produced
+3. **Review expectations scale with AI involvement** — Vibe Coded triggers maximum scrutiny
+4. **Policy is adopted and codified** — Drupal has a published *Policy on the use of AI when contributing to Drupal* (last updated 2026-04-23); see [Drupal AI Policy](drupal-ai-policy.md)
 
 ## Common Mistakes
 
-- **Wrong**: Not disclosing at all → **Right**: Even minor AI usage (autocomplete) should be disclosed; when in doubt, disclose
+- **Wrong**: Not disclosing at all → **Right**: Even minor AI usage should be disclosed; when in doubt, disclose
 - **Wrong**: Treating disclosure as optional → **Right**: Undisclosed AI usage erodes trust and may lead to credit revocation
 - **Wrong**: Assuming "Vibe Coded" is acceptable → **Right**: Contributors who cannot explain their own code face maximum scrutiny and likely rejection
 - **Wrong**: Confusing Drupal's openness with permissiveness → **Right**: "AI welcome" does not mean "anything goes" — quality standards are the same or higher
@@ -52,4 +52,4 @@ Core principles:
 - [Disclosure Checkboxes](disclosure-checkboxes.md)
 - [Industry Context](industry-context.md)
 - [Supervised AI Workflow](supervised-ai-workflow.md)
-- Reference: [drupal.org governance issue #3565917](https://www.drupal.org/project/governance/issues/3565917)
+- Reference: [Adopted AI policy](https://www.drupal.org/docs/develop/issues/issue-procedures-and-etiquette/policy-on-the-use-of-ai-when-contributing-to-drupal)

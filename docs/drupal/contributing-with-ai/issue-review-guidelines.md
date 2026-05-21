@@ -54,4 +54,5 @@ Understanding of the problem:
 - [Drupal AI Policy](drupal-ai-policy.md)
 - [AI Code Review Checklist](ai-code-review-checklist.md)
 - [Human Review Requirements](human-review-requirements.md)
+- [Contribution Etiquette, RTBC & Credit](../contributing/contribution-etiquette-rtbc-credit.md) — RTBC discipline and general review etiquette (this guide covers the AI-specific angle only)
 - Reference: [#3569240 AI Issue Review Guidelines](https://www.drupal.org/project/ai/issues/3569240)

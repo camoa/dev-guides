@@ -64,6 +64,7 @@ guide-meta:
 | Add faceted search navigation | [Facets](facets/index.md) |
 | Configure site search with backends and processors | [Search API](search-api/index.md) |
 | Build pages with drag-and-drop, inline editing, nested layouts | [Plus Suite](plus-suite/index.md) |
+| Contribute to Drupal (pipeline, coding standards, issue workflow, DDEV, scaffolding, RTBC, maintainership) | [Contribution](contributing/index.md) |
 | Contribute to Drupal using AI responsibly | [Contributing with AI](contributing-with-ai/index.md) |
 | Build an AI-powered module with Drupal AI | [AI Module](ai-module/index.md) |
 | Build AJAX forms and callbacks | [AJAX](ajax/index.md) |
