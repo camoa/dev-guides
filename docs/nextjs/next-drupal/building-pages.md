@@ -33,8 +33,14 @@ export async function generateStaticParams() {
   return resources.map((resource) => ({ slug: resource.segments }))
 }
 
-export default async function Page({ params }) {
-  const path = await drupal.translatePath(params.slug)
+// In Next.js 15+, `params` is a Promise and must be awaited.
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string[] }>
+}) {
+  const { slug } = await params
+  const path = await drupal.translatePath(`/${slug.join("/")}`)
   const type = path.jsonapi.resourceName
   const uuid = path.entity.uuid
 
@@ -64,8 +70,13 @@ const node = await drupal.getResource(type, uuid, {
 
 ```typescript
 // Omit generateStaticParams for SSR
-export default async function Page({ params }) {
-  const node = await drupal.getResourceByPath(`/${params.slug.join("/")}`, {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string[] }>
+}) {
+  const { slug } = await params
+  const node = await drupal.getResourceByPath(`/${slug.join("/")}`, {
     cache: "no-store", // No caching, always fresh
   })
 
@@ -75,6 +86,7 @@ export default async function Page({ params }) {
 
 ### Common Mistakes
 
+- **Accessing `params` synchronously** — In Next.js 15+, `params` is a Promise. `params.slug` must become `const { slug } = await params`. Synchronous access logs a deprecation warning in 15 and is a hard error in 16.
 - **Pre-generating all paths for large sites** — Build times exceed limits. WHY: Use `fallback: 'blocking'` or SSR for 1000+ pages.
 - **Mixing revalidate and tags** — Conflicting strategies. WHY: Choose one: time-based (revalidate) or tag-based (tags).
 - **Not configuring revalidate API route** — On-demand ISR fails. WHY: Requires `/api/revalidate` endpoint.

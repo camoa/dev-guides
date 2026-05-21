@@ -51,12 +51,13 @@ import { drupal } from "@/lib/drupal"
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { index: string } }
+  { params }: { params: Promise<{ index: string }> }
 ) {
   try {
+    const { index } = await params
     const body = await request.json()
 
-    const results = await drupal.getSearchIndex(params.index, {
+    const results = await drupal.getSearchIndex(index, {
       params: body.params,
       locale: body.locale,
       defaultLocale: body.defaultLocale,
@@ -75,7 +76,15 @@ export async function POST(
 **5. Query from frontend**
 
 ```typescript
-// In a client component
+"use client"
+import { useParams } from "next/navigation"
+import { defaultLocale } from "@/lib/i18n"
+
+// Inside a client component. The App Router's useRouter() has no `.locale` —
+// read the active locale from the [lang] route segment via useParams()
+// (or pass it down as a prop from a server component).
+const { lang } = useParams<{ lang: string }>()
+
 const handleSearch = async (term: string) => {
   const response = await fetch("/api/search/content_index", {
     method: "POST",
@@ -83,8 +92,8 @@ const handleSearch = async (term: string) => {
       params: {
         filter: { title: term },
       },
-      locale: router.locale,
-      defaultLocale: router.defaultLocale,
+      locale: lang ?? defaultLocale,
+      defaultLocale,
     }),
   })
 

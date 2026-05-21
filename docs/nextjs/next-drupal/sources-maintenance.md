@@ -21,9 +21,12 @@ composer require drupal/next drupal/simple_oauth drupal/jsonapi_menu_items drupa
 
 | Source | URL | Guide Sections | Last Verified |
 |--------|-----|----------------|---------------|
-| Next.js for Drupal Official Site | https://next-drupal.org/ | All sections | 2026-02-13 |
-| Next.js for Drupal Drupal.org Module | https://www.drupal.org/project/next | Drupal Setup, Version Compatibility | 2026-02-13 |
-| Chapter Three next-drupal GitHub | https://github.com/chapter-three/next-drupal | NextDrupal Client, API Reference | 2026-02-13 |
+| Next.js for Drupal Official Site | https://next-drupal.org/ | All sections | 2026-05-20 |
+| Next.js for Drupal Drupal.org Module | https://www.drupal.org/project/next | Drupal Setup, Version Compatibility | 2026-05-20 |
+| next-drupal GitHub (Kanopi / Chapter Three) | https://github.com/chapter-three/next-drupal | NextDrupal Client, API Reference | 2026-05-20 |
+| GitHub issue #884 — Next.js 16 incompatibility | https://github.com/chapter-three/next-drupal/issues/884 | Project Status, Next.js version pinning | 2026-05-20 |
+| GitHub issue #885 — project future / BoF | https://github.com/chapter-three/next-drupal/issues/885 | Project Status | 2026-05-20 |
+| Kanopi acquires Chapter Three | https://kanopi.com/blog/kanopi-acquires-chapter-three-sf-drupal/ | Project Status | 2026-05-20 |
 | Next-Drupal Quick Start Guide | https://next-drupal.org/learn/quick-start | Drupal Setup, Next.js Project Setup | 2026-02-13 |
 | BRAINSUM: Decoupled Architecture with Next.js and Drupal | https://www.brainsum.com/blog/harnessing-power-decoupled-architecture-nextjs-and-drupal | Decoupled Architecture Decision | 2026-02-13 |
 | Axelerant: Decoupled Drupal with Next.js | https://www.axelerant.com/blog/decoupled-drupal-nextjs-using-next-drupal | Architecture Patterns | 2026-02-13 |
@@ -45,9 +48,10 @@ composer require drupal/next drupal/simple_oauth drupal/jsonapi_menu_items drupa
 | webform_rest | modules/contrib/webform_rest | Webform Integration | Optional |
 
 **Next.js Library:**
-- Package: `next-drupal` (npm)
-- Repository: https://github.com/chapter-three/next-drupal
-- Latest Version: 2.0.1 (supports Next.js 15, App Router, Drupal 11)
+- Package: `next-drupal` (npm) — latest **2.0.1** (Mar 2026); peer range `next ^14.2 || ^15.1`, App Router, Drupal 10/11
+- Drupal module: "Next.js" (`drupal/next`) — latest **2.1.0** (Mar 2026), Drupal core `^10 || ^11`
+- Repository: https://github.com/chapter-three/next-drupal — maintained by **Kanopi Studios** (acquired Chapter Three, Jan 2026)
+- **Next.js 16 is not supported** as of `next-drupal` 2.0.1 (issue #884). Pin Next.js to 15.
 - All Sections
 
 **Related Guides:**

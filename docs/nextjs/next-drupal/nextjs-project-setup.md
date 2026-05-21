@@ -15,13 +15,20 @@ Use when creating a new Next.js frontend for an existing Drupal backend. App Rou
 
 **1. Create project from starter**
 
-```bash
-# Basic starter (App Router)
-npx create-next-app -e https://github.com/chapter-three/next-drupal-basic-starter
+The official starters live in the `next-drupal` monorepo under `starters/`:
 
-# GraphQL starter
-npx create-next-app -e https://github.com/chapter-three/next-drupal-graphql-starter
+```bash
+# Basic starter (App Router, JSON:API)
+npx create-next-app -e https://github.com/chapter-three/next-drupal/tree/main/starters/basic-starter
+
+# GraphQL starter (App Router)
+npx create-next-app -e https://github.com/chapter-three/next-drupal/tree/main/starters/graphql-starter
+
+# Pages Router starter (legacy)
+npx create-next-app -e https://github.com/chapter-three/next-drupal/tree/main/starters/pages-starter
 ```
+
+All starters pin Next.js 15 / React 19 / `next-drupal` 2.x. Do not bump Next.js to 16 — see Project Status in the Decoupled Architecture Decision section.
 
 **2. Configure environment variables**
 

@@ -138,9 +138,9 @@
     "guides_extracted": 21
   },
   "nextjs/next-drupal": {
-    "source_hash": "f9078b86430ff65bc652340475424198fcba6037b201a226478657df777e47e9",
-    "partitioned": "2026-02-14",
-    "partitioned_by": "camoa",
+    "source_hash": "1c5aebc40e819126f69c872987b34ea1e35a2bb1ac94d4ad8b0d725f9dc2bad8",
+    "partitioned": "2026-05-20",
+    "partitioned_by": "Carlos Ospina",
     "guides_extracted": 19
   },
   "drupal/caching": {

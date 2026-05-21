@@ -1,6 +1,6 @@
 ---
 description: "Choose decoupled Drupal with Next.js when you need modern frontend performance, independent backend/frontend development teams, or flexibility to serve multiple frontends from one Drupal backend."
-tldr: "Choose decoupled Drupal with Next.js when you need modern frontend performance, independent backend/frontend development teams, or flexibility to serve multiple frontends from one Drupal backend."
+tldr: "Choose decoupled Drupal with Next.js when you need modern frontend performance, independent backend/frontend development teams, or flexibility to serve multiple frontends from one Drupal backend. As of May 2026, next-drupal is minimally maintained and does not support Next.js 16 — weigh this before starting a long-lived build."
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
 ---
@@ -10,6 +10,16 @@ topic: "drupal/next-drupal"
 ### When to Use
 
 Choose decoupled Drupal with Next.js when you need modern frontend performance, independent backend/frontend development teams, or flexibility to serve multiple frontends from one Drupal backend.
+
+### Project Status (May 2026)
+
+Before committing to next-drupal, weigh its current maintenance state:
+
+- **Maintainer** — the project was created by Chapter Three, which **Kanopi Studios acquired in January 2026**. The GitHub repo is still `chapter-three/next-drupal`.
+- **Maintenance** — Kanopi has publicly stated (GitHub issue #885) the project "has been **minimally maintained**" and is relying on **community volunteer maintainers**. A future-direction BoF was held at DrupalCon Chicago (March 2026); no public roadmap has been published since.
+- **Next.js support** — `next-drupal` 2.0.1 supports `next ^14 || ^15` only. **Next.js 16 is not supported** (open type-incompatibility, issue #884), and **Next.js 15 reaches end-of-life in October 2026**. The supported stack therefore has a limited runway until next-drupal ships a 16-compatible release.
+
+This is not a "don't use next-drupal" warning — it remains the standard JSON:API/GraphQL client for decoupled Drupal — but treat the Next.js version ceiling and maintenance cadence as real project risks when planning a long-lived build.
 
 ### Decision
 

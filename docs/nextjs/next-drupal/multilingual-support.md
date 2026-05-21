@@ -17,17 +17,18 @@ Support multiple languages in your Next.js site backed by multilingual Drupal co
 
 See Drupal Setup section for patch details. Required for language resolution.
 
-**2. Configure locales in Next.js**
+**2. Configure locales (App Router)**
+
+The Pages Router `i18n` key in `next.config.js` does **not** work with the App Router — it is silently ignored. Instead, define your locales in a shared config and route localized pages through a `[lang]` dynamic segment.
 
 ```typescript
-// next.config.js
-module.exports = {
-  i18n: {
-    locales: ['en', 'es', 'fr'],
-    defaultLocale: 'en',
-  },
-}
+// lib/i18n.ts
+export const locales = ["en", "es", "fr"] as const
+export const defaultLocale = "en"
+export type Locale = (typeof locales)[number]
 ```
+
+Place localized routes under an `app/[lang]/` segment (e.g. `app/[lang]/[...slug]/page.tsx`). Optionally add a `middleware.ts` that redirects `/` to `/${defaultLocale}` and negotiates the visitor's preferred language from the `Accept-Language` header.
 
 **3. Use locale parameter when fetching**
 
@@ -49,20 +50,32 @@ In Drupal, configure path patterns for each language at `/admin/config/search/pa
 **5. Translate path for dynamic routes**
 
 ```typescript
-// app/[...slug]/page.tsx
-export default async function Page({ params }) {
-  const path = await drupal.translatePath(params.slug, {
-    locale: params.locale,
+// app/[lang]/[...slug]/page.tsx
+import { defaultLocale } from "@/lib/i18n"
+
+// `params` is a Promise in Next.js 15+ and includes the [lang] segment.
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ lang: string; slug: string[] }>
+}) {
+  const { lang, slug } = await params
+
+  const path = await drupal.translatePath(`/${slug.join("/")}`, {
+    locale: lang,
+    defaultLocale,
   })
 
   const node = await drupal.getResource(
     path.jsonapi.resourceName,
     path.entity.uuid,
     {
-      locale: params.locale,
-      defaultLocale: "en",
+      locale: lang,
+      defaultLocale,
     }
   )
+
+  return <article>{node.title}</article>
 }
 ```
 
@@ -76,6 +89,7 @@ export default async function Page({ params }) {
 
 ### Common Mistakes
 
+- **Using the `next.config.js` `i18n` key with App Router** — It is silently ignored; you get no localized routing. WHY: `i18n` config is a Pages Router feature. Use a `[lang]` route segment instead.
 - **Not applying Decoupled Router patch** — Language resolution fails. WHY: Drupal can't resolve paths in non-default languages.
 - **Forgetting locale in translatePath** — Always returns default language. WHY: Drupal needs explicit locale for routing.
 - **Inconsistent locale parameter** — Mixed language content. WHY: Must pass locale to all drupal.getResource calls.

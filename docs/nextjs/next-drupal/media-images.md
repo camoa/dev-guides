@@ -87,7 +87,7 @@ const imageUrl = article.field_image.field_media_image.image_style_uri?.large
 
 - **Not including media relationships** — Image data missing. WHY: Media is a relationship, requires explicit include.
 - **Missing alt text** — Accessibility violation. WHY: Always provide alt from resourceIdObjMeta.alt or fallback.
-- **Not configuring NEXT_IMAGE_DOMAIN** — Image optimization fails. WHY: Next.js requires domain allowlist.
+- **Not allowlisting the Drupal host for images** — `next/image` optimization fails. WHY: Next.js requires the host in `images.remotePatterns` (`next.config.js`).
 - **Inline images without width/height** — Layout shift. WHY: Next.js Image requires dimensions for optimization.
 
 ### See Also

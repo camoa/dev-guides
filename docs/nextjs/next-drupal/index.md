@@ -30,7 +30,7 @@ guide-meta:
 
 | I need to... | Guide | Summary |
 |-------------|-------|---------|
-| **Choose between decoupled approaches** | [Decoupled Architecture Decision](decoupled-architecture-decision.md) | Choose decoupled Drupal with Next.js when you need modern frontend performance, independent backend/frontend development teams, or flexibility to serve multiple frontends from one Drupal backend. |
+| **Choose between decoupled approaches** | [Decoupled Architecture Decision](decoupled-architecture-decision.md) | Choose decoupled Drupal with Next.js when you need modern frontend performance, independent backend/frontend development teams, or flexibility to serve multiple frontends from one Drupal backend. As of May 2026, next-drupal is minimally maintained and does not support Next.js 16 — weigh this before starting a long-lived build. |
 | **Decide on JSON:API vs GraphQL** | [JSON:API vs GraphQL Decision](jsonapi-vs-graphql.md) | Both JSON:API and GraphQL work with next-drupal. JSON:API is simpler and built into Drupal core. |
 | **Set up Drupal for Next.js** | [Drupal Setup](drupal-setup.md) | Follow this workflow when setting up a new Drupal backend for Next.js or adding Next.js support to an existing Drupal site. |
 | **Initialize a Next.js project** | [Next.js Project Setup](nextjs-project-setup.md) | Use when creating a new Next.js frontend for an existing Drupal backend. App Router (Next.js 13+) is recommended over Pages Router. |

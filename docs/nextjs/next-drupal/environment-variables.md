@@ -45,7 +45,18 @@ NEXT_IMAGE_DOMAIN=drupal.example.com
 **Gotchas:**
 - Must match Drupal domain exactly
 - No protocol, no trailing slash
-- Add to next.config.js images.domains
+- Allowlist the host in `next.config.js` under `images.remotePatterns` — the older `images.domains` array is deprecated:
+
+```javascript
+// next.config.js
+module.exports = {
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "drupal.example.com" },
+    ],
+  },
+}
+```
 
 #### DRUPAL_CLIENT_ID
 
