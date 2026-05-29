@@ -109,20 +109,22 @@ data:
 
 ### image_convert_avif
 
-**Description:** Convert to AVIF with fallback. If AVIF unsupported, uses fallback format.
+**Description:** Convert to AVIF, with a fallback format when the toolkit can't produce AVIF. Core class: `Drupal\image\Plugin\ImageEffect\AvifImageEffect` (extends `ConvertImageEffect`). **This is the Drupal 11 default** — core's `large`, `medium`, `wide`, and `thumbnail` styles ship with this effect and `extension: webp`.
 
 **Data Schema:**
 ```yaml
 data:
-  extension: webp  # Required, string, fallback format if AVIF unavailable
+  extension: webp  # Required. Fallback format used when the toolkit lacks AVIF support
 ```
 
-**Use Case:** Modern format optimization with graceful degradation.
+**How the fallback works:** The choice is made **server-side at derivative-generation time**, based on toolkit capability (`isAvifSupported()`), not per browser. If the toolkit supports AVIF, every derivative is `.avif` and is served to all visitors; otherwise every derivative is the fallback `extension`. The effect produces **one** format, never both — it does not negotiate per browser. For per-browser format negotiation you need a `<picture>` with `type`-based sources (contrib, e.g. ImageAPI Optimize WebP/AVIF).
+
+**Use Case:** Modern format optimization, with safe degradation on servers that lack AVIF.
 
 **Gotchas:**
-- AVIF requires PHP 8.1+ with GD compiled with libavif → not universally available
-- Falls back silently → check derivative extension to verify AVIF worked
-- Fallback format still processes even if AVIF succeeds in config → no extra derivatives, just config declaration
+- AVIF requires the GD toolkit compiled with libavif (PHP 8.1+) or ImageMagick with AVIF → not universally available; without it you silently get the fallback format
+- AVIF **encoding is CPU- and memory-intensive and slow** → on shared/modest hosting, generating AVIF derivatives can be slow or hit PHP time/memory limits. If that's a risk, use `image_convert` with `extension: webp` instead (see § 9)
+- Server-capability-based, not browser-based → if the server supports AVIF, even browsers that don't will receive `.avif` (AVIF browser support is high but not universal)
 
 ### image_rotate
 

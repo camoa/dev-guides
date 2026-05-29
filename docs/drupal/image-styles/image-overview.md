@@ -56,7 +56,7 @@ image_style_mappings:
 ## Common Mistakes
 
 - Using responsive images when a single image style suffices → Adds complexity and generates unnecessary derivatives, increases storage/processing
-- Not setting a fallback_image_style → Breaks display when JavaScript disabled or responsive_image module missing
+- Not setting a fallback_image_style → Breaks the `<img>` for browsers without `srcset`/`<picture>` support and for crawlers/feed readers that read the bare `<img>` src (responsive images are native HTML — no JavaScript is involved)
 - Creating separate image styles for every breakpoint instead of reusing → Bloats config, makes maintenance harder
 - Using image styles for full-width hero images without responsive variants → Wastes bandwidth on mobile devices
 

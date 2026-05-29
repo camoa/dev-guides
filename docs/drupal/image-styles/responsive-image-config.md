@@ -109,7 +109,7 @@ image_style_mappings:
 | `id` | machine_name | Yes | Machine name for responsive image style |
 | `label` | required_label | Yes | Human-readable name |
 | `breakpoint_group` | string | Yes | Must match a declared breakpoint group |
-| `fallback_image_style` | string | Yes | Image style for no-JS or unsupported browsers |
+| `fallback_image_style` | string | Yes | Image style rendered as the `<img>` src — used by browsers without `srcset`/`<picture>` support and by crawlers/feed readers reading the bare `<img>` (not a JavaScript fallback) |
 | `image_style_mappings` | sequence | No | List of breakpoint-to-image-style mappings |
 | `image_style_mappings.*.image_mapping_type` | string | Yes | `'image_style'` or `'sizes'` |
 | `image_style_mappings.*.image_mapping` | string or mapping | Yes | Image style ID (if type=image_style) or sizes config (if type=sizes) |
@@ -136,7 +136,7 @@ image_mapping:
 ## Common Mistakes
 
 - Using `sizes` mapping type with multipliers other than `1x` → Invalid HTML, browser ignores sizes attribute
-- Missing fallback_image_style → Broken images for no-JS users, accessibility failure
+- Missing fallback_image_style → Broken `<img>` for browsers without `srcset`/`<picture>` support and for crawlers/feed readers that read the bare `<img>` src
 - Breakpoint ID doesn't exist in declared breakpoint_group → Config validation error
 - Not declaring dependencies on referenced image styles → Broken config on style deletion
 - Mixing image_style and sizes mapping types on same breakpoint → Last mapping wins, confusing output

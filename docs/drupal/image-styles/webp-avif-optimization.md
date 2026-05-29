@@ -1,6 +1,6 @@
 ---
 description: Optimize image delivery with WebP and AVIF formats using image_convert effects with PHP/GD support checks and fallback strategies
-tldr: "Use this when you need to optimize image delivery with modern formats (WebP, AVIF) while maintaining fallback for older browsers."
+tldr: "Use this when you need to optimize image delivery with modern formats (WebP, AVIF) while maintaining fallback for older browsers. AVIF is the Drupal 11 core default but is encoding-heavy; prefer WebP-only on shared/modest hosting."
 ---
 
 # WebP & AVIF Optimization
@@ -23,7 +23,7 @@ drush php-eval "var_dump(function_exists('imageavif'));"
 
 ### 2. Add conversion effect to image styles
 
-**For WebP (universal support):**
+**WebP (safe default — works on virtually any host):**
 ```yaml
 effects:
   uuid-1:
@@ -39,7 +39,7 @@ effects:
       extension: webp
 ```
 
-**For AVIF with WebP fallback (recommended):**
+**AVIF with WebP fallback (the Drupal 11 core default):**
 ```yaml
 effects:
   uuid-1:
@@ -52,8 +52,10 @@ effects:
     id: image_convert_avif
     weight: 1
     data:
-      extension: webp  # Fallback if AVIF unsupported
+      extension: webp  # Server-side fallback when the toolkit can't produce AVIF
 ```
+
+> **Hosting caveat:** Core 11 ships `image_convert_avif` in its default styles, and the effect degrades to the `extension` fallback on servers without AVIF support — so it is *safe* on unsupported hosts. The real cost is that AVIF **encoding is CPU- and memory-heavy and slow**; on shared/modest hosting, generating AVIF derivatives can hit PHP time/memory limits or noticeably delay first-request rendering. If you'd rather avoid that, swap `image_convert_avif` → `image_convert` with `extension: webp` in the affected styles (including the core defaults). WebP is the more conservative, widely-deployed choice.
 
 ### 3. Flush existing derivatives to regenerate with new format
 
@@ -71,26 +73,27 @@ drush image:flush --all
 |---|---|---|---|
 | JPEG | Baseline (100%) | Universal | Fallback only |
 | PNG | 26% larger than WebP lossless | Universal | Transparency fallback |
-| WebP | 25-34% smaller than JPEG | 96%+ (2025) | Primary optimization target |
-| AVIF | 50% smaller than JPEG | 80%+ (2025) | Cutting edge optimization |
+| WebP | 25-34% smaller than JPEG | ~97% (2026) | Safe default optimization target |
+| AVIF | 50% smaller than JPEG | ~93% (2026) | Best compression; Drupal 11 core default (with WebP fallback) |
 
 ## Decision Points
 
 | If... | Use... | Why |
 |---|---|---|
-| Site targets modern browsers only | `image_convert_avif` with WebP fallback | Best compression, future-proof |
-| Need maximum compatibility | `image_convert` to WebP only | Near-universal support, good compression |
-| Server lacks AVIF support (PHP < 8.1) | `image_convert` to WebP | AVIF requires newer PHP |
-| Serving to legacy IE11 users | No conversion (JPEG/PNG) | WebP unsupported in IE |
-| Transparency required | PNG or WebP | JPEG loses transparency |
+| Default / following core 11 | `image_convert_avif` with WebP fallback | Core default; best compression where the toolkit supports AVIF, safe webp fallback where it doesn't |
+| Shared/modest hosting, want predictable generation cost | `image_convert` to WebP only | Avoids slow, memory-heavy AVIF encoding; near-universal browser support |
+| Need maximum simplicity/compatibility | `image_convert` to WebP only | One format, widely deployed, good compression |
+| Transparency required | WebP (or AVIF) — both support alpha | JPEG loses transparency |
 | Photo content | AVIF > WebP > JPEG | Lossy compression benefits |
 | Icons/diagrams | WebP lossless or PNG | Sharp edges preserved |
 
-## Browser Support Strategy
+> The AVIF-vs-WebP choice here is about **server encoding cost**, not browser targeting — `image_convert_avif` already degrades to the fallback format on hosts without AVIF support. Per-browser format negotiation is a separate concern (needs `<picture>` `type` sources, contrib).
 
-**AVIF with fallback (best):**
+## Format Strategy
+
+**AVIF with WebP fallback (Drupal 11 core default):**
 ```yaml
-# Image style with AVIF attempt
+# Generates AVIF where the toolkit supports it, otherwise WebP
 effects:
   uuid-1:
     id: image_convert_avif
@@ -99,9 +102,9 @@ effects:
       extension: webp
 ```
 
-If AVIF unsupported by PHP, generates WebP. Browsers that don't support WebP will fall back via `<picture>` or UA sniffing (requires contrib module).
+The fallback is decided **server-side** by toolkit capability — if the server lacks AVIF, every derivative is WebP. It is **not** a per-browser fallback: where AVIF is generated, all visitors receive `.avif`. For true per-browser negotiation you need a `<picture>` element with `type`-based sources, which core's responsive image module does not emit on its own (use contrib such as ImageAPI Optimize WebP/AVIF).
 
-**WebP only (safe):**
+**WebP only (conservative default for shared/modest hosting):**
 ```yaml
 effects:
   uuid-1:
@@ -110,6 +113,8 @@ effects:
     data:
       extension: webp
 ```
+
+WebP avoids AVIF's heavy encoding cost while still cutting 25–34% off JPEG. Prefer this when derivative-generation time/memory is a concern.
 
 ## Performance Impact
 
@@ -124,10 +129,11 @@ effects:
 
 ## Common Mistakes
 
-- Assuming AVIF works without checking PHP version → Silent fallback to fallback format, no error
+- Assuming you're actually getting AVIF → `image_convert_avif` silently emits the fallback format when the toolkit lacks AVIF; verify the generated derivative's extension
+- Ignoring AVIF encoding cost on shared hosting → slow derivative generation, possible PHP time/memory limits; use `image_convert` to WebP if this bites
 - Converting all images to WebP without testing transparency → Lost alpha channel on PNGs converted to WebP in some GD versions
 - Not flushing derivatives after adding convert effect → Old JPEG derivatives served until cache expires
-- Using AVIF without fallback → Broken images if PHP lacks AVIF support
+- Using plain `image_convert` with `extension: avif` (no fallback) → Broken/failed derivatives where the toolkit lacks AVIF; use `image_convert_avif` so it falls back automatically
 - Converting before scaling → Wasted processing, convert after final dimensions
 - Setting convert effect weight before crop/scale → May get reconverted by toolkit, quality loss
 

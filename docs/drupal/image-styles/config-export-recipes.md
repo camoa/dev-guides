@@ -33,16 +33,22 @@ sed -i '1d' modules/custom/my_module/config/install/image.style.hero_large.yml
 
 ### 3. Export responsive image styles with dependencies
 
-Responsive image styles depend on image styles. Export both:
+Responsive image styles depend on image styles. `drush config:export` (`cex`) writes the **entire** active config to the sync directory in one pass — it does not take a single config name. Run it once, then commit the relevant files together:
 
 ```bash
-# Export responsive style
-drush config:export responsive_image.styles.hero
+# Export ALL active config to the sync directory
+drush config:export
 
-# Export all referenced image styles
-drush config:export image.style.hero_small
-drush config:export image.style.hero_medium
-drush config:export image.style.hero_large
+# Inspect a single item without exporting (config:get, not config:export)
+drush config:get responsive_image.styles.hero
+drush config:get image.style.hero_small
+
+# The responsive style and every image style it references are now in
+# config/sync/ — commit them together so the dependency set stays intact:
+#   responsive_image.styles.hero.yml
+#   image.style.hero_small.yml
+#   image.style.hero_medium.yml
+#   image.style.hero_large.yml
 ```
 
 ## Steps - Creating a Recipe

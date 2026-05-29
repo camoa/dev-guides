@@ -62,7 +62,7 @@ field_content_images:
 
 **What:** Responsive image style without `fallback_image_style` set.
 
-**Why it's wrong:** No-JS browsers, crawlers, and RSS readers use the fallback. If omitted, they get blank images or broken display. Accessibility failure, SEO harm, broken email notifications.
+**Why it's wrong:** Responsive images are native HTML (`<picture>`/`srcset`) — no JavaScript is involved. The fallback is rendered as the `<img>` src, used by browsers that don't support `srcset`/`<picture>` and by consumers that read the bare `<img>` (crawlers, feed/email readers). If omitted, they get blank images or broken display. Accessibility failure, SEO harm, broken email notifications.
 
 **Correct approach:** Always set fallback to smallest acceptable size.
 
@@ -218,7 +218,7 @@ field_photo:
 |---|---|---|
 | Responsive images for fixed UI | Storage bloat, config complexity | Use single image style |
 | Lazy above-fold images | Poor LCP, failed Core Web Vitals | Use `eager` loading |
-| Missing fallback style | Broken no-JS/RSS display | Always set fallback |
+| Missing fallback style | Broken `<img>` for old browsers, crawlers, feeds | Always set fallback |
 | Programmatic style creation | Not exportable, breaks config sync | Use YAML config |
 | Upscaling small images | Pixelated, huge files | Use `upscale: false` |
 | Sizes with 2x multiplier | Invalid HTML, wrong images | Sizes only with 1x |

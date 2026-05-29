@@ -47,7 +47,7 @@ field_image:
 ```
 
 **Gotchas:**
-- `image_link: 'file'` links to derivative, not original → unexpected for lightbox modules expecting full-size
+- `image_link: 'file'` links to the original uploaded file (via `$file->getFileUri()`), not a derivative → this is what lightbox modules want, but the link serves the full-size original, which may be large
 - Lazy loading on above-fold images → delayed LCP, poor Core Web Vitals
 - Empty `image_style` serves original → massive files for user-uploaded images
 
@@ -119,7 +119,7 @@ field_hero_image:
 - Missing responsive_image_style → No image rendered, blank output
 - Using on small thumbnails → Overkill, generates many unnecessary derivatives
 - Lazy loading on hero images → Delays LCP, poor performance scores
-- `image_link: 'file'` links to fallback image style, not original
+- `image_link: 'file'` links to the original uploaded file (`$file->createFileUrl()`), not the fallback image style or any derivative
 
 ## Formatter Selection Decision
 
@@ -139,7 +139,7 @@ field_hero_image:
 - Lazy loading above-fold images → Poor LCP, failed Core Web Vitals
 - `image_url` for visible images → No alt text, accessibility violation
 - Not setting `image_style` on user-uploaded images → Serving multi-MB originals
-- `image_link: 'file'` expecting original size → Gets derivative URL instead
+- Assuming `image_link: 'file'` returns a sized derivative → it returns the original uploaded file URL (full-size), which is correct for lightboxes but can be a large download
 - Using `eager` loading on below-fold images → Wastes bandwidth, delays critical resources
 
 ## See Also
