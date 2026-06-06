@@ -356,6 +356,6 @@ mix.purgeCss({
 ```
 
 ### See Also
-- [1.1 Sub-Theme Directory Structure](#11-sub-theme-directory-structure)
-- [3.6 SCSS Compilation Modes](#36-radix-sub-theme-best-practices)
-- [6.5 Performance Best Practices](#65-performance-best-practices)
+- [1.1 Sub-Theme Directory Structure](radix-sub-theme-architecture.md#11-sub-theme-directory-structure)
+- [3.6 SCSS Compilation Modes](radix-sub-theme-best-practices.md)
+- [6.5 Performance Best Practices](performance-best-practices.md)

@@ -142,4 +142,4 @@ Key observations:
 ### See Also
 
 - Drupal Layout Builder Guide
-- [Blocks Integration](#blocks-integration)
+- [Blocks Integration](blocks-integration.md)

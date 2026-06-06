@@ -83,5 +83,5 @@ Library pages use Drupal's `hook_theme` system. Seven templates can be overridde
 
 ### See Also
 
-- [Defining Components](#defining-components)
-- [Variants](#variants)
+- [Defining Components](defining-components.md)
+- [Variants](variants.md)

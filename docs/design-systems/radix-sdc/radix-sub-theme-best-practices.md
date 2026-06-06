@@ -500,7 +500,7 @@ $custom-color: #ff6600;
 ```
 
 #### See Also
-- [1.1 Sub-Theme Directory Structure](#11-sub-theme-directory-structure)
-- [2.1 Variable Override Location](#21-variable-override-location)
-- [8.2 Reuse Decision Framework](#82-reuse-decision-framework)
-- [8.3 Overriding Radix Components](#83-overriding-radix-components)
+- [1.1 Sub-Theme Directory Structure](radix-sub-theme-architecture.md#11-sub-theme-directory-structure)
+- [2.1 Variable Override Location](design-tokens-radix-configuration.md#21-variable-override-location)
+- [8.2 Reuse Decision Framework](radix-component-reuse-strategy.md#82-reuse-decision-framework)
+- [8.3 Overriding Radix Components](radix-component-reuse-strategy.md#83-overriding-radix-components)

@@ -147,6 +147,6 @@ The deriver creates plugin definitions like `my_field_source:node:article:body`,
 
 ### See Also
 
-- [Source Plugins](#source-plugins)
-- [Props System](#props-system)
+- [Source Plugins](source-plugins.md)
+- [Props System](props-system.md)
 - Drupal Services/DI Guide

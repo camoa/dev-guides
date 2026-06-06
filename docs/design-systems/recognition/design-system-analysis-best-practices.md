@@ -146,6 +146,6 @@ Components:  background: var(--color-background); color: var(--color-text);
 **2025 Best Practice:** Federated model with lightweight governance. Central team maintains tokens + core components. Product teams contribute patterns that get promoted to system after validation.
 
 #### See Also
-- [1. Foundation Layer: Design Tokens](#1-foundation-layer-design-tokens)
-- [2. Atomic Design Hierarchy](#2-atomic-design-hierarchy)
+- [1. Foundation Layer: Design Tokens](foundation-layer-design-tokens.md)
+- [2. Component Classification Framework](component-classification-framework.md)
 - [12. Validation Checklist](validation-checklist.md)

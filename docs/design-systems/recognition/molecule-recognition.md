@@ -136,8 +136,8 @@ tldr: "You've identified atoms and now need to find grouped patterns You're anal
 - **Over-molecularizing** — Not every atom pairing needs to be a molecule; only if reused as unit
 
 #### See Also
-- [3. Atom Recognition](#3-atom-recognition)
-- [5. Organism Recognition](#5-organism-recognition)
-- [2. Component Classification Framework](#2-component-classification-framework)
+- [3. Atom Recognition](atom-recognition.md)
+- [5. Organism Recognition](organism-recognition.md)
+- [2. Component Classification Framework](component-classification-framework.md)
 
 ---

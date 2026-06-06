@@ -107,8 +107,8 @@ slots:
 - **Not integrating with regions** — Map Drupal regions to navbar slots
 
 #### See Also
-- [8.3 Overriding Radix Components](#83-overriding-radix-components)
-- [6.1 Page Template Structure](#61-page-template-structure)
+- [8.3 Overriding Radix Components](radix-component-reuse-strategy.md#83-overriding-radix-components)
+- [6.1 Page Template Structure](templates-drupal-theme-layer.md#61-page-template-structure)
 
 ---
 
@@ -298,5 +298,5 @@ class HeroSectionBlock extends BlockBase {
 - **Missing cache tags** — Add proper cache metadata
 
 #### See Also
-- [6.2 Layout Builder Composition](#62-layout-builder-composition)
+- [6.2 Layout Builder Composition](templates-drupal-theme-layer.md#62-layout-builder-composition)
 - Drupal Layout Builder: https://www.drupal.org/docs/8/core/modules/layout-builder

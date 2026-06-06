@@ -109,7 +109,22 @@ python scripts/add_tldr_to_routing_tables.py --topic <topic>
 Scoped to the new topic only. The partitioner already builds the 3-column table, so this is
 idempotent (`already-has-summary` → skip). It's a safety net for a partitioner that under-filled.
 
-## Step 9 — Local build preview (do NOT commit output)
+## Step 9 — Normalize cross-partition links
+
+The partitioner splits one source guide into sibling files, but the source's internal
+cross-references are same-page `#anchor` links that **break** once their target section
+becomes its own file. Repoint them at the sibling files:
+
+```bash
+python scripts/normalize_cross_partition_links.py --topic <topic>
+```
+
+Review the output. Anything reported **UNRESOLVED** (no sibling owns the anchor, or it's
+ambiguous) is a genuine stale reference — fix it in the SOURCE guide and re-run the
+partitioner, or correct it by hand if it's a one-off rename. A leftover broken anchor will
+surface in the build validation.
+
+## Step 10 — Local build preview (do NOT commit output)
 
 ```bash
 mkdocs build
@@ -120,7 +135,7 @@ page or a broken nav reference the partitioner added), fix the source guide and 
 partitioner — do not hand-edit `docs/`. (CI uses plain `mkdocs build`, not `--strict`, because
 legacy content currently trips strict mode; don't let that block you.)
 
-## Step 10 — Stage, commit, push branch, open PR — then STOP
+## Step 11 — Stage, commit, push branch, open PR — then STOP
 
 Stage **only** the three allowed paths (verify nothing else sneaks in):
 

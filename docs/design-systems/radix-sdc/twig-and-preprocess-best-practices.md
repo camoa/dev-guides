@@ -598,6 +598,6 @@ function mytheme_preprocess_progress_bar(&$variables) {
 **WHY:** Prevents accidental variable collisions and makes variable dependencies explicit.
 
 #### See Also
-- [7.1 Component YAML Schema](#71-component-yaml-schema)
-- [7.2 Props and Slots](#72-props-and-slots)
+- [7.1 Component YAML Schema](sdc-component-development.md#71-component-yaml-schema)
+- [7.2 Props and Slots](sdc-component-development.md#72-props-and-slots)
 - Drupal Twig Documentation: https://www.drupal.org/docs/theming-drupal/twig-in-drupal

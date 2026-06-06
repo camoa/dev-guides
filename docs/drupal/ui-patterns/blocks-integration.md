@@ -169,6 +169,6 @@ Key observations:
 
 ### See Also
 
-- [Layout Builder Integration](#layout-builder-integration)
-- [Slots System](#slots-system)
+- [Layout Builder Integration](layout-builder-integration.md)
+- [Slots System](slots-system.md)
 - Drupal Blocks Guide

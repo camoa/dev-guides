@@ -115,7 +115,7 @@ tldr: "You're analyzing a UI and need to identify the smallest functional buildi
 - **Over-atomizing** — Not every CSS class is an atom; focus on functional UI elements
 
 #### See Also
-- [4. Molecule Recognition](#4-molecule-recognition)
-- [1. Foundation Layer: Design Tokens](#1-foundation-layer-design-tokens)
+- [4. Molecule Recognition](molecule-recognition.md)
+- [1. Foundation Layer: Design Tokens](foundation-layer-design-tokens.md)
 
 ---

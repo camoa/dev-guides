@@ -150,8 +150,8 @@ Or class-based:
 - **Overlooking cascade specificity** — Component tokens may override global tokens; note specificity
 
 #### See Also
-- [1. Foundation Layer: Design Tokens](#1-foundation-layer-design-tokens)
-- [2. Component Classification Framework](#2-component-classification-framework)
+- [1. Foundation Layer: Design Tokens](foundation-layer-design-tokens.md)
+- [2. Component Classification Framework](component-classification-framework.md)
 - [11. Standards & Specifications](standards-specifications.md)
 
 ---
@@ -315,8 +315,8 @@ In Figma, components can contain other components:
 - **Treating frames as components** — Frames are containers; components are reusable elements
 
 #### See Also
-- [1. Foundation Layer: Design Tokens](#1-foundation-layer-design-tokens)
-- [2. Component Classification Framework](#2-component-classification-framework)
+- [1. Foundation Layer: Design Tokens](foundation-layer-design-tokens.md)
+- [2. Component Classification Framework](component-classification-framework.md)
 - [8.1 HTML/CSS Analysis](#81-htmlcss-analysis)
 
 ---
@@ -493,8 +493,8 @@ Look for:
 - **Overlooking shadows/elevation** — Shadow depth indicates hierarchy level
 
 #### See Also
-- [1. Foundation Layer: Design Tokens](#1-foundation-layer-design-tokens)
-- [2. Component Classification Framework](#2-component-classification-framework)
+- [1. Foundation Layer: Design Tokens](foundation-layer-design-tokens.md)
+- [2. Component Classification Framework](component-classification-framework.md)
 - [10. Reference Design Systems](reference-design-systems.md)
 
 ---
@@ -577,6 +577,6 @@ DaisyUI uses OKLCH color format internally and provides 30+ predefined themes.
 - **Reading spacing values wrong** — Tailwind's `p-4` is 16px (4 * 4px), not 4px
 
 #### See Also
-- [1.3 Spacing Token Recognition](#13-spacing-token-recognition)
+- [1.3 Spacing Token Recognition](foundation-layer-design-tokens.md#13-spacing-token-recognition)
 - [8.1 HTML/CSS Analysis](#81-htmlcss-analysis)
 - `design-system-tailwind.md` — full Tailwind documentation

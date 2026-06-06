@@ -81,7 +81,7 @@ $box-shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
 #### See Also
 - Bootstrap Mapping Guide: Section 2 (Design Tokens → Bootstrap Variables)
 - [2.2 SCSS Import Order](#22-scss-import-order)
-- [1.2 Bootstrap Loading Chain](#12-bootstrap-loading-chain)
+- [1.2 Bootstrap Loading Chain](radix-sub-theme-architecture.md#12-bootstrap-loading-chain)
 
 ---
 
@@ -112,7 +112,7 @@ $box-shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
 
 #### See Also
 - Bootstrap Mapping Guide: Section 8 (SCSS Integration Order)
-- [3.4 SCSS Integration in SDCs](#34-scss-integration-in-sdcs)
+- [3.4 SCSS Integration in SDCs](atoms-sdc-components.md#34-scss-integration-in-sdcs)
 
 ---
 
@@ -148,4 +148,4 @@ $primary: #194582;
 - **Overusing runtime customization** — Most tokens should be compile-time for performance
 
 #### See Also
-- [1.3 Theme Configuration Files](#13-theme-configuration-files)
+- [1.3 Theme Configuration Files](radix-sub-theme-architecture.md#13-theme-configuration-files)

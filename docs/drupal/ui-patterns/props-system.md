@@ -78,5 +78,5 @@ position:
 
 ### See Also
 
-- [Source Plugins](#source-plugins)
-- [Defining Components](#defining-components)
+- [Source Plugins](source-plugins.md)
+- [Defining Components](defining-components.md)

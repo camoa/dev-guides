@@ -84,6 +84,6 @@ ui_patterns.twig.extension:
 
 ### See Also
 
-- [Source Plugins](#source-plugins)
-- [Props System](#props-system)
+- [Source Plugins](source-plugins.md)
+- [Props System](props-system.md)
 - SDC Development Guide

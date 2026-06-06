@@ -140,8 +140,8 @@ Reference: [Atomic Design in 2025: From Rigid Theory to Flexible Practice](https
 - **Ignoring semantic meaning** — Name organisms by function (header, hero) not structure
 
 #### See Also
-- [4. Molecule Recognition](#4-molecule-recognition)
-- [6. Templates vs Pages](#6-templates-vs-pages)
-- [8. Source-Specific Recognition](#8-source-specific-recognition)
+- [4. Molecule Recognition](molecule-recognition.md)
+- [6. Templates vs Pages](templates-vs-pages.md)
+- [8. Source-Specific Recognition](source-specific-recognition.md)
 
 ---
