@@ -85,7 +85,7 @@ props:
 - **Forgetting to pass props** — Use `with {}` to pass properties
 
 #### See Also
-- [3.2 SDC Component Structure](#32-sdc-component-structure)
+- [3.2 SDC Component Structure](atoms-sdc-components.md#32-sdc-component-structure)
 - [4.2 Slots and Composition](#42-slots-and-composition)
 
 ---
@@ -185,7 +185,7 @@ slots:
 - **Not documenting slots** — Define all slots in component.yml
 
 #### See Also
-- [7.2 Props and Slots](#72-props-and-slots)
+- [7.2 Props and Slots](sdc-component-development.md#72-props-and-slots)
 - Official SDC Documentation: https://www.drupal.org/docs/develop/theming-drupal/using-single-directory-components
 
 ---
@@ -230,5 +230,5 @@ slots:
 - **Over-abstracting** — Simple molecules may not need SDCs
 
 #### See Also
-- [5.3 Layout Builder Integration](#53-layout-builder-integration)
-- [6.1 Page Template Structure](#61-page-template-structure)
+- [5.3 Layout Builder Integration](organisms-sdc-layout-builder.md#53-layout-builder-integration)
+- [6.1 Page Template Structure](templates-drupal-theme-layer.md#61-page-template-structure)

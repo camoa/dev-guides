@@ -163,7 +163,7 @@ All components are marked as `experimental` status in Radix 6.x except:
 
 #### See Also
 - [8.3 Overriding Radix Components](#83-overriding-radix-components)
-- [3.1 Atom Creation Decision Framework](#31-atom-creation-decision-framework)
+- [3.1 Atom Creation Decision Framework](atoms-sdc-components.md#31-atom-creation-decision-framework)
 
 ---
 
@@ -260,7 +260,7 @@ props:
 
 #### See Also
 - [8.1 Radix Component Catalog](#81-radix-component-catalog)
-- [3.2 SDC Component Structure](#32-sdc-component-structure)
+- [3.2 SDC Component Structure](atoms-sdc-components.md#32-sdc-component-structure)
 
 ---
 
@@ -741,5 +741,5 @@ props:
 
 #### See Also
 - [8.1 Radix Component Catalog](#81-radix-component-catalog)
-- [3.5 SDC Component Best Practices](#35-sdc-component-best-practices)
+- [3.5 SDC Component Best Practices](sdc-component-best-practices.md)
 - [Design System Bootstrap Mapping Guide](/home/camoa/workspace/claude_memory/guides/design-system-bootstrap-mapping.md)

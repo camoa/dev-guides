@@ -125,6 +125,6 @@ tags: ["Internal"]
 
 ### See Also
 
-- [Defining Components](#defining-components)
-- [Slots System](#slots-system)
-- [Security & Accessibility](#security--accessibility)
+- [Defining Components](defining-components.md)
+- [Slots System](slots-system.md)
+- [Security & Accessibility](security-and-accessibility.md)

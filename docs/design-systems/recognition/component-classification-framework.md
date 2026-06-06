@@ -117,9 +117,9 @@ One-off components that should be variants of existing components.
 - **Ignoring single responsibility** — Molecules should do one thing well; if multi-purpose, reconsider classification. **What goes wrong:** FormField molecule handles text inputs, selects, checkboxes, radio buttons, file uploads. Now changing file upload styling breaks radio buttons. Tight coupling creates fragility.
 
 #### See Also
-- [3. Atom Recognition](#3-atom-recognition)
-- [4. Molecule Recognition](#4-molecule-recognition)
-- [5. Organism Recognition](#5-organism-recognition)
-- [6. Templates vs Pages](#6-templates-vs-pages)
+- [3. Atom Recognition](atom-recognition.md)
+- [4. Molecule Recognition](molecule-recognition.md)
+- [5. Organism Recognition](organism-recognition.md)
+- [6. Templates vs Pages](templates-vs-pages.md)
 
 ---

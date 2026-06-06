@@ -393,6 +393,6 @@ public function build() {
 **WHY:** SDC integration maintains design system consistency.
 
 #### See Also
-- [5.3 Layout Builder Integration](#53-layout-builder-integration)
+- [5.3 Layout Builder Integration](organisms-sdc-layout-builder.md#53-layout-builder-integration)
 - Drupal Layout Builder: https://www.drupal.org/docs/8/core/modules/layout-builder
 - Layout Builder Restrictions: https://www.drupal.org/project/layout_builder_restrictions

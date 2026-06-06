@@ -75,5 +75,5 @@ UI Patterns registers a `ui-patterns://` stream wrapper for JSON Schema `$ref` r
 
 ### See Also
 
-- [Architecture](#architecture)
+- [Architecture](architecture.md)
 - SDC Development Guide

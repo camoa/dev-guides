@@ -178,7 +178,7 @@ themes/custom/THEME_NAME/components/button/
 | New unique component | Create | `drupal-radix-cli create NAME` | You own |
 | Customize Radix component | Import | `drupal-radix-cli import NAME` | You own |
 | Use Radix as-is | Include | `{% include 'radix:NAME' %}` | Radix maintains |
-| Override Radix template only | Copy manually | See [8.3](#83-overriding-radix-components) | Partial ownership |
+| Override Radix template only | Copy manually | See [8.3](radix-component-reuse-strategy.md#83-overriding-radix-components) | Partial ownership |
 
 **RECOMMENDATION:** Use `include` whenever possible. Only import/override when absolutely necessary.
 
@@ -301,7 +301,7 @@ drush cr  # Clear cache to register new component
 ```
 
 ### See Also
-- [3.2 SDC Component Structure](#32-sdc-component-structure)
-- [3.5 SDC Component Best Practices](#35-sdc-component-best-practices)
-- [8.1 Radix Component Catalog](#81-radix-component-catalog)
-- [8.3 Overriding Radix Components](#83-overriding-radix-components)
+- [3.2 SDC Component Structure](atoms-sdc-components.md#32-sdc-component-structure)
+- [3.5 SDC Component Best Practices](sdc-component-best-practices.md)
+- [8.1 Radix Component Catalog](radix-component-reuse-strategy.md#81-radix-component-catalog)
+- [8.3 Overriding Radix Components](radix-component-reuse-strategy.md#83-overriding-radix-components)

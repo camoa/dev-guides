@@ -100,8 +100,8 @@ Recognize WCAG compliance indicators:
 
 #### See Also
 - [1.2 Typography Token Recognition](#12-typography-token-recognition)
-- [8.1 HTML/CSS Analysis](#81-htmlcss-analysis)
-- [10. Standards & Specifications](#10-standards-specifications)
+- [8.1 HTML/CSS Analysis](source-specific-recognition.md#81-htmlcss-analysis)
+- [10. Standards & Specifications](standards-specifications.md)
 
 ---
 
@@ -214,7 +214,7 @@ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica N
 
 #### See Also
 - [1.3 Spacing Token Recognition](#13-spacing-token-recognition)
-- [8.1 HTML/CSS Analysis](#81-htmlcss-analysis)
+- [8.1 HTML/CSS Analysis](source-specific-recognition.md#81-htmlcss-analysis)
 
 ---
 
@@ -318,7 +318,7 @@ The 8pt grid creates a design language that feels intuitive to both users and te
 
 #### See Also
 - [1.4 Surface Token Recognition](#14-surface-token-recognition)
-- [2. Component Classification Framework](#2-component-classification-framework)
+- [2. Component Classification Framework](component-classification-framework.md)
 
 ---
 
@@ -396,4 +396,4 @@ A shadow token contains:
 
 #### See Also
 - [1.1 Color Token Recognition](#11-color-token-recognition)
-- [3. Atom Recognition](#3-atom-recognition)
+- [3. Atom Recognition](atom-recognition.md)

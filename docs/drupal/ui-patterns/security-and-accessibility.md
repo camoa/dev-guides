@@ -68,4 +68,4 @@ UI Patterns does not add inline scripts or styles. Components should follow the 
 ### See Also
 
 - Drupal Security Guide
-- [Best Practices & Anti-Patterns](#best-practices--anti-patterns)
+- [Best Practices & Anti-Patterns](best-practices-and-anti-patterns.md)

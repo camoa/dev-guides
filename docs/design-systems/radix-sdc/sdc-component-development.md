@@ -149,7 +149,7 @@ slots:
 - **Missing required props** — Define in `required: []` array
 
 #### See Also
-- [4.2 Slots and Composition](#42-slots-and-composition)
+- [4.2 Slots and Composition](molecules-sdc-components.md#42-slots-and-composition)
 
 ---
 
@@ -208,7 +208,7 @@ slots:
 - **Not importing _init.scss** — Missing Bootstrap foundation
 
 #### See Also
-- [3.4 SCSS Integration in SDCs](#34-scss-integration-in-sdcs)
+- [3.4 SCSS Integration in SDCs](atoms-sdc-components.md#34-scss-integration-in-sdcs)
 
 ---
 

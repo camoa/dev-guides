@@ -134,6 +134,6 @@ The `default` value pre-fills form widgets via `#default_value`. It does **not**
 
 ### See Also
 
-- [Props System](#props-system)
-- [Variants](#variants)
+- [Props System](props-system.md)
+- [Variants](variants.md)
 - SDC Development Guide

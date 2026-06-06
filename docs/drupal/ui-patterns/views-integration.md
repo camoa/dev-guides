@@ -141,4 +141,4 @@ Key observations:
 ### See Also
 
 - Drupal Views Guide
-- [Source Plugins](#source-plugins)
+- [Source Plugins](source-plugins.md)

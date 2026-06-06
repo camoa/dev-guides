@@ -83,7 +83,7 @@ radix_starterkit/               # Sub-theme root
 
 #### See Also
 - [1.2 Bootstrap Loading Chain](#12-bootstrap-loading-chain)
-- [7.1 Component YAML Schema](#71-component-yaml-schema)
+- [7.1 Component YAML Schema](sdc-component-development.md#71-component-yaml-schema)
 
 ---
 
@@ -177,8 +177,8 @@ radix_starterkit/               # Sub-theme root
 - **Modifying _init.scss directly** — Override in `base/_variables.scss` instead. WHY: Radix updates will overwrite `_init.scss`, but your `_variables.scss` is safe. Separating overrides from framework code prevents loss of customizations during updates.
 
 #### See Also
-- [2.1 Variable Override Location](#21-variable-override-location)
-- [2.2 SCSS Import Order](#22-scss-import-order)
+- [2.1 Variable Override Location](design-tokens-radix-configuration.md#21-variable-override-location)
+- [2.2 SCSS Import Order](design-tokens-radix-configuration.md#22-scss-import-order)
 - Bootstrap Mapping Guide: Section 8 (SCSS Integration Order)
 
 ---
@@ -245,5 +245,5 @@ style:
 - **Forgetting to extend core libraries** — Drupal AJAX, dialogs need library-extend
 
 #### See Also
-- [2.3 Theme Settings Integration](#23-theme-settings-integration)
-- [6.1 Page Template Structure](#61-page-template-structure)
+- [2.3 Theme Settings Integration](design-tokens-radix-configuration.md#23-theme-settings-integration)
+- [6.1 Page Template Structure](templates-drupal-theme-layer.md#61-page-template-structure)

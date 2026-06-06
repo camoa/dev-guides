@@ -427,7 +427,7 @@ components/button/button.component.yml
 **WHY:** CSS specificity battles and accidental overrides across components.
 
 #### See Also
-- [4.2 Slots and Composition](#42-slots-and-composition)
-- [7.1 Component YAML Schema](#71-component-yaml-schema)
-- [7.3 SCSS Scoping](#73-scss-scoping)
-- [8.1 Radix Component Catalog](#81-radix-component-catalog)
+- [4.2 Slots and Composition](molecules-sdc-components.md#42-slots-and-composition)
+- [7.1 Component YAML Schema](sdc-component-development.md#71-component-yaml-schema)
+- [7.3 SCSS Scoping](sdc-component-development.md#73-scss-scoping)
+- [8.1 Radix Component Catalog](radix-component-reuse-strategy.md#81-radix-component-catalog)

@@ -107,7 +107,7 @@ Sub-Theme (Your Theme)
 - **Missing template suggestions** — Use `hook_theme_suggestions_*` for variants
 
 #### See Also
-- [1.3 Theme Configuration Files](#13-theme-configuration-files)
+- [1.3 Theme Configuration Files](radix-sub-theme-architecture.md#13-theme-configuration-files)
 - [6.3 Template Hierarchy](#63-template-hierarchy)
 
 ---
@@ -161,7 +161,7 @@ Section 3 (Full Width)
 - **Cache issues** — Ensure proper cache tags on blocks
 
 #### See Also
-- [5.3 Layout Builder Integration](#53-layout-builder-integration)
+- [5.3 Layout Builder Integration](organisms-sdc-layout-builder.md#53-layout-builder-integration)
 - Drupal Layout Builder: https://www.drupal.org/docs/8/core/modules/layout-builder
 
 ---

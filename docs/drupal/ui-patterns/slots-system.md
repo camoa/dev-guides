@@ -78,6 +78,6 @@ Slots appear as Twig variables matching their YAML key names:
 
 ### See Also
 
-- [Source Plugins](#source-plugins)
-- [Defining Components](#defining-components)
-- [Best Practices & Anti-Patterns](#best-practices--anti-patterns)
+- [Source Plugins](source-plugins.md)
+- [Defining Components](defining-components.md)
+- [Best Practices & Anti-Patterns](best-practices-and-anti-patterns.md)

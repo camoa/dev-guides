@@ -53,8 +53,8 @@ drupal_version: "11.x"
 - **Not considering reusability** — Only create SDC if component is reused
 
 #### See Also
-- [8.1 Radix Component Catalog](#81-radix-component-catalog)
-- [8.2 Reuse Decision Framework](#82-reuse-decision-framework)
+- [8.1 Radix Component Catalog](radix-component-reuse-strategy.md#81-radix-component-catalog)
+- [8.2 Reuse Decision Framework](radix-component-reuse-strategy.md#82-reuse-decision-framework)
 - Design System Recognition Guide: Section 2.2 (Atom Recognition)
 
 ---
@@ -173,8 +173,8 @@ slots:
 - **Hardcoding values** — Use props for variant configuration
 
 #### See Also
-- [7.1 Component YAML Schema](#71-component-yaml-schema)
-- [7.2 Props and Slots](#72-props-and-slots)
+- [7.1 Component YAML Schema](sdc-component-development.md#71-component-yaml-schema)
+- [7.2 Props and Slots](sdc-component-development.md#72-props-and-slots)
 - Official Drupal SDC Documentation: https://www.drupal.org/docs/develop/theming-drupal/using-single-directory-components
 
 ---
@@ -264,7 +264,7 @@ slots:
 - **Duplicating Radix button** — Extend, don't replace
 
 #### See Also
-- [8.3 Overriding Radix Components](#83-overriding-radix-components)
+- [8.3 Overriding Radix Components](radix-component-reuse-strategy.md#83-overriding-radix-components)
 - Bootstrap Mapping Guide: Section 4.1 (Button Atoms)
 
 ---
@@ -312,5 +312,5 @@ slots:
 - **Not using Bootstrap mixins** — Leverage existing Bootstrap patterns
 
 #### See Also
-- [1.2 Bootstrap Loading Chain](#12-bootstrap-loading-chain)
-- [2.2 SCSS Import Order](#22-scss-import-order)
+- [1.2 Bootstrap Loading Chain](radix-sub-theme-architecture.md#12-bootstrap-loading-chain)
+- [2.2 SCSS Import Order](design-tokens-radix-configuration.md#22-scss-import-order)

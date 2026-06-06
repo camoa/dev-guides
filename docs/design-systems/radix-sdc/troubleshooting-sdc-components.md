@@ -119,7 +119,7 @@ Use this checklist when troubleshooting a non-functional SDC component:
 - **Hardcoding design tokens instead of using Bootstrap variables** — Creates inconsistency. **WHY:** Hardcoded values won't update when Bootstrap variables change. Using Bootstrap variables (`var(--bs-primary)` or `$primary`) ensures design consistency.
 
 ### See Also
-- [3.2 SDC Component Structure](#32-sdc-component-structure)
-- [7.1 Component YAML Schema](#71-component-yaml-schema)
-- [8.3 Overriding Radix Components](#83-overriding-radix-components)
-- [3.6 Radix Sub-Theme Best Practices](#36-radix-sub-theme-best-practices)
+- [3.2 SDC Component Structure](atoms-sdc-components.md#32-sdc-component-structure)
+- [7.1 Component YAML Schema](sdc-component-development.md#71-component-yaml-schema)
+- [8.3 Overriding Radix Components](radix-component-reuse-strategy.md#83-overriding-radix-components)
+- [3.6 Radix Sub-Theme Best Practices](radix-sub-theme-best-practices.md)

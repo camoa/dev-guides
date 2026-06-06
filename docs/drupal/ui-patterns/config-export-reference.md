@@ -98,14 +98,14 @@ Schema hierarchy:
 |---|---|
 | Forgetting that field property source IDs include entity type and field name | Source IDs are derived: `field_property:{entity_type}:{field_name}:{column}` — no bundle segment. Using `field_property:node:article:field_name` (old bundle format) or just `field_property:field_name` will not resolve. |
 | Missing `_weight` on slot sources | Required for ordering multiple sources within a slot. Omitting it may cause unpredictable render order. Values are strings (e.g., `'0'`, `'1'`). |
-| Using wrong source type for prop type | A `textfield` source cannot serve a `boolean` prop. Match source `prop_types` to the component's prop type (see [Source Plugins](#source-plugins)). |
+| Using wrong source type for prop type | A `textfield` source cannot serve a `boolean` prop. Match source `prop_types` to the component's prop type (see [Source Plugins](source-plugins.md)). |
 | Confusing Views style double nesting with row single nesting | Style config: `options.ui_patterns.ui_patterns` (double). Row config: `options.ui_patterns` (single). Getting this wrong causes schema validation failures. |
 | Manually crafting `block` or `entity_reference` source config | These sources use dynamic sub-keys and have `ignore` schema types. Always configure them via the admin UI and export, rather than writing YAML by hand. |
 
 ### See Also
 
-- [Field Formatters](#field-formatters) -- formatter config examples
-- [Blocks Integration](#blocks-integration) -- block config examples
-- [Layout Builder Integration](#layout-builder-integration) -- layout config examples
-- [Views Integration](#views-integration) -- views config examples
-- [Source Plugins](#source-plugins) -- source plugin system overview
+- [Field Formatters](field-formatters.md) -- formatter config examples
+- [Blocks Integration](blocks-integration.md) -- block config examples
+- [Layout Builder Integration](layout-builder-integration.md) -- layout config examples
+- [Views Integration](views-integration.md) -- views config examples
+- [Source Plugins](source-plugins.md) -- source plugin system overview
