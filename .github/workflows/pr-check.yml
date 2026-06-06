@@ -1,0 +1,32 @@
+name: PR Check
+
+# Build-and-validate gate for pull requests into main. This does NOT deploy —
+# deploy.yml owns deployment and runs only on push to main (i.e. a PR merge).
+# This workflow exists so branch protection has a required status check ("build")
+# to enforce on every PR before merge.
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - 'scripts/**'
+      - 'partition-manifest.json'
+      - 'llms.txt.template'
+      - 'requirements.txt'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+      - run: python scripts/validate_recipes.py
+      - run: mkdocs build --strict
