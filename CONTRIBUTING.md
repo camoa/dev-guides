@@ -38,9 +38,29 @@ Source Guide (local)          Published Site (GitHub Pages)
 
 ### Creating a new topic
 
-1. **Write a comprehensive source guide** with partition markers (use the maintainer agent to help)
-2. **Run the partitioner** — generates `docs/<topic>/` with index + atomic guides
-3. **Submit a PR** — include the source guide path in your PR description
+The fastest path is the **`/create-guide`** command (Claude Code), which orchestrates the whole
+chain and stops at an opened PR:
+
+```
+/create-guide <topic-or-capability>
+```
+
+It runs: **scope gate** (charter) → **miss check** (topic must not already exist) → branch off
+`main` → **`guide-framework-maintainer`** researches and writes the comprehensive *source* guide
+(with PARTITION markers, to `~/workspace/claude_memory/guides/` — outside this repo) → **human
+review pause** → **`guide-partitioner`** extracts atomic guides into `docs/<topic>/` (index +
+routing table + `mkdocs.yml` nav + manifest) → **`guide-meta-populator`** + `add_tldr` backfill
+(idempotent) → local `mkdocs build` → opens a PR. It **never** merges or deploys.
+
+Doing it by hand instead:
+
+1. **Write a comprehensive source guide** with partition markers (use the maintainer agent to help).
+   The source lives in `~/workspace/claude_memory/guides/` and is **never committed** to this repo.
+2. **Run the partitioner** — generates `docs/<topic>/` with index + atomic guides, updates
+   `mkdocs.yml` and `partition-manifest.json`.
+3. **Open a PR** touching only `docs/**`, `mkdocs.yml`, and `partition-manifest.json`. Mention the
+   (local) source guide path in the PR description. Do **not** commit `site/`, `llms.txt`, or
+   `agentic-recipes.txt` — CI regenerates those on merge.
 
 ### Using the agents (Claude Code)
 
@@ -175,9 +195,27 @@ mkdocs serve    # Preview at http://localhost:8000
 mkdocs build    # Build to site/
 ```
 
+## External contributors
+
+Contributors work as **repo collaborators on branches — no fork.** `main` is protected.
+
+- Branch from `main` using a `feature/*` branch; never push to `main` directly.
+- Open a PR into `main`. It must pass the **`build`** status check (`.github/workflows/pr-check.yml`:
+  recipe validation + `mkdocs build`) and get **1 approving review** before it can merge.
+- A PR should touch only `docs/**`, `mkdocs.yml`, and `partition-manifest.json`. Generated indexes
+  (`site/`, `llms.txt`, `agentic-recipes.txt`) are **CI artifacts** — never commit them. Source
+  guides live outside the repo (the manifest records only their hash) — never commit them either.
+- **Merging the PR is the deploy.** `deploy.yml` runs only on push to `main`, and with `main`
+  protected the only such push is a reviewed PR merge — which then regenerates the indexes and
+  publishes to GitHub Pages.
+
 ## Deployment
 
-Push to `main` — GitHub Actions builds and deploys to GitHub Pages automatically. The workflow only triggers on changes to `docs/`, `mkdocs.yml`, or `requirements.txt`.
+A merge to `main` is the deploy. GitHub Actions (`deploy.yml`) builds the site, regenerates
+`llms.txt` and `agentic-recipes.txt`, and publishes to GitHub Pages. It triggers only on push to
+`main` (a reviewed PR merge) for changes under `docs/`, `mkdocs.yml`, `scripts/`,
+`partition-manifest.json`, `llms.txt.template`, or `requirements.txt`. PRs themselves only build
+and validate (`pr-check.yml`) — they do not deploy.
 
 ## License
 
