@@ -40,6 +40,6 @@ test('user can publish a node', async ({ page }) => {
 
 ## See Also
 
-- [Playwright for Visual Regression](../../visual-regression/playwright/index.md) — when the question is visual sameness
-- [Automated Testing Kit (ATK)](../../atk/index.md) — Drupal-specific E2E test catalog
+- [Playwright for Visual Regression](../visual-regression/playwright/index.md) — when the question is visual sameness
+- [Automated Testing Kit (ATK)](../atk/index.md) — Drupal-specific E2E test catalog
 - Reference: [Playwright Best Practices](https://playwright.dev/docs/best-practices)
