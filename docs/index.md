@@ -23,8 +23,8 @@ This site is built for **targeted, on-demand retrieval** — not monolithic cont
 
 | Step | Endpoint | Purpose |
 |------|----------|---------|
-| 1. Cache check | [`llms.hash`](llms.hash) | Tiny SHA-256 of `llms.txt` — fetch first to check if cache is fresh |
-| 2. Topic catalog | [`llms.txt`](llms.txt) | ~1,500-line index of all topics with URLs to topic index pages and guide counts |
+| 1. Cache check | [`llms.hash`](https://camoa.github.io/dev-guides/llms.hash) | Tiny SHA-256 of `llms.txt` — fetch first to check if cache is fresh |
+| 2. Topic catalog | [`llms.txt`](https://camoa.github.io/dev-guides/llms.txt) | ~1,500-line index of all topics with URLs to topic index pages and guide counts |
 | 3. Routing table | `docs/{topic}/index.md` | Each topic's `index.md` contains a "I need to..." routing table + `guide-meta:` frontmatter (concepts/not/requires/complements/specializes/category) for intent disambiguation |
 | 4. Atomic guide | `docs/{topic}/{guide}.md` | Individual decision guide with `tldr:` summary — one decision per page, token-efficient |
 

@@ -27,9 +27,8 @@ jobs:
           python-version: '3.12'
       - run: pip install -r requirements.txt
       - run: python scripts/validate_recipes.py
-      # Non-strict on purpose: `mkdocs build --strict` currently aborts on
-      # PRE-EXISTING content warnings (stale intra-page anchor links under
-      # docs/drupal/ui-patterns/, among others) unrelated to any given PR.
-      # Fixing that legacy content is out of scope for the gate; tighten back to
-      # --strict once those warnings are cleaned up. A non-zero build still fails.
-      - run: mkdocs build
+      # --strict catches broken nav/links and unresolved anchors as build
+      # failures. The legacy cross-partition anchor links and broken relative
+      # links that previously blocked --strict were cleaned up; keep this strict
+      # so regressions fail the PR rather than ship.
+      - run: mkdocs build --strict
