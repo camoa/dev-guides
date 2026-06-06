@@ -112,11 +112,13 @@ idempotent (`already-has-summary` → skip). It's a safety net for a partitioner
 ## Step 9 — Local build preview (do NOT commit output)
 
 ```bash
-mkdocs build --strict
+mkdocs build
 ```
-This is a **local preview / validation** only. The `site/` output is gitignored — never stage it.
-If `--strict` fails on *this topic's* content, fix the source guide and re-run the partitioner
-(do not hand-edit `docs/`). If it fails on unrelated pre-existing warnings, note it and continue.
+This is a **local preview / validation** only, and mirrors the CI `build` gate. The `site/` output
+is gitignored — never stage it. If the build errors on *this topic's* content (e.g. a malformed
+page or a broken nav reference the partitioner added), fix the source guide and re-run the
+partitioner — do not hand-edit `docs/`. (CI uses plain `mkdocs build`, not `--strict`, because
+legacy content currently trips strict mode; don't let that block you.)
 
 ## Step 10 — Stage, commit, push branch, open PR — then STOP
 

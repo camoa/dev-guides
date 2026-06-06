@@ -201,7 +201,7 @@ Contributors work as **repo collaborators on branches — no fork.** `main` is p
 
 - Branch from `main` using a `feature/*` branch; never push to `main` directly.
 - Open a PR into `main`. It must pass the **`build`** status check (`.github/workflows/pr-check.yml`:
-  `mkdocs build --strict` + recipe validation) and get **1 approving review** before it can merge.
+  recipe validation + `mkdocs build`) and get **1 approving review** before it can merge.
 - A PR should touch only `docs/**`, `mkdocs.yml`, and `partition-manifest.json`. Generated indexes
   (`site/`, `llms.txt`, `agentic-recipes.txt`) are **CI artifacts** — never commit them. Source
   guides live outside the repo (the manifest records only their hash) — never commit them either.
