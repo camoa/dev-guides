@@ -45,6 +45,8 @@ class MyController extends ControllerBase {
 }
 ```
 
+Reference: `/core/modules/system/tests/modules/test_htmx/src/Controller/HtmxTestAttachmentsController.php` lines 94–132
+
 **Conditional response** (same route for HTMX and full page):
 
 ```php
@@ -78,6 +80,8 @@ my_module.htmx_only:
   options:
     _htmx_route: TRUE
 ```
+
+Reference: `/core/lib/Drupal/Core/EventSubscriber/HtmxContentViewSubscriber.php` — handles `_htmx_route` routes
 
 ## Common Mistakes
 

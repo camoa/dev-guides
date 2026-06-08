@@ -28,7 +28,7 @@ guide-meta:
 
 | I need to... | Guide | Summary |
 |-------------|-------|---------|
-| Understand the AJAX system architecture | [Core Concepts](core-concepts.md) | Use Drupal AJAX when maintaining existing codebases, working with contributed modules, or needing backward compatibility. Use HTMX (available in Drupal 11.3+) for new projects — it reduces JavaScript size by up to 71%. |
+| Understand the AJAX system architecture | [Core Concepts](core-concepts.md) | Drupal AJAX: PHP callbacks return AjaxResponse objects; clients execute commands and re-attach behaviors. Required for ordered sequences, the dialog system, and contrib compatibility. HTMX is the alternative for new work in Drupal 11.3+. |
 | Add AJAX to a form element | [Form Element AJAX Configuration](form-element-ajax-configuration.md) | Use the `#ajax` property on any form element when you need server-driven content updates triggered by user interaction without a full page reload. |
 | Create dependent fields (category/subcategory) | [Dependent Field Patterns](dependent-field-patterns.md) | Use dependent fields when form options must change based on the value of another field (category/subcategory, country/state, product type/options). |
 | Build a multi-step wizard form | [Multi-Step Form Workflows](multi-step-form-workflows.md) | Use multi-step AJAX forms for wizard-style workflows where users navigate sequential steps without page reloads. Use standard forms for simple one-page submissions. |
@@ -42,7 +42,7 @@ guide-meta:
 | Handle file uploads via AJAX | [File Upload Patterns](file-upload-patterns.md) | Use `#type => 'managed_file'` with AJAX for file uploads that need immediate preview or feedback (avatars, attachments, media galleries). Always configure upload validators. |
 | Implement autocomplete suggestions | [Autocomplete Implementation](autocomplete-implementation.md) | Use `#autocomplete_route_name` for dynamic suggestions as users type. Use core's `system.entity_autocomplete` for existing entity types. |
 | Restrict access to AJAX callbacks | [Access Control Patterns](access-control-patterns.md) | Every AJAX callback and route is an HTTP endpoint and requires access control. AJAX callbacks are not protected by the UI alone — attackers can call them directly. |
-| Protect AJAX endpoints from CSRF | [CSRF Protection](csrf-protection.md) | Drupal's Form API handles CSRF automatically. For custom AJAX routes outside Form API, add `_csrf_token: 'TRUE'` and verify request type. |
+| Protect AJAX endpoints from CSRF | [CSRF Protection](csrf-protection.md) | Form API `#ajax` is CSRF-protected automatically. For custom POST AJAX routes use `_csrf_request_header_token: 'TRUE'` (validates X-CSRF-Token header). For GET action links use `_csrf_token: 'TRUE'` (validates `token=` query param). |
 | Optimize slow AJAX requests | [Performance Optimization](performance-optimization.md) | Apply these patterns when AJAX requests are slow, causing excessive database queries, large DOM updates, or timeouts on large operations. |
 | Cache AJAX responses | [Response Caching](response-caching.md) | Use CacheableAjaxResponse for AJAX responses containing cacheable data: public content, configuration results, or expensive calculations that don't vary per user. Do not cache user-specific data without proper cache contexts. |
 | Make AJAX meet WCAG 2.1 AA | [WCAG Compliance Patterns](wcag-compliance-patterns.md) | Apply these patterns to every AJAX implementation. Accessibility is not optional — WCAG 2.1 Level AA is the standard for Drupal sites. |

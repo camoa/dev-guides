@@ -1,6 +1,6 @@
 ---
 description: AJAX commands for updating, adding, removing, and rearranging DOM content — ReplaceCommand, HtmlCommand, AppendCommand and others
-tldr: "Use these commands when you need to update DOM content from AJAX callbacks. Choose the command that matches the specific DOM operation needed."
+tldr: "ReplaceCommand swaps the full element (new content must include wrapper ID); HtmlCommand updates inner HTML only. InsertCommand's 3rd param is `$settings` (JS behaviors), not an insertion method — use AppendCommand or PrependCommand for explicit insertion."
 drupal_version: "11.x"
 ---
 
@@ -21,6 +21,7 @@ drupal_version: "11.x"
 | BeforeCommand | Inserts before element (sibling) | Target element unchanged |
 | AfterCommand | Inserts after element (sibling) | Target element unchanged |
 | RemoveCommand | Removes element from DOM | Permanently removes; detaches behaviors |
+| InsertCommand | Uses `#ajax['method']` from triggering element | 3rd param is `$settings`, not insertion method |
 
 ## Pattern
 
@@ -30,6 +31,7 @@ use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\AppendCommand;
 use Drupal\Core\Ajax\RemoveCommand;
+use Drupal\Core\Ajax\InsertCommand;
 
 $response = new AjaxResponse();
 
@@ -45,6 +47,10 @@ $response->addCommand(new AppendCommand('#list', '<li>New item</li>'));
 // Remove element
 $response->addCommand(new RemoveCommand('#remove-me'));
 
+// InsertCommand: uses #ajax['method'] from the triggering element.
+// 3rd param $settings is for JS behavior data — NOT an insertion method.
+$response->addCommand(new InsertCommand('#target', $render_array));
+
 return $response;
 ```
 
@@ -56,10 +62,10 @@ Reference: `core/lib/Drupal/Core/Ajax/` (all command classes)
 - **Wrong**: Passing render arrays directly to commands → **Right**: Render arrays need `\Drupal::service('renderer')->render()` before adding to commands
 - **Wrong**: Forgetting to create AjaxResponse → **Right**: Commands must be added to an AjaxResponse, not a render array
 - **Wrong**: Chaining commands in wrong order → **Right**: Commands execute in order added; replace before append
-- **Wrong**: Not sanitizing user input in commands → **Right**: Use render arrays or proper escaping to prevent XSS
+- **Wrong**: Passing `['method' => 'append']` as InsertCommand's 3rd param → **Right**: That param is `$settings` (JS behavior data); use AppendCommand directly for explicit insertion
 
 ## See Also
 
 - [CSS Styling Commands](css-styling-commands.md)
 - [Feedback Commands](feedback-commands.md)
-- Reference: `core/lib/Drupal/Core/Ajax/`
+- Reference: `core/lib/Drupal/Core/Ajax/InsertCommand.php`

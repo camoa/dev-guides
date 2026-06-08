@@ -318,20 +318,20 @@
     "guides_extracted": 20
   },
   "drupal/htmx": {
-    "source_hash": "6b7ca46c84a5225147c34320c0ddb7e72aa09666a2bd52db962ffbd49e7cb035",
-    "partitioned": "2026-02-20",
+    "source_hash": "23899d776a2682495126d5671ebc819a03fc8331372efd67541736e4528f2473",
+    "partitioned": "2026-06-07",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 18
   },
   "drupal/ajax-htmx-migration": {
-    "source_hash": "9baf1f0b3aff16171177558972ea081c1667bbb2f4739a3c28c6fb7a22bfff74",
-    "partitioned": "2026-02-20",
+    "source_hash": "11f4ccd649f539fa29cd38fccce614316bc77ab95c8eb77200b4ed6b0a3fa015",
+    "partitioned": "2026-06-07",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 17
   },
   "drupal/ajax": {
-    "source_hash": "2d6034155730a112f453fc1a1643e98d58425d6bcdd06bb44180d609e90e6cc1",
-    "partitioned": "2026-02-20",
+    "source_hash": "70416783ea35dd0ce4e2f50d100aa7672bd00590c6f925eb77dc3aef7b6953c9",
+    "partitioned": "2026-06-07",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 26
   },

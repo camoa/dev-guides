@@ -12,18 +12,47 @@ drupal_version: "11.x"
 
 ## Decision
 
-| Category | Method | Attribute | Purpose |
-|----------|--------|-----------|---------|
-| Request | `get(?Url)` | `data-hx-get` | Issue GET request |
-| Request | `post(?Url)` | `data-hx-post` | Issue POST request |
-| Content | `select(string)` | `data-hx-select` | CSS selector for content to extract from response |
-| Content | `target(string)` | `data-hx-target` | CSS selector for swap target |
-| Content | `swap(string)` | `data-hx-swap` | Swap strategy (innerHTML, outerHTML, beforeend, etc.) |
-| Content | `swapOob(true\|string)` | `data-hx-swap-oob` | Out-of-band swap |
-| Trigger | `trigger(string\|array)` | `data-hx-trigger` | Event(s) that trigger request |
-| History | `pushUrl(bool\|Url)` | `data-hx-push-url` | Push URL to browser history |
-| History | `replaceUrl(bool\|Url)` | `data-hx-replace-url` | Replace current URL |
-| Drupal | `onlyMainContent(bool)` | `data-hx-drupal-only-main-content` | Triggers `_wrapper_format=drupal_htmx` |
+**Request attributes:**
+
+| Method | Attribute | Purpose |
+|--------|-----------|---------|
+| `get(?Url)` | `data-hx-get` | Issue GET request |
+| `post(?Url)` | `data-hx-post` | Issue POST request |
+| `put(?Url)` | `data-hx-put` | Issue PUT request |
+| `patch(?Url)` | `data-hx-patch` | Issue PATCH request |
+| `delete(?Url)` | `data-hx-delete` | Issue DELETE request |
+
+**Content control attributes:**
+
+| Method | Attribute | Purpose |
+|--------|-----------|---------|
+| `select(string)` | `data-hx-select` | CSS selector for content to swap from response |
+| `selectOob(string\|array)` | `data-hx-select-oob` | Out-of-band selectors for additional swaps |
+| `target(string)` | `data-hx-target` | CSS selector for swap target |
+| `swap(string, string, bool)` | `data-hx-swap` | Swap strategy (innerHTML, outerHTML, beforeend, etc.) |
+| `swapOob(true\|string)` | `data-hx-swap-oob` | Mark element for out-of-band swap |
+
+**Trigger attributes:**
+
+| Method | Attribute | Purpose |
+|--------|-----------|---------|
+| `trigger(string\|array)` | `data-hx-trigger` | Event(s) that trigger request |
+| `on(string, string)` | `data-hx-on-{event}` | Inline event handler |
+
+**History attributes:**
+
+| Method | Attribute | Purpose |
+|--------|-----------|---------|
+| `pushUrl(bool\|Url)` | `data-hx-push-url` | Push URL to browser history |
+| `replaceUrl(bool\|Url)` | `data-hx-replace-url` | Replace current URL in history |
+
+**Special Drupal attribute:**
+
+| Method | Attribute | Purpose |
+|--------|-----------|---------|
+| `onlyMainContent(bool)` | `data-hx-drupal-only-main-content` | Triggers `_wrapper_format=drupal_htmx` parameter |
+
+Reference: `/core/lib/Drupal/Core/Htmx/Htmx.php` — complete API with 30+ methods
 
 ## Pattern
 
@@ -43,16 +72,17 @@ drupal_version: "11.x"
 ```php
 (new Htmx())->trigger('click');
 (new Htmx())->trigger(['click', 'keyup changed']);
-(new Htmx())->trigger('revealed');      // For infinite scroll
-(new Htmx())->trigger('every 5s');      // Polling
+(new Htmx())->trigger('revealed');       // Infinite scroll
+(new Htmx())->trigger('every 5s');       // Polling
+(new Htmx())->trigger('keyup changed delay:500ms');  // Debounced
 ```
 
 **Swap with modifier** — Drupal defaults `ignoreTitle` to TRUE:
 
 ```php
-$htmx->swap('outerHTML');                   // "outerHTML ignoreTitle:true"
-$htmx->swap('outerHTML', '', FALSE);        // Allow title changes
-$htmx->swap('beforeend', 'scroll:bottom'); // With modifier
+$htmx->swap('outerHTML');                    // "outerHTML ignoreTitle:true"
+$htmx->swap('outerHTML', '', FALSE);         // Allow title changes
+$htmx->swap('beforeend', 'scroll:bottom');  // With modifier
 ```
 
 **Out-of-band swap:**
@@ -63,7 +93,7 @@ $htmx->swap('beforeend', 'scroll:bottom'); // With modifier
   ->applyTo($form['status'], '#wrapper_attributes');
 ```
 
-**Additional control attributes:**
+**Additional control:**
 
 ```php
 (new Htmx())
@@ -78,7 +108,7 @@ $htmx->swap('beforeend', 'scroll:bottom'); // With modifier
 
 - **Wrong**: Forgetting `onlyMainContent()` when route doesn't have `_htmx_route` → **Right**: Results in full page responses
 - **Wrong**: Using `swap('none')` without OOB swaps → **Right**: Nothing updates
-- **Wrong**: Not understanding ignoreTitle default → **Right**: Pass `FALSE` as third param to allow title changes
+- **Wrong**: Not understanding ignoreTitle default → **Right**: Pass `FALSE` as third param to `swap()` to allow title changes
 - **Wrong**: Hardcoding URLs instead of using Url objects → **Right**: Breaks multilingual sites and alias changes
 - **Wrong**: Chaining attributes without calling `applyTo()` → **Right**: Configuration isn't applied to render array
 

@@ -19,6 +19,8 @@ drupal_version: "11.x"
 
 Behaviors automatically work with HTMX content — `htmx:drupal:load` triggers `Drupal.attachBehaviors()`.
 
+Reference: `/core/misc/htmx/htmx-behaviors.js` lines 14–22
+
 ## Pattern
 
 **Standard Drupal behavior** (works automatically with HTMX):
@@ -37,6 +39,8 @@ Drupal.behaviors.myModuleBehavior = {
   }
 };
 ```
+
+Reference: `/core/misc/htmx/htmx-behaviors.js` lines 14–16 — `htmx:drupal:load` triggers `Drupal.attachBehaviors()`
 
 **Listening to HTMX lifecycle events:**
 
@@ -63,6 +67,8 @@ Drupal.behaviors.htmx = {
   }
 };
 ```
+
+Reference: `/core/misc/htmx/htmx-behaviors.js` lines 34–40 — ensures AJAX-inserted HTMX attributes work
 
 ## Common Mistakes
 

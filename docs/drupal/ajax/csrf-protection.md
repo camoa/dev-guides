@@ -1,6 +1,6 @@
 ---
 description: Protect AJAX endpoints from CSRF attacks using Drupal's token system and request validation
-tldr: "Drupal's Form API handles CSRF automatically. For custom AJAX routes outside Form API, add `_csrf_token: 'TRUE'` and verify request type."
+tldr: "Form API `#ajax` is CSRF-protected automatically. For custom POST AJAX routes use `_csrf_request_header_token: 'TRUE'` (validates X-CSRF-Token header). For GET action links use `_csrf_token: 'TRUE'` (validates `token=` query param)."
 drupal_version: "11.x"
 ---
 
@@ -8,55 +8,65 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Drupal's Form API handles CSRF automatically. For custom AJAX routes outside Form API, add `_csrf_token: 'TRUE'` and verify request type.
+> Drupal's Form API handles CSRF automatically for `#ajax` callbacks. For custom routes outside Form API, apply the correct requirement based on HTTP method.
+
+## Decision
+
+| Endpoint type | CSRF requirement | How it works |
+|---|---|---|
+| Custom AJAX POST route | `_csrf_request_header_token: 'TRUE'` | Validates X-CSRF-Token header Drupal AJAX sends automatically |
+| Action link / GET with side-effects | `_csrf_token: 'TRUE'` | Validates `token` query parameter appended by `Url::toString(TRUE)` |
+| Form API `#ajax` callback | Automatic — no route requirement needed | FormBuilder embeds and validates form token in every AJAX request |
 
 ## Pattern
 
-```yaml
-# Route definition with CSRF protection
-my_module.ajax_endpoint:
-  path: '/my-module/ajax/endpoint'
-  defaults:
-    _controller: '\Drupal\my_module\Controller\AjaxController::ajaxEndpoint'
-  requirements:
-    _permission: 'access content'
-    _csrf_token: 'TRUE'   # Enables CSRF protection for non-Form API routes
+```php
+// Form API: CSRF handled automatically — no route changes needed.
+$form['trigger'] = [
+  '#type' => 'button',
+  '#ajax' => ['callback' => '::ajaxCallback', 'wrapper' => 'target'],
+];
+
+// Custom POST AJAX route: use _csrf_request_header_token.
+// Drupal.ajax sends X-CSRF-Token header automatically on POST.
+// my_module.routing.yml:
+// my_module.ajax_endpoint:
+//   path: '/my-module/ajax/endpoint'
+//   defaults:
+//     _controller: '\Drupal\my_module\Controller\AjaxController::ajaxEndpoint'
+//   requirements:
+//     _permission: 'access content'
+//     _csrf_request_header_token: 'TRUE'
+
+// GET action link with token (destructive action via link):
+// my_module.delete_item:
+//   requirements:
+//     _csrf_token: 'TRUE'   # token= query param validated
+// (Url::toString(TRUE) appends the token automatically)
 ```
 
 ```php
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 public function ajaxEndpoint(Request $request) {
-  // Drupal validates CSRF token automatically when _csrf_token: TRUE
-  // Additional check: verify it's actually an AJAX request
+  // _csrf_request_header_token validates the token automatically.
+  // Additional check: verify it's actually an AJAX request.
   if (!$request->isXmlHttpRequest()) {
-    throw new AccessDeniedHttpException('AJAX requests only');
+    throw new AccessDeniedHttpException('AJAX requests only.');
   }
-
   return new AjaxResponse();
 }
 ```
 
-**Form API (automatic):**
-
-```php
-// No additional CSRF handling needed — Form API handles tokens automatically
-$form['trigger'] = [
-  '#type' => 'button',
-  '#value' => t('Submit'),
-  '#ajax' => ['callback' => '::ajaxCallback', 'wrapper' => 'target'],
-];
-```
-
-Reference: `core/lib/Drupal/Core/Access/CsrfRequestHeaderAccessCheck.php`
+Reference: `core/lib/Drupal/Core/Access/CsrfRequestHeaderAccessCheck.php`, `core/lib/Drupal/Core/Access/CsrfAccessCheck.php`
 
 ## Common Mistakes
 
-- **Wrong**: Disabling CSRF protection unnecessarily → **Right**: Drupal's AJAX system handles tokens automatically; don't remove protection
-- **Wrong**: Not validating AJAX requests → **Right**: Attackers can call endpoints directly; check `$request->isXmlHttpRequest()`
-- **Wrong**: Using GET for state-changing operations → **Right**: CSRF tokens protect POST; use POST for all data changes
-- **Wrong**: Trusting X-Requested-With header alone → **Right**: Can be spoofed; combine with token validation
-- **Wrong**: Not configuring trusted_host_patterns → **Right**: AJAX from untrusted origins; configure in settings.php
+- **Wrong**: Using `_csrf_token: 'TRUE'` on a POST AJAX route → **Right**: `_csrf_token` validates a URL query param, not the X-CSRF-Token header; use `_csrf_request_header_token: 'TRUE'` for POST routes
+- **Wrong**: Relying on X-Requested-With header alone → **Right**: Can be spoofed; it is not a substitute for token validation
+- **Wrong**: Using GET for state-changing operations → **Right**: GET bypasses header-based CSRF checks; use POST for all data changes
+- **Wrong**: Skipping CSRF entirely on custom routes → **Right**: Form API protects forms but custom routes need explicit requirements
+- **Wrong**: Not configuring trusted_host_patterns → **Right**: Requests from untrusted origins; configure in settings.php
 
 ## See Also
 

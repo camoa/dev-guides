@@ -19,6 +19,7 @@ drupal_version: "11.x"
 | Full page in response | Missing HtmxRenderer trigger | Add `_htmx_route: TRUE` or `onlyMainContent()` |
 | `select()` not working | Selector not in response | Response must contain element matching `select` attribute |
 | JS behaviors not running | Asset loading not complete | Use `htmx:drupal:load` event, not `htmx:afterSwap` |
+| Form not submitting | Route or CSRF issue | Check route exists and form has `form_token` |
 | OOB swap not working | ID mismatch | Page and response must have matching IDs |
 | History not updating | Missing `pushUrlHeader()` | Call `->pushUrlHeader($url)->applyTo($form)` |
 
@@ -44,6 +45,8 @@ htmx.on('htmx:responseError', (e) => console.error('Error:', e.detail));
 htmx.on('htmx:drupal:load', (e) => console.log('Drupal loaded:', e.detail));
 ```
 
+**Browser DevTools — Network tab:** Filter XHR, click request → Headers tab should show `HX-Request: true`, `HX-Target: #id`; Preview tab shows rendered HTML.
+
 **Server-side debugging:**
 
 ```php
@@ -52,12 +55,8 @@ if ($this->isHtmxRequest()) {
     '@trigger' => $this->getHtmxTriggerName(),
   ]);
 }
-```
-
-**Verify route option:**
-
-```bash
-drush route:debug | grep my_route
+// Verify route option
+$htmx_route = \Drupal::routeMatch()->getRouteObject()->getOption('_htmx_route') ?? FALSE;
 ```
 
 **Confirm `applyTo()` is called:**
@@ -66,6 +65,16 @@ drush route:debug | grep my_route
 $htmx = new Htmx();
 $htmx->get($url)->target('#content');
 $htmx->applyTo($build['element']);  // REQUIRED — without this, nothing is applied
+```
+
+**Verify CSRF token present:**
+
+View form source — should have `<input type="hidden" name="form_token">`. Drupal forms include this automatically.
+
+**Verify route exists:**
+
+```bash
+drush route:debug | grep my_route
 ```
 
 ## Common Mistakes

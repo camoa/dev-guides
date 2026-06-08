@@ -76,7 +76,7 @@ if ($trigger === 'email') {
 - **Not handling empty values** → Check if the field has a value before validating — empty blur should not show an error
 - **Creating a separate callback** → Put validation logic in `buildForm()` checking `getHtmxTriggerName()`. No callback needed
 - **Including a progress indicator** → HTMX is fast enough without progress indicators. Omit unless validation is slow
-- **Not throttling requests** → For expensive validation, add `->throttle('1s')` to prevent rapid-fire requests on every keystroke + blur
+- **Not throttling requests** → There is no `->throttle()` method. Throttle is a trigger modifier: use `->trigger('focusout throttle:1s')`. Debounce (delay) works similarly: `->trigger('focusout delay:500ms')`
 
 ## See Also
 

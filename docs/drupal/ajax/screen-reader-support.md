@@ -26,12 +26,13 @@ public function ajaxCallback(array &$form, FormStateInterface $form_state) {
     'polite'
   ));
 
-  // Method 2: MessageCommand with announce (visual + audio)
+  // Method 2: MessageCommand (visual + audio — announces by default)
   $response->addCommand(new MessageCommand(
     'Form saved successfully.',
     NULL,
-    ['type' => 'status'],
-    TRUE  // Announce to screen readers
+    ['type' => 'status']
+    // 4th param $clear_previous defaults to TRUE; announces via aria-live by default.
+    // Pass ['announce' => ''] in options to suppress announcement.
   ));
 
   // Method 3: Visually-hidden ARIA live region (in form build)

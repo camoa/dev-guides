@@ -25,6 +25,9 @@ drupal_version: "11.x"
 
 `FormBase` includes this trait automatically. Controllers must implement `getRequest()`.
 
+Reference: `/core/lib/Drupal/Core/Htmx/HtmxRequestInfoTrait.php` — 8 detection methods
+Reference: `/core/lib/Drupal/Core/Form/FormBase.php` line 48 — trait inclusion
+
 ## Pattern
 
 **In forms** (trait included automatically via `FormBase`):
@@ -74,6 +77,9 @@ $input = $form_state->getUserInput();
 $trigger = $input['_triggering_element_name'] ?? '';
 ```
 
+Reference: `/core/misc/htmx/htmx-assets.js` lines 59–62 — JS adds `_triggering_element_name` from `HX-Trigger-Name` header
+Reference: `/core/modules/config/src/Form/ConfigSingleExportForm.php` lines 136–161 — production example
+
 ## Common Mistakes
 
 - **Wrong**: Using `getHtmxTrigger()` for form element names → **Right**: Use `getHtmxTriggerName()` or `getUserInput()['_triggering_element_name']`
@@ -87,4 +93,4 @@ $trigger = $input['_triggering_element_name'] ?? '';
 - [Dynamic Forms](dynamic-forms.md)
 - [Production Example: ConfigSingleExportForm](production-example-config-export.md)
 - Reference: `/core/lib/Drupal/Core/Htmx/HtmxRequestInfoTrait.php`
-- Reference: `/core/modules/config/src/Form/ConfigSingleExportForm.php` lines 136-161
+- Reference: `/core/modules/config/src/Form/ConfigSingleExportForm.php` lines 136–161

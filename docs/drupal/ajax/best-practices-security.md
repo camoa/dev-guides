@@ -15,7 +15,7 @@ drupal_version: "11.x"
 | Vulnerability | Attack Vector | Prevention |
 |---------------|---------------|------------|
 | XSS | Unsanitized user input in AJAX response | Use render arrays; `Html::escape()` for manual markup |
-| CSRF | Forged requests to AJAX endpoints | Enable `_csrf_token` on routes; Form API handles automatically |
+| CSRF | Forged requests to AJAX endpoints | Form API handles automatically; add `_csrf_request_header_token: 'TRUE'` on custom POST AJAX routes |
 | Unauthorized access | Missing permission checks | Add `_permission` or `_custom_access` to every route |
 | SQL injection | User input in queries | Use Entity Query API; never concatenate user input |
 | File upload attacks | Malicious file uploads | Configure `#upload_validators` with extension, size, MIME |
@@ -27,7 +27,7 @@ drupal_version: "11.x"
 my_module.ajax_endpoint:
   requirements:
     _permission: 'access content'
-    _csrf_token: 'TRUE'
+    _csrf_request_header_token: 'TRUE'   // POST AJAX route: validates X-CSRF-Token header
 
 // 2. Return render arrays, not HTML strings
 // BAD:

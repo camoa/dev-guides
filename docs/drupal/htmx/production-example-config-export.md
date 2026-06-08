@@ -19,9 +19,11 @@ drupal_version: "11.x"
 | Trigger detection | Route different field changes | `getHtmxTriggerName()` |
 | History push | Update URL as selections change | `pushUrlHeader($url)` |
 
+Reference: `/core/modules/config/src/Form/ConfigSingleExportForm.php`
+
 ## Pattern
 
-**1. First select updates second select** (lines 92-107):
+**1. First select updates second select** (lines 92–107):
 
 ```php
 (new Htmx())
@@ -33,7 +35,7 @@ drupal_version: "11.x"
   ->applyTo($form['config_type']);
 ```
 
-**2. Second select updates display region** (lines 117-125):
+**2. Second select updates display region** (lines 117–125):
 
 ```php
 (new Htmx())
@@ -45,7 +47,7 @@ drupal_version: "11.x"
   ->applyTo($form['config_name']);
 ```
 
-**3. Trigger detection + OOB clear + history push** (lines 136-161):
+**3. Trigger detection + OOB clear + history push** (lines 136–161):
 
 ```php
 $trigger = $this->getHtmxTriggerName();
@@ -54,17 +56,28 @@ if ($trigger == 'config_type') {
   (new Htmx())
     ->swapOob('outerHTML:[data-export-wrapper]')
     ->applyTo($form['export'], '#wrapper_attributes');
-  $pushUrl = Url::fromRoute('config.export_single', ['config_type' => $default_type, 'config_name' => '']);
+  $pushUrl = Url::fromRoute('config.export_single',
+    ['config_type' => $default_type, 'config_name' => '']);
 }
 elseif ($trigger == 'config_name') {
   $form['export'] = $this->updateExport($form, $default_type, $default_name);
-  $pushUrl = Url::fromRoute('config.export_single', ['config_type' => $default_type, 'config_name' => $default_name]);
+  $pushUrl = Url::fromRoute('config.export_single',
+    ['config_type' => $default_type, 'config_name' => $default_name]);
 }
 
 if ($pushUrl) {
   (new Htmx())->pushUrlHeader($pushUrl)->applyTo($form);
 }
 ```
+
+**Key techniques demonstrated:**
+
+- Cascading dependent form fields
+- OOB swaps for multiple simultaneous updates
+- Browser history push to update URL as selections change
+- Trigger detection to handle different field changes
+- Wrapper selector patterns using `:has()` pseudo-class
+- Progressive enhancement (form POSTs normally without JavaScript)
 
 ## Common Mistakes
 

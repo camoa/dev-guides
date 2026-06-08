@@ -26,6 +26,8 @@ drupal_version: "11.x"
 | `triggerAfterSettleHeader(string\|array)` | `HX-Trigger-After-Settle` | Trigger events after settle |
 | `triggerAfterSwapHeader(string\|array)` | `HX-Trigger-After-Swap` | Trigger events after swap |
 
+Reference: `/core/lib/Drupal/Core/Htmx/Htmx.php` — 11 response header methods (lines 335–522)
+
 ## Pattern
 
 **Push URL to history:**
@@ -35,6 +37,8 @@ drupal_version: "11.x"
   ->pushUrlHeader(Url::fromRoute('my.route', ['type' => $type, 'name' => $name]))
   ->applyTo($form);
 ```
+
+Reference: `/core/modules/config/src/Form/ConfigSingleExportForm.php` lines 157–161
 
 **Trigger client-side events:**
 
@@ -56,9 +60,13 @@ $location_data = new HtmxLocationResponseData(
   path: Url::fromRoute('my.destination'),
   target: '#modal-content',
   swap: 'innerHTML',
+  values: ['key' => 'value'],
+  headers: ['X-Custom' => 'header']
 );
 (new Htmx())->locationHeader($location_data)->applyTo($build);
 ```
+
+Reference: `/core/lib/Drupal/Core/Htmx/HtmxLocationResponseData.php` — constructor at lines 42–52
 
 **Dynamic retarget/reswap:**
 
@@ -80,5 +88,5 @@ $location_data = new HtmxLocationResponseData(
 - [Drupal Behaviors Integration](drupal-behaviors.md)
 - [Production Example: ConfigSingleExportForm](production-example-config-export.md)
 - Reference: [HTMX Official Response Headers](https://htmx.org/reference/#response_headers)
-- Reference: `/core/lib/Drupal/Core/Htmx/Htmx.php` lines 335-522
+- Reference: `/core/lib/Drupal/Core/Htmx/Htmx.php` lines 335–522
 - Reference: `/core/lib/Drupal/Core/Htmx/HtmxLocationResponseData.php`
