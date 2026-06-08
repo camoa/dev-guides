@@ -16,6 +16,7 @@ drupal_version: "11.x"
 |------|------|-------------|
 | Security | Validate all inputs server-side | Trusting client data |
 | Security | Return render arrays, not HTML strings | Manual HTML strings = XSS risk |
+| Security | Test all HTMX interactions under your CSP | Assuming strict CSP works out of the box |
 | Performance | Use `onlyMainContent()` or `_htmx_route` | Full page responses for HTMX endpoints |
 | Performance | Cache render arrays with contexts/tags | Uncached HTMX responses |
 | Performance | Debounce live search (500ms) | Request on every keystroke |
@@ -39,6 +40,8 @@ public function buildForm(array $form, FormStateInterface $form_state, string $t
 }
 ```
 
+**CSP limitation:** Strict CSP policies that exclude `style-src 'unsafe-inline'` are not yet fully supported in Drupal core. A `style-src 'self'` policy (without `unsafe-inline`) causes CSP violations in multiple places across core. Tracked as [#3582309](https://www.drupal.org/node/3582309) (`main` branch, Active). Do not deploy a restrictive CSP in production without testing all HTMX interactions under that policy.
+
 **Performance — caching:**
 
 ```php
@@ -50,6 +53,18 @@ $build['#cache'] = [
 ];
 ```
 
+**Performance — avoid N+1 queries:**
+
+```php
+// GOOD: Load all at once
+$entities = $this->entityTypeManager->getStorage('node')->loadMultiple($ids);
+
+// BAD: Loop loading
+foreach ($ids as $id) {
+  $entity = $this->entityTypeManager->getStorage('node')->load($id);
+}
+```
+
 **Accessibility — ARIA live region:**
 
 ```php
@@ -57,6 +72,14 @@ $build['results'] = [
   '#type' => 'container',
   '#attributes' => ['id' => 'search-results', 'aria-live' => 'polite', 'aria-atomic' => 'true'],
 ];
+```
+
+**Accessibility — focus management for major swaps:**
+
+```php
+(new Htmx())
+  ->on('::afterSwap', 'document.querySelector("#modal-content").focus()')
+  ->applyTo($build['trigger']);
 ```
 
 **Progressive enhancement:**
@@ -69,6 +92,22 @@ $form['#method'] = 'post';
 (new Htmx())->post(Url::fromRoute('my.form'))->onlyMainContent()->applyTo($form['submit']);
 ```
 
+**Dependency injection:**
+
+```php
+// GOOD
+class MyForm extends FormBase {
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+  ) {}
+  public static function create(ContainerInterface $container) {
+    return new static($container->get('entity_type.manager'));
+  }
+}
+// BAD: Static service call
+$entity = \Drupal::entityTypeManager()->getStorage('node')->load($id);
+```
+
 ## Common Mistakes
 
 - **Wrong**: Trusting client input → **Right**: Always validate server-side
@@ -77,6 +116,7 @@ $form['#method'] = 'post';
 - **Wrong**: Building HTML strings → **Right**: XSS vulnerabilities; use render arrays
 - **Wrong**: Not testing without JavaScript → **Right**: Progressive enhancement fails
 - **Wrong**: Using `<div>` with HTMX attributes → **Right**: Use semantic `<button>`, `<a>` elements
+- **Wrong**: Deploying strict CSP without testing → **Right**: Core has known CSP issues (#3582309); test thoroughly
 
 ## See Also
 
@@ -84,3 +124,4 @@ $form['#method'] = 'post';
 - [Troubleshooting](troubleshooting.md)
 - Reference: [Drupal Security Best Practices](https://www.drupal.org/docs/security-in-drupal)
 - Reference: [WCAG Quick Reference](https://www.w3.org/WAI/WCAG21/quickref/)
+- Reference: [Drupal Core Issue #3582309 — CSP support](https://www.drupal.org/node/3582309)

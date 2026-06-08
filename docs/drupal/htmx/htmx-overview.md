@@ -1,6 +1,6 @@
 ---
 description: HTMX in Drupal 11.3+ — core concepts, benefits, and when to use declarative HTML-driven interactions
-tldr: "Use HTMX when you're building interactive Drupal features that update page regions without full page reloads and want a simpler approach than traditional AJAX. Use traditional AJAX when you need complex command sequences or contrib module…"
+tldr: "Use HTMX when you're building interactive Drupal features that update page regions without full page reloads and want a simpler approach than traditional AJAX. Use traditional AJAX when you need complex command sequences or contrib module compatibility."
 drupal_version: "11.x"
 ---
 
@@ -16,9 +16,9 @@ drupal_version: "11.x"
 |-----------|--------|-----|
 | Content replacement, simple swap | HTMX | Declarative attributes, less code |
 | Forms with dependent fields | HTMX | Automatic form_build_id, cleaner DX |
-| Up to 71% less JavaScript needed | HTMX | Drupal 11.3 core integration |
 | Complex AJAX command sequences | Traditional AJAX | Fine-grained DOM control |
 | Contrib module integration | Traditional AJAX | Maintain compatibility |
+| Heavy client-side processing | Traditional AJAX | HTMX is server-driven |
 
 ## Pattern
 
@@ -29,6 +29,17 @@ drupal_version: "11.x"
 ```
 
 HTMX extends HTML with attributes that enable dynamic content updates without extensive JavaScript. Elements issue HTTP requests and swap content directly in the DOM.
+
+**Key benefits:**
+
+- **Declarative**: HTML attributes replace imperative JavaScript
+- **Smaller footprint**: Up to 71% less JavaScript compared to traditional AJAX
+- **Progressive enhancement**: Forms/links work without JavaScript
+- **Hypermedia-driven**: Aligns with web platform patterns
+- **Seamless integration**: Works with Drupal's render system and behaviors
+
+Reference: Change record "Ajax subsystem now includes HTMX" — Drupal 11.3.0 (September 10, 2025)
+Reference: `/core/lib/Drupal/Core/Htmx/Htmx.php`
 
 ## Common Mistakes
 
@@ -43,4 +54,3 @@ HTMX extends HTML with attributes that enable dynamic content updates without ex
 - [Request/Response Lifecycle](request-response-lifecycle.md)
 - Reference: [Official HTMX documentation](https://htmx.org/reference/)
 - Reference: [Drupal 11.3 HTMX announcement](https://www.drupal.org/about/core/blog/native-htmx-in-drupal-1130-rich-ux-with-up-to-71-less-javascript)
-- Reference: `/core/lib/Drupal/Core/Htmx/Htmx.php`

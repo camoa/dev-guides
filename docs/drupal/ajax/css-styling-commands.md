@@ -1,6 +1,6 @@
 ---
 description: AJAX commands for CSS properties, jQuery method invocation, data attributes, and dynamic CSS loading
-tldr: "Use CSS styling commands for dynamic visual changes triggered by AJAX responses. Prefer adding classes over inline styles."
+tldr: "Use CssCommand for inline styles, InvokeCommand for jQuery methods, DataCommand for `.data()`. AddCssCommand expects `[['href' => '...']]` (link attribute arrays, not library-registry format) — prefer `#attached` for static assets."
 drupal_version: "11.x"
 ---
 
@@ -25,6 +25,7 @@ drupal_version: "11.x"
 use Drupal\Core\Ajax\CssCommand;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\DataCommand;
+use Drupal\Core\Ajax\AddCssCommand;
 
 $response = new AjaxResponse();
 
@@ -42,6 +43,13 @@ $response->addCommand(new InvokeCommand('#field', 'val', ['New value']));
 // Attach data to element
 $response->addCommand(new DataCommand('#element', 'userId', 123));
 // Retrieved in JS: $('#element').data('userId')
+
+// Dynamically load a CSS file.
+// Constructor expects an array of attribute arrays — each becomes a <link> element.
+// Do NOT pass a library-registry nested array.
+$response->addCommand(new AddCssCommand([
+  ['href' => '/modules/custom/my_module/css/dynamic.css'],
+]));
 ```
 
 Reference: `core/lib/Drupal/Core/Ajax/CssCommand.php`, `core/lib/Drupal/Core/Ajax/InvokeCommand.php`
@@ -52,10 +60,11 @@ Reference: `core/lib/Drupal/Core/Ajax/CssCommand.php`, `core/lib/Drupal/Core/Aja
 - **Wrong**: Invoking non-existent jQuery methods → **Right**: Silent failures in production; test thoroughly before deploying
 - **Wrong**: Overusing InvokeCommand → **Right**: Prefer semantic commands (ReplaceCommand, CssCommand); InvokeCommand is a fallback
 - **Wrong**: Not ensuring jQuery is loaded → **Right**: Add `core/jquery` to library dependencies
+- **Wrong**: Passing a library-registry array to AddCssCommand → **Right**: Constructor expects `[['href' => '...']]`; use `#attached` for static assets
 - **Wrong**: Using AddCssCommand for static assets → **Right**: Use `#attached` for aggregation and caching benefits
 
 ## See Also
 
 - [Content Manipulation Commands](content-manipulation-commands.md)
 - [Dialog Commands](dialog-commands.md)
-- Reference: `core/lib/Drupal/Core/Ajax/InvokeCommand.php`
+- Reference: `core/lib/Drupal/Core/Ajax/AddCssCommand.php`, `core/lib/Drupal/Core/Ajax/InvokeCommand.php`

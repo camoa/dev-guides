@@ -28,18 +28,19 @@ drupal_version: "11.x"
 (new Htmx())
   ->get(Url::fromRoute('my.load_more', ['page' => $page + 1]))
   ->target('#items-container')
-  ->swap('beforeend')
-  ->select('#items-container > *')
+  ->swap('beforeend')               // Append to container
+  ->select('#items-container > *')  // Extract only new items
   ->applyTo($build['load_more']);
 ```
 
 **Infinite scroll:**
 
 ```php
-$build['sentinel'] = ['#type' => 'html_tag', '#tag' => 'div'];
+$build['sentinel'] = ['#type' => 'html_tag', '#tag' => 'div',
+  '#attributes' => ['id' => 'scroll-sentinel']];
 (new Htmx())
   ->get(Url::fromRoute('my.load_more', ['page' => $page + 1]))
-  ->trigger('revealed')
+  ->trigger('revealed')             // Fire when scrolled into view
   ->target('#items-container')
   ->swap('beforeend')
   ->select('#items-container > *')

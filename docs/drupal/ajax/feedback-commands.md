@@ -1,6 +1,6 @@
 ---
 description: Show messages, alerts, and screen reader announcements after AJAX operations using MessageCommand, AlertCommand, and AnnounceCommand
-tldr: "Use MessageCommand for all user-facing messages. Use AnnounceCommand to notify screen readers of content changes."
+tldr: "MessageCommand: 4th param is `$clear_previous`; control screen-reader announcements via `$options['announce']`. AnnounceCommand provides screen-reader-only output; 'polite' waits, 'assertive' interrupts. Never use AlertCommand in production."
 drupal_version: "11.x"
 ---
 
@@ -26,15 +26,24 @@ use Drupal\Core\Ajax\AnnounceCommand;
 
 $response = new AjaxResponse();
 
-// User-facing message (auto-escaped, screen reader aware)
+// Default: clears previous messages, announces via aria-live (polite).
 $response->addCommand(new MessageCommand(
   'Operation successful',
-  NULL,                      // Selector (NULL = default message region)
+  NULL,                      // NULL = default message region
   ['type' => 'status'],      // status, warning, error
-  TRUE                       // Announce to screen readers
+  TRUE                       // $clear_previous: clear prior messages first (default TRUE)
 ));
 
-// Screen reader only announcement
+// Suppress screen reader announcement:
+$response->addCommand(new MessageCommand('Saved.', NULL, ['announce' => '']));
+
+// Assertive announcement (errors requiring immediate attention):
+$response->addCommand(new MessageCommand('Upload failed.', NULL, [
+  'type' => 'error',
+  'priority' => 'assertive',
+]));
+
+// Screen reader only announcement (no visual output)
 $response->addCommand(new AnnounceCommand(
   'Content updated',
   'polite'  // 'polite' (wait) or 'assertive' (interrupt)
@@ -45,11 +54,12 @@ Reference: `core/lib/Drupal/Core/Ajax/MessageCommand.php`, `core/lib/Drupal/Core
 
 ## Common Mistakes
 
+- **Wrong**: Treating the 4th param as an announce flag → **Right**: The 4th param is `$clear_previous`; control announcements via `$options['announce']`
 - **Wrong**: Using AlertCommand in production → **Right**: Blocks all page interaction; use MessageCommand for all user-facing messages
 - **Wrong**: Not announcing AJAX updates to screen readers → **Right**: WCAG violation; always use AnnounceCommand or MessageCommand with announce option
 - **Wrong**: Using 'assertive' priority unnecessarily → **Right**: Interrupts current screen reader speech; reserve for critical errors only
-- **Wrong**: Not escaping user input in messages → **Right**: MessageCommand auto-escapes, but verify any custom implementations
-- **Wrong**: Not clearing old messages → **Right**: Messages accumulate; use RemoveCommand to clear message container when needed
+- **Wrong**: Combining MessageCommand and AnnounceCommand in the same response → **Right**: Can cause double-announcements; test with a screen reader
+- **Wrong**: Not clearing old messages → **Right**: Messages accumulate; pass `TRUE` as 4th param to clear, or use RemoveCommand
 
 ## See Also
 

@@ -54,6 +54,24 @@ $form['load_button'] = ['#type' => 'button', '#value' => 'Load Content'];
 // Controller returns render array directly — no callback needed
 ```
 
+**AJAX form → HTMX form:**
+
+Before (AJAX): `#ajax` array with callback returning `$form['name_wrapper']`
+
+After (HTMX):
+
+```php
+$form['type'] = ['#type' => 'select', '#options' => $types, '#default_value' => $type];
+(new Htmx())
+  ->post(Url::fromRoute('<current>'))
+  ->onlyMainContent()
+  ->select('*:has(>select[name="name"])')
+  ->target('*:has(>select[name="name"])')
+  ->swap('outerHTML')
+  ->applyTo($form['type']);
+// No callback needed — buildForm() handles everything via getHtmxTriggerName()
+```
+
 **Multiple AJAX commands → OOB swaps:**
 
 Before (AJAX):
@@ -73,6 +91,17 @@ After (HTMX):
 // JS: htmx.on('showAlert', () => document.querySelector('.alert').show());
 ```
 
+**Comparison:**
+
+| Aspect | AJAX | HTMX |
+|---|---|---|
+| Response type | JSON with commands | HTML render arrays |
+| Configuration | `#ajax` array | `Htmx` class methods |
+| Callbacks | Required | Optional (use routes) |
+| Multiple updates | Command array | Out-of-band swaps |
+| Progressive enhancement | Harder | Built-in |
+| form_build_id | Manual handling | Automatic OOB swap |
+
 **Migration checklist:**
 
 - [ ] Identify AJAX callbacks — simple content returns migrate well
@@ -82,6 +111,8 @@ After (HTMX):
 - [ ] Test progressive enhancement — form should work without JavaScript
 - [ ] Update tests — change AJAX test expectations to HTMX
 - [ ] Document decisions — why some stayed AJAX, why some moved
+
+Reference: `/core/modules/system/tests/modules/test_htmx/src/Form/HtmxTestAjaxForm.php` demonstrates AJAX inserting HTMX content (both systems coexisting)
 
 ## Common Mistakes
 

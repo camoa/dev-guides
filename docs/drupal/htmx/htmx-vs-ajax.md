@@ -44,6 +44,8 @@ $build = ['#markup' => '<div>Content</div>'];
 return $build;
 ```
 
+Reference: `/core/modules/system/tests/modules/test_htmx/src/Form/HtmxTestAjaxForm.php` demonstrates AJAX inserting HTMX content (both systems coexisting).
+
 ## Common Mistakes
 
 - **Wrong**: Trying to use AJAX commands with HTMX → **Right**: HTMX returns HTML, not JSON commands

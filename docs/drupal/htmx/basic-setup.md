@@ -35,6 +35,8 @@ my_module.htmx_content:
     _htmx_route: TRUE
 ```
 
+Reference: `/core/modules/system/tests/modules/test_htmx/test_htmx.routing.yml` lines 41–49
+
 **Step 2: Controller** (`src/Controller/MyController.php`):
 
 ```php
@@ -57,11 +59,15 @@ class MyController extends ControllerBase {
 }
 ```
 
+Reference: `/core/modules/system/tests/modules/test_htmx/src/Controller/HtmxTestAttachmentsController.php`
+
 Library attaches automatically via `applyTo()`. Manual attachment only needed if not using the `Htmx` class:
 
 ```php
 $build['#attached']['library'][] = 'core/drupal.htmx';
 ```
+
+Reference: `/core/lib/Drupal/Core/Htmx/Htmx.php` lines 1291–1295
 
 ## Common Mistakes
 

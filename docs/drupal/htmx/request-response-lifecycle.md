@@ -25,19 +25,29 @@ drupal_version: "11.x"
 
 1. **Request Initiated** — User interacts with HTMX-enabled element
 2. **Request Configuration** (`htmx:configRequest`) — JS adds `_wrapper_format=drupal_htmx`, `ajax_page_state`, `_triggering_element_name`
+   - Reference: `/core/misc/htmx/htmx-assets.js` lines 39–62
 3. **Server Processing** — Route to controller/form; Drupal detects HTMX via headers
 4. **Response Generation** — Controller returns render array with HTMX attributes/headers via `Htmx` class
-5. **Response Rendering** — `HtmxRenderer` creates minimal HTML (noindex meta, no sidebars/header/footer)
+5. **Response Rendering** — `HtmxRenderer` creates minimal HTML:
+   ```html
+   <!doctype html><html><head>
+   <meta name="robots" content="noindex">
+   <title>Page Title</title>
+   </head><body><!-- status messages --><!-- main content --></body></html>
+   ```
+   Reference: `/core/lib/Drupal/Core/Render/MainContent/HtmxRenderer.php` lines 53–73
 6. **Asset Loading** (`htmx:beforeSwap`) — JS extracts and loads new CSS/JS not already on page
+   - Reference: `/core/misc/htmx/htmx-assets.js` lines 84–146
 7. **Content Swap** — HTMX swaps content per swap strategy (`outerHTML`, `innerHTML`, etc.)
 8. **Behaviors Attach** (`htmx:drupal:load`) — Drupal behaviors run on new content
+   - Reference: `/core/misc/htmx/htmx-behaviors.js` lines 14–16
 
 ## Common Mistakes
 
 - **Wrong**: Not understanding `onlyMainContent()` vs `_htmx_route` → **Right**: Both trigger HtmxRenderer but through different mechanisms
 - **Wrong**: Expecting full page HTML in response → **Right**: HtmxRenderer returns minimal structure with noindex meta tag
 - **Wrong**: Not accounting for asset loading delay → **Right**: Behaviors fire AFTER assets load, not immediately after swap
-- **Wrong**: Forgetting history cleanup → **Right**: `htmx:beforeHistoryUpdate` removes wrapper_format from URLs automatically
+- **Wrong**: Forgetting history cleanup → **Right**: `htmx:beforeHistoryUpdate` removes `_wrapper_format` from URLs automatically
 
 ## See Also
 

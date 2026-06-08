@@ -50,6 +50,8 @@ $form['name'] = [
 ];
 ```
 
+Reference: `/core/modules/config/src/Form/ConfigSingleExportForm.php` lines 92–125
+
 **Trigger detection:**
 
 ```php
@@ -67,6 +69,8 @@ if ($trigger === 'type') {
   ->applyTo($form['display'], '#wrapper_attributes');
 ```
 
+Reference: `/core/modules/config/src/Form/ConfigSingleExportForm.php` lines 141–143
+
 **Browser history push:**
 
 ```php
@@ -77,7 +81,11 @@ if ($this->getHtmxTriggerName() === 'name') {
 }
 ```
 
+Reference: `/core/modules/config/src/Form/ConfigSingleExportForm.php` lines 157–161
+
 `FormBuilder` automatically handles `form_build_id` for HTMX requests via OOB swap — no action needed.
+
+Reference: `/core/lib/Drupal/Core/Form/FormBuilder.php` lines 782–790
 
 ## Common Mistakes
 

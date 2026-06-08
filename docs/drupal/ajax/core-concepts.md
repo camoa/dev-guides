@@ -1,6 +1,6 @@
 ---
 description: Drupal AJAX architecture — three-layer system, workflow, and minimal form pattern
-tldr: "Use Drupal AJAX when maintaining existing codebases, working with contributed modules, or needing backward compatibility. Use HTMX (available in Drupal 11.3+) for new projects — it reduces JavaScript size by up to 71%."
+tldr: "Drupal AJAX: PHP callbacks return AjaxResponse objects; clients execute commands and re-attach behaviors. Required for ordered sequences, the dialog system, and contrib compatibility. HTMX is the alternative for new work in Drupal 11.3+."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use Drupal AJAX when maintaining existing codebases, working with contributed modules, or needing backward compatibility. Use HTMX (available in Drupal 11.3+) for new projects — it reduces JavaScript size by up to 71%.
+> Use Drupal AJAX when maintaining existing codebases, working with contributed modules, or requiring ordered command sequences and the core dialog system. See [Drupal HTMX Development Guide](../htmx/index.md) for HTMX-based approaches available in Drupal 11.3+.
 
 ## Decision
 
@@ -74,4 +74,4 @@ Reference: `core/lib/Drupal/Core/Form/FormBuilderInterface.php`
 
 - [Form Element AJAX Configuration](form-element-ajax-configuration.md)
 - Reference: [Drupal AJAX API documentation](https://www.drupal.org/docs/drupal-apis/ajax-api)
-- Reference: [AJAX API to HTMX migration](https://www.drupal.org/docs/develop/drupal-apis/htmx/ajax-api-to-htmx)
+- Reference: [AJAX API to HTMX documentation](https://www.drupal.org/docs/develop/drupal-apis/htmx/ajax-api-to-htmx)

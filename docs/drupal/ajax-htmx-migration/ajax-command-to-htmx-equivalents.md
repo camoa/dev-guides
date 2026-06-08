@@ -26,6 +26,8 @@ drupal_version: "11.x"
 | `SettingsCommand` | Auto-merged | Via `htmx-assets.js` |
 | `InvokeCommand` | `on('::afterSwap', 'fn()')` | Custom JavaScript event |
 | `CssCommand` | Custom trigger header + JS | Not built-in, use events |
+| `AddCssCommand` | Not needed | Response CSS assets auto-merge via `htmx-assets.js` |
+| `AddJsCommand` | Not needed | Response JS assets auto-merge via `htmx-assets.js` |
 | Multiple commands | `swapOob()` | Out-of-band swaps for multiple elements |
 
 ## Pattern
