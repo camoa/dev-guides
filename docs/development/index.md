@@ -27,3 +27,4 @@ guide-meta:
 | Apply SOLID design principles | [SOLID Principles](solid-principles/index.md) |
 | Practice test-driven or spec-driven development | [TDD & Spec-Driven Development](tdd-spec-driven/index.md) |
 | Choose the right file-reading strategy (grep vs full read vs subagent) | [Context-Efficient Reading Strategy](reading-strategy/index.md) |
+| Choose the right test type, structure, and strategy for any stack | [Testing Strategy](testing-strategy/index.md) |

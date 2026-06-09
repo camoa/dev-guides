@@ -526,5 +526,11 @@
     "partitioned": "2026-05-20",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 12
+  },
+  "development/testing-strategy": {
+    "source_hash": "809dd5cebbfdc3aa410c18a2ca2122bef9795fc411d3c13a0c9bf1c5deebfcfc",
+    "partitioned": "2026-06-08",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 17
   }
 }

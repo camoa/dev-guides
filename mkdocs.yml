@@ -1581,6 +1581,25 @@ nav:
       - development/reading-strategy/token-warning-interpretation.md
       - development/reading-strategy/pre-completion-checklist.md
       - development/reading-strategy/quick-reference.md
+    - Testing Strategy:
+      - development/testing-strategy/index.md
+      - development/testing-strategy/testing-strategy-overview.md
+      - development/testing-strategy/test-pyramid-vs-trophy.md
+      - development/testing-strategy/unit-testing-concepts.md
+      - development/testing-strategy/integration-testing-concepts.md
+      - development/testing-strategy/functional-testing-concepts.md
+      - development/testing-strategy/e2e-testing-concepts.md
+      - development/testing-strategy/visual-regression-concepts.md
+      - development/testing-strategy/contract-api-testing-concepts.md
+      - development/testing-strategy/performance-testing-concepts.md
+      - development/testing-strategy/accessibility-testing-concepts.md
+      - development/testing-strategy/test-doubles.md
+      - development/testing-strategy/test-structure-and-naming.md
+      - development/testing-strategy/determinism-and-flakiness.md
+      - development/testing-strategy/coverage-philosophy.md
+      - development/testing-strategy/what-to-test-and-what-not.md
+      - development/testing-strategy/best-practices-and-anti-patterns.md
+      - development/testing-strategy/choosing-a-test-type.md
   - AI Tooling:
     - ai-tooling/index.md
     - Figma MCP Server:
