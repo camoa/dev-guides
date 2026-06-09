@@ -21,3 +21,5 @@ guide-meta:
 | I need to... | Guide |
 |-------------|-------|
 | Build polished JS-CSS interactions (cursor effects, scroll choreography, GSAP patterns) | [Interaction Craft](interaction-craft/index.md) |
+| Implement phishing-resistant passwordless authentication with WebAuthn passkeys | [Passkeys / WebAuthn](passkeys/index.md) |
+| Build accessible, autofill-ready HTML forms with native browser validation | [HTML Forms](forms/index.md) |

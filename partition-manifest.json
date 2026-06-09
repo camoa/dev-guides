@@ -246,10 +246,10 @@
     "guides_extracted": 15
   },
   "development/security-practices": {
-    "source_hash": "5a5238f8f23d117aacf143e63642b4c9c02fdc2302734ac62df61a9d0415d022",
-    "partitioned": "2026-02-14",
-    "partitioned_by": "camoa",
-    "guides_extracted": 22
+    "source_hash": "46cdcf9e7bd8f54febce32e06a88be3e99ca276ce2d4b81313a53568b4f6cbb5",
+    "partitioned": "2026-06-09",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 23
   },
   "drupal/media-system": {
     "source_hash": "2fd4b1d18e03edf803bc59099afdb702bf85694ddb81e10b99ed3fa36cea2bf8",
@@ -354,10 +354,10 @@
     "guides_extracted": 7
   },
   "css/modern-css": {
-    "source_hash": "1d52b980888344de7c1cd35e74e0f158978f9aa6b30faa992489b8e82b04d805",
-    "partitioned": "2026-04-08",
+    "source_hash": "9ede502ff779e4ac2394e8817c95189e58f055a17ebdad691f1982ddd8ddbe1d",
+    "partitioned": "2026-06-09",
     "partitioned_by": "Carlos Ospina",
-    "guides_extracted": 26
+    "guides_extracted": 27
   },
   "drupal/canvas": {
     "source_hash": "aa9164dc53d1ddf236119c4afd8f02fa3d9adb7381626c1690a1e5ba9313685d",
@@ -532,5 +532,35 @@
     "partitioned": "2026-06-08",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 17
+  },
+  "js/passkeys": {
+    "source_hash": "33034df5ea13d3b831a099e5bc4bb006466f6e3195dc9d1c5f2f34dc25091c75",
+    "partitioned": "2026-06-09",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 6
+  },
+  "js/forms": {
+    "source_hash": "89150bc0668ff3fbe18ed0a3ba8d61dd1cf4b98a2c99c27ca7c2bb8304c98a6e",
+    "partitioned": "2026-06-09",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 8
+  },
+  "ai-tooling/modern-web-guidance": {
+    "source_hash": "374cb49a767fdcfdb1f0ae3ea88f345cb7718aa1902ffc376af08da9b8e046dc",
+    "partitioned": "2026-06-09",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 5
+  },
+  "performance/web-performance": {
+    "source_hash": "796cad3dcde237752fb7ca2f6cf4c5d8cf03d018c5a15534182b575910933c64",
+    "partitioned": "2026-06-09",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 10
+  },
+  "accessibility/fundamentals": {
+    "source_hash": "45e169c22112ac11939d467b609f8052e8a9d527e88a89f1751014c80081d156",
+    "partitioned": "2026-06-09",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 12
   }
 }

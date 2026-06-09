@@ -20,3 +20,4 @@ guide-meta:
 | I need to... | Guide |
 |-------------|-------|
 | Connect AI agents to Figma for design-to-code generation | [Figma MCP Server](figma-mcp/index.md) |
+| Give my coding agent web platform expertise and Baseline compatibility data | [Modern Web Guidance](modern-web-guidance/index.md) |
