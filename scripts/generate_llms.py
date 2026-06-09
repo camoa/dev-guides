@@ -35,6 +35,8 @@ CATEGORY_MAP = {
     "ai-tooling": "AI Tooling",
     "decoupled": "Decoupled",
     "testing": "Testing",
+    "performance": "Performance",
+    "accessibility": "Accessibility",
 }
 
 # Category display order
@@ -46,6 +48,8 @@ CATEGORY_ORDER = [
     "Design Systems",
     "Next.js",
     "Development Practices",
+    "Performance",
+    "Accessibility",
     "AI Tooling",
     "Decoupled",
     "Testing",
