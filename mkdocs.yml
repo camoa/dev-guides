@@ -1527,6 +1527,7 @@ nav:
       - development/security-practices/security-anti-patterns.md
       - development/security-practices/security-checklist.md
       - development/security-practices/security-headers.md
+      - development/security-practices/browser-security-policies.md
       - development/security-practices/security-mindset-overview.md
       - development/security-practices/sensitive-data-protection.md
       - development/security-practices/sources-maintenance-manifest.md
@@ -1600,8 +1601,45 @@ nav:
       - development/testing-strategy/what-to-test-and-what-not.md
       - development/testing-strategy/best-practices-and-anti-patterns.md
       - development/testing-strategy/choosing-a-test-type.md
+  - Performance:
+    - performance/index.md
+    - Web Performance:
+      - performance/web-performance/index.md
+      - performance/web-performance/core-web-vitals-overview.md
+      - performance/web-performance/critical-rendering-path.md
+      - performance/web-performance/resource-hints.md
+      - performance/web-performance/lcp-image-optimization.md
+      - performance/web-performance/inp-scheduler-api.md
+      - performance/web-performance/inp-field-measurement.md
+      - performance/web-performance/css-containment-performance.md
+      - performance/web-performance/service-worker-caching.md
+      - performance/web-performance/code-splitting.md
+      - performance/web-performance/web-font-performance.md
+  - Accessibility:
+    - accessibility/index.md
+    - Fundamentals:
+      - accessibility/fundamentals/index.md
+      - accessibility/fundamentals/semantic-structure.md
+      - accessibility/fundamentals/aria-usage.md
+      - accessibility/fundamentals/accessible-names.md
+      - accessibility/fundamentals/keyboard-and-focus.md
+      - accessibility/fundamentals/live-regions.md
+      - accessibility/fundamentals/forms-accessibility.md
+      - accessibility/fundamentals/media-alternatives.md
+      - accessibility/fundamentals/color-and-typography.md
+      - accessibility/fundamentals/motion-preferences.md
+      - accessibility/fundamentals/native-dialog.md
+      - accessibility/fundamentals/document-metadata.md
+      - accessibility/fundamentals/accessibility-testing.md
   - AI Tooling:
     - ai-tooling/index.md
+    - Modern Web Guidance:
+      - ai-tooling/modern-web-guidance/index.md
+      - ai-tooling/modern-web-guidance/what-is-modern-web-guidance.md
+      - ai-tooling/modern-web-guidance/install-claude-code.md
+      - ai-tooling/modern-web-guidance/install-other-agents.md
+      - ai-tooling/modern-web-guidance/using-it-effectively.md
+      - ai-tooling/modern-web-guidance/relationship-to-dev-guides.md
     - Figma MCP Server:
       - ai-tooling/figma-mcp/index.md
       - ai-tooling/figma-mcp/figma-mcp-overview.md
@@ -1639,6 +1677,7 @@ nav:
       - css/modern-css/color-mix.md
       - css/modern-css/relative-color.md
       - css/modern-css/light-dark.md
+      - css/modern-css/color-scheme-dark-mode.md
       - css/modern-css/scroll-driven-animations.md
       - css/modern-css/starting-style-transitions.md
       - css/modern-css/view-transitions.md
@@ -1706,6 +1745,24 @@ nav:
       - js/interaction-craft/form-interaction-craft.md
       - js/interaction-craft/animation-orchestration.md
       - js/interaction-craft/performance-and-event-handling.md
+    - Passkeys:
+      - js/passkeys/index.md
+      - js/passkeys/passkeys-overview.md
+      - js/passkeys/passkey-registration.md
+      - js/passkeys/passkey-conditional-create.md
+      - js/passkeys/passkey-authentication.md
+      - js/passkeys/passkey-management.md
+      - js/passkeys/passkey-reauthentication.md
+    - HTML Forms:
+      - js/forms/index.md
+      - js/forms/form-structure-semantics.md
+      - js/forms/input-types-and-modes.md
+      - js/forms/autocomplete-and-autofill.md
+      - js/forms/autofill-visual-feedback.md
+      - js/forms/native-validation.md
+      - js/forms/field-sizing.md
+      - js/forms/styling-native-select.md
+      - js/forms/rich-media-input.md
   - Media:
     - media/index.md
     - Image & Media Craft:

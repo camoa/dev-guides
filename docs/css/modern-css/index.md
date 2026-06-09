@@ -18,6 +18,10 @@ guide-meta:
     - "@property"
     - subgrid
     - light-dark()
+    - color-scheme
+    - dark mode FOUC
+    - scrollbar-color
+    - accent-color
     - interpolate-size
     - animate height auto
     - field-sizing
@@ -66,6 +70,7 @@ Recently-shipped CSS features with decision guidance — when to reach for each,
 - [color-mix()](color-mix.md)
 - [Relative Color Syntax](relative-color.md)
 - [light-dark() — One-Line Dark Mode](light-dark.md)
+- [color-scheme & Dark Mode Mechanics](color-scheme-dark-mode.md)
 
 ## Animation
 - [Scroll-Driven Animations](scroll-driven-animations.md)
