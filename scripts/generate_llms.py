@@ -35,9 +35,13 @@ CATEGORY_MAP = {
     "ai-tooling": "AI Tooling",
     "decoupled": "Decoupled",
     "testing": "Testing",
+    "performance": "Performance",
+    "accessibility": "Accessibility",
 }
 
-# Category display order
+# Preferred category display order. This is an ORDERING HINT, not a gate:
+# categories not listed here are still emitted (appended alphabetically). Add a
+# category here only to control where it appears.
 CATEGORY_ORDER = [
     "Drupal",
     "CSS",
@@ -46,6 +50,8 @@ CATEGORY_ORDER = [
     "Design Systems",
     "Next.js",
     "Development Practices",
+    "Performance",
+    "Accessibility",
     "AI Tooling",
     "Decoupled",
     "Testing",
@@ -101,9 +107,33 @@ def extract_summary(content: str) -> str:
 
 
 def get_category(key: str) -> str:
-    """Get display category from topic key prefix."""
+    """Get display category from topic key prefix.
+
+    Falls back to a prettified prefix (e.g. 'web-components' -> 'Web Components')
+    for categories not explicitly mapped, so new categories get a sane name.
+    """
     prefix = key.split("/")[0]
-    return CATEGORY_MAP.get(prefix, prefix.title())
+    return CATEGORY_MAP.get(prefix, prefix.replace("-", " ").title())
+
+
+def order_categories(present: list[str]) -> list[str]:
+    """Order categories by CATEGORY_ORDER, then append any others alphabetically.
+
+    CATEGORY_ORDER is a ranking hint, NOT a gate: every category present in the
+    data is returned, so newly added categories are never silently dropped from
+    the index. Unranked categories trigger a stderr note suggesting they be
+    added to CATEGORY_ORDER for custom placement.
+    """
+    present_set = set(present)
+    ranked = [c for c in CATEGORY_ORDER if c in present_set]
+    unranked = sorted(c for c in present_set if c not in CATEGORY_ORDER)
+    for c in unranked:
+        print(
+            f"  NOTE: category '{c}' not in CATEGORY_ORDER — appended at end; "
+            f"add it to CATEGORY_ORDER to control placement.",
+            file=sys.stderr,
+        )
+    return ranked + unranked
 
 
 def extract_topic_metadata(topic_key: str, guide_count: int) -> dict | None:
@@ -148,14 +178,15 @@ def build_index(topics: list[dict]) -> str:
         cat = t["category"]
         categories.setdefault(cat, []).append(t)
 
+    # Every present category, in preferred order then alphabetical (no drops).
+    ordered_cats = order_categories(list(categories.keys()))
+
     # Check for template
     if TEMPLATE_PATH.exists():
         template = TEMPLATE_PATH.read_text(encoding="utf-8")
         # Simple template rendering
         sections = []
-        for cat_name in CATEGORY_ORDER:
-            if cat_name not in categories:
-                continue
+        for cat_name in ordered_cats:
             section_lines = [f"## {cat_name}\n"]
             for t in sorted(categories[cat_name], key=lambda x: x["title"]):
                 url = f"{SITE_BASE_URL}/{t['topic_key']}/"
@@ -182,9 +213,7 @@ def build_index(topics: list[dict]) -> str:
         f"with a routing table to individual guides.\n"
     )
 
-    for cat_name in CATEGORY_ORDER:
-        if cat_name not in categories:
-            continue
+    for cat_name in ordered_cats:
         lines.append(f"## {cat_name}\n")
         for t in sorted(categories[cat_name], key=lambda x: x["title"]):
             url = f"{SITE_BASE_URL}/{t['topic_key']}/"
