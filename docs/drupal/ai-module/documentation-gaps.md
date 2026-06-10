@@ -1,6 +1,6 @@
 ---
-description: Documentation gaps in Drupal AI 1.3.5 — undocumented features identified by comparing official docs to source code
-tldr: "Use this guide when the official documentation doesn't match actual behavior. Gaps verified against 1.3.5 source code. New in 1.4.0-rc1 and not yet in official docs: ChatProcessor plugin system, global guardrails, and AiExceptionEvent."
+description: Documentation gaps in Drupal AI 1.4.2 — undocumented features identified by comparing official docs to source code
+tldr: "Undocumented features verified against 1.4.2 source. 1.4 gaps: ChatProcessor, global guardrails, AiExceptionEvent. 1.4.2 gaps: ai_file, ai.file_manager, AiFileProviderInterface, ChatWithPdf, restrict_to_topic, StreamableGuardrailInterface."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when the official documentation doesn't match actual behavior. These gaps were identified by comparing official docs to source code through 1.3.5. New in 1.4.0-rc1 and not yet in official docs: ChatProcessor plugin system, global guardrails, and `AiExceptionEvent`.
+> Use this guide when the official documentation doesn't match actual behavior. These gaps were identified by comparing official docs to source code through 1.4.2. New in 1.4.0-rc1 and not yet in official docs: ChatProcessor plugin system, global guardrails, and `AiExceptionEvent`. New in 1.4.2: `ai_file` entity, `ai.file_manager`, `AiFileProviderInterface`, `ChatWithPdf` capability, `restrict_to_topic` guardrail, and `StreamableGuardrailInterface`.
 
 ## Core Module
 
@@ -23,6 +23,12 @@ drupal_version: "11.x"
 | ChatProcessor plugin type (1.4) | [Core Architecture](core-architecture.md) |
 | `AiExceptionEvent` (1.4) | [Events System](events-system.md) |
 | Global guardrails in `ai.settings` (1.4) | [Guardrails System](guardrails-system.md) |
+| `ai_file` content entity (1.4.2) | [Core Architecture](core-architecture.md) |
+| `ai.file_manager` service (1.4.2) | [Core Architecture](core-architecture.md), [Operation Types](operation-types.md) |
+| `AiFileProviderInterface` (1.4.2) | [Provider System](provider-system.md) |
+| `ChatWithPdf` capability (1.4.2) | [Enums & DTOs](enums-and-dtos.md), [Operation Types](operation-types.md) |
+| `StreamableGuardrailInterface` (1.4.2) | [Guardrails System](guardrails-system.md) |
+| `restrict_to_topic` guardrail (1.4.2) | [Guardrails System](guardrails-system.md) |
 
 ## ai_assistant_api
 

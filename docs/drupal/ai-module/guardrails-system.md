@@ -1,6 +1,6 @@
 ---
 description: Guardrails system — pre/post processing plugins for content moderation, PII filtering, and prompt injection detection
-tldr: "Use guardrails when you need to intercept AI requests before they reach the provider (pre-processing) or after receiving a response (post-processing). Required for user-facing AI features. Changed in 1.4: inputs now hold multiple guardrail sets (addGuardrailSet/getGuardrailSets); global site-wide sets are prepended before any caller-attached sets."
+tldr: "Pre/post process AI requests: block unsafe input, filter PII, or inject context. Required for user-facing features. 1.4 adds multiple guardrail sets per input, global site-wide enforcement, and StreamableGuardrailInterface for mid-stream redaction."
 drupal_version: "11.x"
 ---
 
@@ -19,6 +19,7 @@ drupal_version: "11.x"
 | Prompt injection detection | Pre guardrail | Catch injection attempts before processing |
 | AI-based moderation | `NonDeterministicGuardrailInterface` | Guardrail itself uses AI; receives `AiProviderPluginManager` |
 | Streaming response | Avoid `NonStreamableGuardrailInterface` | Skipped for streaming calls automatically |
+| Redact content mid-stream | `StreamableGuardrailInterface` (1.4) | Buffer streamed output and redact before client sees it |
 | Site-wide enforcement | Global guardrail sets (1.4) | Applied to every request before caller-attached sets |
 
 ## Pattern
@@ -108,6 +109,15 @@ $sets = $input->getGuardrailSets();          // Returns array keyed by set ID
 |--------|---------|
 | `regexp_guardrail` | Block inputs/outputs matching a configurable regex (fixed in 1.3.5 — `processOutput()` now executes the pattern) |
 | `input_length_limit` | **Changed in 1.4:** Built-in DoS protection — blocks requests exceeding a configurable character limit |
+| `restrict_to_topic` | **New in 1.4:** Non-deterministic (LLM-based) guardrail blocking inputs/outputs outside a configured topic. 1.4.2 added a re-entrancy guard (its internal LLM call can't recurse into global guardrails) and parses the classifier response via `ai.prompt_json_decode` |
+
+## Specialized Interfaces
+
+| Interface | Purpose |
+|-----------|---------|
+| `NonDeterministicGuardrailInterface` | Guardrail that uses AI itself; receives `AiProviderPluginManager` via `setAiPluginManager()` |
+| `NonStreamableGuardrailInterface` | Marker — guardrail cannot process streamed responses; skipped for streaming calls |
+| `StreamableGuardrailInterface` | **New in 1.4:** Evaluate streamed output mid-stream. `getStartRegex()` begins buffering, `getStopRegex()` ends it, and `processStreamedBuffer(string $buffered): GuardrailResultInterface` decides — used to redact sensitive content before it reaches the client |
 
 ## AiGuardrailRepository
 
@@ -117,13 +127,6 @@ $guardrail = $repo->getGuardrailById('safety:pii_filter');
 $set = $repo->getGuardrailSetById('my_guardrail_set');
 $all = $repo->getAllGuardrailSets();
 ```
-
-## Specialized Interfaces
-
-| Interface | Purpose |
-|-----------|---------|
-| `NonDeterministicGuardrailInterface` | Guardrail that uses AI itself; receives `AiProviderPluginManager` via `setAiPluginManager()` |
-| `NonStreamableGuardrailInterface` | Marker — guardrail cannot process streamed responses; skipped for streaming calls |
 
 ## Common Mistakes
 

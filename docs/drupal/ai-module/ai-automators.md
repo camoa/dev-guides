@@ -1,6 +1,6 @@
 ---
 description: AI Automators — auto-populate entity fields on save using AI, with 52 plugin types and three worker modes
-tldr: "Use this guide when auto-generating field content on entity save. Use [AI Agents](ai-agents.md) when you need autonomous decision-making rather than fixed field generation. AutomatorsTool config entity exposes automator chains as function-calling tools."
+tldr: "Use this guide when auto-generating field content on entity save. 1.4 adds guardrail_set_id per automator, RunAutomatorAction for VBO backfilling without re-saving, and a drush generator for custom automator types."
 drupal_version: "11.x"
 ---
 
@@ -18,6 +18,7 @@ drupal_version: "11.x"
 | Programmatic/API save | `direct` worker | Batch requires JS — won't run in API context |
 | High-volume background | `queue` worker | Cron queue; no timeout risk |
 | Only generate when empty | `edit_mode: false` | Prevents overwriting manual edits |
+| Backfill existing content | `RunAutomatorAction` + VBO | Runs outside entity presave; no re-save needed |
 
 ## Pattern
 
@@ -90,6 +91,20 @@ $output = $service->run('my_chain_machine_name', [
 // $output['field_output_text'] contains the generated value.
 ```
 
+## Guardrails on Automators (New in 1.4)
+
+An automator can carry its own guardrail set via the `guardrail_set_id` config property (set in the automator's advanced settings). Its guardrails run in addition to any [global guardrails](guardrails-system.md) on every generation the automator triggers.
+
+## Running Automators as Actions / VBO (New in 1.4)
+
+`RunAutomatorAction` (derived per automator by `RunAutomatorActionDeriver`) exposes any automator as a core Action. Because it runs **outside** entity presave, wrap it in Views Bulk Operations to backfill fields across many existing entities without re-saving each one through the normal save hook — useful for generating alt text for 1,000 existing images.
+
+## Scaffolding an Automator Type (New in 1.4)
+
+```bash
+drush generate plugin:ai:automator-type   # alias: ai-automator-type
+```
+
 ## Built-in Plugin Types (52 total)
 
 - **Text/String**: `LlmSimpleString`, `LlmSimpleStringLong`, `LlmString`, `LlmTextWithSummary`, `LlmTextCreateSummary`, `LlmSummarizeToStringLong`
@@ -128,4 +143,5 @@ $settings['ai_automator_advanced_mode_enabled'] = TRUE; // Show token mode + pro
 - [AI Agents](ai-agents.md)
 - [AI CKEditor](ai-ckeditor.md)
 - [Function Calling](function-calling.md)
+- [Guardrails System](guardrails-system.md)
 - Reference: `web/modules/contrib/ai/modules/ai_automators/`

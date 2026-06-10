@@ -1,6 +1,6 @@
 ---
-description: AI Chatbot module — DeepChat frontend, REST API endpoints, streaming, and authentication flow
-tldr: "Use this guide when integrating the DeepChat chatbot frontend with Drupal. Use [AI Assistant API](ai-assistant-api.md) when building the backend assistant logic or custom actions."
+description: AI Chatbot module — DeepChat frontend, REST API endpoints, streaming, ChatProcessor plugins, and authentication flow
+tldr: "Integrate DeepChat as a Drupal block or call its REST API from decoupled frontends; always fetch CSRF token first. New in 1.4: ChatProcessorInterface is the stable contract for any chat UI; extend ChatProcessorBase."
 drupal_version: "11.x"
 ---
 
@@ -18,6 +18,7 @@ drupal_version: "11.x"
 | Call from decoupled frontend | REST API with CSRF flow | Session-based; requires `credentials: 'include'` |
 | Toolbar chatbot button | Set `placement: toolbar` on block | `hook_toolbar()` registers automatically |
 | Reset conversation | `/ajax/chatbot/reset-session/{id}/{thread}` | Flood-protected: 3 resets per session |
+| Custom chat front-end (Slack bot, etc.) | Implement `ChatProcessorInterface` | Stable API contract for any UI to back-end |
 
 ## Pattern
 
@@ -84,6 +85,12 @@ const data = await chatRes.json();
 ## XSS Sanitization
 
 All LLM output is sanitized with `Xss::filter()`. Allowed tags: `<a>`, `<b>`, `<br>`, `<code>`, `<em>`, headings, `<li>`, `<ol>`, `<p>`, `<pre>`, `<span>`, `<strong>`, `<table>` elements, `<ul>`, `<img>`, `<details>`, `<summary>`.
+
+## ChatProcessor Plugins (New in 1.4)
+
+`ChatProcessorInterface` (`#[ChatProcessor]` attribute, manager `plugin.manager.ai.chat_processor`) is the stable contract between any chat UI and the Drupal-side generation logic. It lets contrib ship alternative chat frontends (e.g., Slack bot, CLI) against a consistent API without coupling to the DeepChat block.
+
+Key methods: `setInput(ChatInput)` / `getInput()`, `setOutput(ChatOutput)` / `getOutput()`, `doExecute(): ChatOutput` (custom processing logic), `execute(): ChatOutput` (validates input, calls `doExecute()`, stores output). Extend `ChatProcessorBase` (`Drupal\ai\Base\ChatProcessorBase`) rather than implementing the interface directly.
 
 ## Hooks
 
