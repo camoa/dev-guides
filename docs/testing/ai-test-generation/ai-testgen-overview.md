@@ -51,5 +51,5 @@ Three review gates. Skipping any of them defeats the workflow.
 
 - [The Four-Phase Pattern](ai-testgen-four-phase-pattern.md)
 - [Anti-Patterns](ai-testgen-anti-patterns.md)
-- [Playwright (E2E)](../playwright/)
-- [Automated Testing Kit (ATK)](../atk/)
+- [Playwright (E2E)](../playwright/index.md)
+- [Automated Testing Kit (ATK)](../atk/index.md)

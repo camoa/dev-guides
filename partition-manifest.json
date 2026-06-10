@@ -510,8 +510,8 @@
     "guides_extracted": 14
   },
   "testing/ai-test-generation": {
-    "source_hash": "e5c1f383b45fbb1ae633b778ba948ef61439ffbb8486707e2633f116862ad386",
-    "partitioned": "2026-05-11",
+    "source_hash": "0961d93238412c7dd9a56481d279a4f3fb0e67b72f4d2168fefbbf35b1abb60c",
+    "partitioned": "2026-06-10",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 18
   },

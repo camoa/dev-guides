@@ -19,4 +19,4 @@ Recipes are published to a separate index, `agentic-recipes.txt` (not `llms.txt`
 ## See also
 
 - File-format standard: `recipe_schema_version 1.0.0` — routing-first frontmatter, fixed body section set, verifier required.
-- [Drupal best-practice plays](../drupal/best-practices/camoa/) — the prescriptive stances recipes cite as sources.
+- [Drupal best-practice plays](../drupal/best-practices/camoa/index.md) — the prescriptive stances recipes cite as sources.
