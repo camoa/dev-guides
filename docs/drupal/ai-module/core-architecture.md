@@ -1,6 +1,6 @@
 ---
-description: Drupal AI module architecture — ProviderProxy, core services, module hierarchy, and request lifecycle
-tldr: "Use this guide to understand how the AI module works before writing any code. All AI calls route through ProviderProxy, which fires pre/post events and applies guardrails — never instantiate providers directly. Key gotcha: 1.4 adds a ChatProcessor plugin type and a GlobalGuardrailsEventSubscriber that prepends site-wide guardrail sets before any caller-attached sets."
+description: Drupal AI module architecture — ProviderProxy, core services, ai_file entity, and request lifecycle
+tldr: "Route all AI calls through ai.provider (ProviderProxy) — never bypass it. 1.4 adds ChatProcessor and site-wide global guardrails. 1.4.2 adds ai.file_manager service for provider-side file uploads and the ai_file content entity."
 drupal_version: "11.x"
 ---
 
@@ -69,6 +69,11 @@ ai (core)
 | `plugin.manager.ai_guardrail` | Discover guardrail plugins |
 | `plugin.manager.ai.chat_processor` | **Changed in 1.4:** Discover ChatProcessor plugins (new plugin type for preprocessing chat inputs) |
 | `ai.exception_event_subscriber` | **Changed in 1.4:** Logs AI exceptions via `AiExceptionEvent`; enables graceful failover |
+| `ai.file_manager` | **New in 1.4.2:** Manages the AI File lifecycle — uploads local files to a provider's Files API, tracks them as `ai_file` entities, deletes and loads them by purpose |
+
+## Content Entities
+
+**New in 1.4.2:** The `ai_file` content entity (`Drupal\ai\Entity\AiFile`) represents a file uploaded to a provider's Files API. Fields: provider ID, remote ID, filename, MIME type, size, purpose, JSON metadata, optional local `file` reference, owner. Administered at `/admin/config/ai/files` (permission: `administer ai`). Managed via `ai.file_manager` service. See [Operation Types](operation-types.md) for usage and [Provider System](provider-system.md) for `AiFileProviderInterface`.
 
 ## Key Concepts
 

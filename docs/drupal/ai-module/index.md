@@ -1,5 +1,5 @@
 ---
-description: Drupal AI module — provider abstraction, AI operations, agents, automators, chatbot API, CKEditor, vector search/RAG, guardrails, and all 14 sub-modules (1.3.5 stable, 1.4.0-rc1 callouts)
+description: Drupal AI module — provider abstraction, AI operations, agents, automators, chatbot API, CKEditor, vector search/RAG, guardrails, and all 14 sub-modules (1.4.2 stable)
 guide-meta:
   concepts:
     - Drupal AI module
@@ -24,6 +24,11 @@ guide-meta:
     - short-term memory
     - prompt system
     - AI observability
+    - ai_file
+    - AiFileManager
+    - ChatWithPdf
+    - AiFileProviderInterface
+    - StreamableGuardrailInterface
   not:
     - Claude API
     - OpenAI API
@@ -43,7 +48,7 @@ guide-meta:
 
 # Drupal AI Module
 
-Provider-agnostic AI abstraction for Drupal 11. Covers provider setup, all 16 operation types, agents, automators, the DeepChat chatbot, CKEditor integration, vector search/RAG, guardrails, and the complete sub-module ecosystem. Based on AI module 1.3.5 stable with "Changed in 1.4" callouts for 1.4.0-rc1 APIs.
+Provider-agnostic AI abstraction for Drupal 11. Covers provider setup, all 16 operation types, agents, automators, the DeepChat chatbot, CKEditor integration, vector search/RAG, guardrails, and the complete sub-module ecosystem. Based on AI module 1.4.2 stable with "New in 1.4" / "Changed in 1.4" callouts.
 
 | I need to... | Guide | Summary |
 |-------------|-------|---------|
@@ -71,4 +76,4 @@ Provider-agnostic AI abstraction for Drupal 11. Covers provider setup, all 16 op
 | Work with enums, DTOs, structured output | [Enums & DTOs](enums-and-dtos.md) | Use this guide when filtering models by capability, building structured output schemas, or tracking token usage from provider responses. |
 | Follow security best practices | [Security](security.md) | Use this guide before deploying any user-facing AI feature. All items in the checklist are required for production. |
 | Plan migrations from deprecated modules | [Deprecated Modules](deprecated-modules.md) | Use this guide when planning migrations away from deprecated sub-modules. All deprecations remain in 1.3.5 and 1.4.0-rc1; removal planned for AI 2.0.0. |
-| Identify gaps in official documentation | [Documentation Gaps](documentation-gaps.md) | Use this guide when the official documentation doesn't match actual behavior. Gaps verified against 1.3.5; new 1.4.0-rc1 gaps (ChatProcessor, global guardrails, AiExceptionEvent) also listed. |
+| Identify gaps in official documentation | [Documentation Gaps](documentation-gaps.md) | Undocumented features verified against 1.4.2 source. 1.4 gaps: ChatProcessor, global guardrails, AiExceptionEvent. 1.4.2 gaps: ai_file, ai.file_manager, AiFileProviderInterface, ChatWithPdf, restrict_to_topic, StreamableGuardrailInterface. |

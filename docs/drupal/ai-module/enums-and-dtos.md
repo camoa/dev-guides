@@ -1,6 +1,6 @@
 ---
 description: AI enums and DTOs — AiModelCapability, AiProviderCapability, StructuredOutputSchema, TokenUsageDto, and ChatProviderLimitsDto
-tldr: "Use this guide when filtering models by capability, building structured output schemas, or tracking token usage from provider responses. Deprecated in 1.4: ChatInput::setChatStrictSchema() — set strict: TRUE on StructuredOutputSchema instead."
+tldr: "Filter models by AiModelCapability, enforce structured output via StructuredOutputSchema, or track token costs via TokenUsageDto. New in 1.4: ChatWithPdf capability. Deprecated: setChatStrictSchema() — set strict: TRUE on StructuredOutputSchema."
 drupal_version: "11.x"
 ---
 
@@ -26,6 +26,7 @@ drupal_version: "11.x"
 | `ChatWithImageVision` | `chat_with_image_vision` | Model accepts image inputs |
 | `ChatWithAudio` | `chat_with_audio` | Model accepts audio inputs |
 | `ChatWithVideo` | `chat_with_video` | Model accepts video inputs |
+| `ChatWithPdf` | `chat_with_pdf` | **New in 1.4:** Model accepts PDF document inputs |
 | `ChatSystemRole` | `chat_system_role` | Model supports system role |
 | `ChatJsonOutput` | `chat_json_output` | Reliable complex JSON output |
 | `ChatStructuredResponse` | `chat_structured_response` | Native structured/schema responses |
@@ -35,6 +36,9 @@ drupal_version: "11.x"
 ```php
 // Get models that support vision.
 $models = $provider->getConfiguredModels('chat', [AiModelCapability::ChatWithImageVision]);
+
+// Get models that support PDF input.
+$models = $provider->getConfiguredModels('chat', [AiModelCapability::ChatWithPdf]);
 ```
 
 ## AiModelCapability — Image-to-Image
@@ -105,7 +109,7 @@ Both DTOs use `DtoBaseMethodsTrait` providing `create(array $values)` (factory) 
 | `VdbSimilarityMetrics` | `CosineSimilarity`, `EuclideanDistance`, `InnerProduct` |
 | `VdbCapability` | `GroupBy` |
 | `EmbeddingStrategyCapability` | `MultipleMainContent` |
-| `EmbeddingStrategyIndexingOptions` | `MainContent`, `ContextualContent`, `Attributes`, `Ignore` |
+| `EmbeddingStrategyIndexingOptions` | `MainContent`, `ContextualContent`, `Attributes`, `Ignore` — each with `getKey()`, `getLabel()`, `getDescription()` |
 
 ## Common Mistakes
 

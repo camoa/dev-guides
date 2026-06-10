@@ -1,6 +1,6 @@
 ---
-description: AI provider plugins — using, building, and selecting providers for AI operations
-tldr: "Use this guide when calling a specific provider, building a custom provider plugin, or working with the provider/model selection form. Extend OpenAiBasedProviderClientBase when your provider's API is OpenAI-compatible — you get chat, embeddings, TTS, STT, and T2I for free. Key gotcha: always call isUsable() before createInstance()."
+description: AI provider plugins — using, building, file handling, and selecting providers for AI operations
+tldr: "Extend OpenAiBasedProviderClientBase for OpenAI-compatible APIs; always check isUsable() before calling. 1.4.2 adds AiFileProviderInterface for provider-side file uploads; use ai.file_manager service, not direct provider methods."
 drupal_version: "11.x"
 ---
 
@@ -18,6 +18,7 @@ drupal_version: "11.x"
 | Provider with OpenAI-compatible API | `OpenAiBasedProviderClientBase` | Gets chat, embeddings, TTS, STT, T2I for free |
 | List models for a form | `getSimpleProviderModelOptions()` | Returns formatted `provider__model => label` array |
 | Check if operation is available | `hasProvidersForOperationType()` | Boolean check before calling |
+| Upload file to provider | `ai.file_manager` service | Lifecycle management; don't call provider file methods directly |
 
 ## Pattern
 
@@ -71,6 +72,27 @@ class MyProvider extends AiProviderClientBase implements ChatInterface {
 }
 ```
 
+## Provider File Handling (New in 1.4.2)
+
+Providers that support a remote Files API implement `AiFileProviderInterface` (`Drupal\ai\AiFileProviderInterface`):
+
+| Method | Purpose |
+|--------|---------|
+| `uploadFile(AiFileInterface $ai_file, mixed $file): AiFileInterface` | Upload binary/stream; MUST set remote ID on entity |
+| `deleteFile(AiFileInterface $ai_file): bool` | Delete remote file by stored remote ID |
+| `downloadFile(AiFileInterface $ai_file, ?string $destination = NULL): string` | Download to path, or return raw contents when no destination given |
+| `supportsMimeType(string $mime_type, string $purpose): bool` | Whether MIME type is allowed for the purpose |
+
+OpenAI-compatible providers get this via `FileApiTrait` (`Drupal\ai\Traits\OpenAi\FileApiTrait`), which maps to the OpenAI `files()` endpoint. Don't call provider file methods directly — use `ai.file_manager`. See [Operation Types](operation-types.md) for the `AiFileManager` API.
+
+## Scaffolding (New in 1.4)
+
+```bash
+drush generate plugin:ai:provider       # alias: ai-provider
+drush generate plugin:ai:guardrail      # alias: ai-guardrail
+drush generate plugin:ai:automator-type # alias: ai-automator-type
+```
+
 ## Provider Matrix
 
 | Provider | Chat | Embeddings | Moderation | TTS | STT | T2I | Translation |
@@ -111,6 +133,7 @@ class MyProvider extends AiProviderClientBase implements ChatInterface {
 - **Wrong**: Using `createInstance()` without checking `isUsable()` → **Right**: Provider may lack API key — check first
 - **Wrong**: Not implementing `getAvailableConfiguration()` → **Right**: Breaks the form helper's model configuration UI
 - **Wrong**: Missing `loadClient()` → **Right**: Base class expects this for lazy client initialization
+- **Wrong**: Calling provider file methods directly → **Right**: Always use `ai.file_manager` service for file lifecycle management
 
 ## See Also
 
@@ -118,3 +141,4 @@ class MyProvider extends AiProviderClientBase implements ChatInterface {
 - [Operation Types](operation-types.md)
 - Reference: `web/modules/contrib/ai/src/Base/AiProviderClientBase.php`
 - Reference: `web/modules/contrib/ai/src/Base/OpenAiBasedProviderClientBase.php`
+- Reference: `web/modules/contrib/ai/src/AiFileProviderInterface.php`
