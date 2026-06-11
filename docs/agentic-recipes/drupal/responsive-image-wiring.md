@@ -6,7 +6,21 @@ description: Use when a Drupal site has named image use-cases (hero, card thumbn
 # Metadata — read only after a match.
 label: Responsive image wiring
 recipe_schema_version: 1.0.0
-version: 0.4.0
+version: 0.5.0
+# Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
+requires_guides:
+  - drupal/image-styles/image-overview
+  - drupal/image-styles/image-style-schema
+  - drupal/image-styles/creating-styles-config
+  - drupal/image-styles/core-image-effects
+  - drupal/image-styles/responsive-image-config
+  - drupal/image-styles/breakpoint-configuration
+  - drupal/image-styles/art-direction-resolution
+  - drupal/image-styles/image-field-formatters
+  - drupal/image-styles/webp-avif-optimization
+requires_plays:
+  - drupal/best-practices/camoa/responsive-image-sizing-per-context
+  - drupal/best-practices/camoa/media-view-mode-to-responsive-image-style
 drupal_compatibility: "^10.3 || ^11"
 requires_modules:
   - image

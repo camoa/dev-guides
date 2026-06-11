@@ -140,6 +140,26 @@ def validate_recipe(path: Path) -> list[str]:
                 f"(expected docs/{slug}.md or docs/{slug}/index.md)"
             )
 
+    # 5. Machine-readable `requires_*` frontmatter slugs resolve.
+    #    Honors the contract recipe-loader relies on (degrade-paths.md:14 — dev-guides CI owns dangling
+    #    requires_* slugs). OPTIONAL keys: checked only WHEN PRESENT, so older recipes with no machine
+    #    deps stay valid and the degraded fall-through path remains supported.
+    for key in ("requires_guides", "requires_plays"):
+        decl = meta.get(key)
+        if decl is None:
+            continue
+        if not isinstance(decl, list):
+            errors.append(
+                f"`{key}` must be a list of guide/play slugs (got {type(decl).__name__})"
+            )
+            continue
+        for slug in decl:
+            if not isinstance(slug, str) or not slug_resolves(slug):
+                errors.append(
+                    f"`{key}` slug does not resolve to a file: `{slug}` "
+                    f"(expected docs/{slug}.md or docs/{slug}/index.md)"
+                )
+
     return errors
 
 
