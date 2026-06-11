@@ -74,6 +74,6 @@ Include these in every plan for a Drupal site:
 
 ## See Also
 
-- [Automated Testing Kit (ATK)](../atk/)
+- [Automated Testing Kit (ATK)](../atk/index.md)
 - [Input: Code Analysis](ai-testgen-input-code.md)
 - [Negative Assertions](ai-testgen-negative-assertions.md)

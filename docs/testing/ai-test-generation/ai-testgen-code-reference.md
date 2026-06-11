@@ -46,8 +46,8 @@ claude mcp add playwright npx @playwright/mcp@latest
 
 ## See Also
 
-- [Playwright (E2E)](../playwright/) — the runner the Generator targets; locators, web-first assertions, fixtures, auth
-- [Playwright for Visual Regression](../visual-regression/playwright/) — setup, config, Drupal/DDEV plumbing
-- [Visual Regression Workflow](../visual-regression/workflow/) — adjacent workflow guide (pre-AI baseline strategies that still matter)
-- [Automated Testing Kit (ATK)](../atk/) — Drupal-specific test catalog; integration patterns
-- [HTML Report](../visual-regression/html-report/) — triage UI for generated test failures
+- [Playwright (E2E)](../playwright/index.md) — the runner the Generator targets; locators, web-first assertions, fixtures, auth
+- [Playwright for Visual Regression](../visual-regression/playwright/index.md) — setup, config, Drupal/DDEV plumbing
+- [Visual Regression Workflow](../visual-regression/workflow/index.md) — adjacent workflow guide (pre-AI baseline strategies that still matter)
+- [Automated Testing Kit (ATK)](../atk/index.md) — Drupal-specific test catalog; integration patterns
+- [HTML Report](../visual-regression/html-report/index.md) — triage UI for generated test failures
