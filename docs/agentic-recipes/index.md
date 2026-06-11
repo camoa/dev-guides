@@ -19,4 +19,5 @@ Recipes are published to a separate index, `agentic-recipes.txt` (not `llms.txt`
 ## See also
 
 - File-format standard: `recipe_schema_version 1.0.0` — routing-first frontmatter, fixed body section set, verifier required.
+- Machine-readable dependencies (**optional**): a recipe body may declare `requires_guides:` and `requires_plays:` — lists of guide/play slugs (e.g. `drupal/image-styles/image-overview`) the recipe-loader resolves **without parsing prose**. Each slug must resolve to a published guide/play (`docs/<slug>.md` or `docs/<slug>/index.md`); `scripts/validate_recipes.py` (run in CI) fails the build on a dangling slug. A recipe that omits them still matches — its aspects fall through to residual guide-search. These keys live in the **recipe body** (fetched raw on match), not the routing index.
 - [Drupal best-practice plays](../drupal/best-practices/camoa/index.md) — the prescriptive stances recipes cite as sources.
