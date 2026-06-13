@@ -1,0 +1,169 @@
+---
+# Routing block — an orchestrator reads to here and decides.
+name: drupal_visual_regression_setup
+capability: visual-regression
+description: Use when a Drupal project (DDEV and Playwright assumed) needs visual-regression coverage — binds Drupal surface discovery, a theme-aware viewport matrix, and authenticated-surface reach into the plugin's generic baseline-and-gate mechanism.
+# Metadata — read only after a match.
+label: Visual-regression setup (Drupal)
+recipe_schema_version: 1.0.0
+version: 0.1.0
+# Process-recipe routing keys, enforced by validate_recipes.py for any recipe
+# under docs/process-recipes/. `capability` above doubles as the phase; there is
+# no separate applies_to_phase. `framework` is the second routing dimension.
+recipe_class: process
+framework: drupal
+drupal_compatibility: "^10.3 || ^11"
+requires_modules:
+  - qa_accounts
+assumes:
+  - ddev
+  - playwright
+authors:
+  - name: camoa
+license: GPL-2.0-or-later
+---
+
+## Goal
+
+Give a Drupal site visual-regression coverage: a discovered set of surfaces (public and authenticated), a theme-aware viewport matrix, deterministic baselines, and a model-free gate that fails on unexpected pixel drift.
+
+The plugin owns the generic mechanism — the baseline manager, the screenshot store, and the gate verdict, all stack-neutral and deterministic. This recipe owns the thin Drupal binding the mechanism cannot know: which Drupal surfaces exist, which viewports the theme actually declares, and how to reach surfaces that require authentication.
+
+## Opinion
+
+**The recipe is thin; the mechanism is generic.** Baseline capture, the screenshot store, and the pass/fail gate are framework-neutral deterministic kernels that stay in the plugin. This recipe contributes only the Drupal-specific inputs to that machine: surface discovery, the viewport matrix, the auth seam, and baseline migration.
+
+**Authenticated reach is the real Drupal seam.** The generic visual path is anonymous-only — it navigates, waits for network-idle and `document.fonts.ready`, and screenshots. Any Drupal surface behind login (an admin listing, an authored node, a role-gated view) is unreachable without auth. This recipe fills that gap by reusing the e2e auth primitive: a qa_accounts login captured once to a Playwright `storageState`, then replayed so authenticated surfaces can be screenshotted. The qa_accounts role is the auth source. When the recipe seeds the registry it maps that role to the schema's generic `auth_context` field (an opaque storageState reference), so the registry stays stack-neutral; anonymous surfaces get a null `auth_context`.
+
+**One auth context = one storageState = one Playwright project chain.** The plugin's generic seam expects each authenticated context `<ctx>` (the `auth_context` token mapped from a qa_accounts `role`) to drive a deterministic file-and-project layout the recipe must produce *exactly* — this is the binding the mechanism cannot guess:
+
+- **Setup spec** `tests/visual/.auth/<ctx>.setup.ts` — logs in for that role and persists the state. Fills the throwing stub with `loginAsRole(page, '<role>')` (from `@lullabot/playwright-drupal`) then `await page.context().storageState({ path: STORAGE_STATE })`. The plugin templates this with two stub tokens the recipe substitutes: `__AUTH_CONTEXT__` → `<ctx>`, `__STORAGE_STATE__` → `tests/visual/.auth/<ctx>.json`.
+- **storageState** `tests/visual/.auth/<ctx>.json` — the captured session; gitignored (`tests/visual/.auth/*.json`), never committed.
+- **Setup project** `visual-setup-<ctx>` — `testDir: './tests/visual/.auth'`, `testMatch: /<ctx>\.setup\.ts$/`.
+- **Authed surface project** `visual-chromium-<vp>-<ctx>` — `testDir: './tests/visual/auth/<ctx>'`, `dependencies: ['visual-setup-<ctx>']`, `storageState: 'tests/visual/.auth/<ctx>.json'`. One project per (viewport `<vp>` × context `<ctx>`).
+- **Authed surface spec** `tests/visual/auth/<ctx>/<id>.spec.ts`.
+- **Isolation** `testIgnore: ['**/.auth/**', '**/auth/**']` on the anonymous projects, so setup specs and authed specs never run unauthenticated.
+
+Anonymous surfaces keep the plain `visual-chromium-<vp>` project and a null `auth_context`; nothing about the anonymous path changes.
+
+**The baseline filename is load-bearing — do not rename the test.** Baselines embed the Playwright project name, so the two paths differ by exactly the `<ctx>` segment:
+
+- **Anonymous:** `<surface-id>-1-visual-chromium-<viewport>-linux.png` (project `visual-chromium-<vp>`).
+- **Authenticated:** `<surface-id>-1-visual-chromium-<viewport>-<ctx>-linux.png` (project `visual-chromium-<vp>-<ctx>`).
+
+The `-1-` ordinal is assigned because the test is named exactly `visual regression` and takes exactly one screenshot. Renaming that test, or taking a second screenshot in it, re-numbers the ordinal and ORPHANS every existing baseline. Capture baselines on Linux (CI or a Linux container) so the `-linux` platform suffix matches. This rule is a hard constraint, not a convention.
+
+**Behaviour belongs to e2e, pixels belong here.** Visual regression asserts rendered appearance only. Navigation, form, and auth-state assertions live in the e2e recipe. Do not fold behavioural checks into a visual spec.
+
+**DDEV and Playwright are assumed, not branched.** The recipe targets a DDEV-hosted, Playwright-driven Drupal site and carries no alternative-runtime branches; the agent adapts the runtime at execution time if the host differs.
+
+## Preconditions
+
+- Drupal 10.3+ or 11.x, Composer-managed, with a resolvable `web/` docroot.
+- DDEV configured (`.ddev/config.yaml`), with `ddev` and `npm` on PATH; Playwright installable.
+- The plugin's generic visual layer is present: the baseline manager, the screenshot store, the visual-regression gate, the Playwright base config template, and the surface registry. This recipe binds Drupal into that layer; it does not recreate it.
+- For authenticated surfaces: qa_accounts enabled and the `loginAsRole` auth primitive available from `@lullabot/playwright-drupal` (the same package the e2e recipe leans on). If only public surfaces are in scope, the auth seam is skipped.
+
+## Input contract
+
+Source-agnostic, supplied by the caller (the orchestrator at the visual-regression phase, or a human operator).
+
+```yaml
+code_path: string             # absolute path to the Drupal project root
+surfaces:                     # optional; if absent, discovery proposes them
+  - id: string                #   stable surface id (drives the baseline filename)
+    url: string               #   path to capture, e.g. /admin/content
+    role: string              #   qa_accounts role, or "anonymous"; mapped to the registry's auth_context on seed
+    masks:                    #   optional CSS selectors to mask (dynamic regions)
+      - string
+viewports:                    # optional; if absent, derived from the theme
+  - string                    #   e.g. "375", "768", "1280"
+migrate_from: string          # optional; a memory-project .screenshots/ source
+                              #   to import existing baselines from
+```
+
+## Sequence
+
+If invoked in dry-run mode, perform all reads and derivations but emit a preview instead of capturing or writing. Dry-run is required.
+
+1. **Discover Drupal surfaces.** If `surfaces` is not supplied, derive candidates from the site: enabled Views config (`views.view.*`), content-type bundles (`node.type.*`, queried through `ddev drush`), and the standard `/admin/*` structural routes. Propose them as registry surfaces with a `url` and any obvious dynamic-region `masks`. The operator confirms; discovery never overwrites an authored surface.
+
+2. **Derive the viewport matrix from the theme.** Read the active default theme's `*.breakpoints.yml` (Radix and its sub-themes included) to derive the viewport widths the design actually targets. If no theme breakpoints resolve, fall back to the plugin's generic CSS `@media` scan. An explicit `viewports` input overrides both.
+
+3. **Establish authenticated reach (skip if all surfaces are anonymous).** For each distinct qa_accounts `role` in scope, derive an `auth_context` token `<ctx>` and stand up the per-context chain the plugin's seam expects (see Opinion): write the setup spec `tests/visual/.auth/<ctx>.setup.ts` from the plugin's stub, substituting `__AUTH_CONTEXT__` → `<ctx>` and `__STORAGE_STATE__` → `tests/visual/.auth/<ctx>.json` — its body is `loginAsRole(page, '<role>')` then `await page.context().storageState({ path: STORAGE_STATE })`. Register the `visual-setup-<ctx>` setup project and, per viewport, the `visual-chromium-<vp>-<ctx>` authed project (`dependencies: ['visual-setup-<ctx>']`, `storageState: 'tests/visual/.auth/<ctx>.json'`, `testDir: './tests/visual/auth/<ctx>'`). Add `tests/visual/.auth/*.json` to `.gitignore` and `testIgnore: ['**/.auth/**', '**/auth/**']` to the anonymous projects. This per-context capture is the gap the generic anonymous-only path cannot fill on its own; authored setup specs and storageState files are never overwritten when already present.
+
+4. **Seed the surface registry.** Write the confirmed surfaces into the registry with `gates: [visual]`, their `url`, the `auth_context` mapped from the qa_accounts `role` (anonymous surfaces get a null `auth_context`), and `masks`. Idempotent: surfaces are matched by id and skipped when present.
+
+5. **Migrate existing baselines (optional).** If `migrate_from` points at a memory-project `.screenshots/` source, import those images into the code-path baseline location, renaming each to the deterministic `<surface-id>-1-visual-chromium-<viewport>-linux.png` form. Flag any image that cannot be mapped to a registered surface rather than guessing.
+
+6. **Capture baselines.** Hand off to the plugin's baseline manager (plan, then confirm, then `npx playwright test --update-snapshots`). The recipe does not re-implement capture — it supplies the surfaces, viewports, and auth state the manager consumes. Capture on Linux so the `-linux` suffix is correct.
+
+7. **Run the gate.** Execute the plugin's visual-regression gate (`npx playwright test`, JSON-reported), which diffs against the baselines and derives a model-free verdict.
+
+8. **Emit summary.** Surfaces discovered / confirmed / seeded, viewports derived, auth states captured, baselines migrated or captured, and any drift the gate reported.
+
+## Data flow
+
+```
+input: code_path, surfaces (optional), viewports (optional), migrate_from (optional)
+
+reads project state:
+       views.view.* / node.type.* config (via ddev drush)
+       /admin/* structural routes
+       active default theme's *.breakpoints.yml (Radix + sub-themes)
+       qa_accounts roles (for authenticated surfaces)
+       an optional memory-project .screenshots/ source
+
+applies opinion:
+       thin binding over a generic mechanism · authenticated reach via
+       qa_accounts storageState · deterministic baseline filename ·
+       pixels-only · DDEV/Playwright assumed
+
+references origin (never duplicated):
+       Playwright snapshot/storageState docs · @lullabot/playwright-drupal
+       (takeAccessibleScreenshot — screenshot + a11y capture)
+
+emits:
+       registry:   visual surfaces (gates: [visual]) with url/auth_context/masks
+       viewports:  the theme-derived width matrix
+       auth:       per-ctx setup spec tests/visual/.auth/<ctx>.setup.ts +
+                   storageState tests/visual/.auth/<ctx>.json (gitignored) +
+                   projects visual-setup-<ctx> and visual-chromium-<vp>-<ctx>
+       baselines:  anonymous  <id>-1-visual-chromium-<vp>-linux.png
+                   authed     <id>-1-visual-chromium-<vp>-<ctx>-linux.png
+                   (migrated or captured via the plugin baseline manager)
+```
+
+## State-awareness contract
+
+The recipe reads existing state before writing. Registry surfaces are matched by id: absent → seed; present and matching → skip; present and differing → conflict, do not overwrite, request operator review. Discovery proposes surfaces but never overwrites an authored one. Migrated baselines are renamed to the deterministic form; an image that maps to no registered surface is flagged, never guessed into place.
+
+The baseline filename contract is invariant: the test stays named `visual regression` and takes exactly one screenshot, so the `-1-` ordinal is stable and existing baselines are never orphaned. The authed variant additionally carries the `-<ctx>` project segment (`<id>-1-visual-chromium-<vp>-<ctx>-linux.png`); the `<ctx>` token is stable per qa_accounts role, so renaming a role's `auth_context` orphans that context's baselines exactly as renaming the test would. Authored setup specs and captured `storageState` files are read before writing — present and matching → skip, present and differing → conflict, never overwrite. Capture on Linux so the platform suffix matches.
+
+Idempotent: running the recipe twice on identical input and identical project state produces no changes on the second run.
+
+## Verifier
+
+After the recipe runs, verify:
+
+1. The surface registry holds the confirmed surfaces, each tagged `gates: [visual]` with a `url` and (where applicable) a non-anonymous `auth_context`.
+2. The viewport matrix matches the theme's declared breakpoints (or the explicit `viewports` override).
+3. For each authenticated context, `tests/visual/.auth/<ctx>.setup.ts` and a captured `tests/visual/.auth/<ctx>.json` (gitignored) exist, the `visual-setup-<ctx>` and `visual-chromium-<vp>-<ctx>` projects are registered, and the visual run reaches the surface logged in (not the login redirect).
+4. Baselines exist for every surface-by-viewport pair, captured on Linux: anonymous at `<surface-id>-1-visual-chromium-<viewport>-linux.png`, authenticated at `<surface-id>-1-visual-chromium-<viewport>-<ctx>-linux.png`.
+5. The plugin's visual-regression gate returns a verdict; an unchanged surface passes; a deliberately altered surface fails the diff.
+
+This recipe ships no executable verifier of its own — the plugin's baseline manager and visual-regression gate are the runtime mechanism; the checks above are the agent-driven protocol.
+
+## References
+
+### External origins (referenced, not authored here)
+
+| Source | Used for |
+|---|---|
+| Playwright (playwright.dev) | `toHaveScreenshot` snapshots, the `storageState` auth-replay model, and config |
+| `@lullabot/playwright-drupal` | `takeAccessibleScreenshot` (screenshot plus accessibility capture, generic by usage) and `loginAsRole(page, '<role>')` — the auth primitive each `<ctx>.setup.ts` calls before persisting `storageState` |
+| Automated Testing Kit (drupal.org/project/automated_testing_kit) | qa_accounts roles (the auth source mapped to each `auth_context` token) |
+
+### Plugin-side generic mechanism (ai-dev-assistant)
+
+The stack-neutral visual layer this recipe binds Drupal into — the baseline manager, the screenshot store, the visual-regression gate, the Playwright base config template, and the surface registry — is documented in the plugin itself, not duplicated here. The baseline-filename determinism rule above is load-bearing and is enforced wherever the capture runs.
