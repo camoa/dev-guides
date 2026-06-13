@@ -21,6 +21,11 @@ nav:
     - agentic-recipes/index.md
     - Drupal:
       - agentic-recipes/drupal/responsive-image-wiring.md
+  - Process Recipes:
+    - process-recipes/index.md
+    - Drupal:
+      - process-recipes/drupal/e2e-setup-atk.md
+      - process-recipes/drupal/visual-regression-setup.md
   - Drupal:
     - drupal/index.md
     - AJAX:

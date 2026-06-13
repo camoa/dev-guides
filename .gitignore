@@ -1,3 +1,9 @@
 site/
 __pycache__/
 *.pyc
+
+# Tool telemetry / local agent output — never part of the repo
+.claude/
+.claude-telemetry/
+.design-intelligence/
+.design-intelligence-audit/

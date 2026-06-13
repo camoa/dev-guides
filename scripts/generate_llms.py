@@ -224,6 +224,45 @@ def build_index(topics: list[dict]) -> str:
     return "\n".join(lines)
 
 
+GUIDE_MANIFEST_NAME = "guide-index.json"
+
+
+def build_guide_manifests(topics: list[dict]) -> int:
+    """Emit a per-topic guide manifest giving each guide BODY a content hash.
+
+    `llms.txt` is per-topic, so a guide body edit that doesn't move a topic's
+    count/description is invisible to `llms.hash` — the navigator has no way to
+    know a cached guide went stale without re-fetching it. This manifest is the
+    per-guide equivalent of the recipe index's per-line `(sha:...)`: a small
+    `{ "<filename>.md": "<sha256>" }` map the navigator reads (once per topic it
+    routes into) to decide, WITHOUT fetching the body, whether its cached copy is
+    current. `index.md` is included so the routing table is cacheable too.
+
+    The sha256 is over the raw file bytes — the exact content the navigator pulls
+    from `raw.githubusercontent.com/.../docs/<topic>/<file>.md` — so the hashes
+    match byte-for-byte. Written to `site/<topic>/guide-index.json`, served beside
+    the topic page (gated by the per-file sha, never the global `llms.hash`).
+
+    Returns the total number of files hashed across all topics.
+    """
+    total = 0
+    for t in topics:
+        topic_key = t["topic_key"]
+        md_files = sorted((DOCS_DIR / topic_key).glob("*.md"))
+        if not md_files:
+            continue
+        manifest = {
+            f.name: hashlib.sha256(f.read_bytes()).hexdigest() for f in md_files
+        }
+        out_dir = SITE_DIR / topic_key
+        out_dir.mkdir(parents=True, exist_ok=True)
+        (out_dir / GUIDE_MANIFEST_NAME).write_text(
+            json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        total += len(manifest)
+    return total
+
+
 def build_llms_hash(llms_content: str) -> None:
     """Generate llms.hash — SHA-256 of llms.txt for cache freshness."""
     content_hash = hashlib.sha256(llms_content.encode("utf-8")).hexdigest()
@@ -260,10 +299,14 @@ def main():
     # Generate llms.hash for cache freshness
     build_llms_hash(index_content)
 
+    # Generate per-topic guide manifests (per-guide body shas for the navigator).
+    files_hashed = build_guide_manifests(topics)
+
     print(f"\nDone!")
     print(f"  Topics: {len(topics)}")
     print(f"  Total guides: {total_guides}")
     print(f"  Index: {index_path}")
+    print(f"  Guide manifests: {len(topics)} × {GUIDE_MANIFEST_NAME} ({files_hashed} files hashed)")
 
 
 if __name__ == "__main__":
