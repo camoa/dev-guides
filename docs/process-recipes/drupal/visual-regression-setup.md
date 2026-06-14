@@ -88,7 +88,40 @@ If invoked in dry-run mode, perform all reads and derivations but emit a preview
 
 1. **Discover Drupal surfaces.** If `surfaces` is not supplied, derive candidates from the site: enabled Views config (`views.view.*`), content-type bundles (`node.type.*`, queried through `ddev drush`), and the standard `/admin/*` structural routes. Propose them as registry surfaces with a `url` and any obvious dynamic-region `masks`. The operator confirms; discovery never overwrites an authored surface.
 
-2. **Derive the viewport matrix from the theme.** Read the active default theme's `*.breakpoints.yml` (Radix and its sub-themes included) to derive the viewport widths the design actually targets. If no theme breakpoints resolve, fall back to the plugin's generic CSS `@media` scan. An explicit `viewports` input overrides both.
+2. **Derive the viewport matrix from the theme.** The plugin's `derive-viewport-matrix.sh` kernel carries no Drupal knowledge — it does not know the `breakpoints.yml` format. This recipe owns that parse and hands the kernel a neutral `[{name, width}]` list via `--breakpoints-from`; the kernel then applies the canonical height band, dedup, and registry JSON shaping (the recipe never reimplements that). Parsing steps:
+
+   a. Resolve the breakpoints file. Drupal keeps themes under `web/themes/` (or the repo root if there is no `web/` docroot). Prefer the sole custom theme under `themes/custom/<theme>/<theme>.breakpoints.yml` — a built Radix sub-theme carries its own. Radix base ships **no** runtime `breakpoints.yml` of its own (only a starterkit template under `src/kits/`), so there is no contrib-Radix fallback file: if no custom-theme breakpoints file resolves, take no file and let the kernel's CSS `@media` scan handle it (the fallback at the tail of this step).
+
+   b. Parse it into `[{name, width}]`. Each top-level `key:` block names a breakpoint (the `name` is the segment after the last dot, so `mytheme.mobile` → `mobile`); read its `weight:` and the `min-width:` inside `mediaQuery:`. Sort by ascending weight, dedup by resolved width. Map the **mobile-first base** to width `375`: in Drupal that base is expressed as a `max-width`-only or empty `mediaQuery` (e.g. Radix `default.xs` is `(max-width: 575px)`), not a literal `min-width: 0` — so the lowest-weight block carrying no `min-width` becomes the 375 mobile viewport, and any further `min-width`-less blocks are dropped. (A literal `min-width: 0`, if a theme uses one, also maps to `375`.) A portable parser:
+
+      ```bash
+      THEME_BP="web/themes/custom/<theme>/<theme>.breakpoints.yml"
+      awk '
+        function flush() { if (cur != "") print w "\t" mw "\t" nm }
+        /^[A-Za-z_][A-Za-z0-9_.-]*:[[:space:]]*$/ {
+          flush(); cur = $0; sub(/:[[:space:]]*$/, "", cur)
+          n = split(cur, p, "."); nm = p[n]; w = 999; mw = "none"; next
+        }
+        /^[[:space:]]+weight:[[:space:]]*/ { line=$0; sub(/^[[:space:]]+weight:[[:space:]]*/,"",line); w=line+0; next }
+        /^[[:space:]]+mediaQuery:[[:space:]]*/ {
+          line=$0; if (match(line,/min-width:[[:space:]]*[0-9]+/)) { seg=substr(line,RSTART,RLENGTH); sub(/min-width:[[:space:]]*/,"",seg); mw=seg+0 }
+          next
+        }
+        END { flush() }
+      ' "$THEME_BP" | sort -n -k1,1 | awk -F'\t' '
+        $3=="" { next }
+        {
+          if ($2=="none") { if (basedone) next; w = 375; basedone = 1 }   # lowest-weight max-width-only block = mobile base
+          else { w = ($2==0 ? 375 : $2) }
+          if (!(w in seen)) { seen[w]=1; printf "%s%s", (c++?",":""), "{\"name\":\"" $3 "\",\"width\":" w "}" }
+        }
+        END { print "" }
+      ' | sed 's/^/[/; s/$/]/' > "$CODE_PATH/.viewports-from-recipe.json"
+      ```
+
+   c. Feed the kernel: `derive-viewport-matrix.sh <code_path> --breakpoints-from "$CODE_PATH/.viewports-from-recipe.json"`. Strip the `_source` annotation from its output and write the matrix to the registry's top-level `viewports:` block.
+
+   If no theme breakpoints resolve, skip the parse and let the kernel fall back to its generic CSS `@media` scan (`derive-viewport-matrix.sh <code_path>`, optionally `--css-root <dir>`). An explicit `viewports` input overrides both. Clean up the temp `.viewports-from-recipe.json` after the matrix is written.
 
 3. **Establish authenticated reach (skip if all surfaces are anonymous).** For each distinct qa_accounts `role` in scope, derive an `auth_context` token `<ctx>` and stand up the per-context chain the plugin's seam expects (see Opinion): write the setup spec `tests/visual/.auth/<ctx>.setup.ts` from the plugin's stub, substituting `__AUTH_CONTEXT__` → `<ctx>` and `__STORAGE_STATE__` → `tests/visual/.auth/<ctx>.json` — its body is `loginAsRole(page, '<role>')` then `await page.context().storageState({ path: STORAGE_STATE })`. Register the `visual-setup-<ctx>` setup project and, per viewport, the `visual-chromium-<vp>-<ctx>` authed project (`dependencies: ['visual-setup-<ctx>']`, `storageState: 'tests/visual/.auth/<ctx>.json'`, `testDir: './tests/visual/auth/<ctx>'`). Add `tests/visual/.auth/*.json` to `.gitignore` and `testIgnore: ['**/.auth/**', '**/auth/**']` to the anonymous projects. This per-context capture is the gap the generic anonymous-only path cannot fill on its own; authored setup specs and storageState files are never overwritten when already present.
 
@@ -153,6 +186,30 @@ After the recipe runs, verify:
 5. The plugin's visual-regression gate returns a verdict; an unchanged surface passes; a deliberately altered surface fails the diff.
 
 This recipe ships no executable verifier of its own — the plugin's baseline manager and visual-regression gate are the runtime mechanism; the checks above are the agent-driven protocol.
+
+## Change-impact globs
+
+The plugin's change-impact classifier ships a framework-neutral floor (stylesheet / plain-script / markup extensions) and asks the active framework's recipes for the stack's own view-layer file types. This section is that declaration for the Drupal visual-regression path: it maps each Drupal view-layer file type to the `visual_regression` gate a change to it could justify — a change there can alter rendered output, so it is worth a re-baseline check. The plugin reconstructs this list on the fly each run and **unions** it onto the neutral floor; it also unions across recipes, so these entries deliberately agree with the `review` recipe's `## Change-impact globs` (`checks.md`) — where a glob overlaps, the gates merge and the duplication is harmless. Nothing here is persisted as a project-local file a builder could edit to drop a gate.
+
+| Glob | Gate | Why |
+|---|---|---|
+| `**/*.twig` | `visual_regression` | Template — the rendered surface itself. |
+| `**/*.theme` | `visual_regression` | Theme preprocessing alters render arrays (output). |
+| `**/*.css` | `visual_regression` | Stylesheet — a direct change to rendered appearance. |
+| `**/*.libraries.yml` | `visual_regression` | Asset wiring — which CSS/JS attach to a surface, so a change alters appearance. |
+
+Machine-readable form the plugin lifts directly into `--rules-from`:
+
+```json
+{
+  "rules": [
+    { "glob": "**/*.twig",          "gates": ["visual_regression"] },
+    { "glob": "**/*.theme",         "gates": ["visual_regression"] },
+    { "glob": "**/*.css",           "gates": ["visual_regression"] },
+    { "glob": "**/*.libraries.yml", "gates": ["visual_regression"] }
+  ]
+}
+```
 
 ## References
 
