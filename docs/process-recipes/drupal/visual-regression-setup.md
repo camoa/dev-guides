@@ -187,6 +187,30 @@ After the recipe runs, verify:
 
 This recipe ships no executable verifier of its own — the plugin's baseline manager and visual-regression gate are the runtime mechanism; the checks above are the agent-driven protocol.
 
+## Change-impact globs
+
+The plugin's change-impact classifier ships a framework-neutral floor (stylesheet / plain-script / markup extensions) and asks the active framework's recipes for the stack's own view-layer file types. This section is that declaration for the Drupal visual-regression path: it maps each Drupal view-layer file type to the `visual_regression` gate a change to it could justify — a change there can alter rendered output, so it is worth a re-baseline check. The plugin reconstructs this list on the fly each run and **unions** it onto the neutral floor; it also unions across recipes, so these entries deliberately agree with the `review` recipe's `## Change-impact globs` (`checks.md`) — where a glob overlaps, the gates merge and the duplication is harmless. Nothing here is persisted as a project-local file a builder could edit to drop a gate.
+
+| Glob | Gate | Why |
+|---|---|---|
+| `**/*.twig` | `visual_regression` | Template — the rendered surface itself. |
+| `**/*.theme` | `visual_regression` | Theme preprocessing alters render arrays (output). |
+| `**/*.css` | `visual_regression` | Stylesheet — a direct change to rendered appearance. |
+| `**/*.libraries.yml` | `visual_regression` | Asset wiring — which CSS/JS attach to a surface, so a change alters appearance. |
+
+Machine-readable form the plugin lifts directly into `--rules-from`:
+
+```json
+{
+  "rules": [
+    { "glob": "**/*.twig",          "gates": ["visual_regression"] },
+    { "glob": "**/*.theme",         "gates": ["visual_regression"] },
+    { "glob": "**/*.css",           "gates": ["visual_regression"] },
+    { "glob": "**/*.libraries.yml", "gates": ["visual_regression"] }
+  ]
+}
+```
+
 ## References
 
 ### External origins (referenced, not authored here)
