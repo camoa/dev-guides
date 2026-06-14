@@ -124,7 +124,12 @@ def collect_recipes() -> list[dict]:
                 file=sys.stderr,
             )
             continue
-        sha = hashlib.sha256(raw.encode("utf-8")).hexdigest()[:8]
+        # Hash the raw on-disk bytes — the exact content the navigator pulls from
+        # raw.githubusercontent.com and re-hashes to verify the blob. read_text()
+        # above normalizes newlines for frontmatter parsing, so it must NOT be the
+        # hash input or a CRLF/BOM file would fail the consumer's integrity check.
+        # Matches the guide manifest (generate_llms.py uses f.read_bytes()).
+        sha = hashlib.sha256(path.read_bytes()).hexdigest()[:8]
         recipes.append(
             {
                 "name": name,
