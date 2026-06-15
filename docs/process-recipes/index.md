@@ -14,6 +14,12 @@ Process recipes are **resolved by an orchestrator**, keyed by **`(phase × frame
 |---|---|---|---|
 | `e2e-setup` | `drupal` | [ATK end-to-end test setup](drupal/e2e-setup-atk.md) | A Drupal project (DDEV + Playwright) needs a behavioural E2E harness. |
 | `visual-regression` | `drupal` | [Visual-regression setup](drupal/visual-regression-setup.md) | A Drupal project needs visual-regression coverage with deterministic baselines. |
+| `research` | `claude-code-plugins` | [Plugin prior-art research](claude-code-plugins/prior-art.md) | A Claude Code plugin project must establish prior art (reuse / extend / build-new) before scaffolding a component. |
+| `design` | `claude-code-plugins` | [Plugin component architecture](claude-code-plugins/architecture.md) | Turning a researched need into a component map — type choice, progressive disclosure, manifest + boundary. |
+| `implement` | `claude-code-plugins` | [Component authoring standards](claude-code-plugins/authoring-standards.md) | Authoring skills / commands / agents / hooks to contract, with paper-test as the test-first gate. |
+| `review` | `claude-code-plugins` | [Plugin review checks](claude-code-plugins/checks.md) | Validating a plugin (structural + semantic) before acceptance, routing each check to its owning tool. |
+
+> **`claude-code-plugins` binds only four phases.** A Claude Code plugin has no rendered or behavioural runtime surface, so this framework declares **no `e2e-setup` or `visual-regression` recipe**. Do not run `/setup-e2e` or `/setup-visual-regression` on a plugin project — the loader correctly returns no recipe, but those commands' generic fallback would still try to scaffold a Playwright harness that does not apply.
 
 ## Authoring a process recipe
 
