@@ -26,6 +26,11 @@ nav:
     - Drupal:
       - process-recipes/drupal/e2e-setup-atk.md
       - process-recipes/drupal/visual-regression-setup.md
+    - Claude Code Plugins:
+      - process-recipes/claude-code-plugins/prior-art.md
+      - process-recipes/claude-code-plugins/architecture.md
+      - process-recipes/claude-code-plugins/authoring-standards.md
+      - process-recipes/claude-code-plugins/checks.md
   - Drupal:
     - drupal/index.md
     - AJAX:

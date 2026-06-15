@@ -48,8 +48,9 @@ DOMAIN_MAP = {
     "nextjs": "Next.js",
     "wordpress": "WordPress",
     "design-systems": "Design Systems",
+    "claude-code-plugins": "Claude Code Plugins",
 }
-DOMAIN_ORDER = ["Drupal", "WordPress", "Next.js", "JavaScript", "CSS", "Design Systems"]
+DOMAIN_ORDER = ["Drupal", "WordPress", "Next.js", "JavaScript", "CSS", "Design Systems", "Claude Code Plugins"]
 
 HEADER = (
     "# Dev Process Recipes\n\n"
