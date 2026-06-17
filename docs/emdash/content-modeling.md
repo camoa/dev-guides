@@ -2,7 +2,7 @@
 description: The core EmDash build workflow — defining collections and fields in the visual schema builder, generating TypeScript types, querying via Astro live collections, modelling structured content with Portable Text, and editorial workflow (revisions, drafts, scheduling, search).
 tldr: "Define collections in EmDash's visual schema builder, run `npx emdash types`, and query via Astro live collections (`getEmDashCollection`/`getEmDashEntry`). Content is Portable Text JSON (not serialized HTML), rendered with `<PortableText>`."
 emdash_version: "0.20.0 / main@23c37f3 (2026-06-17)"
-# Verified against: github.com/emdash-cms/emdash README + main@23c37f35dfe9ce23fca0d48acea228299d25e19e (2026-06-17); release emdash@0.20.0; official docs https://docs.emdashcms.com/ (fetched 2026-06-16/17). UNVERIFIED items flagged inline (FTS5 engine name; per-collection SQL table). Third-party emdashcms.dev NOT used.
+# Verified against: github.com/emdash-cms/emdash README + main@23c37f35dfe9ce23fca0d48acea228299d25e19e (2026-06-17); release emdash@0.20.0; official docs https://docs.emdashcms.com/ (fetched 2026-06-16/17). Third-party emdashcms.dev NOT used.
 ---
 
 # EmDash: Content Modeling
@@ -32,7 +32,7 @@ Every entry also carries **system fields** managed by EmDash: `id`, `slug`, `sta
 
 **Schema safety:** "Adding a field is always safe. Removing one drops its data. Rename rather than remove-and-recreate to preserve values."
 
-> **DB-to-table caveat (UNVERIFIED specifics).** Each field type "maps to a SQLite column type" ([Field Types](https://docs.emdashcms.com/reference/field-types/)), so the model is backed by real database columns. The docs do **not** state verbatim that "each collection produces its own SQL table" — that mechanic is implied by the column mappings but not documented in those words. Treat it as "DB-backed columns," not a documented per-collection-table guarantee.
+Each field type "maps to a SQLite column type" ([Field Types](https://docs.emdashcms.com/reference/field-types/)), so a collection's fields are backed by real, typed database columns.
 
 ## Field Types
 
@@ -71,7 +71,7 @@ EmDash "provides **16 field types**… Each type maps to a SQLite column type an
 
 ## Pattern — Querying Content
 
-Content is queried in Astro templates with two helpers. The docs describe this as using "Astro's live content collections with automatic caching"; the public surface is `getEmDashCollection` / `getEmDashEntry` (there is no separately branded "Live Collections" API name). ([Querying Content](https://docs.emdashcms.com/guides/querying-content/), [API Reference](https://docs.emdashcms.com/reference/api/), [Create a Blog](https://docs.emdashcms.com/guides/create-a-blog/))
+Content is queried in Astro templates with two helpers — `getEmDashCollection` / `getEmDashEntry` — using "Astro's live content collections with automatic caching" ([Querying Content](https://docs.emdashcms.com/guides/querying-content/), [API Reference](https://docs.emdashcms.com/reference/api/), [Create a Blog](https://docs.emdashcms.com/guides/create-a-blog/)).
 
 ```typescript
 import { getEmDashCollection, getEmDashEntry } from "emdash";
@@ -103,13 +103,13 @@ import { PortableText } from "emdash/ui";
 
 Why this matters for a content model: WordPress's `the_content()` emits a single serialized HTML blob, mixing content with presentation. EmDash maps `the_content()` → `<PortableText />` and "Gutenberg blocks convert to Portable Text"; collections "work like Custom Post Types" ([Coming from WordPress](https://docs.emdashcms.com/coming-from/wordpress/)). Because the body is structured JSON, the same content can be rendered to different presentations, queried, and transformed — decoupling content from markup.
 
-> The exact phrase "JSON vs serialized HTML" is **not** stated verbatim in the docs; it is the documented `the_content()` → `<PortableText />` mapping plus the Portable Text spec reference, presented here as an adoption consequence. Conversion helpers `prosemirrorToPortableText` / `portableTextToProsemirror` are exported from `emdash` ([API Reference](https://docs.emdashcms.com/reference/api/)).
+Conversion helpers `prosemirrorToPortableText` / `portableTextToProsemirror` are exported from `emdash` for moving between the editor and the stored Portable Text ([API Reference](https://docs.emdashcms.com/reference/api/)).
 
 ## Editing, Revisions, Drafts, and Scheduling
 
 The editor supports headings (H2–H6), inline formatting, lists, links, media-library images, code blocks (syntax highlighting), sanitized HTML blocks, embeds (YouTube/Vimeo/Twitter), and reusable **Sections** via a `/section` command. HTML blocks "are sanitized before rendering on the frontend to prevent XSS"; by default iframes are allowed only from `www.youtube.com` and `player.vimeo.com` ([Working with Content](https://docs.emdashcms.com/guides/working-with-content/)).
 
-- **Statuses:** "Every entry has one of three statuses": **Draft** (admin only), **Published** (public), **Archived** (admin only). The `CollectionFilter` type confirms `"draft" | "published" | "archived"`. *Doc inconsistency to flag: the content-model system-fields table calls the third status "scheduled," but the TypeScript type and the working-with-content page agree it is "archived." Scheduling is achieved via Draft + a future date, not a discrete `scheduled` status.*
+- **Statuses:** "Every entry has one of three statuses": **Draft** (admin only), **Published** (public), **Archived** (admin only). The `CollectionFilter` type confirms `"draft" | "published" | "archived"`. Scheduling is achieved via Draft + a future publication date, not a discrete `scheduled` status.
 - **Revisions:** enabled by the `revisions` support; "track content history with version snapshots," viewable from a sidebar **Revisions** list with timestamps. No maximum revision count is documented. `version` increments on each save. (REST exposes revision list/get/restore endpoints.)
 - **Scheduled publishing:** with the `scheduling` support, set status to Draft and a future **Publication date**; "when the publication date arrives, the content automatically becomes published." (`scheduled_at` is a system field.)
 - **Drafts & preview:** the `preview` support generates "secure, time-limited URLs" with "HMAC-SHA256 signed tokens"; `getEmDashEntry` returns `isPreview` ([Preview](https://docs.emdashcms.com/guides/preview/)).
@@ -129,7 +129,7 @@ const results = await search("hello world", {
 
 There is also a REST surface: `GET /_emdash/api/search?q=…` (params `q`, `collections`, `status`, `limit`, `cursor`) and `POST /_emdash/api/search/rebuild` to rebuild the FTS index ([REST API](https://docs.emdashcms.com/reference/rest-api/), [API Reference](https://docs.emdashcms.com/reference/api/)).
 
-> **UNVERIFIED — FTS engine name.** The docs mention an "FTS index" and a rebuild endpoint but **do not name SQLite FTS5**. Do not claim "FTS5" as documented — treat it as "a (SQLite) full-text search index" with the engine name unconfirmed.
+The docs describe a full-text search index (the engine is not named in the docs) plus the rebuild endpoint above.
 
 ## Common Mistakes
 

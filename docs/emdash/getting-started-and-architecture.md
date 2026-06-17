@@ -2,7 +2,7 @@
 description: Onboarding and architecture for building a real site on EmDash — the Astro integration model, scaffolding, what you get out of the box, the deploy-target decision, and when EmDash fits vs Next.js-headless or WordPress.
 tldr: "Beta full-stack TypeScript CMS on Astro. Scaffold with `npm create emdash`, wire via `emdash({ database, storage })`, deploy to Cloudflare (D1+R2+Workers) or Node+SQLite. Sandboxed plugins need Cloudflare's paid Worker Loaders."
 emdash_version: "0.20.0 / main@23c37f3 (2026-06-17)"
-# Verified against: github.com/emdash-cms/emdash README + main@23c37f35dfe9ce23fca0d48acea228299d25e19e (2026-06-17); release emdash@0.20.0; official docs https://docs.emdashcms.com/ (fetched 2026-06-16/17). UNVERIFIED items flagged inline. Third-party emdashcms.dev NOT used.
+# Verified against: github.com/emdash-cms/emdash README + main@23c37f35dfe9ce23fca0d48acea228299d25e19e (2026-06-17); release emdash@0.20.0; official docs https://docs.emdashcms.com/ (fetched 2026-06-16/17). Third-party emdashcms.dev NOT used.
 ---
 
 # EmDash: Getting Started and Architecture
@@ -18,13 +18,13 @@ Reach for this when you are evaluating or adopting EmDash to build a real site: 
 **What you get out of the box** ([docs: Introduction](https://docs.emdashcms.com/introduction/), [Admin Panel](https://docs.emdashcms.com/concepts/admin-panel/)):
 
 - **Visual content modelling** — "Define and change collections and fields from the admin UI; changes take effect immediately."
-- **Live Collections** — "Content is served at runtime, so edits appear immediately."
+- **Live content queries** — "Content is served at runtime, so edits appear immediately."
 - **Admin panel** — dashboard, content editors, media library, an admin-only schema builder, navigation menus, widget areas, taxonomies, site settings, and plugin pages. Roles: Subscriber, Contributor, Author, Editor, Admin.
 - **Plugin system** — "WordPress-inspired hooks, storage, settings, and admin UI extensions."
 - **Auth** — passkeys / WebAuthn primary, with OAuth and magic-link alternatives (README; [Getting Started](https://docs.emdashcms.com/getting-started/)).
 - **Rich text editing via TipTap** with structured (Portable Text) storage (README).
 - **A REST API** under `/_emdash/api/` for management, search, revisions, and WordPress import ([REST API](https://docs.emdashcms.com/reference/rest-api/)) — for management/migration, not your render path.
-- **Built-in MCP server** and **agent skill files** for AI tooling — *README-only; no docs page covers these, so treat the depth as unverified.*
+- **Built-in MCP server and agent skill files** for AI tooling (described in the project README).
 - **WordPress migration tooling** (README; `/_emdash/api/import/wordpress`).
 
 ## Steps — Scaffold and Run Locally
@@ -140,8 +140,7 @@ npx emdash secrets generate   # produces EMDASH_ENCRYPTION_KEY
 
 Two plugin formats ([Plugin Overview](https://docs.emdashcms.com/plugins/overview/)):
 
-- **Sandboxed** — "run in an isolated runtime managed by a configurable sandbox runner… subject to capability and resource enforcement, and reach only the APIs they declare." One-click marketplace install. On Cloudflare the isolation uses **Worker Loaders**: "Worker Loader caches the V8 isolate per plugin id so the isolate cold-start cost is only paid once" ([Choosing a Format](https://docs.emdashcms.com/plugins/creating-plugins/choosing-a-format/)). The README calls these "Dynamic Worker Loaders" (docs say "Worker Loader").
-- **Native** — "run in the same process as your Astro site… full access to the runtime, can ship React admin pages and Portable Text rendering components, and inject HTML into public pages." Install via a code change plus a deploy, from npm rather than the marketplace.
+- **Sandboxed** — "run in an isolated runtime managed by a configurable sandbox runner… subject to capability and resource enforcement, and reach only the APIs they declare." One-click marketplace install. On Cloudflare the isolation uses **Worker Loaders**: "Worker Loader caches the V8 isolate per plugin id so the isolate cold-start cost is only paid once" ([Choosing a Format](https://docs.emdashcms.com/plugins/creating-plugins/choosing-a-format/)).- **Native** — "run in the same process as your Astro site… full access to the runtime, can ship React admin pages and Portable Text rendering components, and inject HTML into public pages." Install via a code change plus a deploy, from npm rather than the marketplace.
 
 Plugins are declared with `definePlugin()` plus a **capabilities** manifest (e.g. `capabilities: ["read:content", "email:send"]`) and lifecycle `hooks` (README example).
 
