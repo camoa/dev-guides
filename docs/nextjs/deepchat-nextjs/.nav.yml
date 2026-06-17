@@ -1,0 +1,18 @@
+nav:
+- index.md
+- ai-provider-integration.md
+- anti-patterns.md
+- authentication-sessions.md
+- best-practices.md
+- connect-configuration.md
+- custom-handlers.md
+- deepchat-overview.md
+- drupal-backend.md
+- file-upload.md
+- installation.md
+- message-formats.md
+- nextjs-api-routes.md
+- security.md
+- streaming-responses.md
+- styling-theming.md
+append_unmatched: true

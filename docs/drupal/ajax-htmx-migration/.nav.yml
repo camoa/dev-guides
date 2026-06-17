@@ -1,0 +1,20 @@
+nav:
+- index.md
+- ajax-vs-htmx-fundamentals.md
+- ajax-command-to-htmx-equivalents.md
+- dependent-dropdown-migration.md
+- cascading-selects-with-url-migration.md
+- button-triggered-content-load-migration.md
+- multi-step-wizard-migration.md
+- real-time-validation-migration.md
+- infinite-scroll-migration.md
+- dynamic-field-addition-migration.md
+- javascript-event-migration.md
+- custom-ajax-command-migration.md
+- drupal-behavior-migration.md
+- accessibility-migration.md
+- when-not-to-migrate.md
+- hybrid-ajax-htmx-approach.md
+- migration-strategy-best-practices.md
+- migration-checklist.md
+append_unmatched: true

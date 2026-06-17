@@ -1,0 +1,21 @@
+nav:
+- index.md
+- overview-and-decision.md
+- architecture.md
+- defining-components.md
+- props-system.md
+- slots-system.md
+- source-plugins.md
+- variants.md
+- sdc-integration.md
+- layout-builder-integration.md
+- views-integration.md
+- field-formatters.md
+- blocks-integration.md
+- pattern-library.md
+- creating-custom-source-plugins.md
+- config-export-reference.md
+- best-practices-and-anti-patterns.md
+- security-and-accessibility.md
+- sources-maintenance.md
+append_unmatched: true

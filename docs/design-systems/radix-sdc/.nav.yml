@@ -1,0 +1,19 @@
+nav:
+- index.md
+- atoms-sdc-components.md
+- build-tools-compilation.md
+- design-tokens-radix-configuration.md
+- layout-builder-best-practices.md
+- molecules-sdc-components.md
+- organisms-sdc-layout-builder.md
+- performance-best-practices.md
+- radix-cli-integration.md
+- radix-component-reuse-strategy.md
+- radix-sub-theme-architecture.md
+- radix-sub-theme-best-practices.md
+- sdc-component-best-practices.md
+- sdc-component-development.md
+- templates-drupal-theme-layer.md
+- troubleshooting-sdc-components.md
+- twig-and-preprocess-best-practices.md
+append_unmatched: true

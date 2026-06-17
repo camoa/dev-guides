@@ -1,0 +1,16 @@
+nav:
+- index.md
+- foundation-layer-design-tokens.md
+- component-classification-framework.md
+- atom-recognition.md
+- molecule-recognition.md
+- organism-recognition.md
+- templates-vs-pages.md
+- styleguide-format.md
+- design-system-analysis-best-practices.md
+- source-specific-recognition.md
+- reference-design-systems.md
+- standards-specifications.md
+- validation-checklist.md
+- conclusion.md
+append_unmatched: true

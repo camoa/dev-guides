@@ -1,0 +1,20 @@
+nav:
+- index.md
+- overview-and-decision.md
+- architecture.md
+- installation-and-setup.md
+- theme-components-catalog.md
+- ui-styles-integration.md
+- ui-skins-integration.md
+- template-overrides.md
+- preprocess-and-hooks.md
+- sub-theming-starterkit.md
+- component-reuse-decision-tree.md
+- layout-builder-integration.md
+- sdc-rendering-decision.md
+- libraries-and-assets.md
+- customization-patterns.md
+- best-practices-and-anti-patterns.md
+- security-and-accessibility.md
+- sources-maintenance.md
+append_unmatched: true

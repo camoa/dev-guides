@@ -1,0 +1,22 @@
+nav:
+- index.md
+- architecture.md
+- best-practices.md
+- code-reference-map.md
+- column-types.md
+- config-first-creation.md
+- custom-plugins.md
+- datetime-fields.md
+- entity-references.md
+- feeds-integration.md
+- field-level-formatters.md
+- field-level-widgets.md
+- files-images.md
+- link-fields.md
+- overview.md
+- schema-updates.md
+- sub-modules.md
+- token-support.md
+- views-integration.md
+- widget-plugins.md
+append_unmatched: true

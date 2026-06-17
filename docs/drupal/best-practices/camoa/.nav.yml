@@ -1,0 +1,25 @@
+nav:
+- index.md
+- use-bootstrap-before-custom-css.md
+- never-replace-bootstrap-maps.md
+- font-sizing-always-use-rfs.md
+- mobile-first-breakpoints.md
+- no-direct-child-selectors-with-layout-builder.md
+- lb-styles-must-not-override-component-internals.md
+- media-view-mode-to-responsive-image-style.md
+- responsive-image-sizing-per-context.md
+- sizes-based-vs-breakpoint-based.md
+- no-hardcoded-content-in-templates.md
+- config-over-code.md
+- field-descriptions-via-base-field-overrides.md
+- bef-ajax-over-js-toggles.md
+- block-to-sdc-via-block-template.md
+- sdc-libraries.md
+- window-width-at-click-time.md
+- per-environment-module-exclusion.md
+- metatag-per-bundle.md
+- composer-module-removal-order.md
+- hiding-features-for-launch.md
+- prefer-drush-commands-over-custom-php.md
+- avoid-unnecessary-custom-modules.md
+append_unmatched: true

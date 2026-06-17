@@ -1,0 +1,9 @@
+nav:
+- index.md
+- DRY Principles: dry-principles
+- Security Practices: security-practices
+- SOLID Principles: solid-principles
+- TDD & Spec-Driven: tdd-spec-driven
+- Reading Strategy: reading-strategy
+- Testing Strategy: testing-strategy
+append_unmatched: true

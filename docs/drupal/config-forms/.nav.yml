@@ -1,0 +1,13 @@
+nav:
+- index.md
+- common-mistakes.md
+- configformbase-pattern.md
+- configuration-schema.md
+- dependency-injection.md
+- formbase-pattern.md
+- formbase-vs-listbuilder.md
+- listbuilder-pattern.md
+- operations-implementation.md
+- performance-best-practices.md
+- security-best-practices.md
+append_unmatched: true

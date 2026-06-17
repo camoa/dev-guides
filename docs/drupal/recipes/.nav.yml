@@ -1,0 +1,25 @@
+nav:
+- index.md
+- anti-patterns-mistakes.md
+- best-practices-patterns.md
+- code-reference-map.md
+- composer-integration.md
+- config-actions-advanced.md
+- config-actions-entity-specific.md
+- config-actions-universal.md
+- config-import-strict.md
+- core-recipes-catalog.md
+- creating-first-recipe.md
+- default-content-exporting.md
+- default-content-importing.md
+- default-content-overview.md
+- extension-installation.md
+- input-collection-forms.md
+- input-default-sources.md
+- input-defining.md
+- recipe-composition.md
+- recipe-system-overview.md
+- recipe-tooling.md
+- recipe-yaml-schema.md
+- security-performance.md
+append_unmatched: true

@@ -1,0 +1,8 @@
+nav:
+- index.md
+- what-is-modern-web-guidance.md
+- install-claude-code.md
+- install-other-agents.md
+- using-it-effectively.md
+- relationship-to-dev-guides.md
+append_unmatched: true

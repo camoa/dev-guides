@@ -1,0 +1,21 @@
+nav:
+- index.md
+- tailwind-v3-vs-v4.md
+- installation-integration.md
+- v4-configuration.md
+- v3-configuration.md
+- design-token-mapping.md
+- utility-class-reference.md
+- custom-theme-extension.md
+- responsive-design.md
+- dark-mode.md
+- component-patterns.md
+- apply-guidance.md
+- class-variance-authority.md
+- tailwind-merge-clsx.md
+- design-system-integration.md
+- performance-optimization.md
+- best-practices.md
+- accessibility.md
+- sources-maintenance.md
+append_unmatched: true

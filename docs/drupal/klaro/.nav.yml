@@ -1,0 +1,19 @@
+nav:
+- index.md
+- automatic-resource-attribution.md
+- consent-mode-selection.md
+- development-standards.md
+- installation-methods.md
+- legal-compliance-requirements.md
+- menu-integration.md
+- performance-optimization.md
+- purpose-management.md
+- security-best-practices.md
+- service-configuration.md
+- storage-settings.md
+- styling-and-ui-customization.md
+- translation-and-localization.md
+- troubleshooting.md
+- url-pattern-exclusions.md
+- what-is-consent-management.md
+append_unmatched: true

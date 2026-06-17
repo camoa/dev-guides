@@ -1,0 +1,23 @@
+nav:
+- index.md
+- overview.md
+- installation-setup.md
+- general-settings.md
+- checkboxes-radio-buttons.md
+- links-widget.md
+- sliders-widget.md
+- datepickers-widget.md
+- hidden-special-widgets.md
+- sort-widgets.md
+- pager-widgets.md
+- auto-submit.md
+- secondary-collapsible.md
+- option-rewriting-sorting.md
+- theming-templates.md
+- custom-widget-plugins.md
+- javascript-behaviors.md
+- hooks-alter.md
+- integration-patterns.md
+- configuration-schema.md
+- common-mistakes.md
+append_unmatched: true

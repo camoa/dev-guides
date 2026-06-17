@@ -1,0 +1,23 @@
+nav:
+- index.md
+- base-field-definitions.md
+- bundle-entity-implementation.md
+- computed-field-patterns.md
+- content-type-configuration.md
+- custom-field-type-development.md
+- entity-architecture-fundamentals.md
+- entity-query-patterns.md
+- entity-query-performance.md
+- entity-reference-patterns.md
+- field-access-control.md
+- field-formatter-development.md
+- field-instance-configuration.md
+- field-storage-configuration.md
+- field-type-selection.md
+- field-validation-patterns.md
+- field-widget-development.md
+- file-and-image-field-patterns.md
+- form-display-configuration.md
+- view-display-configuration.md
+- view-mode-development.md
+append_unmatched: true

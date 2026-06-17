@@ -1,0 +1,14 @@
+nav:
+- index.md
+- architecture-owners-vs-modelers.md
+- when-to-use.md
+- component-model.md
+- registering-model-owner.md
+- building-a-modeler.md
+- data-model-entity-storage.md
+- routes-permissions.md
+- yaml-plugin-definitions.md
+- import-export-recipe.md
+- modeler-landscape.md
+- drush-commands.md
+append_unmatched: true

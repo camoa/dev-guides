@@ -1,0 +1,21 @@
+use_index_title: true
+ignore:
+- plans
+- decoupled
+nav:
+- Home: index.md
+- Agentic Recipes: agentic-recipes
+- Process Recipes: process-recipes
+- Drupal: drupal
+- Next.js: nextjs
+- Design Systems: design-systems
+- Development Practices: development
+- Performance: performance
+- Accessibility: accessibility
+- AI Tooling: ai-tooling
+- CSS: css
+- CSS Craft: css/css-craft
+- JavaScript: js
+- Media: media
+- Testing: testing
+append_unmatched: true

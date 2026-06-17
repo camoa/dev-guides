@@ -1,0 +1,20 @@
+nav:
+- index.md
+- canvas-overview.md
+- component-types-decision.md
+- sdc-component-format.md
+- sdc-props-reference.md
+- sdc-slots.md
+- sdc-image-handling.md
+- code-component-format.md
+- canvas-npm-tools.md
+- canvas-cli.md
+- acquia-nebula.md
+- design-tokens-and-theming.md
+- storybook-integration.md
+- canvas-ai-assistant.md
+- decoupled-frontend-patterns.md
+- canvas-vs-standard-sdc-decision.md
+- security-considerations.md
+- component-creation-workflow.md
+append_unmatched: true

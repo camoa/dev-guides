@@ -1,0 +1,20 @@
+nav:
+- index.md
+- module-decision.md
+- dns-setup.md
+- region-selection.md
+- module-installation.md
+- settings-configuration.md
+- mail-routing.md
+- ui-configuration.md
+- api-key-storage.md
+- programmatic-sending.md
+- mailgun-specific-params.md
+- queue-vs-direct-send.md
+- webhook-handling.md
+- bounce-complaint-handling.md
+- verification-testing.md
+- common-errors.md
+- alternatives-comparison.md
+- pricing-tier-selection.md
+append_unmatched: true

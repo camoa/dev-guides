@@ -1,0 +1,12 @@
+nav:
+- index.md
+- responsive-images-craft.md
+- image-format-strategy.md
+- loading-and-decode-craft.md
+- placeholder-strategies.md
+- video-and-embed-craft.md
+- svg-craft.md
+- image-effects-craft.md
+- build-pipeline-optimization.md
+- drupal-media-pipeline.md
+append_unmatched: true
