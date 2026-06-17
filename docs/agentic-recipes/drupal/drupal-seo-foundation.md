@@ -2,12 +2,12 @@
 # Routing block — an orchestrator reads to here and decides.
 name: drupal_seo_foundation
 capability: drupal-seo-foundation
-description: Use when a Drupal 11.3+ site needs a complete on-page SEO foundation (metatag defaults, Schema.org JSON-LD, XML sitemap, pathauto patterns, redirects, robots.txt, google_tag, 403/404 + non-content defaults), composed from the site's own field inventory and runnable fully unattended via a typed input contract. Leverages drupal_cms_seo_basic + drupal_cms_seo_tools as the baseline; overlays only the gaps.
+description: Use when a Drupal 11.3+ site needs a complete on-page SEO foundation (metatag defaults, Schema.org JSON-LD, XML sitemap, pathauto patterns, redirects, robots.txt, google_tag, 403/404 + non-content defaults), composed from the site's own field inventory and runnable fully unattended via a typed input contract. Leverages drupal_cms_seo_basic + drupal_cms_seo_tools as the baseline; overlays only the gaps; supports `Person`/`Organization` roles, per-bundle `og_type` and date meta, hreflang sitemaps, and breadcrumb customization.
 
 # Metadata — read only after a match.
 label: Drupal SEO foundation
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 
 # Machine-readable dependency declaration.
 requires_guides:
@@ -38,6 +38,7 @@ requires_modules:
   - metatag
   - metatag_open_graph
   - metatag_twitter_cards
+  - metatag_custom_tags   # only required when `alternate_links` is used (rel="alternate" custom tags)
   - schema_metatag
   - schema_article
   - schema_organization
@@ -100,13 +101,16 @@ The layers are configured in this order, and the order is load-bearing:
 4. **Per-bundle defaults.** `node__<bundle>` files declaring the chains and Schema.org tags specific to each bundle's field set + semantic role.
 5. **Page-context defaults.** `403`, `404`, `front` (if not present).
 6. **Schema.org / JSON-LD per bundle.** Schema_metatag tags inside the per-bundle defaults from step 4. Source: guide `drupal/seo-geo/schema-metatag-setup`.
-7. **Pathauto patterns.** Per-bundle node patterns + per-vocabulary taxonomy patterns. Source: guide `drupal/seo-geo/pathauto-patterns`.
-8. **Sitemap settings.** Per-bundle priority + changefreq + image inclusion. Source: guide `drupal/seo-geo/xml-sitemap`.
-9. **robots.txt content.** `robotstxt.settings.yml` + remove the static `robots.txt` via composer scaffold exclusion. Source: guide `drupal/seo-geo/robots-txt`.
-10. **google_tag install + config exclusion.** Install the module and add `google_tag` to `$settings['config_exclude_modules']` in `settings.php` so its environment-specific container config stays out of config sync. The recipe authors no `google_tag` config; the container is configured per environment by the operator.
-11. **Breadcrumb structured data.** Verify `easy_breadcrumb` has `add_structured_data_json_ld: true`. Source: guide `drupal/seo-geo/breadcrumbs-structured-data`.
+7. **Metatag entity-type groups.** Emit `metatag.settings.yml` `entity_type_groups` per `metatag_groups_by_bundle` (or the default derived from `semantic_role_by_bundle`) so only the relevant tag groups (basic, open_graph, schema_article, schema_person, …) surface on each bundle's edit form. Sequenced after the per-bundle defaults exist. Source: guide `drupal/seo-geo/metatag-architecture`.
+8. **Pathauto patterns.** Per-bundle node patterns + per-vocabulary taxonomy patterns. Source: guide `drupal/seo-geo/pathauto-patterns`.
+9. **Sitemap settings.** Per-bundle priority + changefreq (empty `changefreq` allowed = no crawl-frequency hint) + image inclusion. Source: guide `drupal/seo-geo/xml-sitemap`.
+10. **Hreflang sitemap type + index.** When `sitemap_type: default_hreflang`, also write `simple_sitemap.type.default_hreflang.yml` and `simple_sitemap.sitemap.index.yml` (referencing both the default and the hreflang variant). Skipped when `sitemap_type: default`. Source: guide `drupal/seo-geo/metatag-multilingual`.
+11. **robots.txt content.** `robotstxt.settings.yml` + remove the static `robots.txt` via composer scaffold exclusion. Source: guide `drupal/seo-geo/robots-txt`.
+12. **google_tag install + config exclusion.** Install the module and add `google_tag` to `$settings['config_exclude_modules']` in `settings.php` so its environment-specific container config stays out of config sync. The recipe authors no `google_tag` config; the container is configured per environment by the operator.
+13. **Breadcrumb structured data.** Verify `easy_breadcrumb` has `add_structured_data_json_ld: true`. Source: guide `drupal/seo-geo/breadcrumbs-structured-data`.
+14. **Breadcrumb customization.** When declared, write `easy_breadcrumb.settings.yml` `alternative_title_field` (custom display-label field) and `custom_paths` (path-to-label overrides). Source: guide `drupal/seo-geo/breadcrumbs-structured-data`.
 
-The bundle defaults cannot exist until the per-entity defaults exist; pathauto patterns cannot generate aliases until the patterns are imported; the sitemap cannot reference URLs until aliases exist — hence the order.
+The bundle defaults cannot exist until the per-entity defaults exist; the entity-type groups reference the per-bundle defaults; pathauto patterns cannot generate aliases until the patterns are imported; the sitemap cannot reference URLs until aliases exist, and the hreflang index cannot reference a sitemap type that hasn't been written — hence the order.
 
 ## Preconditions
 
@@ -136,8 +140,33 @@ layers_in_scope:                       # opt-in per layer; absent = false
   non_content_defaults: false          # 403/404/taxonomy_term/user metatag defaults
 
 semantic_role_by_bundle:               # operator-chosen; no auto-derivation
-  # role enum: content_article | product | service | web_page | landing_page | none
+  # role enum: content_article | product | service | web_page | landing_page |
+  #            person | organization | none
+  #   person       → author/profile-style bundles (Schema.org Person)
+  #   organization → tenant/agency/brand bundles  (Schema.org Organization)
   <bundle>: <role>
+
+og_type_by_bundle:                     # og:type per bundle; bundles omitted inherit
+  # the node-level default. Source: guide drupal/seo-geo/open-graph
+  <bundle>: <og_type>                  # e.g. article | website | product
+
+metatag_groups_by_bundle:              # metatag.settings.yml entity_type_groups —
+  # which tag groups surface on each bundle's edit form. DEFAULT IS DERIVED from
+  # semantic_role_by_bundle (content_article → basic + open_graph + schema_article;
+  # product → … + schema_product; person → … + schema_person; etc.); declare a
+  # bundle here only to OVERRIDE the derived set.
+  <bundle>: [<group>]                  # e.g. [basic, open_graph, schema_article]
+
+date_fields_by_bundle:                 # drives article_published_time /
+  # article_modified_time tokens. Bundles omitted get no date meta. Each bundle's
+  # actual date fields differ. Source: guide drupal/seo-geo/open-graph
+  <bundle>:
+    published: <field_machine_name>    # e.g. field_publication_date | created
+    modified: <field_machine_name>     # e.g. field_updated_date | changed
+
+alternate_links: []                    # metatag_custom_tags rel="alternate" links
+  # (RSS, AMP, …). Empty = none. Requires the metatag_custom_tags module when used.
+  # - {rel: alternate, type: <mime_type>, href: <url>}
 
 priority_chains:                       # walked top-down against audited fields;
   og_image:                            #   first present field wins; if none, omit
@@ -158,19 +187,35 @@ home_node:                             # single source of truth; recipe does not
   bundle: string
   og_image_strategy: omit | static_url
   og_image_static_url: string|null
+  og_type: string|null                 # og:type on the front-page default; often
+                                       #   differs from the node-level default; null = inherit
+
+sitemap_type: default                  # default | default_hreflang
+  # default_hreflang also emits simple_sitemap.type.default_hreflang.yml +
+  # simple_sitemap.sitemap.index.yml. Source: guide drupal/seo-geo/metatag-multilingual
 
 sitemap_priority_by_role:              # role → (priority, changefreq)
-  content_article: {priority: <0.0-1.0>, changefreq: <enum>}
-  product:         {priority: <0.0-1.0>, changefreq: <enum>}
-  service:         {priority: <0.0-1.0>, changefreq: <enum>}
-  web_page:        {priority: <0.0-1.0>, changefreq: <enum>}
-  landing_page:    {priority: <0.0-1.0>, changefreq: <enum>}
+  # changefreq enum: always | hourly | daily | weekly | monthly | yearly | never | ""
+  #   "" = emit no changefreq hint (a valid, intentional "don't signal crawlers" stance)
+  content_article: {priority: <0.0-1.0>, changefreq: <enum|"">}
+  product:         {priority: <0.0-1.0>, changefreq: <enum|"">}
+  service:         {priority: <0.0-1.0>, changefreq: <enum|"">}
+  web_page:        {priority: <0.0-1.0>, changefreq: <enum|"">}
+  landing_page:    {priority: <0.0-1.0>, changefreq: <enum|"">}
+  person:          {priority: <0.0-1.0>, changefreq: <enum|"">}
+  organization:    {priority: <0.0-1.0>, changefreq: <enum|"">}
 
 pathauto_patterns_by_bundle:           # bundles omitted get no pattern
   <bundle>: <pattern_string>
 
 pathauto_patterns_by_vocabulary:       # vocabularies omitted get no pattern
   <vocabulary>: <pattern_string>
+
+excluded_vocabularies: []              # vocabularies that exist as taxonomies but are
+  # NOT part of the public SEO surface: no pathauto pattern, no sitemap setting, no
+  # metatag default is authored for them. Declared opt-out so the operator need not
+  # name every vocabulary just to silently exclude it.
+  # - <vocabulary>
 
 redirect:                              # verified when redirect in layers_in_scope
   auto_redirect: bool                  # expected true
@@ -184,12 +229,23 @@ robotstxt_remove_static_scaffold: bool # remove web/robots.txt via composer scaf
 # and excludes its config via settings.php (config_exclude_modules). The GA4 / GTM
 # container is environment-specific and set by the operator per environment.
 
+breadcrumb:                            # easy_breadcrumb.settings.yml customization
+  alternative_title_field: string|null # custom field for the breadcrumb display label
+                                       #   (e.g. field_breadcrumb_title); null = default
+  custom_paths: {}                     # path → label overrides, operator-facing as a map;
+  # the recipe serializes it to easy_breadcrumb's native `PATH::LABEL` newline-delimited
+  # string form. Empty = none.
+  #   <path>: <label>
+
 escalation_policy:                     # per ambiguity class; default = halt
   no_image_field_for_bundle: halt | omit_og_image | use_site_default
   no_description_field_for_bundle: halt | use_fallback | use_static
   url_convention_change_on_live_aliases: halt | apply_with_redirects | skip
   hardcoded_schema_org_blob: halt | apply | skip
   conflict_with_existing_config: halt | overwrite | skip
+  unknown_bundle_in_groups_map: halt | apply | drop      # bundle in metatag_groups_by_bundle doesn't exist
+  unknown_vocabulary_in_excluded_list: halt | apply | drop  # vocab in excluded_vocabularies doesn't exist
+  date_field_missing_on_bundle: halt | omit_date_meta | use_node_created_changed  # date_fields_by_bundle names an absent field
   new_entity_field_required: halt      # always halts; data-model changes out of scope
   content_seed_required: halt          # always halts; content authoring out of scope
 ```
@@ -205,10 +261,13 @@ If `mode: dry-run`, perform all reads and derivations but emit a preview instead
 3. **Reference scan (advisory menu).** Read only `reference_sources`; produce a labelled menu of reference patterns. Filter to `reference_selections`; drop everything else. The recipe never carries unselected reference patterns into the plan. See guide `drupal/seo-geo/seo-recipe-baseline` for the Drupal CMS recipe shape if it's a selected source.
 
 4. **Compose the plan.** For each in-scope layer, walk the contract's rules over the audit:
-   - For each bundle in `semantic_role_by_bundle`: compose its per-bundle metatag default by walking `priority_chains` against the bundle's audited fields. Cite the rule and the field for every produced line.
-   - For each role: derive Schema.org type and sitemap priority/changefreq from the input mapping.
+   - For each bundle in `semantic_role_by_bundle`: compose its per-bundle metatag default by walking `priority_chains` against the bundle's audited fields. Cite the rule and the field for every produced line. Add `og_type_by_bundle` and `date_fields_by_bundle` overrides where declared; halt per `date_field_missing_on_bundle` if a named date field is absent.
+   - For `metatag_groups_by_bundle` (or the role-derived default): compose `metatag.settings.yml` `entity_type_groups`; halt per `unknown_bundle_in_groups_map` on an unknown bundle.
+   - For each role: derive Schema.org type and sitemap priority/changefreq (empty `changefreq` allowed) from the input mapping. When `sitemap_type: default_hreflang`, also plan `simple_sitemap.type.default_hreflang.yml` + `simple_sitemap.sitemap.index.yml`.
    - For each bundle in `pathauto_patterns_by_bundle`: produce the pattern file.
-   - For each vocabulary in `pathauto_patterns_by_vocabulary`: produce the pattern file.
+   - For each vocabulary in `pathauto_patterns_by_vocabulary`: produce the pattern file. Vocabularies in `excluded_vocabularies` get no pathauto/sitemap/metatag surface; halt per `unknown_vocabulary_in_excluded_list` on an unknown vocabulary.
+   - For `alternate_links` (if any): plan `metatag_custom_tags` `rel="alternate"` entries (requires the `metatag_custom_tags` module).
+   - For `breadcrumb` (if declared): plan `easy_breadcrumb.settings.yml` `alternative_title_field` + `custom_paths`.
    - For `google_tag` (if in scope): plan the module install and the `settings.php` `config_exclude_modules` entry. No container config is produced.
    - For robotstxt, redirect verification, 403/404, taxonomy_term, user, home: produce per the input.
    Emit a structured `plan.json`.
@@ -267,12 +326,16 @@ emits (in chain order):
        metatag.metatag_defaults.403.yml               (create, if non_content_defaults)
        metatag.metatag_defaults.404.yml               (create, if non_content_defaults)
        metatag.metatag_defaults.node__<bundle>.yml    (per bundle in semantic_role_by_bundle)
+       metatag.settings.yml                           (entity_type_groups per metatag_groups_by_bundle / derived)
        pathauto.settings.yml                          (taxonomy_term enabled if needed)
        pathauto.pattern.<bundle>.yml                  (per bundle in input)
        pathauto.pattern.taxonomy_<vocabulary>.yml     (per vocab in input)
-       simple_sitemap.bundle_settings.default.node.<bundle>.yml  (per role mapping)
-       simple_sitemap.bundle_settings.default.taxonomy_term.<vocab>.yml  (per input)
+       simple_sitemap.bundle_settings.default.node.<bundle>.yml  (per role mapping; changefreq may be '')
+       simple_sitemap.bundle_settings.default.taxonomy_term.<vocab>.yml  (per input; excluded_vocabularies omitted)
+       simple_sitemap.type.default_hreflang.yml       (if sitemap_type: default_hreflang)
+       simple_sitemap.sitemap.index.yml               (if sitemap_type: default_hreflang)
        robotstxt.settings.yml                         (from input)
+       easy_breadcrumb.settings.yml                   (alternative_title_field + custom_paths, if declared)
        settings.php  (config_exclude_modules += google_tag, if in scope)
        core.extension.yml                             (newly-enabled modules)
 ```
@@ -305,6 +368,16 @@ After `apply`, the recipe runs each check and emits PASS / FAIL. Failures exit n
 
 9. **idempotency** — Immediately re-run `apply` with the same contract and project state; assert `drush cim` reports 0 changes and no aliases are regenerated.
 
+10. **metatag-groups-resolve-per-bundle** — For each bundle in `metatag_groups_by_bundle`: the bundle's `entity_type_groups` entry in `metatag.settings.yml` matches the declared (or derived) set. Fail if a configured group isn't installed (e.g. `schema_person` group declared but the `schema_person` module is not enabled).
+
+11. **sitemap-hreflang-when-declared** — If `sitemap_type: default_hreflang`, assert `simple_sitemap.type.default_hreflang.yml` exists and `simple_sitemap.sitemap.index.yml` references both the default and the hreflang variant. PASS when `sitemap_type: default`.
+
+12. **og-type-per-bundle** — For each bundle in `og_type_by_bundle`: the resolved per-bundle metatag default contains the declared `og_type`. Fetch a sample page from each bundle; `<meta property="og:type">` matches. Source: guide `drupal/seo-geo/open-graph`.
+
+13. **date-meta-resolves-when-declared** — For each bundle in `date_fields_by_bundle`: a sample page has non-empty `<meta property="article:published_time">` and `<meta property="article:modified_time">` resolving from the declared fields. Source: guide `drupal/seo-geo/open-graph`.
+
+14. **excluded-vocabularies-absent-from-surface** — For each vocabulary in `excluded_vocabularies`: no pathauto pattern, no sitemap setting, and no metatag default exists for it. Idempotent: re-running the recipe does not create them.
+
 The verifier is recipe-runnable, not operator-driven. Failures exit non-zero.
 
 ## References
@@ -317,7 +390,7 @@ The verifier is recipe-runnable, not operator-driven. Failures exit non-zero.
 | `drupal/seo-geo/seo-recipe-baseline` | ✅ exists | Drupal CMS recipe selection in Phase 3 |
 | `drupal/seo-geo/metatag-architecture` | ✅ exists | Cascade order (global → entity → bundle) the chain follows |
 | `drupal/seo-geo/core-meta-tags` | ✅ exists | Foundation tags written in steps 2–3 |
-| `drupal/seo-geo/open-graph` | ✅ exists | og:* tags in per-bundle defaults |
+| `drupal/seo-geo/open-graph` | ✅ exists | og:* tags in per-bundle defaults; og:type-per-bundle (`og_type_by_bundle`); article:published_time/modified_time (`date_fields_by_bundle`) |
 | `drupal/seo-geo/twitter-cards` | ✅ exists | twitter:* tags |
 | `drupal/seo-geo/canonical-urls` | ✅ exists | Canonical URL configuration |
 | `drupal/seo-geo/metatag-multilingual` | ✅ exists | hreflang for multilingual sites (when in scope) |
