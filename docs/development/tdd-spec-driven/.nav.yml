@@ -1,0 +1,21 @@
+nav:
+- index.md
+- anti-patterns.md
+- code-reference-map.md
+- development-standards.md
+- integration-testing.md
+- performance-best-practices.md
+- red-green-refactor.md
+- refactoring-confidence.md
+- security-best-practices.md
+- spec-driven-overview.md
+- spec-to-implementation.md
+- tdd-overview.md
+- tdd-vs-traditional.md
+- test-coverage.md
+- test-doubles.md
+- testing-patterns.md
+- three-laws-tdd.md
+- unit-testing-fundamentals.md
+- writing-specs.md
+append_unmatched: true

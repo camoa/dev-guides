@@ -1,0 +1,23 @@
+nav:
+- index.md
+- overview.md
+- drupal-ai-policy.md
+- disclosure-checkboxes.md
+- industry-context.md
+- issue-creation.md
+- issue-review-guidelines.md
+- credit-system.md
+- merge-request-workflow.md
+- coding-standards.md
+- commit-messages.md
+- ai-code-review-checklist.md
+- human-review-requirements.md
+- supervised-ai-workflow.md
+- ai-toolchain-for-contribution.md
+- testing-ai-code.md
+- security-considerations.md
+- evidence-over-assertion.md
+- ai-best-practices-and-evals.md
+- decision-trees.md
+- resources.md
+append_unmatched: true

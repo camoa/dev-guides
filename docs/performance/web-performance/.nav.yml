@@ -1,0 +1,13 @@
+nav:
+- index.md
+- core-web-vitals-overview.md
+- critical-rendering-path.md
+- resource-hints.md
+- lcp-image-optimization.md
+- inp-scheduler-api.md
+- inp-field-measurement.md
+- css-containment-performance.md
+- service-worker-caching.md
+- code-splitting.md
+- web-font-performance.md
+append_unmatched: true

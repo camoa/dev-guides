@@ -1,0 +1,24 @@
+nav:
+- index.md
+- access-control-patterns.md
+- action-plugin-basics.md
+- advanced-action-patterns.md
+- cleanup-interface.md
+- common-pitfalls.md
+- complex-token-structures.md
+- condition-plugin-basics.md
+- debugging-workflows.md
+- entity-aware-events.md
+- event-plugin-basics.md
+- kernel-testing.md
+- mandatory-rules.md
+- performance-patterns.md
+- plugin-derivers.md
+- reusable-traits.md
+- security-best-practices.md
+- service-injection.md
+- string-comparison-conditions.md
+- token-form-integration.md
+- token-receiver-interface.md
+- yaml-configuration.md
+append_unmatched: true

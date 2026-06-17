@@ -1,0 +1,19 @@
+nav:
+- index.md
+- overview.md
+- installation.md
+- pack-format.md
+- extractors.md
+- settings-rendering.md
+- field-api.md
+- ckeditor5.md
+- patterns.md
+- menu.md
+- twig.md
+- media.md
+- library-admin.md
+- authoring.md
+- pack-catalog.md
+- anti-patterns.md
+- code-reference.md
+append_unmatched: true

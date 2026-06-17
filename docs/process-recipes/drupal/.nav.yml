@@ -1,0 +1,8 @@
+nav:
+- Contrib prior-art research (Drupal): contrib-prior-art.md
+- Service-based architecture design (Drupal): architecture.md
+- Coding standards and test discipline (Drupal): standards-and-tests.md
+- Implementation review checks (Drupal): checks.md
+- ATK end-to-end test setup (Drupal): e2e-setup-atk.md
+- Visual-regression setup (Drupal): visual-regression-setup.md
+append_unmatched: true

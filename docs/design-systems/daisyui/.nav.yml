@@ -1,0 +1,19 @@
+nav:
+- index.md
+- daisyui-vs-alternatives.md
+- installation-configuration.md
+- theming-system.md
+- color-system-design-tokens.md
+- actions-components.md
+- data-display-components.md
+- navigation-components.md
+- data-input-components.md
+- layout-components.md
+- mockup-components.md
+- feedback-components.md
+- customization-patterns.md
+- daisyui-react.md
+- best-practices.md
+- security-accessibility.md
+- sources-maintenance.md
+append_unmatched: true

@@ -1,0 +1,7 @@
+nav:
+- index.md
+- Next Drupal: next-drupal
+- Tiptap Editor: tiptap-editor
+- DeepChat + Next.js: deepchat-nextjs
+- DeepChat + Drupal Auth: deepchat-drupal-auth
+append_unmatched: true

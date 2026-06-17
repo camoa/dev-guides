@@ -1,0 +1,19 @@
+nav:
+- index.md
+- anti-patterns.md
+- assess-migration-scope.md
+- choose-migration-approach.md
+- complex-field-mappings.md
+- configure-migration-sources.md
+- create-migration-definitions.md
+- debug-migration-failures.md
+- handle-field-mappings.md
+- map-content-structure.md
+- migrate-configuration.md
+- migrate-content-entities.md
+- migration-best-practices.md
+- performance-optimization.md
+- plan-custom-code-strategy.md
+- security-best-practices.md
+- test-migration-results.md
+append_unmatched: true

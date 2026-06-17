@@ -1,0 +1,16 @@
+nav:
+- index.md
+- caching-strategies.md
+- code-quality-checks.md
+- deployment-artifacts.md
+- drupal-stack-setup.md
+- environment-protection.md
+- matrix-testing.md
+- multi-environment-deployment.md
+- parallel-execution.md
+- phpunit-testing.md
+- secret-management.md
+- theme-asset-compilation.md
+- troubleshooting.md
+- workflow-fundamentals.md
+append_unmatched: true

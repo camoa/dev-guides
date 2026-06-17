@@ -1,0 +1,19 @@
+nav:
+- index.md
+- dry-drupal-overview.md
+- base-classes-inheritance.md
+- best-practices-decision-framework.md
+- code-reference-map.md
+- config-single-source-truth.md
+- config-split-environments.md
+- drush-cli-reuse.md
+- hook-event-reuse.md
+- over-dry-anti-patterns.md
+- plugin-reuse.md
+- recipes-reusable-config.md
+- render-array-patterns.md
+- sdc-component-reuse.md
+- services-shared-logic.md
+- traits-cross-cutting.md
+- twig-template-inheritance.md
+append_unmatched: true

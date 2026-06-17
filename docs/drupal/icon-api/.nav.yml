@@ -1,0 +1,25 @@
+nav:
+- index.md
+- caching-strategy.md
+- choosing-extractors.md
+- custom-extractor-development.md
+- debugging-templates.md
+- font-extractor.md
+- icon-pack-architecture.md
+- icon-pack-definition.md
+- iconpackmanager-service.md
+- icon-slots.md
+- migration-patterns.md
+- path-extractor.md
+- performance-best-practices.md
+- remote-resource-security.md
+- sdc-icon-props.md
+- svg-extractor.md
+- svg-security-performance.md
+- svg-sprite-extractor.md
+- template-variables.md
+- troubleshooting-icon-discovery.md
+- twig-icon-function.md
+- ui-icons-module-features.md
+- what-is-icon-api.md
+append_unmatched: true

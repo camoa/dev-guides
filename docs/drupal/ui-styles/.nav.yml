@@ -1,0 +1,19 @@
+nav:
+- index.md
+- overview.md
+- installation.md
+- definition-format.md
+- source-plugins.md
+- block-layout.md
+- layout-builder.md
+- ckeditor5.md
+- views.md
+- page-region.md
+- ui-patterns-sdc.md
+- theme-authoring.md
+- stylesheet-generation.md
+- overriding.md
+- programmatic.md
+- anti-patterns.md
+- code-reference.md
+append_unmatched: true

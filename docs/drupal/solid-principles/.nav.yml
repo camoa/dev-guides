@@ -1,0 +1,22 @@
+nav:
+- index.md
+- overview.md
+- access-results-lsp.md
+- anti-patterns-dip.md
+- best-practices-checklist.md
+- code-reference-map.md
+- common-mistakes.md
+- config-overrides-ocp.md
+- controllers-srp.md
+- dependency-injection-patterns-dip.md
+- entity-hierarchy-lsp.md
+- entity-interfaces-isp.md
+- form-hierarchy-lsp.md
+- hook-classes-srp.md
+- hooks-events-ocp.md
+- injection-interfaces-isp.md
+- module-architecture.md
+- plugin-system-ocp.md
+- service-container-dip.md
+- services-srp.md
+append_unmatched: true

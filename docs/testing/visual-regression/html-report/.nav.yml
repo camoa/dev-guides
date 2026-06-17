@@ -1,0 +1,18 @@
+nav:
+- index.md
+- pw-report-overview.md
+- pw-report-enabling.md
+- pw-report-generation.md
+- pw-report-viewing.md
+- pw-report-navigation.md
+- pw-report-vr-diff-panel.md
+- pw-report-per-test-detail.md
+- pw-report-trace-viewer.md
+- pw-report-multiple-projects.md
+- pw-report-baseline-updates.md
+- pw-report-sharing.md
+- pw-report-configuration.md
+- pw-report-running-modes.md
+- pw-report-anti-patterns.md
+- pw-report-reporter-combos.md
+append_unmatched: true

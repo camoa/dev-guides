@@ -1,0 +1,23 @@
+nav:
+- index.md
+- anti-patterns-common-mistakes.md
+- best-practices-patterns.md
+- bigpipe.md
+- bubbleable-metadata-cache-bubbling.md
+- cache-backend-configuration.md
+- cache-backends.md
+- cache-bins.md
+- cache-contexts.md
+- cache-invalidation-patterns.md
+- cache-max-age.md
+- cache-metadata-trinity.md
+- cache-system-overview.md
+- cache-tags.md
+- code-reference-map.md
+- custom-cache-tags.md
+- dynamic-page-cache.md
+- lazy-builders.md
+- page-cache.md
+- render-caching.md
+- security-performance.md
+append_unmatched: true

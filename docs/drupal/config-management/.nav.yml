@@ -1,0 +1,25 @@
+nav:
+- index.md
+- anti-patterns-and-common-mistakes.md
+- best-practices-and-patterns.md
+- code-reference-map.md
+- config-and-recipes-integration.md
+- config-dependencies.md
+- config-entities.md
+- config-entity-schema-definition.md
+- config-events.md
+- config-factory-and-reading-config.md
+- config-import-export.md
+- config-installer.md
+- config-override-system.md
+- config-schema-yaml.md
+- config-split.md
+- config-storage.md
+- config-synchronization.md
+- config-system-overview.md
+- core-data-types-schema.md
+- deployment-workflows.md
+- security-and-performance.md
+- simple-config-vs-config-entities.md
+- writing-config-schema.md
+append_unmatched: true

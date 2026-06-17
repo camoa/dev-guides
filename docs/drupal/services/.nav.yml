@@ -1,0 +1,24 @@
+nav:
+- index.md
+- anti-patterns-and-common-mistakes.md
+- autowiring.md
+- best-practices-and-patterns.md
+- code-reference-map.md
+- compiler-passes.md
+- constructor-injection.md
+- core-services-reference.md
+- defining-services.md
+- dependency-serialization-trait.md
+- drupal-global-helper.md
+- event-subscribers.md
+- factory-services.md
+- plugin-injection.md
+- security-and-performance.md
+- service-container-architecture.md
+- service-definition-properties.md
+- service-providers-and-altering.md
+- services-di-overview.md
+- services-yml-schema.md
+- service-tags.md
+- tagged-service-collectors.md
+append_unmatched: true

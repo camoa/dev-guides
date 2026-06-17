@@ -1,0 +1,24 @@
+nav:
+- index.md
+- media-overview.md
+- core-media-types.md
+- custom-media-type-config.md
+- media-fields-field-mapping.md
+- media-view-modes.md
+- media-display-config.md
+- responsive-image-strategy.md
+- media-form-display.md
+- media-library-widget.md
+- media-library-views.md
+- ckeditor-media-embedding.md
+- media-access-permissions.md
+- media-reference-fields.md
+- media-layout-builder.md
+- media-views.md
+- focal-point-crop-integration.md
+- media-file-system.md
+- best-practices-patterns.md
+- anti-patterns-mistakes.md
+- security-performance.md
+- code-reference-map.md
+append_unmatched: true

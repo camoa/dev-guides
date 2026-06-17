@@ -1,0 +1,19 @@
+nav:
+- index.md
+- core-architecture.md
+- entity-types.md
+- plugin-system.md
+- permissions-system.md
+- access-control.md
+- configuration.md
+- php-api.md
+- views-integration.md
+- hooks-and-events.md
+- sub-modules.md
+- caching.md
+- when-to-use-group.md
+- migration-from-v1v2.md
+- common-mistakes.md
+- security.md
+- group-actions-contrib.md
+append_unmatched: true

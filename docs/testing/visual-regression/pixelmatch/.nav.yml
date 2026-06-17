@@ -1,0 +1,16 @@
+nav:
+- index.md
+- pixelmatch-overview.md
+- pixelmatch-algorithm.md
+- pixelmatch-threshold.md
+- pixelmatch-other-options.md
+- pixelmatch-api.md
+- pixelmatch-cli.md
+- pixelmatch-reading-pngs.md
+- pixelmatch-same-size.md
+- pixelmatch-performance.md
+- pixelmatch-inside-playwright.md
+- pixelmatch-standalone.md
+- pixelmatch-limitations.md
+- pixelmatch-tuning-recipes.md
+append_unmatched: true

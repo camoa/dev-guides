@@ -1,0 +1,18 @@
+nav:
+- index.md
+- anti-patterns.md
+- component-composition.md
+- component-file-structure.md
+- component-variants.md
+- component-yaml-schema.md
+- javascript-in-sdcs.md
+- performance.md
+- props-vs-slots-decision-framework.md
+- replacing-templates-with-sdcs.md
+- scss-css-in-sdcs.md
+- sdc-architecture.md
+- security.md
+- testing-sdcs.md
+- twig-templates-in-sdcs.md
+- ui-patterns-2-integration.md
+append_unmatched: true

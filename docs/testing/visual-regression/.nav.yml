@@ -1,0 +1,6 @@
+nav:
+- Workflow: workflow
+- Playwright: playwright
+- Pixelmatch: pixelmatch
+- HTML Report: html-report
+append_unmatched: true

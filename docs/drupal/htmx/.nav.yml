@@ -1,0 +1,21 @@
+nav:
+- index.md
+- htmx-overview.md
+- htmx-vs-ajax.md
+- request-response-lifecycle.md
+- basic-setup.md
+- library-dependencies.md
+- request-detection.md
+- dynamic-forms.md
+- htmx-controllers.md
+- htmx-attributes.md
+- response-headers.md
+- drupal-behaviors.md
+- asset-loading.md
+- production-patterns.md
+- production-example-config-export.md
+- best-practices.md
+- troubleshooting.md
+- ajax-migration.md
+- core-file-reference.md
+append_unmatched: true
