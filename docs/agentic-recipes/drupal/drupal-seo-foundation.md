@@ -66,7 +66,7 @@ license: GPL-2.0-or-later
 
 ## Goal
 
-Deliver a complete on-page SEO foundation for a Drupal site — per-bundle metatag defaults (title, description, og:*, twitter:*, canonical), per-bundle Schema.org JSON-LD, an XML sitemap tuned per content priority, pathauto URL patterns for nodes and taxonomy terms, redirect-on-alias-change behavior, a google_tag container, robots.txt managed as config, and 403/404/`user`/`taxonomy_term` defaults — **composed from the target site's own field inventory**, deterministically and idempotently, with the operator's policy supplied once via a typed input contract.
+Deliver a complete on-page SEO foundation for a Drupal site — per-bundle metatag defaults (title, description, og:*, twitter:*, canonical), per-bundle Schema.org JSON-LD, an XML sitemap tuned per content priority, pathauto URL patterns for nodes and taxonomy terms, redirect-on-alias-change behavior, google_tag installed with its config excluded from sync, robots.txt managed as config, and 403/404/`user`/`taxonomy_term` defaults — **composed from the target site's own field inventory**, deterministically and idempotently, with the operator's policy supplied once via a typed input contract.
 
 The recipe runs **fully unattended**. Decisions are encoded in the input contract; when the contract doesn't cover a situation, the recipe halts with a typed reason rather than guessing.
 
@@ -86,7 +86,7 @@ The recipe runs **fully unattended**. Decisions are encoded in the input contrac
 
 **robots.txt is content, not scaffold.** Use the `robotstxt` module so robots.txt is editable via config without redeploying core scaffold. The static `robots.txt` shipped by Drupal core scaffold is removed via the composer `drupal-scaffold.file-mapping` exclusion. Source: guide `drupal/seo-geo/robots-txt`.
 
-**Analytics container IDs come from the operator, never invented.** When `google_tag` is in scope the operator supplies the container ID in the contract; the recipe authors `google_tag.tag.<id>.yml` from it and halts if it is absent. The recipe never fabricates a GA4 / GTM ID.
+**google_tag is installed, never config-managed.** A GA4 / GTM container is environment-specific, so its config must not live in tracked config sync. When `google_tag` is in scope the recipe installs the module and adds `google_tag` to `$settings['config_exclude_modules']` in `settings.php`; it authors **no** container config. The container is set per environment by the operator, outside config management — the recipe never fabricates or exports a GA4 / GTM ID.
 
 **The recipe never makes a judgment call.** Every situation is either covered by the input contract (proceed) or it isn't (halt with a typed reason). It doesn't infer defaults; it doesn't have a "smart" fallback. This stance is invariant — it is expressed by the escalation policy in the Input contract and the adversarial Verifier, not by a play.
 
@@ -103,7 +103,7 @@ The layers are configured in this order, and the order is load-bearing:
 7. **Pathauto patterns.** Per-bundle node patterns + per-vocabulary taxonomy patterns. Source: guide `drupal/seo-geo/pathauto-patterns`.
 8. **Sitemap settings.** Per-bundle priority + changefreq + image inclusion. Source: guide `drupal/seo-geo/xml-sitemap`.
 9. **robots.txt content.** `robotstxt.settings.yml` + remove the static `robots.txt` via composer scaffold exclusion. Source: guide `drupal/seo-geo/robots-txt`.
-10. **google_tag container.** `google_tag.tag.<id>.yml` authored from the contract's container ID. Halts if `google_tag` is in scope and no container ID is supplied.
+10. **google_tag install + config exclusion.** Install the module and add `google_tag` to `$settings['config_exclude_modules']` in `settings.php` so its environment-specific container config stays out of config sync. The recipe authors no `google_tag` config; the container is configured per environment by the operator.
 11. **Breadcrumb structured data.** Verify `easy_breadcrumb` has `add_structured_data_json_ld: true`. Source: guide `drupal/seo-geo/breadcrumbs-structured-data`.
 
 The bundle defaults cannot exist until the per-entity defaults exist; pathauto patterns cannot generate aliases until the patterns are imported; the sitemap cannot reference URLs until aliases exist — hence the order.
@@ -112,7 +112,7 @@ The bundle defaults cannot exist until the per-entity defaults exist; pathauto p
 
 - Drupal 11.3+ (required by `drupal_cms_seo_basic` and `drupal_cms_seo_tools`, which this recipe leverages).
 - Composer-managed install (the recipe writes to `composer.json` and runs `composer require`).
-- A writable config sync directory the recipe can author into.
+- A writable config sync directory the recipe can author into, and a writable `settings.php` (the recipe appends `google_tag` to `$settings['config_exclude_modules']` when `google_tag` is in scope).
 - A working `drush` from the project root (or via ddev/docker wrapper).
 - A typed input contract supplied by the caller (see below).
 
@@ -132,7 +132,7 @@ layers_in_scope:                       # opt-in per layer; absent = false
   pathauto: true
   redirect: true                       # verify auto-redirect-on-alias-change behavior
   robotstxt: true
-  google_tag: false                    # GA4 / GTM container
+  google_tag: false                    # install module + exclude its config (settings.php)
   non_content_defaults: false          # 403/404/taxonomy_term/user metatag defaults
 
 semantic_role_by_bundle:               # operator-chosen; no auto-derivation
@@ -180,17 +180,15 @@ redirect:                              # verified when redirect in layers_in_sco
 robotstxt_content: string              # full robots.txt body
 robotstxt_remove_static_scaffold: bool # remove web/robots.txt via composer scaffold
 
-google_tag:                            # required when google_tag in layers_in_scope
-  container_id: string                 # GA4 / GTM id; recipe halts if absent
-  placement: string                    # placement enum, e.g. header | footer
-  environments: [string]               # env machine names where the tag is active
+# google_tag has no contract fields — when in scope the recipe installs the module
+# and excludes its config via settings.php (config_exclude_modules). The GA4 / GTM
+# container is environment-specific and set by the operator per environment.
 
 escalation_policy:                     # per ambiguity class; default = halt
   no_image_field_for_bundle: halt | omit_og_image | use_site_default
   no_description_field_for_bundle: halt | use_fallback | use_static
   url_convention_change_on_live_aliases: halt | apply_with_redirects | skip
   hardcoded_schema_org_blob: halt | apply | skip
-  missing_google_tag_container_id: halt    # always halts; recipe never invents an id
   conflict_with_existing_config: halt | overwrite | skip
   new_entity_field_required: halt      # always halts; data-model changes out of scope
   content_seed_required: halt          # always halts; content authoring out of scope
@@ -200,7 +198,7 @@ escalation_policy:                     # per ambiguity class; default = halt
 
 If `mode: dry-run`, perform all reads and derivations but emit a preview instead of writing.
 
-1. **Validate input contract.** Halt with `contract_error` on missing/inconsistent fields, on bundles that don't exist, on roles that aren't in the enum, on priority chains that name no terminator. If `google_tag` is in scope and `google_tag.container_id` is absent, halt with `contract_error`.
+1. **Validate input contract.** Halt with `contract_error` on missing/inconsistent fields, on bundles that don't exist, on roles that aren't in the enum, on priority chains that name no terminator.
 
 2. **Audit target project state.** Inventory composer.json modules, `core.extension.yml`, per-bundle field lists, existing sync configs matching the in-scope layers, taxonomies, home node. Read-only. Emit a structured `audit.json`. See guide `drupal/seo-geo/overview` for what's worth inventorying.
 
@@ -211,7 +209,7 @@ If `mode: dry-run`, perform all reads and derivations but emit a preview instead
    - For each role: derive Schema.org type and sitemap priority/changefreq from the input mapping.
    - For each bundle in `pathauto_patterns_by_bundle`: produce the pattern file.
    - For each vocabulary in `pathauto_patterns_by_vocabulary`: produce the pattern file.
-   - For `google_tag` (if in scope): produce `google_tag.tag.<id>.yml` from the contract's container ID, placement, and environments.
+   - For `google_tag` (if in scope): plan the module install and the `settings.php` `config_exclude_modules` entry. No container config is produced.
    - For robotstxt, redirect verification, 403/404, taxonomy_term, user, home: produce per the input.
    Emit a structured `plan.json`.
 
@@ -220,7 +218,7 @@ If `mode: dry-run`, perform all reads and derivations but emit a preview instead
 6. **Apply.** Walk the plan:
    - `composer require <missing modules>` + `drush en <missing modules>` (includes `google_tag` when in scope).
    - For each emitted config file: absent → write; present + matching → no-op + log; present + differing → halt with `conflict` (already escalated in step 5; reaching this means a TOCTOU change).
-   - For `google_tag` in scope: write `google_tag.tag.<id>.yml` from the contract; halt if no container ID reached this point.
+   - For `google_tag` in scope: add `google_tag` to `$settings['config_exclude_modules']` in `settings.php`. The module is installed (above); no container config is written or exported.
    - `drush cim`.
    - `drush pathauto:aliases-generate create` per added pattern.
    - `drush simple-sitemap:generate`.
@@ -241,7 +239,8 @@ reads project state:
        field.field.<entity>.<bundle>.<field>.yml  (per bundle field inventory)
        taxonomy.vocabulary.*.yml
        existing metatag.metatag_defaults.* / simple_sitemap.* / pathauto.* /
-         redirect.* / robotstxt.* / google_tag.*
+         redirect.* / robotstxt.*
+       settings.php (config_exclude_modules — for the google_tag exclusion)
        system.site.yml (home node)
 
 applies opinion:
@@ -249,7 +248,7 @@ applies opinion:
        inline invariant stances: adapt-to-project-fields · schema-type-per-role ·
          no-hardcoded-json-ld-without-policy · sitemap-priority-per-role ·
          one-pathauto-pattern-per-bundle · robotstxt-as-content ·
-         google-tag-container-from-input · halt-on-ambiguity ·
+         google-tag-install-only · halt-on-ambiguity ·
          headless-via-input-contract · verifier-runs-adversarially
 
 references atomic detail (guides):
@@ -274,7 +273,7 @@ emits (in chain order):
        simple_sitemap.bundle_settings.default.node.<bundle>.yml  (per role mapping)
        simple_sitemap.bundle_settings.default.taxonomy_term.<vocab>.yml  (per input)
        robotstxt.settings.yml                         (from input)
-       google_tag.tag.<id>.yml                        (if google_tag in scope, from input)
+       settings.php  (config_exclude_modules += google_tag, if in scope)
        core.extension.yml                             (newly-enabled modules)
 ```
 
@@ -302,7 +301,7 @@ After `apply`, the recipe runs each check and emits PASS / FAIL. Failures exit n
 
 7. **redirect-on-alias-change** — When `pathauto` regenerates an alias for a node whose alias changed, `redirect` module creates a 301 from the old alias to the new. Verify: assert `redirect.settings.auto_redirect: true`, `default_status_code: 301`, `redirect_404.suppress_404: true`; fetch the old alias of a known-renamed node, assert `301` → new alias.
 
-8. **google-tag-container-renders** — If `google_tag` is in scope: assert a `google_tag.tag.<id>.yml` config entity exists matching `google_tag.container_id` from input; fetch a sample page; assert the Google Tag snippet (or GTM `<noscript>`) is in the HTML, carrying the configured container ID.
+8. **google-tag-installed-and-config-excluded** — If `google_tag` is in scope: assert the `google_tag` module is enabled and that `google_tag` is listed in `$settings['config_exclude_modules']` (`settings.php`), so its environment-specific container config is not under config management. The recipe authors no container; per-environment container configuration is the operator's, out of scope.
 
 9. **idempotency** — Immediately re-run `apply` with the same contract and project state; assert `drush cim` reports 0 changes and no aliases are regenerated.
 
@@ -338,7 +337,7 @@ The verifier is recipe-runnable, not operator-driven. Failures exit non-zero.
 |---|---|---|
 | `drupal/best-practices/camoa/metatag-per-bundle` | ✅ exists | The per-bundle defaults principle |
 
-The remaining SEO stances (adapt-to-project-fields, schema-type-per-role, no-hardcoded-json-ld, sitemap-priority-per-role, one-pathauto-pattern-per-bundle, robotstxt-as-content, google-tag-container-from-input) are expressed inline in the Opinion section and cite the relevant `drupal/seo-geo/*` guide for their mechanics. The cross-cutting invariants (headless-via-input-contract, halt-on-ambiguity, verifier-runs-adversarially) are expressed structurally by the Input contract, escalation policy, and Verifier sections rather than by a play citation.
+The remaining SEO stances (adapt-to-project-fields, schema-type-per-role, no-hardcoded-json-ld, sitemap-priority-per-role, one-pathauto-pattern-per-bundle, robotstxt-as-content, google-tag-install-only) are expressed inline in the Opinion section and cite the relevant `drupal/seo-geo/*` guide for their mechanics. The cross-cutting invariants (headless-via-input-contract, halt-on-ambiguity, verifier-runs-adversarially) are expressed structurally by the Input contract, escalation policy, and Verifier sections rather than by a play citation.
 
 ### Drupal recipes invoked
 
