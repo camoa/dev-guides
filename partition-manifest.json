@@ -562,5 +562,11 @@
     "partitioned": "2026-06-09",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 12
+  },
+  "emdash": {
+    "source_hash": "57736d0dda914f7e882da70ba90df4ad11cb37ccf54be1d505eaa06eb5d18085",
+    "partitioned": "2026-06-17",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 2
   }
 }
