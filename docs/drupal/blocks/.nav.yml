@@ -1,0 +1,26 @@
+nav:
+- index.md
+- anti-patterns.md
+- best-practices.md
+- block-access-control.md
+- block-caching.md
+- block-configuration.md
+- block-events-hooks.md
+- block-placement.md
+- block-rendering.md
+- block-system-architecture.md
+- block-type-decision.md
+- code-reference-map.md
+- config-recipes.md
+- content-blocks.md
+- core-block-plugins.md
+- creating-block-plugins.md
+- custom-block-types.md
+- dependency-injection.md
+- layout-builder-blocks.md
+- programmatic-operations.md
+- sdc-component-blocks.md
+- security-performance.md
+- visibility-conditions.md
+- sources-maintenance.md
+append_unmatched: true

@@ -1,0 +1,19 @@
+nav:
+- index.md
+- anti-patterns.md
+- art-direction-resolution.md
+- best-practices.md
+- breakpoint-configuration.md
+- code-reference-map.md
+- config-export-recipes.md
+- core-image-effects.md
+- creating-styles-config.md
+- image-field-formatters.md
+- image-overview.md
+- image-style-schema.md
+- programmatic-operations.md
+- responsive-image-config.md
+- security-performance.md
+- sources-maintenance.md
+- webp-avif-optimization.md
+append_unmatched: true

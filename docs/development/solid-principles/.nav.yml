@@ -1,0 +1,20 @@
+nav:
+- index.md
+- best-practices-framework.md
+- code-reference-map.md
+- dependency-inversion-principle.md
+- dip-in-practice.md
+- interface-segregation-principle.md
+- isp-in-practice.md
+- liskov-substitution-principle.md
+- lsp-in-practice.md
+- ocp-in-practice.md
+- open-closed-principle.md
+- single-responsibility-principle.md
+- solid-anti-patterns.md
+- solid-code-smells.md
+- solid-modern-architecture.md
+- solid-overview.md
+- solid-pragmatism.md
+- srp-in-practice.md
+append_unmatched: true

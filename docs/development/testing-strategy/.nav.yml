@@ -1,0 +1,20 @@
+nav:
+- index.md
+- testing-strategy-overview.md
+- test-pyramid-vs-trophy.md
+- unit-testing-concepts.md
+- integration-testing-concepts.md
+- functional-testing-concepts.md
+- e2e-testing-concepts.md
+- visual-regression-concepts.md
+- contract-api-testing-concepts.md
+- performance-testing-concepts.md
+- accessibility-testing-concepts.md
+- test-doubles.md
+- test-structure-and-naming.md
+- determinism-and-flakiness.md
+- coverage-philosophy.md
+- what-to-test-and-what-not.md
+- best-practices-and-anti-patterns.md
+- choosing-a-test-type.md
+append_unmatched: true

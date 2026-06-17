@@ -1,0 +1,22 @@
+nav:
+- index.md
+- authentication-patterns.md
+- building-pages.md
+- decoupled-architecture-decision.md
+- draft-mode.md
+- drupal-setup.md
+- environment-variables.md
+- fetching-content.md
+- jsonapi-vs-graphql.md
+- media-images.md
+- multilingual-support.md
+- nextdrupal-client-configuration.md
+- nextjs-project-setup.md
+- on-demand-revalidation.md
+- performance-optimization.md
+- search-integration.md
+- security-best-practices.md
+- sources-maintenance.md
+- troubleshooting.md
+- webform-integration.md
+append_unmatched: true

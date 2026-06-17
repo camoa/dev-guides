@@ -1,0 +1,25 @@
+nav:
+- index.md
+- salesforce-overview.md
+- oauth-authentication.md
+- jwt-authentication.md
+- mapping-framework.md
+- mapping-ui.md
+- push-synchronization.md
+- pull-synchronization.md
+- optional-submodules.md
+- event-system.md
+- rest-client-api.md
+- soql-query-builder.md
+- mapped-objects-api.md
+- push-queue-operations.md
+- custom-field-mapping-plugin.md
+- configuration-management.md
+- queue-processing.md
+- drush-commands.md
+- class-reference.md
+- troubleshooting.md
+- performance.md
+- extension-patterns.md
+- decision-framework.md
+append_unmatched: true

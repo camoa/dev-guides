@@ -1,0 +1,24 @@
+nav:
+- index.md
+- authentication-patterns.md
+- code-reference-map.md
+- core-architecture.md
+- creating-resources.md
+- deleting-resources.md
+- fetching-resources.md
+- field-enhancers.md
+- file-uploads.md
+- filtering.md
+- includes-sparse-fieldsets.md
+- jsonapi-extras-customization.md
+- jsonapi-vs-rest-vs-graphql.md
+- performance-optimization.md
+- revisions-translations.md
+- security-best-practices.md
+- sorting-pagination.md
+- sources-maintenance.md
+- testing-debugging.md
+- updating-resources.md
+- url-structure-resource-types.md
+- what-is-jsonapi.md
+append_unmatched: true

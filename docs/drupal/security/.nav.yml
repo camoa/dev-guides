@@ -1,0 +1,24 @@
+nav:
+- index.md
+- access-system-architecture.md
+- accessresult-patterns.md
+- anti-patterns-and-common-mistakes.md
+- authentication-system.md
+- best-practices-and-patterns.md
+- code-reference-map.md
+- content-access-node-grants.md
+- csrf-protection.md
+- entity-access-control.md
+- file-upload-security.md
+- input-validation-and-sanitization.md
+- owasp-top-10-in-drupal.md
+- permissions-and-roles.md
+- route-access-checks.md
+- security-headers.md
+- security-overview.md
+- session-management.md
+- sql-injection-prevention.md
+- trusted-callbacks.md
+- twig-autoescape-and-safe-markup.md
+- xss-prevention.md
+append_unmatched: true

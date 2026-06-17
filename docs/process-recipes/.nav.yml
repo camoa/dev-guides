@@ -1,0 +1,5 @@
+nav:
+- index.md
+- Drupal: drupal
+- Claude Code Plugins: claude-code-plugins
+append_unmatched: true

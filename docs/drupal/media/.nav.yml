@@ -1,0 +1,18 @@
+nav:
+- index.md
+- anti-patterns.md
+- architecture-overview.md
+- base-class-selection.md
+- custom-media-source-plugin.md
+- dependency-injection.md
+- display-configuration.md
+- extending-oembed-sources.md
+- field-mapping.md
+- media-type-selection-strategy.md
+- metadata-system.md
+- performance-optimization.md
+- security-best-practices.md
+- testing-strategies.md
+- thumbnail-generation.md
+- validation-constraints.md
+append_unmatched: true

@@ -1,0 +1,22 @@
+nav:
+- index.md
+- anti-patterns-common-mistakes.md
+- attachments.md
+- best-practices-patterns.md
+- cache-metadata-render-arrays.md
+- code-reference-map.md
+- core-render-elements.md
+- custom-render-elements.md
+- form-render-elements.md
+- lazy-builders-placeholders.md
+- main-content-renderers.md
+- preprocess-functions.md
+- render-api-overview.md
+- render-array-patterns.md
+- render-array-structure.md
+- renderer-service.md
+- render-properties.md
+- security-performance.md
+- theme-hooks-suggestions.md
+- twig-integration.md
+append_unmatched: true

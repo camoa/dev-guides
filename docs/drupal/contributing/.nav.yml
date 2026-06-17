@@ -1,0 +1,13 @@
+nav:
+- index.md
+- three-contribution-workflows-compared.md
+- drupalci-pipeline-gitlab-templates.md
+- reproducing-drupalci-failures-locally.md
+- drupal-coding-standards-ci-parity.md
+- ddev-contribution-environment.md
+- contrib-project-scaffolding.md
+- drupal-issue-lifecycle.md
+- issue-forks-merge-requests.md
+- contribution-etiquette-rtbc-credit.md
+- module-theme-maintainer.md
+append_unmatched: true

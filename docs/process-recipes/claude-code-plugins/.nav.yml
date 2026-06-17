@@ -1,0 +1,6 @@
+nav:
+- Plugin prior-art research (Claude Code): prior-art.md
+- Plugin component architecture (Claude Code): architecture.md
+- Component authoring standards (Claude Code): authoring-standards.md
+- Plugin review checks (Claude Code): checks.md
+append_unmatched: true

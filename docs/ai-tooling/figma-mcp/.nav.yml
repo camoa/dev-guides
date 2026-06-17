@@ -1,0 +1,22 @@
+nav:
+- index.md
+- figma-mcp-overview.md
+- remote-server-setup.md
+- desktop-server-setup.md
+- claude-code-plugin.md
+- available-tools-reference.md
+- design-context-extraction.md
+- design-tokens-and-variables.md
+- code-connect-integration.md
+- screenshots-and-metadata.md
+- figjam-and-diagram-tools.md
+- design-system-rules.md
+- selection-vs-link-workflows.md
+- prompting-strategies.md
+- figma-file-best-practices.md
+- custom-agent-rules.md
+- rate-limits-and-access-tiers.md
+- best-practices-and-patterns.md
+- limitations-and-workarounds.md
+- sources-maintenance.md
+append_unmatched: true

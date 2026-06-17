@@ -1,0 +1,61 @@
+nav:
+- index.md
+- AJAX: ajax
+- AI Module: ai-module
+- AJAX-HTMX Migration: ajax-htmx-migration
+- Breadcrumbs: breadcrumbs
+- Blocks: blocks
+- Caching: caching
+- Config Forms: config-forms
+- Config Management: config-management
+- Custom Field: custom-field
+- DRY Principles: dry-principles
+- ECA: eca
+- Entities: entities
+- Forms: forms
+- GitHub Actions: github-actions
+- Group: group
+- Modeler API: modeler-api
+- Orchestration: orchestration
+- Better Exposed Filters: better-exposed-filters
+- Facets: facets
+- Search API: search-api
+- Plus Suite: plus-suite
+- Contribution: contributing
+- Contributing with AI: contributing-with-ai
+- Icon API: icon-api
+- Image Styles: image-styles
+- JSON:API: jsonapi
+- JavaScript: js-development
+- Klaro: klaro
+- Layout Builder: layout-builder
+- Media: media
+- Media System: media-system
+- Multilingual: multilingual
+- Twig Theming: twig
+- UI Patterns: ui-patterns
+- UI Styles: ui-styles
+- UI Suite DaisyUI: ui-suite-daisyui
+- UI Skins: ui-skins
+- UI Icons: ui-icons
+- HTMX: htmx
+- Migration: migration
+- Plugins: plugins
+- Recipes: recipes
+- Render API: render-api
+- Routing: routing
+- Salesforce: salesforce
+- Storybook: storybook
+- Canvas: canvas
+- SEO & GEO: seo-geo
+- SDC: sdc
+- Security: security
+- Services: services
+- SOLID Principles: solid-principles
+- Taxonomy: taxonomy
+- TDD: tdd
+- Testing: testing
+- Views: views
+- Mailgun: mailgun
+- Best Practices — camoa: best-practices/camoa
+append_unmatched: true

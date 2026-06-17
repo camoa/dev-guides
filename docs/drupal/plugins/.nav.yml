@@ -1,0 +1,16 @@
+nav:
+- index.md
+- architecture-pattern-selection.md
+- configuration-architecture.md
+- event-system-integration.md
+- foundation-extension-pattern.md
+- pattern-selection-decision-matrix.md
+- performance-best-practices.md
+- plugin-manager-implementation.md
+- provider-plugin-pattern.md
+- real-world-examples.md
+- security-best-practices.md
+- service-collector-pattern.md
+- service-integration-patterns.md
+- testing-debugging.md
+append_unmatched: true

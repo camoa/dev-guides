@@ -1,0 +1,19 @@
+nav:
+- index.md
+- anti-patterns.md
+- best-practices.md
+- code-reference-map.md
+- creating-vocabularies-config.md
+- entity-reference-taxonomy.md
+- hierarchical-taxonomy.md
+- programmatic-terms.md
+- security-performance.md
+- taxonomy-config-recipes.md
+- taxonomy-overview.md
+- taxonomy-permissions.md
+- taxonomy-views.md
+- term-management.md
+- term-reference-config.md
+- term-storage-querying.md
+- vocabulary-config-schema.md
+append_unmatched: true

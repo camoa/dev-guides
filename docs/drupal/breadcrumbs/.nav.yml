@@ -1,0 +1,17 @@
+nav:
+- index.md
+- overview-decision.md
+- core-breadcrumb-architecture.md
+- core-breadcrumb-builders.md
+- easy-breadcrumb-module.md
+- easy-breadcrumb-configuration.md
+- custom-breadcrumb-builder.md
+- altering-breadcrumbs.md
+- structured-data-seo.md
+- twig-theming.md
+- ui-suite-daisyui-integration.md
+- caching.md
+- block-placement.md
+- best-practices-anti-patterns.md
+- common-recipes.md
+append_unmatched: true

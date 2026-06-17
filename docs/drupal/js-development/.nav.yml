@@ -1,0 +1,25 @@
+nav:
+- index.md
+- aggregation-and-minification.md
+- ajax-integration.md
+- best-practices-summary.md
+- common-anti-patterns.md
+- conditional-loading.md
+- core-dependencies.md
+- debounce-and-throttle.md
+- defer-and-async-attributes.md
+- dom-manipulation.md
+- drupal-behaviors-pattern.md
+- drupal-settings.md
+- es-modules-and-modern-javascript.md
+- event-handling.md
+- header-vs-footer-loading.md
+- javascript-architecture.md
+- javascript-in-sdc-components.md
+- library-attachment-methods.md
+- library-definitions.md
+- once-api.md
+- performance-optimization.md
+- security.md
+- testing-javascript.md
+append_unmatched: true

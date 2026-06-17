@@ -1,0 +1,18 @@
+nav:
+- index.md
+- abstraction-strategies.md
+- best-practices-decision-framework.md
+- code-duplication.md
+- code-reference-map.md
+- code-smells-detection.md
+- dry-across-boundaries.md
+- dry-in-configuration.md
+- dry-in-documentation.md
+- dry-in-testing.md
+- dry-overview.md
+- dry-vs-wet-vs-aha.md
+- four-types-of-duplication.md
+- knowledge-duplication.md
+- over-dry-anti-patterns.md
+- rule-of-three.md
+append_unmatched: true

@@ -1,0 +1,26 @@
+nav:
+- index.md
+- api-security.md
+- authentication-best-practices.md
+- authorization-access-control.md
+- code-reference-map.md
+- cross-site-scripting-xss.md
+- cryptography-basics.md
+- csrf-prevention.md
+- dependency-security.md
+- file-upload-security.md
+- input-validation.md
+- logging-monitoring.md
+- output-encoding-escaping.md
+- owasp-top-10.md
+- secure-development-lifecycle.md
+- security-anti-patterns.md
+- security-checklist.md
+- security-headers.md
+- browser-security-policies.md
+- security-mindset-overview.md
+- sensitive-data-protection.md
+- sources-maintenance-manifest.md
+- sql-injection-prevention.md
+- xss-prevention-patterns.md
+append_unmatched: true

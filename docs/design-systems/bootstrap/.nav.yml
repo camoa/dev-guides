@@ -1,0 +1,19 @@
+nav:
+- index.md
+- advanced-scss-best-practices.md
+- atoms-bootstrap-components.md
+- bootstrap-accommodation-decision-framework.md
+- design-tokens-bootstrap-variables.md
+- documentation-templates.md
+- key-bootstrap-scss-mechanisms.md
+- molecules-component-combinations.md
+- organisms-layout-components.md
+- progressive-enhancement-guidelines.md
+- project-continuation-guidelines.md
+- project-organization-principles.md
+- quality-assurance-framework.md
+- scss-best-practices.md
+- scss-integration-order.md
+- templates-bootstrap-grid.md
+- token-to-utility-flow.md
+append_unmatched: true

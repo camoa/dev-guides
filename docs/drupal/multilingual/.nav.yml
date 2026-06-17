@@ -1,0 +1,25 @@
+nav:
+- index.md
+- multilingual-overview.md
+- language-setup.md
+- language-negotiation.md
+- content-translation-setup.md
+- translating-content-entities.md
+- field-translatability.md
+- translation-revisions.md
+- config-translation.md
+- interface-translation.md
+- translatable-markup.md
+- programmatic-entity-translation.md
+- twig-translation.md
+- url-language-routing.md
+- language-aware-queries.md
+- translation-workflows.md
+- translating-custom-modules.md
+- drupal-11-changes.md
+- best-practices.md
+- anti-patterns.md
+- security-performance-caching.md
+- code-reference-map.md
+- sources-maintenance.md
+append_unmatched: true

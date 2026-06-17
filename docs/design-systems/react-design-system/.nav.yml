@@ -1,0 +1,20 @@
+nav:
+- index.md
+- component-architecture-decisions.md
+- props-patterns.md
+- children-and-slot-patterns.md
+- composition-patterns.md
+- tailwind-integration.md
+- variant-management.md
+- design-token-consumption.md
+- typescript-patterns.md
+- accessibility-patterns.md
+- storybook-integration.md
+- component-organization.md
+- form-components.md
+- layout-components.md
+- performance.md
+- testing.md
+- best-practices-and-anti-patterns.md
+- sources-maintenance.md
+append_unmatched: true

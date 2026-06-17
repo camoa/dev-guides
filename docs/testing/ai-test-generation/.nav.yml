@@ -1,0 +1,21 @@
+nav:
+- index.md
+- ai-testgen-overview.md
+- ai-testgen-four-phase-pattern.md
+- ai-testgen-plan-format.md
+- ai-testgen-plan-vs-code.md
+- ai-testgen-acceptance-criteria.md
+- ai-testgen-negative-assertions.md
+- ai-testgen-input-code.md
+- ai-testgen-input-user-stories.md
+- ai-testgen-input-raw-prompt.md
+- ai-testgen-targeted-scope.md
+- ai-testgen-crawled-site.md
+- ai-testgen-hybrid-inputs.md
+- ai-testgen-playwright-test-agents.md
+- ai-testgen-playwright-mcp.md
+- ai-testgen-end-to-end-workflow.md
+- ai-testgen-drupal-atk-notes.md
+- ai-testgen-anti-patterns.md
+- ai-testgen-code-reference.md
+append_unmatched: true

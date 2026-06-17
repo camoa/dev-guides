@@ -1,0 +1,15 @@
+nav:
+- index.md
+- access-control-patterns.md
+- admin-route-configuration.md
+- basic-route-structure.md
+- common-pitfalls.md
+- custom-access-checking.md
+- dynamic-routes.md
+- performance-best-practices.md
+- route-parameters.md
+- route-subscribers.md
+- security-best-practices.md
+- testing-and-debugging.md
+- yaml-escaping-rules.md
+append_unmatched: true
