@@ -1,3 +1,9 @@
+# Site navigation is generated automatically by the awesome-nav plugin from the
+# files on disk — mkdocs.yml has NO nav: block.
+#   * New guide PAGE in an existing topic  -> appears automatically (append_unmatched);
+#     order it via that topic's docs/<topic>/.nav.yml.
+#   * New top-level CATEGORY (new docs/<dir>/) -> add ONE line to the nav: list below,
+#     "- <Title>: <dir>", placed where it should appear. (See .claude/agents/guide-partitioner.md.)
 use_index_title: true
 ignore:
 - plans
