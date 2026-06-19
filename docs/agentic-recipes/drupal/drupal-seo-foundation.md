@@ -7,7 +7,7 @@ description: Use when a Drupal 11.3+ site needs a complete on-page SEO foundatio
 # Metadata — read only after a match.
 label: Drupal SEO foundation
 recipe_schema_version: 1.0.0
-version: 0.2.0
+version: 0.2.1
 
 # Machine-readable dependency declaration.
 requires_guides:
@@ -362,7 +362,7 @@ After `apply`, the recipe runs each check and emits PASS / FAIL. Failures exit n
 
 6. **pathauto-context-fix-clean** — Run `drush pathauto:aliases-generate update canonical_entities:node`; assert no `ContextException` warnings in output. (This is the `context_mapping.node: node` fix that emerged from the cotea session.)
 
-7. **redirect-on-alias-change** — When `pathauto` regenerates an alias for a node whose alias changed, `redirect` module creates a 301 from the old alias to the new. Verify: assert `redirect.settings.auto_redirect: true`, `default_status_code: 301`, `redirect_404.suppress_404: true`; fetch the old alias of a known-renamed node, assert `301` → new alias.
+7. **redirect-on-alias-change** — `redirect` creates a 301 from a node's old alias to its new one when `pathauto` regenerates the alias. First assert config (`config-assert`): `redirect.settings.auto_redirect: true`, `default_status_code: 301`, `redirect_404.suppress_404: true`. Then verify behaviour with a **self-fixture** the check creates and cleans up — no operator-supplied "renamed node" required: create a node in an aliased bundle, let `pathauto` mint its alias, record it, change the field(s) the bundle's pathauto pattern derives from so the alias regenerates, fetch the recorded old alias and assert a `301` to the new one, then delete the fixture node. This keeps the check deterministic and runnable on any served site with `drush`, with no `known-renamed node` assumption in the input contract.
 
 8. **google-tag-installed-and-config-excluded** — If `google_tag` is in scope: assert the `google_tag` module is enabled and that `google_tag` is listed in `$settings['config_exclude_modules']` (`settings.php`), so its environment-specific container config is not under config management. The recipe authors no container; per-environment container configuration is the operator's, out of scope.
 
@@ -378,7 +378,7 @@ After `apply`, the recipe runs each check and emits PASS / FAIL. Failures exit n
 
 14. **excluded-vocabularies-absent-from-surface** — For each vocabulary in `excluded_vocabularies`: no pathauto pattern, no sitemap setting, and no metatag default exists for it. Idempotent: re-running the recipe does not create them.
 
-The verifier is recipe-runnable, not operator-driven. Failures exit non-zero.
+Every check is recipe-runnable, not operator-driven: each is a `config-assert` (`drush`/config reads), a `live-site` assertion (fetch a sample page), or a `self-fixture` check that creates and cleans up its own test data (check 7). A check that cannot run for lack of a served site or `drush` is fail-closed, not skipped. Failures exit non-zero.
 
 ## References
 
