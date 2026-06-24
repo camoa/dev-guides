@@ -6,7 +6,7 @@ description: Use when a Drupal site has named image use-cases (hero, card thumbn
 # Metadata — read only after a match.
 label: Responsive image wiring
 recipe_schema_version: 1.0.0
-version: 0.5.0
+version: 0.5.1
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/image-styles/image-overview
@@ -163,7 +163,7 @@ After the recipe runs, verify:
 4. Every bound `(bundle, field, view_mode)` triple renders through the intended use-case's view mode.
 5. A real page renders a `<picture>`/`srcset` for resolution switching or per-breakpoint `<source>` elements for art direction, the smallest derivative is served on the smallest viewport, and a high-DPR viewport pulls a 2× source rather than an upscaled 1×.
 
-The recipe does not ship an executable verifier in v0.4.0. The checks above are the manual / agent-driven verification protocol.
+The recipe ships no verifier *script*, but every check above is **agent-runnable against a live site** — "ships no script" does not mean "not runnable". A consumer runs each as a method: checks 1–4 are `config-assert` / view-mode assertions (`drush` + config reads, no served site needed); check 5 is `live-site` (fetch a sample page, inspect the emitted `<picture>` / `srcset` / `<source>` markup and the served derivatives). The only check that cannot run is check 5 with **no served site** — and that is then correctly **fail-closed, not skipped**, per the consumer's verifier contract.
 
 ## References
 
