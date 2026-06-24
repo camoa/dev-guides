@@ -7,7 +7,7 @@ tldr: "When to use UI Suite DaisyUI vs alternatives like Radix, custom Tailwind 
 
 ## What UI Suite DaisyUI Is
 
-UI Suite DaisyUI is a Drupal theme that integrates [DaisyUI](https://daisyui.com/) (a component class library for Tailwind CSS) with Drupal's component system via the [UI Suite Initiative](https://www.drupal.org/project/ui_suite) modules. It exposes 51 DaisyUI components as Single Directory Components (SDCs) through UI Patterns 2, 10 style plugins (with dozens of CSS class options) through UI Styles, 35 themes through UI Skins, and 25 CSS variables for design token customization -- all accessible from the Drupal admin UI without writing code.
+UI Suite DaisyUI is a Drupal theme that integrates [DaisyUI](https://daisyui.com/) (a component class library for Tailwind CSS) with Drupal's component system via the [UI Suite Initiative](https://www.drupal.org/project/ui_suite) modules. It exposes 51 DaisyUI components as Single Directory Components (SDCs) through UI Patterns 2, 10 style plugins (with dozens of CSS class options) through UI Styles, 35 themes through UI Skins, and 28 CSS variables for design token customization -- all accessible from the Drupal admin UI without writing code.
 
 Version 5.0.x targets **DaisyUI 5** (built on Tailwind CSS 4). The 4.0.x branch is minimally maintained. All new development focuses on 5.0.x.
 

@@ -36,7 +36,7 @@ After enabling the theme, verify these admin paths:
 |---|---|
 | `/admin/appearance/ui/components` | Browse all 51 SDC components with live previews |
 | `/admin/appearance/ui/styles` | Browse 30+ style utility categories |
-| `/admin/appearance/css-variables` | Configure 25 CSS variables |
+| `/admin/appearance/css-variables` | Configure 28 CSS variables |
 | `/admin/appearance/settings/ui_suite_daisyui` | Theme settings including DaisyUI theme selector |
 
 ## Default Block Configuration

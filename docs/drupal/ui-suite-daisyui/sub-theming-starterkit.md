@@ -42,7 +42,7 @@ drush config:set system.theme default my_theme
 ```
 my_theme/
   my_theme.info.yml              # Base theme: ui_suite_daisyui, library overrides
-  my_theme.libraries.yml         # Library: dist/css/app.css + theme overrides
+  my_theme.libraries.yml         # daisyui library: dist/css/app.css + one dist/css/themes/<name>.css per theme override
   my_theme.theme                 # Preprocess hooks
   my_theme.ui_styles.yml         # Custom UI Styles (replaces some base theme styles)
   my_theme.ui_skins.themes.yml   # Theme switching config
@@ -93,20 +93,22 @@ my_theme/
 The `vite.config.js` generates Rollup entry points from glob patterns:
 
 ```javascript
-// Entry point generation:
+// Entry point generation (starterkit vite.config.js):
 const cssGlob = {
-  '': 'css/**/*.pcss.css',      // Global CSS -> dist/css/
+  '': 'css/**/*.pcss.css',            // Global CSS -> dist/css/ (flat, per source file)
   'css': 'components/**/*.pcss.css',  // Component CSS -> dist/css/components/
 };
 ```
 
 Key behaviors:
 
-- **Entry generation**: Globs all `.pcss.css` files and creates Rollup entries
+- **Entry generation**: Globs all `.pcss.css` files and creates one Rollup entry per file. Each source file becomes a **separate** output -- the build does NOT merge them. `css/app.pcss.css` -> `dist/css/app.css`; `css/themes/dark.pcss.css` -> `dist/css/themes/dark.css` (one standalone file per theme override, preserving the `css/` sub-path).
 - **Component CSS copy**: `viteStaticCopy` copies `dist/css/components/` to `components/` so each SDC can reference its own compiled CSS
 - **SVG sprite**: `@pivanov/vite-plugin-svg-sprite` generates `default-icons.svg` from `icons/default/`
 - **PostCSS pipeline**: `postcss-import` + `@tailwindcss/postcss` (Tailwind 4) + `stylelint`
 - **Minification**: Only in production (`NODE_ENV=production`)
+
+> **Base theme vs starterkit `cssGlob`**: the base theme's `vite.config.js` defines ONLY the `'': 'css/**/*.pcss.css'` entry (no component glob, no `viteStaticCopy`) and its `css/` source has no `themes/` overrides -- so the base theme emits exactly one file, `dist/css/app.css`, with all 35 DaisyUI themes bundled in. The starterkit adds the component glob AND ships `css/themes/dark.pcss.css`, so it emits `dist/css/app.css` plus standalone `dist/css/themes/dark.css`. This is the root of the two-layer CSS model documented below.
 
 npm scripts:
 
@@ -140,7 +142,12 @@ The starterkit uses Tailwind CSS 4's **CSS-first configuration** (no `tailwind.c
 @source "../templates/**/*.{twig,js}";
 @source "../components/**/*.{twig,js,yml}";
 @source "../*.ui_styles.yml";
+@source "../*.icons.yml";
+@source "./safelist.txt";
+/* Also scan the BASE theme so its component/template classes survive tree-shaking: */
+@source "../../../contrib/ui_suite_daisyui/templates/**/*.{twig,js}";
 @source "../../../contrib/ui_suite_daisyui/components/**/*.{twig,js,yml}";
+@source "../../../contrib/ui_suite_daisyui/*.icons.yml";
 @source "../../../contrib/ui_suite_daisyui/*.ui_styles.yml";
 ```
 
@@ -291,26 +298,46 @@ daisyui_mask:
   enabled: false
 ```
 
-## Library Override Pattern
+## Two-Layer CSS Model & Library Registration
 
-The starterkit's `.info.yml` uses `libraries-override` to disable the base theme's compiled CSS while using its own:
+A generated sub-theme uses a **two-layer** compiled-CSS model. Getting both layers registered is the single most common cause of "my theme override does nothing":
+
+1. **Bundle layer (`dist/css/app.css`)** -- Compiled from `css/app.pcss.css`. Contains Tailwind, the DaisyUI plugin, and ALL 35 DaisyUI themes bundled together. This is the same shape as the base theme's single library.
+2. **Per-theme override layer (`dist/css/themes/<name>.css`)** -- Compiled from each `css/themes/<name>.pcss.css` source. Vite's `cssGlob` (`css/**/*.pcss.css`) emits one **standalone** file per override, NOT merged into `app.css`. The starterkit ships exactly one such override: `css/themes/dark.pcss.css` -> `dist/css/themes/dark.css`.
+
+Because the override is a separate output file, the sub-theme's OWN `*.libraries.yml` must register BOTH layers explicitly. The real starterkit `ui_suite_daisyui_starterkit.libraries.yml`:
 
 ```yaml
+# my_theme.libraries.yml
+daisyui:
+  css:
+    theme:
+      "dist/css/app.css": { minified: true }          # bundle (all themes)
+      "dist/css/themes/dark.css": { minified: true }   # standalone per-theme override
+```
+
+Add one `dist/css/themes/<name>.css` line here for **every** `css/themes/<name>.pcss.css` you create. Then disable the base theme's bundle in `.info.yml` so the two `app.css` files do not stack:
+
+```yaml
+# my_theme.info.yml
 libraries:
-  - my_theme/daisyui          # Sub-theme's own library
+  - my_theme/daisyui            # Sub-theme's own library (the daisyui block above)
 
 libraries-override:
-  ui_suite_daisyui/daisyui:     # Disable base theme's CSS
+  ui_suite_daisyui/daisyui:     # Disable ONLY the base theme's app.css
     css:
       theme:
         "dist/css/app.css": false
 ```
 
-This ensures the sub-theme's Vite-built CSS replaces (not stacks on) the base theme's CDN/compiled CSS.
+> **Do NOT add `themes/*.css: false` to the `libraries-override` block.** The base theme ships ONLY `dist/css/app.css` (all themes bundled in; its `dist/css/` has no `themes/` directory), so there is nothing else to disable. The override layer lives entirely on the sub-theme's own-library side -- registering it in your `daisyui` block is what makes it load.
+
+This replaces (does not stack on) the base theme's pre-built `dist/css/app.css` with the sub-theme's Vite-built CSS.
 
 ## Common Mistakes
 
-- **Forgetting `npm install && npm run build` after generating** -- The starterkit generates source `.pcss` files. Without the build step, `dist/css/app.css` does not exist and the theme has no styles. WHY: Unlike the base theme's CDN approach, the starterkit uses a local build pipeline.
+- **Forgetting `npm install && npm run build` after generating** -- A generated sub-theme ships source `.pcss` files but no `dist/`. Without the build step, `dist/css/app.css` does not exist and the theme has no styles. WHY: The base theme ships a pre-built `dist/css/app.css`, but the starterkit ships only source -- you must run its local Vite/PostCSS build to produce the compiled CSS.
+- **Added a `css/themes/<name>.pcss.css` override but never registered the compiled output** -- You create `css/themes/brand.pcss.css`, run the build (which emits `dist/css/themes/brand.css`), but forget to add `"dist/css/themes/brand.css": { minified: true }` to the `daisyui` library in your `*.libraries.yml`. Result: the override silently does nothing -- `app.css` loads fine, so the page looks styled, but the override CSS is never sent to the browser. WHY: Vite emits each `css/themes/*.pcss.css` as a SEPARATE standalone file (not merged into `app.css`); only files listed in a loaded library are served. The `libraries-override` for the base theme does NOT cover this -- the override lives on your own-library side.
 - **Not running `npm run dev` during development** -- Changes to `.pcss` files, Twig templates, or utility classes are not reflected until rebuilt. WHY: The build step compiles PostCSS/Tailwind and copies component CSS.
 - **Editing `dist/` files directly** -- The `dist/` directory is generated output. Edits will be overwritten on next build. WHY: Edit source files in `css/` and `components/`, then rebuild.
 - **Not updating `@source` directives when adding template directories** -- Tailwind only scans files matched by `@source` patterns for class usage. If you add a new directory (e.g., `templates/paragraphs/`), add a corresponding `@source` directive in `app.pcss.css`. WHY: Missing `@source` entries cause Tailwind to purge classes it thinks are unused.

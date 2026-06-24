@@ -300,8 +300,8 @@
     "guides_extracted": 17
   },
   "drupal/ui-suite-daisyui": {
-    "source_hash": "3feb4cdf2cd7ab4019d092623909f6fba1e4ce9672aa6b10d96ab36d7e11bfea",
-    "partitioned": "2026-04-27",
+    "source_hash": "0369ef1b1e37a6c172e63bf4077847bf2a1f6874a55c41f374958d515a5e5e82",
+    "partitioned": "2026-06-24",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 16
   },
