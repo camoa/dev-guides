@@ -50,11 +50,12 @@ The theme defines 4 Heroicon packs in `ui_suite_daisyui.icons.yml`:
 | `hero_solid_24` | Heroicons solid 24px | 0 0 24 24 | 24px |
 | `hero_outline_24` | Heroicons outline 24px | 0 0 24 24 | 24px |
 
-Icons are loaded from `/libraries/heroicons/` using the SVG extractor. Each pack supports `size` and `color` settings; the outline pack additionally supports `stroke_width`.
+Icons are loaded from `/libraries/heroicons/` using the SVG extractor. The three solid packs support `size` and `fill_color` settings (the `fill_color` enum lists `fill-current` plus all 20 DaisyUI semantic colors). The outline pack supports `size`, `stroke_color`, and `stroke_width` (enum `0`-`6`, default `2`).
 
 ## Common Mistakes
 
 - **Overriding the `daisyui` library without providing replacement CSS** -- If a sub-theme disables `dist/css/app.css` via `libraries-override` without providing its own compiled CSS, the theme has no styles. WHY: Alpha6 uses pre-compiled CSS instead of CDN; disabling it removes all DaisyUI and Tailwind styles. The starterkit handles this correctly with its own `daisyui` library.
+- **Treating the sub-theme `daisyui` library as a single-file library** -- The base theme's `daisyui` library lists exactly one file (`dist/css/app.css`), but a sub-theme's `daisyui` library is multi-entry: the `app.css` bundle PLUS one standalone `dist/css/themes/<name>.css` per theme override. Forgetting the override entries makes those overrides silently no-op. WHY: Vite emits per-theme overrides as separate files; see Sub-theming "Two-Layer CSS Model & Library Registration".
 - **Assuming Heroicons are bundled** -- The icon packs reference `/libraries/heroicons/` which must be installed separately (e.g., via `npm` or `composer`). WHY: The theme only defines the icon pack configuration; the actual SVG files must exist at the specified path.
 
 ## See Also

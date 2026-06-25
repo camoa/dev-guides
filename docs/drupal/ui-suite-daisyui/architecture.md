@@ -25,7 +25,7 @@ UI Suite DaisyUI theme (51 SDC components)
     |     +-- ui_styles_ui_patterns: Styles on pattern instances
     |
     +-- ui_skins: Design tokens & theme switching
-    |     +-- CSS Variables: 25 DaisyUI variables (colors, radius, etc.)
+    |     +-- CSS Variables: 28 DaisyUI variables (colors, radius, sizes, border, effects)
     |     +-- Themes: 35 DaisyUI themes via data-theme attribute
     |
     +-- ui_icons: Icon packs (Heroicons 16/20/24 solid + 24 outline)
