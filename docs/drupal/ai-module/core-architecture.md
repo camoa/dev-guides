@@ -44,7 +44,7 @@ ai (core)
 ├── ai_automators       — Field-level AI automation (52 plugin types)
 ├── ai_ckeditor         — CKEditor 5 AI toolbar
 ├── ai_search           — Vector DB Search API backend
-├── ai_translate        — Content + interface translation [DEPRECATED]
+├── ai_translate        — Content + interface translation [DEPRECATED → standalone drupal/ai_translate]
 ├── ai_observability    — Production monitoring (logger + OpenTelemetry)
 ├── ai_logging          — Entity-based request logging [DEPRECATED]
 ├── ai_api_explorer     — Developer testing UI
