@@ -396,7 +396,7 @@
     "guides_extracted": 27
   },
   "drupal/ai-module": {
-    "source_hash": "6b0d1b8c6a2a6264ab1b75434118e8ae6118ffd189dbc18b219fe2ddf7637220",
+    "source_hash": "059f53c6ada66953ac6654098f593a02840e1d60d43b1e11685192d2a520bd2a",
     "partitioned": "2026-06-26",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 25

@@ -1,6 +1,6 @@
 ---
 description: AI Validations — AI-powered field validation using XTRUE/XFALSE protocol and image classification
-tldr: "**Status: DEPRECATED** — moving to standalone `drupal/ai_validations` project. Use when you need AI-powered field validation constraints with the Field Validation module (>=3.0.0-beta3)."
+tldr: "**Status: DEPRECATED** — moving to standalone `drupal/ai_validations` (1.0.0-alpha1, pre-stable as of Jun 2026; keep using in-core until stable). Use when you need AI-powered field validation constraints with the Field Validation module (>=3.0.0-beta3)."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> **Status: DEPRECATED** — moving to standalone `drupal/ai_validations` project. Use when you need AI-powered field validation constraints with the Field Validation module (>=3.0.0-beta3).
+> **Status: DEPRECATED** — moving to standalone `drupal/ai_validations`. The standalone exists but is **1.0.0-alpha1** only (pre-stable as of Jun 2026); keep using the in-core submodule until a stable tag lands. Use when you need AI-powered field validation constraints with the Field Validation module (>=3.0.0-beta3).
 
 ## Decision
 
