@@ -2,8 +2,12 @@ site/
 __pycache__/
 *.pyc
 
+# Local working drafts (briefs/proposals authored outside the published docs)
+proposals/
+
 # Tool telemetry / local agent output — never part of the repo
 .claude/
 .claude-telemetry/
 .design-intelligence/
 .design-intelligence-audit/
+.playwright-mcp/
