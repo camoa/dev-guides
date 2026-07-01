@@ -8,6 +8,7 @@ nav:
 - block-placement.md
 - inline-vs-reusable.md
 - field-extra-field-blocks.md
+- block-content-list-components.md
 - defaults-vs-overrides.md
 - lb-restrictions.md
 - lb-styles-overview.md
@@ -19,6 +20,7 @@ nav:
 - lb-events-hooks.md
 - lb-config-recipes.md
 - theming-lb.md
+- editor-form-display-hardening.md
 - best-practices.md
 - anti-patterns.md
 - security-performance.md

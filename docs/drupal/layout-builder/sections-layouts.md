@@ -1,5 +1,5 @@
 ---
-tldr: "When you need to understand how sections work, what layout plugins provide, and how regions structure content within a section."
+tldr: "Sections (Section value object + layout plugin + regions) structure LB displays. Group components sharing section-level CSS into ONE section—style classes apply at the wrapper. Storage: Defaults (view display) or Overrides (entity field)."
 
 ---
 ## 4. Sections & Layouts
@@ -137,6 +137,7 @@ $sections = $storage->getSections();
 - **Assuming section order** → Sections stored as array, order matters. Use `getSections()` not direct array access on programmatic manipulation
 - **Forgetting contexts** → `toRenderArray($contexts)` needs entity context for field blocks to render correctly
 - **Mutating sections without saving** → Section changes in defaults require `$display->save()`. Override sections require entity save
+- **Fragmenting a shared-styling component group into sibling sections** → Group multiple components (e.g. heading + body + CTA) into ONE section when they share authoring intent AND section-level styling. A Layout Builder Styles / UI Styles class applies at the SECTION level, so one section = one background/spacing/max-width. Split into sibling sections only when each genuinely needs independent section-level styling. Emitting three sibling sections for a heading+body+CTA group that shares styling fragments editor control and multiplies style config. Core's `Section` already holds many `SectionComponent`s across regions (`getComponentsByRegion()` sorts by weight) — no contrib needed to keep them together
 
 ### See Also
 

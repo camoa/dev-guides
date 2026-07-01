@@ -1,5 +1,5 @@
 ---
-tldr: "When deciding whether to allow per-entity layout customization or use a single default layout for all entities of a bundle."
+tldr: "Use allow_custom:false for consistency bundles, allow_custom:true + restrictions for curated editor bundles — posture is per-bundle. Overrides are content, not config; default changes don't propagate to overridden entities."
 
 ---
 ## 9. Defaults vs Overrides
@@ -53,6 +53,18 @@ third_party_settings:
 When overrides enabled, entities get a `layout_builder__layout` field (or similar, configurable name) storing per-entity sections.
 
 Reference: `/core/modules/layout_builder/src/Plugin/SectionStorage/DefaultsSectionStorage.php` and `OverridesSectionStorage.php` for implementation.
+
+**The allow_custom editorial-posture spectrum**
+
+`allow_custom` is not just a boolean — combined with restrictions and Layout Builder Styles it yields three editorial postures:
+
+| Posture | Config | Editor experience | Best for |
+|---|---|---|---|
+| **Locked / templated** | `allow_custom: false` | Cannot customize; default-only layout | Consistency-critical bundles |
+| **Curated** | `allow_custom: true` + restrictions allowlist + curated LB Styles | Composes from an approved palette | Most editorial bundles |
+| **Open** | `allow_custom: true`, no restrictions | Full freedom | Rare / risky |
+
+Verified: one production site ran a templated bundle (`allow_custom: false`) alongside curated bundles (`allow_custom: true` + per-bundle allowlists) in the same install — the posture is a per-bundle decision, not a site-wide one.
 
 ### Decision Points
 
