@@ -1,5 +1,5 @@
 ---
-tldr: "When styling Layout Builder admin UI, layout frontend output, or section/component markup."
+tldr: "Override layout templates in templates/layout/ and use attributes.addClass(). Any inline-block template MUST output {{ attributes }} and {{ title_suffix }} — omitting either silently breaks LB contextual edit and the Configure menu."
 
 ---
 ## 15. Theming Layout Builder
@@ -119,6 +119,17 @@ When styling Layout Builder admin UI, layout frontend output, or section/compone
 - **Not namespacing classes** → Generic classes like `.first` conflict. Use `.layout-region--first` or similar
 - **Ignoring cache in preprocess** → Preprocessing runs on every render. Don't do expensive operations without caching
 - **Not providing template suggestions** → Make layouts themeable per entity bundle or context with suggestions
+- **Dropping `{{ attributes }}` or `{{ title_suffix }}` in an inline-block template** → Any inline-block / `block_content` Twig template used in Layout Builder MUST output `{{ attributes }}` (carries the `data-layout-block-uuid` wrapper) AND `{{ title_suffix }}` (the contextual-links placeholder). Omitting either SILENTLY breaks the contextual edit pencil AND the LB "Configure" menu — no error, just missing editor UI. Minimal correct shape:
+  ```twig
+  {#
+   # MUST output {{ attributes }} and {{ title_suffix }} so Layout Builder's
+   # data-layout-block-uuid wrapper + contextual edit pencil work.
+   #}
+  <div{{ attributes }}>
+    {{ title_suffix }}
+    {# component markup #}
+  </div>
+  ```
 
 ### See Also
 

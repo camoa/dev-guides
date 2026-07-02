@@ -108,10 +108,10 @@
     "guides_extracted": 16
   },
   "drupal/layout-builder": {
-    "source_hash": "a82d43cccc6cdedc5ef214a9c8568022f696f926dbc87f5a672db28346731630",
-    "partitioned": "2026-02-19",
+    "source_hash": "d265331b2e719d17ab87ff7a32f8c30f27fe593b0c75d10f9cd6203c93a17585",
+    "partitioned": "2026-07-01",
     "partitioned_by": "Carlos Ospina",
-    "guides_extracted": 25
+    "guides_extracted": 27
   },
   "drupal/views": {
     "source_hash": "d7c0710d5763baa382f029a751dd035328130e3f9afbb77d9c876f7657ab33e5",

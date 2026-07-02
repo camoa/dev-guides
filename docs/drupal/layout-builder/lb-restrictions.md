@@ -1,5 +1,5 @@
 ---
-tldr: "When you need to limit which blocks, layouts, or sections editors can add in Layout Builder to prevent overwhelming choices or enforce content governance."
+tldr: "Use Layout Builder Restrictions (3.0.4, D11-compatible) to limit blocks/layouts per bundle; allowlist lives in third_party_settings.layout_builder_restrictions on the view-display config. Restrictions are UI governance, not access control."
 
 ---
 ## 10. Layout Builder Restrictions
@@ -45,6 +45,10 @@ When you need to limit which blocks, layouts, or sections editors can add in Lay
 4. **Via permissions**
    - "Administer blocks" required to see all blocks
    - Without permission, users only see blocks they have access to
+
+**Where the allowlist is stored:** Layout Builder Restrictions writes its allowlist into `third_party_settings.layout_builder_restrictions` ON the `core.entity_view_display.<entity>.<bundle>.<viewmode>.yml` config — it is NOT standalone config, so it travels with the view-display export. The common strategy uses the `entity_view_mode_restriction` plugin with `allowed_layouts` plus allowlisted blocks by category.
+
+**Module version context:** `layout_builder_restrictions` 3.0.4 is Drupal 11-compatible. The project itself flags that Drupal core may soon provide native block-restriction — evaluate core capabilities first on new builds before adding the contrib dependency.
 
 ### Decision Points
 
