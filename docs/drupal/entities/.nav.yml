@@ -13,6 +13,7 @@ nav:
 - field-formatter-development.md
 - field-instance-configuration.md
 - field-storage-configuration.md
+- field-storage-decision.md
 - field-type-selection.md
 - field-validation-patterns.md
 - field-widget-development.md
