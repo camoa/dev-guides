@@ -568,5 +568,11 @@
     "partitioned": "2026-06-17",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 2
+  },
+  "drupal/editorial-workflow": {
+    "source_hash": "new-guide-no-source",
+    "partitioned": "2026-07-03",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 3
   }
 }
