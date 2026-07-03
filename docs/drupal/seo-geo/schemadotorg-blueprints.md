@@ -25,7 +25,7 @@ drupal_version: "11.x"
 
 ### Stability Warning
 
-Schema.org Blueprints is at **1.0.0-alpha37** (March 2026) with approximately 210 installs. Alpha status means:
+Schema.org Blueprints is at **1.0.0-alpha37** — still the current release as of mid-2026, with no stable release yet (see the [project page](https://www.drupal.org/project/schemadotorg) for live status and adoption). Alpha status means:
 
 - API changes between releases without deprecation periods
 - Database schema migrations may be required on update
