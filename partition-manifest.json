@@ -360,8 +360,8 @@
     "guides_extracted": 27
   },
   "drupal/canvas": {
-    "source_hash": "aa9164dc53d1ddf236119c4afd8f02fa3d9adb7381626c1690a1e5ba9313685d",
-    "partitioned": "2026-02-21",
+    "source_hash": "d3d1f0c27e8d6b0bd9719e0f0c308ba3de8a1f6168b6a96f149830c392b18dd5",
+    "partitioned": "2026-07-02",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 17
   },
