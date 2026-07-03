@@ -415,3 +415,7 @@ The remaining SEO stances (adapt-to-project-fields, schema-type-per-role, no-har
 ### Drupal recipes invoked
 
 The recipe optionally invokes `drupal_cms_seo_basic`, `drupal_cms_seo_tools`, or both (controlled via input). When invoked, the agentic recipe still owns the per-bundle adaptation and verifier; the Drupal core recipes only install the module set + carry their own opinionated config that the agentic recipe then overlays.
+
+### Related recipes
+
+- `configure_pathauto_alias_pattern` — the narrow "just give this one bundle a clean URL pattern" case. Route there when the task is aliases only, not a full SEO foundation; this recipe owns pathauto as one of many layers behind the full SEO input contract.
