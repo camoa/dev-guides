@@ -53,6 +53,15 @@ custom_storage: false
 
 Reference: `/core/modules/field/src/Entity/FieldStorageConfig.php`
 
+## Shared Storage by Concern
+
+When the SAME concern recurs on ≥2 bundles of one entity type, model it as ONE shared storage — but name it by the CONCERN, not by a bundle. The mechanics of shared storage are above; this is the decision discipline that keeps it maintainable.
+
+- **Concern-named, not bundle-named:** for an eyebrow, CTA, or publish date that appears on several bundles, create one concern-named storage (`field_eyebrow`) instanced across those bundles — NOT `field_hero_eyebrow` + `field_card_eyebrow`. Bundle-named proliferation blocks cross-bundle queries and future reuse, and multiplies near-identical storage tables.
+- **Cardinality reconciliation:** cardinality is a STORAGE-level property — it lives on `field.storage.*` and there is no per-bundle cardinality override. When one shared storage serves bundles with different needs, set the storage cardinality to the MAX any bundle requires, then enforce a lower per-bundle limit through WIDGET configuration, not storage.
+- **entity_reference settings placement (load-bearing):** on a shared `entity_reference` storage the storage carries only `target_type`. The `handler`, `handler_settings`, and `target_bundles` belong on the field INSTANCE (`field.field.*`), never on the storage. Putting `handler_settings` on a storage YAML fails config schema validation.
+- **Cross-entity-type boundary:** storage cannot cross entity types. The same concern on `node` vs `block_content` is legitimately TWO storages — sharing is only possible within one entity type.
+
 ## Common Mistakes
 
 - **Wrong**: Trying to change immutable properties → **Right**: These are locked after creation; create new field instead
@@ -61,6 +70,9 @@ Reference: `/core/modules/field/src/Entity/FieldStorageConfig.php`
 - **Wrong**: Wrong entity_type → **Right**: Field storage tied to entity type; can't reuse across node/user/etc.
 - **Wrong**: Not setting translatable → **Right**: Defaults to FALSE; explicitly set TRUE for multi-language sites
 - **Wrong**: Forgetting indexes → **Right**: Add indexes for commonly filtered/sorted fields for performance
+- **Wrong**: Sharing a storage for something that is really a classification → **Right**: Use a vocabulary + `entity_reference` so the dimension is governed, hierarchical, and reusable (see [Field & Storage Decision Order](field-storage-decision.md))
+- **Wrong**: Bundle-naming a shared concern (`field_hero_eyebrow` + `field_card_eyebrow`) → **Right**: Name shared storage by the concern (`field_eyebrow`) and instance it per bundle
+- **Wrong**: Putting `handler_settings`/`target_bundles` on a shared `entity_reference` storage → **Right**: Those settings belong on the field INSTANCE, not the storage
 
 **Performance**:
 - Add database indexes for fields used in views filters/sorts: `indexes: {value: [value]}`
@@ -73,6 +85,7 @@ Reference: `/core/modules/field/src/Entity/FieldStorageConfig.php`
 
 ## See Also
 
+- [Field Storage Decision Order](field-storage-decision.md)
 - [Field Type Selection](field-type-selection.md)
 - [Field Instance Configuration](field-instance-configuration.md)
 - Reference: [Field storage configuration](https://git.drupalcode.org/project/drupal/-/blob/11.x/core/modules/field/config/schema/field.schema.yml)

@@ -46,4 +46,4 @@ guide-meta:
 | Create custom field type plugins | [Custom Plugins](custom-plugins.md) | You need to create custom field type, widget, or formatter plugins specific to your application. |
 | Import data via Feeds | [Feeds Integration](feeds-integration.md) | You need to import CSV or other data sources into custom field columns via the Feeds module. |
 | Understand performance and security best practices | [Best Practices](best-practices.md) | Performance optimization, security hardening, dependency injection, and coding standards for custom field development. |
-| Find source code for specific functionality | [Code Reference Map](code-reference-map.md) |  |
+| Find source code for specific functionality | [Code Reference Map](code-reference-map.md) | You need to find specific source code for custom field functionality. |

@@ -1,5 +1,6 @@
 ---
 description: Source code locations for all Custom Field components -- field types, widgets, formatters, services, hooks, Views plugins, templates, and sub-modules.
+tldr: "You need to find specific source code for custom field functionality."
 ---
 
 # Code Reference Map
@@ -51,8 +52,8 @@ You need to find specific source code for custom field functionality.
 ## Services
 
 - `/modules/contrib/custom_field/custom_field.services.yml` -- Service definitions
-- `/modules/contrib/custom_field/src/CustomFieldUpdateManager.php` -- Schema update service
-- `/modules/contrib/custom_field/src/CustomFieldGenerateData.php` -- Sample data generation
+- `/modules/contrib/custom_field/src/Service/UpdateManager.php` -- Schema update service (id `custom_field.update_manager`, interface `UpdateManagerInterface`)
+- `/modules/contrib/custom_field/src/Service/GenerateData.php` -- Sample data generation
 
 ## Hook Classes
 

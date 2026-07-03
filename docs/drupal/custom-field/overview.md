@@ -21,6 +21,17 @@ You need to store multiple related values together in a single field without cre
 
 **Performance comparison**: Custom Field stores all sub-fields in one table row (one JOIN). Paragraphs creates separate entities (N+1 queries for N paragraphs). For 10 paragraph items, expect 20+ queries vs 1 query with Custom Field.
 
+## Two Triggers for a `custom` Compound Field
+
+A compound field (`type: custom`) is the right tool for two distinct reasons -- reach for it when EITHER applies:
+
+1. **Grouping trigger** -- 3-10 related values that always belong together and render together (address parts; SKU/price/weight/dimensions). This is the performance play above: one table row instead of entity overhead.
+2. **Polymorphic trigger** -- a value has **>=2 mutually-exclusive sub-shapes**, only one of which renders per instance, and no single core field type expresses all of them. Examples: a partner logo that is an image OR a text fallback; a contact method that is an email OR a phone OR a URL. Model each shape as its own column on one `custom` field and populate only the relevant one per instance.
+
+**Overengineering guard (counter-example):** an *optional single* thing is NOT polymorphic. An optional link is just a single-value `link` field with `required: false` at the instance level -- there is no "cardinality 0..1" in Drupal (cardinality counts values; "optional" is the `required` setting). Do not reach for `custom` for the mere presence/absence of one shape.
+
+**A `custom` compound field CAN hold an `entity_reference` column** -- the module ships an `entity_reference` sub-field type (`type: entity_reference` with a `target_type`). So "route to a wrapper entity because a column would be a reference" is wrong as a technical claim. The real rule is a judgment call: give a child its own wrapper entity when it needs its own view modes, cross-parent reuse, or an independent lifecycle -- NOT because a compound "can't hold a reference."
+
 ## Pattern
 
 **Creating via UI (config-first approach)**:
