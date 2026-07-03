@@ -1,0 +1,8 @@
+nav:
+- index.md
+- menu-system-fundamentals.md
+- menu-blocks-and-placement.md
+- menu-access-and-permissions.md
+- menu-programmatic-links-and-alter-hooks.md
+- menu-caching-and-performance.md
+append_unmatched: true
