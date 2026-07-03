@@ -28,8 +28,8 @@ Both Schema Metatag and Schema.org Blueprints output JSON-LD. Do not mix formats
 |-----------|--------|-----|
 | Existing site with established content types | Schema Metatag | Token-based mapping — no content restructuring required |
 | Greenfield build, schema-first architecture | Schema.org Blueprints | Content types and fields are generated from Schema.org; tighter coupling |
-| Need production-stable module (now) | Schema Metatag 3.0.4 | Stable release; 2,000+ installs; well-tested |
-| Alpha risk acceptable, deep schema alignment wanted | Schema.org Blueprints alpha37 | Only ~210 installs; alpha stability; significant ongoing API changes |
+| Need production-stable module (now) | Schema Metatag 3.0.4 | Stable release; widely adopted; well-tested |
+| Alpha risk acceptable, deep schema alignment wanted | Schema.org Blueprints alpha37 | Limited adoption; alpha stability; significant ongoing API changes |
 | Decoupled/headless Drupal | Schema.org Blueprints | schemadotorg_jsonld outputs structured JSON API; schema-aligned field names |
 | Quick wins on article/product pages | Schema Metatag | 25 pre-built types; configure in admin UI; no custom code needed |
 | Custom content model already built | Schema Metatag | Map existing fields to schema properties via tokens |
