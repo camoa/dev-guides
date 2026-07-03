@@ -22,4 +22,10 @@ nav:
 - hiding-features-for-launch.md
 - prefer-drush-commands-over-custom-php.md
 - avoid-unnecessary-custom-modules.md
+- ddev-composer-path-repo-drupal-recipe.md
+- ship-search-index-view-mode-defensively.md
+- schemadotorg-mapping-type-deps-post-export.md
+- pre-stable-template-consumer-minimum-stability.md
+- rebrand-required-theme-without-forking.md
+- canvas-versioned-config-raw-edit-trap.md
 append_unmatched: true

@@ -59,7 +59,7 @@ You want to create a compound field through the Drupal UI using configuration, n
 
 ## Common Mistakes
 
-- **Changing column types after adding data** -- Column schema is locked once data exists. Plan ahead or use `CustomFieldUpdateManager` service with caution (data loss risk)
+- **Changing column types after adding data** -- Column schema is locked once data exists. Plan ahead or use the `custom_field.update_manager` service with caution (data loss risk)
 - **Machine name too long** -- Max length calculated as `64 - strlen($field_name) - 12`. For field `field_custom_address`, sub-field max is ~38 characters
 - **Using double underscores in column names** -- `__` is reserved separator for extended properties. Use single underscores only
 - **Not setting decimal precision/scale correctly** -- Precision is total digits, scale is decimal places. For money: precision=10, scale=2 allows up to $99,999,999.99

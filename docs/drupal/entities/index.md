@@ -6,6 +6,7 @@ guide-meta:
     - bundle entities
     - base fields
     - field types
+    - field storage decision order
     - field widgets
     - field formatters
     - view modes
@@ -35,6 +36,7 @@ guide-meta:
 | Build a custom bundle entity | [Bundle Entity Implementation](bundle-entity-implementation.md) | When building custom content entity types that need bundle support (multiple subtypes with different field configurations), requiring programmatic bundle creation or custom bundle behavior. |
 | Add base fields to entities | [Base Field Definitions](base-field-definitions.md) | When adding fields that exist on ALL bundles of an entity type (e.g., title on all nodes, uid on all content), or creating non-configurable fields that store critical entity data. |
 | Choose the right field type | [Field Type Selection](field-type-selection.md) | When adding fields to content types or entities, you must choose the appropriate field type that matches your data structure and validation requirements. |
+| Decide field storage shape (compound / taxonomy / shared / wrapper) | [Field & Storage Decision Order](field-storage-decision.md) | Decide field-storage SHAPE in priority order: polymorphic -> custom compound field; classification -> taxonomy + entity_reference; shared concern -> concern-named storage; entity-worthy collection -> wrapper entity; else plain core field. |
 | Create field storage config | [Field Storage Configuration](field-storage-configuration.md) | When creating fields that can be reused across multiple bundles, defining the technical specifications (data type, cardinality, storage schema) independent of bundle-specific settings. |
 | Configure field instances | [Field Instance Configuration](field-instance-configuration.md) | When attaching a field storage to a specific bundle with bundle-specific settings (label, description, required status, default values, widget/formatter settings). |
 | Build custom field types | [Custom Field Type Development](custom-field-type-development.md) | When core field types don't meet your data structure needs, requiring custom storage schema, validation, or business logic for a specific data pattern. |

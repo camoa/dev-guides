@@ -134,6 +134,12 @@ foreach ($node->field_custom as $delta => $item) {
 $values = $node->field_custom->getValue(); // Bypasses field logic
 ```
 
+**Configuration-first approach**:
+
+- Create fields via UI or config YAML, not code
+- Code-based fields harder to maintain, translate, export
+- Use update hooks to modify field config, not programmatic creation
+
 **Empty checks**:
 
 ```php
@@ -163,22 +169,12 @@ $street = $node->field_custom->street; // Only gets delta 0
 **Update hooks for schema changes**:
 
 ```php
-function my_module_update_9001() {
-  /** @var \Drupal\custom_field\CustomFieldUpdateManager $updateManager */
+function my_module_update_N() {
+  /** @var \Drupal\custom_field\Service\UpdateManagerInterface $updateManager */
   $updateManager = \Drupal::service('custom_field.update_manager');
 
-  $field_storage = FieldStorageConfig::loadByName('node', 'field_address');
-  $columns = $field_storage->getSetting('columns');
-
-  // Add new column
-  $columns['country'] = [
-    'name' => 'country',
-    'type' => 'string',
-    'length' => 2,
-  ];
-
-  $field_storage->setSetting('columns', $columns);
-  $updateManager->updateFieldSchema($field_storage);
+  // Add a new 'country' column to the `custom` field field_address on node.
+  $updateManager->addColumn('node', 'field_address', 'country', 'string');
 
   return t('Added country column to field_address');
 }
@@ -186,7 +182,7 @@ function my_module_update_9001() {
 
 ## Anti-Patterns
 
-- Modify field schema directly in database -- always use CustomFieldUpdateManager
+- Modify field schema directly in database -- always use the `custom_field.update_manager` service (`addColumn()` / `removeColumn()`)
 - Store sensitive data (passwords, API keys) in custom fields -- use State API or Key module
 - Create entity references to deleted entities -- validate entity exists before saving
 - Use @extend in SCSS for custom field styling -- creates selector explosion
@@ -200,7 +196,7 @@ function my_module_update_9001() {
 - **Exposing entity references without access checks** -- Always check $entity->access('view')
 - **Public files for private data** -- Use private:// scheme and configure file access controls
 - **Using static calls in OOP code** -- Inject dependencies via DI; improves testability
-- **Modifying fields without update hooks** -- Schema changes must go through CustomFieldUpdateManager
+- **Modifying fields without update hooks** -- Schema changes must go through the `custom_field.update_manager` service in a `hook_update_N()`
 
 ## See Also
 
