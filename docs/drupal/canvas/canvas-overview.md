@@ -43,12 +43,12 @@ Canvas introduces a distinct page entity type (`canvas_page`) that stores its la
 - Design token editing (color, typography overrides)
 - AI assistant (optional `canvas_ai` submodule)
 
-**Module version**: Canvas 1.0 stable released November 2025. Canvas 1.1.0 (February 2026) requires Drupal ^11.2. As of early 2026, ~3,253 sites report using the module. Security advisory SA-CONTRIB-2026-006 exists — update to Canvas 1.0.4+ if using unpublished Canvas pages.
+**Module version**: Canvas 1.0 stable released November 2025. Current stable is Canvas 1.7.1 (2026-07-01); minimum supported Drupal is 11.2. Canvas 1.7.0 was flagged Insecure and superseded by 1.7.1 (security release) — always run the latest. See the live install count on the [project page](https://www.drupal.org/project/canvas). Security advisory SA-CONTRIB-2026-006 exists — update to Canvas 1.0.4+ if using unpublished Canvas pages.
 
 ## Common Mistakes
 
 - **Wrong**: Treating Canvas pages like standard content types — they are a separate entity; standard fields cannot be added to the page entity → **Right**: Use the component tree for all content and layout
-- **Wrong**: Assuming any Drupal 11 version works → **Right**: Minimum is Drupal 11.2 (Canvas 1.1.0+)
+- **Wrong**: Assuming any Drupal 11 version works → **Right**: Minimum is Drupal 11.2
 - **Wrong**: Enabling Canvas on existing sites without planning component migration → **Right**: Paragraphs content cannot be auto-converted to Canvas pages; plan migration carefully
 - **Wrong**: Confusing "Canvas" (the page builder) with "canvas_page" (the entity type) and "Component" (the config entity) → **Right**: These are three distinct concepts
 - **Wrong**: Forgetting that theme changes break SDC dependencies if components reference a theme's SDC → **Right**: Track component-to-theme dependencies carefully

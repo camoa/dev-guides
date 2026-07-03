@@ -187,7 +187,7 @@ items:
         x-formatting-context: block
 ```
 
-Canvas widget: Repeater — editors can add/remove/reorder items. Multi-value prop UI support is still maturing (tracked in Canvas issue #3571917). In Twig, iterate with `{% for item in items %}`.
+Canvas widget: Repeater — editors can add/remove/reorder items. Array prop UI landed in Canvas 1.3.0 (issue #3571917); value persistence across reloads landed in Canvas 1.4.0 (issue #3572553). As of Canvas 1.7.1, multi-value is functionally supported for Text, Link, Image, Video, Integer, Number, Date, and List (Text/Integer) — not for Formatted Text or Boolean. A required-field-validation gap for multi-value props is tracked in issue #3576124 — check for current status. In Twig, iterate with `{% for item in items %}`.
 
 ## Common Mistakes
 
