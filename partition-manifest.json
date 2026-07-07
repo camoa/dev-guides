@@ -574,5 +574,11 @@
     "partitioned": "2026-07-03",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 3
+  },
+  "drupal/menus-navigation": {
+    "source_hash": "3d1f31fcc3273eb038c99b4724c785a8baec5638c66dad6473424aab79a97947",
+    "partitioned": "2026-07-03",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 5
   }
 }

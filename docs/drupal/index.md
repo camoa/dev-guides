@@ -49,6 +49,7 @@ guide-meta:
 | Define or use services | [Services & DI](services/index.md) |
 | Handle security correctly | [Security](security/index.md) |
 | Set up editorial roles and content moderation | [Editorial Workflow](editorial-workflow/index.md) |
+| Build site menus and navigation | [Menus & Navigation](menus-navigation/index.md) |
 | Configure caching | [Caching](caching/index.md) |
 | Create multi-column compound fields | [Custom Field](custom-field/index.md) |
 | Apply DRY principles in Drupal | [DRY in Drupal](dry-principles/index.md) |
