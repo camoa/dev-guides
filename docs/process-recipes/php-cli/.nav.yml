@@ -1,0 +1,6 @@
+nav:
+- PHP CLI prior-art research: prior-art.md
+- PHP CLI architecture: architecture.md
+- PHP CLI standards and tests: standards-and-tests.md
+- PHP CLI review checks: checks.md
+append_unmatched: true

@@ -18,8 +18,14 @@ Process recipes are **resolved by an orchestrator**, keyed by **`(phase × frame
 | `design` | `claude-code-plugins` | [Plugin component architecture](claude-code-plugins/architecture.md) | Turning a researched need into a component map — type choice, progressive disclosure, manifest + boundary. |
 | `implement` | `claude-code-plugins` | [Component authoring standards](claude-code-plugins/authoring-standards.md) | Authoring skills / commands / agents / hooks to contract, with paper-test as the test-first gate. |
 | `review` | `claude-code-plugins` | [Plugin review checks](claude-code-plugins/checks.md) | Validating a plugin (structural + semantic) before acceptance, routing each check to its owning tool. |
+| `research` | `php-cli` | [PHP CLI prior-art research](php-cli/prior-art.md) | A PHP CLI project (a Composer library/app whose interface is one or more binaries) must establish prior art (reuse / extend / build-new) before building — Packagist is dense. |
+| `design` | `php-cli` | [PHP CLI architecture](php-cli/architecture.md) | Turning a researched need into a library-first architecture — the library/CLI boundary, the entrypoint contract (exit codes, stream split, machine-readable output), and the dependency posture. |
+| `implement` | `php-cli` | [PHP CLI standards and tests](php-cli/standards-and-tests.md) | Holding PHP code to PSR-12 / `strict_types` and test-first discipline, with fixture-driven CLI end-to-end coverage and the extensionless-binary syntax check. |
+| `review` | `php-cli` | [PHP CLI review checks](php-cli/checks.md) | Validating a PHP CLI implementation (boundary, exit-code contract, dependency policy, security sinks, every binary linted) before acceptance. |
 
 > **`claude-code-plugins` binds only four phases.** A Claude Code plugin has no rendered or behavioural runtime surface, so this framework declares **no `e2e-setup` or `visual-regression` recipe**. Do not run `/setup-e2e` or `/setup-visual-regression` on a plugin project — the loader correctly returns no recipe, but those commands' generic fallback would still try to scaffold a Playwright harness that does not apply.
+
+> **`php-cli` binds only four phases.** A PHP CLI tool has no rendered or behavioural runtime surface, so this framework declares **no `e2e-setup` or `visual-regression` recipe**. Do not run `/setup-e2e` or `/setup-visual-regression` on a PHP CLI project — the loader correctly returns no recipe, but those commands' generic fallback would still try to scaffold a Playwright harness that does not apply. "No e2e" means no *browser* e2e: a CLI tool's end-to-end shape — run the built binary against a fixture tree and assert on output and exit code — lives in the `implement` and `review` recipes as a test tier, not as an `e2e-setup` binding.
 
 ## Authoring a process recipe
 
