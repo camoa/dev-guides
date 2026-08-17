@@ -44,7 +44,7 @@ ui_skins_theme: dark
 
 ## Requirements
 
-- Drupal `^10.3 || ^11`, PHP 8.3+
+- UI Skins 1.2.1 requires Drupal `^11.4 || ^12`, PHP 8.3+
 - No external Composer dependencies
 
 ## See Also

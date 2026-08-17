@@ -1,6 +1,6 @@
 ---
 description: Make Playwright VR captures deterministic with animation disabling, font waits, masking, and a global screenshot.css.
-tldr: Add `document.fonts.ready`, `animations: 'disabled'`, and a `stylePath` injecting `screenshot.css` to eliminate the three most common sources of VR flake: font swap, CSS animation frames, and dynamic content regions.
+tldr: "Add `document.fonts.ready`, `animations: 'disabled'`, and a `stylePath` injecting `screenshot.css` to eliminate the three most common sources of VR flake: font swap, CSS animation frames, and dynamic content regions."
 ---
 
 # Stability Controls

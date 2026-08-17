@@ -35,7 +35,7 @@ Essential for all JSON:API deployments, especially production environments and p
 # Check module status
 drush pm:list --status=enabled
 
-# Only use stable versions
+# Only use stable versions (current stable: 8.x-3.28, legacy version naming)
 composer require drupal/jsonapi_extras:^3.0
 ```
 

@@ -1,7 +1,7 @@
 ---
-description: Variants — pre-defined visual variations for components, including per-instance variants in Layout Builder
-tldr: Variants are declared in component YAML and auto-converted to a string enum prop named variant. For per-instance variants in Layout Builder, use either an entity field (Option 1 — same variant everywhere the block is placed) or a block template reading configuration.{prop} (Option 2 — different variant per placement, requires Plus Suite BlockPropertiesEvent).
-drupal_version: "10.3+ / 11"
+description: "Variants — pre-defined visual variations for components, including per-instance variants in Layout Builder"
+tldr: "Variants are declared in component YAML and auto-converted to a string enum prop named variant. For per-instance variants in Layout Builder, use either an entity field (Option 1 — same variant everywhere the block is placed) or a block template reading configuration.{prop} (Option 2 — different variant per placement, requires Plus Suite BlockPropertiesEvent)."
+drupal_version: "11.x"
 ---
 
 # Variants

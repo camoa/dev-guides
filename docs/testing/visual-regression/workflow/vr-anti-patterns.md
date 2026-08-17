@@ -1,6 +1,6 @@
 ---
 description: Consolidated list of VR anti-patterns — wrong approach paired with the correct alternative.
-tldr: The most destructive VR anti-patterns are: bulk --update-snapshots as the default response to failures, capturing on host and comparing in CI, bumping threshold to silence flakes, and committing .auth/ session files. Each silently destroys test value.
+tldr: "The most destructive VR anti-patterns are: bulk --update-snapshots as the default response to failures, capturing on host and comparing in CI, bumping threshold to silence flakes, and committing .auth/ session files. Each silently destroys test value."
 ---
 
 # Anti-Patterns

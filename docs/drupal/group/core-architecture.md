@@ -14,9 +14,8 @@ drupal_version: "11.x"
 
 | Situation | Choose | Why |
 |---|---|---|
-| New site, Drupal 11.2+ | Group 4.x | No contrib dependencies, Access Policy API, OOP hooks |
-| Existing site on Drupal 10 | Group 3.3.5 | 4.x requires Drupal 11.2+; 3.x is the latest stable for Drupal 10 |
-| Existing site on Drupal 11.2+ with Group 3.x | Upgrade to 4.x | Normal module update — same data model and machine names |
+| New site, Drupal 11.2+ | Group 4.x | No contrib dependencies, Access Policy API, OOP hooks — but 4.0.0-alpha1 is the only tag on the 4.0.x branch (no stable release), requires an `@alpha` install, and is not covered by Drupal security advisories |
+| Existing site on Drupal 11.2+ with Group 3.x | Upgrade to 4.x | Normal module update — same data model and machine names; the same alpha-only caveat applies |
 | Migrating from Group 2.x | Upgrade to 3.x first | Same data model as 3.x; then upgrade core to 11.2+ and upgrade to 4.x |
 
 ## Pattern
@@ -44,6 +43,13 @@ group_type (config entity, bundle of group)
 | Individual | A specific member with an explicitly assigned role | `PermissionScopeInterface::INDIVIDUAL_ID` |
 | Anonymous | Unauthenticated user (subset of outsider scope) | — |
 
+**Version differences:**
+
+| Version jump | What changed |
+|---|---|
+| v2 → v3 | Functionally identical; only machine names changed (`group_content` → `group_relationship`, `group_content_type` → `group_relationship_type`). No programmatic upgrade path. |
+| v3 → v4 | Same data model, entities, and scopes. Infrastructure rewrite: permission calculation moved to the Access Policy API, all contrib dependencies dropped, procedural hooks became OOP hook classes, the two-step relationship-creation wizard removed, automatic creator membership restricted to form submissions. |
+
 **v4 key dependencies** (core only — no contrib required):
 
 - **Access Policy API (core 11.2+)** — replaces `flexible_permissions` contrib. Group registers `IndividualGroupRoleAccessPolicy` (priority -100) and `SynchronizedGroupRoleAccessPolicy` (priority -50) tagged `access_policy`.
@@ -51,9 +57,8 @@ group_type (config entity, bundle of group)
 
 ## Common Mistakes
 
-- **Wrong**: Treating Group 4.x like Group 1.x → **Right**: `GroupContent`, `addContent()`, and `GroupContentEnabler` are gone since 3.x. Use `GroupRelationship`, `addRelationship()`, and `GroupRelationBase`.
-- **Wrong**: Registering a `flexible_permissions_calculator`-tagged service → **Right**: In 4.x the tag is `access_policy`. Re-implement custom calculators as `AccessPolicyBase` subclasses.
-- **Wrong**: Installing Group 4.x on Drupal 10 or Drupal 11.0/11.1 → **Right**: Group 4.x requires Drupal 11.2+ for the Access Policy API.
+- **Wrong**: Treating Group 4.x like Group 1.x → **Right**: The `GroupContent` entity, `addContent()` method, and `GroupContentEnabler` plugin are all gone since 3.x. Use `GroupRelationship`, `addRelationship()`, and `GroupRelationBase`.
+- **Wrong**: Installing v3 over v2 data expecting an in-place upgrade → **Right**: There is no in-place upgrade — migrate the data. Do not reach for the `group2to3` contrib module: it is marked **Unsupported** and **Obsolete** on drupal.org and has never had a tagged release.
 
 ## See Also
 

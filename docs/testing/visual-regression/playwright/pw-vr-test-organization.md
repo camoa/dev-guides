@@ -1,6 +1,6 @@
 ---
 description: Structure Playwright VR tests using fixtures, parallelism controls, and project metadata parameterization.
-tldr: Use `test.extend` fixtures for shared auth and page state instead of globals or `beforeEach` chains. Set `fullyParallel: true` globally but apply `mode: 'serial'` only to tests that share Drupal editorial state.
+tldr: "Use `test.extend` fixtures for shared auth and page state instead of globals or `beforeEach` chains. Set `fullyParallel: true` globally but apply `mode: 'serial'` only to tests that share Drupal editorial state."
 ---
 
 # Test Organization

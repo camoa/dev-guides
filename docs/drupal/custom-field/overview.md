@@ -1,9 +1,17 @@
 ---
-description: When to use Custom Field vs Paragraphs, entity references, or core multi-value fields for compound data storage in Drupal.
+description: When to use Custom Field 5.0.1 vs Paragraphs, entity references, or core multi-value fields for compound data storage in Drupal.
 tldr: "You need to store multiple related values together in a single field without creating entity references or separate content types -- for example, an address with street/city/state/zip, a product with SKU/price/weight/dimensions, or a…"
 ---
 
 # Custom Field Overview
+
+## Version
+
+```
+composer require 'drupal/custom_field:^5.0'
+```
+
+**5.0.1** (`core_version_requirement: ^11.4 || ^12`) is the version documented here. The 4.0.x branch is still maintained upstream, but 4.0.10 retargeted its compatibility to `^10.3 || >=11.0 <11.4` -- it will **not** install on Drupal 11.4 or later. On current core, 5.x is the only branch that installs. 5.0.0 is a modernization release (procedural `.module` hook shims and `DeprecationHelper` removed in favour of OO `#[Hook]` classes); the public API surface is unchanged from 4.0.x, so 4.x code and config carry over. The one upgrade action item is a post-update that backfills the taxonomy index -- see Schema Updates.
 
 ## When to Use
 
@@ -69,4 +77,5 @@ foreach ($node->field_address as $delta => $item) {
 ## See Also
 
 - Reference: [Custom Field project page](https://www.drupal.org/project/custom_field)
-- Reference: [Official documentation](https://www.drupal.org/docs/extending-drupal/contributed-modules/contributed-module-documentation/custom-field)
+- Reference: [drupal.org handbook pages](https://www.drupal.org/docs/extending-drupal/contributed-modules/contributed-module-documentation/custom-field) -- still live, but no longer the canonical reference
+- Reference: the module's own documentation site, shipped in the release tarball under `docs/` (mkdocs, Material theme; built from the project's GitLab repository). It documents every field type, widget and formatter plugin individually and is the canonical upstream reference as of 5.0.0

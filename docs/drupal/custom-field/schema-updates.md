@@ -57,6 +57,8 @@ function MY_MODULE_update_N() {
 
 **The update process** (handled by the service): backs up existing rows, truncates the table, adds or removes the column across both the data and revision tables, restores rows in batches, and clears the property definitions cache.
 
+**Upgrading 4.x -> 5.x:** the update manager, its three methods, and both drush commands are unchanged. The one thing 5.x adds is a post-update, `custom_field_post_update_bulk_populate_taxonomy_index()`, which `drush updb` runs once. It is a batched backfill of `taxonomy_index` across **every published node** that has an `entity_reference` sub-column targeting `taxonomy_term`. On a large content set this is slow -- budget for it in the deploy window rather than discovering it mid-update. `custom_field.post_update.php` contains no other function, and no 4.x->5.x data migration beyond this one is documented upstream.
+
 **Scope note:** this managed migration path is specific to the **custom_field module's** `custom` type. A field type you hand-build yourself (your own `FieldItemBase` with its own `schema()`) has **no** such service -- you own the schema change in your module's `hook_update_N()` directly.
 
 ## Decision

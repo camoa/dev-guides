@@ -1,6 +1,6 @@
 ---
 description: Group Actions contrib module — action plugins for VBO, ECA, and token-driven group operations
-tldr: "Read this when you need to automate group operations — adding/removing members or content — via Views Bulk Operations (VBO), ECA workflows, or any Drupal action-based system."
+tldr: "Automates group operations via VBO/ECA — but drupal/group_action 1.2.2 caps at Group ^3@beta and excludes 4.x entirely. On Group 4.0.x, write the actions yourself against the PHP API instead."
 drupal_version: "11.x"
 ---
 
@@ -9,6 +9,8 @@ drupal_version: "11.x"
 ## When to Use
 
 > Read this when you need to automate group operations — adding/removing members or content — via Views Bulk Operations (VBO), ECA workflows, or any Drupal action-based system.
+
+> **This section applies to Group 3.3.x, not Group 4.x.** `drupal/group_action` 1.2.2 (2025-08-29) declares `"drupal/group": "^1 || ^2@beta || ^3@beta"`, and the HEAD of its only branch carries the identical constraint — 4.x is excluded, so `composer require` will not resolve on a Group 4.x site. Verified 2026-08-16. Until the module declares 4.x support, automating group operations on 4.0.x means either staying on Group 3.3.x or writing the actions yourself against the [PHP API](php-api.md).
 
 ## Decision
 
@@ -20,7 +22,7 @@ drupal_version: "11.x"
 | Update existing relationship fields | `add_method: update_existing` | Updates fields if relationship exists |
 | Dynamic group from token | `group_id: [node:field_department:entity:id]` | Tokens resolved at execution time |
 
-Install: `composer require 'drupal/group_action:^1.2'`
+Install (Group 3.3.x sites only): `composer require 'drupal/group_action:^1.2'`
 
 ## Pattern
 
@@ -61,6 +63,7 @@ values:
 - **Wrong**: Setting `group_id` to a group title → **Right**: Only numeric IDs and UUIDs are supported. Use entity autocomplete in config forms or tokens.
 - **Wrong**: Forgetting to install the relation type on the group type → **Right**: The action silently skips if the plugin is not installed on the target group type.
 - **Wrong**: ECA recursion errors on group save → **Right**: Module handles this automatically via a `Compatibility` class. Ensure `group_action` is enabled.
+- **Wrong**: Requiring `drupal/group_action` on a Group 4.x site → **Right**: The module caps at `^3@beta`; Composer refuses to resolve it against `drupal/group:^4.0`. Stay on Group 3.3.x or write the actions against the [PHP API](php-api.md) directly.
 
 ## See Also
 

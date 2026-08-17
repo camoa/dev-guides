@@ -3,9 +3,8 @@ description: Drupal Custom Field module guides -- compound fields with multiple 
 tracks:
   - project: custom_field
     channel: stable
-    declared: null
-    note: no version stated in prose
-    verified: 2026-07-02
+    declared: "5.0.1"
+    verified: 2026-08-16
 guide-meta:
   concepts:
     - Custom Field module
@@ -15,6 +14,7 @@ guide-meta:
     - custom field formatters
     - entity reference sub-fields
     - single table storage
+    - SDC prop widgets
   not:
     - Paragraphs
     - core field types
@@ -37,19 +37,19 @@ guide-meta:
 | Understand what Custom Field is and when to use it vs Paragraphs/entity references | [Overview](overview.md) | You need to store multiple related values together in a single field without creating entity references or separate content types -- for example, an address with street/city/state/zip, a product with SKU/price/weight/dimensions, or a… |
 | Understand the plugin architecture and extensibility | [Architecture](architecture.md) | You need to understand how Custom Field's plugin system works to extend it with custom field types, widgets, or formatters, or to debug plugin discovery issues. |
 | Create a custom field using YAML config | [Config-First Creation](config-first-creation.md) | You want to create a compound field through the Drupal UI using configuration, not code -- the recommended approach for site builders and most use cases. |
-| Add/remove columns from existing fields with data | [Schema Updates](schema-updates.md) | You need to add, remove, or modify columns in a Custom Field that already has data, without losing existing content. |
-| Choose the right column type for my data | [Column Types](column-types.md) | All 27 custom field column types organized by category -- text, numeric, date/time, reference, file, and data fields with schema details and gotchas. |
+| Add/remove columns from existing fields with data | [Schema Updates](schema-updates.md) | You need to add, remove, or modify columns in a Custom Field that already has data, without losing existing content. Use addColumn()/removeColumn() on custom_field.update_manager -- there is no updateFieldSchema(). |
+| Choose the right column type for my data | [Column Types](column-types.md) | All 23 custom field column types organized by category -- text, numeric, date/time, reference, file, and data fields with schema details and gotchas. |
 | Find the right widget for a sub-field | [Widget Plugins](widget-plugins.md) | You need to choose the right widget for collecting data for each sub-field in your custom field. |
-| Use stacked vs flexbox layouts for the entire field | [Field-Level Widgets](field-level-widgets.md) | You need to control how the entire custom field (all sub-fields together) is laid out on the edit form. |
-| Render custom field data with templates or tables | [Field-Level Formatters](field-level-formatters.md) | You need to control how the entire custom field (all sub-fields together) is displayed on the view. |
+| Use stacked vs flexbox layouts for the entire field | [Field-Level Widgets](field-level-widgets.md) | You need to control how the entire custom field (all sub-fields together) is laid out on the edit form. CustomFlexWidget uses the module's own 12-column CSS grid, not Bootstrap -- works in any theme. |
+| Render custom field data with templates or tables | [Field-Level Formatters](field-level-formatters.md) | You need to control how the entire custom field (all sub-fields together) is displayed on the view. Plugin IDs are short (custom_inline, not custom_inline_formatter) -- only custom_formatter carries the _formatter suffix. |
 | Work with entity reference sub-fields | [Entity References](entity-references.md) | You need to reference entities (taxonomy terms, nodes, users, media) from within a custom field column. |
 | Handle file and image uploads | [Files and Images](files-images.md) | You need file uploads or images within a custom field column. |
 | Work with dates, times, and ranges | [Date/Time Fields](datetime-fields.md) | Working with date, time, date range, time range, or duration columns in custom fields. |
 | Add link fields with Linkit integration | [Link Fields](link-fields.md) | You need full link functionality (URL + title + attributes) within a custom field column. |
 | Query custom fields in Views | [Views Integration](views-integration.md) | You need to query, filter, sort, or display custom field data in Views. |
 | Use tokens in custom fields | [Token Support](token-support.md) | You need to use custom field values in token replacement contexts (Pathauto, Rules, email templates). |
-| Integrate with GraphQL, JSON:API, Search API | [Sub-Modules](sub-modules.md) | You need extended functionality like GraphQL, JSON:API normalization, Entity Browser, Linkit, Media Library, Search API, or AI integration. |
-| Create custom field type plugins | [Custom Plugins](custom-plugins.md) | You need to create custom field type, widget, or formatter plugins specific to your application. |
-| Import data via Feeds | [Feeds Integration](feeds-integration.md) | You need to import CSV or other data sources into custom field columns via the Feeds module. |
+| Integrate with GraphQL, JSON:API, Search API, or SDC | [Sub-Modules](sub-modules.md) | You need extended functionality like GraphQL, JSON:API normalization, Entity Browser, Linkit, Media Library, Search API, Single Directory Component rendering, or AI integration. Nine sub-modules ship with 5.x. |
+| Create custom field type plugins | [Custom Plugins](custom-plugins.md) | You need to create custom field type, widget, or formatter plugins specific to your application. schema()/propertyDefinitions()/generateSampleValue() are static; there is no #[CustomFieldFormatter] attribute -- sub-field formatters use core's #[FieldFormatter]. |
+| Import data via Feeds | [Feeds Integration](feeds-integration.md) | You need to import CSV or other data sources into custom field columns via the Feeds module. A single Feeds target delegates per sub-field to 23 FeedsType plugins, one per supported column type. |
 | Understand performance and security best practices | [Best Practices](best-practices.md) | Performance optimization, security hardening, dependency injection, and coding standards for custom field development. |
 | Find source code for specific functionality | [Code Reference Map](code-reference-map.md) | You need to find specific source code for custom field functionality. |

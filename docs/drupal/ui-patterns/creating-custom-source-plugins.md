@@ -1,26 +1,26 @@
 ---
 description: Creating custom source plugins — widgets, API sources, and derivers
 tldr: "Creating custom source plugins — widgets, API sources, and derivers"
-drupal_version: "10.3+ / 11"
+drupal_version: "11.x"
 ---
 
-## Creating Custom Source Plugins
+# Creating Custom Source Plugins
 
-### When to Create a Custom Source
+## When to Create a Custom Source
 
 Create a custom source plugin when:
 - A Drupal API provides data that no existing source exposes
 - You need a specialized widget for a specific data entry pattern
 - An external system provides data that should be available in component forms
 
-### Source Plugin Structure
+## Source Plugin Structure
 
 A source plugin requires:
 1. A class in `Plugin/UiPatterns/Source/` namespace
 2. The `#[Source]` attribute with metadata
 3. An implementation of `getPropValue()`
 
-### Minimal Widget Source (Direct Input)
+## Minimal Widget Source (Direct Input)
 
 For sources that store a value directly in configuration, extend `SourcePluginPropValue` (or `SourcePluginPropValueWidget` for form widget sources):
 
@@ -60,7 +60,7 @@ class ColorPickerWidget extends SourcePluginPropValueWidget {
 }
 ```
 
-### Drupal API Source (Context-Aware)
+## Drupal API Source (Context-Aware)
 
 For sources that pull data from Drupal APIs, extend `SourcePluginBase`:
 
@@ -97,7 +97,7 @@ class EntityCreatedDateSource extends SourcePluginBase {
 }
 ```
 
-### Source Attribute Properties
+## Source Attribute Properties
 
 | Property | Type | Purpose |
 |---|---|---|
@@ -111,7 +111,7 @@ class EntityCreatedDateSource extends SourcePluginBase {
 | `deriver` | string | Deriver class for creating multiple derivatives |
 | `metadata` | array | Arbitrary metadata accessible via `getCustomPluginMetadata()` |
 
-### Key Methods to Implement
+## Key Methods to Implement
 
 | Method | Required | Purpose |
 |---|---|---|
@@ -122,7 +122,7 @@ class EntityCreatedDateSource extends SourcePluginBase {
 | `calculateDependencies()` | Optional | Declare config dependencies |
 | `label()` | Optional | Override display label |
 
-### Using Derivers
+## Using Derivers
 
 For sources that need one derivative per field, entity type, or other dynamic dimension, use a deriver. UI Patterns provides `EntityFieldSourceDeriverBase` as a base:
 
@@ -136,7 +136,7 @@ For sources that need one derivative per field, entity type, or other dynamic di
 
 The deriver creates plugin definitions like `my_field_source:node:article:body`, `my_field_source:node:article:title`, etc.
 
-### Common Mistakes
+## Common Mistakes
 
 | Mistake | Why It Is Wrong |
 |---|---|
@@ -145,7 +145,7 @@ The deriver creates plugin definitions like `my_field_source:node:article:body`,
 | Returning render arrays from `getPropValue()` for non-slot props | Props expect scalar/structured data matching their JSON Schema type. Render arrays are only valid for slot prop types. |
 | Not calling `$this->replaceTokens()` for string values | If your source value may contain tokens, call `$this->replaceTokens($value)` to process them. The base class provides token support. |
 
-### See Also
+## See Also
 
 - [Source Plugins](source-plugins.md)
 - [Props System](props-system.md)

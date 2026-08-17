@@ -1,6 +1,6 @@
 ---
 description: Reference for every option available to toHaveScreenshot() and page.screenshot().
-tldr: Set `animations: 'disabled'`, `caret: 'hide'`, `threshold: 0.15`, and `maxDiffPixelRatio: 0.005` globally in `expect.toHaveScreenshot`. Never override `animations: 'allow'` — it reintroduces flake.
+tldr: "Set `animations: 'disabled'`, `caret: 'hide'`, `threshold: 0.15`, and `maxDiffPixelRatio: 0.005` globally in `expect.toHaveScreenshot`. Never override `animations: 'allow'` — it reintroduces flake."
 ---
 
 # Screenshot Options

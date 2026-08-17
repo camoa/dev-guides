@@ -1,6 +1,6 @@
 ---
 description: Passkeys prerequisites and environment checklist before writing any WebAuthn code — HTTPS requirements, RP ID rules, discoverable credential settings, and server library selection.
-tldr: Verify HTTPS context, consistent RP ID, and residentKey:required before writing passkey code. Use getClientCapabilities() to gate UI. Server-side: pick a vetted library (SimpleWebAuthn for JS/TS); never hand-roll WebAuthn crypto.
+tldr: "Verify HTTPS context, consistent RP ID, and residentKey:required before writing passkey code. Use getClientCapabilities() to gate UI. Server-side: pick a vetted library (SimpleWebAuthn for JS/TS); never hand-roll WebAuthn crypto."
 drupal_version: ""
 ---
 

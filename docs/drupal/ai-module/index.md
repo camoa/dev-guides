@@ -1,10 +1,10 @@
 ---
-description: Drupal AI module — provider abstraction, AI operations, agents, automators, chatbot API, CKEditor, vector search/RAG, guardrails, and all 14 sub-modules (1.4.2 stable)
+description: Drupal AI module — provider abstraction, AI operations, agents, automators, chatbot API, CKEditor, vector search/RAG, guardrails, and all 14 sub-modules (1.4.6 stable)
 tracks:
   - project: ai
     channel: stable
-    declared: "1.4.2"
-    verified: 2026-06-26
+    declared: "1.4.6"
+    verified: 2026-08-16
 guide-meta:
   concepts:
     - Drupal AI module
@@ -53,7 +53,7 @@ guide-meta:
 
 # Drupal AI Module
 
-Provider-agnostic AI abstraction for Drupal 11. Covers provider setup, all 16 operation types, agents, automators, the DeepChat chatbot, CKEditor integration, vector search/RAG, guardrails, and the complete sub-module ecosystem. Based on AI module 1.4.2 stable with "New in 1.4" / "Changed in 1.4" callouts.
+Provider-agnostic AI abstraction for Drupal 11. Covers provider setup, all 16 operation types, agents, automators, the DeepChat chatbot, CKEditor integration, vector search/RAG, guardrails, and the complete sub-module ecosystem. Based on AI module 1.4.6 stable with "New in 1.4" / "Changed in 1.4" callouts.
 
 | I need to... | Guide | Summary |
 |-------------|-------|---------|
@@ -80,5 +80,5 @@ Provider-agnostic AI abstraction for Drupal 11. Covers provider setup, all 16 op
 | Handle AI-specific exceptions | [Exceptions](exceptions.md) | Use this guide when handling errors from AI provider calls. Always catch specific exceptions before the generic `AiExceptionInterface`. |
 | Work with enums, DTOs, structured output | [Enums & DTOs](enums-and-dtos.md) | Use this guide when filtering models by capability, building structured output schemas, or tracking token usage from provider responses. |
 | Follow security best practices | [Security](security.md) | Use this guide before deploying any user-facing AI feature. All items in the checklist are required for production. |
-| Plan migrations from deprecated modules | [Deprecated Modules](deprecated-modules.md) | Use this guide when planning migrations away from deprecated sub-modules. All deprecations remain in 1.3.5 and 1.4.0-rc1; removal planned for AI 2.0.0. |
+| Plan migrations from deprecated modules | [Deprecated Modules](deprecated-modules.md) | Use this guide when planning migrations away from deprecated sub-modules. As of AI Core 1.4.6 all deprecations remain in place — removal is planned for AI 2.0.0, which is not yet released. |
 | Identify gaps in official documentation | [Documentation Gaps](documentation-gaps.md) | Undocumented features verified against 1.4.2 source. 1.4 gaps: ChatProcessor, global guardrails, AiExceptionEvent. 1.4.2 gaps: ai_file, ai.file_manager, AiFileProviderInterface, ChatWithPdf, restrict_to_topic, StreamableGuardrailInterface. |

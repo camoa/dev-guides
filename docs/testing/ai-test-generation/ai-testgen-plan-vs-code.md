@@ -1,6 +1,6 @@
 ---
 description: Plan vs code boundary — what belongs in the Markdown test plan versus what belongs in generated Playwright code.
-tldr: Scenario intent, step lists, acceptance criteria, negative assertions, and field labels (user-facing) belong in the plan. CSS selectors, wait tactics, fixtures, and data construction belong in generated code or seed tests. Rule of thumb: if a manual tester could act on it by reading the rendered page, it goes in the plan.
+tldr: "Scenario intent, step lists, acceptance criteria, negative assertions, and field labels (user-facing) belong in the plan. CSS selectors, wait tactics, fixtures, and data construction belong in generated code or seed tests. Rule of thumb: if a manual tester could act on it by reading the rendered page, it goes in the plan."
 ---
 
 # Plan vs Code Boundary

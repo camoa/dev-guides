@@ -1,6 +1,6 @@
 ---
 description: Decision tree for triaging a VR diff — flakiness vs environment drift vs real regression.
-tldr: When a diff fires, work the triage tree: same image on re-run (flake → stability checklist), differs by machine (env drift → pin Docker image), differs per browser (browser-specific rendering → per-browser baselines), differs CI vs local (always capture inside Docker). Skip only with a linked issue; never skip to ship a suspected regression.
+tldr: "When a diff fires, work the triage tree: same image on re-run (flake → stability checklist), differs by machine (env drift → pin Docker image), differs per browser (browser-specific rendering → per-browser baselines), differs CI vs local (always capture inside Docker). Skip only with a linked issue; never skip to ship a suspected regression."
 ---
 
 # Triaging False Positives

@@ -6,9 +6,9 @@ description: UI Patterns 2.x — source references, versions, and maintenance no
 
 ## Module Info
 
-- **Module:** `ui_patterns` 2.0.14
-- **Drupal:** 10.3+ / 11
-- **Last Updated:** 2026-02-19
+- **Module:** `ui_patterns` 2.0.19
+- **Drupal:** 11.4
+- **Last Updated:** 2026-08-16
 
 ## Drupal Research Install
 
@@ -33,10 +33,10 @@ Path: `~/workspace/contrib/web/`
 
 | Module | Relative Path | Guide Sections | Drupal Version |
 |--------|---------------|----------------|----------------|
-| ui_patterns | `modules/contrib/ui_patterns/` | All sections | 10.3+ / 11 |
-| ui_patterns (src) | `modules/contrib/ui_patterns/src/` | Architecture, Props System, Source Plugins, Custom Source Plugins | 10.3+ / 11 |
-| ui_patterns_layouts | `modules/contrib/ui_patterns/modules/ui_patterns_layouts/` | Layout Builder Integration | 10.3+ / 11 |
-| ui_patterns_views | `modules/contrib/ui_patterns/modules/ui_patterns_views/` | Views Integration | 10.3+ / 11 |
-| ui_patterns_field_formatters | `modules/contrib/ui_patterns/modules/ui_patterns_field_formatters/` | Field Formatters | 10.3+ / 11 |
-| ui_patterns_blocks | `modules/contrib/ui_patterns/modules/ui_patterns_blocks/` | Blocks Integration | 10.3+ / 11 |
-| ui_patterns_library | `modules/contrib/ui_patterns/modules/ui_patterns_library/` | Pattern Library | 10.3+ / 11 |
+| ui_patterns | `modules/contrib/ui_patterns/` | All sections | 11.4 |
+| ui_patterns (src) | `modules/contrib/ui_patterns/src/` | Architecture, Props System, Source Plugins, Custom Source Plugins | 11.4 |
+| ui_patterns_layouts | `modules/contrib/ui_patterns/modules/ui_patterns_layouts/` | Layout Builder Integration | 11.4 |
+| ui_patterns_views | `modules/contrib/ui_patterns/modules/ui_patterns_views/` | Views Integration | 11.4 |
+| ui_patterns_field_formatters | `modules/contrib/ui_patterns/modules/ui_patterns_field_formatters/` | Field Formatters | 11.4 |
+| ui_patterns_blocks | `modules/contrib/ui_patterns/modules/ui_patterns_blocks/` | Blocks Integration | 11.4 |
+| ui_patterns_library | `modules/contrib/ui_patterns/modules/ui_patterns_library/` | Pattern Library | 11.4 |

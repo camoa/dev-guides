@@ -1,6 +1,6 @@
 ---
-description: Facets events — available event constants, when they dispatch, and event subscriber pattern for URL and cache customization
-tldr: "Use this guide when you need to hook into the facets processing pipeline without creating a full custom processor — for example, modifying URL formats, overriding active filter detection, or adjusting cache metadata."
+description: "Facets event subscribers for hooking into URL building, active filter parsing, and cache metadata without a full custom processor"
+tldr: "Use this guide when you need to hook into the facets processing pipeline without creating a full custom processor — modifying URL formats, overriding active filter detection, or adjusting cache metadata."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when you need to hook into the facets processing pipeline without creating a full custom processor — for example, modifying URL formats, overriding active filter detection, or adjusting cache metadata.
+> When you need to hook into the facets processing pipeline without creating a full custom processor.
 
 ## Decision
 
@@ -49,6 +49,7 @@ class FacetsSubscriber implements EventSubscriberInterface {
   }
 
   public function onQueryStringCreated(QueryStringCreated $event): void {
+    // Modify the query string parameters.
     $filter_params = $event->getFilterParameters();
     // ... modify $filter_params
     $event->setFilterParameters($filter_params);
@@ -59,10 +60,10 @@ class FacetsSubscriber implements EventSubscriberInterface {
 
 ## Common Mistakes
 
-- **Wrong**: Using events to transform result values → **Right**: Value transformation belongs in a BUILD processor (`BuildProcessorInterface`). Events are for URL and cache metadata customization.
+- **Wrong**: Writing a custom processor just to tweak a URL format → **Right**: Subscribe to `QUERY_STRING_CREATED` or `URL_CREATED` instead — no plugin boilerplate needed.
 
 ## See Also
 
 - [URL Processors](url-processors.md) — URL events in context
 - [Caching](caching.md) — cache events
-- Reference: `web/modules/contrib/facets/src/Event/`
+- Reference: `src/Event/`

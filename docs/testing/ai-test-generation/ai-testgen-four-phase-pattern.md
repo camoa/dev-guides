@@ -1,6 +1,6 @@
 ---
 description: The Plan → Review → Generate → Heal four-phase pattern — the spine of every AI test generation cycle.
-tldr: Every AI test generation cycle runs four phases: Plan (Planner agent writes a Markdown spec), Review (human approves), Generate (Generator writes code from the spec), Heal (Healer fixes locators when CI breaks). Never skip Plan or Review; the spec is the only artifact non-developers can review, and editing tests instead of the spec causes silent drift.
+tldr: "Every AI test generation cycle runs four phases: Plan (Planner agent writes a Markdown spec), Review (human approves), Generate (Generator writes code from the spec), Heal (Healer fixes locators when CI breaks). Never skip Plan or Review; the spec is the only artifact non-developers can review, and editing tests instead of the spec causes silent drift."
 ---
 
 # The Four-Phase Pattern

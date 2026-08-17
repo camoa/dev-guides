@@ -1,6 +1,6 @@
 ---
-description: Facets sort processors — active_widget_order, count_widget_order, display_value_widget_order, raw_value_widget_order, term_weight_widget_order
-tldr: "Use this guide when you need to control the order of facet result items."
+description: "SORT-stage processors that order facet result items — active state, count, display value, raw value, taxonomy weight"
+tldr: "Use this guide when you need to control the order of facet result items. Sort processors run in weight order and each breaks ties for the next; use term_weight_widget_order for manual ordering."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when you need to control the order of facet result items.
+> When you need to control the order of facet result items.
 
 ## Decision
 
@@ -22,22 +22,22 @@ drupal_version: "11.x"
 
 ## Pattern
 
-Processors execute in weight order. Each processor returns a comparison result (-1, 0, 1) for a pair of results. If a processor returns 0 (equal), the next processor in the chain breaks the tie.
+Processors execute in weight order. Each returns a comparison result (-1, 0, 1) for a pair of results; if a processor returns 0 (equal), the next processor in the chain breaks the tie.
 
-**Default order (all three enabled):**
+**Default order (all enabled):**
 1. Active items first (`active_widget_order`)
 2. Then by count descending (`count_widget_order`)
 3. Then alphabetically (`display_value_widget_order`)
 
-**`term_weight_widget_order`** — Uses the taxonomy term's weight field for ordering. Respects the manual ordering set in the taxonomy vocabulary UI. Use when you want a specific non-alphabetical order.
+`term_weight_widget_order` uses the taxonomy term's weight field, respecting manual ordering set in the taxonomy vocabulary UI — useful for a specific non-alphabetical order.
 
 ## Common Mistakes
 
-- **Wrong**: Expecting a single sort to govern all items when counts differ → **Right**: Sort processors chain. Lower weight wins for items with different values; equal values fall through to the next sorter.
-- **Wrong**: Trying to set arbitrary manual order via drag-and-drop → **Right**: Facets doesn't support manual ordering. Use `term_weight_widget_order` with taxonomy weights, or create a custom sort processor.
+- **Wrong**: Enabling both `count_widget_order` (DESC) and `display_value_widget_order` (ASC) and expecting one clear order → **Right**: The lower-weight processor wins for items with different counts; items with the same count fall through to the next sorter.
+- **Wrong**: Expecting drag-and-drop manual ordering → **Right**: Facets doesn't support arbitrary manual ordering. Use `term_weight_widget_order` with taxonomy weights, or write a custom sort processor.
 
 ## See Also
 
 - [Processing Pipeline](processing-pipeline.md) — sort stage in the pipeline
 - [Hierarchy](hierarchy.md) — sorting within hierarchy levels
-- Reference: `web/modules/contrib/facets/src/Plugin/facets/processor/`
+- Reference: `src/Plugin/facets/processor/`

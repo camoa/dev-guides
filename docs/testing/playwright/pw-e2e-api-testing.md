@@ -1,6 +1,6 @@
 ---
 description: Test HTTP APIs with the request fixture, share cookies between API and browser contexts, and use the API+UI hybrid pattern for fast deterministic E2E.
-tldr: The request fixture shares the browser context's cookie jar — use it to log in via API then drive UI as an authenticated user. The killer pattern: create state via JSON:API (fast), drive UI for the feature under test, verify via API (authoritative).
+tldr: "The request fixture shares the browser context's cookie jar — use it to log in via API then drive UI as an authenticated user. The killer pattern: create state via JSON:API (fast), drive UI for the feature under test, verify via API (authoritative)."
 ---
 
 # API Testing

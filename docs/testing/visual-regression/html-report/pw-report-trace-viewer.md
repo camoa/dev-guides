@@ -1,6 +1,6 @@
 ---
 description: How to enable and use the Playwright Trace Viewer from the HTML report.
-tldr: Enable trace with `trace: 'on-first-retry'` (recommended CI default). The Trace Viewer provides DOM snapshots at every action step, timeline scrubbing, and network/console inspection. Open from the HTML report or standalone via `npx playwright show-trace`. Keep zip intact — the viewer expects the archive.
+tldr: "Enable trace with `trace: 'on-first-retry'` (recommended CI default). The Trace Viewer provides DOM snapshots at every action step, timeline scrubbing, and network/console inspection. Open from the HTML report or standalone via `npx playwright show-trace`. Keep zip intact — the viewer expects the archive."
 ---
 
 # Trace Viewer

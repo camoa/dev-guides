@@ -4,8 +4,8 @@ drupal_version: "11.x"
 tracks:
   - project: storybook
     channel: stable
-    declared: "1.0.2"
-    verified: 2026-02-20
+    declared: "1.0.4"
+    verified: 2026-08-16
 guide-meta:
   concepts:
     - stories.yml

@@ -1,12 +1,12 @@
 ---
 description: Slots — renderables, multiple sources, and normalization for component placeholders
 tldr: "Slots — renderables, multiple sources, and normalization for component placeholders"
-drupal_version: "10.3+ / 11"
+drupal_version: "11.x"
 ---
 
-## Slots System
+# Slots System
 
-### How Slots Work
+## How Slots Work
 
 Slots are named placeholders in a component that accept Drupal render arrays. Unlike props (typed scalar/structured data), slots hold renderables: blocks, other components, WYSIWYG content, or field formatter output.
 
@@ -17,7 +17,7 @@ Internally, the `slot` prop type is a special PropType plugin that normalizes an
 - `MarkupInterface` objects become `['#children' => $value]`
 - Arrays pass through as render arrays (with cleanup for non-list keys)
 
-### Slot Definition in YAML
+## Slot Definition in YAML
 
 ```yaml
 slots:
@@ -31,7 +31,7 @@ slots:
 
 Slots do not have JSON Schema types. Their only metadata is `title` and `description`. UI Patterns automatically adds `title` from the slot key if missing.
 
-### Multiple Sources Per Slot
+## Multiple Sources Per Slot
 
 Unlike props (one source per prop), slots support **multiple sources**. In the UI, site-builders can add several sources to a single slot (e.g., a component + a block + WYSIWYG text), and they render in sequence:
 
@@ -42,7 +42,7 @@ foreach ($configuration['sources'] as $source_configuration) {
 }
 ```
 
-### Slot Sources
+## Slot Sources
 
 Built-in sources that work with slots (`prop_types: ['slot']`):
 
@@ -55,7 +55,7 @@ Built-in sources that work with slots (`prop_types: ['slot']`):
 
 String-type sources (textfield, token, etc.) also work via the `slot <- string` conversion path.
 
-### Accessing Slots in Twig
+## Accessing Slots in Twig
 
 Slots appear as Twig variables matching their YAML key names:
 
@@ -68,7 +68,7 @@ Slots appear as Twig variables matching their YAML key names:
 </div>
 ```
 
-### Common Mistakes
+## Common Mistakes
 
 | Mistake | Why It Is Wrong |
 |---|---|
@@ -76,7 +76,7 @@ Slots appear as Twig variables matching their YAML key names:
 | Correlating indices across multiple slots | If you have `images` and `captions` slots, there is no guarantee they have matching indices. Use a single slot with a sub-component that pairs them. |
 | Applying filters to slot output | Slots should pass through unmodified. Filtering slot content (except approved slot filters like `add_class` and `set_attribute`) may break render arrays. |
 
-### See Also
+## See Also
 
 - [Source Plugins](source-plugins.md)
 - [Defining Components](defining-components.md)

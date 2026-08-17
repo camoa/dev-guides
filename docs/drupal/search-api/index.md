@@ -3,13 +3,12 @@ description: Drupal Search API — decision guides for backends, indexing, proce
 tracks:
   - project: search_api
     channel: stable
-    declared: null
-    note: no version stated in prose
-    verified: 2026-03-30
+    declared: "8.x-1.41"
+    verified: 2026-08-16
   - project: search_api_solr
     channel: stable
-    declared: "4.3.x"
-    verified: 2026-03-30
+    declared: "4.4.0"
+    verified: 2026-08-16
 guide-meta:
   concepts:
     - Search API
@@ -63,7 +62,7 @@ guide-meta:
     - Solr Cloud
     - search_api_solr_admin
     - acquia_search
-    - pantheon_search
+    - search_api_pantheon
   not:
     - Facets widgets and processors (see drupal/facets)
     - Better Exposed Filters widgets (see drupal/better-exposed-filters)
@@ -100,7 +99,7 @@ guide-meta:
 | Add autocomplete to search | [Autocomplete](autocomplete.md) | Use this when adding search-as-you-type suggestions to search forms. |
 | Handle multilingual search | [Multilingual Search](multilingual-search.md) | Use this when building search for multilingual Drupal sites. |
 | Configure Solr (configsets, Solr Cloud, hosting) | [Solr Best Practices](solr-best-practices.md) | Use this when configuring Apache Solr as your Search API backend. |
-| Build decoupled/headless search (JSON:API, Next.js) | [Decoupled Search](decoupled-search.md) | Use this when building headless/decoupled frontends (Next.js, React, etc.) that need search functionality. |
+| Build decoupled/headless search (JSON:API, Next.js) | [Decoupled Search](decoupled-search.md) | Use this when building headless/decoupled frontends (Next.js, React, etc.) that need search functionality. jsonapi_search_api is the most-used option but has never had a stable release. |
 | Secure search results (content access, permissions) | [Content Access & Security](content-access-security.md) | Use this when you need to ensure search results respect content access permissions. Search API does NOT restrict access by default. |
 | Use Search API with Facets | [Facets Integration](facets-integration.md) | Use this when adding faceted search navigation to your Search API-powered search page. |
 | Subscribe to Search API events | [Events System](events-system.md) | Use this when hooking into Search API's query or indexing pipeline without creating full custom processors. |

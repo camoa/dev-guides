@@ -1,10 +1,10 @@
 ---
-description: Drupal Canvas — decision guides for the React-based visual page builder using SDC and Code Components on Drupal 11.2+.
+description: Drupal Canvas — decision guides for the React-based visual page builder using SDC and Code Components on Drupal 11.3+.
 tracks:
   - project: canvas
     channel: stable
-    declared: "1.7.1"
-    verified: 2026-07-02
+    declared: "1.10.1"
+    verified: 2026-08-16
 guide-meta:
   concepts:
     - Drupal Canvas
@@ -31,7 +31,7 @@ guide-meta:
 
 # Drupal Canvas
 
-Atomic decision guides for building with Drupal Canvas — the first-party visual page builder for Drupal 11.2+. Covers architecture decisions, SDC component authoring, Code Component (React/Preact) development, CLI tooling, theming, Storybook, AI assistant, decoupled patterns, and security.
+Atomic decision guides for building with Drupal Canvas — the first-party visual page builder for Drupal 11.3+. Covers architecture decisions, SDC component authoring, Code Component (React/Preact) development, CLI tooling, theming, Storybook, AI assistant, decoupled patterns, and security.
 
 - [Canvas Overview](canvas-overview.md) — What Canvas is, when to use it, and how it differs from standard Drupal content types
 - [Component Types Decision](component-types-decision.md) — Choose between SDC (Twig), Code Component (React), or External JS Component

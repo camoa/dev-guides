@@ -1,6 +1,6 @@
 ---
 description: Arrange-Act-Assert (AAA) structure, Given-When-Then, one logical assertion per test, and naming conventions that communicate intent.
-tldr: Structure every test as Arrange/Act/Assert with blank lines between phases — one Act per test. Name tests to describe what is tested, under what conditions, and what the expected outcome is. One logical assertion per test: multiple asserts are fine if they all verify facets of the same single outcome.
+tldr: "Structure every test as Arrange/Act/Assert with blank lines between phases — one Act per test. Name tests to describe what is tested, under what conditions, and what the expected outcome is. One logical assertion per test: multiple asserts are fine if they all verify facets of the same single outcome."
 ---
 
 # Test Structure and Naming

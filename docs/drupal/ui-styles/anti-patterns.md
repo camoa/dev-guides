@@ -1,6 +1,6 @@
 ---
-description: Common anti-patterns when using the UI Styles module and the correct alternative pattern.
-tldr: The most common mistakes are relying on the extra freeform field instead of curated options, using generic plugin IDs that collide, defining mega-styles with too many options, and deleting style definitions without auditing existing config references.
+description: "Common anti-patterns when using the UI Styles module and the correct alternative pattern."
+tldr: "The most common mistakes are relying on the extra freeform field instead of curated options, using generic plugin IDs that collide, defining mega-styles with too many options, and deleting style definitions without auditing existing config references."
 drupal_version: "11.x"
 ---
 

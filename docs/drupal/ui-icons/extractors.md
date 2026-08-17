@@ -1,6 +1,6 @@
 ---
-description: Choose the right UI Icons extractor (path, svg, svg_sprite, font) based on how icon assets are stored.
-tldr: Use svg for individual SVG files with inline content, svg_sprite for a single sprite sheet, path for URL-referenced files (PNG/JPG/SVG), and font for TTF/WOFF packs. The sprite extractor requires symbols; the font extractor requires dompdf/php-font-lib for TTF or a metadata file (.codepoints/.json/.yml) as an alternative.
+description: "Choose between path, svg, svg_sprite, and font icon extractors based on how icons are stored."
+tldr: "Use svg for individual SVG files needing inline content, svg_sprite for a single sprite sheet, path for URL-referenced files, and font (ui_icons_font) for TTF/WOFF packs. Only font ships from UI Icons; the other three live in Drupal core."
 drupal_version: "11.x"
 ---
 
@@ -12,12 +12,14 @@ drupal_version: "11.x"
 
 ## Decision
 
-| Storage | Extractor | Best for |
-|---|---|---|
-| Individual files (PNG/SVG/JPG/GIF) in directories | `path` | Mixed-format icons; URL-referenced icons |
-| Individual SVG files, content inlined into output | `svg` | Most modern icon sets (Heroicons, Lucide, Tabler, etc.) |
-| Single SVG sprite sheet with `<symbol>`s | `svg_sprite` | Hundreds of icons; one HTTP request |
-| Web font (TTF/WOFF + codepoints/JSON/YAML metadata) | `font` | FontAwesome, Material Symbols, legacy IcoMoon packs |
+| Storage | Extractor | Provided by | Best for |
+|---|---|---|---|
+| Individual files (PNG/SVG/JPG/GIF) in directories | `path` | Drupal core | Mixed-format icons; URL-referenced icons |
+| Individual SVG files, content inlined into output | `svg` | Drupal core | Most modern icon sets (Heroicons, Lucide, Tabler, etc.) |
+| Single SVG sprite sheet with `<symbol>`s | `svg_sprite` | Drupal core | Hundreds of icons; one HTTP request |
+| Web font (TTF/WOFF + codepoints/JSON/YAML metadata) | `font` | `ui_icons_font` submodule | FontAwesome, Material Symbols (font version), legacy IcoMoon packs |
+
+Only `font` comes from UI Icons. The other three live in core at `core/lib/Drupal/Core/Theme/Plugin/IconExtractor/` and work whether or not UI Icons is installed.
 
 ## Pattern: `path` extractor
 
@@ -26,11 +28,11 @@ extractor: path
 config:
   sources:
     - icons/flat/*.png
-    - icons/group/{group}/*.svg   # {group} captures subdirectory as metadata
-    - icons/{icon_id}_outline.png # {icon_id} parses filename pattern
+    - icons/group/{group}/*.svg     # {group} captures subdirectory as metadata
+    - icons/{icon_id}_outline.png   # {icon_id} parses filename pattern
 ```
 
-Template variables: `{{ source }}` (full URL), `{{ icon_id }}`. Format agnostic — outputs `<img>` URLs.
+Template variables: `{{ source }}` (full URL), `{{ icon_id }}`. Image format agnostic.
 
 ## Pattern: `svg` extractor
 
@@ -59,7 +61,16 @@ config:
     - icons/sprite.svg
 ```
 
-Sprite file must use `<symbol id="...">` elements. Template:
+Icon IDs come from `<symbol id="...">`:
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <symbol id="arrow-left" viewBox="0 0 24 24"><path d="..."/></symbol>
+    <symbol id="menu" viewBox="0 0 24 24"><path d="..."/></symbol>
+  </defs>
+</svg>
+```
 
 ```twig
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -74,13 +85,21 @@ Sprite file must use `<symbol id="...">` elements. Template:
 extractor: font
 config:
   sources:
-    - fonts/icons.ttf        # requires dompdf/php-font-lib
-    - fonts/icons.codepoints # space-separated: "icon_name unicode"
-    - fonts/icons.json       # keys = icon names
-    - fonts/icons.yml        # keys = icon names
+    - fonts/icons.ttf            # parsed via dompdf/php-font-lib
+    - fonts/icons.codepoints     # space-separated: "icon_name unicode"
+    - fonts/icons.json           # keys = icon names
+    - fonts/icons.yml            # keys = icon names
 ```
 
-Codepoints file format: `arrow-left f101` (one per line).
+Codepoints file:
+
+```
+arrow-left f101
+menu f102
+close f103
+```
+
+Template variables: `{{ content }}` (Unicode character), `{{ icon_id }}`.
 
 ```twig
 <i class="icon-{{ icon_id|clean_class }}" style="font-size:{{ size|default(24) }}px">
@@ -88,16 +107,16 @@ Codepoints file format: `arrow-left f101` (one per line).
 </i>
 ```
 
-Pair with a CSS library defining `@font-face` for the font file.
+Pair with a CSS library that defines `@font-face` for the font file (in `{theme}.libraries.yml`).
 
 ## Common Mistakes
 
-- **Wrong**: using `path` extractor when you need inline SVG manipulation → **Right**: switch to `svg`; `path` outputs `<img>` URLs, not inline content
-- **Wrong**: sprite sheet without `<symbol>` elements → **Right**: `svg_sprite` extractor finds nothing; convert to symbol form
-- **Wrong**: font extractor with `.ttf` but no `dompdf/php-font-lib` → **Right**: use `.codepoints` metadata, or install the library
+- **Wrong**: using `path` extractor when you need inline SVG manipulation → **Right**: `path` outputs `<img>` URLs; switch to `svg` for inline content
+- **Wrong**: sprite sheet without `<symbol>` elements → **Right**: `svg_sprite` finds nothing; convert with svgo or sprite-builder tools
+- **Wrong**: font extractor with `.ttf` but no `dompdf/php-font-lib` → **Right**: the pack yields no icons and status report warns "Missing Font library!"; install the library or use `.codepoints` instead
 
 ## See Also
 
-- [Pack Format](pack-format.md)
+- [Icon Pack Format](pack-format.md)
 - [Settings & Rendering](settings-rendering.md)
-- [Pre-built Pack Catalog](pack-catalog.md)
+- Reference: `core/lib/Drupal/Core/Theme/Plugin/IconExtractor/`

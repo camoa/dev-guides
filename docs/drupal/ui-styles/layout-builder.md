@@ -1,6 +1,6 @@
 ---
-description: Apply UI Styles per-block and per-section inside Layout Builder — the primary UI Styles use case for editorial sites.
-tldr: Enable ui_styles_layout_builder; block placement forms and section configuration forms both gain UI Styles fieldsets. Apply background/rhythm/width classes at the section level, component-specific classes (text color, alignment) at the block level.
+description: "Apply UI Styles per-block and per-section inside Layout Builder — the primary UI Styles use case for editorial sites."
+tldr: "Enable ui_styles_layout_builder; block placement forms and section configuration forms both gain UI Styles fieldsets. Apply background/rhythm/width classes at the section level, component-specific classes (text color, alignment) at the block level."
 drupal_version: "11.x"
 ---
 

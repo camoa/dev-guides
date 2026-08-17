@@ -1,5 +1,5 @@
 ---
-description: Widget selection reference for all 27 custom field types with 39 available widgets, showing defaults and compatibility.
+description: Widget selection reference for all 23 custom field types with 36 available widgets, showing defaults and compatibility.
 tldr: "You need to choose the right widget for collecting data for each sub-field in your custom field."
 ---
 
@@ -38,7 +38,7 @@ You need to choose the right widget for collecting data for each sub-field in yo
 | map_string | MapTextWidget | MapTextWidget | Text key-value |
 | uuid | UuidWidget | UuidWidget | Auto-generated, hidden |
 
-**39 total widget plugins** in `/src/Plugin/CustomField/FieldWidget/`.
+**36 total widget plugins** -- 31 in the main module's `/src/Plugin/CustomField/FieldWidget/`, 5 more across the sub-modules.
 
 ## Common Mistakes
 

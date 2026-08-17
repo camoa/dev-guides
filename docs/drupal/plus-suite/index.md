@@ -42,7 +42,8 @@ guide-meta:
 tracks:
   - project: plus_suite
     channel: stable
-    declared: 1.1.x-dev
+    declared: 1.1.21
+    note: 1.1.21 is the current tag and replaces a policy-violating 1.1.x-dev pin, but only installation-setup.md was re-read in the 2026-08-16 sweep; the other 28 guides still reflect the 1.1.x dev branch and the component module versions they describe were not re-checked
     verified: 2026-04-08
 ---
 

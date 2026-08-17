@@ -11,8 +11,15 @@ Implements proposals/guide-staleness-convention.md. Reads locally:
 Fetches `updates.drupal.org/release-history/<project>/current` once per declared
 project, plus core's equivalent.
 
-Reports five categories:
+Reports six categories:
 
+  Unparseable frontmatter a guide's frontmatter block does not parse as YAML
+                         at all. Nothing else in this report can be true or
+                         false for that file -- drift, exceptions, core
+                         assertions -- because every one of those readers,
+                         this checker included, silently skips a file it
+                         cannot parse. Listed by name so it is never
+                         rediscovered by accident
   Drift                  declared version is behind the current tag on the
                          current branch; a new major is reported apart from a
                          patch bump because they are different sizes of work.
@@ -547,6 +554,35 @@ def check_core_assertion(value: str, pairs, majors, baseline_major) -> list[str]
     return reasons
 
 
+def find_unparseable_frontmatter() -> list[dict]:
+    """Every docs/**/*.md file whose frontmatter block fails to parse as YAML.
+
+    Walks the same tree check_core_assertions() already walks for
+    `drupal_version`, so this extra pass is cheap. A file that lands here is
+    invisible to every consumer that reads frontmatter: the topic index, the
+    navigator, and check_core_assertions() itself, which has always silently
+    `continue`d past a parse error rather than surfacing it. That silent skip
+    is the exact failure this checker exists to prevent, so every file that
+    fails here must be named in the report, not folded into a count or
+    dropped from one -- discovering it by accident is the failure mode.
+    """
+    failures = []
+    for path in sorted(DOCS_DIR.rglob("*.md")):
+        fm_yaml = split_frontmatter(path.read_text(encoding="utf-8"))
+        if not fm_yaml.strip():
+            continue
+        try:
+            yaml.safe_load(fm_yaml)
+        except yaml.YAMLError as exc:
+            failures.append(
+                {
+                    "path": path.relative_to(PROJECT_ROOT).as_posix(),
+                    "error": str(exc),
+                }
+            )
+    return failures
+
+
 def check_core_assertions(core: dict) -> list[dict]:
     """Validate every guide file's `drupal_version` against the guides.yml core.
 
@@ -580,7 +616,12 @@ def check_core_assertions(core: dict) -> list[dict]:
         try:
             meta = yaml.safe_load(fm_yaml) or {}
         except yaml.YAMLError:
-            continue  # already reported as a could-not-check by discover_topics
+            # Reported by find_unparseable_frontmatter(), not here -- this
+            # loop only has an opinion about drupal_version, and a file that
+            # cannot be parsed states no drupal_version as far as this pass
+            # is concerned. It is never silently dropped: every file skipped
+            # on this line is named in the "Unparseable frontmatter" section.
+            continue
         if not isinstance(meta, dict) or "drupal_version" not in meta:
             continue
         slug = path.parent.relative_to(DOCS_DIR).as_posix() or "."
@@ -936,6 +977,7 @@ def run_check(today: date, unverified_days: int) -> dict:
         "unverified_days": unverified_days,
         "topics": len(topics),
         "projects_fetched": sorted(wanted),
+        "frontmatter_errors": find_unparseable_frontmatter(),
         "core_assertions": check_core_assertions(core),
         "drift": drift,
         "unjustified": unjustified,
@@ -976,6 +1018,14 @@ def render_text(result: dict) -> str:
         f"{len(result['projects_fetched'])} project(s) fetched, "
         f"unverified threshold {result['unverified_days']} days."
     )
+
+    fm_errors = sorted(result["frontmatter_errors"], key=lambda r: r["path"])
+    out.append("")
+    out.append(f"Unparseable frontmatter ({len(fm_errors)})")
+    if not fm_errors:
+        out.append("  every guide file's frontmatter parses.")
+    for row in fm_errors:
+        out.append(f"  {row['path']}: {row['error']}")
 
     drift = sorted_drift(result["drift"])
     out.append("")
@@ -1054,6 +1104,15 @@ def render_markdown(result: dict) -> str:
         f"{result['topics']} topics scanned, {len(result['projects_fetched'])} project(s) fetched, "
         f"unverified threshold {result['unverified_days']} days."
     )
+
+    fm_errors = sorted(result["frontmatter_errors"], key=lambda r: r["path"])
+    out.append("")
+    out.append(f"## Unparseable frontmatter ({len(fm_errors)})")
+    out.append("")
+    if not fm_errors:
+        out.append("Every guide file's frontmatter parses.")
+    for row in fm_errors:
+        out.append(f"- `{row['path']}` — {row['error']}")
 
     drift = sorted_drift(result["drift"])
     out.append("")

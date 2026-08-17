@@ -1,6 +1,6 @@
 ---
-description: Ship a custom theme with its own UI Styles definitions tied to the theme's CSS libraries.
-tldr: Place {theme}.ui_styles.yml at the theme root (not a subdirectory); clear cache after creation. Prefix plugin IDs with the theme name. Subthemes inherit parent UI Styles and add to them; suppress parent styles with enabled: false on the same plugin ID.
+description: "Ship a custom theme with its own UI Styles definitions tied to the theme's CSS libraries."
+tldr: "Place {theme}.ui_styles.yml at the theme root (not a subdirectory); clear cache after creation. Prefix plugin IDs with the theme name. Subthemes inherit parent UI Styles and add to them; suppress parent styles with enabled: false on the same plugin ID."
 drupal_version: "11.x"
 ---
 

@@ -1,15 +1,15 @@
 ---
 description: Views integration — row and style plugins for rendering Views results as components
 tldr: "Views integration — row and style plugins for rendering Views results as components"
-drupal_version: "10.3+ / 11"
+drupal_version: "11.x"
 ---
 
-## Views Integration
+# Views Integration
 
 **Sub-module:** `ui_patterns_views`
 **Dependencies:** `views`, `ui_patterns`
 
-### What It Does
+## What It Does
 
 Provides two Views plugins:
 
@@ -18,7 +18,7 @@ Provides two Views plugins:
 | **Row** | `ComponentRow` | Renders each Views result row using a component |
 | **Style** | `ComponentStyle` | Wraps the collection of rendered rows in a component |
 
-### Row Plugin
+## Row Plugin
 
 The `ComponentRow` extends Views' `Fields` row plugin. For each row, it:
 
@@ -34,18 +34,18 @@ $context['bundle'] = new Context(ContextDefinition::create('string'), $bundle);
 $context['ui_patterns_views:row:index'] = new Context(new ContextDefinition('integer'), $row->index);
 ```
 
-### Style Plugin
+## Style Plugin
 
 The `ComponentStyle` wraps rows in a wrapper component. The rendered rows are passed as context via `ui_patterns_views:rows`. This is useful for list-style components (card grids, carousels) where individual rows need to be wrapped in a container component.
 
-### Configuration
+## Configuration
 
 In Views UI:
 1. Set the **Format** to "Component (UI Patterns)" for style
 2. Set the **Show** to "Component (UI Patterns)" for row
 3. Configure the component, mapping entity fields to props and slots
 
-### Config YAML
+## Config YAML
 
 Views configuration with UI Patterns row and style plugins is stored in `views.view.{view_name}.yml`. After `drush config:export`, the relevant sections under each display's `display_options`:
 
@@ -127,10 +127,10 @@ display:
 Key observations:
 - The style plugin has **double nesting**: `options.ui_patterns.ui_patterns` (the outer `ui_patterns` is the Views sub-key, the inner is the `ui_patterns_component` schema). This matches the `views.ui_patterns_configuration` schema.
 - The row plugin has **single nesting**: `options.ui_patterns` maps directly to `ui_patterns_component`.
-- Row-level entity field sources use derived source IDs like `field_property:node:title:value`. The format is `field_property:{entity_type}:{field_name}:{column}` — bundle is implicit from the view's row context.
+- Row-level entity field sources use derived source IDs like `field_property:node:title:value` because entity context is available per row. The format is `field_property:{entity_type}:{field_name}:{column}` — bundle is implicit from the View's row context.
 - The style plugin wraps all rows; the rendered rows are injected into the component's slot via the `ui_patterns_views:rows` context.
 
-### Common Mistakes
+## Common Mistakes
 
 | Mistake | Why It Is Wrong |
 |---|---|
@@ -138,7 +138,7 @@ Key observations:
 | Expecting row-level sources in the style plugin | The style plugin operates on the collection of rows, not individual rows. Entity-level sources are available only in the row plugin. |
 | Not enabling "Hide empty" | The `hide_empty` option from the Fields row plugin is preserved. Other Fields options are stripped since component rendering replaces the fields display. |
 
-### See Also
+## See Also
 
 - Drupal Views Guide
 - [Source Plugins](source-plugins.md)

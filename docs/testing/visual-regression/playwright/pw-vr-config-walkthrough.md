@@ -1,6 +1,6 @@
 ---
 description: Annotated playwright.config.ts with every key relevant to visual regression testing.
-tldr: Set `reporter: 'html'`, `outputDir: 'test-results'`, `forbidOnly: !!process.env.CI`, and pin `colorScheme`, `locale`, `timezoneId` in `use`. Define the browser × viewport matrix under `projects`.
+tldr: "Set `reporter: 'html'`, `outputDir: 'test-results'`, `forbidOnly: !!process.env.CI`, and pin `colorScheme`, `locale`, `timezoneId` in `use`. Define the browser × viewport matrix under `projects`."
 ---
 
 # Config Walkthrough

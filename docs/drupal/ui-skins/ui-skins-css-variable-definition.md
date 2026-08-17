@@ -27,8 +27,11 @@ plugin_id:                          # machine name; becomes the CSS variable nam
   enabled: true                     # optional, default true
   type: ui_skins_alpha_color        # optional widget type; default "textfield"
   label: "Brand primary"            # required, translatable
-  description: "Primary brand color used for CTAs and links"  # optional
+  description: "Primary brand color used for CTAs and links"  # optional, translatable
+  label_context: "ui_skins"         # optional translation context
+  description_context: "ui_skins"   # optional
   category: "Colors"                # optional grouping; default "Other"
+  category_context: "ui_skins"      # optional
   weight: -50                       # optional sort within category; default 0
 
   default_values:                   # required; map of CSS scope => value

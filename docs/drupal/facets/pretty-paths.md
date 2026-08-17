@@ -1,6 +1,6 @@
 ---
-description: Facets Pretty Paths contrib module — cleaner facet URLs as path segments instead of query parameters, SEO benefits, and gotchas
-tldr: "Use this guide when you want cleaner facet URLs — `/search/color/blue/size/large` instead of `?f[0]=color:blue&f[1]=size:large`."
+description: "The facets_pretty_paths contrib module for path-based facet URLs instead of query string parameters"
+tldr: "Use this guide when you want cleaner facet URLs — /search/color/blue/size/large instead of ?f[0]=color:blue&f[1]=size:large. Contrib, not included in Facets core; don't mix with query string on the same source."
 drupal_version: "11.x"
 ---
 
@@ -8,40 +8,38 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when you want cleaner facet URLs — `/search/color/blue/size/large` instead of `?f[0]=color:blue&f[1]=size:large`.
+> When you want cleaner facet URLs — `/search/color/blue/size/large` instead of `?f[0]=color:blue&f[1]=size:large`.
 
 ## Decision
 
-**Module:** `drupal/facets_pretty_paths` (contrib — not included in Facets core)
-
-**URL format comparison:**
-
-| Approach | URL Format |
-|---|---|
-| Default (query string) | `/search?f[0]=color:blue&f[1]=size:large` |
-| Pretty Paths | `/search/color/blue/size/large` |
-
-**SEO advantage** — Pretty paths are easier to block in robots.txt with a single rule:
-```
-Disallow: /search/*/
-```
-
-And easier to set up canonical URLs since the path structure is predictable.
-
-## Pattern
+**Module:** `drupal/facets_pretty_paths` (contrib, not included in Facets core)
 
 ```bash
 composer require drupal/facets_pretty_paths
 drush en facets_pretty_paths
 ```
 
-Then configure the facet source to use the pretty paths URL processor instead of `query_string`.
+| Approach | URL Format |
+|---|---|
+| Default (query string) | `/search?f[0]=color:blue&f[1]=size:large` |
+| Pretty Paths | `/search/color/blue/size/large` |
+
+Pretty paths are easier to block in robots.txt and easier to set up canonical URLs for, since the path structure is predictable:
+
+```
+# Block all faceted variations under /search/
+Disallow: /search/*/
+```
+
+## Pattern
+
+Enable the module, then configure the facet source's URL processor to use Pretty Paths instead of the default query string processor.
 
 ## Common Mistakes
 
-- **Wrong**: Using both pretty paths and query string URL processors on the same source → **Right**: Choose one URL processor per facet source. Don't mix them.
-- **Wrong**: Using Drupal path segments as facet URL aliases → **Right**: Ensure facet URL aliases don't conflict with actual Drupal paths (e.g., don't use 'node' as a facet alias).
-- **Wrong**: Not accounting for increased cache entries → **Right**: Pretty paths create more unique cache entries than query strings. Monitor cache size on high-traffic sites.
+- **Wrong**: Mixing pretty paths and query string on the same facet source → **Right**: Choose one URL processor per facet source.
+- **Wrong**: Using a facet URL alias that collides with a real Drupal path (e.g., `node`) → **Right**: Check for path conflicts before assigning aliases.
+- **Wrong**: Ignoring cache growth after switching → **Right**: Pretty paths create more unique cache entries — monitor cache size.
 
 ## See Also
 

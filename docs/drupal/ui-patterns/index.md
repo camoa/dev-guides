@@ -3,8 +3,8 @@ description: Drupal UI Patterns 2.x guides — SDC plugin architecture, props/sl
 tracks:
   - project: ui_patterns
     channel: stable
-    declared: "2.0.14"
-    verified: 2026-04-27
+    declared: "2.0.19"
+    verified: 2026-08-16
 guide-meta:
   concepts:
     - story.yml

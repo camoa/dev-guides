@@ -1,6 +1,6 @@
 ---
-description: All 27 custom field column types organized by category -- text, numeric, date/time, reference, file, and data fields with schema details and gotchas.
-tldr: "All 27 custom field column types organized by category -- text, numeric, date/time, reference, file, and data fields with schema details and gotchas."
+description: All 23 custom field column types organized by category -- text, numeric, date/time, reference, file, and data fields with schema details and gotchas.
+tldr: "All 23 custom field column types organized by category -- text, numeric, date/time, reference, file, and data fields with schema details and gotchas."
 ---
 
 # Column Types
@@ -162,7 +162,7 @@ TRUE/FALSE value (TINYINT 1).
 
 ### Numeric field mistakes
 
-- **Using float for currency** -- Floating-point errors cause rounding issues. Always use decimal for money
+- **Using float for currency** -- Floating-point errors cause rounding issues. Always use decimal with appropriate precision/scale for money
 - **Setting precision too low for decimal** -- Precision 10, scale 2 maxes at $99,999,999.99. For larger values, increase precision
 - **Not setting unsigned for counts** -- Quantities, counts, IDs should be unsigned to prevent negative values
 - **Forgetting scale rounds on save** -- Decimal with scale=2 rounds 10.999 to 11.00, not truncates

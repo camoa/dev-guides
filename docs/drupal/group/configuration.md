@@ -69,6 +69,8 @@ plugin_config:
   # Note: use_creation_wizard is removed in 4.x — do not include it
 ```
 
+**Do not "fix" `content_plugin` to `relation_type`.** The key is `content_plugin` at tag `4.0.0-alpha1`. The untagged 4.0.x dev branch renamed it to `relation_type` (2026-06-19, issue #3604203), but that rename has never shipped in a release.
+
 Plugin config schema (required for each `defaultConfiguration()` key):
 
 ```yaml
@@ -84,6 +86,7 @@ group_relation.config.my_setting:
 - **Wrong**: Deploying relationship type config without the dependent entity config → **Right**: Include `node.type.article` (or equivalent) in the same config import batch.
 - **Wrong**: Keeping `creator_wizard` in `group.type.*` config when upgrading to 4.x → **Right**: The 4.x config schema no longer defines it; config validation will flag it.
 - **Wrong**: Keeping `use_creation_wizard` in `plugin_config` of relationship type config for 4.x → **Right**: The two-step wizard was removed in 4.x; drop this key from all relationship type config.
+- **Wrong**: Writing `relation_type` as the plugin key in relationship type config → **Right**: The tagged `4.0.0-alpha1` release still uses `content_plugin`. The `relation_type` rename exists only on the untagged dev branch.
 
 ## See Also
 

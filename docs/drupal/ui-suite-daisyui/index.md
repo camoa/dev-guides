@@ -5,24 +5,24 @@ tracks:
     channel: alpha
     reason: no stable release exists; 5.0.x is alpha-only
     declared: "5.0.0-alpha6"
-    verified: 2026-06-24
+    verified: 2026-08-16
   - project: ui_patterns
     channel: stable
-    declared: "2.0.14"
-    verified: 2026-06-24
+    declared: "2.0.19"
+    verified: 2026-08-16
   - project: ui_styles
     channel: stable
-    declared: "8.x-1.19"
-    verified: 2026-06-24
+    declared: "8.x-1.21"
+    verified: 2026-08-16
   - project: ui_skins
     channel: stable
-    declared: null
-    note: the prose states a floor (`ui_skins` 1.1+), not a documented version; 1.1.0-alpha5 in sources-maintenance.md is the version read off a local install. drupal/ui-skins owns this project's version claim and also states none
-    verified: 2026-06-24
+    declared: "1.2.1"
+    verified: 2026-08-16
   - project: ui_icons
     channel: stable
-    declared: "1.1.x"
-    verified: 2026-06-24
+    declared: null
+    note: prose states a dependency floor (`ui_icons` 2.0+, installation-and-setup.md), not a tag; sources-maintenance.md Code Sources has no ui_icons row. drupal/ui-icons owns this project's version claim and declares 2.0.0
+    verified: 2026-08-16
 guide-meta:
   concepts:
     - UI Suite DaisyUI

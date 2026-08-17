@@ -4,8 +4,8 @@ tracks:
   - project: ui_styles
     channel: stable
     declared: null
-    note: no version stated in prose
-    verified: 2026-05-05
+    note: prose states only the core constraint `^11.4 || ^12` (installation.md Compatibility table), which does not identify a ui_styles tag; no module version stated anywhere in the topic
+    verified: 2026-08-16
 guide-meta:
   concepts:
     - UI Styles

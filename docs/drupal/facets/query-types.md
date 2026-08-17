@@ -1,6 +1,6 @@
 ---
-description: Facets query types — search_api_string, search_api_date, search_api_range, search_api_granular, and how they execute
-tldr: "Use this guide when you need to understand how facet selections are translated into search backend queries, or when facets are not filtering correctly for a field type."
+description: "Built-in query types that translate facet selections into Search API query conditions by field type"
+tldr: "Use this guide when you need to understand how facet selections are translated into search backend queries, or when facets are not filtering correctly for a field type. Query type is auto-detected from the Search API field type."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when you need to understand how facet selections are translated into search backend queries, or when facets are not filtering correctly for a field type.
+> When you need to understand how facet selections are translated into search backend queries.
 
 ## Decision
 
@@ -19,15 +19,13 @@ drupal_version: "11.x"
 | `search_api_range` | SearchApiRange | integer, decimal | Numeric range conditions |
 | `search_api_granular` | SearchApiGranular | integer | Grouped numeric ranges |
 
-**Field type to query type mapping:**
+Query types are auto-detected based on the Search API field type — you rarely need to override this:
 
 | Field Type | Query Type |
 |---|---|
 | string, fulltext, entity reference | `search_api_string` |
 | date | `search_api_date` |
 | integer, decimal, float | `search_api_string` (or `search_api_range` with range widget) |
-
-Query types are auto-detected based on the Search API field type. Manual override is rarely needed.
 
 ## Pattern
 
@@ -51,10 +49,10 @@ $query->addConditionGroup($filter);
 
 ## Common Mistakes
 
-- **Wrong**: Expecting exact-match filtering on numeric fields with the default query type → **Right**: Numeric fields default to `search_api_string` (exact match). For range filtering, you need `search_api_range` combined with the `facets_range_widget` sub-module.
+- **Wrong**: Expecting range filtering on a numeric field by default → **Right**: Numeric fields default to `search_api_string` (exact match). For range filtering, use `search_api_range` with the range widget sub-module.
 
 ## See Also
 
 - [Processing Pipeline](processing-pipeline.md) — query types in the pipeline
 - [Range Slider Widget](range-slider.md) — using range query types
-- Reference: `web/modules/contrib/facets/src/Plugin/facets/query_type/`
+- Reference: `src/Plugin/facets/query_type/`

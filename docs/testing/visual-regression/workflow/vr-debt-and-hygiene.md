@@ -1,6 +1,6 @@
 ---
 description: Quarterly VR suite maintenance — pruning stale baselines, fixing flaky ones, and deciding when to move to an external service.
-tldr: Run quarterly hygiene: prune orphan PNGs, fix drifting baselines at the root cause (never bump threshold), cull whole-page shots covered by component shots, and walk the suite with the team to retire tests that haven't caught a regression in 6 months. Move to an external service when baseline directory exceeds 1 GB.
+tldr: "Run quarterly hygiene: prune orphan PNGs, fix drifting baselines at the root cause (never bump threshold), cull whole-page shots covered by component shots, and walk the suite with the team to retire tests that haven't caught a regression in 6 months. Move to an external service when baseline directory exceeds 1 GB."
 ---
 
 # VR Debt & Hygiene

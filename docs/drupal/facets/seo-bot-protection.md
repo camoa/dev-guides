@@ -1,6 +1,6 @@
 ---
-description: Facets SEO and bot protection — layered defense against crawl budget exhaustion and AI scraper abuse, including robots.txt, facet_bot_blocker, Cloudflare WAF, and form-based facets
-tldr: "Use this guide when deploying any site with Facets. Facets have ZERO built-in SEO or bot protection."
+description: "Facets SEO and bot protection — layered defense against crawl budget exhaustion and AI scraper abuse, including robots.txt, facet_bot_blocker, Cloudflare WAF, and form-based facets"
+tldr: "Use this guide when deploying any site with Facets. Facets have ZERO built-in SEO or bot protection — combinatorial URL explosion invites crawl budget waste. Form-based (exposed filter) facets are the primary architectural fix."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when deploying any site with Facets. Facets have ZERO built-in SEO or bot protection. Without protection, bots generate combinatorial URL explosions that exhaust server resources, waste crawl budgets, and create duplicate content penalties.
+> Use this guide when deploying any site with Facets. Without protection, bots generate combinatorial URL explosions that exhaust server resources, waste crawl budgets, and create duplicate content penalties.
 
 ## Decision
 
@@ -25,7 +25,7 @@ drupal_version: "11.x"
 | Search engine bots (Googlebot, Bingbot) | Follow every link, index every page | Usually yes |
 | AI scrapers (GPTBot, ClaudeBot, CCBot, Bytespider) | Aggressively crawl all reachable URLs | Often no |
 
-**Recommended defense stack (priority order):**
+**Recommended defense stack (priority order) — layer 1 is architectural, not a mitigation:**
 
 | Priority | Layer | What It Stops |
 |---|---|---|
@@ -39,9 +39,7 @@ drupal_version: "11.x"
 
 ## Pattern
 
-**Layer 1 — Form-based facets (primary solution):**
-
-Block-based facets render as `<a href="?f[0]=color:blue">` — bots follow these links eagerly. Exposed filter facets render as `<input type="checkbox">` inside a `<form>`. No crawlable URLs exist in the HTML at all.
+**Layer 1 — form-based facets (primary solution):** block-based facets render as `<a href="?f[0]=color:blue">` — bots follow these links eagerly. Exposed filter facets render as `<input type="checkbox">` inside a `<form>`; no crawlable URLs exist in the HTML at all.
 
 ```bash
 drush en facets_exposed_filters better_exposed_filters
@@ -64,11 +62,38 @@ Disallow: /
 
 User-agent: Bytespider
 Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: FacebookBot
+Disallow: /
 ```
 
-Use the `robotstxt` module: `composer require drupal/robotstxt && drush en robotstxt`
+If you use pretty paths, add `Disallow: /search/facets/` for the path form too.
 
-**Layer 3 — Facet Bot Blocker module:**
+Manage it from the admin UI: `composer require drupal/robotstxt && drush en robotstxt`.
+
+**Layer 3 — Cloudflare WAF rule at the edge:**
+
+```
+Rule: URI Query String wildcard *f%5B0%5D*
+Action: Managed Challenge
+```
+
+A second rule catches the AI scrapers by user agent:
+
+```
+Rule: User-Agent contains GPTBot OR ClaudeBot OR CCBot OR Bytespider OR anthropic-ai
+Action: Block
+```
+
+On Pantheon, request AGCDN+WAF via a support ticket — Pantheon can apply JA3 fingerprinting and VCL rules to identify bot signatures at the edge.
+
+**Layer 4 — Facet Bot Blocker module:**
 
 ```bash
 composer require drupal/facet_bot_blocker
@@ -82,12 +107,7 @@ Config at `/admin/config/system/facet-bot-blocker`:
 | Facet parameter limit | 1 | Block if `f[N]` where N >= limit exists |
 | Return 410 Gone | FALSE | 410 tells bots the URL is permanently gone (stronger than 403) |
 
-**Layer 4 — Cloudflare WAF rule:**
-
-```
-Rule: URI Query String wildcard *f%5B0%5D*
-Action: Managed Challenge
-```
+It operates as a kernel event subscriber at priority 101, checking `$_GET['f'][$limit]` before Drupal fully bootstraps. The permission `bypass facet bot blocker` exempts logged-in users. Dashboard: `/admin/reports/facet-bot-blocker` (requires Memcache or Redis for metrics).
 
 **Layer 5 — Meta noindex:**
 
@@ -103,13 +123,17 @@ function my_module_page_attachments_alter(array &$attachments) {
 }
 ```
 
+**Layer 6 — canonical URLs:** point all faceted variations at the base search page with `rel="canonical"` so link signals consolidate on one URL. The `hook_page_attachments_alter()` implementation is in [Canonical URLs & Duplicate Content](canonical-urls.md).
+
 ## Common Mistakes
 
 - **Wrong**: Deploying Facets with no protection → **Right**: The module has zero built-in SEO/bot protection. You must implement it yourself.
 - **Wrong**: Relying only on robots.txt → **Right**: AI bots frequently ignore robots.txt. Use server-side and edge-level blocking too.
 - **Wrong**: Using 403 Forbidden instead of 410 Gone → **Right**: 410 tells bots the URL is permanently removed — stronger deindexing signal, less likely to be retried.
-- **Wrong**: Blocking only `f[0]` without the URL-encoded form → **Right**: `f[0]` becomes `f%5B0%5D` in URLs. Both patterns must be blocked.
-- **Wrong**: Ignoring AI scrapers and only thinking about Googlebot → **Right**: In 2025-2026, AI scrapers generate more facet abuse traffic than search engines.
+- **Wrong**: Blocking only `f[0]` without the URL-encoded form → **Right**: `f[0]` becomes `f%5B0%5D` in URLs. Both patterns must be blocked in robots.txt and WAF rules.
+- **Wrong**: Ignoring AI scrapers and only thinking about Googlebot → **Right**: AI scrapers now generate more facet abuse traffic than search engines.
+- **Wrong**: Blocking the base search page or all query parameters → **Right**: Scope blocking to the facet `f[]` pattern only.
+- **Wrong**: Deploying the layers and never looking again → **Right**: The threat evolves. Watch the Facet Bot Blocker dashboard, Cloudflare analytics, or server logs for shifting bot traffic patterns.
 
 ## See Also
 

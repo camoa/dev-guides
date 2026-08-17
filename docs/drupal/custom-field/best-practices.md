@@ -47,6 +47,12 @@ $city = Node::load($nid)->field_address->city; // Redundant load
 
 ## Security
 
+**Input validation**:
+
+- Widget validation runs automatically
+- For custom widgets, implement validation in widget plugin
+- Don't trust programmatic imports -- validate types
+
 **XSS prevention**:
 
 ```php

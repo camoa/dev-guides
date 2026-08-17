@@ -1,6 +1,6 @@
 ---
-description: Define configurable per-icon settings (size, color, decorative, variant) and produce accessible output markup.
-tldr: Declare settings as JSON Schema properties in the pack YAML; build the template to honor decorative vs meaningful intent by toggling aria-hidden/role/aria-label. Always include a decorative boolean and an ariaLabel or alt string so editors can comply with WCAG.
+description: "Declare configurable per-icon settings (size, color, decorative) and choose the right output markup."
+tldr: "Declare settings as typed properties (size, color, decorative, variant); build the template to switch aria-hidden/role/aria-label on a decorative boolean. Always include decorative plus an alt/ariaLabel setting for WCAG compliance."
 drupal_version: "11.x"
 ---
 
@@ -8,25 +8,15 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Defining configurable per-icon properties and producing the correct output markup.
+> Defining configurable per-icon properties (size, color, decorative role) and producing the right output markup.
 
-## Decision: which settings to declare
-
-| Need | Setting | Type |
-|---|---|---|
-| Editor controls icon size | `size` | integer with min/max/multipleOf |
-| Editor recolors icons inline | `color` | string with `format: color` |
-| Differentiate decorative vs meaningful icons (a11y) | `decorative` | boolean |
-| Multi-style packs (solid/outline/duotone) | `variant` | string with enum |
-| Custom CSS class on output | `class` | string (free-form) |
-| Accessible label for content icons | `ariaLabel` or `alt` | string |
-
-## Pattern: setting schema
+## Pattern: Setting Schema
 
 ```yaml
 settings:
   size:
     title: "Size"
+    description: "Icon edge in px"
     type: integer
     default: 24
     minimum: 8
@@ -35,7 +25,7 @@ settings:
   color:
     title: "Color"
     type: string
-    format: color          # forces color-picker widget
+    format: color           # forces color-picker widget
   decorative:
     title: "Decorative only"
     type: boolean
@@ -46,11 +36,31 @@ settings:
     enum: ["solid", "outline"]
   alt:
     title: "Alt text"
+    description: "Leave blank for decorative icons"
     type: string
     default: ""
 ```
 
-## Pattern: accessible template
+## Decision: which settings to declare
+
+| Need | Setting | Type |
+|---|---|---|
+| Editor controls icon size | `size` | integer with min/max/multipleOf |
+| Editor recolors icons inline | `color` | string with format: color |
+| Differentiate decorative vs meaningful icons (a11y) | `decorative` | boolean |
+| Multi-style packs (solid/outline/duotone) | `variant` | string with enum |
+| Custom CSS class on output | `class` | string (free-form) |
+| Accessible label for content icons | `ariaLabel` or `alt` | string |
+
+## Decision: Output Format Choice
+
+| Extractor | Default output | Pros | Cons |
+|---|---|---|---|
+| svg / svg_sprite | Inline `<svg>` | CSS-styleable, animatable, accessible | larger HTML |
+| path | `<img>` | cacheable, fewer DOM nodes | not inline-styleable |
+| font | `<i>`/`<span>` with character | tiny HTML, CSS-color | less semantic, font-loading dependency |
+
+## Pattern: Accessibility
 
 ```twig
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -61,22 +71,16 @@ settings:
 </svg>
 ```
 
-## Decision: output format by extractor
-
-| Extractor | Default output | Pros | Cons |
-|---|---|---|---|
-| svg / svg_sprite | Inline `<svg>` | CSS-styleable, animatable, accessible | Larger HTML |
-| path | `<img>` | Cacheable, fewer DOM nodes | Not inline-styleable |
-| font | `<i>`/`<span>` with character | Tiny HTML, CSS-color | Less semantic, font-loading dependency |
+Site builders pick `decorative: true` for purely visual icons (chevrons, checkmarks next to label text); leave it false and provide `ariaLabel` for icons that carry meaning on their own.
 
 ## Common Mistakes
 
-- **Wrong**: no `decorative` or `ariaLabel` setting → **Right**: without them editors can't comply with WCAG; every icon gets the same default a11y
-- **Wrong**: hardcoding `width`/`height` in template without honoring a `size` setting → **Right**: editors can't resize
-- **Wrong**: using `format: color` with a non-CSS-color string default → **Right**: the color-picker widget breaks
+- **Wrong**: no `decorative` or `ariaLabel` setting → **Right**: declare them so editors can comply with WCAG; without them every icon gets the same default a11y
+- **Wrong**: hardcoding `width`/`height` in the template without honoring a `size` setting → **Right**: reference `{{ size|default(...) }}` so editors can resize
+- **Wrong**: using `format: color` with a non-CSS-color string default → **Right**: default to a valid color value or the form widget breaks
 
 ## See Also
 
-- [Pack Format](pack-format.md)
+- [Icon Pack Format](pack-format.md)
 - [Extractors](extractors.md)
-- [Twig Rendering](twig.md)
+- [Anti-Patterns](anti-patterns.md)

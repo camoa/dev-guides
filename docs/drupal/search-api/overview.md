@@ -21,7 +21,7 @@ drupal_version: "11.x"
 | Autocomplete | No | Yes (via search_api_autocomplete) |
 | Field-level control | No | Yes — choose exactly what to index |
 | Relevance tuning | Minimal | Field boosts, HTML element boosts, type boosts |
-| Processors | Basic | 23+ built-in, extensible |
+| Processors | Basic | 22 built-in, extensible |
 | Performance at scale | Poor | Excellent with Solr/ES |
 
 ## Pattern

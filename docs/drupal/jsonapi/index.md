@@ -3,8 +3,8 @@ description: "Comprehensive guide for working with Drupal's JSON:API module (cor
 tracks:
   - project: jsonapi_extras
     channel: stable
-    declared: "^3.0"
-    verified: 2026-02-14
+    declared: "8.x-3.28"
+    verified: 2026-08-16
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 guide-meta:

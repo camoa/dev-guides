@@ -1,6 +1,6 @@
 ---
 description: Markdown test plan format — the schema Playwright Test Agents emit and parse, with canonical section structure and detail-level rules.
-tldr: Plans use a specific Markdown hierarchy: H2 = epic/area, H3 = scenario group (test.describe), H4 = single test, numbered Steps, bulleted Expected results, bulleted Negative checks. Each section has a correct detail level — steps are behavioral actions, not selector instructions. Free-form prose breaks the Generator.
+tldr: "Plans use a specific Markdown hierarchy: H2 = epic/area, H3 = scenario group (test.describe), H4 = single test, numbered Steps, bulleted Expected results, bulleted Negative checks. Each section has a correct detail level — steps are behavioral actions, not selector instructions. Free-form prose breaks the Generator."
 ---
 
 # Test Plan Format

@@ -26,6 +26,7 @@ drupal_version: "11.x"
 | Stemmer conflicts on Solr | Duplicate processing | Disable Tokenizer, Stemmer, Stopwords, Ignore case for Solr |
 | Core Search module conflicts | Both modules running | `drush pm:uninstall search` |
 | Highlight adds latency | Processor too expensive | Disable or use `search_api_skip_processor_highlight` tag |
+| Deleted terms show as IDs in facets | Orphaned entity references | Reindex to remove stale references |
 | Search returns all content unfiltered | Missing fulltext search exposed filter | Add "Search: Fulltext search" filter to View |
 
 ## Pattern

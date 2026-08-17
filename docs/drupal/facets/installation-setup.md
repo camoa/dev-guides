@@ -1,6 +1,6 @@
 ---
-description: Install Facets with Search API, configure prerequisites, and choose block-based vs exposed filter vs REST approach
-tldr: "Use this guide when setting up Facets on a Drupal site with Search API."
+description: "Installing Facets and Search API, and the prerequisite steps before creating your first facet"
+tldr: "Use this guide when setting up Facets on a Drupal site with Search API. Facets requires a saved View on an indexed Search API source before facets can be created against it."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when setting up Facets on a Drupal site with Search API.
+> When setting up Facets on a Drupal site with Search API.
+
+These guides document **Facets 3.0.3**, the current stable tag on the 3.x branch. Where they say "3.x" they mean a behaviour that holds across the branch, not a looser version claim.
 
 ## Decision
 
@@ -40,7 +42,7 @@ drush en facets_summary
 drush en facets_range_widget
 ```
 
-**Prerequisites Checklist:**
+**Prerequisites checklist:**
 
 | Step | Action | Where |
 |---|---|---|
@@ -52,7 +54,7 @@ drush en facets_range_widget
 | 6 | Save the View | Must save before adding facets |
 | 7 | Create facets | `/admin/config/search/facets/add-facet` |
 
-**Admin Routes:**
+**Admin routes:**
 
 | Route | Purpose |
 |---|---|
@@ -63,9 +65,9 @@ drush en facets_range_widget
 
 ## Common Mistakes
 
-- **Wrong**: Creating facets before saving the View → **Right**: You must save the View before facets can see it as a source. Sources are only generated for saved Views displays.
-- **Wrong**: Adding facets without reindexing after adding fields → **Right**: After adding fields to the index, reindex. Facets only show results for indexed content.
-- **Wrong**: Using Database server for production range/hierarchy facets → **Right**: For production, use Solr or Elasticsearch. Some facet features (hierarchy, range) work better with Solr.
+- **Wrong**: Adding fields to the index without saving the View first → **Right**: You must save the View before facets can see it as a source.
+- **Wrong**: Forgetting to reindex after adding fields → **Right**: Facets only show results for indexed content — reindex after any field change.
+- **Wrong**: Using the Database server in production → **Right**: For development, use the "Database" server. For production, use Solr or Elasticsearch — hierarchy and range facets work better with Solr.
 
 ## See Also
 

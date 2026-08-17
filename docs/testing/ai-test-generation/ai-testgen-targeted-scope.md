@@ -1,6 +1,6 @@
 ---
 description: Scoping test plans to a single flow, page, or viewport — three-constraint pattern and when narrow scope becomes a coverage gap.
-tldr: A scope-narrow prompt expresses three things: feature ("password reset"), surface ("mobile viewport 375×667, iOS Safari"), and explicit exclusions ("do not test login after reset"). Viewport goes in Preconditions (becomes test.use), not in Steps. Always plan a sibling desktop scenario — targeting only mobile misses responsive issues.
+tldr: "A scope-narrow prompt expresses three things: feature (\"password reset\"), surface (\"mobile viewport 375×667, iOS Safari\"), and explicit exclusions (\"do not test login after reset\"). Viewport goes in Preconditions (becomes test.use), not in Steps. Always plan a sibling desktop scenario — targeting only mobile misses responsive issues."
 ---
 
 # Targeted Scope

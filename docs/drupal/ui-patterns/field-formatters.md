@@ -1,7 +1,7 @@
 ---
-description: Field formatters — rendering fields through components at items or per-item granularity
-tldr: Two formatters — ui_patterns_component (multi-value) and ui_patterns_component_per_item (per-item). Per-item scopes sources to the trigger field only; reach sibling fields via entity_field context switcher. field_property source IDs are field_property:{entity_type}:{field_name}:{column} — no bundle segment. For 5+ slots reading different fields, Twig include() is often cleaner.
-drupal_version: "10.3+ / 11"
+description: "Field formatters — rendering fields through components at items or per-item granularity"
+tldr: "Two formatters — ui_patterns_component (multi-value) and ui_patterns_component_per_item (per-item). Per-item scopes sources to the trigger field only; reach sibling fields via entity_field context switcher. field_property source IDs are field_property:{entity_type}:{field_name}:{column} — no bundle segment. For 5+ slots reading different fields, Twig include() is often cleaner."
+drupal_version: "11.x"
 ---
 
 # Field Formatters

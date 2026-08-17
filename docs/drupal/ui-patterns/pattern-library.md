@@ -1,19 +1,19 @@
 ---
 description: Pattern Library — browsable component preview with stories
 tldr: "Pattern Library — browsable component preview with stories"
-drupal_version: "10.3+ / 11"
+drupal_version: "11.x"
 ---
 
-## Pattern Library
+# Pattern Library
 
 **Sub-module:** `ui_patterns_library`
 **Dependencies:** `ui_patterns`
 
-### What It Does
+## What It Does
 
 Provides a browsable component library at `/admin/appearance/ui/components` where developers and designers can preview components with their stories (documented example states).
 
-### Library Pages
+## Library Pages
 
 | Page | URL | Content |
 |---|---|---|
@@ -21,7 +21,7 @@ Provides a browsable component library at `/admin/appearance/ui/components` wher
 | Provider | `/admin/appearance/ui/components/{provider}` | Components from a specific module/theme |
 | Single | `/admin/appearance/ui/components/{provider}/{machineName}` | Component detail with metadata, props/slots tables, stories |
 
-### Stories
+## Stories
 
 Stories are YAML files that define example renderings of a component. They are discovered by the `StoryPluginManager`:
 
@@ -56,13 +56,13 @@ props:
   title: "Sub-theme version"
 ```
 
-### Story Display Behavior
+## Story Display Behavior
 
 - Stories with a `variant` prop display once with that variant
 - Stories without a `variant` prop display once per defined variant
 - Library wrappers allow custom HTML around story output
 
-### Customizing Library Pages
+## Customizing Library Pages
 
 Library pages use Drupal's `hook_theme` system. Seven templates can be overridden:
 - `ui_patterns_overview_page`
@@ -73,7 +73,7 @@ Library pages use Drupal's `hook_theme` system. Seven templates can be overridde
 - `ui_patterns_stories_full`
 - `ui_patterns_stories_compact`
 
-### Common Mistakes
+## Common Mistakes
 
 | Mistake | Why It Is Wrong |
 |---|---|
@@ -81,7 +81,7 @@ Library pages use Drupal's `hook_theme` system. Seven templates can be overridde
 | Wrapping single renderables in unnecessary arrays in stories | Keep story structures flat. A single renderable does not need array wrapping. |
 | Confusing the library with Storybook | The UI Patterns library is a Drupal-native tool. Storybook is an external JavaScript tool. They serve different purposes and can coexist. |
 
-### See Also
+## See Also
 
 - [Defining Components](defining-components.md)
 - [Variants](variants.md)

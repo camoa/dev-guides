@@ -1,6 +1,6 @@
 ---
 description: Running ATK in CI — GitHub Actions + DDEV canonical pattern, Tugboat preview environments, and Pantheon SSH Drush invocation.
-tldr: The canonical CI pattern is ddev/github-action-setup-ddev + composer install + demo recipe + preflight + playwright test. There is no ddev-atk addon. Always pass --with-deps to playwright install in CI and upload the report artifact with if: always().
+tldr: "The canonical CI pattern is ddev/github-action-setup-ddev + composer install + demo recipe + preflight + playwright test. There is no ddev-atk addon. Always pass --with-deps to playwright install in CI and upload the report artifact with if: always()."
 drupal_version: "11.x"
 ---
 

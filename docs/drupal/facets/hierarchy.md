@@ -1,6 +1,6 @@
 ---
-description: Facets hierarchy — taxonomy and date hierarchy plugins, Search API index hierarchy processor, hierarchy configuration settings
-tldr: "Use this guide when faceting on hierarchical data — taxonomy vocabularies with parent-child relationships or date facets with year → month → day grouping."
+description: "Building hierarchical facets from taxonomy parent-child relationships or date year/month/day grouping"
+tldr: "Use this guide when faceting on hierarchical data — taxonomy vocabularies with parent-child relationships or date facets with year → month → day grouping. Requires Index hierarchy in Search API plus use_hierarchy on the facet."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when faceting on hierarchical data — taxonomy vocabularies with parent-child relationships or date facets with year → month → day grouping.
+> When faceting on hierarchical data — taxonomy vocabularies with parent-child relationships or date facets with year → month → day grouping.
 
 ## Decision
 
@@ -28,15 +28,6 @@ drupal_version: "11.x"
 | Expand hierarchy | `expand_hierarchy` | FALSE | Always show all levels expanded |
 | Enable parent on child disable | `enable_parent_when_child_gets_disabled` | FALSE | Re-enable parent when last child is deselected |
 
-**Hierarchy-related processors:**
-
-| Processor | Purpose |
-|---|---|
-| `hierarchy_processor` | Builds the tree structure (LOCKED — always runs when hierarchy enabled) |
-| `hide_inactive_siblings_processor` | Collapse branches without active selections |
-| `show_siblings_processor` | Show all siblings of active items |
-| `show_only_deepest_level_items_processor` | Only show leaf-level items |
-
 ## Pattern
 
 To use hierarchy, the Search API index must know about it:
@@ -46,14 +37,23 @@ To use hierarchy, the Search API index must know about it:
 3. Configure which fields should have hierarchy indexed
 4. Reindex
 
+**Hierarchy-related processors:**
+
+| Processor | Purpose |
+|---|---|
+| `hierarchy_processor` | Builds the tree structure (LOCKED — always runs when hierarchy enabled) |
+| `hide_inactive_siblings_processor` | Collapse branches without active selections |
+| `show_siblings_processor` | Show all siblings of active items |
+| `show_only_deepest_level_items_processor` | Only show leaf-level items |
+
 ## Common Mistakes
 
-- **Wrong**: Enabling hierarchy on the facet without enabling it in Search API → **Right**: Must enable "Index hierarchy" in Search API AND set `use_hierarchy: TRUE` on the facet.
-- **Wrong**: Flat results despite hierarchy enabled → **Right**: The `hierarchy_processor` runs at weight 100. If something removes parent items before weight 100, the tree can't be built.
-- **Wrong**: Expecting hierarchy to work in facets_exposed_filters without extra config → **Right**: In `facets_exposed_filters`, enable "Build hierarchical tree" in the facet filter settings within the Views UI.
+- **Wrong**: Enabling only `use_hierarchy` on the facet → **Right**: Must also enable "Index hierarchy" in Search API AND set `use_hierarchy: TRUE` on the facet.
+- **Wrong**: Assuming hierarchy always builds correctly → **Right**: `hierarchy_processor` runs at weight 100. If another processor removes parent items before weight 100, the tree can't be built.
+- **Wrong**: Expecting hierarchy to work automatically with exposed filters → **Right**: In `facets_exposed_filters`, enable "Build hierarchical tree" in the facet filter settings within the Views UI.
 
 ## See Also
 
 - [Processing Pipeline](processing-pipeline.md) — where hierarchy_processor fits
 - [Result Filtering Processors](result-filtering-processors.md) — hierarchy-related filters
-- Reference: `web/modules/contrib/facets/src/Plugin/facets/hierarchy/`
+- Reference: `src/Plugin/facets/hierarchy/`

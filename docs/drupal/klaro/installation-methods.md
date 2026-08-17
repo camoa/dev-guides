@@ -1,6 +1,6 @@
 ---
-description: Install Klaro module and klaro-js library via Composer or manual methods
-tldr: "Install Klaro module and klaro-js JavaScript library before configuration. Choose installation method based on your Drupal project's dependency management approach."
+description: Install Klaro module (3.1.1) and klaro-js library via Composer or manual methods
+tldr: "Install Klaro module (current stable: 3.1.1) and klaro-js JavaScript library — two independently versioned lines — before configuration. Choose installation method based on your Drupal project's dependency management approach."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Install Klaro module and klaro-js JavaScript library before configuration. Choose installation method based on your Drupal project's dependency management approach.
+> Install the Klaro module (current stable: 3.1.1) and the klaro-js JavaScript library it depends on before configuration. These are two separate version lines — the Drupal module and the upstream JS library — tracked independently; see Security Best Practices for the library's version requirement. Choose installation method based on your Drupal project's dependency management approach.
 
 ## Decision
 
@@ -25,9 +25,9 @@ drupal_version: "11.x"
 ```bash
 composer require drupal/klaro
 # Automatically installs:
-# - drupal/klaro (module)
+# - drupal/klaro (module) — current stable: 3.1.1
 # - drupal/klaro_js (library wrapper)
-# - klaro-org/klaro-js (JavaScript library)
+# - klaro-org/klaro-js (JavaScript library — a separate version line; see Security Best Practices)
 
 # Enable module
 drush en klaro
@@ -66,6 +66,7 @@ drush role:perm:add authenticated 'use klaro ui'
 - **Wrong**: Not whitelisting drupal/klaro_js in repo.packagist.org → **Right**: May block installation; add to allowed packages
 - **Wrong**: Using outdated klaro-js version → **Right**: Security vulnerability in versions <3.0.5 (XSS risk); update to 3.0.5+
 - **Wrong**: Enabling module before library installed → **Right**: Module will report missing library; verify library presence first
+- **Wrong**: Conflating the module version with the library version → **Right**: `drupal/klaro` (currently 3.1.1) and `klaro-org/klaro-js` (currently 3.0.5+) version independently; check each separately when auditing for updates
 
 ## See Also
 

@@ -1,6 +1,6 @@
 ---
 description: Playwright Test Agents (1.56+) — the Planner, Generator, and Healer agents and how to invoke each via Claude Code.
-tldr: Playwright 1.56+ ships three agents: Planner (explores app via MCP, writes specs/feature.md), Generator (reads approved plan, writes tests/feature.spec.ts), Healer (fixes failing locators without touching assertions). Invoke via Claude Code with Playwright MCP installed. Never invoke the Generator without an approved plan, and never let the Healer rewrite assertions — only locators are the Healer's job.
+tldr: "Playwright 1.56+ ships three agents: Planner (explores app via MCP, writes specs/feature.md), Generator (reads approved plan, writes tests/feature.spec.ts), Healer (fixes failing locators without touching assertions). Invoke via Claude Code with Playwright MCP installed. Never invoke the Generator without an approved plan, and never let the Healer rewrite assertions — only locators are the Healer's job."
 ---
 
 # Playwright Test Agents

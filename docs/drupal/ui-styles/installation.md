@@ -1,6 +1,6 @@
 ---
-description: Install and enable UI Styles and its integration submodules on Drupal 10.3+ or 11.x.
-tldr: Require drupal/ui_styles via Composer, then enable only the integration submodules you need (block, layout_builder, ckeditor5, views, page, ui_patterns). The base module is the engine — enabling it alone adds no editor UI.
+description: "Install and enable UI Styles and its integration submodules on Drupal 11.4+."
+tldr: "Require drupal/ui_styles via Composer, then enable only the integration submodules you need (block, layout_builder, ckeditor5, views, page, ui_patterns). The base module is the engine — enabling it alone adds no editor UI."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when setting up UI Styles for the first time on a Drupal 10.3+ or 11.x site.
+> Use this guide when setting up UI Styles for the first time on a Drupal 11.4+ site.
 
 ## Pattern
 
@@ -34,7 +34,7 @@ Enable only the relevant integration submodule(s):
 
 | Property | Value |
 |---|---|
-| Drupal core | `^10.3 \|\| ^11` |
+| Drupal core | `^11.4 \|\| ^12` |
 | PHP | 8.3+ |
 | External | `sabberworm/php-css-parser ^9.0` (via Composer for stylesheet generation) |
 

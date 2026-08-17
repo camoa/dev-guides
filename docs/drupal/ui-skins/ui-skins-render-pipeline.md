@@ -34,6 +34,7 @@ ui_skins_theme: dark
 
 | Goal | Hook / Service |
 |---|---|
+| Modify variable definitions before form render | Custom plugin manager alter — none built-in for variables; alter the discovered definitions in a custom service or use the alter mechanism via the plugin manager |
 | Modify the rendered `<style>` tag | `hook_preprocess_html()` after UI Skins (use higher-weight module) |
 | Conditionally activate a theme | Override theme settings via `hook_form_system_theme_settings_alter()` |
 

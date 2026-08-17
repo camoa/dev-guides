@@ -1,6 +1,6 @@
 ---
 description: Respect prefers-reduced-motion by defaulting to static and scoping motion to the no-preference query; provide pause controls for auto-playing content.
-tldr: Default page state should be static — scope animations inside `@media (prefers-reduced-motion: no-preference)` so users opt in to motion; slowing down a spinning animation is not sufficient — motion itself is the trigger for vestibular disorders; never exceed 3 flashes/second.
+tldr: "Default page state should be static — scope animations inside `@media (prefers-reduced-motion: no-preference)` so users opt in to motion; slowing down a spinning animation is not sufficient — motion itself is the trigger for vestibular disorders; never exceed 3 flashes/second."
 ---
 
 # Motion Preferences

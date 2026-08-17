@@ -1,6 +1,6 @@
 ---
-description: Facets value transformation processors — translate_entity, list_item, boolean_item, date_item, granularity_item, uid_to_username
-tldr: "Use this guide when facet raw values need to be converted to human-readable labels — entity IDs to names, boolean values to Yes/No, dates to formatted strings."
+description: "BUILD-stage processors that convert raw facet values to human-readable labels — entities, booleans, dates, list fields"
+tldr: "Use this guide when facet raw values need conversion to labels — entity IDs to names, booleans to Yes/No, dates to formatted strings. translate_entity is the most commonly needed processor."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when facet raw values need to be converted to human-readable labels — entity IDs to names, boolean values to Yes/No, dates to formatted strings.
+> When facet raw values need to be converted to human-readable labels — entity IDs to names, boolean values to Yes/No, dates to formatted strings.
 
 ## Decision
 
@@ -24,21 +24,15 @@ drupal_version: "11.x"
 
 ## Pattern
 
-**`translate_entity`** — The most commonly needed processor. Without it, taxonomy facets show term IDs instead of names.
+`translate_entity` is the most commonly needed processor — without it, taxonomy facets show term IDs instead of names. Supports taxonomy terms, nodes, users, any entity reference field. It requires entity loading, which can be slow for large result sets — consider indexing the entity label directly in Search API and using `list_item` instead.
 
-Supports: Taxonomy terms, nodes, users, any entity reference field.
-
-Limitation: Requires entity loading. For large result sets, this can be slow. Consider indexing the entity label directly in Search API and using `list_item` instead.
-
-**`boolean_item` configuration:**
 ```
+# boolean_item configuration
 On label: "Yes" (or "Published", "Active", etc.)
 Off label: "No" (or "Unpublished", "Inactive", etc.)
 ```
 
-**`date_item` configuration:**
-
-| Setting | Options |
+| date_item Setting | Options |
 |---|---|
 | Date display | year, month, day, hour, minute, second |
 | Granularity | Controls grouping level |
@@ -46,12 +40,12 @@ Off label: "No" (or "Unpublished", "Inactive", etc.)
 
 ## Common Mistakes
 
-- **Wrong**: Not enabling `translate_entity` on taxonomy/entity reference facets → **Right**: Without it, taxonomy facets show IDs like "42" instead of "Technology". This is the #1 new-user issue.
-- **Wrong**: Using `translate_entity` on text or list fields → **Right**: `translate_entity` only works for entity reference fields. For list fields, use `list_item` instead.
-- **Wrong**: Using `translate_entity` on high-traffic sites with many items → **Right**: Loading hundreds of entities per request is expensive. Index the label and avoid entity loading.
+- **Wrong**: Omitting `translate_entity` on entity reference facets → **Right**: Without it, taxonomy facets show IDs like "42" instead of "Technology" — the #1 new-user issue.
+- **Wrong**: Using `translate_entity` on list fields → **Right**: It only works for entity reference fields. For list fields, use `list_item` instead.
+- **Wrong**: Loading hundreds of entities per request on high-traffic sites → **Right**: `translate_entity` is expensive at scale. Index the label directly and avoid entity loading.
 
 ## See Also
 
 - [Processing Pipeline](processing-pipeline.md) — where transformations fit
 - [Result Filtering Processors](result-filtering-processors.md) — filtering after transformation
-- Reference: `web/modules/contrib/facets/src/Plugin/facets/processor/`
+- Reference: `src/Plugin/facets/processor/`

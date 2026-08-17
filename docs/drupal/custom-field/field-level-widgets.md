@@ -1,6 +1,6 @@
 ---
-description: Stacked and flexbox layout widgets for controlling how the entire custom field displays on the edit form.
-tldr: "You need to control how the entire custom field (all sub-fields together) is laid out on the edit form."
+description: Stacked and flexbox layout widgets for controlling how the entire custom field displays on the edit form. CustomFlexWidget ships its own CSS grid, not Bootstrap.
+tldr: "You need to control how the entire custom field (all sub-fields together) is laid out on the edit form. CustomFlexWidget uses the module's own 12-column CSS grid, not Bootstrap -- works in any theme."
 ---
 
 # Field-Level Widgets
@@ -14,15 +14,25 @@ You need to control how the entire custom field (all sub-fields together) is lai
 | If you need... | Use... | Why |
 |---|---|---|
 | Vertical stacking (default) | CustomStackedWidget | Simplest layout, sub-fields stack vertically |
-| Responsive flexbox layout | CustomFlexWidget | Bootstrap 5 flexbox with configurable columns per breakpoint |
+| Side-by-side columns | CustomFlexWidget | The module's own 12-column CSS flexbox grid, with an optional breakpoint below which columns stack. Theme-independent |
 
 ## CustomStackedWidget
 
 Stacks sub-field widgets vertically (default field widget).
 
 - **Plugin ID:** `custom_stacked`
-- **Settings:** None (uses sub-field widget settings)
-- **Layout:** Each sub-field renders full-width, one below the other
+
+| Setting | Type | Default | Notes |
+|---------|------|---------|-------|
+| wrapper | string | `details` | Wrapper element around each delta |
+| label_value | string | '' | Sub-field whose value is used as the delta label |
+| label_limit | integer | 60 | Truncation length for that label |
+| label_prefix | string | `Item` | Prefix when no `label_value` is set |
+| auto_collapse | boolean | -- | Collapse a delta once it has a value |
+| open | boolean | -- | Whether the wrapper starts expanded |
+| fields | array | [] | Per-sub-field widget settings (inherited) |
+
+**Layout:** Each sub-field renders full-width, one below the other
 
 ```yaml
 # In field display config
@@ -41,41 +51,37 @@ settings:
 
 ## CustomFlexWidget
 
-Bootstrap 5 flexbox layout with responsive column sizing.
+Lays sub-fields out side by side on a 12-column flexbox grid. **This is not Bootstrap.** The widget emits the module's own `custom-field-row` / `custom-field-col-N` classes and attaches the module's own `custom_field/custom-field-flex` library (`css/custom-field-flex.css`), so it works in any theme with no CSS framework installed.
 
 - **Plugin ID:** `custom_flex`
 
 | Setting | Type | Default | Notes |
 |---------|------|---------|-------|
-| column_classes | array | [] | Responsive classes per sub-field (xs/sm/md/lg/xl/xxl) |
-| column_gap | string | '' | Gap utility class (gap-0 through gap-5) |
-| row_gap | string | '' | Row gap utility class |
+| columns | array | [] | Per-sub-field integer width on the 12-column grid |
+| breakpoint | string | '' | Viewport below which columns stack. `''` = "Don't stack", `medium` = below 769px, `small` = below 601px |
+| fields | array | [] | Per-sub-field widget settings (inherited) |
 
-**Layout:** Wraps sub-fields in Bootstrap `.row` with per-field column classes.
+**Layout:** Wraps sub-fields in `.custom-field-row`, each sub-field in `.custom-field-col-{1..12}`
 
 ```yaml
 type: custom_flex
 settings:
-  fields:
-    first_name:
-      column_classes:
-        md: col-md-6
-        sm: col-sm-12
-    last_name:
-      column_classes:
-        md: col-md-6
-        sm: col-sm-12
-  column_gap: gap-3
+  breakpoint: medium
+  columns:
+    first_name: 6
+    last_name: 6
 ```
 
-**Gotchas:** Requires Bootstrap 5 theme. Column classes must be valid Bootstrap grid classes. Default is full-width if no classes set.
+**Gotchas:** Widths are integers out of 12, not class names -- a sub-field left unset takes the full row. Choosing a `breakpoint` is what makes the layout responsive; with `''` the columns never stack.
 
 ## Common Mistakes
 
-- **Using FlexWidget without Bootstrap theme** -- Flexbox layout requires Bootstrap 5 CSS; won't work with non-Bootstrap themes
-- **Not setting responsive column classes** -- Without column classes, all fields full-width; defeats purpose of flex layout
-- **Mixing incompatible gap utilities** -- gap-* requires flexbox; doesn't work with non-flex layouts
+- **Setting `columns` values that don't sum to 12 per row** -- Sub-fields wrap to the next row; check the totals if the layout breaks unexpectedly
+- **Leaving `breakpoint` at "Don't stack" on a narrow form** -- Columns stay side by side at every width, which squeezes sub-field widgets on mobile and in narrow sidebars
+- **Looking for a gap or gutter setting** -- There is none; spacing comes from the module's stylesheet. Override it in your theme's CSS if you need different spacing
 
 ## See Also
 
 - Reference: `/modules/contrib/custom_field/src/Plugin/Field/FieldWidget/CustomFlexWidget.php`
+- Reference: `/modules/contrib/custom_field/css/custom-field-flex.css` -- the grid the widget ships with
+- Reference: `/modules/contrib/custom_field/templates/custom-field-flex-wrapper.html.twig`

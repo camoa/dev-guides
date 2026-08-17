@@ -1,7 +1,7 @@
 ---
-description: Source plugins — widgets, API sources, and context-switcher sources for component props/slots in UI Patterns 2
-tldr: Source plugins bridge Drupal data (entity fields, menus, user input) to component props/slots. Three categories — widgets (direct input), API sources (Drupal data), and context switchers (entity_field, entity_reference) that unlock sibling-field sources via a mandatory 3-level colon-keyed YAML nesting.
-drupal_version: "10.3+ / 11"
+description: "Source plugins — widgets, API sources, and context-switcher sources for component props/slots in UI Patterns 2"
+tldr: "Source plugins bridge Drupal data (entity fields, menus, user input) to component props/slots. Three categories — widgets (direct input), API sources (Drupal data), and context switchers (entity_field, entity_reference) that unlock sibling-field sources via a mandatory 3-level colon-keyed YAML nesting."
+drupal_version: "11.x"
 ---
 
 # Source Plugins

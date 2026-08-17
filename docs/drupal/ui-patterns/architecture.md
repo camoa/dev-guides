@@ -1,12 +1,12 @@
 ---
 description: UI Patterns plugin system — managers, services, and rendering pipeline
 tldr: "UI Patterns plugin system — managers, services, and rendering pipeline"
-drupal_version: "10.3+ / 11"
+drupal_version: "11.x"
 ---
 
-## Architecture
+# Architecture
 
-### Plugin System Overview
+## Plugin System Overview
 
 UI Patterns introduces four plugin types managed by dedicated plugin managers:
 
@@ -27,7 +27,7 @@ Drupal\ui_patterns\ComponentPluginManager
 
 This decoration intercepts `alterDefinition()` to annotate every prop and slot with `ui_patterns` metadata (type_definition, summary, required status, prop_type_adapter).
 
-### Rendering Pipeline
+## Rendering Pipeline
 
 The rendering pipeline for a UI Patterns component:
 
@@ -44,7 +44,7 @@ The rendering pipeline for a UI Patterns component:
 8. After validation, `preprocessProps()` runs `PropType::preprocess()` to prepare template-ready values.
 9. SDC's Twig template receives the processed props and slots.
 
-### Service Architecture
+## Service Architecture
 
 Key services from `ui_patterns.services.yml`:
 
@@ -74,7 +74,7 @@ ui_patterns.twig.extension:
   class: Drupal\ui_patterns\Template\TwigExtension
 ```
 
-### Common Mistakes
+## Common Mistakes
 
 | Mistake | Why It Is Wrong |
 |---|---|
@@ -82,7 +82,7 @@ ui_patterns.twig.extension:
 | Calling source plugins directly in custom code | Sources are managed by `SourcePluginManager`; use `getSource()` to properly initialize context and configuration. |
 | Not clearing caches after adding/changing components | The decorated `ComponentPluginManager` caches definitions; use `drush cr` when component YAML changes. |
 
-### See Also
+## See Also
 
 - [Source Plugins](source-plugins.md)
 - [Props System](props-system.md)

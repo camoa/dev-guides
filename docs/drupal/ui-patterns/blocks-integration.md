@@ -1,19 +1,19 @@
 ---
 description: Blocks integration — exposing components as block plugins and embedding blocks in slots
 tldr: "Blocks integration — exposing components as block plugins and embedding blocks in slots"
-drupal_version: "10.3+ / 11"
+drupal_version: "11.x"
 ---
 
-## Blocks Integration
+# Blocks Integration
 
 **Sub-module:** `ui_patterns_blocks`
 **Dependencies:** `block`, `ui_patterns`
 
-### What It Does
+## What It Does
 
 Exposes every SDC component as a Drupal Block plugin. Each component becomes a derivative of the `ComponentBlock` base plugin, appearing in the block listing under the "UI Patterns" category.
 
-### How It Works
+## How It Works
 
 `ComponentBlock` extends `BlockBase` and uses `ComponentFormBuilderTrait`. The deriver creates one block derivative per component:
 
@@ -35,11 +35,11 @@ public function blockForm($form, FormStateInterface $form_state) {
 }
 ```
 
-### Entity Context Resolution
+## Entity Context Resolution
 
 When placed in Layout Builder, the block resolves entity context via `ChainContextEntityResolver`, making entity field sources available in the component form.
 
-### Rendering
+## Rendering
 
 The `build()` method creates a standard component render array:
 
@@ -54,7 +54,7 @@ public function build() {
 }
 ```
 
-### Block Source Plugin
+## Block Source Plugin
 
 Conversely, UI Patterns core includes a `BlockSource` that allows embedding Drupal blocks **inside** component slots. This is separate from `ui_patterns_blocks` -- it is a source plugin, not a block plugin:
 
@@ -69,7 +69,7 @@ class BlockSource extends DerivableContextSourceBase { ... }
 
 The `BlockSource` filters out incompatible blocks (inline_block, system_main_block, page_title_block, layout_builder blocks, ui_patterns_blocks blocks) via `hook_plugin_filter_block__ui_patterns_alter()`.
 
-### Config YAML
+## Config YAML
 
 Block configuration is stored in `block.block.{block_id}.yml`. After `drush config:export`:
 
@@ -160,14 +160,14 @@ Key observations:
 - Nested components in slots use the `component` source, which recursively contains another full `ui_patterns_component` structure.
 - The `_weight` property on slot sources controls rendering order.
 
-### Common Mistakes
+## Common Mistakes
 
 | Mistake | Why It Is Wrong |
 |---|---|
 | Confusing `ui_patterns_blocks` with the `block` source plugin | `ui_patterns_blocks` makes components available *as* blocks. The `block` source plugin makes blocks available *inside* component slots. They are complementary, not the same thing. |
 | Placing UI Patterns blocks inside UI Patterns layouts recursively without care | While nesting is supported, deep recursion of components-as-blocks within components-as-layouts can cause performance issues and confusing configuration. |
 
-### See Also
+## See Also
 
 - [Layout Builder Integration](layout-builder-integration.md)
 - [Slots System](slots-system.md)

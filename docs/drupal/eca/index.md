@@ -3,8 +3,8 @@ description: ECA 3.1 (Event-Condition-Action) plugin development — create cust
 tracks:
   - project: eca
     channel: stable
-    declared: "3.1"
-    verified: 2026-05-20
+    declared: "3.1.5"
+    verified: 2026-08-16
 guide-meta:
   concepts:
     - ECA module

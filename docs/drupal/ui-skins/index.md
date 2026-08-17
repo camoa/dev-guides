@@ -3,9 +3,8 @@ description: UI Skins — expose CSS custom properties and named theme variants 
 tracks:
   - project: ui_skins
     channel: stable
-    declared: null
-    note: no version stated in prose
-    verified: 2026-05-05
+    declared: "1.2.1"
+    verified: 2026-08-16
 guide-meta:
   concepts:
     - UI Skins
@@ -42,7 +41,7 @@ guide-meta:
 | I need to... | Guide | Summary |
 |-------------|-------|---------|
 | Understand what UI Skins does and when to use it | [Overview](ui-skins-overview.md) | Use UI Skins when site builders need to adjust CSS custom property values or toggle named theme variants from theme settings. It is config-time and theme-wide — not per-block and not runtime. |
-| Install UI Skins | [Installation](ui-skins-installation.md) | Install UI Skins with composer and drush en. Single module only — no submodules. Requires Drupal ^10.3 or ^11 and PHP 8.3+. |
+| Install UI Skins | [Installation](ui-skins-installation.md) | Install UI Skins with composer and drush en. Single module only — no submodules exist. Requires Drupal ^11.4 || ^12 and PHP 8.3+. Once enabled, it adds CSS variable and theme controls to every theme's settings form. |
 | Declare a CSS variable plugin in YAML | [CSS Variable Definition](ui-skins-css-variable-definition.md) | Declare CSS variable plugins in `{theme}.ui_skins.css_variables.yml` at the theme root. Each plugin maps a machine name to a CSS variable, a form widget type, and a map of CSS scope → default value. |
 | Pick a form widget for a CSS variable | [Variable Types & Widgets](ui-skins-variable-types.md) | Use `ui_skins_alpha_color` for color tokens (8-char hex), `textfield` for numeric/unit/arbitrary CSS values, or a custom form element plugin for specialized inputs. |
 | Wire variable scopes for nested overrides | [Variable Scopes](ui-skins-variable-scopes.md) | `default_values` is a map of CSS selector → value emitting separate CSS rules at render time. Site-builder edits only replace the `:root` scope value. |

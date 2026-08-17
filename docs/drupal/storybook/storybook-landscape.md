@@ -1,5 +1,5 @@
 ---
-description: Decision guide — UI Patterns 2 story.yml (static browsing, no Node.js, any theme with ui_patterns module) vs Storybook.js tools (interactive Controls) — choose based on whether you need live prop manipulation
+description: "Decision guide — UI Patterns 2 story.yml (static browsing, no Node.js, any theme with ui_patterns module) vs Storybook.js tools (interactive Controls) — choose based on whether you need live prop manipulation"
 tldr: "Use UI Patterns 2 `.story.yml` when you need static variant browsing with zero Node.js setup — works on any theme with the `ui_patterns` module. Use Storybook.js tools (`drupal/storybook` or `storybook-addon-sdc`) when you need interactive…"
 drupal_version: "11.x"
 ---
@@ -39,12 +39,12 @@ These two systems do not interact and can coexist.
 
 Most Drupal projects don't need interactive controls — developers know the props and designers work from Figma. The setup cost of Storybook is only justified when non-developers need to explore component behavior directly.
 
-### All Active Tools
+### Decision Table — All Active Tools
 
-| Tool | Version (2025) | When to Use | Requires Drupal? | Node.js? |
+| Tool | Version | When to Use | Requires Drupal? | Node.js? |
 |---|---|---|---|---|
 | **UI Patterns 2 `.story.yml`** | Part of `ui_patterns` 2.x | Any theme with UI Patterns 2 module — static variant browsing, zero Node.js | No — built-in styleguide at `/admin/appearance/ui/components` | No |
-| **`drupal/storybook` module** | 1.0.2 | Interactive Controls, real Drupal Twig rendering, design system handoff | Yes — server-rendered | Yes (Storybook.js v10+) |
+| **`drupal/storybook` module** | 1.0.4 | Interactive Controls, real Drupal Twig rendering, design system handoff | Yes — server-rendered | Yes (Storybook.js v10+) |
 | **`storybook-addon-sdc`** | 0.21.2 | Interactive Controls offline, CI/CD, decoupled preview | No — decoupled | Yes (Vite + Twig.js) |
 | **`sdc_styleguide`** | N/A | Simple Drupal-native browser, no Node.js, no Controls | Yes | No |
 

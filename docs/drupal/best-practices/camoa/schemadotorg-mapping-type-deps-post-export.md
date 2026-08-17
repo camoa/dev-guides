@@ -1,7 +1,7 @@
 ---
 description: schemadotorg alpha mappings omit their mapping_type config dependency — a flat recipe imports alphabetically and creates mappings before their types, failing install. Enrich the deps post-export.
 drupal_version: "11.x"
-tldr: `schemadotorg` alpha `schemadotorg_mapping` entities don't declare their `schemadotorg_mapping_type` config dependency. A flat recipe imports config alphabetically, so `...mapping.media` lands before `...mapping_type.media` → "A mapping type for 'media' does not exist". Add the mapping_type to each mapping's `dependencies.config` after export. `site:export` regenerates WITHOUT it — re-apply the patch every export and document it.
+tldr: "`schemadotorg` alpha `schemadotorg_mapping` entities don't declare their `schemadotorg_mapping_type` config dependency. A flat recipe imports config alphabetically, so `...mapping.media` lands before `...mapping_type.media` → \"A mapping type for 'media' does not exist\". Add the mapping_type to each mapping's `dependencies.config` after export. `site:export` regenerates WITHOUT it — re-apply the patch every export and document it."
 ---
 
 # schemadotorg mapping_type Dependency Enrichment Post-Export

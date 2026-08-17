@@ -1,6 +1,6 @@
 ---
 description: Run Playwright VR tests against a Drupal site under DDEV — config, auth setup, directory layout, and common masks.
-tldr: Set `baseURL` to `DDEV_PRIMARY_URL`, `ignoreHTTPSErrors: true`, and run via `ddev exec npx playwright test`. Use storage-state auth with a setup project; gitignore `.auth/`. Mask `[data-contextual-id]`, timestamps, and user fields.
+tldr: "Set `baseURL` to `DDEV_PRIMARY_URL`, `ignoreHTTPSErrors: true`, and run via `ddev exec npx playwright test`. Use storage-state auth with a setup project; gitignore `.auth/`. Mask `[data-contextual-id]`, timestamps, and user fields."
 ---
 
 # Drupal & DDEV

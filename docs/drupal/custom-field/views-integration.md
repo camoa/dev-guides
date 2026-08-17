@@ -36,7 +36,7 @@ fields:
 
 **Sort plugin** (`CustomFieldDate`) -- sort by datetime columns
 
-**Date argument plugins** (7 total):
+**Date argument plugins** (6, all extending the shared `CustomFieldDate` base class):
 
 - `CustomFieldFullDate` -- full date (CCYYMMDD)
 - `CustomFieldYearDate` -- year (CCYY)

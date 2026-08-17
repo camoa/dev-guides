@@ -1,5 +1,5 @@
 ---
-description: Custom Field plugin architecture with three plugin managers, key services, hook classes, and extensibility patterns.
+description: Custom Field 5.0.1 plugin architecture with six plugin managers, key services, hook classes, and extensibility patterns.
 tldr: "You need to understand how Custom Field's plugin system works to extend it with custom field types, widgets, or formatters, or to debug plugin discovery issues."
 ---
 
@@ -11,7 +11,7 @@ You need to understand how Custom Field's plugin system works to extend it with 
 
 ## Pattern
 
-**Three custom plugin managers** (defined in `custom_field.services.yml`):
+**Six plugin-discovery managers** (defined in `custom_field.services.yml`):
 
 ```yaml
 plugin.manager.custom_field_type:
@@ -24,8 +24,21 @@ plugin.manager.custom_field_widget:
 
 plugin.manager.custom_field_formatter:
   class: Drupal\custom_field\Plugin\CustomFieldFormatterManager
-  # Discovers #[CustomFieldFormatter] plugins in /Plugin/CustomField/FieldFormatter/
+  # Discovers plugins in /Plugin/CustomField/FieldFormatter/ -- note the attribute is
+  # CORE's Drupal\Core\Field\Attribute\FieldFormatter, not a custom_field one
+
+plugin.manager.custom_field_feeds:
+  # Discovers #[CustomFieldFeedsType] plugins in /Plugin/CustomField/FeedsType/
+
+plugin.manager.custom_field_link_attributes:
+  # Discovers link-attribute plugins used by link columns
+
+plugin.manager.custom_field_component_prop_widget:
+  # NEW in 5.x -- discovers #[PropWidget] plugins in /Plugin/Components/,
+  # which map sub-fields onto SDC component props
 ```
+
+Plus `custom_field.tag_manager`. Only the prop-widget manager is new in 5.x; the feeds, link-attributes and tag managers already existed in 4.x and were simply undocumented.
 
 **Main field type**: `CustomItem` (plugin ID `custom`) -- single field type with dynamic columns defined via settings. Uses `CustomItemList` as list class.
 
@@ -36,16 +49,28 @@ plugin.manager.custom_field_formatter:
 - `plugin.manager.custom_field_type` -- FieldType plugin manager
 - `plugin.manager.custom_field_widget` -- Widget plugin manager
 - `plugin.manager.custom_field_formatter` -- Formatter plugin manager
+- `plugin.manager.custom_field_feeds` -- Feeds target plugin manager
+- `plugin.manager.custom_field_link_attributes` -- Link attribute plugin manager
+- `plugin.manager.custom_field_component_prop_widget` -- SDC prop widget plugin manager (5.x)
 - `custom_field.update_manager` -- Handles schema updates for existing fields
 - `custom_field.generate_data` -- Generates sample data
+- `custom_field.tag_manager` -- Tag handling
 
-**Hook classes** (Drupal 11 style):
+In 5.x both services also autowire by interface: type-hint `\Drupal\custom_field\Service\UpdateManagerInterface` or `\Drupal\custom_field\Service\GenerateDataInterface` in a constructor and the container resolves it.
+
+**Hook classes** (OO `#[Hook]` only -- 5.x deleted every `.module` file and the procedural `#[LegacyHook]` shims with them):
 
 - `GeneralHooks` -- General hooks
 - `FormHooks` -- Form alterations
 - `ThemeHooks` -- Theme preprocessing
 - `TokenHooks` -- Token definitions
 - `ViewsHooks` -- Views integration
+- `EntityHooks` -- Node insert/update maintenance of the taxonomy index, plus `entity_view_display_presave`. In 5.x the node hooks declare `#[Hook('node_update', order: Order::Last)]`, replacing the `hook_module_implements_alter()` reordering 4.x used
+
+**Other integrations shipped in the main module** (not sub-modules):
+
+- Entity Usage tracking -- `src/Plugin/EntityUsage/Track/`: `CustomField` (pre-existing), plus `CustomFieldLink` and `CustomFieldText` new in 5.x
+- `custom_field_multivalue` form element -- `src/Element/MultiValue.php`, `#[FormElement('custom_field_multivalue')]`, new in 5.x
 
 ## Common Mistakes
 

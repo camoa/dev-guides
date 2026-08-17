@@ -1,16 +1,16 @@
 ---
 description: Config export reference — ui_patterns_component schema, source types, and integration file locations
 tldr: "When you need to understand, construct, or debug UI Patterns configuration YAML for deployment, recipes, config management, or programmatic setup. This section documents the core schema that all four integrations share and provides a…"
-drupal_version: "10.3+ / 11"
+drupal_version: "11.x"
 ---
 
-## Config Export Reference
+# Config Export Reference
 
-### When to Use
+## When to Use
 
 When you need to understand, construct, or debug UI Patterns configuration YAML for deployment, recipes, config management, or programmatic setup. This section documents the core schema that all four integrations share and provides a reference for all available source types.
 
-### The ui_patterns_component Schema
+## The ui_patterns_component Schema
 
 Every UI Patterns integration stores its component configuration using the `ui_patterns_component` config schema. This is the canonical structure:
 
@@ -44,7 +44,7 @@ Schema hierarchy:
 - `ui_patterns_slot` -- each slot: `sources` sequence
 - `ui_patterns_slot_source` -- each slot source: `source_id` + `source` + `_weight`
 
-### Source Types Reference
+## Source Types Reference
 
 | Source ID | Schema Key | Config Structure | Use For |
 |---|---|---|---|
@@ -69,7 +69,7 @@ Schema hierarchy:
 | `entity_field` | `ui_patterns_source.entity_field` | (ignore schema -- dynamic) | Full field render in slot |
 | `entity_reference` | `ui_patterns_source.entity_reference` | (ignore schema -- dynamic) | Context switcher (no value) |
 
-### Integration Config File Locations
+## Integration Config File Locations
 
 | Integration | Config File Pattern | Schema | Settings Path |
 |---|---|---|---|
@@ -79,7 +79,7 @@ Schema hierarchy:
 | **Views Style** | `views.view.{view_name}.yml` | `views.style.ui_patterns` | `display.{id}.display_options.style.options.ui_patterns.ui_patterns` |
 | **Views Row** | `views.view.{view_name}.yml` | `views.row.ui_patterns` | `display.{id}.display_options.row.options.ui_patterns` |
 
-### Export Workflow
+## Export Workflow
 
 ```
 1. Configure the integration via the admin UI
@@ -92,17 +92,17 @@ Schema hierarchy:
 4. The ui_patterns key in the exported YAML matches the ui_patterns_component schema
 ```
 
-### Common Mistakes
+## Common Mistakes
 
 | Mistake | Why It Is Wrong |
 |---|---|
-| Forgetting that field property source IDs include entity type and field name | Source IDs are derived: `field_property:{entity_type}:{field_name}:{column}` — no bundle segment. Using `field_property:node:article:field_name` (old bundle format) or just `field_property:field_name` will not resolve. |
+| Forgetting that field property source IDs include entity type and field name | Source IDs are derived: `field_property:{entity_type}:{field_name}:{column}` (no bundle segment — bundle is implicit from the view display). Using just `field_property:field_name` will not resolve. |
 | Missing `_weight` on slot sources | Required for ordering multiple sources within a slot. Omitting it may cause unpredictable render order. Values are strings (e.g., `'0'`, `'1'`). |
 | Using wrong source type for prop type | A `textfield` source cannot serve a `boolean` prop. Match source `prop_types` to the component's prop type (see [Source Plugins](source-plugins.md)). |
 | Confusing Views style double nesting with row single nesting | Style config: `options.ui_patterns.ui_patterns` (double). Row config: `options.ui_patterns` (single). Getting this wrong causes schema validation failures. |
 | Manually crafting `block` or `entity_reference` source config | These sources use dynamic sub-keys and have `ignore` schema types. Always configure them via the admin UI and export, rather than writing YAML by hand. |
 
-### See Also
+## See Also
 
 - [Field Formatters](field-formatters.md) -- formatter config examples
 - [Blocks Integration](blocks-integration.md) -- block config examples

@@ -1,6 +1,6 @@
 ---
 description: Eliminate FOIT and FOUT by coordinating font-display strategy, preload, and fallback metric overrides.
-tldr: Use `font-display: swap` for body text with fallback metric overrides (`size-adjust`, `ascent-override`) to minimize CLS; preload only the primary weight of above-fold fonts; always include `crossorigin` on font preloads or the preload is silently ignored.
+tldr: "Use `font-display: swap` for body text with fallback metric overrides (`size-adjust`, `ascent-override`) to minimize CLS; preload only the primary weight of above-fold fonts; always include `crossorigin` on font preloads or the preload is silently ignored."
 ---
 
 # Web Font Performance

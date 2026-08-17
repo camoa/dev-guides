@@ -1,7 +1,7 @@
 ---
 description: Never use the default media view mode for content display — create purpose-specific view modes that use responsive image formatters.
 drupal_version: "11.x"
-tldr: Never use the `default` media view mode for content display. Create purpose-specific view modes that use responsive image formatters. The chain is: Media View Mode → Responsive Image Formatter → Responsive Image Style → Breakpoint-specific Image Styles → `<picture>` or `srcset`.
+tldr: "Never use the `default` media view mode for content display. Create purpose-specific view modes that use responsive image formatters. The chain is: Media View Mode → Responsive Image Formatter → Responsive Image Style → Breakpoint-specific Image Styles → `<picture>` or `srcset`."
 ---
 
 # Media View Mode → Responsive Image Style

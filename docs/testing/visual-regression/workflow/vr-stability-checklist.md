@@ -1,6 +1,6 @@
 ---
 description: The pre-baseline capture checklist that prevents flaky VR tests before they happen.
-tldr: Run the 10-point checklist before any baseline capture: disable animations, hide carets, wait for fonts and images, wait for network idle, mask dynamic regions, normalize scroll and focus, dismiss cookie banners, and pin the Chromium version via the official Playwright Docker image.
+tldr: "Run the 10-point checklist before any baseline capture: disable animations, hide carets, wait for fonts and images, wait for network idle, mask dynamic regions, normalize scroll and focus, dismiss cookie banners, and pin the Chromium version via the official Playwright Docker image."
 ---
 
 # Stability Checklist

@@ -1,6 +1,6 @@
 ---
-description: Apply curated inline text styles via CKEditor 5 using UI Styles without exposing freeform class input.
-tldr: Enable ui_styles_ckeditor5 and add its toolbar items to a text format's CKEditor 5 toolbar. CKEditor-targeted styles must also be whitelisted in the text format's allowed HTML — otherwise Drupal's filter strips the injected class on render.
+description: "Apply curated inline text styles via CKEditor 5 using UI Styles without exposing freeform class input."
+tldr: "Enable ui_styles_ckeditor5 and add its toolbar items to a text format's CKEditor 5 toolbar. CKEditor-targeted styles must also be whitelisted in the text format's allowed HTML — otherwise Drupal's filter strips the injected class on render."
 drupal_version: "11.x"
 ---
 

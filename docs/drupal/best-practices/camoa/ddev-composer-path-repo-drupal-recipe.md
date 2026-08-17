@@ -1,7 +1,7 @@
 ---
 description: Composer path repos install drupal-recipe packages as symlinks that dangle inside a DDEV container — force symlink:false, and never trust a path repo for tag-accurate resolution.
 drupal_version: "11.x"
-tldr: Composer path repos symlink drupal-recipe packages, and the symlink points outside the DDEV mount so drush/install can't read the recipe. Force `symlink: false` (or copy the package in). Path repos ignore git tags — use a local `vcs` repo when you must test a tagged constraint.
+tldr: "Composer path repos symlink drupal-recipe packages, and the symlink points outside the DDEV mount so drush/install can't read the recipe. Force `symlink: false` (or copy the package in). Path repos ignore git tags — use a local `vcs` repo when you must test a tagged constraint."
 ---
 
 # DDEV + Composer Path Repo for drupal-recipe Packages

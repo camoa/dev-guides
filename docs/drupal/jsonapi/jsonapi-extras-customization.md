@@ -11,6 +11,8 @@ topic: "drupal/jsonapi"
 
 Customize resource names, URLs, field visibility, and field transformations. Requires `jsonapi_extras` contrib module.
 
+**Version:** Guide targets `drupal/jsonapi_extras:^3.0` (current stable: `8.x-3.28` -- the project still uses legacy Drupal 7-style version tags despite targeting modern core). Core compatibility: `^9.5 || ^10 || ^11`.
+
 ### Features
 
 | Feature | Use Case |

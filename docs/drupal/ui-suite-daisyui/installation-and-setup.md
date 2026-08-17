@@ -9,7 +9,7 @@ tldr: "Composer install, theme enable, dependency requirements, and post-install
 
 - Drupal 10.3+ or 11.x
 - PHP 8.3+
-- `ui_patterns` 2.x, `ui_icons` 1.1+ (hard dependencies)
+- `ui_patterns` 2.x, `ui_icons` 2.0+ (hard dependencies)
 - `ui_styles` 1.11+, `ui_skins` 1.1+ (recommended, not required since alpha6)
 
 ## Installation

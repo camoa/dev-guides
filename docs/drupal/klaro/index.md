@@ -21,9 +21,9 @@ guide-meta:
 tracks:
   - project: klaro
     channel: stable
-    declared: null
-    note: no version stated in prose; the 3.0.5 in these guides is klaro-js, the JavaScript library, not the Drupal module
-    verified: 2026-02-12
+    declared: "3.1.1"
+    note: module version 3.1.1 now stated in Installation Methods prose, distinct from the 3.0.5+ klaro-js JavaScript library version
+    verified: 2026-08-16
 ---
 
 # Klaro Cookie & Consent Management
@@ -33,7 +33,7 @@ tracks:
 | Understand what consent management is and when to use it | [What is Consent Management](what-is-consent-management.md) | Use consent management when your Drupal site loads external resources (scripts, iframes, images) that may collect visitor data or set cookies. Required for GDPR, ePrivacy Directive, and similar privacy regulations. |
 | Ensure GDPR and ePrivacy compliance | [Legal Compliance Requirements](legal-compliance-requirements.md) | Understand legal requirements before implementing consent management to ensure your configuration meets regulatory standards for GDPR, ePrivacy Directive, and other privacy laws. |
 | Choose between Silent, Notice, or Modal consent modes | [Consent Mode Selection](consent-mode-selection.md) | Choose consent mode based on your site's regulatory requirements and user experience priorities. Configure at **Administration > Configuration > User interface > Klaro! |
-| Install Klaro module and library | [Installation Methods](installation-methods.md) | Install Klaro module and klaro-js JavaScript library before configuration. Choose installation method based on your Drupal project's dependency management approach. |
+| Install Klaro module and library | [Installation Methods](installation-methods.md) | Install Klaro module (current stable: 3.1.1) and klaro-js JavaScript library — two independently versioned lines — before configuration. Choose installation method based on your Drupal project's dependency management approach. |
 | Configure third-party services (analytics, tracking) | [Service Configuration](service-configuration.md) | Configure a service when you need to control external resources (scripts, iframes, images) that collect data or set cookies. Each third-party integration requires a service definition. |
 | Group services by category (purposes) | [Purpose Management](purpose-management.md) | Create purposes to group related services into categories. Purposes appear as sections in the consent modal and allow users to enable/disable entire groups at once. |
 | Set cookie expiration and domain scope | [Storage Settings](storage-settings.md) | Configure how Klaro stores user consent decisions. Storage method and duration affect user experience, browser compatibility, and compliance requirements. |
