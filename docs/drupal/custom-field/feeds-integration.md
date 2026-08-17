@@ -1,6 +1,7 @@
 ---
-description: Importing CSV and external data into custom field columns via Feeds module -- one Feeds target dispatching to 23 per-column-type FeedsType plugins.
-tldr: "You need to import CSV or other data sources into custom field columns via the Feeds module. A single Feeds target delegates per sub-field to 23 FeedsType plugins, one per supported column type."
+description: "Importing CSV and external data into custom field columns via Feeds module -- one Feeds target dispatching to 23 per-column-type FeedsType plugins."
+tldr: "You need to import CSV or other data sources into custom field columns via the Feeds module. A single Feeds target delegates per sub-field to 23 FeedsType plugins, one per supported column type. Target format is field_name:column_name, not double-underscore."
+drupal_version: "11.x"
 ---
 
 # Feeds Import Integration

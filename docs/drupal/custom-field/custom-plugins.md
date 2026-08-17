@@ -1,6 +1,7 @@
 ---
-description: Creating custom field type, widget, and sub-field formatter plugins for Custom Field 5.x -- correct attribute namespaces, static method signatures, and the 5.x PropWidget extension point.
-tldr: "You need to create custom field type, widget, or formatter plugins specific to your application. schema()/propertyDefinitions()/generateSampleValue() are static; there is no #[CustomFieldFormatter] attribute -- sub-field formatters use core's #[FieldFormatter]."
+description: "Creating custom field type, widget, and sub-field formatter plugins for Custom Field 5.x -- correct attribute namespaces, static method signatures, and the 5.x PropWidget extension point."
+tldr: "schema()/propertyDefinitions()/generateSampleValue() are static on CustomFieldTypeBase; there is no #[CustomFieldFormatter] attribute -- sub-field formatters use core's #[FieldFormatter] and implement formatValue(), not format()."
+drupal_version: "11.x"
 ---
 
 # Custom Plugin Development

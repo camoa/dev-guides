@@ -1,6 +1,7 @@
 ---
-description: Understand Drupal's configuration management architecture — how config data is structured, stored, validated, synchronized, and overridden.
+description: "Understand Drupal's configuration management architecture — how config data is structured, stored, validated, synchronized, and overridden."
 tldr: "When you need to understand Drupal's configuration management architecture — how config data is structured, stored, validated, synchronized, and overridden."
+drupal_version: "11.x"
 ---
 
 # Config System Overview

@@ -91,7 +91,7 @@ If you are building a Drupal CMS site (not vanilla Drupal), the recipes may alre
 | Situation | Module | Why |
 |-----------|--------|-----|
 | Retrofitting existing site with JSON-LD | Schema Metatag 3.0.4 | Token-based, stable, integrates with Metatag admin UI |
-| Greenfield build, schema-first approach | Schema.org Blueprints alpha37 | Generates content types from schema — but still alpha |
+| Greenfield build, schema-first approach | Schema.org Blueprints 1.0.0-alpha38 | Generates content types from schema — but still alpha |
 | Both rich snippets now AND schema-first architecture | Both together | Schema Metatag for immediate output, Blueprints for new content types |
 | Minimal install, custom JSON-LD | `hook_page_attachments` | Roll your own — only for simple, single-type cases |
 
@@ -108,8 +108,8 @@ If you are building a Drupal CMS site (not vanilla Drupal), the recipes may alre
 
 | Module | Version | Layer | Required? |
 |--------|---------|-------|-----------|
-| Pathauto | 1.14 | Foundation | Yes, via recipe |
-| Redirect | 1.12 | Foundation | Yes, via recipe |
+| Pathauto | 8.x-1.15 | Foundation | Yes, via recipe |
+| Redirect | 8.x-1.13 | Foundation | Yes, via recipe |
 | Easy Breadcrumb | — | Foundation | Yes, via recipe |
 | Token | — | Foundation | Yes, via recipe |
 | Metatag | 2.2.0 | Meta tags | Yes, via recipe |
@@ -117,7 +117,7 @@ If you are building a Drupal CMS site (not vanilla Drupal), the recipes may alre
 | Real-time SEO (Yoast) | — | Editorial | Via recipe |
 | SEO Checklist | 5.2.x | Editorial | Via recipe |
 | Schema Metatag | 3.0.4 | Structured data | Add manually |
-| Schema.org Blueprints | 1.0.0-alpha37 | Structured data | Add manually (greenfield) |
+| Schema.org Blueprints | 1.0.0-alpha38 | Structured data | Add manually (greenfield) |
 | AEO | — | GEO | Add manually |
 
 ## How This Guide Is Organized

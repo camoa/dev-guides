@@ -156,9 +156,9 @@
     "guides_extracted": 20
   },
   "drupal/config-management": {
-    "source_hash": "91109682e54153fc18f5d304c7638f8d8e73b95166a262219b57780c301c2d60",
-    "partitioned": "2026-02-14",
-    "partitioned_by": "camoa",
+    "source_hash": "6b5fee4ec80f5fccc2e96ba798406ccfda578ede34c900a361339d32e3198b4b",
+    "partitioned": "2026-08-17",
+    "partitioned_by": "Carlos Ospina",
     "guides_extracted": 22
   },
   "drupal/render-api": {
@@ -180,8 +180,8 @@
     "guides_extracted": 21
   },
   "drupal/custom-field": {
-    "source_hash": "add473de333691f9357f025370f94a7ec3db9dd4c5449bc994f54ed76b7b69b5",
-    "partitioned": "2026-08-16",
+    "source_hash": "f6cc8c886389eabf5d0a47eb5acb1a86cb101e4d43a03f7687a64533d195e496",
+    "partitioned": "2026-08-17",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 19
   },
@@ -216,15 +216,15 @@
     "guides_extracted": 16
   },
   "design-systems/radix-sdc": {
-    "source_hash": "9272e69dd754ebc2718236f7eadeb9144c4f972ab87f029dbe5e131d37e0c189",
-    "partitioned": "2026-02-13",
-    "partitioned_by": "camoa",
+    "source_hash": "f1165146f158e1866ac697a89dc1e4d28fea3569caeab39efd553bb4711c06a3",
+    "partitioned": "2026-08-17",
+    "partitioned_by": "Carlos Ospina",
     "guides_extracted": 16
   },
   "design-systems/radix-components": {
-    "source_hash": "44b79f4f154e400999c37e73671cedaef35fd2c16cab25e753d424d3ccbf6ecf",
-    "partitioned": "2026-02-13",
-    "partitioned_by": "camoa",
+    "source_hash": "90773f4c8367579f17e41481ed8f23f177ebf4fe3cc06f54f18cc1af2e4f0ec4",
+    "partitioned": "2026-08-17",
+    "partitioned_by": "Carlos Ospina",
     "guides_extracted": 14
   },
   "development/tdd-spec-driven": {
@@ -342,8 +342,8 @@
     "guides_extracted": 7
   },
   "drupal/salesforce": {
-    "source_hash": "4f65de3fff3002daa03ea738f4ce80e071576504601f0c9e0d6036a72003e911",
-    "partitioned": "2026-02-20",
+    "source_hash": "e78b3803f6edbf9b3e5a1376e94956f35705ff07a4b44b3ec48ac2f0657488b7",
+    "partitioned": "2026-08-17",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 22
   },
@@ -414,8 +414,8 @@
     "guides_extracted": 20
   },
   "drupal/better-exposed-filters": {
-    "source_hash": "cbbfea74a6ac1ccfed65577b4cec07633a1afc4b8f454c6fc895676a3f8a39b2",
-    "partitioned": "2026-03-30",
+    "source_hash": "5ff334e6c180ee8637c81cb39ab15b4d1829a7b665bdf22af8a7e6609681e3ab",
+    "partitioned": "2026-08-17",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 20
   },
@@ -462,8 +462,8 @@
     "guides_extracted": 13
   },
   "drupal/ui-styles": {
-    "source_hash": "772d864792ee745e9e7cedec714abc85b1829010b9123b213fe14ce261a2c825",
-    "partitioned": "2026-08-16",
+    "source_hash": "a1a6e084487a850f3349a27d8db6c4bf160d765f2a62c59c4aa807c34d010dc0",
+    "partitioned": "2026-08-17",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 16
   },

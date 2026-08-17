@@ -1,6 +1,7 @@
 ---
-description: Nine sub-modules for GraphQL, JSON:API, Entity Browser, Linkit, Media Library, Search API, Viewfield, SDC rendering, and AI integration.
-tldr: "You need extended functionality like GraphQL, JSON:API normalization, Entity Browser, Linkit, Media Library, Search API, Single Directory Component rendering, or AI integration. Nine sub-modules ship with 5.x."
+description: "Nine sub-modules for GraphQL, JSON:API, Entity Browser, Linkit, Media Library, Search API, Viewfield, SDC rendering, and AI integration."
+tldr: "Nine optional sub-modules ship with Custom Field 5.x for GraphQL, JSON:API, Entity Browser, Linkit, Media Library, Search API, Viewfield, SDC rendering, and AI integration -- enable only the ones you actually use."
+drupal_version: "11.x"
 ---
 
 # Sub-Modules

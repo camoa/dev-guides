@@ -3,9 +3,8 @@ description: Drupal Salesforce Suite — bidirectional sync between Drupal entit
 tracks:
   - project: salesforce
     channel: stable
-    declared: null
-    note: no version stated in prose
-    verified: 2026-02-20
+    declared: "5.1.3"
+    verified: 2026-08-17
 guide-meta:
   concepts:
     - Salesforce Suite

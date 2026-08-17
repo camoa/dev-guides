@@ -3,8 +3,8 @@ description: Drupal Radix Components — Complete reference for all 57 Radix 6.x
 tracks:
   - project: radix
     channel: stable
-    declared: "6.x"
-    verified: 2026-02-13
+    declared: "6.0.8"
+    verified: 2026-08-17
 guide-meta:
   concepts:
     - Radix 6.x SDC

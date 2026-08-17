@@ -29,7 +29,7 @@ Both Schema Metatag and Schema.org Blueprints output JSON-LD. Do not mix formats
 | Existing site with established content types | Schema Metatag | Token-based mapping — no content restructuring required |
 | Greenfield build, schema-first architecture | Schema.org Blueprints | Content types and fields are generated from Schema.org; tighter coupling |
 | Need production-stable module (now) | Schema Metatag 3.0.4 | Stable release; widely adopted; well-tested |
-| Alpha risk acceptable, deep schema alignment wanted | Schema.org Blueprints alpha37 | Limited adoption; alpha stability; significant ongoing API changes |
+| Alpha risk acceptable, deep schema alignment wanted | Schema.org Blueprints 1.0.0-alpha38 | Limited adoption; alpha stability; significant ongoing API changes |
 | Decoupled/headless Drupal | Schema.org Blueprints | schemadotorg_jsonld outputs structured JSON API; schema-aligned field names |
 | Quick wins on article/product pages | Schema Metatag | 25 pre-built types; configure in admin UI; no custom code needed |
 | Custom content model already built | Schema Metatag | Map existing fields to schema properties via tokens |
@@ -74,7 +74,7 @@ drush schemadotorg:create-type node:Event
 - **Wrong**: Using Microdata or RDFa for Schema.org markup on a new build → **Right**: JSON-LD only; simpler to implement and maintain
 - **Wrong**: Installing Schema.org Blueprints on an existing site expecting a drop-in replacement for Schema Metatag → **Right**: Blueprints rebuilds content architecture; it is not a configuration replacement
 - **Wrong**: Running both modules outputting JSON-LD for the same content type → **Right**: Disable schemadotorg_jsonld for types managed by Schema Metatag, or vice versa
-- **Wrong**: Treating alpha37 stability as production-ready for high-stakes projects → **Right**: Monitor the project issue queue; test upgrades in staging; Schema Metatag 3.0.4 is the safer choice for production
+- **Wrong**: Treating alpha38 stability as production-ready for high-stakes projects → **Right**: Monitor the project issue queue; test upgrades in staging; Schema Metatag 3.0.4 is the safer choice for production
 - **Wrong**: Skipping validation after configuration → **Right**: Always verify with Google Rich Results Test after setup
 
 ## See Also

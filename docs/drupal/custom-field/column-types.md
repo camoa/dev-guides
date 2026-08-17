@@ -1,6 +1,7 @@
 ---
-description: All 23 custom field column types organized by category -- text, numeric, date/time, reference, file, and data fields with schema details and gotchas.
+description: "All 23 custom field column types organized by category -- text, numeric, date/time, reference, file, and data fields with schema details and gotchas."
 tldr: "All 23 custom field column types organized by category -- text, numeric, date/time, reference, file, and data fields with schema details and gotchas."
+drupal_version: "11.x"
 ---
 
 # Column Types

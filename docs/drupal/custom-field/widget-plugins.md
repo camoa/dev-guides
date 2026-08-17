@@ -1,6 +1,7 @@
 ---
-description: Widget selection reference for all 23 custom field types with 36 available widgets, showing defaults and compatibility.
-tldr: "You need to choose the right widget for collecting data for each sub-field in your custom field."
+description: "Widget selection reference for all 23 custom field types with 36 available widgets, showing defaults and compatibility."
+tldr: "36 widget plugins map to 23 custom field column types, each with a documented default; only override the default when UX calls for it (e.g., select/radios instead of autocomplete for small reference sets)."
+drupal_version: "11.x"
 ---
 
 # Widget Plugins

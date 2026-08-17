@@ -1,6 +1,7 @@
 ---
-description: Choose between simple config (singleton YAML) and config entities (multiple instances with CRUD and UI).
+description: "Choose between simple config (singleton YAML) and config entities (multiple instances with CRUD and UI)."
 tldr: "When deciding whether to implement config as simple config (singleton YAML) or config entities (multiple instances, CRUD, UI)."
+drupal_version: "11.x"
 ---
 
 # Simple Config vs Config Entities

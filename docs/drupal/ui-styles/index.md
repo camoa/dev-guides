@@ -3,9 +3,8 @@ description: UI Styles module — curated CSS class options for site builders in
 tracks:
   - project: ui_styles
     channel: stable
-    declared: null
-    note: prose states only the core constraint `^11.4 || ^12` (installation.md Compatibility table), which does not identify a ui_styles tag; no module version stated anywhere in the topic
-    verified: 2026-08-16
+    declared: "8.x-1.21"
+    verified: 2026-08-17
 guide-meta:
   concepts:
     - UI Styles

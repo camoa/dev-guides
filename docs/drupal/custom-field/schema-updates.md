@@ -1,6 +1,7 @@
 ---
-description: Adding, removing, and modifying columns in existing custom fields with data using the custom_field.update_manager service.
-tldr: "You need to add, remove, or modify columns in a Custom Field that already has data, without losing existing content. Use addColumn()/removeColumn() on custom_field.update_manager -- there is no updateFieldSchema()."
+description: "Adding, removing, and modifying columns in existing custom fields with data using the custom_field.update_manager service."
+tldr: "Use addColumn()/removeColumn() on custom_field.update_manager inside a hook_update_N() to change existing custom-field columns without data loss -- there is no updateFieldSchema(), and 5.x adds a one-time taxonomy-index backfill post-update."
+drupal_version: "11.x"
 ---
 
 # Schema Updates & Data Migration
@@ -57,7 +58,7 @@ function MY_MODULE_update_N() {
 
 **The update process** (handled by the service): backs up existing rows, truncates the table, adds or removes the column across both the data and revision tables, restores rows in batches, and clears the property definitions cache.
 
-**Upgrading 4.x -> 5.x:** the update manager, its three methods, and both drush commands are unchanged. The one thing 5.x adds is a post-update, `custom_field_post_update_bulk_populate_taxonomy_index()`, which `drush updb` runs once. It is a batched backfill of `taxonomy_index` across **every published node** that has an `entity_reference` sub-column targeting `taxonomy_term`. On a large content set this is slow -- budget for it in the deploy window rather than discovering it mid-update. `custom_field.post_update.php` contains no other function, and no 4.x->5.x data migration beyond this one is documented upstream.
+**Upgrading 4.x to 5.x:** the update manager, its three methods, and both drush commands are unchanged. The one thing 5.x adds is a post-update, `custom_field_post_update_bulk_populate_taxonomy_index()`, which `drush updb` runs once. It is a batched backfill of `taxonomy_index` across **every published node** that has an `entity_reference` sub-column targeting `taxonomy_term`. On a large content set this is slow -- budget for it in the deploy window rather than discovering it mid-update. `custom_field.post_update.php` contains no other function, and no 4.x to 5.x data migration beyond this one is documented upstream.
 
 **Scope note:** this managed migration path is specific to the **custom_field module's** `custom` type. A field type you hand-build yourself (your own `FieldItemBase` with its own `schema()`) has **no** such service -- you own the schema change in your module's `hook_update_N()` directly.
 
@@ -85,3 +86,4 @@ function MY_MODULE_update_N() {
 
 - Reference: [Add/remove columns to Custom fields with existing data](https://www.drupal.org/docs/extending-drupal/contributed-modules/contributed-module-documentation/custom-field/addremove-columns-to-custom-fields-with-existing-data)
 - Reference: `/modules/contrib/custom_field/src/Service/UpdateManager.php`
+- [Config-First Creation](config-first-creation.md)

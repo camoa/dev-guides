@@ -1,5 +1,5 @@
 ---
-description: You're setting up a new Radix sub-theme
+description: "You're setting up a new Radix sub-theme"
 tldr: "You're setting up a new Radix sub-theme You need to understand how Radix organizes files and loads Bootstrap You're mapping design system files to Radix file structure"
 drupal_version: "11.x"
 ---
@@ -10,6 +10,8 @@ drupal_version: "11.x"
 - You're setting up a new Radix sub-theme
 - You need to understand how Radix organizes files and loads Bootstrap
 - You're mapping design system files to Radix file structure
+
+This guide documents **Radix 6.0.8**, the current stable tag on the 6.x branch. Where it says "6.x" it means a behavior that holds across the branch, not a looser version claim.
 
 ### 1.1 Sub-Theme Directory Structure
 

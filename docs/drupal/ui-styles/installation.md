@@ -32,8 +32,11 @@ Enable only the relevant integration submodule(s):
 
 ## Compatibility
 
+The current stable release is UI Styles 8.x-1.21 — the project has not moved to semantic versioning, so the legacy `8.x-1.x` branch prefix is the real tag, not a typo. A `2.x` branch exists but carries no stable tag; it is dev-only and not documented here.
+
 | Property | Value |
 |---|---|
+| UI Styles | `8.x-1.21` |
 | Drupal core | `^11.4 \|\| ^12` |
 | PHP | 8.3+ |
 | External | `sabberworm/php-css-parser ^9.0` (via Composer for stylesheet generation) |

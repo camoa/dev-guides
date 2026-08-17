@@ -1,6 +1,7 @@
 ---
-description: Performance optimization, security hardening, dependency injection, and coding standards for custom field development.
-tldr: "Performance optimization, security hardening, dependency injection, and coding standards for custom field development."
+description: "Performance optimization, security hardening, dependency injection, and coding standards for custom field development."
+tldr: "Custom Field's single-table storage avoids Paragraphs' N+1 query problem; always check entity access before rendering references, sanitize formatter output, and use custom_field.update_manager -- never raw SQL -- for schema changes."
+drupal_version: "11.x"
 ---
 
 # Best Practices

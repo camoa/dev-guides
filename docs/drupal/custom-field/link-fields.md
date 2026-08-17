@@ -1,6 +1,7 @@
 ---
-description: Link sub-fields with URL, title, attributes, Linkit integration, and security considerations for target_blank links.
-tldr: "You need full link functionality (URL + title + attributes) within a custom field column."
+description: "Link sub-fields with URL, title, attributes, Linkit integration, and security considerations for target_blank links."
+tldr: "Use the link column type (not uri) when you need title and attributes on a link; always pair target=\"_blank\" with rel=\"noopener noreferrer\" to avoid a security vulnerability."
+drupal_version: "11.x"
 ---
 
 # Link Sub-Fields

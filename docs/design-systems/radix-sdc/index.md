@@ -3,8 +3,8 @@ description: Design System to Radix SDC Mapping — atomic guides for implementi
 tracks:
   - project: radix
     channel: stable
-    declared: "6.x"
-    verified: 2026-02-13
+    declared: "6.0.8"
+    verified: 2026-08-17
   - project: bootstrap
     registry: npm
     channel: stable

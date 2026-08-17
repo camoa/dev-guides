@@ -1,6 +1,7 @@
 ---
-description: Seven field-level formatters for rendering custom field output -- stacked, inline, list, table, flipped table, token template, and SDC. Plugin IDs have no _formatter suffix except custom_formatter.
+description: "Seven field-level formatters for rendering custom field output -- stacked, inline, list, table, flipped table, token template, and SDC. Plugin IDs have no _formatter suffix except custom_formatter."
 tldr: "You need to control how the entire custom field (all sub-fields together) is displayed on the view. Plugin IDs are short (custom_inline, not custom_inline_formatter) -- only custom_formatter carries the _formatter suffix."
+drupal_version: "11.x"
 ---
 
 # Field-Level Formatters

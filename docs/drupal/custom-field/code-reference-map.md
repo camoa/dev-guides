@@ -1,6 +1,7 @@
 ---
-description: Source code locations for all Custom Field 5.x components -- field types, widgets, formatters, services, hooks, Views plugins, templates, and sub-modules.
-tldr: "You need to find specific source code for custom field functionality."
+description: "Source code locations for all Custom Field 5.x components -- field types, widgets, formatters, services, hooks, Views plugins, templates, and sub-modules."
+tldr: "Reference map of every Custom Field 5.x source path -- field types, widgets, formatters, plugin managers, hook classes, Views plugins, templates, and the nine sub-module directories -- for locating implementation details fast."
+drupal_version: "11.x"
 ---
 
 # Code Reference Map

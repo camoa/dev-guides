@@ -4,29 +4,28 @@ tracks:
   - project: metatag
     channel: stable
     declared: "2.2.0"
-    verified: 2026-03-07
+    verified: 2026-08-17
   - project: simple_sitemap
     channel: stable
     declared: "4.2.3"
-    verified: 2026-03-07
+    verified: 2026-08-17
   - project: pathauto
     channel: stable
-    declared: "1.14"
-    verified: 2026-03-07
+    declared: "8.x-1.15"
+    verified: 2026-08-17
   - project: redirect
     channel: stable
-    declared: null
-    note: no version stated in prose
-    verified: 2026-03-07
+    declared: "8.x-1.13"
+    verified: 2026-08-17
   - project: schema_metatag
     channel: stable
     declared: "3.0.4"
-    verified: 2026-03-07
+    verified: 2026-08-17
   - project: schemadotorg
     channel: alpha
     reason: project has never had a stable release
-    declared: "1.0.0-alpha37"
-    verified: 2026-03-07
+    declared: "1.0.0-alpha38"
+    verified: 2026-08-17
 guide-meta:
   concepts:
     - SEO recipes

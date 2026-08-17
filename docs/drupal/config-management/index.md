@@ -1,11 +1,10 @@
 ---
-description: Drupal Configuration Management — the Config API, simple config vs config entities, schema, storage, synchronization, overrides, Config Split, dependencies, and deployment workflows.
+description: "Drupal Configuration Management — the Config API, simple config vs config entities, schema, storage, synchronization, overrides, Config Split, dependencies, and deployment workflows."
 tracks:
   - project: config_split
     channel: stable
-    declared: null
-    note: no version stated in prose
-    verified: 2026-02-14
+    declared: "2.0.2"
+    verified: 2026-08-17
 guide-meta:
   concepts:
     - Config API
@@ -47,7 +46,7 @@ guide-meta:
 | Sync config between environments | [Config Synchronization](config-synchronization.md) | When you need to sync configuration between environments — export config from dev, commit to Git, import to staging/production. |
 | Export/import with Drush | [Config Import/Export](config-import-export.md) | When you need to export config from active storage to sync directory, or import config from sync directory to active storage using Drush commands. |
 | Override config per environment | [Config Override System](config-override-system.md) | When you need to override config values per environment (e.g., API keys, site name) without modifying stored config or committing credentials to Git. |
-| Split config by environment | [Config Split](config-split.md) | When you need to manage environment-specific configuration (dev modules, production settings) that should not be deployed to all environments. |
+| Split config by environment | [Config Split](config-split.md) | When you need to manage environment-specific configuration (dev modules, production settings) that should not be deployed to all environments. Config Split 2.0.2 is the current stable release; install with composer require drupal/config_split:^2.0. |
 | Understand config dependencies | [Config Dependencies](config-dependencies.md) | When you need to understand how Drupal tracks which modules, themes, and config entities depend on each other, and how dependencies affect import order and deletion. |
 | React to config changes | [Config Events](config-events.md) | When you need to react to config changes — save, delete, import, rename — via event subscribers. |
 | Handle module install config | [Config Installer](config-installer.md) | When your module needs to provide default configuration that's installed when the module is enabled — content types, views, fields, module settings. |

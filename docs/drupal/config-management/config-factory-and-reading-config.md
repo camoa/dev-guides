@@ -1,6 +1,7 @@
 ---
-description: Read and write configuration values in custom code — forms, controllers, services, hooks.
+description: "Read and write configuration values in custom code — forms, controllers, services, hooks."
 tldr: "When you need to read configuration values in custom code — forms, controllers, services, hooks."
+drupal_version: "11.x"
 ---
 
 # Config Factory & Reading Config

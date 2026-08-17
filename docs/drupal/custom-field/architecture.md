@@ -1,6 +1,7 @@
 ---
-description: Custom Field 5.0.1 plugin architecture with six plugin managers, key services, hook classes, and extensibility patterns.
-tldr: "You need to understand how Custom Field's plugin system works to extend it with custom field types, widgets, or formatters, or to debug plugin discovery issues."
+description: "Custom Field 5.0.2 plugin architecture with six plugin managers, key services, hook classes, and extensibility patterns."
+tldr: "Custom Field discovers types/widgets/formatters/feeds/link-attributes/prop-widget plugins through six services under custom_field.services.yml; formatter plugins use core's #[FieldFormatter] attribute, not a custom_field one."
+drupal_version: "11.x"
 ---
 
 # Architecture & Plugin System
@@ -82,3 +83,4 @@ In 5.x both services also autowire by interface: type-hint `\Drupal\custom_field
 
 - Reference: `/modules/contrib/custom_field/src/Plugin/CustomFieldTypeManager.php`
 - Reference: `/modules/contrib/custom_field/custom_field.services.yml`
+- [Custom Field Overview](overview.md)

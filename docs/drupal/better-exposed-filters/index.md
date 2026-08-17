@@ -3,9 +3,8 @@ description: Better Exposed Filters — replace Views exposed filter dropdowns w
 tracks:
   - project: better_exposed_filters
     channel: stable
-    declared: null
-    note: no version stated in prose
-    verified: 2026-03-30
+    declared: "7.1.3"
+    verified: 2026-08-17
 guide-meta:
   concepts:
     - Better Exposed Filters

@@ -1,6 +1,7 @@
 ---
-description: Stacked and flexbox layout widgets for controlling how the entire custom field displays on the edit form. CustomFlexWidget ships its own CSS grid, not Bootstrap.
+description: "Stacked and flexbox layout widgets for controlling how the entire custom field displays on the edit form. CustomFlexWidget ships its own CSS grid, not Bootstrap."
 tldr: "You need to control how the entire custom field (all sub-fields together) is laid out on the edit form. CustomFlexWidget uses the module's own 12-column CSS grid, not Bootstrap -- works in any theme."
+drupal_version: "11.x"
 ---
 
 # Field-Level Widgets

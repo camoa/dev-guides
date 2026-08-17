@@ -11,6 +11,8 @@ tldr: "Understanding Radix's SDC architecture for component selection and custom
 
 ## Architecture Overview
 
+This guide documents Radix 6.0.8 (tagged 2026-06-19), the current stable release on the 6.x branch.
+
 | Aspect | Implementation | Why |
 |--------|----------------|-----|
 | Single Directory Components | `.component.yml` + Twig + CSS + JS in one directory | Drupal core feature (10.1+); automatic asset loading |

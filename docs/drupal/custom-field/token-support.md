@@ -1,6 +1,7 @@
 ---
-description: Token replacement for custom field values in Pathauto, Rules, and email templates with correct separator syntax.
-tldr: "You need to use custom field values in token replacement contexts (Pathauto, Rules, email templates)."
+description: "Token replacement for custom field values in Pathauto, Rules, and email templates with correct separator syntax."
+tldr: "Custom field tokens use the format [entity:field_name:column_name] -- sub-fields use a colon separator while extended properties use double-underscore inside the column name itself."
+drupal_version: "11.x"
 ---
 
 # Token Support
