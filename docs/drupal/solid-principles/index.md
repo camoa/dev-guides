@@ -1,5 +1,6 @@
 ---
 description: SOLID principles in Drupal 11 development - services, plugins, entities, forms, hooks, dependency injection
+tracks: []
 guide-meta:
   concepts:
     - Drupal SOLID

@@ -25,6 +25,12 @@ guide-meta:
     - drupal/blocks
   specializes: ""
   category: drupal
+tracks:
+  - project: drupal
+    channel: stable
+    declared: null
+    verified: 2026-02-14
+    note: core topic; states no version of its own and inherits the guides.yml core baseline
 ---
 
 # Drupal Render API

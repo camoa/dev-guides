@@ -1,5 +1,6 @@
 ---
 description: Figma MCP Server — design-to-code AI workflows for Claude Code, VS Code, Cursor, and Windsurf
+tracks: []
 guide-meta:
   concepts:
     - Figma MCP

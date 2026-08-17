@@ -1,5 +1,11 @@
 ---
 description: UI Skins — expose CSS custom properties and named theme variants as YAML plugins for site-builder configuration without theme forking.
+tracks:
+  - project: ui_skins
+    channel: stable
+    declared: null
+    note: no version stated in prose
+    verified: 2026-05-05
 guide-meta:
   concepts:
     - UI Skins

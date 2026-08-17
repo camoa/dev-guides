@@ -18,6 +18,12 @@ guide-meta:
     - drupal/seo-geo
   specializes: ""
   category: drupal
+tracks:
+  - project: klaro
+    channel: stable
+    declared: null
+    note: no version stated in prose; the 3.0.5 in these guides is klaro-js, the JavaScript library, not the Drupal module
+    verified: 2026-02-12
 ---
 
 # Klaro Cookie & Consent Management

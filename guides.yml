@@ -1,0 +1,22 @@
+# Repo-wide Drupal core baseline.
+#
+# The core version is declared once here instead of per-file because per-file
+# duplication has already failed in this repo: dry-principles has files
+# claiming 10.3 beside siblings claiming 11.x, js-development carries both
+# 10.x and 11.x, and config-management has 21 of 22 files with no version
+# claim at all. Those are not three separate mistakes — they are what happens
+# to one fact copied across 350 files with nothing comparing the copies.
+#
+# Contrib versions differ per topic and stay declared per topic, in each
+# topic's index.md frontmatter (`tracks:`). Core does not vary per topic, so
+# it is stated once here and every topic's `project: drupal` track inherits
+# it. See proposals/guide-staleness-convention.md for the full convention.
+#
+# `verified` is the date this baseline was last confirmed against
+# updates.drupal.org/release-history/drupal/current, branch-aware.
+
+core:
+  baseline: "11.4"
+  latest_stable: "11.4.5"
+  verified: 2026-08-16
+  supported_branches: ["10.6", "11.3", "11.4"]

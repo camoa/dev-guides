@@ -1,5 +1,10 @@
 ---
 description: Automated Testing Kit (ATK) — decision guides for installing, configuring, and extending this Drupal-aware E2E test catalog for Cypress and Playwright.
+tracks:
+  - project: automated_testing_kit
+    channel: stable
+    declared: "2.0.0"
+    verified: 2026-05-08
 guide-meta:
   concepts:
     - automated_testing_kit

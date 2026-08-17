@@ -20,6 +20,10 @@ guide-meta:
     - drupal/entities
   specializes: ""
   category: drupal
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-02-12
 ---
 
 # Drupal 7 to 11 Migration

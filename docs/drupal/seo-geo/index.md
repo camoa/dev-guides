@@ -1,5 +1,32 @@
 ---
 description: Drupal SEO & GEO — search engine optimization, structured data, meta tags, and generative engine optimization for Drupal 11
+tracks:
+  - project: metatag
+    channel: stable
+    declared: "2.2.0"
+    verified: 2026-03-07
+  - project: simple_sitemap
+    channel: stable
+    declared: "4.2.3"
+    verified: 2026-03-07
+  - project: pathauto
+    channel: stable
+    declared: "1.14"
+    verified: 2026-03-07
+  - project: redirect
+    channel: stable
+    declared: null
+    note: no version stated in prose
+    verified: 2026-03-07
+  - project: schema_metatag
+    channel: stable
+    declared: "3.0.4"
+    verified: 2026-03-07
+  - project: schemadotorg
+    channel: alpha
+    reason: project has never had a stable release
+    declared: "1.0.0-alpha37"
+    verified: 2026-03-07
 guide-meta:
   concepts:
     - SEO recipes

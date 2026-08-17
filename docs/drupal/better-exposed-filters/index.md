@@ -1,5 +1,11 @@
 ---
 description: Better Exposed Filters — replace Views exposed filter dropdowns with checkboxes, radio buttons, links, sliders, date pickers, and custom widgets
+tracks:
+  - project: better_exposed_filters
+    channel: stable
+    declared: null
+    note: no version stated in prose
+    verified: 2026-03-30
 guide-meta:
   concepts:
     - Better Exposed Filters

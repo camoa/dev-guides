@@ -1,5 +1,10 @@
 ---
 description: Drupal Canvas — decision guides for the React-based visual page builder using SDC and Code Components on Drupal 11.2+.
+tracks:
+  - project: canvas
+    channel: stable
+    declared: "1.7.1"
+    verified: 2026-07-02
 guide-meta:
   concepts:
     - Drupal Canvas

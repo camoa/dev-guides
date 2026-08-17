@@ -1,5 +1,9 @@
 ---
 description: Drupal JavaScript Development - library-based architecture, behaviors, and modern patterns
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-02-12
 guide-meta:
   concepts:
     - Drupal.behaviors

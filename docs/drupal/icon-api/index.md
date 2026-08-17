@@ -1,5 +1,9 @@
 ---
 description: Icon API - unified system for managing and rendering icons across Drupal 11.1+ sites
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-02-13
 guide-meta:
   concepts:
     - Icon API

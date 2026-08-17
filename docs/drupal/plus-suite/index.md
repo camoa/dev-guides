@@ -39,6 +39,11 @@ guide-meta:
     - drupal/recipes
   specializes: ""
   category: drupal
+tracks:
+  - project: plus_suite
+    channel: stable
+    declared: 1.1.x-dev
+    verified: 2026-04-08
 ---
 
 # Plus Suite

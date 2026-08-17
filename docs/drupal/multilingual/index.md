@@ -24,6 +24,10 @@ guide-meta:
     - drupal/caching
   specializes: ""
   category: drupal
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-02-16
 ---
 
 # Multilingual & Translation

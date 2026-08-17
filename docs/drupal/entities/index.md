@@ -1,5 +1,9 @@
 ---
 description: Drupal entities and fields — content types, field development, and entity patterns
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-07-02
 guide-meta:
   concepts:
     - content entities

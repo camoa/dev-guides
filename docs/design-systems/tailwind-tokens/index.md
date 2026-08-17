@@ -1,5 +1,11 @@
 ---
 description: Tailwind CSS 4 design tokens — decision guides for extraction, mapping, and multi-platform integration
+tracks:
+  - project: tailwindcss
+    registry: npm
+    channel: stable
+    declared: "4.x"
+    verified: 2026-05-05
 guide-meta:
   concepts:
     - design token extraction

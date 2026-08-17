@@ -1,5 +1,11 @@
 ---
 description: Drupal Group module 4.x — group types, roles, permissions, access control, membership, GroupRelationType plugins, and contrib integrations
+tracks:
+  - project: group
+    channel: alpha
+    reason: no stable release exists on the 4.0.x branch
+    declared: 4.0.0-alpha1
+    verified: 2026-05-20
 guide-meta:
   concepts:
     - Group module

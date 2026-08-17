@@ -1,5 +1,6 @@
 ---
 description: Interaction Craft — vanilla JS patterns for timing, keyboard accessibility, scroll, drag-and-drop, optimistic UI, touch, clipboard, forms, animations, and performance
+tracks: []
 guide-meta:
   concepts:
     - debounce throttle

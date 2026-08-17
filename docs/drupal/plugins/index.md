@@ -20,6 +20,10 @@ guide-meta:
     - drupal/blocks
   specializes: ""
   category: drupal
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-02-12
 ---
 
 # Plugin Architecture

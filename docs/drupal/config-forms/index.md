@@ -1,5 +1,9 @@
 ---
 description: Configuration Forms — choose form types, build admin interfaces, implement operations
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-02-12
 guide-meta:
   concepts:
     - ConfigFormBase

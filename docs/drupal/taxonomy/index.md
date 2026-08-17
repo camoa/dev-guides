@@ -1,5 +1,9 @@
 ---
 description: Drupal Taxonomy — vocabulary and term management, config-first development
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-02-14
 guide-meta:
   concepts:
     - taxonomy vocabulary

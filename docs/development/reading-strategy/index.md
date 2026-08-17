@@ -1,5 +1,6 @@
 ---
 description: Context-Efficient Reading Strategy — decide between grep-first, full-read, and subagent delegation based on task type
+tracks: []
 guide-meta:
   concepts:
     - reading strategy

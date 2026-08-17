@@ -1,5 +1,6 @@
 ---
 description: Accessibility guides — WCAG conformance patterns, ARIA, keyboard navigation, screen reader testing, forms, color contrast, and motion preferences.
+tracks: []
 guide-meta:
   concepts:
     - accessibility

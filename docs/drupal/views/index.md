@@ -1,5 +1,9 @@
 ---
 description: Drupal Views — query and display entity lists with UI-based configuration
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-02-19
 guide-meta:
   concepts:
     - Views configuration

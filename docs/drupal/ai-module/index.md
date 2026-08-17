@@ -1,5 +1,10 @@
 ---
 description: Drupal AI module — provider abstraction, AI operations, agents, automators, chatbot API, CKEditor, vector search/RAG, guardrails, and all 14 sub-modules (1.4.2 stable)
+tracks:
+  - project: ai
+    channel: stable
+    declared: "1.4.2"
+    verified: 2026-06-26
 guide-meta:
   concepts:
     - Drupal AI module

@@ -1,5 +1,9 @@
 ---
 description: Drupal security architecture, access control, XSS/CSRF/SQL injection prevention, authentication, and OWASP best practices.
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-02-14
 guide-meta:
   concepts:
     - Drupal access system

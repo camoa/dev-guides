@@ -1,5 +1,6 @@
 ---
 description: CSS decision guides — modern CSS features, visual effects, animations, and craft patterns
+tracks: []
 guide-meta:
   concepts:
     - CSS development

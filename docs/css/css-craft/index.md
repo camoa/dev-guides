@@ -1,5 +1,6 @@
 ---
 description: CSS Craft — motion tokens, micro-interactions, depth, entrance animations, visual hierarchy, performance, visual effects, container query craft, cinematic effects, scroll-snap carousels, hover effects, CSS shapes, motion path, scroll-aware components, CSS-only UI, and fluid typography
+tracks: []
 guide-meta:
   concepts:
     - motion tokens

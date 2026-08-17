@@ -1,5 +1,6 @@
 ---
 description: Performance guides — Core Web Vitals, LCP/INP/CLS optimization, resource loading, JS scheduling, service workers, and font performance.
+tracks: []
 guide-meta:
   concepts:
     - web performance

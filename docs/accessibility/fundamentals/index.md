@@ -1,5 +1,6 @@
 ---
 description: Accessibility Fundamentals — landmarks, ARIA, accessible names, keyboard, live regions, forms, media, color, motion, dialogs, metadata, and testing.
+tracks: []
 guide-meta:
   concepts:
     - accessibility

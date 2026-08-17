@@ -1,5 +1,11 @@
 ---
 description: Playwright for Visual Regression — decision guides for setup, screenshot APIs, browser projects, viewports, stability, determinism, and Drupal/DDEV integration.
+tracks:
+  - project: playwright
+    registry: npm
+    channel: stable
+    declared: "1.59.1"
+    verified: 2026-05-08
 guide-meta:
   concepts:
     - playwright

@@ -1,5 +1,11 @@
 ---
 description: AI Test Generation — decision guides for the plan-first workflow, test plan authoring, Playwright Test Agents, and avoiding the encode-current-behavior trap.
+tracks:
+  - project: playwright
+    registry: npm
+    channel: stable
+    declared: "1.56"
+    verified: 2026-06-10
 guide-meta:
   concepts:
     - AI test generation

@@ -1,5 +1,15 @@
 ---
 description: Design System to Radix SDC Mapping — atomic guides for implementing design systems with Drupal Radix and Single Directory Components
+tracks:
+  - project: radix
+    channel: stable
+    declared: "6.x"
+    verified: 2026-02-13
+  - project: bootstrap
+    registry: npm
+    channel: stable
+    declared: "5"
+    verified: 2026-02-13
 guide-meta:
   concepts:
     - Radix sub-theme

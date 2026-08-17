@@ -1,5 +1,6 @@
 ---
 description: Design system guides — recognition, Bootstrap mapping, Radix SDC implementation, Radix component reference, Tailwind CSS integration, design token extraction
+tracks: []
 guide-meta:
   concepts:
     - design system pipeline

@@ -31,6 +31,11 @@ guide-meta:
     - drupal/services
   specializes: ""
   category: drupal
+tracks:
+  - project: mailgun
+    channel: stable
+    declared: 2.1.x
+    verified: 2026-04-26
 ---
 
 # Mailgun

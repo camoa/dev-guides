@@ -1,5 +1,12 @@
 ---
 description: Visual regression workflow — decisions for designing, running, and maintaining a pixel-comparison test suite with Playwright.
+tracks:
+  - project: playwright
+    registry: npm
+    channel: stable
+    declared: null
+    note: no version stated in prose
+    verified: 2026-05-08
 guide-meta:
   concepts:
     - visual regression testing

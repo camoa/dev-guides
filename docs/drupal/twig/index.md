@@ -1,5 +1,9 @@
 ---
 description: Drupal Twig theming — template development, field access, preprocess functions, debugging, and contrib tools
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-04-16
 guide-meta:
   concepts:
     - Twig templates

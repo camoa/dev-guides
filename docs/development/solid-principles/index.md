@@ -1,5 +1,6 @@
 ---
 description: SOLID principles for object-oriented design — decision guides for SRP, OCP, LSP, ISP, and DIP with practical examples in PHP, TypeScript, Python, and Java.
+tracks: []
 guide-meta:
   concepts:
     - Single Responsibility Principle

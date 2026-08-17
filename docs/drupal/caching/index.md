@@ -1,5 +1,9 @@
 ---
 description: Drupal caching decision guides — cache metadata, backends, invalidation, and performance
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-02-14
 guide-meta:
   concepts:
     - cache tags

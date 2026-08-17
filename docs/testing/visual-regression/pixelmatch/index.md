@@ -1,5 +1,12 @@
 ---
 description: Pixelmatch — decision guides for understanding the algorithm, tuning thresholds, calling the API, reading PNGs, and deciding when to use alternatives.
+tracks:
+  - project: pixelmatch
+    registry: npm
+    channel: stable
+    declared: null
+    note: no version stated in prose
+    verified: 2026-05-08
 guide-meta:
   concepts:
     - pixelmatch

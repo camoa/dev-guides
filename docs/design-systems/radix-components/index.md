@@ -1,5 +1,10 @@
 ---
 description: Drupal Radix Components — Complete reference for all 57 Radix 6.x Single Directory Components
+tracks:
+  - project: radix
+    channel: stable
+    declared: "6.x"
+    verified: 2026-02-13
 guide-meta:
   concepts:
     - Radix 6.x SDC

@@ -1,5 +1,11 @@
 ---
 description: Drupal Custom Field module guides -- compound fields with multiple sub-fields stored in a single table for optimal performance.
+tracks:
+  - project: custom_field
+    channel: stable
+    declared: null
+    note: no version stated in prose
+    verified: 2026-07-02
 guide-meta:
   concepts:
     - Custom Field module

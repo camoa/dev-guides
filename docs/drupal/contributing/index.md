@@ -1,5 +1,6 @@
 ---
 description: Drupal contribution mechanics — three contribution workflows, drupalci pipeline, CI failure reproduction, coding standards, DDEV environment setup, project scaffolding, issue lifecycle, merge requests, RTBC etiquette, and module maintainership
+tracks: []
 guide-meta:
   concepts:
     - Drupal contribution

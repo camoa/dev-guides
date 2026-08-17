@@ -1,5 +1,9 @@
 ---
 description: Drupal editorial workflow — content roles and permissions, and the content_moderation state machine that moves content from draft to published.
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-07-03
 guide-meta:
   concepts:
     - editorial roles

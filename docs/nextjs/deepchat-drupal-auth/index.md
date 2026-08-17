@@ -1,5 +1,12 @@
 ---
 description: DeepChat + Drupal OAuth auth — architecture, CSRF lifecycle, configuration, pitfalls, and debugging
+tracks:
+  - project: deep-chat
+    registry: npm
+    channel: stable
+    declared: null
+    note: no version stated in prose
+    verified: 2026-02-20
 guide-meta:
   concepts:
     - DeepChat Drupal auth

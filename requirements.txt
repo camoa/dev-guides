@@ -2,3 +2,9 @@ mkdocs>=1.6,<2.0
 mkdocs-material>=9.5,<10.0
 mkdocs-llmstxt-md>=0.2
 mkdocs-awesome-nav>=3.3,<4.0
+
+# Imported directly by scripts/validate_recipes.py and
+# scripts/check_staleness.py. It currently arrives as a transitive mkdocs
+# dependency, which means a mkdocs release dropping it would break the scripts
+# with nothing in this file explaining why.
+PyYAML>=6.0

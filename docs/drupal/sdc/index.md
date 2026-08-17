@@ -1,5 +1,9 @@
 ---
 description: Single Directory Components (SDC) — component architecture, development patterns, and best practices
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-02-19
 guide-meta:
   concepts:
     - "*.component.yml"

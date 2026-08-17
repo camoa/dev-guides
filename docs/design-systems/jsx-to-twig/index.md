@@ -1,5 +1,6 @@
 ---
 description: JSX to Twig conversion patterns for React → Drupal SDC migration
+tracks: []
 guide-meta:
   concepts:
     - JSX to Twig

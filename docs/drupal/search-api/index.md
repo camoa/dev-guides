@@ -1,5 +1,15 @@
 ---
 description: Drupal Search API — decision guides for backends, indexing, processors, Views integration, Solr, facets, autocomplete, multilingual, decoupled search, and custom plugins
+tracks:
+  - project: search_api
+    channel: stable
+    declared: null
+    note: no version stated in prose
+    verified: 2026-03-30
+  - project: search_api_solr
+    channel: stable
+    declared: "4.3.x"
+    verified: 2026-03-30
 guide-meta:
   concepts:
     - Search API

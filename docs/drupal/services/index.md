@@ -1,5 +1,9 @@
 ---
 description: Drupal Services & Dependency Injection decision guides — atomic references for defining services, injection patterns, service tags, event subscribers, and container architecture.
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-02-14
 guide-meta:
   concepts:
     - services.yml

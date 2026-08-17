@@ -1,5 +1,9 @@
 ---
 description: Drupal Blocks — block plugins, derivatives, contexts, Layout Builder, render pipeline
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-02-19
 guide-meta:
   concepts:
     - block plugin

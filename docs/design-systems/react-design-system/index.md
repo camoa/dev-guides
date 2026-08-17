@@ -1,5 +1,16 @@
 ---
 description: React design system guides — component architecture, props patterns, composition, Tailwind, CVA variants, TypeScript, accessibility, Storybook, performance, testing
+tracks:
+  - project: react
+    registry: npm
+    channel: stable
+    declared: "19"
+    verified: 2026-02-19
+  - project: tailwindcss
+    registry: npm
+    channel: stable
+    declared: "4.x"
+    verified: 2026-02-19
 guide-meta:
   concepts:
     - React component architecture

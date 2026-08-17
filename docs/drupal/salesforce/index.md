@@ -1,5 +1,11 @@
 ---
 description: Drupal Salesforce Suite — bidirectional sync between Drupal entities and Salesforce objects, authentication, mapping, events, and Drush operations
+tracks:
+  - project: salesforce
+    channel: stable
+    declared: null
+    note: no version stated in prose
+    verified: 2026-02-20
 guide-meta:
   concepts:
     - Salesforce Suite

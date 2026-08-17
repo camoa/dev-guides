@@ -1,5 +1,10 @@
 ---
 description: Drupal Facets — decision guides for faceted search with Search API, widgets, processors, URL handling, SEO/bot protection, and custom plugin development
+tracks:
+  - project: facets
+    channel: stable
+    declared: "3.x"
+    verified: 2026-03-30
 guide-meta:
   concepts:
     - Facets

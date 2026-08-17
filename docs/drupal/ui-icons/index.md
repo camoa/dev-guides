@@ -1,5 +1,10 @@
 ---
 description: UI Icons module — icon pack discovery, picker integrations (Field API, CKEditor 5, UI Patterns, menu, media), and Twig rendering in Drupal 11.1+.
+tracks:
+  - project: ui_icons
+    channel: stable
+    declared: "1.1.x"
+    verified: 2026-05-05
 guide-meta:
   concepts:
     - UI Icons
@@ -12,7 +17,7 @@ guide-meta:
     - ui_icons_library
     - ui_icons_font
     - icon pack
-    - *.icons.yml
+    - "*.icons.yml"
     - icon_preview
     - icon_autocomplete
     - icon_picker
@@ -41,6 +46,11 @@ guide-meta:
     - drupal/ui-suite-daisyui
   specializes: ""
   category: drupal
+tracks:
+  - project: ui_icons
+    channel: stable
+    declared: 1.1.x
+    verified: 2026-05-05
 ---
 
 # UI Icons

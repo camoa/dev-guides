@@ -1,5 +1,12 @@
 ---
 description: Playwright HTML Report — decision guides for configuring, viewing, navigating, and sharing the VR triage UI.
+tracks:
+  - project: playwright
+    registry: npm
+    channel: stable
+    declared: null
+    note: no version stated in prose
+    verified: 2026-05-08
 guide-meta:
   concepts:
     - playwright html report

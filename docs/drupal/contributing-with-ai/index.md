@@ -1,5 +1,6 @@
 ---
 description: Contributing to Drupal with AI — disclosure requirements, merge request workflow, coding standards, human review, and responsible AI-assisted development practices
+tracks: []
 guide-meta:
   concepts:
     - AI contribution

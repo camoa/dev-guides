@@ -1,5 +1,6 @@
 ---
 description: JavaScript decision guides — interaction patterns, event handling, and CSS-JS coordination
+tracks: []
 guide-meta:
   concepts:
     - JavaScript development

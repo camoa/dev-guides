@@ -1,5 +1,11 @@
 ---
 description: Drupal Configuration Management — the Config API, simple config vs config entities, schema, storage, synchronization, overrides, Config Split, dependencies, and deployment workflows.
+tracks:
+  - project: config_split
+    channel: stable
+    declared: null
+    note: no version stated in prose
+    verified: 2026-02-14
 guide-meta:
   concepts:
     - Config API

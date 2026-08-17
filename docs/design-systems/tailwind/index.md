@@ -1,5 +1,11 @@
 ---
 description: Tailwind CSS design system guides — v3/v4 migration, configuration, tokens, variants, responsive, dark mode, CVA, tailwind-merge, performance, accessibility
+tracks:
+  - project: tailwindcss
+    registry: npm
+    channel: stable
+    declared: "4.x"
+    verified: 2026-02-19
 guide-meta:
   concepts:
     - Tailwind CSS v4

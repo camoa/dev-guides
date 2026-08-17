@@ -20,6 +20,10 @@ guide-meta:
     - drupal/services
   specializes: ""
   category: drupal
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-02-12
 ---
 
 # Drupal Routing

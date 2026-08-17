@@ -1,5 +1,6 @@
 ---
 description: GitHub Actions for Drupal — automated CI/CD workflows for testing, building, and deploying
+tracks: []
 guide-meta:
   concepts:
     - GitHub Actions

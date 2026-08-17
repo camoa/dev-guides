@@ -1,5 +1,10 @@
 ---
 description: ECA 3.1 (Event-Condition-Action) plugin development — create custom actions, events, and conditions for Drupal ^11.3 / ^12.0
+tracks:
+  - project: eca
+    channel: stable
+    declared: "3.1"
+    verified: 2026-05-20
 guide-meta:
   concepts:
     - ECA module

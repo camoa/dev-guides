@@ -1,5 +1,28 @@
 ---
 description: UI Suite DaisyUI guides — DaisyUI 5 theme integration with Drupal, 51 SDC components, UI Patterns/Styles/Skins, Tailwind 4, starterkit sub-theming
+tracks:
+  - project: ui_suite_daisyui
+    channel: alpha
+    reason: no stable release exists; 5.0.x is alpha-only
+    declared: "5.0.0-alpha6"
+    verified: 2026-06-24
+  - project: ui_patterns
+    channel: stable
+    declared: "2.0.14"
+    verified: 2026-06-24
+  - project: ui_styles
+    channel: stable
+    declared: "8.x-1.19"
+    verified: 2026-06-24
+  - project: ui_skins
+    channel: stable
+    declared: null
+    note: the prose states a floor (`ui_skins` 1.1+), not a documented version; 1.1.0-alpha5 in sources-maintenance.md is the version read off a local install. drupal/ui-skins owns this project's version claim and also states none
+    verified: 2026-06-24
+  - project: ui_icons
+    channel: stable
+    declared: "1.1.x"
+    verified: 2026-06-24
 guide-meta:
   concepts:
     - UI Suite DaisyUI
