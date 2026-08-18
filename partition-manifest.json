@@ -222,7 +222,7 @@
     "guides_extracted": 16
   },
   "design-systems/radix-components": {
-    "source_hash": "90773f4c8367579f17e41481ed8f23f177ebf4fe3cc06f54f18cc1af2e4f0ec4",
+    "source_hash": "535befb4b9019ab7ffb3264eba0d62d1c682c430411f6dc45e089d04ce86b7ab",
     "partitioned": "2026-08-17",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 14

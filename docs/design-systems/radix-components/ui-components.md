@@ -1,5 +1,5 @@
 ---
-description: Components for interactive elements, user feedback, and visual indicators
+description: "Components for interactive elements, user feedback, and visual indicators"
 tldr: "Components for interactive elements, user feedback, and visual indicators. Use these to provide contextual information, loading states, and user interaction controls."
 ---
 
@@ -9,18 +9,16 @@ tldr: "Components for interactive elements, user feedback, and visual indicators
 
 > Components for interactive elements, user feedback, and visual indicators. Use these to provide contextual information, loading states, and user interaction controls.
 
-Components for interactive elements, user feedback, and visual indicators. Use these to provide contextual information, loading states, and user interaction controls.
+## Items
 
-### Items
-
-#### alert
+### alert
 **Description:** Provide contextual feedback messages for typical user actions with the handful of available and flexible alert messages.
 **Status:** stable
 **Props:**
 | Prop | Type | Default | Notes |
 |------|------|---------|-------|
 | `type` | string | primary | The type of the alert (primary, secondary, success, danger, warning, info, light, dark). **(required)** |
-| `dismissible` | boolean |  | Enable close button for dismissing alert |
+| `dismissible` | boolean | true | Close button for dismissing the alert. On by default — omitting it still adds `.alert-dismissible` and a close button; pass `false` for a non-dismissible alert |
 | `heading` | string |  | Optional heading text |
 | `alert_utility_classes` | array | [] | An array of utility classes. Use to add extra Bootstrap utility classes or custom CSS classes over to this component. |
 | `attributes` | Drupal\Core\Template\Attribute |  | HTML attributes for the alert element |
@@ -48,7 +46,7 @@ Components for interactive elements, user feedback, and visual indicators. Use t
 - For dismissible alerts, Bootstrap JS must be initialized
 - Content slot overrides the `content` prop if both are provided
 
-#### badge
+### badge
 **Description:** Documentation and examples for badges, our small count and labeling component.
 **Status:** experimental
 **Props:**
@@ -56,7 +54,7 @@ Components for interactive elements, user feedback, and visual indicators. Use t
 |------|------|---------|-------|
 | `badge_html_tag` | string | span | The HTML tag to use for the badge. Enum: `span, div, a` |
 | `badge_url` | string |  | URL link for Badge when the HTML tag is an anchor link. |
-| `color` | string | secondary | Set a background-color with contrasting foreground color. Enum: `primary, secondary, success, info, warning, danger, light, dark` |
+| `color` | string | none | Set a background-color with contrasting foreground color, emitted as `.text-bg-{color}`. Enum: `primary, secondary, success, info, warning, danger, light, dark`. The YAML says `secondary`, but `badge.twig` emits no colour class at all when `color` is omitted — pass it explicitly |
 | `badge_utility_classes` | array | [] | An array of utility classes. Use to add extra Bootstrap utility classes or custom CSS classes over to this component. |
 | `badge_attributes` | Drupal\Core\Template\Attribute |  | HTML attributes for the badge element |
 
@@ -82,7 +80,7 @@ Components for interactive elements, user feedback, and visual indicators. Use t
 - `.text-bg-{color}` classes replaced older `.text-{color}` and `.bg-{color}` pattern
 - Badge content should be brief - typically numbers or short text
 
-#### button
+### button
 **Description:** Use Bootstrap custom button styles for actions in forms, dialogs, and more with support for multiple sizes, states, and more.
 **Status:** experimental
 **Props:**
@@ -119,7 +117,7 @@ Components for interactive elements, user feedback, and visual indicators. Use t
 - For disabled anchor buttons, add `aria-disabled="true"` via `button_attributes`
 - Link style buttons (`color: 'link'`) don't have solid backgrounds but still need proper contrast
 
-#### button-group
+### button-group
 **Description:** Creates a group of buttons or inputs.
 **Status:** experimental
 **Props:**
@@ -130,13 +128,13 @@ Components for interactive elements, user feedback, and visual indicators. Use t
 | `aria_label` | string |  | The aria-label attribute of the button group. |
 | `toolbar` | boolean | false | Whether to render the button group as a toolbar. |
 | `toolbar_aria_label` | string |  | The aria-label attribute of the toolbar. |
-| `items` | array | [] | An array of buttons or inputs. |
+| `items` | array | [] | An **array of groups**, each group an array of button/input prop hashes. Each group renders as one `.btn-group` wrapper. |
 | `button_group_attribute` | Drupal\Core\Template\Attribute |  | HTML attributes for the button group |
 
 **Slots:**
 | Slot | Description |
 |------|-------------|
-| `content` | Content text for the button group. |
+| `content` | Declared in the YAML but never printed by `button-group.twig` — dead. All content comes from `items`. |
 
 **Usage Example:**
 ```twig
@@ -145,18 +143,21 @@ Components for interactive elements, user feedback, and visual indicators. Use t
     size: 'lg',
     aria_label: 'Pagination controls',
     items: [
-      { content: 'Previous', color: 'primary' },
-      { content: 'Next', color: 'primary' }
+      [
+        { content: 'Previous', color: 'primary' },
+        { content: 'Next', color: 'primary' }
+      ]
     ]
   }
 %}
 ```
 **Gotchas:**
+- **`items` is a list of lists, not a flat list of buttons.** `button-group.twig` loops the outer array to emit one `.btn-group` div per entry, then loops the inner array to include `radix:button` (or `radix:input` when the item has `type: 'input'`). A flat array of button hashes renders nothing usable — the inner loop iterates the hash's own values. Use a second set of brackets even for a single group.
+- Each extra top-level entry is a second `.btn-group`; that is how you build a toolbar of groups
 - `aria_label` is required for accessibility when using button groups
 - For toolbars containing multiple button groups, set `toolbar: true` and provide `toolbar_aria_label`
-- Items structure depends on content - use content slot for complex layouts
 
-#### close-button
+### close-button
 **Description:** A generic close button for dismissing content like modals and alerts.
 **Status:** experimental
 **Props:**
@@ -164,6 +165,8 @@ Components for interactive elements, user feedback, and visual indicators. Use t
 |------|------|---------|-------|
 | `size` | string |  | Bootstrap button size class (btn-sm, btn-lg) |
 | `disabled` | boolean | false | Disabled button |
+| `close_button_attributes` | Drupal\Core\Template\Attribute |  | Attributes for the `<button>` (`close-button.twig:19`). This is where `data-bs-dismiss` goes — plain `attributes` is not read |
+| `close_button_utility_classes` | array | [] | Utility classes merged onto the button (`close-button.twig:27`) |
 
 **Slots:**
 No slots defined.
@@ -184,7 +187,7 @@ No slots defined.
 - Bootstrap JS must be initialized for dismiss functionality
 - Close button has built-in accessibility markup (aria-label="Close")
 
-#### dropdown
+### dropdown
 **Description:** Toggle contextual overlays for displaying lists of links and more with the Bootstrap dropdown plugin.
 **Status:** experimental
 **Props:**
@@ -193,15 +196,15 @@ No slots defined.
 | `items` | array |  | Menu Items |
 | `dropdown_button_content` | string |  | Dropdown button content |
 | `dropdown_button_attributes` | Drupal\Core\Template\Attribute |  | HTML attributes for dropdown button |
-| `dropdown_button_html_tag` | string | button | The HTML tag to use for the button. Enum: `button, a` |
+| `dropdown_button_html_tag` | string | button, or a when `dropdown_button_url` is set | The HTML tag to use for the button. Enum: `button, a` |
 | `dropdown_button_url` | string |  | Dropdown button URL |
-| `dropdown_size` | string |  | Bootstrap button size. Enum: `null, btn-sm, btn-lg` |
+| `dropdown_size` | string | btn-lg | Bootstrap button size. Enum: `null, btn-sm, btn-lg`. Omitting it renders a **large** button — pass `btn-sm` or your own size explicitly |
 | `split_button` | boolean | false | Split button style |
 | `dropdown_utility_classes` | array |  | Dropdown utility classes |
 | `dropdown_item_utility_classes` | array |  | Dropdown item utility classes |
 | `dropdown_button_utility_classes` | array |  | Dropdown button utility classes |
 | `dropdown_menu_utility_classes` | array |  | Dropdown menu utility classes |
-| `dropdown_color` | string |  | Bootstrap button color. Enum: `primary, secondary, success, danger, warning, info, dark, light, link` |
+| `dropdown_color` | string | primary | Bootstrap button color. Enum: `primary, secondary, success, danger, warning, info, dark, light, link`. Omitting it renders `.btn-primary` |
 | `outline` | boolean | false | Use outline style for button |
 | `disabled` | boolean | false | Disabled button |
 | `dropdown_item_attributes` | Drupal\Core\Template\Attribute |  | HTML attributes for dropdown items |
@@ -234,7 +237,7 @@ No slots defined.
 - When using `split_button: true`, dropdown button is split from main action button
 - Items need proper structure with `title` and `url` keys
 
-#### dropdown-menu
+### dropdown-menu
 **Description:** A dropdown menu component. This component is used to create a dropdown menu.
 **Status:** experimental
 **Props:**
@@ -266,7 +269,7 @@ No slots defined.
 - `items` must be properly structured menu array (typically `item.below` from Drupal menu)
 - Direction controls (dropstart/dropend) affect where submenu appears
 
-#### progress
+### progress
 **Description:** Progress components are built with two HTML elements, some CSS to set the width, and a few attributes.
 **Status:** experimental
 **Props:**
@@ -306,7 +309,7 @@ No slots defined.
 - Animated stripes only work when `striped: true` and `animated: true` are both set
 - For stacked progress bars, use nested includes with different colors
 
-#### spinner
+### spinner
 **Description:** Indicate the loading state of a component or page with Bootstrap spinners, built entirely with HTML, CSS, and no JavaScript.
 **Status:** experimental
 **Props:**
@@ -318,8 +321,8 @@ No slots defined.
 | `size` | string |  | Make a smaller spinner. Enum: `sm` |
 | `hidden_status` | boolean | true | Hidden spinner status message. |
 | `spinner_utility_classes` | array | [] | An array of utility classes that can be used to add extra Bootstrap utility classes or custom classes to this component. |
-| `spinner_attributes` | Drupal\Core\Template\Attribute |  | A list of HTML attributes for the Spinner element. |
-| `spinner_status_attributes` | Drupal\Core\Template\Attribute |  | A list of HTML attributes for the Spinner status element. |
+| `spinner_attributes` | Drupal\Core\Template\Attribute |  | **Dead — not honoured by `spinner.twig`.** Line 49 unconditionally reassigns it to `create_attribute()` (then adds `role`/`aria-hidden`); whatever you pass is discarded. Use `spinner_utility_classes` for classes. |
+| `spinner_status_attributes` | Drupal\Core\Template\Attribute |  | **Dead — not honoured by `spinner.twig`.** Line 50 unconditionally reassigns it to `create_attribute()`. Use `spinner_status_utility_classes` for classes. |
 
 **Slots:**
 | Slot | Description |
@@ -344,7 +347,7 @@ No slots defined.
 - Status text should always be provided via content slot for screen readers
 - Use `hidden_status: false` to show loading text visually, or `true` to hide it (but keep for accessibility)
 
-#### toasts
+### toasts
 **Description:** Toasts component, see Bootstrap Documentation: https://getbootstrap.com/docs/5.3/components/toasts/
 **Status:** experimental
 **Props:**
@@ -391,7 +394,7 @@ No slots defined.
 - Positioning via `container_classes` (e.g., `position-fixed bottom-0 end-0 p-3`)
 - Each toast in array needs proper structure with header/body objects
 
-#### tooltips
+### tooltips
 **Description:** Documentation-only component (no component.yml or twig template). See Bootstrap Tooltips Documentation: https://getbootstrap.com/docs/5.3/components/tooltips/
 **Status:** Not implemented as SDC
 **Props:**
@@ -417,14 +420,14 @@ N/A
 - Radix does not provide a Twig SDC wrapper for tooltips - use Bootstrap's native data attributes
 - Tooltips on disabled elements require wrapper element
 
-### Common Mistakes
+## Common Mistakes
 - Forgetting to initialize Bootstrap JS for interactive components (dropdowns, toasts, tooltips)
 - Using dismissible alerts/modals without `data-bs-dismiss` attribute on close buttons
 - Not providing required accessibility attributes (`aria-label` for button groups, spinner status text)
 - Using anchor button styles without providing `url` prop
 - Assuming tooltips work without JS initialization
 
-### See Also
+## See Also
 - [Bootstrap Components Documentation](https://getbootstrap.com/docs/5.3/components/)
 - Design System Radix SDC Mapping Guide (Section 7: Form Controls & Interactive Elements)
 - Drupal JS Development Guide (for initializing Bootstrap components)
