@@ -1,5 +1,5 @@
 ---
-description: Architecture decision guide — when to choose Drupal Canvas page builder vs standard SDC theming, Layout Builder, or content types.
+description: "Architecture decision guide — when to choose Drupal Canvas page builder vs standard SDC theming, Layout Builder, or content types."
 tldr: "Use this when deciding whether to build a site with Drupal Canvas or with standard Drupal theming using SDC components, Layout Builder, or content types with Twig templates. Make this decision at project start."
 drupal_version: "11.x"
 ---

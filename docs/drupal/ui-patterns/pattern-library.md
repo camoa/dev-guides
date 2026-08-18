@@ -25,7 +25,7 @@ Provides a browsable component library at `/admin/appearance/ui/components` wher
 
 Stories are YAML files that define example renderings of a component. They are discovered by the `StoryPluginManager`:
 
-**File naming:** `{component-name}.{story-id}.stories.yml`
+**File naming:** `{component-name}.{story-id}.story.yml` — singular `story`. `DirectoryWithMetadataDiscovery::getDirectoryIterator()` matches `/^([a-z0-9_-])+\.([a-z0-9_-])+\.story\.yml$/i`. A file named `.stories.yml` is never discovered: no error, no log entry, the story just never appears in the library. (The module's own `StoryPluginManager` docblock still says `.stories.yml` — it is wrong.)
 **Location:** Same directory as the component (inside `components/`)
 
 ```yaml

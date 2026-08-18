@@ -57,17 +57,20 @@ Schema hierarchy:
 | `url` | `ui_patterns_source.url` | `value: 'https://...'` | URL input |
 | `path` | `ui_patterns_source.path` | `value: ...` | Current path (ignore type) |
 | `attributes` | `ui_patterns_source.attributes` | `value: 'string'` | HTML attributes |
-| `attributes_class` | `ui_patterns_source.attributes_class` | `value: 'string'` | CSS class string |
+| `class_attribute` | (none that resolves — see note) | `value: 'string'` | CSS class string. Deprecated; use `attributes` |
 | `list_textarea` | `ui_patterns_source.list_textarea` | `value: 'string'` | Multi-line list |
 | `wysiwyg` | `ui_patterns_source.wysiwyg` | `value: {value: 'html', format: 'format_id'}` | Rich text (text_format) |
 | `component` | `ui_patterns_source.component` | `component: {ui_patterns_component}` | Nested SDC component |
 | `menu` | `ui_patterns_source.menu` | `menu: 'menu_name', level: '1', depth: '2'` | Menu tree for links props |
 | `token` | `ui_patterns_source.token` | `value: '[node:title]'` | Token replacement |
-| `entity_link` | `ui_patterns_source.entity_link` | `template: 'canonical'` | Entity URL for url/links props |
-| `field_property:*:*:*` | `ui_patterns_source.field_property` | `type: 'value'` | Entity field property value |
+| `entity_link` | `ui_patterns_source.entity_link` | `template: 'canonical'` | Entity URL. `url` props only, and the source ID has no entity-type suffix |
+| `field_property:{entity_type}:{field}:{property}` | `ui_patterns_source.field_property:*:*:*` | `type: 'value'` | Entity field property value (no bundle segment) |
+| `field_formatter:{entity_type}:{bundle}:{field}` | `ui_patterns_source.field_formatter:*:*:*` | `type: 'formatter_id'`, `settings: {...}`, `third_party_settings: {...}` | Field rendered through a formatter (bundle segment required; empty for base fields) |
 | `block` | `ui_patterns_source.block` | (ignore schema -- dynamic) | Drupal block in slot |
-| `entity_field` | `ui_patterns_source.entity_field` | (ignore schema -- dynamic) | Full field render in slot |
+| `entity_field` | `ui_patterns_source.entity_field` | (ignore schema -- dynamic) | Context switcher to a field on the same entity (no `prop_types`, so offered everywhere) |
 | `entity_reference` | `ui_patterns_source.entity_reference` | (ignore schema -- dynamic) | Context switcher (no value) |
+
+**Note on `class_attribute` / `attributes_class`.** The schema file declares `ui_patterns_source.attributes_class`, but the plugin ID minted by `ClassAttributeWidget` is `class_attribute`. Since `ui_patterns.schema.yml` resolves source config as `ui_patterns_source.[%parent.source_id]`, the `attributes_class` key can never match anything — it is an upstream naming mismatch, not an alternate ID. Write `source_id: class_attribute` (which then has no schema), or better, use `attributes`.
 
 ## Integration Config File Locations
 

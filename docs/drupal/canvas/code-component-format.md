@@ -1,5 +1,5 @@
 ---
-description: File structure, component.yml schema, JSX patterns, and allowed package imports for Canvas Code Components (React/Preact).
+description: "File structure, component.yml schema, JSX patterns, and allowed package imports for Canvas Code Components (React/Preact)."
 tldr: "Use Code Components when you need browser-rendered React/Preact with interactive state, dynamic behavior, or Tailwind CSS styling without a separate Drupal theme build. Use SDC components when you need server-side Drupal field integration."
 drupal_version: "11.x"
 ---
@@ -92,28 +92,48 @@ export default function HeroBanner({ headline, body, ctaLabel, ctaUrl, badge }) 
 
 **Critical rules:**
 1. **Default export only** — named exports are not allowed and will cause errors
-2. **Preact under the hood** — Canvas uses Preact with the React compatibility layer; `react`, `react-dom`, `react-dom/client` are all mapped to `preact/compat`
+2. **Preact under the hood** — Canvas uses Preact with the React compatibility layer; the import map aliases `react`, `react-dom`, and `react-dom/client` onto Preact's compat build. Import `react`, not `preact/compat` — the latter is not in the map
 3. **Tailwind CSS 4 is available globally** — Tailwind utility classes work without any build configuration
 4. **Props arrive as component parameters** — same names as defined in `component.yml`
 5. **Slots arrive as React children** — a slot named `badge` in YAML becomes a `badge` prop containing renderable content
 
-**Allowed package imports:**
+**Allowed package imports** — the complete base import map (bare specifiers that resolve without any build step):
 
 | Import | Notes |
 |---|---|
-| `preact` | Preact core — use instead of React |
-| `preact/hooks` | React-equivalent hooks (useState, useEffect, etc.) |
-| `preact/compat` | React compatibility layer (mapped from `react`) |
-| `react` | Mapped to `preact/compat` |
-| `react-dom` | Mapped to `preact/compat` |
-| `drupal-canvas` | Canvas utilities and base components |
+| `preact` | Preact core |
+| `preact/hooks` | `useState`, `useEffect`, … |
+| `react` | Aliased to Preact's compat build |
+| `react-dom` | Aliased to Preact's compat build |
+| `react-dom/client` | Aliased to Preact's compat build |
+| `react/jsx-runtime` | Automatic JSX runtime |
+| `clsx` | Class-name joining |
+| `class-variance-authority` | Variant-based class composition |
+| `tailwind-merge` | Tailwind class conflict resolution |
+| `swr` | Data fetching / caching hooks |
+| `drupal-jsonapi-params` | JSON:API query building |
+| `@drupal-api-client/json-api-client` | JSON:API client (prefer `JsonApiClient` from `drupal-canvas`) |
+| `@tailwindcss/typography` | Prose styles |
+| `drupal-canvas` | Canvas runtime: `Image`, `FormattedText`, `JsonApiClient`, utils |
 
-Third-party npm packages are NOT importable by default. Canvas issue #3500761 tracks expanding this.
+**`preact/compat` is not in the map.** `react` and `react-dom` are *aliased to* Preact's compat build, but `import … from 'preact/compat'` does not resolve — import `react` instead.
+
+Four legacy specifiers — `@/lib/FormattedText`, `@/lib/utils`, `@/lib/jsonapi-utils`, `@/lib/drupal-utils` — are still in the map for backward compatibility but are **deprecated and reserved**: their contents moved into `drupal-canvas`, and Canvas's ESLint config errors (with an autofix) if you import them. You cannot use those four paths for your own files. `next-image-standalone` is likewise deprecated in favour of `Image` from `drupal-canvas`.
+
+**Third-party npm packages: it depends which path you are on.**
+
+- **In-browser code editor** — you get the base import map and nothing else. An arbitrary `import _ from 'lodash'` will not resolve
+- **CLI (`@drupal-canvas/cli`)** — third-party packages *are* supported. `canvas build` walks your imports, bundles anything it classifies as third-party into a vendor bundle, and `canvas push` writes those bundles into the site's global asset library, appending them to the runtime import map (overriding same-named base entries). So a package installed in your codebase and imported from a component works in production after a push
+
+**Your own shared code** uses the `@/` alias, rooted at `aliasBaseDir` from `canvas.config.json`. Relative `./` and `../` JS/TS *module* imports are **not** supported — use `@/` (relative *asset* imports — images, SVG, fonts — are fine). Font packages (`@fontsource/*`) and CSS side-effect imports are rejected outright.
 
 ## Common Mistakes
 
 - **Wrong**: Named exports (`export function MyComponent`) → **Right**: Canvas requires `export default`
-- **Wrong**: Importing arbitrary npm packages (`import _ from 'lodash'`) → **Right**: Only allowed packages work; others silently fail or error
+- **Wrong**: Importing `preact/compat` → **Right**: not in the import map; import `react` instead
+- **Wrong**: Importing an arbitrary npm package while working in the **in-browser** editor → **Right**: only the base import map resolves there. Through the CLI, install it and let `build`/`push` bundle it
+- **Wrong**: Using `./` or `../` to import a sibling helper → **Right**: Canvas rejects relative module imports; use the `@/` alias
+- **Wrong**: Writing your own file at `@/lib/utils` (or the other three reserved `@/lib/*` paths) → **Right**: Canvas owns those specifiers
 - **Wrong**: Server-side expectations — Code Components render only in the browser → **Right**: No PHP/Drupal preprocess available
 - **Wrong**: Forgetting that slots are renderable content, not strings → **Right**: Render `{badge}` directly, not `{badge.toString()}`
 

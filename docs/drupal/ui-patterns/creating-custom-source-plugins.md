@@ -69,6 +69,7 @@ For sources that pull data from Drupal APIs, extend `SourcePluginBase`:
 
 namespace Drupal\my_module\Plugin\UiPatterns\Source;
 
+use Drupal\Core\Plugin\Context\ContextDefinition;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\ui_patterns\Attribute\Source;
 use Drupal\ui_patterns\SourcePluginBase;
@@ -78,9 +79,14 @@ use Drupal\ui_patterns\SourcePluginBase;
   label: new TranslatableMarkup('Created Date'),
   description: new TranslatableMarkup('Entity creation date.'),
   prop_types: ['string'],
-  context_requirements: ['entity'],
+  // Entity dependency is a context DEFINITION, not a context requirement.
+  // Definitions must be ContextDefinition objects, never arrays.
   context_definitions: [
-    'entity' => ['type' => 'entity']
+    'entity' => new ContextDefinition(
+      'entity',
+      label: new TranslatableMarkup('Entity'),
+      required: TRUE
+    ),
   ]
 )]
 class EntityCreatedDateSource extends SourcePluginBase {
@@ -104,12 +110,19 @@ class EntityCreatedDateSource extends SourcePluginBase {
 | `id` | string | Unique plugin ID |
 | `label` | TranslatableMarkup | Human-readable name |
 | `description` | TranslatableMarkup | Form description |
-| `prop_types` | array | Which prop types this source serves (e.g., `['string', 'url']`) |
-| `tags` | array | Categorization tags (`widget`, `widget:dismissible`) |
-| `context_requirements` | array | Required context keys (`entity`, `field_granularity:item`) |
-| `context_definitions` | array | Plugin context definitions for dependency injection |
+| `no_ui` | bool | Since 2.0.16+. Hides the source from the component configuration form; it stays usable programmatically |
+| `prop_types` | array | Which prop types this source serves (e.g., `['string', 'url']`). **Omit it and the source matches every prop type** |
+| `tags` | array | Categorization tags. Use the `SourceTags` enum (2.0.16+): `Widget`, `WidgetDismissible`, `ContextSwitcher`, `Field`, `EntityReferenced` |
+| `context_requirements` | array | The rendering *situation* the source needs. Only these five are ever satisfied: `field_granularity:item`, `field_granularity:items`, `field_formatter`, `views:row`, `views:style` |
+| `context_definitions` | array | `ContextDefinition` **objects**, keyed by context name. This is where an entity dependency belongs |
 | `deriver` | string | Deriver class for creating multiple derivatives |
 | `metadata` | array | Arbitrary metadata accessible via `getCustomPluginMetadata()` |
+
+`no_ui` is declared as the **fourth positional parameter** of `#[Source]`, ahead of `prop_types`. Always pass source attribute arguments by name.
+
+#### `context_requirements` is not "what data do I need"
+
+`SourcePluginManager::processDefinition()` converts each `context_requirements` entry into a `RequirementsContextDefinition` that must be satisfied by a `context_requirements` context supplied at render time. The nine `RequirementsContext::addToContext()` call sites in the module supply only the five strings listed above. `context_requirements: ['entity']` compiles cleanly, produces no error, and yields a source that appears in **no** dropdown anywhere — the hardest possible thing to debug. Declare the entity through `context_definitions` instead, and read it with `$this->getContextValue('entity')`.
 
 ## Key Methods to Implement
 
@@ -140,8 +153,9 @@ The deriver creates plugin definitions like `my_field_source:node:article:body`,
 
 | Mistake | Why It Is Wrong |
 |---|---|
-| Not declaring `prop_types` | Without `prop_types`, the source matches all prop types. This clutters the source selector for every prop. Always be explicit. |
-| Forgetting `context_requirements` for entity-dependent sources | The source will appear in contexts where it cannot function (e.g., in a block without entity context), causing errors when it tries to access missing context. |
+| Not declaring `prop_types` | `filterDefinitionsByPropType()` only filters when the array is non-empty, so an omitted `prop_types` makes the source match every prop type. That is deliberate for context switchers (`entity_field`, `entity_reference`); for anything else it clutters the selector on every prop. Be explicit. |
+| Using `context_requirements: ['entity']` to declare an entity dependency | `context_requirements` names a rendering situation (field formatter, Views row, field granularity), and `entity` is never one of them. The source silently disappears from every form. Declare `context_definitions: ['entity' => new ContextDefinition('entity', required: TRUE)]` instead — `ComponentElementBuilder::buildSource()` catches the resulting `ContextException` and skips the prop when the context is absent. |
+| Passing arrays as `context_definitions` | Core's `ContextHandler` calls methods such as `isRequired()` on each definition. An array fatals the first time a component form builds its source list. Every shipped source passes `new ContextDefinition(...)`. |
 | Returning render arrays from `getPropValue()` for non-slot props | Props expect scalar/structured data matching their JSON Schema type. Render arrays are only valid for slot prop types. |
 | Not calling `$this->replaceTokens()` for string values | If your source value may contain tokens, call `$this->replaceTokens($value)` to process them. The base class provides token support. |
 

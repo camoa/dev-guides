@@ -26,12 +26,15 @@ Drupal\ui_patterns\ComponentPluginManager:
 Via `hook_element_info_alter()`, two `#pre_render` callbacks are prepended to the `component` render element:
 
 ```php
-// ui_patterns.module
-$types['component']['#pre_render'][] = 'ui_patterns.component_element_builder:build';
-$types['component']['#pre_render'][] = 'ui_patterns.component_element_alter:alter';
+// ui_patterns.module — hook_element_info_alter()
+// Note array_unshift, and note the reversed call order: the alter callback is
+// pushed to the front first, then the builder is pushed in front of it, so the
+// final order is [builder, alter, ...core].
+array_unshift($types['component']['#pre_render'], 'ui_patterns.component_element_alter:alter');
+array_unshift($types['component']['#pre_render'], 'ui_patterns.component_element_builder:build');
 ```
 
-These process `#ui_patterns` configuration into `#props` and `#slots` before SDC's own rendering.
+These process `#ui_patterns` configuration into `#props` and `#slots` before SDC's own rendering. If you add your own `#pre_render` to the `component` element, appending it with `[] =` puts it *after* SDC's callbacks, not after UI Patterns' — unshift if you need to run in the UI Patterns window.
 
 **3. Twig Node Visitors**
 
@@ -45,10 +48,12 @@ During discovery, every prop gets an `ui_patterns` annotation:
 $prop['ui_patterns'] = [
   'type_definition' => $propTypeInstance,  // PropTypeInterface
   'summary' => [...],                       // Human-readable constraints
-  'required' => TRUE|FALSE,                 // From JSON Schema 'required'
+  'required' => TRUE,                       // Present ONLY when required
   'prop_type_adapter' => 'adapter_id',     // Optional adapter
 ];
 ```
+
+`ComponentPluginManager::annotateProps()` walks the component's `props.required` list and writes `['ui_patterns']['required'] = TRUE` on just those props. There is no `FALSE` branch — an optional prop has no `required` key at all. Custom code must read it as `$prop['ui_patterns']['required'] ?? FALSE`.
 
 Two "magic" props are always added:
 - **`attributes`** -- Always present, uses `ui-patterns://attributes` ref

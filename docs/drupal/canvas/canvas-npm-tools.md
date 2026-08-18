@@ -1,5 +1,5 @@
 ---
-description: Reference for Canvas npm packages — @drupal-canvas/cli, @drupal-canvas/create, drupal-canvas runtime, and Tailwind CSS 4.
+description: "Reference for Canvas npm packages — @drupal-canvas/cli, @drupal-canvas/create, drupal-canvas runtime, and Tailwind CSS 4."
 tldr: "Use this when setting up a local development environment for Canvas Code Components, or when you need to understand which npm packages are part of the Canvas ecosystem and what each one does."
 drupal_version: "11.x"
 ---
@@ -28,8 +28,14 @@ npm install -g @drupal-canvas/cli
 # or use npx
 npx @drupal-canvas/cli --help
 
+# Authenticate against the Drupal site
+npx @drupal-canvas/cli login
+
 # Create a new component directory with scaffold files
-npx @drupal-canvas/cli create my-component
+npx @drupal-canvas/cli scaffold --name my-component   # --name optional; prompts if omitted
+
+# Check local components and pages before pushing
+npx @drupal-canvas/cli validate
 
 # Build local components (creates dist/ in each component dir)
 npx @drupal-canvas/cli build
@@ -39,8 +45,13 @@ npx @drupal-canvas/cli push
 
 # Download components from Drupal to local filesystem (replaces old "download")
 npx @drupal-canvas/cli pull
+
+# Pull site context for local AI coding agents
+npx @drupal-canvas/cli agents-context
 ```
 
+- The scaffold command is `scaffold`, not `create` — `canvas create` does not exist. (`@drupal-canvas/create`, below, is a separate package for scaffolding a whole *codebase*)
+- `download` and `upload` are registered as hidden stubs that print "use pull/push instead" and exit non-zero
 - `build` compiles JSX → JS and builds Tailwind CSS into a `dist/` directory per component
 - `push`/`pull` are the new names for the sync commands (previously `upload`/`download`)
 - Requires Drupal Canvas module + API credentials configured in `.env`
@@ -92,7 +103,8 @@ Available inside Code Components at runtime. Provides helper functions and pre-b
 
 ## Common Mistakes
 
-- **Wrong**: Trying to use npm packages not in the allowed import map (lodash, axios, etc.) → **Right**: They won't work at runtime in Canvas
+- **Wrong**: Assuming a `canvas create` command exists → **Right**: the scaffold command is `canvas scaffold`
+- **Wrong**: Assuming npm packages outside the base import map can never be used → **Right**: that is true of the in-browser editor only. The CLI bundles third-party deps at `build` and registers them in the site's import map at `push`
 - **Wrong**: Using `@drupal/canvas-cli` (wrong scope) → **Right**: The correct package is `@drupal-canvas/cli`
 - **Wrong**: Running the CLI without configuring Drupal connection credentials in `.env` → **Right**: push/pull commands need API access
 - **Wrong**: Installing the CLI globally when a project-local install is more reproducible → **Right**: Prefer project-level devDependency

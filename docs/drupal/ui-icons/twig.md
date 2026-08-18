@@ -1,6 +1,6 @@
 ---
 description: "Render an icon in a custom Twig template with core's icon() function, not UI Icons' admin-only icon_preview()."
-tldr: "Use core's icon(pack_id, icon_id, settings) as the general renderer in theme templates; needs no contrib module. icon_preview() is the admin-preview renderer and silently defaults to size 32 when settings are omitted."
+tldr: "Use core's icon(pack_id, icon_id, settings) as the general renderer in theme templates; needs no contrib module. icon_preview() is the admin-preview renderer and forces size 48 (not the pack's own default) when settings are omitted."
 drupal_version: "11.x"
 ---
 
@@ -30,7 +30,9 @@ It returns the `#type: icon` render array below, so cache metadata bubbles corre
 
 ## `icon_preview()` is not the same function
 
-UI Icons also registers `icon_preview(pack_id, icon_id, settings)`, but it is the **admin-preview** renderer behind the Library page and the picker — not the one to reach for in a theme template. It returns `IconPreview::getPreview()`, and when you omit the settings argument it silently substitutes `{size: 32}` rather than the pack's own defaults.
+UI Icons also registers `icon_preview(pack_id, icon_id, settings)`, but it is the **admin-preview** renderer behind the Library page and the picker — not the one to reach for in a theme template. It returns `IconPreview::getPreview()`, which forces a size of **48** when you omit the settings argument, rather than using the pack's own defaults: `IconPreview::ICON_DEFAULT_SIZE` is `48` on the `preview:`-template path, and `templates/icon-preview.html.twig` writes `{{ settings.size|default(48) }}` on the fallback path.
+
+(The `?? ['size' => 32]` in `IconPreviewTwigExtension::getIconPreview()` is dead code from Twig's point of view — the parameter default is `[]`, not `NULL`, so `??` never fires on a two-argument call.)
 
 ## Decision
 
@@ -64,7 +66,7 @@ $build = $icon->getRenderable(['size' => 32]);
 ## Common Mistakes
 
 - **Wrong**: calling `icon()` or `icon_preview()` with the full ID string (`my_theme_icons:menu`) → **Right**: both expect `(pack_id, icon_id, settings)` as separate arguments
-- **Wrong**: using `icon_preview()` as the general renderer in theme templates → **Right**: it's the admin preview helper and forces `size: 32` when settings are omitted
+- **Wrong**: using `icon_preview()` as the general renderer in theme templates → **Right**: it's the admin preview helper and forces `size: 48` when settings are omitted
 - **Wrong**: hardcoding the SVG content from the source file → **Right**: bypasses settings, accessibility templating, and cache metadata
 
 ## See Also

@@ -100,7 +100,7 @@ display:
                 source:
                   value: '3'
               url:
-                source_id: 'entity_link:node'
+                source_id: entity_link
                 source:
                   template: canonical
             slots:
@@ -128,6 +128,8 @@ Key observations:
 - The style plugin has **double nesting**: `options.ui_patterns.ui_patterns` (the outer `ui_patterns` is the Views sub-key, the inner is the `ui_patterns_component` schema). This matches the `views.ui_patterns_configuration` schema.
 - The row plugin has **single nesting**: `options.ui_patterns` maps directly to `ui_patterns_component`.
 - Row-level entity field sources use derived source IDs like `field_property:node:title:value` because entity context is available per row. The format is `field_property:{entity_type}:{field_name}:{column}` — bundle is implicit from the View's row context.
+- `entity_link` has **no deriver**: the plugin ID is the bare string `entity_link`, never `entity_link:node`. Its config schema is `ui_patterns_source.entity_link`, resolved through `[%parent.source_id]`, so an entity-type suffix breaks both plugin resolution and config schema validation.
+- The `ui_patterns_views` sub-module also ships `view_field` (row context), `view_rows` (style context) and `view_title` sources, all filling slots or a string prop from the view itself rather than from the row entity.
 - The style plugin wraps all rows; the rendered rows are injected into the component's slot via the `ui_patterns_views:rows` context.
 
 ## Common Mistakes

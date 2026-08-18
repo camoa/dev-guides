@@ -1,6 +1,6 @@
 ---
-description: CSS scoping strategies, BEM methodology, and Bootstrap/Radix integration
-tldr: "Use this when adding styles to components, ensuring proper CSS scoping, or importing Bootstrap variables in Radix sub-themes."
+description: "Scoping component CSS with BEM, importing Bootstrap/Radix variables, and using CSS custom properties for theming"
+tldr: "Use BEM to scope component CSS and prevent collisions; prefer CSS custom properties for theming values that variants override. Never use @extend or !important — fix selector specificity or use mixins/utility classes instead."
 drupal_version: "11.x"
 ---
 
@@ -8,20 +8,16 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when adding styles to components, ensuring proper CSS scoping, or importing Bootstrap variables in Radix sub-themes.
+> Use this when you're adding styles to a component, you need to scope CSS properly, or you're importing Bootstrap variables in Radix sub-themes.
 
 ## Decision
 
-| Strategy | Use Case | Pattern |
-|----------|----------|---------|
-| BEM methodology | Component-scoped styles | `.component__element--modifier` |
-| CSS custom properties | Theming values | `--component-padding: 1rem;` |
-| Bootstrap imports | Radix sub-theme components | `@import '~bootstrap/scss/mixins';` |
-| Scoped selectors | Prevent collisions | Always namespace with component class |
+Use BEM for component-scoped styles to prevent collisions. Prefer CSS custom properties for theming values.
 
 ## Pattern
 
-**BEM Methodology:**
+**BEM Methodology** — Reference: `/core/themes/olivero/components/teaser/teaser.css`
+
 ```css
 /* Block */
 .teaser {
@@ -39,10 +35,17 @@ drupal_version: "11.x"
 .teaser--featured {
   border: 2px solid var(--color-accent);
 }
+
+/* Modifier + Element */
+.teaser--featured .teaser__title {
+  font-weight: bold;
+}
 ```
 
-**Importing Radix/Bootstrap Variables:**
+**Importing Radix/Bootstrap Variables** — Reference: `/themes/contrib/radix/` structure
+
 ```scss
+/* In component SCSS file */
 @import '../../../src/scss/base/variables';  // Bootstrap overrides
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
@@ -51,6 +54,7 @@ drupal_version: "11.x"
 .my-component {
   padding: $spacer;
   background: $primary;
+  border-radius: $border-radius;
 
   @include media-breakpoint-up(md) {
     padding: $spacer * 2;
@@ -58,7 +62,8 @@ drupal_version: "11.x"
 }
 ```
 
-**CSS Custom Properties:**
+**Custom Properties (CSS Variables)**
+
 ```css
 .component {
   --component-padding: 1rem;
@@ -76,9 +81,9 @@ drupal_version: "11.x"
 
 ## Common Mistakes
 
-- **Wrong**: Global selectors like `.button` or `.card` → **Right**: Use component-specific namespace (`.my-component__button`)
-- **Wrong**: Using `@extend` in Sass → **Right**: Use mixins or utility classes (extends create bloated CSS)
-- **Wrong**: Using `!important` → **Right**: Fix selector specificity instead
+- **Wrong**: Not scoping CSS with a component-specific class → **Right**: Global selectors like `.button` or `.card` collide with other components. Always use a unique component class as namespace.
+- **Wrong**: Using `@extend` in Sass → **Right**: `@extend` creates unexpected selector chains and bloats compiled CSS. Use mixins or utility classes instead.
+- **Wrong**: Using `!important` → **Right**: Indicates specificity problems. Fix selector specificity instead of using `!important`.
 
 ## See Also
 

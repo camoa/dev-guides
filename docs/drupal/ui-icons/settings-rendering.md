@@ -58,12 +58,13 @@ settings:
 |---|---|---|---|
 | svg / svg_sprite | Inline `<svg>` | CSS-styleable, animatable, accessible | larger HTML |
 | path | `<img>` | cacheable, fewer DOM nodes | not inline-styleable |
-| font | `<i>`/`<span>` with character | tiny HTML, CSS-color | less semantic, font-loading dependency |
+| font | `<i>`/`<span>` whose glyph comes from CSS `content:` | tiny HTML, CSS-color | less semantic, font-loading dependency, needs a paired library |
 
 ## Pattern: Accessibility
 
 ```twig
 <svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="{{ attributes.viewBox|default('0 0 24 24') }}"
      width="{{ size|default(24) }}" height="{{ size|default(24) }}"
      {% if decorative %}aria-hidden="true" role="presentation"
      {% else %}role="img" aria-label="{{ ariaLabel|default(alt|default(icon_id)) }}"{% endif %}>

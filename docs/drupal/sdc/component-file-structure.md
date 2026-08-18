@@ -1,6 +1,6 @@
 ---
-description: Required and optional SDC component file structure and naming conventions
-tldr: "Use this when creating a new component, debugging \"component not found\" errors, or understanding automatic asset loading."
+description: "Required and optional component files, and where the component's machine name actually comes from"
+tldr: "Every sibling file (.twig, .css, .js) must match the .component.yml basename, not the directory name — machineName is derived from the plugin ID, which is the YAML basename. Renaming the directory does not fix a 'component not found' error; check the basename match instead."
 drupal_version: "11.x"
 ---
 
@@ -8,39 +8,57 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when creating a new component, debugging "component not found" errors, or understanding automatic asset loading.
+> Use this when you're creating a new component, debugging "component not found" errors, or you need to understand automatic asset loading.
 
 ## Decision
 
-| File | Required | Auto-loaded | Purpose |
-|------|----------|-------------|---------|
-| `component-name.component.yml` | Yes | Always | Component metadata and schema |
-| `component-name.twig` | Yes | Always | Template markup |
-| `component-name.css` | No | If present | Styles (attached as library) |
-| `component-name.js` | No | If present | Scripts (attached as library) |
-| `README.md` | No | Never | Documentation |
-| `thumbnail.png` | No | Never | Admin UI preview |
-| `assets/` | No | Never | Additional assets (manual reference) |
+**Required Structure:**
+```
+component-name/
+├── component-name.component.yml  ← Metadata (REQUIRED)
+└── component-name.twig           ← Template (REQUIRED)
+```
+
+**Optional Files (auto-loaded if present):**
+```
+component-name/
+├── component-name.css            ← Styles (auto-attached as library)
+├── component-name.js             ← Scripts (auto-attached as library)
+├── README.md                     ← Documentation
+├── thumbnail.png                 ← Preview for admin UI
+└── assets/                       ← Additional assets (must reference manually)
+```
+
+**CRITICAL:** The `.component.yml` basename is the component's machine name, and every sibling file must match **that basename** — not the directory name.
+
+**WHY:** `ComponentPluginManager::alterDefinition()` derives `machineName` by splitting the plugin ID (`[, $machine_name] = explode(':', $definition['id'])`), and the plugin ID came from `basename($file, '.component.yml')`. The Twig, CSS and JS are then located by `machineName`. The directory name is never read.
+
+Matching directory to basename is still the right convention: it keeps the folder greppable and matches every example in core and contrib. But when you are debugging "component not found", **renaming the directory will not fix it** — check that the ID you are calling equals `provider:{yml basename}` and that the `.twig` shares that basename.
+
+Core proves this with a fixture: `core/modules/system/tests/themes/sdc_theme_test/components/mismatching-folder-name/` contains `foo.component.yml` + `foo.twig`, and `ComponentPluginManagerTest` asserts that `sdc_theme_test:foo` **is** found while `sdc_theme_test:mismatching-folder-name` throws `ComponentNotFoundException`.
 
 ## Pattern
 
-**CRITICAL:** Directory name MUST match all file basenames exactly.
-
 ```
-✓ CORRECT:
+✓ CORRECT (conventional — keep doing this):
 my-button/
 ├── my-button.component.yml
 ├── my-button.twig
 ├── my-button.css
 └── my-button.js
 
-✗ WRONG:
+✓ ALSO WORKS (directory name is ignored):
+some-folder/
+├── my-button.component.yml   ← ID is provider:my-button
+└── my-button.twig
+
+✗ BROKEN — the template basename does not match the YAML basename:
 my-button/
-├── button.component.yml      ← Won't be discovered
-├── my_button.twig             ← Won't be discovered
+├── my-button.component.yml
+└── my_button.twig             ← template not found
 ```
 
-**Automatic Library Generation:**
+**Automatic Library Generation:** each component generates a library automatically.
 - Format: `core/components.{provider}--{component-name}`
 - Example: `core/components.my_theme--hero-banner`
 - Includes CSS/JS files named identically to component
@@ -48,13 +66,14 @@ my-button/
 
 ## Common Mistakes
 
-- **Wrong**: Using underscores in component names → **Right**: Use hyphens (kebab-case) per Drupal conventions
-- **Wrong**: Mismatched file basenames → **Right**: All files must match directory name exactly
-- **Wrong**: Expecting `assets/` directory to auto-load → **Right**: Only root-level `.css` and `.js` files auto-attach
+- **Wrong**: Renaming the directory to fix "component not found" → **Right**: The directory name is never read; check that the ID equals `provider:{yml basename}` and that the `.twig` shares that basename.
+- **Wrong**: Using underscores in component names → **Right**: Component names should use hyphens (kebab-case) per Drupal conventions. Underscores in provider names are converted to hyphens in library names.
 
 ## See Also
 
-- Reference: `/core/themes/olivero/components/teaser/` - Reference implementation
-- Reference: `/themes/contrib/radix/components/button/` - Radix button example
+- Reference: `/core/lib/Drupal/Core/Theme/ComponentPluginManager.php:343-352` — `machineName` from the plugin ID, template found by `machineName`
+- Reference: `/core/tests/Drupal/KernelTests/Components/ComponentPluginManagerTest.php:29-53` — the mismatching-folder-name assertions
+- Reference: `/core/themes/olivero/components/teaser/` — Reference implementation
+- Reference: `/themes/contrib/radix/components/button/` — Radix button example
 - [SCSS/CSS in SDCs](scss-css-in-sdcs.md)
 - [JavaScript in SDCs](javascript-in-sdcs.md)

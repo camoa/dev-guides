@@ -1,6 +1,6 @@
 ---
-description: Asset pipeline security, Twig escaping, form security, DaisyUI component accessibility, and WCAG concerns
-tldr: "Asset pipeline security, Twig escaping, form security, DaisyUI component accessibility, and WCAG concerns"
+description: "Asset pipeline security, Twig escaping, form security, DaisyUI component accessibility, and WCAG concerns"
+tldr: "Asset pipeline security, Twig escaping, form security -- the theme touches forms only through #daisy_ui_form config hooks and a theme-settings alter, never hook_form_alter() -- DaisyUI component accessibility, and WCAG concerns."
 ---
 
 # Security & Accessibility
@@ -19,7 +19,7 @@ All SDC component Twig templates use Drupal's `attributes` object and `{{ }}` sy
 
 ### Form Security
 
-The `form_alter` hook only adds CSS classes to form elements -- it does not modify form behavior, validation, or CSRF tokens. DaisyUI's `<dialog>` modal uses the HTML `<form method="dialog">` pattern, which is a standard browser API that does not submit data to the server.
+The theme touches forms in three places -- `hook_preprocess_form_element()`, `hook_preprocess_input()` and `hook_form_system_theme_settings_alter()` -- and none of them modifies form behavior, validation, or CSRF tokens. The first two only attach a `#daisy_ui_form` config array that the templates read; the third adds two radios to the theme settings form. There is no `hook_form_alter()` in this theme. DaisyUI's `<dialog>` modal uses the HTML `<form method="dialog">` pattern, which is a standard browser API that does not submit data to the server.
 
 ## Accessibility
 

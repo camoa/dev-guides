@@ -1,5 +1,5 @@
 ---
-description: When UI Suite DaisyUI fits, recommended patterns, anti-patterns to avoid, and performance considerations
+description: "When UI Suite DaisyUI fits, recommended patterns, anti-patterns to avoid, and performance considerations"
 tldr: "When UI Suite DaisyUI fits, recommended patterns, anti-patterns to avoid, and performance considerations"
 ---
 

@@ -12,10 +12,11 @@ Slots are named placeholders in a component that accept Drupal render arrays. Un
 
 Internally, the `slot` prop type is a special PropType plugin that normalizes any input into a render array via `SlotPropType::normalize()`:
 
-- Strings become `['#children' => Markup::create($string)]`
-- Objects implementing `RenderableInterface` are converted via `->toRenderable()`
-- `MarkupInterface` objects become `['#children' => $value]`
-- Arrays pass through as render arrays (with cleanup for non-list keys)
+- Plain strings become `['#plain_text' => $string]` — **escaped**. This reversed after 2.0.15 (issue #3611167); it used to be `['#children' => Markup::create($string)]`, i.e. raw HTML. To put raw HTML in a slot you must now hand over a trusted type: `Markup::create()`, a Twig `{% set %}` capture, or a render array.
+- Objects implementing `RenderableInterface` are converted via `->toRenderable()`, then normalized again
+- `MarkupInterface` (and Twig `Markup`) objects become `['#children' => $value]` and stay raw
+- Other `Stringable` objects become `['#plain_text' => (string) $value]`
+- Arrays pass through as render arrays; a list with no `#`-properties is re-keyed with `array_values()` so Twig's `is sequence` test works on UUID-keyed block lists
 
 ## Slot Definition in YAML
 
@@ -51,9 +52,12 @@ Built-in sources that work with slots (`prop_types: ['slot']`):
 | `component` | Embeds another SDC component (nesting) |
 | `block` | Embeds a Drupal block plugin |
 | `wysiwyg` | Rich text via CKEditor text_format element |
-| `field_formatter` | Renders a field using a Drupal field formatter |
+| `field_formatter` | Renders a field using a Drupal field formatter (its deriver sets `prop_types: ["slot"]`) |
+| `token` | Declares `slot` natively alongside `string` and `url` |
+| `view_field`, `view_rows` | `ui_patterns_views` — a Views row field, or the whole set of rendered rows |
+| `entity_field`, `entity_reference` | Declare no `prop_types` at all, so they are offered for slots as well as props |
 
-String-type sources (textfield, token, etc.) also work via the `slot <- string` conversion path.
+Other string-type sources (`textfield` and friends) reach slots through the `slot <- string` conversion path.
 
 ## Accessing Slots in Twig
 

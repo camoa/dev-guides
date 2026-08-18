@@ -1,6 +1,6 @@
 ---
-description: Available variables in icon pack templates and how to use them effectively
-tldr: "You're writing icon pack templates and need to understand available variables and how to use them effectively."
+description: "Which variables reach an icon pack template per extractor — attributes and the pack definition itself both leak into context"
+tldr: "You're writing icon pack templates and need the real variable set; caller settings override extractor data but icon_id/source always win, and the pack definition's own keys (label, provider, ...) leak into context too."
 drupal_version: "11.x"
 ---
 
@@ -14,20 +14,27 @@ You're writing icon pack templates and need to understand available variables an
 
 | Variable | Available in... | Use for... |
 |---|---|---|
-| `icon_id` | All extractors | CSS classes, IDs, data attributes |
-| `source` | All extractors | File paths, URLs, sprite references |
-| `content` | SVG extractor only | SVG inner content (paths, circles, etc.) |
-| Custom settings | When defined in pack | User-configurable options (size, color, style) |
+| `icon_id` | Always | CSS classes, IDs, data attributes, sprite fragments |
+| `source` | `svg`, `svg_sprite`, `path` (empty string for `font`) | File paths, URLs, sprite references |
+| `content` | `svg` extractor; `font` only for `.codepoints` sources | SVG inner markup (paths, circles, …) |
+| `attributes` | Always — populated by `svg` from the source root, empty `Attribute` otherwise | Passing the source SVG's own `viewBox`, `fill`, `stroke` through |
+| Whatever the caller passed as `icon()`'s third argument | Always | Size, color, extra classes |
+
+`Render\Element\Icon::preRenderIcon()` builds the context as `array_merge($extractor_data, $element['#settings'], $context)`, so:
+
+- The pack definition itself leaks into the context — `label`, `id`, `provider`, `extractor`, `settings`, `library`, `version`, `license` are all readable in a pack template. Do not name a setting after one of them.
+- Caller settings **override** extractor data, but `icon_id` and `source` are merged last and win over everything. A setting named `icon_id` or `source` is silently discarded.
+- `{{ group }}` does not exist. `{group}` in a source pattern is stored on the `IconDefinition` and reachable only from PHP via `getGroup()`.
 
 ## Pattern
 
-Template with all common variables:
+Template with all common variables. Prefer `{{ attributes }}` over a hardcoded `viewBox` — for the `svg` extractor it carries the source file's own root attributes:
 
 ```twig
 <svg xmlns="http://www.w3.org/2000/svg"
+     {{ attributes }}
      width="{{ size|default(24) }}"
      height="{{ size|default(24) }}"
-     viewBox="0 0 {{ viewBox|default('24 24') }}"
      fill="{{ color|default('currentColor') }}"
      stroke="{{ stroke|default('none') }}"
      stroke-width="{{ stroke_width|default(0) }}"
@@ -39,7 +46,7 @@ Template with all common variables:
 </svg>
 ```
 
-Settings definition for above template:
+Settings definition for the above. This builds the **admin form** for the pack; the `default:` values below never reach the template, which is why every one of them is repeated as a `|default()` above:
 
 ```yaml
 settings:
@@ -66,15 +73,16 @@ settings:
     default: ""
 ```
 
-Reference: `/core/lib/Drupal/Core/Theme/Icon/IconDefinition.php` for variable processing.
+Reference: `/core/lib/Drupal/Core/Render/Element/Icon.php:59-99` for how the template context is assembled; `/core/lib/Drupal/Core/Theme/Icon/IconExtractorBase.php:24-30` for which definition keys are stripped before it.
 
 ## Common Mistakes
 
-- **Wrong**: Accessing undefined variables → **Right**: Define in `settings` schema first
-- **Wrong**: No default values → **Right**: Always provide defaults using `|default()` filter
-- **Wrong**: Hardcoded values in template → **Right**: Make configurable via settings for flexibility
+- **Wrong**: Expecting `settings: default:` to populate a variable → **Right**: It builds a form; the template must use `|default()`
+- **Wrong**: Declaring a setting in YAML and assuming that is what makes it available → **Right**: Any key in `icon()`'s third argument reaches the template, declared or not. The `settings` schema only controls the admin form
+- **Wrong**: Naming a setting `icon_id` or `source` → **Right**: Overwritten by the render element, always
+- **Wrong**: Hardcoding `viewBox` in an `svg` pack template → **Right**: Print `{{ attributes }}` and let the source file decide
 - **Wrong**: Missing `clean_class` filter → **Right**: Use `|clean_class` for icon_id in class names
-- **Wrong**: Not escaping user input → **Right**: Twig auto-escapes, but be cautious with `|raw` filter
+- **Wrong**: Printing `{{ content }}` with `|raw` → **Right**: Unnecessary and unsafe. `SvgExtractor` already returns a `FormattableMarkup`, which Twig prints unescaped
 
 ## See Also
 

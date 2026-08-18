@@ -1,6 +1,6 @@
 ---
-description: Building Single Directory Components with configurable icons as props for reusable component APIs
-tldr: "You're building Single Directory Components that need configurable icons as props for reusable, flexible component APIs."
+description: "Model an icon SDC prop as {pack_id, icon_id, settings} — YAML default: and required: are never enforced at render time"
+tldr: "You're building SDC components that need configurable icon props; YAML default: is never applied and required: runs behind assert(), off in production — write the Twig so it's correct with no props declared at all."
 drupal_version: "11.x"
 ---
 
@@ -25,7 +25,7 @@ Object-based icon prop (recommended):
 
 ```yaml
 # components/card/card.component.yml
-$schema: https://git.drupalcode.org/project/drupal/-/raw/11.x/core/modules/sdc/src/metadata.schema.json
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
 name: Card
 props:
   type: object
@@ -36,18 +36,22 @@ props:
       properties:
         pack_id:
           type: string
-          default: "my_theme"
         icon_id:
           type: string
         settings:
           type: object
-          default:
-            size: 24
       required:
         - icon_id
     title:
       type: string
 ```
+
+Two things this YAML does *not* do, both of which the template below has to compensate for:
+
+- **`default:` is never applied.** `ComponentValidator::validateProps()` runs with `CHECK_MODE_TYPE_CAST` only — it casts and validates, it never fills in defaults. The effective default is whatever the Twig writes with `??` or `|default()`.
+- **Validation is not a runtime guarantee.** `ComponentsTwigExtension::validateProps()` wraps the check in `assert()` (`ComponentsTwigExtension.php:106`), so on a production `zend.assertions=-1` it does not run, and the validator takes the context by value and never strips anything. Undeclared props reach the template and work; `required: [icon_id]` will not stop a render in production.
+
+Write the template so it is correct with no props declared at all, and treat the YAML as documentation for the component's consumers.
 
 Component template:
 
@@ -57,19 +61,29 @@ Component template:
   {% if icon and icon.icon_id %}
     <div class="card__icon">
       {{ icon(
-        icon.pack_id|default('my_theme'),
-        icon.icon_id,
+        icon.pack_id|default('my_theme'), 
+        icon.icon_id, 
         icon.settings|default({})
       ) }}
     </div>
   {% endif %}
-
+  
   {% if title %}
     <h3 class="card__title">{{ title }}</h3>
   {% endif %}
 
-  {{ content }}
+  {% block content %}{% endblock %}
 </div>
+```
+
+A local variable named `icon` does not shadow the `icon()` function — Twig resolves `name(...)` as a function call at compile time — so the prop and the function can share a name safely.
+
+The component's `card.component.yml` must also declare the slot it renders:
+
+```yaml
+slots:
+  content:
+    title: Content
 ```
 
 Usage:
@@ -100,16 +114,16 @@ props:
 ```
 
 ```twig
-{{ icon('my_theme:' ~ status_icon, { size: 20 }) }}
+{{ icon('my_theme', status_icon, { size: 20 }) }}
 ```
 
-Reference: `/core/modules/sdc/src/metadata.schema.json` for component schema.
+Reference: `/core/assets/schemas/v1/metadata.schema.json` for the component schema. (`core/modules/sdc/` is an empty stub since SDC moved into core proper — it holds only `sdc.info.yml`, and the `core/modules/sdc/src/metadata.schema.json` URL is a Drupal 10.1-era path.)
 
 ## Common Mistakes
 
-- **Wrong**: Hardcoded pack_id in template → **Right**: Make configurable via prop with default
-- **Wrong**: No default settings → **Right**: Provide sensible defaults for size, color
-- **Wrong**: Missing required validation → **Right**: Mark `icon_id` as required when icon is mandatory
+- **Wrong**: Using a `pack:id` prop and passing it straight to `icon()` → **Right**: Fatal. Either model the prop as `{pack_id, icon_id}` or split the string in the template
+- **Wrong**: Relying on the YAML `default:` for `pack_id` or `settings` → **Right**: Never applied; put the fallback in the Twig
+- **Wrong**: Relying on `required:` to guarantee a value at runtime → **Right**: Validation is behind `assert()` and is off in production
 - **Wrong**: Not handling missing icons gracefully → **Right**: Use `{% if icon and icon.icon_id %}` checks
 - **Wrong**: Complex nested objects → **Right**: Keep icon prop structure flat for easier usage
 

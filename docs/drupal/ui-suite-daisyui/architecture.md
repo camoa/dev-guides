@@ -1,5 +1,5 @@
 ---
-description: How UI Patterns, UI Styles, UI Skins, and UI Icons integrate with DaisyUI components in the theme
+description: "How UI Patterns, UI Styles, UI Skins, and UI Icons integrate with DaisyUI components in the theme"
 tldr: "How UI Patterns, UI Styles, UI Skins, and UI Icons integrate with DaisyUI components in the theme"
 ---
 
@@ -19,7 +19,7 @@ UI Suite DaisyUI theme (51 SDC components)
     |     +-- Variants: component style variations
     |     +-- Sources: map Drupal data to component props/slots
     |
-    +-- ui_styles: Utility class styles (30+ categories)
+    +-- ui_styles: Utility class styles (10 plugins, 6 categories)
     |     +-- ui_styles_block: Apply styles to blocks
     |     +-- ui_styles_layout_builder: Apply styles to LB sections
     |     +-- ui_styles_ui_patterns: Styles on pattern instances

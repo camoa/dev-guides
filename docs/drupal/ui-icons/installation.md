@@ -22,11 +22,11 @@ The base module is the engine. Enable submodules per integration need:
 | Submodule | Adds |
 |---|---|
 | `ui_icons_field` | `ui_icon` field type, widget, formatter; Link-field icon variants. Does **not** pull in `ui_icons_picker` |
-| `ui_icons_ckeditor5` | "Icon" toolbar button + `<drupal-icon>` filter for CKEditor 5 |
-| `ui_icons_text` | The `icon_embed` text filter (required for `ui_icons_ckeditor5` output) |
+| `ui_icons_ckeditor5` | "Icon" toolbar button + `<drupal-icon>` dialog for CKEditor 5. Depends on `ckeditor5` + `ui_icons_text`, so enabling it pulls the filter module in |
+| `ui_icons_text` | The `icon_embed` text filter that turns `<drupal-icon>` into markup |
 | `ui_icons_picker` | Modal grid picker form element (`icon_picker`). Depends on `ui_icons_field` |
 | `ui_icons_patterns` | UI Patterns `icon` PropType + 4 data sources |
-| `ui_icons_menu` | Icon field on `menu_link_content`, rendered automatically into link titles |
+| `ui_icons_menu` | Icon field on `menu_link_content`, rendered automatically into link titles. Depends on `menu_ui` + `ui_icons_field`, so it pulls the whole Field API integration in |
 | `ui_icons_media` | Icon media source type. Depends on `ui_icons_field` |
 | `ui_icons_canvas` | Makes the `ui_icon` field and its `icon_widget` editable as a Drupal Canvas component input. Depends on `canvas:canvas` + `ui_icons_field` |
 | `ui_icons_library` | Admin browser at `/admin/appearance/ui/icons` |
@@ -39,16 +39,17 @@ The base module is the engine. Enable submodules per integration need:
 | Property | Value |
 |---|---|
 | Drupal core | `^11.3 \|\| ^12.0` — asserted in every `.info.yml`. Drupal 10 and 11.0–11.2 are not supported |
-| PHP | 8.3+ (imposed by core) |
+| PHP | 8.3+ (imposed by core: `core/composer.json` requires `>=8.3.0`) |
 | Optional Composer | `dompdf/php-font-lib` (only for TTF/WOFF font extraction) |
 
-The project's root `composer.json` carries no `require` block as of 2.0.0 — core compatibility is expressed solely through `core_version_requirement`. Nothing pins `dompdf/php-font-lib`; install it yourself if the font extractor needs to read binary font files.
+The project's root `composer.json` carries **no `require` block** as of 2.0.0 — core compatibility is expressed solely through `core_version_requirement`. Nothing pins `dompdf/php-font-lib`; install it yourself if the font extractor needs to read binary font files.
 
 ## Common Mistakes
 
-- **Wrong**: enabling `ui_icons_ckeditor5` without `ui_icons_text` → **Right**: the `<drupal-icon>` tag passes through to output untransformed without the filter module
-- **Wrong**: forgetting `dompdf/php-font-lib` when using `.ttf` files → **Right**: install it, or use `.codepoints`/`.json`/`.yml` metadata to skip the dependency
-- **Wrong**: trying to uninstall `ui_icons_field` and `ui_icons_picker` together on 1.x → **Right**: on 2.0.0 the dependency cycle is broken; picker depends on field, not the reverse
+- **Wrong**: enabling `ui_icons_ckeditor5` and expecting icons to render → **Right**: the module is only the editor half. `ui_icons_text` comes along as a hard dependency, but its `icon_embed` filter still has to be switched on per text format; until then `<drupal-icon>` passes through untransformed
+- **Wrong**: forgetting `dompdf/php-font-lib` when using `.ttf` files → **Right**: the status report shows a "Missing Font library!" warning and the font pack yields no icons. Use `.codepoints`, `.json`, or `.yml` metadata if you don't want the dep
+- **Wrong**: trying to uninstall `ui_icons_field` and `ui_icons_picker` together on 1.x → **Right**: they depended on each other, so neither could go. 2.0.0 broke the cycle; the dependency now runs picker → field only
+- **Wrong**: enabling only `ui_icons_menu` expecting a narrow menu-only footprint → **Right**: it depends on `menu_ui` + `ui_icons_field`, so enabling it also pulls in the whole Field API integration
 
 ## See Also
 

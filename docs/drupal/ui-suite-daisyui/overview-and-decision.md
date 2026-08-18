@@ -1,5 +1,5 @@
 ---
-description: When to use UI Suite DaisyUI vs alternatives like Radix, custom Tailwind themes, or UI Suite Bootstrap
+description: "When to use UI Suite DaisyUI vs alternatives like Radix, custom Tailwind themes, or UI Suite Bootstrap"
 tldr: "When to use UI Suite DaisyUI vs alternatives like Radix, custom Tailwind themes, or UI Suite Bootstrap"
 ---
 

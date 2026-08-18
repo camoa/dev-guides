@@ -1,6 +1,6 @@
 ---
-description: Reference for all SDC prop types in Canvas — YAML syntax, Canvas editor widgets, value structures, and gotchas per type.
-tldr: "Use this when defining props in a `*.component.yml` file and you need the exact YAML syntax for each prop type, what Canvas editor widget each produces, and Canvas-specific annotations (`$ref`, `contentMediaType`, `x-formatting-context`)."
+description: "Reference for all SDC prop types in Canvas — YAML syntax, Canvas editor widgets, value structures, defaults, and the hard eligibility gates."
+tldr: "Use this when writing `*.component.yml` props: exact YAML per type, the Canvas widget each produces, that `default:` is stripped (use `examples[0]`), and the eligibility gates that silently exclude a component from the panel."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when defining props in a `*.component.yml` file and you need the exact YAML syntax for each prop type, what Canvas editor widget each produces, and Canvas-specific annotations (`$ref`, `contentMediaType`, `x-formatting-context`).
+> Use this when defining props in a `*.component.yml` file and you need the exact YAML syntax for each prop type, what Canvas editor widget each produces, and Canvas-specific annotations (`$ref`, `contentMediaType`, `x-formatting-context`, `meta:enum`). Read [Defaults](#defaults-canvas-ignores-default) and [Component Eligibility](#component-eligibility-hard-gates) below before writing any YAML — Canvas ignores `default:`, and a prop that breaks any eligibility rule removes the whole component from the editor with no visible error.
 
 ## Decision
 
@@ -18,12 +18,15 @@ drupal_version: "11.x"
 | Rich text (block) | `type: string` + `contentMediaType: text/html` + `x-formatting-context: block` | CKEditor 5 block editor |
 | Rich text (inline) | `type: string` + `contentMediaType: text/html` + `x-formatting-context: inline` | CKEditor 5 inline editor |
 | Image | `type: object` + `$ref: 'json-schema-definitions://canvas.module/image'` | Media Library picker |
-| Link | `type: object` + `$ref: 'json-schema-definitions://canvas.module/link'` | URL + link text input |
-| Enum/select | `type: string` + `enum: [...]` + `default: value` | Select dropdown |
-| Boolean | `type: boolean` + `default: false` | Toggle/checkbox |
+| Link (any URL) | `type: string` + `format: uri-reference` | Link field, URL only |
+| Link (external only) | `type: string` + `format: uri` | Link field, URL only |
+| Enum/select | `type: string` + `enum: [...]` + `meta:enum:` for labels | Select dropdown |
+| Boolean | `type: boolean` | Toggle/checkbox |
 | Integer | `type: integer` + `minimum`/`maximum` | Numeric input |
 | Number (float) | `type: number` | Numeric input |
-| Multi-value | `type: array` + `items: {type: object, properties: {...}}` | Repeater |
+| Multi-value | `type: array` + `items:` (scalar or recognized `$ref` only) | Repeater |
+
+**All defaults come from `examples[0]`, never from `default:`.** See [Defaults](#defaults-canvas-ignores-default).
 
 ## Pattern
 
@@ -87,39 +90,52 @@ image:
   $ref: 'json-schema-definitions://canvas.module/image'
 ```
 
-Canvas widget: Media Library picker.
+Canvas widget: Media Library picker (layered on top via `hook_canvas_storable_prop_shape_alter()`).
 
-Value structure passed to Twig:
+Value structure passed to Twig — exactly four keys, no more:
 ```
-image.url         — rendered image URL
-image.alt         — alt text from media entity
+image.src         — the image URL (NOT `image.url` — that key does not exist)
+image.alt         — alt text
 image.width       — pixel width
 image.height      — pixel height
-image.srcset      — responsive srcset string (if image styles configured)
 ```
 
-Do NOT use `<img src="{{ image }}">` — the prop is an object, not a URL. Always use the `canvas:image` component (see [SDC Image Handling](sdc-image-handling.md)).
+- There is no `image.url` and no `image.srcset`. `srcset` is computed *inside* `canvas:image` from `|toSrcSet`; it is never a value on the prop
+- Do NOT use `<img src="{{ image }}">` — the prop is an object, not a URL. Always use `canvas:image` (see [SDC Image Handling](sdc-image-handling.md))
+- `examples:` on an image prop must be a list of objects with those same keys — e.g. `- {src: hero.jpg, alt: 'Hero', width: 640, height: 427}`. An invalid example disqualifies the whole component
 
 ---
 
 #### Link Prop
 
+A link prop is a **plain string with a `format`**, not an object and not a `$ref`.
+
 ```yaml
+# internal OR external URLs
 cta_url:
-  type: object
+  type: string
+  format: uri-reference   # accepts /node/1, /contact, and https://example.com
   title: 'Call to Action URL'
-  $ref: 'json-schema-definitions://canvas.module/link'
+  examples:
+    - '/contact'
 ```
 
-Canvas widget: URL input + link text input.
-
-Value structure:
+```yaml
+# external URLs only
+cta_url:
+  type: string
+  format: uri             # absolute URLs only; relative paths are rejected
+  title: 'Call to Action URL'
+  examples:
+    - 'https://www.drupal.org'
 ```
-cta_url.url    — the URL string
-cta_url.title  — the link text (if provided)
-```
 
-Check for `cta_url` being empty before using `cta_url.url` in Twig.
+Canvas widget: Drupal's `link_default` widget, URL field only. Canvas sets the link field's `title` instance setting to `0`, so the widget shows **no link-text input**. Value passed to Twig is the URL string itself — render with `{{ cta_url }}`.
+
+- `$ref: 'json-schema-definitions://canvas.module/link'` does not exist and never has. Use it and Canvas disqualifies the component — no error on the page, the component simply never appears in the panel
+- There is no `.url` and no `.title` on the value your Twig receives
+- Need editor-editable link text? Declare a separate `type: string` prop for it and pair the two in your Twig
+- `format: uri` vs `format: uri-reference` is the *only* thing that decides internal-links-allowed. `uri` maps to `LinkItemInterface::LINK_EXTERNAL`, `uri-reference` to `LINK_GENERIC`
 
 ---
 
@@ -133,10 +149,19 @@ color_scheme:
     - light
     - dark
     - brand
-  default: light
+  meta:enum:              # human-readable labels for the dropdown
+    light: 'Light'
+    dark: 'Dark'
+    brand: 'Brand'
+  examples:
+    - light               # ← this, not `default:`, is the effective default
 ```
 
-Canvas widget: Select dropdown showing enum values. Values shown are raw enum strings.
+Canvas widget: Select dropdown (`options_select` over a `list_string` field).
+
+- **Do not write `default: light`.** Canvas strips `default` from every prop schema; the seeded value is `examples[0]`
+- The extension key for labels is `meta:enum`, not `enumNames` — `enumNames` appears nowhere in Canvas. Without `meta:enum` the dropdown shows the raw enum strings
+- An `enum` containing `""` disqualifies the component. To express "no choice", make the prop optional instead
 
 ---
 
@@ -146,10 +171,11 @@ Canvas widget: Select dropdown showing enum values. Values shown are raw enum st
 show_divider:
   type: boolean
   title: 'Show Divider'
-  default: false
+  examples:
+    - false             # ← this, not `default:`, is the effective default
 ```
 
-Canvas widget: Toggle/checkbox. In Twig, check with `{% if show_divider %}` — no casting needed.
+Canvas widget: Toggle/checkbox (`boolean_checkbox`). `default: false` is stripped by Canvas — use `examples: [false]`. In Twig, check with `{% if show_divider %}` — no casting needed.
 
 ---
 
@@ -161,41 +187,100 @@ columns:
   title: Columns
   minimum: 1
   maximum: 6
-  default: 3
+  examples:
+    - 3                 # ← this, not `default:`, is the effective default
 ```
 
-Canvas widget: Numeric input (with min/max constraints if specified). Use `integer` for whole numbers; `number` for floats.
+Canvas widget: Numeric input, with min/max passed through as field instance settings. `default: 3` is stripped by Canvas — use `examples: [3]`. Use `integer` for whole numbers, `number` for floats. `multipleOf` has no Drupal core equivalent — a prop that uses it gets no storable shape and disqualifies the component.
 
 ---
 
 #### Multi-value Props
 
+Arrays of a repeated **single** prop shape. `type: array` → cardinality, `items:` → the field type.
+
 ```yaml
-items:
+# array of strings (optional, unlimited)
+tags:
   type: array
-  title: Items
+  title: Tags
   items:
-    type: object
-    properties:
-      title:
-        type: string
-        title: Title
-      body:
-        type: string
-        title: Body
-        contentMediaType: text/html
-        x-formatting-context: block
+    type: string
+  examples:
+    - ['Alpha', 'Beta']
 ```
 
-Canvas widget: Repeater — editors can add/remove/reorder items. Array prop UI landed in Canvas 1.3.0 (issue #3571917); value persistence across reloads landed in Canvas 1.4.0 (issue #3572553). As of Canvas 1.10.1, multi-value props are functionally supported for Text, Link, Image, Video, Integer, Number, Date, and List (Text/Integer) props — not for Formatted Text or Boolean; the two exclusions are a Code Component Builder UI restriction where the "Allow multiple values" option is hidden for them. The required-field-validation gap for multi-value props is closed: issue #3576124 ("Enforce required validation for multi-value props in code component editor") was closed 2026-05-01, so a prop marked both Required and Multi-value enforces at least one value in the Code Component editor. In Twig, iterate with `{% for item in items %}`.
+```yaml
+# array of images (required, capped at 4)
+images:
+  type: array
+  title: 'Gallery images'
+  minItems: 1        # required arrays MUST have this, and it must be exactly 1
+  maxItems: 4         # optional; if present must be >= 2
+  items:
+    $ref: json-schema-definitions://canvas.module/image
+    type: object
+  examples:
+    - - {src: a.jpg, alt: 'A', width: 601, height: 402}
+      - {src: b.jpg, alt: 'B', width: 601, height: 402}
+```
+
+Canvas widget: the item type's own widget, repeated.
+
+- **`items` must be a scalar type or a recognized `$ref`.** An inline `items: {type: object, properties: {...}}` is **not** supported — Canvas finds no storable shape for an anonymous object and disqualifies the entire component. For repeated compound content, use a **slot** and let editors nest real components
+- The array schema may carry only `type`, `items`, `minItems`, `maxItems`. Any other keyword (`uniqueItems`, `contains`, …) makes the prop unstorable and disqualifies the component. `title`, `description`, `examples`, `meta:enum` are stripped before this check, so those are safe
+- `minItems` is allowed only on a **required** array, and only with the value `1`. An optional array with `minItems`, or a required array without it, disqualifies the component
+- `maxItems`, if present, must be at least `2`
+- As of Canvas 1.10.1, multi-value props are functionally supported for Text, Link, Image, Video, Integer, Number, Date, and List (Text/Integer) — not for Formatted Text or Boolean (a Code Component Builder UI restriction that hides "Allow multiple values" for those two)
+- The required-field-validation gap for multi-value props is closed (issue #3576124, closed 2026-05-01) — a prop marked both Required and Multi-value enforces at least one value in the Code Component editor
+- In Twig, iterate with `{% for item in items %}`
+
+## Defaults: Canvas Ignores `default:`
+
+This is the single most surprising thing about Canvas props, and it inverts what plain SDC authors expect.
+
+**Canvas deletes `default:` from every prop schema** before deciding how to store the prop, and never reads it again. The value Canvas actually seeds a new component instance with is **`examples[0]`** — the same list you write for documentation and Storybook. Canvas validates `examples[0]` against the prop's own schema precisely because it uses it as the default; an example that does not validate disqualifies the component.
+
+- Write the default you want as the **first** entry of `examples:`. Additional entries are documentation only
+- Do not also write `default:` — it is inert, and having two disagreeing "defaults" in one file is a maintenance trap
+- On a **required** prop, `examples[0]` is mandatory — no example, no component
+- On an **optional** prop with no `examples`, Canvas stores nothing. The effective runtime default is then whatever your Twig supplies via `??` or `|default()`
+- Content-entity-reference props are the exception in the other direction: they must **not** carry `examples`, because the referenced entity is resolved at runtime
+
+## Component Eligibility (Hard Gates)
+
+Canvas discovers every SDC automatically, then checks it against a fixed list of requirements. **A component that fails any of these is disqualified: it is never offered in the component panel, and if a Component config entity already existed it gets disabled.** There is no error on the page and no exception in the log — the failure mode is silence.
+
+| The gate | Failing it means |
+|---|---|
+| Every prop has a `title` | Component excluded — editors do **not** just see machine names |
+| Every slot has a `title` | Component excluded |
+| Every required prop has `examples[0]` | Component excluded |
+| `examples[0]` validates against the prop's own schema | Component excluded |
+| `group:` is not `Elements` | `Elements` is reserved; component excluded |
+| No `enum` contains `""` (including inside `items`) | Component excluded |
+| Required `type: array` props have `minItems: 1` | Component excluded |
+| Optional `type: array` props have **no** `minItems` | Component excluded |
+| `maxItems`, if present, is ≥ 2 | Component excluded |
+| Every prop resolves to a field type + widget Canvas knows | Component excluded — this is what an invented `$ref` or an inline object array item trips |
+| Content-entity-reference props are optional and carry no `examples` | Component excluded |
+| Not flagged `noUi: true` | Filtered out before discovery even runs — deliberately hidden, and it will **not** be listed on the status page |
+| Not `status: obsolete` | Component excluded |
+
+Props typed `Drupal\Core\Template\Attribute` are skipped by all of the above — that is the standard SDC `attributes` prop, and it needs no `title` or `examples`.
+
+**Where to see why a component is missing:** Visit **`/admin/appearance/component/status`** (permission: *administer themes*) for a table of every excluded component and the exact message. Check this page first whenever a component you just wrote does not show up.
 
 ## Common Mistakes
 
-- **Wrong**: Not providing `title` on props → **Right**: Canvas uses `title` as the editor label; without it, editors see raw machine names
-- **Wrong**: Not providing `description` → **Right**: Editors have no context for what the prop is for
-- **Wrong**: Using `$ref` for props that don't need Media Library or link widgets → **Right**: It adds overhead and changes the editor widget
-- **Wrong**: Forgetting `type: object` wrapping when using `$ref` → **Right**: `$ref` props must declare `type: object`
-- **Wrong**: Defining props that don't appear in the Twig template → **Right**: Wasted editor effort and storage
+- **Wrong**: Writing `default:` and expecting Canvas to honour it → **Right**: it is stripped; use `examples[0]`
+- **Wrong**: Omitting `title` on a prop or slot → **Right**: this does not degrade the label, it removes the component entirely
+- **Wrong**: Omitting `examples` on a required prop → **Right**: same result, the component disappears
+- **Wrong**: Inventing a `$ref` → **Right**: only `image`, `video`, and `content-entity-reference` resolve
+- **Wrong**: Using `enumNames` → **Right**: the real key is `meta:enum`
+- **Wrong**: Forgetting `type: object` alongside `$ref` → **Right**: SDC's own validator needs it, so `$ref` props must declare both
+- **Wrong**: An inline `items: {type: object, properties: {...}}` for a repeater → **Right**: use a scalar type or a recognized `$ref`; for compound content use a slot instead
+- **Wrong**: Debugging a missing component by re-reading YAML → **Right**: open `/admin/appearance/component/status` first — it names the exact gate that failed
 
 ## See Also
 

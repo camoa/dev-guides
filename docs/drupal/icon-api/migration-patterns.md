@@ -1,6 +1,6 @@
 ---
-description: Migrate from manual icon management, icon fonts, or other icon systems to Icon API
-tldr: "You're migrating from manual icon management, icon fonts, or other icon systems to Icon API."
+description: "Migrate manual SVG, Font Awesome, and image icons onto Icon API — always call icon() with pack and id as two arguments"
+tldr: "Migrating to Icon API from manual markup, an icon font, or image files; search-and-replacing old markup into icon('pack:id') is fatal — the Twig function always takes pack and icon as two separate arguments."
 drupal_version: "11.x"
 ---
 
@@ -34,7 +34,7 @@ Migrate from manual SVG embedding:
 {# 1. Create icon pack in my_theme.icons.yml #}
 {# 2. Move SVG to themes/my_theme/icons/home.svg #}
 {# 3. Use icon() function #}
-{{ icon('my_theme:home', { size: 24 }) }}
+{{ icon('my_theme', 'home', { size: 24 }) }}
 ```
 
 Migrate from Font Awesome:
@@ -45,22 +45,24 @@ Migrate from Font Awesome:
 
 {# After - Icon API with font extractor #}
 {# Option 1: Keep using font #}
-{{ icon('fontawesome:home') }}
+{{ icon('fontawesome', 'home') }}
 
 {# Option 2: Switch to SVG (recommended) #}
 {# Download Font Awesome SVGs, create SVG pack #}
-{{ icon('fontawesome_svg:home', { size: 24 }) }}
+{{ icon('fontawesome_svg', 'home', { size: 24 }) }}
 ```
 
 Icon pack for Font Awesome migration:
 
 ```yaml
-# Option 1: Font extractor
+# Option 1: Font extractor (needs drupal/ui_icons + ui_icons_font).
+# .woff2 is not a recognised source extension -- use .woff/.ttf, or a
+# .json/.yaml/.codepoints metadata file that lists the icon IDs.
 fontawesome:
   extractor: font
   config:
     sources:
-      - fonts/fontawesome.woff2
+      - fonts/fontawesome.woff
   library: "my_theme/fontawesome"
   template: >-
     <i class="fas fa-{{ icon_id }}" style="font-size: {{ size|default(24) }}px;"></i>
@@ -84,22 +86,23 @@ Migrate image-based icons:
 <img src="{{ base_path ~ directory }}/images/icons/home.png" alt="Home" width="24">
 
 {# After - Path extractor #}
-{{ icon('my_theme:home', {
+{{ icon('my_theme', 'home', {
   size: 24,
-  alt: 'Home'  # For semantic icons
+  alt: 'Home'  {# only if the pack template prints `alt` #}
 }) }}
 ```
 
 ```yaml
-# Image icon pack
+# Image icon pack. Local sources are limited to .svg, .png and .gif
+# (IconFinder::ALLOWED_EXTENSION) -- a .webp or .jpg entry logs
+# "Invalid icon path extension" and contributes nothing.
 image_icons:
   extractor: path
   config:
     sources:
       - images/icons/{icon_id}.png
-      - images/icons/{icon_id}.webp
   template: >-
-    <img src="{{ source }}"
+    <img src="{{ source }}" 
          width="{{ size|default(24) }}"
          height="{{ size|default(24) }}"
          alt="{{ alt|default('') }}"
@@ -124,6 +127,8 @@ Reference: Migration is theme-specific, no core migration path.
 ## Common Mistakes
 
 - **Wrong**: Migrating everything at once → **Right**: Migrate incrementally by component/template
+- **Wrong**: Search-and-replacing old markup into `icon('pack:id')` → **Right**: That form is fatal; the Twig function takes pack and icon as separate arguments
+- **Wrong**: Migrating `.webp`/`.jpg` icons to a `path` pack → **Right**: Not discoverable; convert to `.png`/`.svg` first
 - **Wrong**: Not updating documentation → **Right**: Update theme docs with new icon() usage
 - **Wrong**: Breaking existing functionality → **Right**: Test thoroughly, icons are high-visibility
 - **Wrong**: Forgetting to remove old assets → **Right**: Clean up unused font files, image directories

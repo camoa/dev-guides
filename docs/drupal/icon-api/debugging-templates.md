@@ -1,6 +1,6 @@
 ---
-description: Debug when icons render incorrectly, template variables are missing, or SVG markup is malformed
-tldr: "Icons render incorrectly, template variables are missing, or SVG markup is malformed."
+description: "SVG source files must be complete well-formed <svg> documents — stripping the wrapper breaks XML parsing, it doesn't produce empty markup"
+tldr: "Icons render incorrectly or content is missing; source files for the svg extractor must be full <svg> documents with a single root — two root nodes fails simplexml_load_string() and the icon renders as nothing."
 drupal_version: "11.x"
 ---
 
@@ -74,15 +74,27 @@ Validate SVG source files:
 # Check SVG file structure
 cat themes/my_theme/icons/home.svg
 
-# Should NOT include outer <svg> wrapper for SVG extractor
-# ❌ Bad (for SVG extractor):
-# <svg><path d="..."/></svg>
+# Source files MUST be complete, well-formed SVG documents. simplexml_load_string()
+# parses the file; the root's CHILDREN become {{ content }} and the root's
+# ATTRIBUTES become {{ attributes }}.
 
 # ✅ Good (for SVG extractor):
+# <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+#   <path d="..."/>
+# </svg>
+
+# ❌ Bad - two root nodes is not well-formed XML. simplexml_load_string() fails,
+# loadIcon() returns NULL, and the icon renders as nothing:
 # <path d="..."/>
 # <circle cx="12" cy="12" r="10"/>
 
-# Note: SVG sprite extractor expects <symbol> elements
+# Note: SVG sprite extractor expects <symbol> elements (top level or in <defs>)
+```
+
+Compare against core's own fixtures, which are full documents:
+
+```bash
+cat core/modules/system/tests/modules/icon_test/icons/flat/foo.svg
 ```
 
 Check CSS conflicts:
@@ -116,11 +128,12 @@ Reference: Browser DevTools for inspecting rendered SVG.
 
 ## Common Mistakes
 
+- **Wrong**: Stripping the `<svg>` root from source files → **Right**: Breaks XML parsing; the icon disappears with no error anywhere
 - **Wrong**: Debugging in production → **Right**: Remove debug code before deployment
 - **Wrong**: Not checking browser console → **Right**: SVG errors appear in console, not visible on page
 - **Wrong**: Forgetting `xmlns` attribute → **Right**: Required for inline SVG, icons won't render
-- **Wrong**: Hardcoded viewBox → **Right**: Make configurable or match icon source dimensions
-- **Wrong**: Not escaping variables → **Right**: Twig auto-escapes, but verify with |raw only when safe
+- **Wrong**: Hardcoded viewBox → **Right**: Print `{{ attributes }}` instead so the source file's own viewBox comes through
+- **Wrong**: Reaching for `|raw` on `{{ content }}` → **Right**: Already a `FormattableMarkup`; `|raw` adds nothing and hides the fact that it is unsanitized
 
 ## See Also
 

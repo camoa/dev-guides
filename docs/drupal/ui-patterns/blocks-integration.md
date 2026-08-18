@@ -64,7 +64,7 @@ Conversely, UI Patterns core includes a `BlockSource` that allows embedding Drup
   label: new TranslatableMarkup('Block'),
   prop_types: ['slot']
 )]
-class BlockSource extends DerivableContextSourceBase { ... }
+class BlockSource extends SourcePluginBase implements SourceWithChoicesInterface { ... }
 ```
 
 The `BlockSource` filters out incompatible blocks (inline_block, system_main_block, page_title_block, layout_builder blocks, ui_patterns_blocks blocks) via `hook_plugin_filter_block__ui_patterns_alter()`.

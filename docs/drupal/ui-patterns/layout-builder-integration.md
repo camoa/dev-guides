@@ -11,7 +11,9 @@ drupal_version: "11.x"
 
 ## What It Does
 
-`ui_patterns_layouts` exposes every SDC component (that has slots) as a Drupal Layout plugin. Each component's slots become layout **regions**, and its props become configurable via the Layout Builder section configuration form.
+`ui_patterns_layouts` exposes every SDC component as a Drupal Layout plugin. Each component's slots become layout **regions**, and its props become configurable via the Layout Builder section configuration form.
+
+There is no slot filter. `ComponentLayout::getDerivativeDefinitions()` iterates every negotiated component definition and creates a derivative unconditionally; `buildLayoutDefinition()` only calls `setRegions()`/`setDefaultRegion()` when the component declares at least one slot. A slotless component therefore still becomes a layout plugin — one with **zero regions**, so there is nowhere to place blocks and the section renders props only. That is rarely what you want: reach for `ui_patterns_blocks` instead.
 
 ## How It Works
 
@@ -135,7 +137,7 @@ Key observations:
 
 | Mistake | Why It Is Wrong |
 |---|---|
-| Expecting components without slots to appear as layouts | Layout plugins require at least one region. Components with only props and no slots will not be exposed as layouts. |
+| Expecting a slotless component to be a usable layout | The deriver exposes it as a layout anyway, but with zero regions — no block can be placed in it. Only slots become regions. |
 | Configuring slots in the layout form | Slots in layouts are filled by blocks in regions, not by the layout configuration form. Props are configured; slots receive blocks. |
 | Using `ckeditor_layouts` with UI Patterns layouts | Incompatible because `ckeditor_layouts` loads layouts through the theme manager, but SDC does not pass through the theme manager. |
 

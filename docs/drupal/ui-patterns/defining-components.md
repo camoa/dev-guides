@@ -117,17 +117,27 @@ props:
 
 ## The `default` Property
 
-The `default` value pre-fills form widgets via `#default_value`. It does **not** enforce defaults during rendering. Use Twig's `|default()` filter for render-time defaults:
+Where `default:` applies depends entirely on *which code reads the prop*, and the answer differs between plain SDC and UI Patterns.
+
+**Plain SDC ignores it.** Core validates props against the YAML schema but never injects `default:` — the validator runs in type-cast mode only. Render a component with `#type: component` and no value for the prop and the Twig receives nothing.
+
+**UI Patterns widget sources do apply it, at render time.** `SourcePluginPropValue::getSetting('value')` falls back to `getDefaultFromPropDefinition()` when the stored value is NULL, and `getPropValue()` returns that. So once a widget source (textfield, select, number, …) is selected for the prop — even with an empty value — the YAML `default:` reaches the template.
+
+**But a prop with no source configured at all gets nothing.** `ComponentElementBuilder::buildSource()` returns early on `empty($configuration['source_id'])`, so no source means no value, default or not.
+
+The practical rule is unchanged: never rely on `default:` for correctness. Put the fallback in the Twig, where it holds in every path:
 
 ```twig
 <h2>{{ title|default('Untitled') }}</h2>
 ```
 
+One special case: for an `enum` prop, `EnumTrait::enumDefaultValue()` falls back to `default:` and then, if the prop is **required**, to the *first value in the `enum` array*. Order your enum values so the first one is a sane default.
+
 ## Common Mistakes
 
 | Mistake | Why It Is Wrong |
 |---|---|
-| Relying on `default` in YAML for render-time fallbacks | `default` only affects form pre-fill. If a source returns empty, the template gets nothing unless you use `\|default()` in Twig. |
+| Relying on `default` in YAML for render-time fallbacks | It holds only when a widget source is selected for the prop. With no source configured — or when the component is rendered as plain SDC — the template gets nothing. Put the fallback in Twig with `\|default()`. |
 | Defining props without `title` | While not strictly required by JSON Schema, UI Patterns uses `title` for form labels. Missing titles result in machine names as labels. |
 | Using PHP class names as `type` | `type: 'Drupal\Core\Template\Attribute'` is handled specially as an attributes prop but is non-standard. Prefer `"$ref": "ui-patterns://attributes"`. |
 | Putting renderables in props | Props are strictly typed data. Renderables (blocks, components, markup) belong in slots. |

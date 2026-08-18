@@ -1,6 +1,6 @@
 ---
-description: Integrate existing icon fonts with codepoint metadata files via UI Icons contrib module
-tldr: "You have existing icon fonts (TTF, WOFF, WOFF2) with codepoint metadata files and want to integrate them with Icon API. The font extractor is provided by the **UI Icons** contrib module (not Drupal core)."
+description: "UI Icons contrib's font extractor maps by file extension — .woff2 is silently unsupported, and only .codepoints sources set {{ content }}"
+tldr: "You have an icon font with codepoint metadata and want it in Icon API via the UI Icons contrib module; .woff2 sources are silently skipped, and {{ content }} exists only for .codepoints sources — guard it with |default(icon_id)."
 drupal_version: "11.x"
 ---
 
@@ -19,11 +19,19 @@ You have existing icon fonts (TTF, WOFF, WOFF2) with codepoint metadata files an
 | Font with CSS classes | Map icon_id to CSS classes via codepoint file | Maintain compatibility with existing CSS |
 | Web font from CDN | Include in library CSS | Standard font loading patterns |
 
-**Requirements**: UI Icons module (`composer require 'drupal/ui_icons:^1.1'`) for Drupal 11.1+.
+**Requirements**: UI Icons module — `composer require 'drupal/ui_icons:^2.0'` (2.0.0, released 2026-08-03, requires core `^11.3 || ^12.0`; use `^1.1` on core 11.1/11.2). Then enable `ui_icons_font`, whose own `composer.json` pulls in `dompdf/php-font-lib`.
 
 ## Pattern
 
-Font extractor configuration (requires codepoint metadata file):
+The extractor dispatches on the source file's **extension** (`FontExtractor::discoverIcons()`), and anything it does not recognise falls through `default: break` with no warning:
+
+| Extension | How icon IDs are found | Sets `{{ content }}`? |
+|---|---|---|
+| `.ttf`, `.woff` | Glyph names from the font's `post` table via `FontLib\Font` | No |
+| `.json` | Top-level object keys (values ignored) | No |
+| `.yml`, `.yaml` | Top-level keys | No |
+| `.codepoints` | First space-separated token per line | Yes — the second token, verbatim |
+| **`.woff2`, anything else** | **Not handled — silently skipped** | — |
 
 ```yaml
 # Example: Bootstrap Icons font pack
@@ -31,8 +39,9 @@ bootstrap_icons_font:
   extractor: font
   config:
     sources:
-      - fonts/bootstrap-icons.woff2  # Font file
-      - fonts/bootstrap-icons.json   # Codepoint metadata (JSON, YAML, or .txt format)
+      # .woff2 is NOT a recognised extension. Point at .woff/.ttf, or skip the
+      # font file entirely and let the metadata file supply the icon IDs.
+      - fonts/bootstrap-icons.json
   library: "my_theme/bootstrap_icons"
   template: >-
     <i class="bi bi-{{ icon_id }}"
@@ -41,7 +50,7 @@ bootstrap_icons_font:
     </i>
 ```
 
-**Codepoint metadata file** (JSON example for `bootstrap-icons.json`):
+**Metadata file** (JSON example for `bootstrap-icons.json`):
 
 ```json
 {
@@ -51,7 +60,11 @@ bootstrap_icons_font:
 }
 ```
 
-The font extractor uses the `dompdf/php-font-lib` library to parse TTF/WOFF files and matches glyphs against codepoint metadata for proper icon naming.
+Only the **keys** are read — `getJsonIcons()` calls `array_keys(json_decode(...))` and discards the codepoint values. They live in your CSS (`.bi-home::before { content: "\f3db"; }`), not in the icon pack.
+
+`dompdf/php-font-lib` is used only on the `.ttf`/`.woff` branch, to read glyph names out of the font's `post` table. Nothing in the extractor cross-references a font file against a metadata file; each source contributes icon IDs independently and the results are merged, so listing both a `.woff` and a `.json` gives you the union of two ID lists, not a validated intersection.
+
+Font icons carry **no `{{ source }}`** — `FontExtractor::loadIcon()` passes an empty string. `{{ content }}` exists only for `.codepoints` sources, and it is the raw second token from the line (`arrow-left f101` yields the *string* `"f101"`, not the glyph). Guard it: `{{ content|default(icon_id) }}`.
 
 Accompanying library definition (`my_theme.libraries.yml`):
 
@@ -94,11 +107,12 @@ Reference: Font extractor provided by UI Icons contrib module. Core Drupal does 
 
 ## Common Mistakes
 
-- **Wrong**: Missing library attachment → **Right**: Icons render as text, font never loads
+- **Wrong**: Listing a `.woff2` source → **Right**: Silently skipped; the pack ends up empty. Use `.woff`, `.ttf`, `.json`, `.yaml`, or `.codepoints`
+- **Wrong**: Missing `library:` in the pack → **Right**: Icons render as empty `<i>` elements because the `@font-face` never loads. `library:` on the pack is what makes `preRenderIcon()` attach it; a `libraries.yml` entry alone does nothing
 - **Wrong**: No `font-display: swap` → **Right**: FOUT (Flash of Unstyled Text) on slow connections
 - **Wrong**: Using icon fonts for new projects → **Right**: SVG extractors (core) offer better accessibility and performance
-- **Wrong**: Missing codepoint metadata file → **Right**: Font extractor needs JSON/YAML/TXT file mapping icon IDs to Unicode codepoints
-- **Wrong**: Trying to use font extractor without UI Icons module → **Right**: Not available in core, install `drupal/ui_icons`
+- **Wrong**: Printing bare `{{ content }}` in a font template → **Right**: Only `.codepoints` sources set it, and then as literal hex text. Use `{{ content|default(icon_id) }}` or drop it and drive the glyph from CSS
+- **Wrong**: Trying to use font extractor without UI Icons module → **Right**: Not available in core, install `drupal/ui_icons` and enable `ui_icons_font`
 - **Wrong**: Inline styles instead of CSS classes → **Right**: Violates CSP, harder to maintain
 - **Wrong**: Missing accessibility attributes → **Right**: Use `aria-hidden="true"` and provide text alternatives
 

@@ -1,6 +1,6 @@
 ---
-description: SDC rendering decision — UI Patterns wiring vs Twig include() for rendering custom block content types as DaisyUI SDCs
-tldr: For 1-3 simple block types without per-instance variants, use UI Patterns wiring (native, no templates). For 5+ block types, per-instance variants, or complex multi-field composition, use Twig include() — it avoids 3-level entity_field nesting per slot and reads LB block configuration directly for per-placement variants.
+description: "SDC rendering decision — UI Patterns wiring vs Twig include() for rendering custom block content types as DaisyUI SDCs"
+tldr: "For 1-3 simple block types without per-instance variants, use UI Patterns wiring (native, no templates). For 5+ block types, per-instance variants, or complex multi-field composition, use Twig include() — it avoids 3-level entity_field nesting per slot and reads LB block configuration directly for per-placement variants."
 drupal_version: "11.x"
 ---
 

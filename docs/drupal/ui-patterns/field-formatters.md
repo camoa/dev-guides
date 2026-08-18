@@ -79,7 +79,7 @@ content:
 
 - **Wrong**: `field_property:node:article:field_name` (bundle segment) → **Right**: `field_property:node:field_name:value` (field name + column, no bundle)
 - **Wrong**: Expecting sibling-field sources in per-item dropdowns → **Right**: Use `entity_field` context switcher (3-level nesting) to reach other fields on the same entity
-- **Wrong**: Using multi-value formatter on single-cardinality fields → **Right**: `ComponentFormatter` requires cardinality >1; use `ComponentFormatterSingle` for single-value fields
+- **Wrong**: Using multi-value formatter on single-cardinality fields → **Right**: `ComponentFormatter` requires cardinality >1 or unlimited; it will not appear for single-value fields. Use the per-item formatter (`ComponentPerItemFormatter`, id `ui_patterns_component_per_item`) instead — there is no class named `ComponentFormatterSingle`.
 - **Wrong**: Per-item formatter for a 6-slot component reading 6 different fields → **Right**: Each slot needs `entity_field` 3-level config — block template with `{% include %}` is usually more maintainable
 
 ## See Also
