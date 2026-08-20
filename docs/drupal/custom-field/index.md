@@ -4,7 +4,7 @@ tracks:
   - project: custom_field
     channel: stable
     declared: "5.0.2"
-    verified: 2026-08-17
+    verified: 2026-08-20
 guide-meta:
   concepts:
     - Custom Field module
@@ -15,6 +15,7 @@ guide-meta:
     - entity reference sub-fields
     - single table storage
     - SDC prop widgets
+    - select_or_other widget
   not:
     - Paragraphs
     - core field types
@@ -39,7 +40,7 @@ guide-meta:
 | Create a custom field using YAML config | [Config-First Creation](config-first-creation.md) | Create a custom field via Structure > Manage fields, define sub-field columns before any data exists (column types lock once data is present), then configure widgets/formatters per sub-field. |
 | Add/remove columns from existing fields with data | [Schema Updates](schema-updates.md) | Use addColumn()/removeColumn() on custom_field.update_manager inside a hook_update_N() to change existing custom-field columns without data loss -- there is no updateFieldSchema(), and 5.x adds a one-time taxonomy-index backfill post-update. |
 | Choose the right column type for my data | [Column Types](column-types.md) | All 23 custom field column types organized by category -- text, numeric, date/time, reference, file, and data fields with schema details and gotchas. |
-| Find the right widget for a sub-field | [Widget Plugins](widget-plugins.md) | 36 widget plugins map to 23 custom field column types, each with a documented default; only override the default when UX calls for it (e.g., select/radios instead of autocomplete for small reference sets). |
+| Find the right widget for a sub-field | [Widget Plugins](widget-plugins.md) | 37 widget plugins map to 23 custom field column types, each with a documented default; only override the default when UX calls for it (e.g., select/radios instead of autocomplete for small reference sets, or select_or_other for a constrained-but-extensible list). |
 | Use stacked vs flexbox layouts for the entire field | [Field-Level Widgets](field-level-widgets.md) | You need to control how the entire custom field (all sub-fields together) is laid out on the edit form. CustomFlexWidget uses the module's own 12-column CSS grid, not Bootstrap -- works in any theme. |
 | Render custom field data with templates or tables | [Field-Level Formatters](field-level-formatters.md) | You need to control how the entire custom field (all sub-fields together) is displayed on the view. Plugin IDs are short (custom_inline, not custom_inline_formatter) -- only custom_formatter carries the _formatter suffix. |
 | Work with entity reference sub-fields | [Entity References](entity-references.md) | Pick EntityReferenceAutocompleteWidget for large reference sets and select/radios widgets for small ones; entity reference sub-fields never auto-check access, so validate in the widget and check in the formatter. |

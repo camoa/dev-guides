@@ -151,13 +151,14 @@ settings:
 
 ## SingleDirectoryComponentFormatter
 
-Renders the whole custom field through a Single Directory Component, mapping sub-fields onto component slots and props. Sub-fields of any type can feed a component. Ships in the `custom_field_sdc` sub-module and is positioned upstream as an alternative to the `sdc_display` contrib module.
+Renders the whole custom field through a Single Directory Component, mapping sub-fields onto component slots and props. Sub-fields of any type can feed a component. Positioned upstream as an alternative to the `sdc_display` contrib module.
 
 - **Plugin ID:** `custom_field_sdc`
+- **Class:** `src/Plugin/Field/FieldFormatter/SingleDirectoryComponentFormatter.php` -- **in the main module**, despite the plugin ID. The `custom_field_sdc` sub-module contains no formatter at all.
 - **Label in the UI:** "SDC (Single directory component)"
 - **Settings:** the component to render, plus a per-prop mapping resolved by the `#[PropWidget]` plugins (see Custom Plugin Development)
 
-**Gotchas:** Enable `custom_field_sdc` first -- the formatter does not appear otherwise. Prop mapping is only as good as the component's `*.component.yml` schema; a prop with no matching sub-field type has no widget to map it.
+**Gotchas:** You do **not** need to enable `custom_field_sdc` to use this formatter -- it ships with the main module and appears in the field display dropdown as soon as `custom_field` is on. The sub-module does something different: it adds whole-**view-mode** component rendering (a "Custom Field - Single directory component options" details element on the entity view display form, plus a `hook_entity_view_alter()` that swaps the entity's build for the component). Enable it only if you want the whole view mode rendered as a component. Prop mapping is only as good as the component's `*.component.yml` schema; a prop with no matching sub-field type has no widget to map it.
 
 ## Common Mistakes
 

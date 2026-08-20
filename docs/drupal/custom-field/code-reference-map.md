@@ -26,25 +26,32 @@ You need to find specific source code for custom field functionality.
 
 - `/modules/contrib/custom_field/src/Attribute/` -- `CustomFieldType`, `CustomFieldWidget`, `CustomFieldFeedsType`, `PropWidget`. There is no `CustomFieldFormatter` attribute
 
+> **The three `*Base` classes named after the module are not in the plugin directories.** `CustomFieldTypeBase.php`, `CustomFieldWidgetBase.php` and `CustomFieldFormatterBase.php` all sit one level up, in `src/Plugin/` -- alongside their `*Interface` and `*Manager` counterparts. Only the type-specific bases live beside the plugins.
+
 ## Field Types (27 files, 22 plugin classes)
 
 - Directory: `/modules/contrib/custom_field/src/Plugin/CustomField/FieldType/`
-- Shared classes in that directory: `NumericTypeBase.php`, `OptionsTrait.php`, `DurationOptionsTrait.php` (`CustomFieldTypeBase.php` sits one level up, in `src/Plugin/`)
+- Non-plugin files in that directory: `NumericTypeBase.php`, `OptionsTrait.php`, `DurationOptionsTrait.php`, `DateTimeTypeInterface.php`, `LinkTypeInterface.php`
+- `CustomFieldTypeBase.php` / `CustomFieldTypeInterface.php` -- `src/Plugin/`
 
-## Widgets (38 files, 31 plugin classes)
+## Widgets (39 files, 32 plugin classes as of 5.0.2 -- 38/31 in 5.0.1, before `SelectOrOtherWidget`)
 
 - Directory: `/modules/contrib/custom_field/src/Plugin/CustomField/FieldWidget/`
-- Base classes: `CustomFieldWidgetBase.php`, `NumberWidgetBase.php`, `EntityReferenceWidgetBase.php`, `ListWidgetBase.php`, `DateTimeWidgetBase.php` (`MapWidgetBase.php` existed in 4.x and is removed in 5.x)
+- Base classes in that directory (7): `NumberWidgetBase.php`, `EntityReferenceWidgetBase.php`, `EntityReferenceOptionsWidgetBase.php`, `ListWidgetBase.php`, `DateTimeWidgetBase.php`, `DateRangeWidgetBase.php`, `UrlWidgetBase.php` (`MapWidgetBase.php` existed in 4.x and is removed in 5.x)
+- `CustomFieldWidgetBase.php` / `CustomFieldWidgetInterface.php` -- `src/Plugin/`
 
 ## Formatters (36 files, 33 plugin classes)
 
 - Directory: `/modules/contrib/custom_field/src/Plugin/CustomField/FieldFormatter/`
-- Base classes: `CustomFieldFormatterBase.php`, `NumericFormatterBase.php`, `DateTimeFormatterBase.php`
+- Base classes in that directory (3): `NumericFormatterBase.php`, `DateTimeFormatterBase.php`, `EntityReferenceFormatterBase.php`
+- `CustomFieldFormatterBase.php` / `CustomFieldFormatterInterface.php` -- `src/Plugin/`
 - New in 5.x: `LinkTextFormatter`, `MapInlineFormatter`, `MapListFormatter`
 
-## SDC Prop Widgets (5.x)
+## SDC Prop Widgets (5.x) -- three different directories, which is easy to get wrong
 
-- `/modules/contrib/custom_field/src/Plugin/Components/` -- `#[PropWidget]` plugins, with `PropWidgetBase` / `PropWidgetInterface` and `PropWidgetManager`
+- `/modules/contrib/custom_field/src/Plugin/Components/PropWidget/` -- the 14 `#[PropWidget]` plugin classes (`PropWidgetString`, `PropWidgetImage`, `PropWidgetArrayObject`, ...) plus `PropWidgetArrayBase.php`
+- `/modules/contrib/custom_field/src/Plugin/PropWidgetBase.php` and `PropWidgetInterface.php` -- the base class and interface, one level up
+- `/modules/contrib/custom_field/src/PluginManager/PropWidgetManager.php` (+ `PropWidgetManagerInterface.php`) -- the only classes in `src/PluginManager/`. The manager's discovery subdirectory string is `'Plugin/Components/PropWidget'`.
 
 ## Field-Level Widgets
 
@@ -59,7 +66,8 @@ You need to find specific source code for custom field functionality.
 - `/modules/contrib/custom_field/src/Plugin/Field/FieldFormatter/CustomTableFormatter.php`
 - `/modules/contrib/custom_field/src/Plugin/Field/FieldFormatter/FlippedTableFormatter.php`
 - `/modules/contrib/custom_field/src/Plugin/Field/FieldFormatter/CustomTemplateFormatter.php`
-- `/modules/contrib/custom_field/modules/custom_field_sdc/src/Plugin/Field/FieldFormatter/SingleDirectoryComponentFormatter.php`
+- `/modules/contrib/custom_field/src/Plugin/Field/FieldFormatter/SingleDirectoryComponentFormatter.php` -- plugin ID `custom_field_sdc`, but it is in the **main module**, not the sub-module of the same name
+- `/modules/contrib/custom_field/src/Plugin/Field/FieldFormatter/BaseFormatter.php` + `BaseFormatterInterface.php` -- shared base for all seven
 
 ## Services
 
@@ -83,6 +91,7 @@ You need to find specific source code for custom field functionality.
 ## Form Element
 
 - `/modules/contrib/custom_field/src/Element/MultiValue.php` -- `#[FormElement('custom_field_multivalue')]` (5.x)
+- `/modules/contrib/custom_field/src/Element/SelectOrOtherBase.php`, `SelectOrOtherSelect.php`, `SelectOrOtherRadios.php` -- backing elements for the `select_or_other` widget (5.0.2)
 
 ## Entity Usage Tracking
 
@@ -122,11 +131,11 @@ You need to find specific source code for custom field functionality.
 
 ## Config Schema
 
-- `/modules/contrib/custom_field/config/schema/custom_field.schema.yml` -- 1071 lines
+- `/modules/contrib/custom_field/config/schema/custom_field.schema.yml` -- 1088 lines in 5.0.2 (1071 in 5.0.1)
 
 ## Upstream Documentation
 
-- `/modules/contrib/custom_field/docs/` + `mkdocs.yml` -- ~150-file mkdocs (Material) site shipped in the release, one page per plugin. Canonical reference as of 5.0.0
+- `/modules/contrib/custom_field/docs/` + `mkdocs.yml` -- 143-file mkdocs (Material) site shipped in the release tarball, one page per plugin. Canonical upstream reference since 5.0.0
 
 ## Sub-Module Directories
 

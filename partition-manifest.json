@@ -180,8 +180,8 @@
     "guides_extracted": 21
   },
   "drupal/custom-field": {
-    "source_hash": "f6cc8c886389eabf5d0a47eb5acb1a86cb101e4d43a03f7687a64533d195e496",
-    "partitioned": "2026-08-17",
+    "source_hash": "e2b804c7ee227a22bc9a6d9cd65b255926423b3172d8f3d2d59a58ef23c874ed",
+    "partitioned": "2026-08-20",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 19
   },

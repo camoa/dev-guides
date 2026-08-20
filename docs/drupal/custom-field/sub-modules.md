@@ -75,11 +75,12 @@ AI module integration.
 
 ## custom_field_sdc
 
-Renders a custom field through a Single Directory Component.
+Renders a whole **view mode** through a Single Directory Component.
 
 - **Dependencies:** none beyond core SDC
-- **Plugin:** the `custom_field_sdc` field-level formatter (`SingleDirectoryComponentFormatter`), which fills component slots and props from sub-fields of any type via `#[PropWidget]` plugins
-- An alternative to the `sdc_display` contrib module for component-driven output of compound fields
+- **Contents:** two hook classes and a config-schema file -- `src/Hook/FormHooks.php` (adds the component/prop/slot settings to the entity view display form as a `custom_field_sdc` third-party setting) and `src/Hook/EntityHooks.php` (`hook_entity_view_alter()`, which replaces the entity build with the configured component, and bails out if `sdc_display` has claimed the display). **No plugin classes.**
+- **Not here:** the `custom_field_sdc` *field-level formatter* (`SingleDirectoryComponentFormatter`) lives in the main module and works without this sub-module. The shared plugin ID makes them easy to confuse.
+- An alternative to the `sdc_display` contrib module for component-driven output of whole view modes
 
 ## Common Mistakes
 

@@ -123,7 +123,7 @@ The method is `formatValue(FieldItemInterface $item, mixed $value): mixed` -- it
 | New field type (column storage) | CustomFieldType plugin | `Drupal\custom_field\Attribute\CustomFieldType` | CustomFieldTypeBase |
 | New widget for existing/custom type | CustomFieldWidget plugin | `Drupal\custom_field\Attribute\CustomFieldWidget` | CustomFieldWidgetBase |
 | New formatter for existing/custom type | Sub-field formatter plugin | core's `Drupal\Core\Field\Attribute\FieldFormatter` | CustomFieldFormatterBase |
-| Map a sub-field onto an SDC component prop | PropWidget plugin (5.x, in `/Plugin/Components/`) | `Drupal\custom_field\Attribute\PropWidget` | PropWidgetBase / PropWidgetInterface |
+| Map a sub-field onto an SDC component prop | PropWidget plugin (5.x, in `src/Plugin/Components/PropWidget/`) | `Drupal\custom_field\Attribute\PropWidget` | `Drupal\custom_field\Plugin\PropWidgetBase` / `PropWidgetInterface` -- in `src/Plugin/`, one level above the plugin directory |
 
 The prop-widget type is the fourth extension point, added in 5.x and discovered by `plugin.manager.custom_field_component_prop_widget`. It is what the `custom_field_sdc` formatter uses to decide how each sub-field feeds a component prop.
 

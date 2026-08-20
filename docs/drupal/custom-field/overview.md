@@ -14,6 +14,8 @@ composer require 'drupal/custom_field:^5.0'
 
 **5.0.2** (`core_version_requirement: ^11.4 || ^12`) is the version documented here. The 4.0.x branch is still maintained upstream, but 4.0.10 retargeted its compatibility to `^10.3 || >=11.0 <11.4` -- it will **not** install on Drupal 11.4 or later. On current core, 5.x is the only branch that installs. 5.0.0 is a modernization release (procedural `.module` hook shims and `DeprecationHelper` removed in favour of OO `#[Hook]` classes); the public API surface is unchanged from 4.0.x, so 4.x code and config carry over. The one upgrade action item is a post-update that backfills the taxonomy index -- see Schema Updates.
 
+**5.0.1 → 5.0.2 (2026-08-17)** is a bug-fix-plus-features release. The one visible addition is the `select_or_other` widget (`SelectOrOtherWidget` plus three `SelectOrOther*` render elements) -- see Widget Plugins. Everything else in the release is a large new functional/kernel test suite; nothing was removed or renamed. Where this guide states a file or line count it is for 5.0.2, with the 5.0.1 figure noted where the two differ.
+
 ## When to Use
 
 You need to store multiple related values together in a single field without creating entity references or separate content types -- for example, an address with street/city/state/zip, a product with SKU/price/weight/dimensions, or a person with first/last/email/phone.

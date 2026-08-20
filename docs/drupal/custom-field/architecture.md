@@ -35,8 +35,10 @@ plugin.manager.custom_field_link_attributes:
   # Discovers link-attribute plugins used by link columns
 
 plugin.manager.custom_field_component_prop_widget:
-  # NEW in 5.x -- discovers #[PropWidget] plugins in /Plugin/Components/,
-  # which map sub-fields onto SDC component props
+  # NEW in 5.x -- class Drupal\custom_field\PluginManager\PropWidgetManager
+  # (src/PluginManager/, NOT src/Plugin/). Discovers #[PropWidget] plugins in
+  # Plugin/Components/PropWidget/, which map sub-fields onto SDC component props.
+  # Aliased to PropWidgetManagerInterface, so it autowires by interface.
 ```
 
 Plus `custom_field.tag_manager`. Only the prop-widget manager is new in 5.x; the feeds, link-attributes and tag managers already existed in 4.x and were simply undocumented.
