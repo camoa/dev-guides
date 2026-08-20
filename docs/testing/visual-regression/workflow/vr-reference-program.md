@@ -50,4 +50,4 @@ Don't build the whole suite at once — most failed VR programs over-invest befo
 - [Matrix Design](vr-matrix-design.md)
 - [When to Add a VR Test](vr-when-to-add.md)
 - [VR Debt & Hygiene](vr-debt-and-hygiene.md)
-- Reference: `drupal-playwright-vr.md`, `pixelmatch.md`, `playwright-html-report.md`
+- Reference: `drupal-playwright-vr.md`, `pixelmatch.md`, `playwright-html-report.md`, `drupal-ui-patterns.md` (pattern fixtures pair with VR for component-level testing)

@@ -1,6 +1,6 @@
 ---
-description: Key classes, services, plugin discovery paths, and theme settings storage schema for the UI Skins module.
-tldr: UI Skins ships two plugin managers (CssVariablePluginManager, ThemePluginManager), a PreprocessHtml hook handler that emits the style tag and injects body/html attributes, and a theme settings form integration. Plugin files must live at the theme/module root and are discovered by YAML file name pattern.
+description: "Key classes, services, plugin discovery paths, and theme settings storage schema for the UI Skins module."
+tldr: "UI Skins ships two plugin managers (CssVariablePluginManager, ThemePluginManager), two `#[Hook]`-attributed classes under `src/Hook/` (PreprocessHtml, PageTop — no `.module` file), and stores its settings nested under `third_party_settings.ui_skins.*` per the keys on `UiSkinsInterface`. Plugin YAML files must live at the theme/module root."
 drupal_version: "11.x"
 ---
 
@@ -11,16 +11,17 @@ drupal_version: "11.x"
 | Location | Role |
 |---|---|
 | `ui_skins.services.yml` | Service definitions for plugin managers |
-| `ui_skins.module` | Hook implementations (form alter, preprocess) |
+| `src/UiSkinsInterface.php` | The two theme-setting key constants |
+| `src/UiSkinsUtility.php` | CSS variable/scope name + inline-CSS helpers |
 | `src/CssVariable/CssVariablePluginManager.php` | Discovers and manages CSS variable definitions |
 | `src/Theme/ThemePluginManager.php` | Discovers and manages theme variant definitions |
 | `src/Definition/CssVariableDefinition.php` | Value object for a parsed CSS variable plugin |
 | `src/Definition/ThemeDefinition.php` | Value object for a parsed theme plugin |
 | `src/Element/AlphaColor.php` | Color-picker form element with alpha channel |
 | `src/Form/CssVariablesThemeSettingsForm.php` | Theme settings form integration |
-| `src/HookHandler/PreprocessHtml.php` | Renders `<style>` tag and injects body/html attributes |
-| `src/HookHandler/FormSystemThemeSettingsAlter.php` | Adds variable + theme controls to theme settings page |
-| `src/HookHandler/PageTop.php` | Page-top render integration |
+| `src/Hook/PreprocessHtml.php` | Injects body/html attributes and theme libraries |
+| `src/Hook/FormSystemThemeSettingsAlter.php` | Adds variable + theme controls to theme settings page |
+| `src/Hook/PageTop.php` | Renders the CSS-variables `<style>` tag into page top |
 | `config/schema/ui_skins.schema.yml` | Schema for theme settings storage |
 
 ## Plugin Discovery
@@ -31,16 +32,20 @@ drupal_version: "11.x"
 
 ## Theme Settings Storage
 
+Both keys are nested under the theme's `third_party_settings.ui_skins` (see `config/schema/ui_skins.schema.yml`, which declares `theme_settings.third_party.ui_skins`), and are referenced in code through the constants on `UiSkinsInterface`:
+
 ```yaml
 # config/sync/{theme}.settings.yml (excerpt)
-ui_skins_css_variables:
-  brand_primary:
-    ":root": "#aa00ccff"
-ui_skins_theme: dark
+third_party_settings:
+  ui_skins:
+    css_variables:
+      brand_primary:
+        ":root": "#aa00ccff"
+    theme: dark
 ```
 
-- `ui_skins_css_variables` — map of `{plugin_id: {scope: value}}`
-- `ui_skins_theme` — single string: active theme plugin ID
+- `third_party_settings.ui_skins.css_variables` (`UiSkinsInterface::CSS_VARIABLES_THEME_SETTING_KEY`) — map of `{plugin_id: {scope: value}}`
+- `third_party_settings.ui_skins.theme` (`UiSkinsInterface::THEME_THEME_SETTING_KEY`) — single string: active theme plugin ID
 
 ## Requirements
 

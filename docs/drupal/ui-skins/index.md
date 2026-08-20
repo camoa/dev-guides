@@ -4,7 +4,7 @@ tracks:
   - project: ui_skins
     channel: stable
     declared: "1.2.1"
-    verified: 2026-08-16
+    verified: 2026-08-20
 guide-meta:
   concepts:
     - UI Skins
@@ -49,7 +49,7 @@ guide-meta:
 | Apply a class vs a data attribute for theme switches | [Theme Targets & Keys](ui-skins-theme-targets-keys.md) | Match `target` and `key` to the CSS selectors your theme already uses. Bootstrap 5 uses `html[data-bs-theme]`; Tailwind dark mode uses `html.dark`. |
 | Chain themes via dependencies | [Theme Dependencies](ui-skins-theme-dependencies.md) | Theme dependencies are additive — declaring one theme as a dependency causes both to activate simultaneously. Not a mutual-exclusivity mechanism. |
 | Ship a sub-theme with its own variables and themes | [Theme Authoring](ui-skins-theme-authoring.md) | Author CSS using `var(--token)`, attach via libraries.yml, declare matching plugins at the theme root, clear cache. Sub-themes inherit parent plugin definitions and can override with the same plugin ID. |
-| Understand the render-time injection mechanism | [Render Pipeline](ui-skins-render-pipeline.md) | UI Skins runs via `HookHandler\PreprocessHtml`. It reads theme settings, resolves transitive dependencies, injects attributes, emits a `<style>` tag, and attaches optional libraries. |
+| Understand the render-time injection mechanism | [Render Pipeline](ui-skins-render-pipeline.md) | UI Skins splits its render-time work across two `#[Hook]`-attributed classes (no `.module` file): `Hook\PreprocessHtml` injects body/html class or data attributes and attaches libraries, `Hook\PageTop` emits a `<style>` tag into page top. Both read settings via `ThemeSettingsProvider::getSetting()`, not `theme_get_setting()`; flat `ui_skins_css_variables:`/`ui_skins_theme:` config keys are legacy and silently produce nothing. |
 | Combine UI Skins with UI Styles | [UI Skins + UI Styles Together](ui-skins-with-ui-styles.md) | UI Skins sets CSS variable values theme-wide; UI Styles applies utility classes per-block. Wire them via CSS: `color: var(--brand-primary)` inside `.text-primary`. |
 | Avoid common mistakes | [Anti-Patterns](ui-skins-anti-patterns.md) | The most common mistakes are hardcoding hex colors in CSS, expecting runtime switching, and placing YAML files in theme subdirectories instead of the root. |
-| Find key classes and services | [Code Reference Map](ui-skins-code-reference.md) | Key classes, services, plugin discovery paths, and theme settings storage schema for the UI Skins module. |
+| Find key classes and services | [Code Reference Map](ui-skins-code-reference.md) | UI Skins ships two plugin managers (CssVariablePluginManager, ThemePluginManager), two `#[Hook]`-attributed classes under `src/Hook/` (PreprocessHtml, PageTop — no `.module` file), and stores its settings nested under `third_party_settings.ui_skins.*` per the keys on `UiSkinsInterface`. Plugin YAML files must live at the theme/module root. |

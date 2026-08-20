@@ -1,12 +1,18 @@
 nav:
 - index.md
 - architecture.md
-- best-practices.md
+- best-practices-performance.md
 - code-reference-map.md
-- column-types.md
+- column-types-data.md
+- column-types-datetime.md
+- column-types-file.md
+- column-types-numeric.md
+- column-types-reference.md
+- column-types-text.md
 - config-first-creation.md
 - custom-plugins.md
 - datetime-fields.md
+- development-standards.md
 - entity-references.md
 - feeds-integration.md
 - field-level-formatters.md
@@ -15,8 +21,9 @@ nav:
 - link-fields.md
 - overview.md
 - schema-updates.md
+- sdc-view-modes.md
 - sub-modules.md
 - token-support.md
 - views-integration.md
-- widget-plugins.md
+- widget-plugins-overview.md
 append_unmatched: true

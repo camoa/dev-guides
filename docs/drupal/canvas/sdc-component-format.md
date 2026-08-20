@@ -10,7 +10,7 @@ drupal_version: "11.x"
 
 > Use this when creating a Canvas-compatible component using Drupal's Single Directory Component (SDC) system. This produces a server-side-rendered Twig component with Drupal field widget integration in the Canvas editor.
 
-**Discovery is not eligibility.** Canvas automatically discovers every SDC from every enabled module/theme — there is no registration step. Each discovered component is then run through a requirements check, and any component that fails is silently excluded: it never appears in the Canvas panel, and nothing is logged to the page. See [SDC Props Reference](sdc-props-reference.md) for the full gate list.
+**Discovery is not eligibility.** Canvas automatically discovers every SDC from every enabled module/theme — there is no registration step. Each discovered component is then run through a requirements check, and any component that fails is silently excluded: it never appears in the Canvas panel, and nothing is logged to the page. **One mistake is the exception and is not silent at all:** a `$ref` naming a definition that does not exist throws out of SDC discovery and takes the whole site down. See [SDC Props Reference](sdc-props-reference.md) for the full gate list and both failure modes.
 
 ## Decision
 
@@ -28,7 +28,7 @@ drupal_version: "11.x"
 | Boolean | `type: boolean` | Toggle |
 | Enum/select | `type: string` + `enum: [value1, value2]` (+ `meta:enum` for labels) | Select dropdown |
 
-**Only three `$ref` URIs exist**, and they are a closed enum: `.../image`, `.../video`, `.../content-entity-reference`. There is no `json-schema-definitions://canvas.module/link` — writing one makes Canvas reject the whole component.
+**Three `$ref` URIs are the closed enum of storable `type: object` refs**: `.../image`, `.../video`, `.../content-entity-reference`. That is not the complete list of valid `$ref`s — Canvas's `schema.json` ships fourteen `$defs`, and string/integer-typed ones (`.../heading-element`, `.../column-width`, `.../image-uri`, `.../stream-wrapper-uri`, `.../stream-wrapper-image-uri`) resolve too, as does a `$ref` into another extension's own `schema.json`. What does not exist is `json-schema-definitions://canvas.module/link` — writing a `$ref` to a definition absent from the target extension's `schema.json` is **fatal, not silent**: it throws out of SDC plugin discovery on the next cache rebuild and 500s the whole site, not just the one component. See [SDC Props Reference](sdc-props-reference.md#the-one-failure-that-is-not-silent).
 
 ## Pattern
 
@@ -134,10 +134,10 @@ slots:
 ## Common Mistakes
 
 - **Wrong**: Using `.html.twig` extension → **Right**: Canvas (and SDC) only recognize `.twig`
-- **Wrong**: Writing `$ref: 'json-schema-definitions://canvas.module/link'` → **Right**: that definition has never existed; Canvas fails closed and disables the whole component. Use `type: string` + `format: uri-reference`/`uri`
+- **Wrong**: Writing `$ref: 'json-schema-definitions://canvas.module/link'` → **Right**: that definition has never existed, and a `$ref` to a missing definition is **fatal**: the next cache rebuild throws out of SDC discovery and the site returns 500 — it does not quietly disable one component. Use `type: string` + `format: uri-reference`/`uri`
 - **Wrong**: `<img src="{{ image }}">` — image props are objects, not URLs → **Right**: Use `canvas:image`
 - **Wrong**: `{% include 'canvas:image' with {image: image} %}` — `canvas:image` takes `src`, not `image` → **Right**: Spread with `image|merge({...})`
-- **Wrong**: Adding `$ref` for anything other than image, video, or content-entity-reference → **Right**: those are the only three that resolve
+- **Wrong**: Assuming `$ref` is limited to image, video, and content-entity-reference → **Right**: those are only the storable `type: object` refs. String- and integer-typed refs such as `heading-element`, `column-width`, and `stream-wrapper-uri` resolve too — but a name absent from the target extension's `schema.json` entirely is fatal, not a graceful disqualification
 - **Wrong**: Forgetting `x-formatting-context` on rich text props → **Right**: without it, Canvas may not show the CKEditor widget
 - **Wrong**: Putting components in `templates/` → **Right**: SDC components must be in `components/`
 - **Wrong**: Using `{% embed %}` with `{% block %}` for canvas:image → **Right**: always use `{% include ... only %}`

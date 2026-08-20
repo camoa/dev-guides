@@ -1,6 +1,6 @@
 ---
-description: Understand Playwright baseline file naming, storage layout, snapshotPathTemplate, and version control strategy.
-tldr: Baselines follow `<test-name>-<ordinal>-<projectName>-<platform>.png` stored in `<spec>.ts-snapshots/` next to the spec file. Commit `*-snapshots/`; gitignore `test-results/`. Use `snapshotPathTemplate` to centralize baselines, but set it once and never change it.
+description: "Understand Playwright baseline file naming, storage layout, snapshotPathTemplate, and version control strategy."
+tldr: "Baselines follow `<test-name>-<ordinal>-<projectName>-<platform>.png` stored in `<spec>.ts-snapshots/` next to the spec file. Commit `*-snapshots/`; gitignore `test-results/`. Use `snapshotPathTemplate` to centralize baselines, but set it once and never change it."
 ---
 
 # Baseline Files
@@ -42,6 +42,23 @@ await expect(page).toHaveScreenshot(['marketing', 'pricing.png']);
 
 ### `snapshotPathTemplate` — centralize baselines
 
+Override the default path globally. Available tokens:
+
+| Token | Resolves to |
+|---|---|
+| `{arg}` | Relative snapshot path without extension |
+| `{ext}` | Extension with leading dot (`.png`) |
+| `{platform}` | `process.platform` |
+| `{projectName}` | Sanitized project name (empty if none) |
+| `{snapshotDir}` | `testProject.snapshotDir` |
+| `{testDir}` | `testProject.testDir` |
+| `{testFileDir}` | Relative path from `testDir` to test file's directory |
+| `{testFileName}` | Test filename with extension |
+| `{testFilePath}` | Relative path from `testDir` to test file |
+| `{testName}` | Sanitized test title |
+
+Each token can be prefixed by a single character that's dropped if the token is empty: `{/projectName}` means "insert `/<projectName>`, but nothing if empty."
+
 ```ts
 snapshotPathTemplate: '__screenshots__{/projectName}/{testFilePath}/{arg}{ext}'
 ```
@@ -52,6 +69,9 @@ Per-assertion-type override:
 expect: {
   toHaveScreenshot: {
     pathTemplate: '{testDir}/__screenshots__{/projectName}/{testFilePath}/{arg}{ext}'
+  },
+  toMatchAriaSnapshot: {
+    pathTemplate: '{testDir}/__snapshots__/{testFilePath}/{arg}{ext}'
   },
 }
 ```

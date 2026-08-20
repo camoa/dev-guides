@@ -180,10 +180,10 @@
     "guides_extracted": 21
   },
   "drupal/custom-field": {
-    "source_hash": "e2b804c7ee227a22bc9a6d9cd65b255926423b3172d8f3d2d59a58ef23c874ed",
+    "source_hash": "3d7de097905178fabcefde909833cdea6d10faf44d71de72a2b44f5558a8149a",
     "partitioned": "2026-08-20",
     "partitioned_by": "Carlos Ospina",
-    "guides_extracted": 19
+    "guides_extracted": 26
   },
   "drupal/tdd": {
     "source_hash": "0a74f7c7a4d3d9efe6a5219c6e72c5342689ce3c9b4adac9449124fcb6c732ee",
@@ -360,8 +360,8 @@
     "guides_extracted": 27
   },
   "drupal/canvas": {
-    "source_hash": "2e9352a2a44d90d523109e3c0ff1d4e1fb564d7a870224842198e4006dfa4205",
-    "partitioned": "2026-08-18",
+    "source_hash": "3dddf0c4bd0a223eb6be805310472548c99ba99d3fafed897eb6d622c802aaf0",
+    "partitioned": "2026-08-20",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 17
   },
@@ -456,38 +456,38 @@
     "guides_extracted": 17
   },
   "drupal/ui-skins": {
-    "source_hash": "2a4463b9085dc4fd1bac289b3a0ac8cdc853a068e0a97cfc509fe8876097a57f",
-    "partitioned": "2026-08-16",
+    "source_hash": "8277a7a7fef2abd14562514ebb779ab535b9f2a8c9a7130b4eafd9a8d930510a",
+    "partitioned": "2026-08-20",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 13
   },
   "drupal/ui-styles": {
-    "source_hash": "a1a6e084487a850f3349a27d8db6c4bf160d765f2a62c59c4aa807c34d010dc0",
-    "partitioned": "2026-08-17",
+    "source_hash": "776f486d40bf3e55f43c73822d84979be6e4c7692b172b4cf98f1a3fc14f8d73",
+    "partitioned": "2026-08-20",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 16
   },
   "drupal/ui-icons": {
-    "source_hash": "3c15ce413e694159648396c1ea50337896026a89558b9db4aa2c098e836e175f",
-    "partitioned": "2026-08-18",
+    "source_hash": "9de9fd57e44a8cfa4238c6b6062c7b4d17c8444b77ddde3580ea09270a1f4b18",
+    "partitioned": "2026-08-20",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 16
   },
   "testing/visual-regression/workflow": {
-    "source_hash": "b95256306ed5f16fb85a0be34963afac0cf21f926ed4f1590e43ef4432e6df17",
-    "partitioned": "2026-05-08",
+    "source_hash": "84b03b9d10226e495912c4ea726c753871fda149220cb4667cd19e1c97d4d34f",
+    "partitioned": "2026-08-20",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 14
   },
   "testing/visual-regression/playwright": {
-    "source_hash": "08f5e01eea47d26573a282f0a837fa85a5e8bc315eafdf7313400e29a0b80eff",
-    "partitioned": "2026-05-08",
+    "source_hash": "6a96b6453101e5d23aa0ad36d4ee75efa79e507b2d9b05b768550fb85cbf7dc3",
+    "partitioned": "2026-08-20",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 14
   },
   "testing/visual-regression/pixelmatch": {
-    "source_hash": "f6df8008f92722585bca267130b20e324fa1565c2b93a53d774ff6bc86def8ff",
-    "partitioned": "2026-05-08",
+    "source_hash": "f5d59b1ca67e4a14aede6e3d3f0543673cfe857cfab9394838dfd013b9dc8487",
+    "partitioned": "2026-08-20",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 13
   },

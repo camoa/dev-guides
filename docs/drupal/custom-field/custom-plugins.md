@@ -129,6 +129,10 @@ The prop-widget type is the fourth extension point, added in 5.x and discovered 
 
 **Form element:** 5.x also ships `#[FormElement('custom_field_multivalue')]` (`src/Element/MultiValue.php`) -- the multi-value wrapper element, reusable from your own forms.
 
+**Event, not a plugin -- the cheapest extension point in the module.** `PreFormatEvent` (`src/Event/PreFormatEvent.php`) is dispatched by `BaseFormatter::getFormattedValues()` and by `SingleDirectoryComponentFormatter`, immediately before every field-level formatter renders. A subscriber receives the sorted `CustomFieldTypeInterface` sub-items, the parent `FieldItemInterface` and the langcode, and can call `setCustomItems()` to reorder, filter or swap them. Use it when you need to change *which* sub-fields render or in what order, across all seven field-level formatters at once -- writing a formatter plugin for that is more work than it is worth.
+
+**Legacy annotations:** `src/Annotation/` still carries `CustomFieldType`, `CustomFieldFeedsType` and `PropWidget` annotation classes beside the `src/Attribute/` versions. Write new plugins with the PHP attributes from `Drupal\custom_field\Attribute\`; the annotation classes exist for back-compatibility and importing one by mistake gives you a plugin that is discovered but not configured the way you expect.
+
 ## Common Mistakes
 
 - **Reaching for a `#[CustomFieldFormatter]` attribute** -- It does not exist in any version. Sub-field formatters use core's `#[FieldFormatter]`; only the directory and base class are custom_field's
@@ -139,8 +143,10 @@ The prop-widget type is the fourth extension point, added in 5.x and discovered 
 - **Not declaring field_types in widget/formatter** -- The attribute must list compatible field types
 - **Forgetting to clear cache** -- Plugin discovery is cached; `drush cr` after creating plugins
 - **Not handling empty values** -- Always check for NULL/empty in `formatValue()`
+- **Importing an `Annotation` class instead of the `Attribute` one** -- `src/Annotation/` exists only for back-compatibility; new plugins use `src/Attribute/`
 
 ## See Also
 
+- [SDC View-Mode Rendering](sdc-view-modes.md) -- the `custom_field_sdc` formatter that consumes `#[PropWidget]` plugins
 - Reference: [Extending Custom Field formatter plugins](https://www.drupal.org/docs/extending-drupal/contributed-modules/contributed-module-documentation/custom-field/extending-custom-field-formatter-plugins)
 - Reference: `/modules/contrib/custom_field/src/Plugin/CustomFieldTypeBase.php`

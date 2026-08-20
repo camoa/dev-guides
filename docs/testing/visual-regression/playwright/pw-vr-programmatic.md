@@ -1,6 +1,6 @@
 ---
-description: Use the Playwright programmatic API outside the test runner for audit galleries and custom capture scripts.
-tldr: Use the `playwright` package (not `@playwright/test`) for standalone scripts. `toHaveScreenshot()` and `toMatchSnapshot()` only work inside the test runner — for diffing in custom scripts, call pixelmatch directly.
+description: "Use the Playwright programmatic API outside the test runner for audit galleries and custom capture scripts."
+tldr: "Use the `playwright` package (not `@playwright/test`) for standalone scripts. `toHaveScreenshot()` and `toMatchSnapshot()` only work inside the test runner — for diffing in custom scripts, call pixelmatch directly."
 ---
 
 # Programmatic API

@@ -39,6 +39,8 @@ When the site builder selects this theme:
 - if `key: class` → `<body class="theme-dark">` (merged with existing classes)
 - if `key: data-theme` → `<body data-theme="theme-dark">`
 - if `target: html` → applied to `<html>` instead of `<body>`
+- if `library` is set → that asset library is attached to the page
+- if `dependencies` are set → those theme plugins are activated transitively
 
 ## Common Mistakes
 

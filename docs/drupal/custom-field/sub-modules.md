@@ -81,6 +81,7 @@ Renders a whole **view mode** through a Single Directory Component.
 - **Contents:** two hook classes and a config-schema file -- `src/Hook/FormHooks.php` (adds the component/prop/slot settings to the entity view display form as a `custom_field_sdc` third-party setting) and `src/Hook/EntityHooks.php` (`hook_entity_view_alter()`, which replaces the entity build with the configured component, and bails out if `sdc_display` has claimed the display). **No plugin classes.**
 - **Not here:** the `custom_field_sdc` *field-level formatter* (`SingleDirectoryComponentFormatter`) lives in the main module and works without this sub-module. The shared plugin ID makes them easy to confuse.
 - An alternative to the `sdc_display` contrib module for component-driven output of whole view modes
+- **Full treatment:** [SDC View-Mode Rendering](sdc-view-modes.md) -- the mechanism, the config shape, the fail-safes, and when to pick it over UI Patterns or Canvas
 
 ## Common Mistakes
 
@@ -90,5 +91,6 @@ Renders a whole **view mode** through a Single Directory Component.
 
 ## See Also
 
+- [SDC View-Mode Rendering](sdc-view-modes.md)
 - Reference: `/modules/contrib/custom_field/modules/`
 - GraphQL Compose: https://www.drupal.org/project/graphql_compose

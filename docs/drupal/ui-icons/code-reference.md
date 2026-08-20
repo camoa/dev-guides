@@ -1,6 +1,6 @@
 ---
-description: "Key UI Icons classes, services, hooks, form elements, and cache tags across the base module and submodules."
-tldr: "Core service is plugin.manager.icon_pack; UI Icons adds ui_icons.search and ui_icons.twig_extension. Form elements: icon_autocomplete, icon_picker. Cache tags: icon_pack_plugin, icon_pack_collector. No .module files since 2.0.0."
+description: "Key UI Icons classes, services, hooks, form elements, and cache tags — 2.0.0 file paths are unverified; the 1.1.2 layout is procedural .module files."
+tldr: "Core service is plugin.manager.icon_pack; UI Icons adds ui_icons.search and ui_icons.twig_extension. The src/Hook/ layout is an unverified 2.0.0 claim — 1.1.2 has no src/Hook/ dir and uses procedural .module files instead."
 drupal_version: "11.x"
 ---
 
@@ -37,6 +37,19 @@ drupal_version: "11.x"
 
 The project ships **no `.module` files** as of 2.0.0 — every hook is an attributed method on a `src/Hook/` class.
 
+> **The file paths in the table above are 2.0.0 paths and are unverified.** On 1.1.2 the layout is
+> the pre-OO one: there is no `src/Hook/` directory anywhere in the project, no `ui_icons.install`,
+> and the hooks live in procedural `.module` files — `ui_icons.module` (`ui_icons_help()`,
+> `ui_icons_theme()`, `template_preprocess_icon_selector()`) and `ui_icons_menu.module`
+> (`ui_icons_menu_entity_base_field_info_alter()`, `ui_icons_menu_preprocess_menu()`,
+> `ui_icons_menu_link_alter()`, `ui_icons_menu_navigation_menu_link_tree_alter()`). Note that the
+> **hook set** is verified — those four menu hooks and their behaviour are exactly what
+> [Menu Integration](menu.md) describes — it is only the class paths that are unread.
+> `THEME_LIBRARIES` likewise does not exist on 1.1.2, where the same job is done by a private
+> `_ui_icons_is_theme_active()` helper that special-cases `gin`, `ui_suite_daisyui` and
+> `ui_suite_dsfr` (and nothing for Claro). `ui_icons.services.yml` and its two services
+> (`ui_icons.search`, `ui_icons.twig_extension`) are verified on 1.1.2 and unchanged.
+
 ## Drupal Core Icon API (the engine)
 
 - `\Drupal\Core\Theme\Icon\IconDefinition`
@@ -48,7 +61,7 @@ The project ships **no `.module` files** as of 2.0.0 — every hook is an attrib
 
 ## Hooks Used
 
-All are `#[Hook]`-attributed methods, not procedural functions.
+All are `#[Hook]`-attributed methods on 2.0.0 (unverified — see caveat above); on 1.1.2 the same hook set is procedural functions in `.module` files.
 
 - `hook_help` — admin help
 - `hook_theme` — register icon-selector and icon-preview templates (also in ui_icons_library)
@@ -68,6 +81,11 @@ All are `#[Hook]`-attributed methods, not procedural functions.
 ## Cache
 
 Cache tags: `icon_pack_plugin`, `icon_pack_collector`. Clear with `drush cr` or by invalidating these tags.
+
+## Common Mistakes
+
+- **Wrong**: looking for `src/Hook/UiIconsHooks.php` (or any `src/Hook/` class) on a 1.1.2 site → **Right**: that layout is 2.0.0-only and unverified; on 1.1.2 the same logic lives in `ui_icons.module` and `ui_icons_menu.module`
+- **Wrong**: assuming `ui_icons.install` exists on every version → **Right**: 1.1.2 ships no install file at all; `ui_icons_update_11201()` can only run on 2.0.0
 
 ## See Also
 

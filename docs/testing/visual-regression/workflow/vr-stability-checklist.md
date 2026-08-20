@@ -18,6 +18,7 @@ tldr: "Run the 10-point checklist before any baseline capture: disable animation
 | Image regions vary | Lazy-loading (4) |
 | Time/counter regions vary | Masking (6) |
 | Cross-OS diffs | Pinning (10) |
+| A batch of captures fails at once, with no site change | Not a stability problem — worker concurrency. Playwright defaults to 50% of your cores against a single-container backend; cap `workers` first |
 
 ## Pattern
 

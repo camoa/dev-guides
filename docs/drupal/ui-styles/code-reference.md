@@ -45,9 +45,10 @@ $form['styles'] = [
 
 ## Requirements
 
-- Drupal `^11.4 || ^12`
+- Drupal `^10.3 || ^11 || ^12`
 - PHP 8.3+
 - `sabberworm/php-css-parser ^9.0`
+- All eight integration submodules declare the same `core_version_requirement`
 
 ## See Also
 

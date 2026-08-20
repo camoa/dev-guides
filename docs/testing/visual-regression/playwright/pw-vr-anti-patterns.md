@@ -1,6 +1,6 @@
 ---
-description: Common Playwright VR anti-patterns — environment mismatch, threshold abuse, flake tolerance, and Drupal-specific pitfalls.
-tldr: The two most damaging mistakes are capturing baselines on macOS and comparing in Linux CI, and committing baselines from a flaky state. Pin a Docker image, add stability controls first, then capture.
+description: "Common Playwright VR anti-patterns — environment mismatch, threshold abuse, flake tolerance, and Drupal-specific pitfalls."
+tldr: "The two most damaging mistakes are capturing baselines on macOS and comparing in Linux CI, and committing baselines from a flaky state. Pin a Docker image, add stability controls first, then capture."
 ---
 
 # Anti-Patterns
@@ -22,7 +22,7 @@ tldr: The two most damaging mistakes are capturing baselines on macOS and compar
 | `threshold: 0` chasing pixel-perfect | Trust default `0.2`; tighten only with a documented reason |
 | First-run baselines created from a flaky state | Add stability controls first, then capture; never recapture without investigating flake |
 | Re-running until green then committing | Same diagnosis, same fix; flake masks regressions |
-| `fullPage: true` on every test | Use `clip` or element shots for components |
+| `fullPage: true` on every test | `clip` or element shots for components, full-page for whole templates — the objection is false positives from editorial content, not PNG size (~150 KB per masked baseline) |
 
 ## Drupal-Specific Pitfalls
 

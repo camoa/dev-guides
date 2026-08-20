@@ -4,7 +4,7 @@ tldr: "37 widget plugins map to 23 custom field column types, each with a docume
 drupal_version: "11.x"
 ---
 
-# Widget Plugins
+# Widget Plugins Overview
 
 ## When to Use
 
@@ -51,4 +51,5 @@ You need to choose the right widget for collecting data for each sub-field in yo
 
 ## See Also
 
+- [Field-Level Widgets](field-level-widgets.md) -- layout of the whole compound field, not per-sub-field widget choice
 - Reference: `/modules/contrib/custom_field/src/Plugin/CustomField/FieldWidget/`

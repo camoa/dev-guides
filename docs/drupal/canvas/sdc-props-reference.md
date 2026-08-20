@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when defining props in a `*.component.yml` file and you need the exact YAML syntax for each prop type, what Canvas editor widget each produces, and Canvas-specific annotations (`$ref`, `contentMediaType`, `x-formatting-context`, `meta:enum`). Read [Defaults](#defaults-canvas-ignores-default) and [Component Eligibility](#component-eligibility-hard-gates) below before writing any YAML — Canvas ignores `default:`, and a prop that breaks any eligibility rule removes the whole component from the editor with no visible error.
+> Use this when defining props in a `*.component.yml` file and you need the exact YAML syntax for each prop type, what Canvas editor widget each produces, and Canvas-specific annotations (`$ref`, `contentMediaType`, `x-formatting-context`, `meta:enum`). Read [Defaults](#defaults-canvas-ignores-default) and [Component Eligibility](#component-eligibility-hard-gates) below before writing any YAML — Canvas ignores `default:`, and a prop that breaks an eligibility rule removes the whole component from the editor with no visible error — with one exception, a `$ref` to a definition that does not exist, which takes the entire site down instead (see [The One Failure That Is Not Silent](#the-one-failure-that-is-not-silent)).
 
 ## Decision
 
@@ -132,7 +132,7 @@ cta_url:
 
 Canvas widget: Drupal's `link_default` widget, URL field only. Canvas sets the link field's `title` instance setting to `0`, so the widget shows **no link-text input**. Value passed to Twig is the URL string itself — render with `{{ cta_url }}`.
 
-- `$ref: 'json-schema-definitions://canvas.module/link'` does not exist and never has. Use it and Canvas disqualifies the component — no error on the page, the component simply never appears in the panel
+- `$ref: 'json-schema-definitions://canvas.module/link'` does not exist and never has. This is **not** a disqualification — it is fatal: the stream wrapper behind `json-schema-definitions://` throws when the named definition is absent, and that resolution runs inside SDC plugin discovery for every component on the site, so the next cache rebuild 500s the whole site. See [The One Failure That Is Not Silent](#the-one-failure-that-is-not-silent)
 - There is no `.url` and no `.title` on the value your Twig receives
 - Need editor-editable link text? Declare a separate `type: string` prop for it and pair the two in your Twig
 - `format: uri` vs `format: uri-reference` is the *only* thing that decides internal-links-allowed. `uri` maps to `LinkItemInterface::LINK_EXTERNAL`, `uri-reference` to `LINK_GENERIC`
@@ -231,7 +231,7 @@ Canvas widget: the item type's own widget, repeated.
 - The array schema may carry only `type`, `items`, `minItems`, `maxItems`. Any other keyword (`uniqueItems`, `contains`, …) makes the prop unstorable and disqualifies the component. `title`, `description`, `examples`, `meta:enum` are stripped before this check, so those are safe
 - `minItems` is allowed only on a **required** array, and only with the value `1`. An optional array with `minItems`, or a required array without it, disqualifies the component
 - `maxItems`, if present, must be at least `2`
-- As of Canvas 1.10.1, multi-value props are functionally supported for Text, Link, Image, Video, Integer, Number, Date, and List (Text/Integer) — not for Formatted Text or Boolean (a Code Component Builder UI restriction that hides "Allow multiple values" for those two)
+- Multi-value/array prop UI configuration landed in Canvas 1.3.0 (issue #3571917); value persistence across reloads followed in Canvas 1.4.0 (issue #3572553). In Canvas 1.10.1 the **Code Component builder** offers its "Allow multiple values" checkbox for nine of its twelve prop types — Text, Link, Image, Video, Date, Integer, Number, List (Text) and List (Integer) — and hides it for **Formatted Text, Boolean, and Content Entity Reference**. That is a builder-UI restriction on Code Components only; it says nothing about SDC `type: array` props, which are governed by the array rules above
 - The required-field-validation gap for multi-value props is closed (issue #3576124, closed 2026-05-01) — a prop marked both Required and Multi-value enforces at least one value in the Code Component editor
 - In Twig, iterate with `{% for item in items %}`
 
@@ -249,7 +249,7 @@ This is the single most surprising thing about Canvas props, and it inverts what
 
 ## Component Eligibility (Hard Gates)
 
-Canvas discovers every SDC automatically, then checks it against a fixed list of requirements. **A component that fails any of these is disqualified: it is never offered in the component panel, and if a Component config entity already existed it gets disabled.** There is no error on the page and no exception in the log — the failure mode is silence.
+Canvas discovers every SDC automatically, then checks it against a fixed list of requirements. **A component that fails any of these is disqualified: it is never offered in the component panel, and if a Component config entity already existed it gets disabled.** For every gate below the failure mode is silence — no error on the page, no exception in the log. One mistake escapes this table entirely and is anything but silent; it is covered in [The One Failure That Is Not Silent](#the-one-failure-that-is-not-silent) below.
 
 | The gate | Failing it means |
 |---|---|
@@ -262,25 +262,38 @@ Canvas discovers every SDC automatically, then checks it against a fixed list of
 | Required `type: array` props have `minItems: 1` | Component excluded |
 | Optional `type: array` props have **no** `minItems` | Component excluded |
 | `maxItems`, if present, is ≥ 2 | Component excluded |
-| Every prop resolves to a field type + widget Canvas knows | Component excluded — this is what an invented `$ref` or an inline object array item trips |
+| Every prop resolves to a field type + widget Canvas knows | Component excluded — this is what an inline object array item, an unsupported `format`, or a `$ref` to an *existing* object definition Canvas cannot store trips |
 | Content-entity-reference props are optional and carry no `examples` | Component excluded |
 | Not flagged `noUi: true` | Filtered out before discovery even runs — deliberately hidden, and it will **not** be listed on the status page |
 | Not `status: obsolete` | Component excluded |
 
 Props typed `Drupal\Core\Template\Attribute` are skipped by all of the above — that is the standard SDC `attributes` prop, and it needs no `title` or `examples`.
 
-**Where to see why a component is missing:** Visit **`/admin/appearance/component/status`** (permission: *administer themes*) for a table of every excluded component and the exact message. Check this page first whenever a component you just wrote does not show up.
+### The One Failure That Is Not Silent
+
+Everything in the table above is the *eligibility* gate, and it fails quietly. `$ref` resolution happens **earlier**, during SDC plugin discovery, and it fails loudly. Canvas swaps its own class into core's `plugin.manager.sdc` service, so its `processDefinition()` resolves every `$ref` in every component's props for **every SDC on the site**, Canvas-facing or not, through the `json-schema-definitions://` stream wrapper — which throws an `InvalidArgumentException` when the named definition is not in the target extension's `schema.json`. Nothing on that path catches it.
+
+| What you wrote | What happens |
+|---|---|
+| A `$ref` that **exists** but whose shape Canvas cannot store — `.../shoe-icon`, or `.../date-range` on a site without the `datetime_range` module | Graceful. That one component is disqualified with *"Drupal Canvas does not know of a field type/widget to allow populating the `X` prop"*, and nothing else is affected |
+| A `$ref` naming a definition that does **not** exist — `.../link`, or any typo in the name or the extension | Fatal. The next cache rebuild throws an `InvalidArgumentException` — *"… does not contain a `link` definition."* — out of SDC discovery. Every component fails to build and the site returns 500 |
+
+Canvas has no upstream test covering the fatal case, so do not expect it to be caught for you. Treat every `$ref` you type as a spelling test.
+
+**Where to see why a component is missing:** Visit **`/admin/appearance/component/status`** (permission: *administer themes*) for a table of every excluded component and the exact message. Check this page first whenever a component you just wrote does not show up — it is faster and more reliable than re-reading your YAML.
+
+**If that page itself 500s, you are looking at the fatal `$ref` case, not a disqualification.** The status page is served by the same Drupal that can no longer build its SDC plugin definitions, so it goes down with everything else. Diagnose from the log instead: the exception message names the extension path and the missing definition, which is enough to find the offending `*.component.yml`. Then grep the codebase for `$ref` and check every name against the target extension's `schema.json` before rebuilding caches.
 
 ## Common Mistakes
 
 - **Wrong**: Writing `default:` and expecting Canvas to honour it → **Right**: it is stripped; use `examples[0]`
 - **Wrong**: Omitting `title` on a prop or slot → **Right**: this does not degrade the label, it removes the component entirely
 - **Wrong**: Omitting `examples` on a required prop → **Right**: same result, the component disappears
-- **Wrong**: Inventing a `$ref` → **Right**: only `image`, `video`, and `content-entity-reference` resolve
+- **Wrong**: Inventing a `$ref` → **Right**: a name absent from the target extension's `schema.json` is **fatal**, not a disqualification. `image`/`video`/`content-entity-reference` are only the storable *object* refs — string and integer refs such as `heading-element` and `column-width` resolve as well
 - **Wrong**: Using `enumNames` → **Right**: the real key is `meta:enum`
 - **Wrong**: Forgetting `type: object` alongside `$ref` → **Right**: SDC's own validator needs it, so `$ref` props must declare both
 - **Wrong**: An inline `items: {type: object, properties: {...}}` for a repeater → **Right**: use a scalar type or a recognized `$ref`; for compound content use a slot instead
-- **Wrong**: Debugging a missing component by re-reading YAML → **Right**: open `/admin/appearance/component/status` first — it names the exact gate that failed
+- **Wrong**: Debugging a missing component by re-reading YAML → **Right**: open `/admin/appearance/component/status` first — it names the exact gate that failed. If that page is down too, it's the fatal `$ref` case, not a disqualification
 
 ## See Also
 

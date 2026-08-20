@@ -15,7 +15,7 @@ drupal_version: "11.x"
 | If you need... | Use... | Why |
 |---|---|---|
 | Site-wide brand color customization without theme forking | UI Skins CSS variables | YAML-declared variable plugins, color-picker form, `:root { --var: value; }` injected at render |
-| User-toggleable light/dark mode at runtime | DaisyUI `.theme-controller` or JS theme switcher | UI Skins is a config-time selection, not a runtime toggle |
+| User-toggleable light/dark mode at runtime | DaisyUI `.theme-controller` or JS theme switcher | UI Skins is a **build-/config-time** selection, not a runtime toggle |
 | Per-block CSS class application | UI Styles | UI Skins doesn't apply classes per element |
 | Configurable `--space-*` or `--font-size-*` tokens | UI Skins CSS variables | Same pattern as colors; pick `textfield` widget |
 | Multiple registered themes with one active | UI Skins themes | Site-builder picks active theme; UI Skins emits class/`data-theme` on `<html>` or `<body>` |

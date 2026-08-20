@@ -1,6 +1,6 @@
 ---
-description: Scenario-by-scenario pixelmatch threshold reference — which value to pick and when to combine with maxDiffPixelRatio.
-tldr: Start with Playwright's default of 0.2 and stabilize the suite, then tighten incrementally toward 0.1. For cross-OS captures use 0.2–0.3; for animations and gradients prefer maxDiffPixelRatio over raising threshold. Document every non-default per-test threshold with a comment.
+description: Scenario-by-scenario pixelmatch threshold reference — which value to pick and when to combine with maxDiffPixels.
+tldr: Start with Playwright's default of 0.2 and stabilize the suite, then tighten incrementally toward 0.1. For cross-OS captures use 0.2–0.3; for animations and gradients prefer maxDiffPixels (an absolute cap, sized from a measured residual) over raising threshold. Document every non-default per-test threshold with a comment.
 ---
 
 # Pixelmatch Tuning Recipes
@@ -24,7 +24,7 @@ tldr: Start with Playwright's default of 0.2 and stabilize the suite, then tight
 Start with Playwright's defaults (`threshold: 0.2`, no `maxDiffPixels`). When tests are stable, tighten:
 
 1. Lower `threshold` to `0.15`, then `0.1`
-2. Add a small `maxDiffPixelRatio: 0.005` ceiling
+2. If — and only if — repeat runs against an unchanged site show a residual, add a `maxDiffPixels` ceiling sized from that residual (absolute, not a ratio, so it does not scale with page height)
 3. For sub-pixel-precise components, override per-test with `threshold: 0.05` and a comment
 
 If tightening produces flakes, the env or stability controls (animations, fonts) are the real problem. Don't bandaid with looser thresholds.

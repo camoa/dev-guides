@@ -63,7 +63,7 @@ drupal_version: "11.x"
 
 6. **Clear Drupal caches** — `drush cr` to trigger SDC component discovery.
 
-7. **Check eligibility before hunting in the panel** — visit **`/admin/appearance/component/status`**. Canvas discovers every SDC but only *admits* the ones that pass its requirements check, and a failing component is excluded silently. This page lists every excluded component with the exact reason. If yours is listed, fix the reason and repeat step 6.
+7. **Check eligibility before hunting in the panel** — visit **`/admin/appearance/component/status`**. Canvas discovers every SDC but only *admits* the ones that pass its requirements check, and a failing component is excluded silently. This page lists every excluded component with the exact reason. If yours is listed, fix the reason and repeat step 6. If this page itself 500s, you are looking at the one non-silent failure — a `$ref` to a definition that doesn't exist crashes SDC discovery site-wide (see [SDC Props Reference](sdc-props-reference.md#the-one-failure-that-is-not-silent)) — diagnose from the log instead.
 
 8. **Verify in Canvas editor** — Open Canvas, create a new page, find your component in the component panel (by its `group` and `name`), drag it onto the page, and confirm all prop widgets appear correctly.
 

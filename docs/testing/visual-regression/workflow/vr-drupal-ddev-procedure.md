@@ -56,9 +56,11 @@ await expect(page).toHaveScreenshot({ mask: dynamic });
 ```
 
 Olivero/Claro peculiarities:
+- **Olivero off-canvas / mobile menu** — animates open; default `animations: 'disabled'` handles it, double-check with `stylePath`
+- **Claro vertical tabs** — collapse animation triggers on hash navigation; `animations: 'disabled'` handles it
 - **Admin toolbar** — wait for `'.toolbar-loading'` to disappear or hide via `stylePath`
 - **CKEditor 5 iframe** — `mask` doesn't pierce iframes; `stylePath` does (`iframe { visibility: hidden; }`)
-- **Big Pipe placeholders** — always `await page.waitForLoadState('networkidle')` after `goto`
+- **Big Pipe placeholders** — `<span data-big-pipe-placeholder-id>` swap in async; always `await page.waitForLoadState('networkidle')` after `goto`
 
 Directory layout:
 
@@ -67,6 +69,7 @@ Directory layout:
 ├── composer.json
 ├── web/
 └── tests/playwright/
+    ├── package.json
     ├── playwright.config.ts
     ├── screenshot.css
     ├── auth.setup.ts
@@ -76,6 +79,8 @@ Directory layout:
     │   └── homepage.spec.ts-snapshots/ # committed baselines
     └── playwright-report/             # gitignored
 ```
+
+Pin Playwright in `tests/playwright/package.json`; run baseline updates inside `mcr.microsoft.com/playwright:v1.X.Y-noble` against DDEV; commit the `*-snapshots/` directory.
 
 ## Common Mistakes
 

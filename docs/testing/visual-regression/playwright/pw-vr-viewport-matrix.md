@@ -1,6 +1,6 @@
 ---
-description: Capture VR screenshots at multiple viewport sizes using Playwright's project-per-viewport convention.
-tldr: Use one project per (browser × viewport) combination — the project name flows into the baseline filename, giving each tuple its own image. Never call `page.setViewportSize()` mid-test; it causes baseline filename collisions.
+description: "Capture VR screenshots at multiple viewport sizes using Playwright's project-per-viewport convention."
+tldr: "Use one project per (browser × viewport) combination — the project name flows into the baseline filename, giving each tuple its own image. Never call `page.setViewportSize()` mid-test; it causes baseline filename collisions."
 ---
 
 # Viewport & Device Matrix
@@ -48,8 +48,10 @@ projects: [
 |---|---|
 | `viewport: { width, height }` | Fixed viewport size |
 | `deviceScaleFactor` | High-DPI emulation (`2` for retina) |
-| `isMobile` | Honors `<meta viewport>` and touch events |
-| `colorScheme` | `'light' \| 'dark' \| 'no-preference'` |
+| `isMobile` | Whether `<meta viewport>` and touch events are honored |
+| `hasTouch` | Touch events |
+| `userAgent` | UA string (preset devices use platform-specific UA; set `userAgent: undefined` to use the host UA) |
+| `colorScheme` | `'light' \| 'dark' \| 'no-preference'` for `prefers-color-scheme` |
 | `locale`, `timezoneId` | Localization |
 
 ## Common Mistakes

@@ -4,7 +4,7 @@ tracks:
   - project: ui_styles
     channel: stable
     declared: "8.x-1.21"
-    verified: 2026-08-17
+    verified: 2026-08-20
 guide-meta:
   concepts:
     - UI Styles
