@@ -1,7 +1,7 @@
 ---
 description: Pass server-side PHP data to client-side JavaScript via drupalSettings
 tldr: "Use when passing server-side data (PHP) to client-side JavaScript. Alternative to AJAX requests for static configuration data available at page render."
-drupal_version: "10.x/11.x"
+drupal_version: "11.x"
 ---
 
 # drupalSettings

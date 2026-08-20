@@ -36,10 +36,17 @@ drush en facets_exposed_filters better_exposed_filters
 6. Optionally: change the View's exposed form style to "Better Exposed Filters"
 7. Configure BEF widgets per filter (checkboxes, links, etc.)
 
+**New in 3.0.4**, the facet filter settings dialog also carries:
+- **Ensure that only one result can be displayed** — once an option is selected, only that option stays visible until it is deselected
+- **Depends on exposed filter** — only render and apply this facet after the selected exposed filter has an active value; when that filter changes, this facet is cleared before the form is submitted (client side, via the `facets_exposed_filters/dependent_filters` library)
+
 `facets_exposed_filters` provides:
 - `FacetsFilter` — a Views filter plugin (`src/Plugin/views/filter/FacetsFilter.php`) that appears in the Views UI as a standard filter but internally creates and manages a Facets facet entity
 - `ViewsDefault` — Search API display plugin for Views defaults
 - `ViewsAttachment` — Search API display for View attachments
+- `ExposedRangeSliderProcessor` — **new in 3.0.4.** A facets processor (id `exposed_range_slider`, running at `pre_query` and `post_query`, weight 60) that supplies min/max range data to an exposed numeric facet. Only applies to facets whose source offers a `range` query type
+- `ExposedRangeSlider` — **new in 3.0.4.** A Better Exposed Filters widget plugin (`#[FiltersWidget(id: 'facets_exposed_range_slider')]`, extending BEF's `Sliders`) that renders such a facet as a noUiSlider range slider. Becomes applicable only once the `exposed_range_slider` processor is enabled on the filter
+- `FacetsExposedFiltersHelper` — **new in 3.0.4.** Request-scoped helper shared by the module's hook classes
 
 With BEF as the exposed form style, facet filters render as BEF widgets (checkboxes, radio buttons, links, sliders), auto-submit works, secondary options/collapsible work, and soft limit works. Without BEF, facet filters render as standard dropdowns with no auto-submit or enhanced widgets.
 

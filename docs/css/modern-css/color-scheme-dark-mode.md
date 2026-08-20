@@ -1,7 +1,7 @@
 ---
 description: color-scheme infrastructure for dark mode — FOUC prevention, scrollbar theming, accent-color, component-scoped schemes, and two-state toggle UX.
 tldr: Set color-scheme:light dark on :root and mirror it with <meta name="color-scheme"> in <head> before any stylesheets to prevent the white canvas flash. Inline synchronous script reads localStorage before paint — never defer or type="module". Re-declare inherited color properties (color, accent-color) after any component-level color-scheme override; they resolve at the ancestor's scheme and don't re-resolve on their own.
-drupal_version: ""
+drupal_version: "11.x"
 ---
 
 # color-scheme and Dark Mode Mechanics

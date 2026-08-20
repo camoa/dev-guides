@@ -1,14 +1,14 @@
 ---
 description: Add interactive behavior to Single Directory Components with automatic library discovery
-tldr: "Use when adding interactive behavior to Single Directory Components (Drupal core feature since 10.3)."
-drupal_version: "10.3+"
+tldr: "Use when adding interactive behavior to Single Directory Components."
+drupal_version: "11.x"
 ---
 
 # JavaScript in SDC Components
 
 ## When to Use
 
-> Use when adding interactive behavior to Single Directory Components (Drupal core feature since 10.3).
+> Use when adding interactive behavior to Single Directory Components.
 
 ## Decision
 

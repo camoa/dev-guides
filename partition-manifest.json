@@ -18,9 +18,9 @@
     "guides_extracted": 15
   },
   "drupal/js-development": {
-    "source_hash": "cb29c6b341f9d919846e13e0fecc0e5d8ddeee1cb7c1c71b87c52b34bce8261c",
-    "partitioned": "2026-02-12",
-    "partitioned_by": "camoa",
+    "source_hash": "eaee185221f661c70f493f070031686459aae4356bd49bfd38169c4c3d1094af",
+    "partitioned": "2026-08-20",
+    "partitioned_by": "Carlos Ospina",
     "guides_extracted": 22
   },
   "drupal/entities": {
@@ -66,8 +66,8 @@
     "guides_extracted": 16
   },
   "drupal/eca": {
-    "source_hash": "135cdedf4028717bb0f063ec8d3167acbce4c791116cdf42144e4387e4878f51",
-    "partitioned": "2026-08-16",
+    "source_hash": "843984299f2d3b31eca3120e2976eac46fc9d98f56be53a932385d8e654436c0",
+    "partitioned": "2026-08-20",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 21
   },
@@ -396,8 +396,8 @@
     "guides_extracted": 27
   },
   "drupal/ai-module": {
-    "source_hash": "25cb30b3f71cd508d9a0f9fa4d126d71384647583dcfe6ffc68666719cc57577",
-    "partitioned": "2026-08-16",
+    "source_hash": "c4763dcb7f92124468ba711fc2936e09400221f02c099d955952387d5b504a4b",
+    "partitioned": "2026-08-20",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 25
   },
@@ -420,8 +420,8 @@
     "guides_extracted": 20
   },
   "drupal/facets": {
-    "source_hash": "25e3272df8d1b2aeaf72453172dd2390259a5359e1bc288d323430bc1ba16528",
-    "partitioned": "2026-08-16",
+    "source_hash": "e1ebaebee6abbb237cf1617b02008bb005d60ad689972393138ebf811d4e1ca1",
+    "partitioned": "2026-08-20",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 25
   },

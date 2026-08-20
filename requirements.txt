@@ -8,3 +8,10 @@ mkdocs-awesome-nav>=3.3,<4.0
 # dependency, which means a mkdocs release dropping it would break the scripts
 # with nothing in this file explaining why.
 PyYAML>=6.0
+
+# Test runner for tests/, which pins the branch-resolution behaviour of
+# scripts/check_staleness.py against committed drupal.org fixtures. Nothing in
+# this repo imports pytest at runtime; it is listed here because
+# .github/workflows/pr-check.yml installs only this file and then needs a
+# runner to invoke.
+pytest>=8.0

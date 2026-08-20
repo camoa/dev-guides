@@ -3,7 +3,7 @@ description: Drupal JavaScript Development - library-based architecture, behavio
 tracks:
   - project: drupal
     channel: stable
-    verified: 2026-02-12
+    verified: 2026-08-20
 guide-meta:
   concepts:
     - Drupal.behaviors
@@ -21,6 +21,8 @@ guide-meta:
   requires: []
   complements:
     - drupal/ajax
+    - drupal/htmx
+    - drupal/ajax-htmx-migration
     - drupal/sdc
     - js/interaction-craft
   specializes: ""
@@ -41,10 +43,10 @@ guide-meta:
 | Prevent duplicate initialization | [Once API](once-api.md) | **Every time** you process elements in a behavior. The once() API prevents duplicate initialization and is required for proper AJAX compatibility. |
 | Pass PHP data to JavaScript | [drupalSettings](drupal-settings.md) | Use when passing server-side data (PHP) to client-side JavaScript. Alternative to AJAX requests for static configuration data available at page render. |
 | Manipulate the DOM safely | [DOM Manipulation](dom-manipulation.md) | Use when modifying page structure, content, or attributes in response to user interaction or dynamic updates. |
-| Integrate with Drupal AJAX | [AJAX Integration](ajax-integration.md) | Use when loading content dynamically without full page refresh, or when JavaScript needs to respond to Drupal AJAX events. |
+| Choose between HTMX and legacy AJAX | [AJAX Integration](ajax-integration.md) | Use HTMX (Drupal 11.3+) for new declarative dynamic-content work; use the legacy AJAX API for Drupal 10.x or existing systems. Drupal.behaviors work automatically with both via context — no manual re-init needed. |
 | Handle user interactions and events | [Event Handling](event-handling.md) | Use when responding to user interactions (clicks, input changes, scrolling) or custom application events. |
 | Use ES6+ features | [ES Modules and Modern JavaScript](es-modules-and-modern-javascript.md) | Use when understanding modern JavaScript features available in Drupal 10/11 and how to use ES6+ syntax. |
-| Add JavaScript to SDC components | [JavaScript in SDC Components](javascript-in-sdc-components.md) | Use when adding interactive behavior to Single Directory Components (Drupal core feature since 10.3). |
+| Add JavaScript to SDC components | [JavaScript in SDC Components](javascript-in-sdc-components.md) | Use when adding interactive behavior to Single Directory Components. |
 | Optimize JavaScript performance | [Performance Optimization](performance-optimization.md) | Use for every JavaScript implementation - performance is not optional. Frontend performance directly impacts user experience and SEO. |
 | Enable aggregation and minification | [Aggregation and Minification](aggregation-and-minification.md) | Use in production environments - always enable JavaScript aggregation for performance. |
 | Use defer and async attributes | [Defer and Async Attributes](defer-and-async-attributes.md) | Use as default for most JavaScript - improves page load performance by allowing non-blocking script loading. |

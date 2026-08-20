@@ -1,6 +1,6 @@
 ---
 description: Deprecated AI sub-modules — migration paths for ai_eca, ai_external_moderation, ai_logging, ai_translate, ai_validations, and ai_content_suggestions
-tldr: "Use this guide when planning migrations away from deprecated sub-modules. As of AI Core 1.4.6 all deprecations remain in place — removal is planned for AI 2.0.0, which is not yet released."
+tldr: "Use this guide when planning migrations away from deprecated sub-modules. As of AI Core 1.4.7 all deprecations remain in place — removal is planned for AI 2.0.0, which is not yet released."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when planning migrations away from deprecated sub-modules. As of AI Core 1.4.6 (current stable, verified 2026-08-16) all deprecations are still in place — none have been removed yet. Removal is planned for AI 2.0.0, which is not yet released (currently dev-only on the `2.0.x-dev` branch).
+> Use this guide when planning migrations away from deprecated sub-modules. As of AI Core 1.4.7 (current stable, verified 2026-08-20) all deprecations are still in place — none have been removed yet. Removal is planned for AI 2.0.0, which is not yet released (currently dev-only on the `2.0.x-dev` branch).
 
 ## Deprecation Status
 

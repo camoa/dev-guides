@@ -22,6 +22,8 @@ drupal_version: "11.x"
 | Handle URLs differently | URL processor | `Plugin/facets/url_processor/` |
 | Connect to a new backend | Facet source | `Plugin/facets/facet_source/` |
 
+**As of 3.0.4**, URL processor plugins may declare themselves with either the `@FacetsUrlProcessor` annotation or the `#[Drupal\facets\Attribute\FacetsUrlProcessor]` attribute — `UrlProcessorPluginManager` accepts both. It is the only Facets plugin type with an attribute class; processors, widgets, query types, facet sources, and hierarchies remain annotation-only.
+
 ## Pattern
 
 ```php

@@ -50,7 +50,7 @@ To use hierarchy, the Search API index must know about it:
 
 - **Wrong**: Enabling only `use_hierarchy` on the facet → **Right**: Must also enable "Index hierarchy" in Search API AND set `use_hierarchy: TRUE` on the facet.
 - **Wrong**: Assuming hierarchy always builds correctly → **Right**: `hierarchy_processor` runs at weight 100. If another processor removes parent items before weight 100, the tree can't be built.
-- **Wrong**: Expecting hierarchy to work automatically with exposed filters → **Right**: In `facets_exposed_filters`, enable "Build hierarchical tree" in the facet filter settings within the Views UI.
+- **Wrong**: Looking for a "Build hierarchical tree" checkbox in `facets_exposed_filters` → **Right**: There is no such checkbox, despite what the module's own `docs/exposed_filters.md` still says. Enable the `hierarchy_processor` in the filter's processor list; **Hierarchy type** and **Always expand hierarchy** then become visible in the facet filter settings within the Views UI.
 
 ## See Also
 

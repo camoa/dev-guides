@@ -64,7 +64,7 @@ $facet_manager->processFacets($facet_source_id);
 $build = $facet_manager->build($facet);
 ```
 
-Each processor has a weight per stage — lower weights execute first. Default weights are defined in the processor annotation/attribute and can be reordered in the facet configuration UI.
+Each processor has a weight per stage — lower weights execute first. Default weights are defined in the processor's `@FacetsProcessor` annotation. Facets has not migrated processors to PHP attributes — `src/Attribute/` contains only `FacetsUrlProcessor.php`, so url processors are the one plugin type using an attribute class. Weights can be reordered in the facet configuration UI.
 
 ## Common Mistakes
 

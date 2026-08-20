@@ -26,6 +26,14 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install -r requirements.txt
+      # Regression tests for the branch resolver in scripts/check_staleness.py.
+      # They read committed drupal.org XML fixtures, touch no network, and
+      # finish in well under a second, so they run first and fail fast. They
+      # belong in this required check rather than in staleness-check.yml:
+      # that workflow is a weekly report that never gates, so a resolver
+      # regression landing there would surface only after it had already
+      # published a wrong version number — which has happened twice.
+      - run: python -m pytest tests/
       - run: python scripts/validate_recipes.py
       # --strict catches broken nav/links and unresolved anchors as build
       # failures. The legacy cross-partition anchor links and broken relative

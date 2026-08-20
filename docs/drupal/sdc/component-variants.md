@@ -1,7 +1,7 @@
 ---
 description: "Enum props vs separate components vs the Component Variants API (11.2+), and exactly what variants: does at runtime"
 tldr: "The Component Variants API landed in Drupal 11.2, not 11.1 — variants: is silently ignored on 11.1 and earlier. #variant only copies into $props['variant'] and adds a data-component-variant attribute; it never declares or restricts a variant prop, so declare variant as an enum prop too if you want it validated."
-drupal_version: "11.2+"
+drupal_version: "11.x"
 ---
 
 # Component Variants

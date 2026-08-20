@@ -1,7 +1,7 @@
 ---
 description: Safe DOM manipulation patterns with vanilla JavaScript preferred over jQuery
 tldr: "Use when modifying page structure, content, or attributes in response to user interaction or dynamic updates."
-drupal_version: "10.x/11.x"
+drupal_version: "11.x"
 ---
 
 # DOM Manipulation
