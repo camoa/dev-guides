@@ -27,16 +27,21 @@ plugin_id:                          # machine name; becomes the CSS variable nam
   enabled: true                     # optional, default true
   type: ui_skins_alpha_color        # optional widget type; default "textfield"
   label: "Brand primary"            # required, translatable
-  description: "Primary brand color used for CTAs and links"  # optional
+  description: "Primary brand color used for CTAs and links"  # optional, translatable
+  label_context: "ui_skins"         # optional translation context
+  description_context: "ui_skins"   # optional
   category: "Colors"                # optional grouping; default "Other"
+  category_context: "ui_skins"      # optional
   weight: -50                       # optional sort within category; default 0
 
-  default_values:                   # required; map of CSS scope => value
+  default_values:                   # optional (defaults to empty); map of CSS scope => value
     ":root": "#0066ccff"
     ".theme-dark": "#3399ffff"
 ```
 
-**CSS variable naming**: the plugin ID maps to the CSS variable name. `brand_primary` becomes `--brand-primary`.
+**CSS variable naming**: `UiSkinsUtility::getCssVariableName()` replaces every `_` with `-` and prefixes `--`, unconditionally. `brand_primary` is always emitted as `--brand-primary`, so the theme's CSS must reference `var(--brand-primary)`.
+
+**Default values**: a map of CSS scope → default value. Multiple scopes let you ship different defaults under different parent classes (e.g., one default at `:root`, another inside `.theme-dark`).
 
 ## Common Mistakes
 

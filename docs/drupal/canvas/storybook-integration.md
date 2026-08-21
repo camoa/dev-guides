@@ -1,5 +1,5 @@
 ---
-description: How to use Storybook for Canvas Code Component and SDC component development — story formats, setup approaches, and decision by component type.
+description: "How to use Storybook for Canvas Code Component and SDC component development — story formats, setup approaches, and decision by component type."
 tldr: "Use this when developing Canvas Code Components locally and you want to build, preview, and test components in isolation before pushing to Drupal. Storybook is the recommended isolated development environment for Canvas Code Components."
 drupal_version: "11.x"
 ---

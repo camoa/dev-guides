@@ -14,7 +14,7 @@ tldr: Playwright defaults to threshold 0.2 (pixelmatch's own default is 0.1) and
 | Goal | Tune |
 |---|---|
 | Pixel-level forgiveness (anti-aliasing tolerance) | `threshold` |
-| Tolerate small noise pockets in an otherwise stable test | `maxDiffPixels` (small components) or `maxDiffPixelRatio` (full-page) |
+| Tolerate small noise pockets in an otherwise stable test | `maxDiffPixels` — including on full-page shots, where a ratio's budget would scale with page height |
 | Both | All three; they compose |
 
 ## Pattern: layered thresholds
@@ -23,13 +23,14 @@ tldr: Playwright defaults to threshold 0.2 (pixelmatch's own default is 0.1) and
 expect: {
   toHaveScreenshot: {
     threshold: 0.15,              // per-pixel YIQ tolerance
-    maxDiffPixelRatio: 0.005,     // 0.5% of total pixels can differ
-    // No maxDiffPixels → ratio applies to all sizes
+    maxDiffPixels: 500,           // absolute; same meaning at every image size
   },
 }
 ```
 
-This says: individual pixels can shift up to YIQ delta 0.15; up to 0.5% of pixels can be flagged before failing.
+This says: individual pixels can shift up to YIQ delta 0.15; up to 500 pixels can be flagged before failing.
+
+Reach for this layer only once the capture is stable and repeat runs on an unchanged site show a residual — set the number from what you measured, not from a guess. Prefer the absolute cap over `maxDiffPixelRatio` on anything variable-height: the ratio is a fraction of image *area*, so on a `fullPage: true` shot the budget grows with the page. 0.5% of 1440×900 is about 6,500 px; the same 0.5% of 1440×8000 is about 57,600 px — enough to hide a whole component.
 
 ## The Defaults Differ
 

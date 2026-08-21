@@ -1,5 +1,5 @@
 ---
-description: Getting menu link cache metadata right — entity: vs internal: link URIs, the route.menu_active_trails context, and the config:system.menu.{id} tag.
+description: "Getting menu link cache metadata right — entity: vs internal: link URIs, the route.menu_active_trails context, and the config:system.menu.{id} tag."
 tldr: The single highest-leverage menu-caching fix is writing menu link URIs as entity:node/N rather than internal:/node/N, so title/alias/publish-state changes invalidate the cached menu; route.menu_active_trails varying the menu per route and user.permissions varying it per role are correct, not bugs — never patch a stale menu with max-age 0.
 drupal_version: "11.x"
 ---

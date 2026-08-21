@@ -1,6 +1,6 @@
 ---
 description: A tiered VR program plan for a mid-size Drupal site — ~95 baselines, ~5 minutes locally, manageable maintenance.
-tldr: Build a 4-tier program: Tier 1 smoke set (~15 baselines, 3–6 critical pages, 3 viewports); Tier 2 component set (~50 baselines, SDC atoms against fixture routes); Tier 3 theme variants (~20 baselines, conditional); Tier 4 cross-browser (~10 baselines, nightly). Ramp up over weeks, not days — stability must be proven before scale.
+tldr: "Build a 4-tier program: Tier 1 smoke set (~15 baselines, 3–6 critical pages, 3 viewports); Tier 2 component set (~50 baselines, SDC atoms against fixture routes); Tier 3 theme variants (~20 baselines, conditional); Tier 4 cross-browser (~10 baselines, nightly). Ramp up over weeks, not days — stability must be proven before scale."
 ---
 
 # Reference Program
@@ -50,4 +50,4 @@ Don't build the whole suite at once — most failed VR programs over-invest befo
 - [Matrix Design](vr-matrix-design.md)
 - [When to Add a VR Test](vr-when-to-add.md)
 - [VR Debt & Hygiene](vr-debt-and-hygiene.md)
-- Reference: `drupal-playwright-vr.md`, `pixelmatch.md`, `playwright-html-report.md`
+- Reference: `drupal-playwright-vr.md`, `pixelmatch.md`, `playwright-html-report.md`, `drupal-ui-patterns.md` (pattern fixtures pair with VR for component-level testing)

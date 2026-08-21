@@ -70,6 +70,38 @@ const count = pixelmatch(
 console.log(`Diff: ${count}px`);
 ```
 
+## Pattern: URL-vs-URL uptime check
+
+Compare a live URL to a stored reference — useful for "did the homepage hero change?" checks:
+
+```js
+import { chromium } from 'playwright';
+import { PNG } from 'pngjs';
+import pixelmatch from 'pixelmatch';
+import fs from 'node:fs';
+
+const browser = await chromium.launch();
+const page = await browser.newContext({ viewport: { width: 1440, height: 900 } }).then(c => c.newPage());
+await page.goto('https://prod.example.com');
+const currentBuf = await page.screenshot({ fullPage: true });
+await browser.close();
+
+const baseline = PNG.sync.read(fs.readFileSync('reference/homepage.png'));
+const current = PNG.sync.read(currentBuf);
+
+if (baseline.width !== current.width || baseline.height !== current.height) {
+  console.error('Dimension mismatch'); process.exit(1);
+}
+
+const diff = new PNG({ width: baseline.width, height: baseline.height });
+const count = pixelmatch(
+  baseline.data, current.data, diff.data,
+  baseline.width, baseline.height,
+  { threshold: 0.1 },
+);
+console.log(`${count} pixels differ`);
+```
+
 ## Common Mistakes
 
 - **Wrong**: Ignoring the size-mismatch check — pixelmatch throws; guard it explicitly before calling

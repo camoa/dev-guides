@@ -1,6 +1,6 @@
 ---
-description: Optimize icon rendering performance for large-scale sites with many icons or slow networks
-tldr: "You're optimizing icon rendering performance for large-scale sites with many icons or slow networks."
+description: "svg makes zero HTTP requests (it inlines server-side) — svg_sprite only pays off when the same icon repeats many times per page"
+tldr: "Pick the extractor by repetition, not icon count: svg is 0 HTTP requests since it inlines server-side, so 'switch to sprites to cut requests' is backwards — sprites only win when one icon repeats many times on a page."
 drupal_version: "11.x"
 ---
 
@@ -12,63 +12,56 @@ You're optimizing icon rendering performance for large-scale sites with many ico
 
 ## Decision
 
+The three core extractors have genuinely different cost profiles, and it is not the one usually assumed. **The `svg` extractor makes zero HTTP requests** — it reads each file server-side and inlines the markup — so "switch to sprites to cut requests" is backwards.
+
+| Extractor | HTTP requests for N icons | Page weight | Server cost |
+|---|---|---|---|
+| `svg` | 0 | N copies of the markup inlined per occurrence | One file read + XML parse per distinct icon, cached in `icon_info` |
+| `svg_sprite` | 1 (the sprite, browser-cached) | One `<use>` element per occurrence | One XML parse of the whole sprite at discovery |
+| `path` | 1 per distinct icon URL | Minimal HTML | None — Drupal never fetches the file |
+
 | Optimization | Impact | When to use |
 |---|---|---|
-| SVG sprites over individual files | 70-90% reduction in HTTP requests | 10+ icons, especially in header/footer |
-| Lazy loading for below-fold icons | Faster initial page load | Icons not in viewport on load |
-| Inline critical icons | Eliminates HTTP request | Above-fold icons, small count (<5) |
-| Icon pack consolidation | Reduced plugin overhead | Multiple small packs with same extractor |
-| Settings caching | Faster render array processing | Icons with many dynamic settings |
+| `svg_sprite` over `svg` | Smaller HTML when the same icon repeats many times per page | Icon repeated across a long list or grid |
+| `svg` over `svg_sprite` | Removes the sprite request; icons inherit `currentColor` and can be styled per-element | Small set of distinct icons, above the fold |
+| `path` + `loading="lazy"` | Defers below-fold image icons | Icons rendered as `<img>` |
+| Icon pack consolidation | Fewer plugin definitions to build and cache | Multiple small packs with the same extractor |
 
 ## Pattern
 
-Optimize with SVG sprites:
+Pick the extractor by repetition, not by icon count:
 
 ```yaml
-# ❌ Avoid - 50 individual SVG files
-individual_pack:
+# 8 distinct icons, each used once, above the fold -> inline them.
+header_pack:
   extractor: svg
   config:
     sources:
-      - icons/{icon_id}.svg  # 50 HTTP requests
+      - icons/{icon_id}.svg   # 0 HTTP requests
 
-# ✅ Good - One sprite file
-sprite_pack:
+# 1 icon repeated 200 times in a listing -> one sprite reference each.
+listing_pack:
   extractor: svg_sprite
   config:
     sources:
-      - sprites/all-icons.svg  # 1 HTTP request
+      - sprites/all-icons.svg   # 1 HTTP request total
 ```
 
-Lazy load below-fold icons:
+Lazy loading only works for packs whose template renders an `<img>`, and only if that template prints the setting. Settings are arbitrary context keys — `{ loading: 'lazy' }` does nothing unless the pack template contains `loading="{{ loading|default('eager') }}"`:
 
 ```twig
 {# Above-fold icons - render immediately #}
 <header>
-  {{ icon('my_theme:logo', { size: 40 }) }}
+  {{ icon('my_theme', 'logo', { size: 40 }) }}
 </header>
 
-{# Below-fold icons - lazy load #}
+{# Below-fold icons - requires a `path` pack whose template prints `loading` #}
 <footer>
-  {{ icon('my_theme:facebook', {
+  {{ icon('my_theme_img', 'facebook', {
     size: 24,
-    loading: 'lazy'  # If using <img>, not <svg>
+    loading: 'lazy'
   }) }}
 </footer>
-```
-
-Inline critical SVGs:
-
-```twig
-{# Critical icon - inline for zero HTTP requests #}
-{% set home_svg %}
-  <svg width="24" height="24">
-    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-  </svg>
-{% endset %}
-
-{# Use icon API for non-critical #}
-{{ icon('my_theme:home', { size: 24 }) }}
 ```
 
 Minimize pack overhead:
@@ -92,6 +85,8 @@ combined_pack:
       - icons/b/{icon_id}.svg
 ```
 
+Beware the merge rule when consolidating: icons are keyed by ID, so if `icons/a/home.svg` and `icons/b/home.svg` both exist, the later source wins and the earlier icon disappears silently.
+
 Optimize templates:
 
 ```twig
@@ -110,11 +105,12 @@ Reference: Performance profiling with Webprofiler or Blackfire.
 
 ## Common Mistakes
 
-- **Wrong**: Using individual SVG extractor for large icon sets → **Right**: Switch to sprites at 10+ icons
-- **Wrong**: No HTTP/2 push for icon sprites → **Right**: Preload critical sprites in HTML head
-- **Wrong**: Rendering all icons on page load → **Right**: Use lazy loading for below-fold icons
-- **Wrong**: Not minifying SVG sources → **Right**: Run svgo on icon sources before deployment
-- **Wrong**: Complex extractor logic without caching → **Right**: Cache expensive operations with proper tags
+- **Wrong**: "Sprites cut HTTP requests" → **Right**: Only versus `path`. Versus `svg` a sprite *adds* one request, because `svg` inlines the markup server-side
+- **Wrong**: Duplicate icon IDs across consolidated sources → **Right**: Last source wins, silently
+- **Wrong**: Passing `loading: 'lazy'` to a pack whose template renders `<svg>` → **Right**: The setting is ignored; there is no lazy loading for inline SVG
+- **Wrong**: Not preloading a critical sprite → **Right**: `<link rel="preload" as="image" href="sprite.svg">` for above-fold `svg_sprite` icons
+- **Wrong**: Not minifying SVG sources → **Right**: Run svgo on icon sources before deployment, but keep `viewBox`
+- **Wrong**: Complex extractor logic without caching → **Right**: Cache expensive operations yourself; the base class does nothing
 
 ## See Also
 

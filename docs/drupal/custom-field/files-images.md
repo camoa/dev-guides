@@ -1,6 +1,7 @@
 ---
-description: File upload and image sub-fields with widget configuration, extended properties for alt/title/dimensions, and media library integration.
-tldr: "You need file uploads or images within a custom field column."
+description: "File upload and image sub-fields with widget configuration, extended properties for alt/title/dimensions, and media library integration."
+tldr: "Use file type + FileWidget for plain uploads and image type + ImageWidget for accessible images with auto-populated alt/title/width/height; always check the loaded file entity is not NULL before rendering."
+drupal_version: "11.x"
 ---
 
 # Files and Images

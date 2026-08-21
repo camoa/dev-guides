@@ -1,7 +1,7 @@
 ---
 description: Modern ES6+ JavaScript features available in Drupal 10/11 without build process
 tldr: "Use when understanding modern JavaScript features available in Drupal 10/11 and how to use ES6+ syntax."
-drupal_version: "10.x/11.x"
+drupal_version: "11.x"
 ---
 
 # ES Modules and Modern JavaScript

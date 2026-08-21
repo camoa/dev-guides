@@ -18,6 +18,8 @@ drupal_version: "11.x"
 | `#eca_token_reference` | Show in token browser | Fields that define token names for storage |
 | `#eca_token_select_option` | Add "Defined by token" option | Select/radio fields where options can come from tokens |
 
+`#eca_token_select_option` injects two extra options into the element at build time: `_eca_token` ("Defined by token"), and the empty string ("undefined") when the element is not `#required`. If you declare configuration schema for such a key, constrain it with ECA's `EcaChoice` constraint rather than core's `Choice` — `EcaChoice` adds those same two values to the allowed list, so a configuration the form lets a user build also passes configuration validation. See `Drupal\eca\Plugin\Validation\Constraint\EcaChoiceConstraint`.
+
 ## Pattern
 
 ```php

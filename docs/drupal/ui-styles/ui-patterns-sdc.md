@@ -1,6 +1,6 @@
 ---
-description: Apply UI Styles to UI Patterns components and SDC instances in Layout Builder via prop slot integration.
-tldr: Enable ui_styles_ui_patterns; pattern instances in Layout Builder gain UI Styles form fieldsets per exposed prop slot. Styles merge into the rendered Twig template's attributes. Component-internal markup not exposed as a styleable slot cannot be targeted — modify the Twig template instead.
+description: "Apply UI Styles to UI Patterns components and SDC instances in Layout Builder via prop slot integration."
+tldr: "Enable ui_styles_ui_patterns; pattern instances in Layout Builder gain UI Styles form fieldsets per exposed prop slot. Styles merge into the rendered Twig template's attributes. Component-internal markup not exposed as a styleable slot cannot be targeted — modify the Twig template instead."
 drupal_version: "11.x"
 ---
 

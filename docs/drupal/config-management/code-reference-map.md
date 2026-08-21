@@ -1,5 +1,6 @@
 ---
-description: Locate core config classes, interfaces, and files for deeper understanding or extending config functionality.
+description: "Locate core config classes, interfaces, and files for deeper understanding or extending config functionality."
+drupal_version: "11.x"
 ---
 
 # Code Reference Map

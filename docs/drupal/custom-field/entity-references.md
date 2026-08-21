@@ -1,6 +1,7 @@
 ---
-description: Configuring and using entity reference sub-fields with autocomplete, select, radios, and hierarchical widgets.
-tldr: "You need to reference entities (taxonomy terms, nodes, users, media) from within a custom field column."
+description: "Configuring and using entity reference sub-fields with autocomplete, select, radios, and hierarchical widgets."
+tldr: "Pick EntityReferenceAutocompleteWidget for large reference sets and select/radios widgets for small ones; entity reference sub-fields never auto-check access, so validate in the widget and check in the formatter."
+drupal_version: "11.x"
 ---
 
 # Entity Reference Sub-Fields

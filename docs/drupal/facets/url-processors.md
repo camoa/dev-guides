@@ -1,6 +1,6 @@
 ---
-description: Facets URL processors — default query_string format, filter key, URL alias, events for customization, multiple sources on one page
-tldr: "Use this guide when you need to understand how facet selections are represented in URLs, or when customizing URL behavior."
+description: "How facet selections are represented in URLs via the query_string URL processor, filter keys, and URL events"
+tldr: "Use this guide when you need to understand how facet selections are represented in URLs, or when customizing URL behavior. Default format is ?f[0]=alias:value with a configurable filter key per source."
 drupal_version: "11.x"
 ---
 
@@ -8,26 +8,17 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when you need to understand how facet selections are represented in URLs, or when customizing URL behavior.
+> When you need to understand how facet selections are represented in URLs, or when customizing URL behavior.
 
 ## Decision
 
-**Default URL format (query_string plugin):**
+**Default URL format (QueryString), plugin ID `query_string`:**
 
 ```
 https://example.com/search?search_api_fulltext=drupal&f[0]=category:tutorials&f[1]=tag:php&f[2]=price:[10 TO 50]
 ```
 
-| Part | Meaning |
-|---|---|
-| `f` | Filter key (configurable per facet source) |
-| `[0]`, `[1]`, `[2]` | Array indices |
-| `category` | Facet URL alias |
-| `:` | Separator between alias and value |
-| `tutorials` | The filter value |
-| `[10 TO 50]` | Range syntax |
-
-**URL configuration:**
+Breakdown: `f` is the filter key (configurable per facet source), `[0]`/`[1]`/`[2]` are array indices, `category` is the facet URL alias, `:` separates alias and value, `tutorials` is the filter value, `[10 TO 50]` is range syntax.
 
 | Setting | Where | Default | Purpose |
 |---|---|---|---|
@@ -37,7 +28,7 @@ https://example.com/search?search_api_fulltext=drupal&f[0]=category:tutorials&f[
 
 ## Pattern
 
-**Events for URL customization:**
+Events for URL customization:
 
 | Event | When | Use Case |
 |---|---|---|
@@ -45,18 +36,18 @@ https://example.com/search?search_api_fulltext=drupal&f[0]=category:tutorials&f[
 | `ACTIVE_FILTERS_PARSED` | After parsing URL params | Override active filter detection |
 | `URL_CREATED` | After building facet link URL | Modify link destinations |
 
-**Multiple facet sources on one page** — Each facet source can have its own filter key. If two Views with facets appear on the same page, use different filter keys to prevent conflicts:
+Multiple facet sources on one page — use different filter keys to prevent conflicts:
 - Source A: `filter_key: 'f'`
 - Source B: `filter_key: 'g'`
 
 ## Common Mistakes
 
-- **Wrong**: Changing the filter key on a live site → **Right**: Changing the filter key breaks all bookmarked faceted URLs. Plan before going live.
-- **Wrong**: Two facets on the same source sharing the same URL alias → **Right**: URL alias conflicts break URL parameter handling.
-- **Wrong**: Only blocking `f[0]` in robots.txt without the URL-encoded form → **Right**: `f[0]` becomes `f%5B0%5D` in URLs. Both patterns must be blocked. See [SEO & Bot Protection](seo-bot-protection.md).
+- **Wrong**: Changing the filter key on a live site → **Right**: Existing bookmarked faceted URLs will stop working once the filter key changes.
+- **Wrong**: Reusing a URL alias across facets on the same source → **Right**: Two facets on the same source cannot share the same URL alias.
+- **Wrong**: Assuming query string is the only option → **Right**: The default `query_string` uses `?f[]=` parameters. For cleaner URLs, see [Pretty Paths](pretty-paths.md).
 
 ## See Also
 
 - [SEO & Bot Protection](seo-bot-protection.md) — URL implications for crawling
 - [Pretty Paths](pretty-paths.md) — cleaner facet URLs
-- Reference: `web/modules/contrib/facets/src/Plugin/facets/url_processor/`
+- Reference: `src/Plugin/facets/url_processor/`

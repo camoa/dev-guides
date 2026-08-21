@@ -36,6 +36,11 @@ guide-meta:
     - drupal/modeler-api
   specializes: ""
   category: drupal
+tracks:
+  - project: orchestration
+    channel: stable
+    declared: 1.0.x
+    verified: 2026-05-20
 ---
 
 # Orchestration

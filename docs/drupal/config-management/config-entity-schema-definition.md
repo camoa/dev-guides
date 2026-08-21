@@ -1,6 +1,7 @@
 ---
-description: Define config schema for config entities — matching exported YAML structure and including all entity keys.
+description: "Define config schema for config entities — matching exported YAML structure and including all entity keys."
 tldr: "When defining config schema for config entities — schema must match exported YAML structure and include all entity keys."
+drupal_version: "11.x"
 ---
 
 # Config Entity Schema Definition

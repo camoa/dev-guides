@@ -1,6 +1,7 @@
 ---
-description: Understand how Drupal stores configuration data — active storage (database), sync storage (filesystem), and custom backends.
+description: "Understand how Drupal stores configuration data — active storage (database), sync storage (filesystem), and custom backends."
 tldr: "When you need to understand how Drupal stores configuration data — active storage (database), sync storage (filesystem), and custom storage backends."
+drupal_version: "11.x"
 ---
 
 # Config Storage

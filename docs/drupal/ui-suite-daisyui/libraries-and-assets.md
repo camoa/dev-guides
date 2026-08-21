@@ -1,5 +1,5 @@
 ---
-description: Pre-compiled CSS library, CKEditor 5 integration, and Heroicon pack configuration
+description: "Pre-compiled CSS library, CKEditor 5 integration, and Heroicon pack configuration"
 tldr: "Pre-compiled CSS library, CKEditor 5 integration, and Heroicon pack configuration"
 ---
 
@@ -55,7 +55,7 @@ Icons are loaded from `/libraries/heroicons/` using the SVG extractor. The three
 ## Common Mistakes
 
 - **Overriding the `daisyui` library without providing replacement CSS** -- If a sub-theme disables `dist/css/app.css` via `libraries-override` without providing its own compiled CSS, the theme has no styles. WHY: Alpha6 uses pre-compiled CSS instead of CDN; disabling it removes all DaisyUI and Tailwind styles. The starterkit handles this correctly with its own `daisyui` library.
-- **Treating the sub-theme `daisyui` library as a single-file library** -- The base theme's `daisyui` library lists exactly one file (`dist/css/app.css`), but a sub-theme's `daisyui` library is multi-entry: the `app.css` bundle PLUS one standalone `dist/css/themes/<name>.css` per theme override. Forgetting the override entries makes those overrides silently no-op. WHY: Vite emits per-theme overrides as separate files; see Sub-theming "Two-Layer CSS Model & Library Registration".
+- **Treating the sub-theme `daisyui` library as a single-file library** -- The base theme's `daisyui` library lists exactly one file (`dist/css/app.css`), but a sub-theme's `daisyui` library is multi-entry: the `app.css` bundle PLUS one standalone `dist/css/themes/<name>.css` per theme override. Forgetting the override entries makes those overrides silently no-op. WHY: Vite emits per-theme overrides as separate files; see Section 9 "Two-Layer CSS Model & Library Registration".
 - **Assuming Heroicons are bundled** -- The icon packs reference `/libraries/heroicons/` which must be installed separately (e.g., via `npm` or `composer`). WHY: The theme only defines the icon pack configuration; the actual SVG files must exist at the specified path.
 
 ## See Also

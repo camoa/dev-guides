@@ -1,6 +1,6 @@
 ---
-description: Quick reference for VR-relevant Playwright CLI commands — running tests, updating baselines, managing reports.
-tldr: Use `npx playwright test --project=<name>` to scope runs, `npx playwright test -u` to update only changed baselines, and `npx playwright show-report` to open the HTML diff viewer. Always pass `--grep` when using `-u` to avoid bulk-updating the entire suite.
+description: "Quick reference for VR-relevant Playwright CLI commands — running tests, updating baselines, managing reports."
+tldr: "Use `npx playwright test --project=<name>` to scope runs, `npx playwright test -u` to update only changed baselines, and `npx playwright show-report` to open the HTML diff viewer. Always pass `--grep` when using `-u` to avoid bulk-updating the entire suite."
 ---
 
 # CLI Cheatsheet
@@ -17,11 +17,13 @@ tldr: Use `npx playwright test --project=<name>` to scope runs, `npx playwright 
 npx playwright test                                       # all tests, all projects
 npx playwright test --project=chromium-1440              # single project
 npx playwright test --grep "homepage"                    # filter by title
+npx playwright test --grep-invert "wip"                  # exclude by title
 npx playwright test e2e/homepage.spec.ts                 # filter by file
 npx playwright test e2e/homepage.spec.ts:42              # by line number
 npx playwright test --headed                             # visible browser
 npx playwright test --ui                                 # interactive UI mode
 npx playwright test --workers=1                          # serialize
+npx playwright test -j 4                                 # concurrency shorthand
 ```
 
 ### Update baselines
@@ -32,7 +34,7 @@ npx playwright test -u                                   # short form
 npx playwright test --update-snapshots --grep "button"   # scoped update
 npx playwright test --update-snapshots=all               # all executed tests
 npx playwright test --update-snapshots=missing           # only create missing
-npx playwright test --update-snapshots=none              # never update
+npx playwright test --update-snapshots=none               # never update
 ```
 
 ### Reporter overrides
@@ -58,16 +60,18 @@ npx playwright show-report --host 0.0.0.0               # LAN sharing
 npx playwright install
 npx playwright install chromium webkit
 npx playwright install --with-deps
+npx playwright install-deps
 ```
 
 ### Codegen (bootstrap a test scaffold)
 
 ```bash
+npx playwright codegen
 npx playwright codegen https://playwright.dev
 npx playwright codegen --browser=firefox
 ```
 
-Let the recorder generate navigation; add `expect(page).toHaveScreenshot()` manually.
+Useful for bootstrapping a VR test scaffold against an existing site — let the recorder generate the navigation; then add `expect(page).toHaveScreenshot()`.
 
 ### Debug
 

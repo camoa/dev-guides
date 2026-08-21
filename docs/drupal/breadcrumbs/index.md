@@ -1,5 +1,11 @@
 ---
 description: Drupal Breadcrumbs — decision guides for core builders, Easy Breadcrumb, custom builders, SEO, theming, and caching
+tracks:
+  - project: easy_breadcrumb
+    channel: stable
+    declared: null
+    note: no version stated in prose
+    verified: 2026-02-26
 guide-meta:
   concepts:
     - breadcrumb builder

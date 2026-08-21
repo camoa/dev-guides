@@ -1,5 +1,6 @@
 ---
 description: Next.js guides — Drupal integration, chat interfaces, and decoupled frontend patterns
+tracks: []
 guide-meta:
   concepts:
     - Next.js

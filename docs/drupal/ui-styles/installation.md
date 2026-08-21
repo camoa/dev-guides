@@ -1,6 +1,6 @@
 ---
-description: Install and enable UI Styles and its integration submodules on Drupal 10.3+ or 11.x.
-tldr: Require drupal/ui_styles via Composer, then enable only the integration submodules you need (block, layout_builder, ckeditor5, views, page, ui_patterns). The base module is the engine — enabling it alone adds no editor UI.
+description: "Install and enable UI Styles and its integration submodules on Drupal 10.3+, 11, or 12."
+tldr: "Require drupal/ui_styles via Composer, then enable only the integration submodules you need (block, layout_builder, ckeditor5, views, page, ui_patterns). The base module is the engine — enabling it alone adds no editor UI."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when setting up UI Styles for the first time on a Drupal 10.3+ or 11.x site.
+> Use this guide when setting up UI Styles for the first time on a Drupal 10.3+, 11, or 12 site.
 
 ## Pattern
 
@@ -32,11 +32,14 @@ Enable only the relevant integration submodule(s):
 
 ## Compatibility
 
+The current stable release is UI Styles 8.x-1.21 — the project has not moved to semantic versioning, so the legacy `8.x-1.x` branch prefix is the real tag, not a typo. A `2.x` branch exists but carries no stable tag; it is dev-only and not documented here.
+
 | Property | Value |
 |---|---|
-| Drupal core | `^10.3 \|\| ^11` |
+| UI Styles | `8.x-1.21` |
+| Drupal core | `^10.3 \|\| ^11 \|\| ^12` |
 | PHP | 8.3+ |
-| External | `sabberworm/php-css-parser ^9.0` (via Composer for stylesheet generation) |
+| External | `sabberworm/php-css-parser ^9.0` (Composer-installed for stylesheet generation) |
 
 ## Common Mistakes
 

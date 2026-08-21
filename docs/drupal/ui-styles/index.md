@@ -1,5 +1,10 @@
 ---
 description: UI Styles module — curated CSS class options for site builders in Drupal's block, Layout Builder, Views, CKEditor, and page/region UIs.
+tracks:
+  - project: ui_styles
+    channel: stable
+    declared: "8.x-1.21"
+    verified: 2026-08-20
 guide-meta:
   concepts:
     - UI Styles

@@ -10,6 +10,8 @@ drupal_version: "11.x"
 
 > Create custom Action plugins when you need to perform operations that existing ECA actions cannot handle, such as integrating with external APIs, processing custom data structures, or implementing specialized business logic.
 
+These guides document **ECA 3.1.6**, the current stable tag on the 3.1.x branch. Where they say "3.1" they mean a feature that arrived with the 3.1 line and holds across it, not a looser version claim.
+
 ## Decision
 
 | If you need... | Use Base Class | Why |

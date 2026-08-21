@@ -1,5 +1,5 @@
 ---
-description: How the Canvas AI assistant (canvas_ai submodule) works, setup requirements, and how component metadata affects AI-driven page building.
+description: "How the Canvas AI assistant (canvas_ai submodule) works, setup requirements, and how component metadata affects AI-driven page building."
 tldr: "Use this when you want content editors to build or modify Canvas pages using natural language prompts. The Canvas AI assistant (`canvas_ai` submodule) is an optional feature targeted at editorial workflows, not developer workflows."
 drupal_version: "11.x"
 ---

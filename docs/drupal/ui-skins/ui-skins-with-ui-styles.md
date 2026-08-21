@@ -1,6 +1,6 @@
 ---
 description: Combining UI Skins (design token values) with UI Styles (per-block class selection) on the same site.
-tldr: UI Skins and UI Styles are orthogonal. UI Skins controls the value of CSS variables (theme-wide), UI Styles controls which utility classes are applied to individual blocks. The pattern is: UI Skins sets `--brand-primary`, UI Styles applies `text-primary` to a block, CSS links them via `var(--brand-primary)`.
+tldr: "UI Skins and UI Styles are orthogonal. UI Skins controls the value of CSS variables (theme-wide), UI Styles controls which utility classes are applied to individual blocks. The pattern is: UI Skins sets `--brand-primary`, UI Styles applies `text-primary` to a block, CSS links them via `var(--brand-primary)`."
 drupal_version: "11.x"
 ---
 

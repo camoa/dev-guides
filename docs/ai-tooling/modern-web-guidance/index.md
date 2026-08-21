@@ -1,5 +1,12 @@
 ---
 description: Modern Web Guidance — a Google Chrome Agent Skills plugin that injects web platform best practices and Baseline compatibility data into coding agents via an offline CLI.
+tracks:
+  - project: modern-web-guidance
+    registry: npm
+    channel: stable
+    declared: null
+    note: no version stated in prose
+    verified: 2026-06-09
 guide-meta:
   concepts:
     - Modern Web Guidance

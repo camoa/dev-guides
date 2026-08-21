@@ -1,6 +1,6 @@
 ---
-description: Installing UI Skins on Drupal 10.3+ or 11 — single module, no submodules, no external dependencies.
-tldr: Install UI Skins with composer and drush en. Single module only — no submodules exist. Requires Drupal ^10.3 or ^11 and PHP 8.3+. Once enabled, it adds CSS variable and theme controls to every theme's settings form.
+description: Installing UI Skins on Drupal 11.4+ or 12 — single module, no submodules, no external dependencies.
+tldr: Install UI Skins with composer and drush en. Single module only — no submodules exist. Requires Drupal ^11.4 || ^12 and PHP 8.3+. Once enabled, it adds CSS variable and theme controls to every theme's settings form.
 drupal_version: "11.x"
 ---
 
@@ -14,7 +14,7 @@ drupal_version: "11.x"
 
 | Property | Value |
 |---|---|
-| Drupal core | `^10.3 \|\| ^11` |
+| Drupal core | `^11.4 \|\| ^12` |
 | PHP | 8.3+ |
 | External | None (no Composer dependencies beyond core) |
 

@@ -1,6 +1,6 @@
 ---
-description: Apply 30+ utility class styles to blocks, Layout Builder sections, and pattern instances
-tldr: "Apply 30+ utility class styles to blocks, Layout Builder sections, and pattern instances"
+description: "Apply 10 utility class styles across 6 categories to blocks, Layout Builder sections, and pattern instances"
+tldr: "Apply the theme's 10 UI Styles plugins (background/text color, font size, box shadow, width, padding, margin, glass, mask) to blocks, Layout Builder sections, and pattern instances -- there is no border-color, layout, or flexbox/grid style; add those in a sub-theme."
 ---
 
 # UI Styles Integration
@@ -11,18 +11,22 @@ The UI Styles module lets themes define reusable CSS utility classes as "styles"
 
 ## Style Categories
 
-UI Suite DaisyUI defines **30+ style plugins** across 8 categories:
+UI Suite DaisyUI defines exactly **10 style plugins** across **6 categories**. This is a deliberately small set -- do not plan a design around utilities you expect to be there:
 
-| Category | Styles | Example Classes |
-|---|---|---|
-| **DaisyUI Effects** | Glass, Mask | `glass`, `mask mask-squircle` |
-| **Colors** | Background color, Text color, Border color | `bg-primary`, `text-error`, `border-accent` |
-| **Typography** | Font size, Font weight, Text align | `text-xl`, `font-bold`, `text-center` |
-| **Layout** | Aspect ratio, Container, Display, Overflow | `aspect-video`, `container`, `flex`, `overflow-hidden` |
-| **Flexbox & Grid** | Align items, Place content, Justify content, Flex direction | `items-center`, `justify-between`, `flex-col` |
-| **Effects** | Box shadow | `shadow-lg`, `shadow-inner` |
-| **Sizing** | Width, Height, Max width, Min height | `w-full`, `h-screen`, `max-w-4xl` |
-| **Spacing** | Padding, Padding top/horizontal/vertical, Space between, Margin bottom | `p-4`, `px-8`, `mb-6` |
+| Category | Plugin (machine name) | Options | Example classes |
+|---|---|---|---|
+| **DaisyUI effects** | Glass (`daisyui_glass`) | 1 | `glass` |
+| **DaisyUI effects** | Mask (`daisyui_mask`) | 15 | `mask-squircle`, `mask-hexagon` |
+| **Colors** | Background color (`colors_background_color`) | 7 | `bg-primary`, `bg-base-200` |
+| **Colors** | Text color (`colors_text_color`) | 5 | `text-primary-content`, `text-base-content` |
+| **Typography** | Font size (`typography_font_size`) | 13 | `text-xs` .. `text-9xl` |
+| **Effects** | Box shadow (`effects_box_shadow`) | 8 | `shadow-lg`, `shadow-inner` |
+| **Sizing** | Width (`sizing_width`) | 10 | `w-1/2`, `w-3/4` (fractions only -- no `w-full`) |
+| **Spacing** | Padding top (`spacing_padding_top`) | 14 | `pt-0` .. `pt-8` |
+| **Spacing** | Padding bottom (`spacing_padding_bottom`) | 14 | `pb-0` .. `pb-8` |
+| **Spacing** | Margin bottom (`spacing_margin_bottom`) | 14 | `mb-0` .. `mb-8` |
+
+There is **no** border-color, font-weight, text-align, aspect-ratio, container, display, overflow, flex, grid, height, max-width, min-height, horizontal-padding or space-between style. If you need those in the admin UI you have to add them in your sub-theme's own `*.ui_styles.yml`; UI Styles merges the sub-theme's definitions with the base theme's.
 
 ## Style Definition Format
 
@@ -48,11 +52,13 @@ style_id:
 
 ## DaisyUI Color System in Styles
 
-The theme exposes all 20 DaisyUI semantic colors for background, text, and border:
+DaisyUI itself defines about 20 semantic color tokens, but the two color style plugins expose only a subset of them, and the two lists do not match each other:
 
-- **Brand colors**: primary, secondary, accent, neutral (+ `-content` variants)
-- **Base colors**: base-100, base-200, base-300, base-content
-- **State colors**: info, success, warning, error (+ `-content` variants)
+- **Background color** (7): `bg-primary`, `bg-secondary`, `bg-accent`, `bg-neutral`, `bg-base-100`, `bg-base-200`, `bg-base-300`
+- **Text color** (5): `text-primary-content`, `text-secondary-content`, `text-accent-content`, `text-neutral-content`, `text-base-content` -- the `-content` foreground tokens only, so the dropdown pairs with the background list rather than duplicating it
+- **Not exposed as styles at all**: the state colors (`info`, `success`, `warning`, `error`) and any border color
+
+The state colors are still reachable -- as component variants (`alert`, `badge`, `button`, ...) and as raw Tailwind classes typed into a `class` attribute -- just not from the UI Styles dropdowns.
 
 ## Where Styles Can Be Applied
 

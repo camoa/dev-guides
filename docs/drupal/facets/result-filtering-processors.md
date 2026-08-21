@@ -1,5 +1,5 @@
 ---
-description: Facets result filtering processors — count_limit, hide_non_narrowing, hide_active_items, exclude_specified_items, dependent_processor
+description: "BUILD-stage processors that control which facet items display — count thresholds, narrowing, exclusion, dependencies"
 tldr: "Use this guide when you need to control which facet items are displayed — hiding items with low counts, removing specific values, or showing only narrowing results."
 drupal_version: "11.x"
 ---
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when you need to control which facet items are displayed — hiding items with low counts, removing specific values, or showing only narrowing results.
+> When you need to control which facet items are displayed — hiding items with low counts, removing specific values, or showing only narrowing results.
 
 ## Decision
 
@@ -24,27 +24,21 @@ drupal_version: "11.x"
 
 ## Pattern
 
-**`count_limit` configuration:**
+`hide_non_narrowing_result_processor` is essential for good UX — without it, facets show options that wouldn't change the result set. With it, only meaningful filter options appear.
 
-| Setting | Purpose |
+| count_limit Setting | Purpose |
 |---|---|
 | Minimum items | Don't show items with fewer than N results |
 | Maximum items | Don't show items with more than N results |
 
-Example: `minimum_items: 2` hides any facet option that would only return 1 result.
-
-**`hide_non_narrowing_result_processor`** — Essential for good UX. Without it, facets show options that wouldn't change the result set (100% of results match that option). With it, only meaningful filter options appear.
-
-**`dependent_processor` configuration:**
+`dependent_processor` — show "Sub-category" only when "Category" has an active selection:
 
 | Setting | Purpose |
 |---|---|
 | Facet | Which facet must be active |
 | Negate | Show this facet when the other is NOT active |
 
-Use case: Show "Sub-category" facet only when "Category" has an active selection.
-
-**`exclude_specified_items` configuration:**
+`exclude_specified_items`:
 
 | Setting | Purpose |
 |---|---|
@@ -54,11 +48,11 @@ Use case: Show "Sub-category" facet only when "Category" has an active selection
 
 ## Common Mistakes
 
-- **Wrong**: Using display text in `exclude_specified_items` when `translate_entity` runs after it → **Right**: If `translate_entity` runs at weight 5 and `exclude_specified_items` at weight 50, you can use display text. If you reorder them, you must use raw values.
-- **Wrong**: Expecting `hide_non_narrowing_result_processor` to work identically with OR and AND → **Right**: With OR operator, non-narrowing detection works differently. An item that matches all current results may still be meaningful for OR.
+- **Wrong**: Using display text in `exclude_specified_items` after reordering processors → **Right**: With `translate_entity` at weight 5 and `exclude_specified_items` at weight 50 (default order), you can use display text. If you reorder them, you must use raw values instead.
+- **Wrong**: Assuming `hide_non_narrowing_result_processor` behaves the same for AND and OR → **Right**: With the OR operator, an item that matches all current results may still be meaningful, unlike under AND.
 
 ## See Also
 
 - [Processing Pipeline](processing-pipeline.md) — execution order
 - [Sort Processors](sort-processors.md) — ordering the remaining items
-- Reference: `web/modules/contrib/facets/src/Plugin/facets/processor/`
+- Reference: `src/Plugin/facets/processor/`

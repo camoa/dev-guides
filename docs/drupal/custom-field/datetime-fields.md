@@ -1,6 +1,7 @@
 ---
-description: Working with datetime, daterange, time, time_range, and duration sub-fields including widget selection and timezone handling.
-tldr: "Working with date, time, date range, time range, or duration columns in custom fields."
+description: "Working with datetime, daterange, time, time_range, and duration sub-fields including widget selection and timezone handling."
+tldr: "Match the widget to the exact sub-type (datetime vs date-only vs time-of-day vs range); daterange/time_range auto-calculate duration on save and time_range has no cross-midnight support."
+drupal_version: "11.x"
 ---
 
 # Date/Time Sub-Fields

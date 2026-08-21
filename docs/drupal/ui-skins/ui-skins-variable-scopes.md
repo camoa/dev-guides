@@ -1,6 +1,6 @@
 ---
 description: Using multiple default_values scopes to ship different CSS variable defaults under different parent classes.
-tldr: `default_values` is a map of CSS selector → value. Multiple scopes emit separate CSS rules at render time, letting the cascade deliver the right default in different contexts (`:root`, `.theme-dark`, `.callout-warning`). Site-builder edits only replace the `:root` scope value.
+tldr: "`default_values` is a map of CSS selector → value. Multiple scopes emit separate CSS rules at render time, letting the cascade deliver the right default in different contexts (`:root`, `.theme-dark`, `.callout-warning`). Site-builder edits only replace the `:root` scope value."
 drupal_version: "11.x"
 ---
 

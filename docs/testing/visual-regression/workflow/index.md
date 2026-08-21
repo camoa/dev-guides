@@ -1,5 +1,12 @@
 ---
 description: Visual regression workflow — decisions for designing, running, and maintaining a pixel-comparison test suite with Playwright.
+tracks:
+  - project: playwright
+    registry: npm
+    channel: stable
+    declared: null
+    note: no version stated in prose
+    verified: 2026-05-08
 guide-meta:
   concepts:
     - visual regression testing
@@ -50,11 +57,11 @@ guide-meta:
 |-------------|-------|---------|
 | Understand what VR catches and what it doesn't | [What VR Is For](vr-what-its-for.md) | Use VR when you need to catch unintended visual drift from a code change. VR is baseline governance — every diff is either an intentional baseline update or an unintended regression. Never use it as a substitute for design QA or accessibility testing. |
 | Decide whether a change needs a VR test | [When to Add a VR Test](vr-when-to-add.md) | Add a VR test when you can identify the smallest screenshot that would catch a regression in this change. High-signal, stable surfaces (SDC atoms, hero, forms, critical landing pages) get VR; volatile surfaces (live feeds, external-API pages, dashboards) do not. |
-| Pick what to capture (scope, state, breakpoint, browser, theme) | [What to Capture](vr-what-to-capture.md) | Use the 5-axis cube (scope × state × breakpoint × browser × theme) and pick the smallest cross-section per test. Default to component-level scope, Chromium-only, 3 breakpoints for responsive components, and only capture states with distinct CSS. |
+| Pick what to capture (scope, state, breakpoint, browser, theme) | [What to Capture](vr-what-to-capture.md) | Use the 5-axis cube (scope × state × breakpoint × browser × theme); pick the smallest cross-section per test. Full-page baselines cost ~150 KB each — the real trade-off is coverage, not bytes: viewport-only can miss most of the page. |
 | Design the browser × viewport matrix | [Matrix Design](vr-matrix-design.md) | Use a tiered matrix instead of a uniform N×M cube — component-shared tests use 1 viewport, layout-aware and page tests use 3 viewports, cross-browser tests use 1 viewport with 3 browsers. Name projects so the name flows into the baseline filename. |
 | Decide where baselines live and how to manage them | [Baseline Management](vr-baseline-management.md) | Commit baselines to the repo (Playwright default) for Drupal/DDEV teams without a VR-vendor budget. Keep baselines on main, update them in PRs with the UI change, and never auto-update on main from CI. Prune orphans quarterly. |
 | Stabilize captures before any baseline is set | [Stability Checklist](vr-stability-checklist.md) | Run the 10-point checklist before any baseline capture: disable animations, hide carets, wait for fonts and images, wait for network idle, mask dynamic regions, normalize scroll and focus, dismiss cookie banners, and pin the Chromium version via the official Playwright Docker image. |
-| Tune threshold, maxDiffPixels, maxDiffPixelRatio | [Threshold Tuning](vr-threshold-tuning.md) | Use threshold 0.20 (Playwright default) for standard tests; tighten to 0.05–0.10 for pixel-perfect same-env captures; use maxDiffPixels for small components and maxDiffPixelRatio for full-page shots. Set a global floor in playwright.config.ts and override per assertion only with a comment. |
+| Tune threshold, maxDiffPixels, maxDiffPixelRatio | [Threshold Tuning](vr-threshold-tuning.md) | Use threshold 0.20 (Playwright default), tighter for pixel-perfect captures. Use maxDiffPixels for small components and full-page shots alike — never maxDiffPixelRatio on full-page. Start at zero and measure your own floor. |
 | Author tests with reusable patterns | [Authoring Patterns](vr-authoring-patterns.md) | Extract a waitForStableLayout helper and a vrSnapshot macro so most tests are 1–3 lines. Use data-vrt-mask in Twig markup to decouple volatility masking from test files. Prefer dedicated fixture routes over real content pages for SDC atoms. |
 | Update baselines after intentional UI changes | [Baseline Update Workflow](vr-baseline-update-workflow.md) | Always scope baseline updates with --grep to affected tests. Pair every baseline update with the UI change in the same commit or PR. Never do a bulk --update-snapshots as a default response to red CI. Review diffs using the Playwright HTML report, not just GitHub's PNG diff. |
 | Triage a failed VR test | [Triaging False Positives](vr-triaging-false-positives.md) | When a diff fires, work the triage tree: same image on re-run (flake → stability checklist), differs by machine (env drift → pin Docker image), differs per browser (browser-specific → per-browser baselines), differs CI vs local (always capture inside Docker). |

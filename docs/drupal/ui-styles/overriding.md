@@ -1,6 +1,6 @@
 ---
-description: Override, disable, or extend UI Styles definitions declared by upstream modules or themes.
-tldr: Disable an upstream style by re-declaring its plugin ID with enabled: false in your theme's YAML. Add options by re-declaring with only the new options (arrays merge). For conditional/runtime overrides, implement hook_ui_styles_styles_alter(). Never edit upstream YAML directly.
+description: "Override, disable, or extend UI Styles definitions declared by upstream modules or themes."
+tldr: "Disable an upstream style by re-declaring its plugin ID with enabled: false in your theme's YAML. Add options by re-declaring with only the new options (arrays merge). For conditional/runtime overrides, implement hook_ui_styles_styles_alter(). Never edit upstream YAML directly."
 drupal_version: "11.x"
 ---
 

@@ -1,6 +1,6 @@
 ---
-description: Apply UI Styles classes to theme regions and the page wrapper via theme settings.
-tldr: Enable ui_styles_page; the theme settings page gains a section to apply styles to the page wrapper and each region. Selections store in theme settings YAML and apply via hook_preprocess_region/page. These are theme-level (all pages) — don't duplicate with LB section styles.
+description: "Apply UI Styles classes to theme regions and the page wrapper via theme settings."
+tldr: "Enable ui_styles_page; the theme settings page gains a section to apply styles to the page wrapper and each region. Selections store in theme settings YAML and apply via hook_preprocess_region/page. These are theme-level (all pages) — don't duplicate with LB section styles."
 drupal_version: "11.x"
 ---
 

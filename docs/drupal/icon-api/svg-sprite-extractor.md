@@ -1,6 +1,6 @@
 ---
-description: Optimal performance with single-file loading for large icon sets in SVG sprite format
-tldr: "You have large icon sets (50+ icons) in SVG sprite format and want optimal performance with single-file loading."
+description: "svg_sprite reads symbol IDs from a local sprite only — a remote sprite source discovers zero icons, silently"
+tldr: "You have a large local SVG sprite and want one cached request for every icon; remote sprites cannot work — IconFinder refuses any URI with a scheme, so a CDN sprite source discovers nothing."
 drupal_version: "11.x"
 ---
 
@@ -8,15 +8,17 @@ drupal_version: "11.x"
 
 ## When to Use
 
-You have large icon sets (50+ icons) in SVG sprite format and want optimal performance with single-file loading.
+You have large icon sets (50+ icons) in a **local** SVG sprite file and want one cached request to serve every icon.
 
 ## Decision
 
 | Sprite format... | Template pattern... | Why |
 |---|---|---|
-| Local sprite file | `<use href="{{ source }}#{{ icon_id }}"/>` | Standard SVG `<use>` reference |
-| Remote sprite (trusted) | Same with remote URL | CDN delivery, shared across sites |
-| Inline sprite | Embed sprite in page, use fragment ID | Zero HTTP requests, better for critical icons |
+| Local sprite file | `<use href="{{ source }}#{{ icon_id }}"/>` | Standard SVG `<use>` reference — the only configuration that works |
+| Remote sprite (CDN URL) | Not supported | The extractor must read the file to enumerate `<symbol id>` values, and `IconFinder::getFileContents()` refuses any URI with a scheme. Discovery returns zero icons, silently |
+| Inline sprite | Embed sprite in page, use fragment ID | Zero HTTP requests, better for critical icons — outside Icon API |
+
+Unlike the `svg` extractor, `svg_sprite` never reads SVG markup into the page ("no SVG is parsed or printed", `SvgSpriteExtractor.php:16-17`). There is no `{{ content }}` and no `{{ attributes }}` from this extractor — only `{{ icon_id }}`, `{{ source }}`, and your settings.
 
 ## Pattern
 
@@ -27,10 +29,9 @@ sprite_pack:
   extractor: svg_sprite
   config:
     sources:
-      - sprites/icons.svg
-      - https://cdn.example.com/sprites/icons.svg  # Remote allowed
+      - sprites/icons.svg  # Local only. A URL here discovers nothing.
   template: >-
-    <svg width="{{ size|default(24) }}"
+    <svg width="{{ size|default(24) }}" 
          height="{{ size|default(24) }}"
          fill="{{ color|default('currentColor') }}"
          aria-hidden="true"
@@ -53,18 +54,18 @@ Sprite file format (symbols with IDs matching icon_id):
 </svg>
 ```
 
-Reference: `/core/lib/Drupal/Core/Theme/Icon/Plugin/IconExtractor/SvgSpriteExtractor.php`
+Reference: `/core/lib/Drupal/Core/Theme/Plugin/IconExtractor/SvgSpriteExtractor.php`
 
 ## Common Mistakes
 
-- **Wrong**: Using `<svg>` instead of `<symbol>` in sprite → **Right**: Sprite extractor looks for `<symbol>` elements
-- **Wrong**: Mismatched IDs → **Right**: Symbol `id` must match `icon_id` used in templates
-- **Wrong**: Missing `viewBox` on symbols → **Right**: Each symbol needs `viewBox` for proper scaling
-- **Wrong**: Loading entire sprite per icon → **Right**: Browser caches sprite file, one HTTP request serves all icons
+- **Wrong**: Pointing `sources` at a CDN URL → **Right**: Zero icons discovered, no error. Vendor the sprite into your extension
+- **Wrong**: Using `<svg>` instead of `<symbol>` in sprite → **Right**: The extractor reads `$svg->symbol`, falling back to `$svg->defs->symbol`; both top-level and `<defs>`-wrapped symbols work, nothing else does
+- **Wrong**: Symbol IDs containing dots, colons, or spaces → **Right**: `extractIdsFromSymbols()` rejects any ID matching `/[^\w-]/` and drops it silently; keep IDs to letters, digits, underscore and hyphen
+- **Wrong**: Missing `viewBox` on symbols → **Right**: Each symbol needs `viewBox` for proper scaling; the sprite extractor exposes no `{{ attributes }}` to fall back on
 - **Wrong**: Not preloading critical sprite → **Right**: Use `<link rel="preload" as="image" href="sprite.svg">` for above-fold icons
 
 ## See Also
 
 - [SVG Extractor](svg-extractor.md)
 - [Path Extractor](path-extractor.md)
-- Reference: `/core/lib/Drupal/Core/Theme/Icon/Plugin/IconExtractor/SvgSpriteExtractor.php`
+- Reference: `/core/lib/Drupal/Core/Theme/Plugin/IconExtractor/SvgSpriteExtractor.php`

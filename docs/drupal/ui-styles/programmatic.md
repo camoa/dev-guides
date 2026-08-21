@@ -1,6 +1,6 @@
 ---
-description: Use UI Styles services and form elements in custom code — reading definitions, embedding the form element, and applying classes to render arrays.
-tldr: Use plugin.manager.ui_styles to read definitions, the ui_styles_styles form element type in custom forms, and Drupal\ui_styles\Render\Element::addClasses() to inject classes into render arrays. Store both the selected array and extra string — not just the class string.
+description: "Use UI Styles services and form elements in custom code — reading definitions, embedding the form element, and applying classes to render arrays."
+tldr: "Use plugin.manager.ui_styles to read definitions, the ui_styles_styles form element type in custom forms, and Drupal\\ui_styles\\Render\\Element::addClasses() to inject classes into render arrays. Store both the selected array and extra string — not just the class string."
 drupal_version: "11.x"
 ---
 

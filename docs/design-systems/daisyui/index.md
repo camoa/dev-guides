@@ -1,5 +1,11 @@
 ---
 description: DaisyUI v5 guides — theming, color tokens, component reference, React integration, customization, accessibility
+tracks:
+  - project: daisyui
+    registry: npm
+    channel: stable
+    declared: "5.x"
+    verified: 2026-05-05
 guide-meta:
   concepts:
     - DaisyUI v5

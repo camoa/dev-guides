@@ -25,6 +25,11 @@ guide-meta:
     - design-systems/radix-sdc
   specializes: ""
   category: drupal
+tracks:
+  - project: layout_builder_styles
+    channel: stable
+    declared: 2.1.0
+    verified: 2026-07-01
 ---
 
 # Layout Builder

@@ -10,6 +10,8 @@ drupal_version: "11.x"
 
 > Use this guide when installing BEF on a Drupal site and enabling it for Views.
 
+This guide documents **Better Exposed Filters 7.1.3**, which requires Drupal core `^11.4 || ^12`. An 8.x branch exists but is still in development and has no stable release — do not adopt it.
+
 ## Decision
 
 | Situation | Choose | Why |

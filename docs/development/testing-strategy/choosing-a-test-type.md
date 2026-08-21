@@ -1,6 +1,6 @@
 ---
 description: Master decision matrix — map any verification need to the right test type and the right guide, with quick-reference by stack.
-tldr: Map what you need to verify to the correct test type using this matrix. Most features need a combination: unit tests for logic, integration for seams, E2E for critical journeys only. Quick reference: Drupal uses PHPUnit Unit/Kernel/Functional; React/Next.js uses Vitest + RTL + Playwright.
+tldr: "Map what you need to verify to the correct test type using this matrix. Most features need a combination: unit tests for logic, integration for seams, E2E for critical journeys only. Quick reference: Drupal uses PHPUnit Unit/Kernel/Functional; React/Next.js uses Vitest + RTL + Playwright."
 ---
 
 # Choosing a Test Type

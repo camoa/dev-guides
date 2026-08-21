@@ -1,5 +1,12 @@
 ---
 description: Playwright for E2E Testing — decision guides for locators, web-first assertions, fixtures, auth, network mocking, API testing, CI sharding, and Drupal-specific patterns.
+tracks:
+  - project: playwright
+    registry: npm
+    channel: stable
+    declared: null
+    note: no version stated in prose
+    verified: 2026-05-08
 guide-meta:
   concepts:
     - playwright

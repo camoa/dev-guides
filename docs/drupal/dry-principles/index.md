@@ -1,5 +1,6 @@
 ---
 description: Drupal-specific DRY (Don't Repeat Yourself) principles - config, services, base classes, traits, plugins, templates, SDC, render arrays, hooks, and more.
+tracks: []
 guide-meta:
   concepts:
     - Drupal DRY patterns

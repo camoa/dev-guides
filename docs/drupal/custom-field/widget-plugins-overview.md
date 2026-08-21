@@ -1,9 +1,10 @@
 ---
-description: Widget selection reference for all 27 custom field types with 39 available widgets, showing defaults and compatibility.
-tldr: "You need to choose the right widget for collecting data for each sub-field in your custom field."
+description: "Widget selection reference for all 23 custom field types with 37 available widgets, showing defaults and compatibility."
+tldr: "37 widget plugins map to 23 custom field column types, each with a documented default; only override the default when UX calls for it (e.g., select/radios instead of autocomplete for small reference sets, or select_or_other for a constrained-but-extensible list)."
+drupal_version: "11.x"
 ---
 
-# Widget Plugins
+# Widget Plugins Overview
 
 ## When to Use
 
@@ -15,14 +16,14 @@ You need to choose the right widget for collecting data for each sub-field in yo
 
 | Field Type | Available Widgets | Default | Notes |
 |---|---|---|---|
-| string | TextWidget, HiddenWidget | TextWidget | Short text input |
+| string | TextWidget, HiddenWidget, SelectOrOtherWidget | TextWidget | Short text input |
 | string_long | TextareaWidget | TextareaWidget | Multi-line textarea |
 | email | EmailWidget | EmailWidget | Email input with validation |
 | telephone | TelephoneWidget | TelephoneWidget | Tel input |
 | uri | UrlWidget | UrlWidget | URL input |
 | color | ColorWidget, ColorBoxesWidget | ColorWidget | Color picker |
-| integer | IntegerWidget, SelectWidget, RadiosWidget, CheckboxWidget | IntegerWidget | Number input |
-| float | FloatWidget | FloatWidget | Decimal number input |
+| integer | IntegerWidget, SelectWidget, RadiosWidget, CheckboxWidget, SelectOrOtherWidget | IntegerWidget | Number input |
+| float | FloatWidget, SelectOrOtherWidget | FloatWidget | Decimal number input |
 | decimal | DecimalWidget | DecimalWidget | Fixed precision input |
 | boolean | CheckboxWidget, SelectWidget, RadiosWidget | CheckboxWidget | On/off widget |
 | datetime | DateTimeDefaultWidget, DateTimeDatelistWidget, DateTimeLocalWidget | DateTimeDefaultWidget | Date/time picker |
@@ -38,7 +39,9 @@ You need to choose the right widget for collecting data for each sub-field in yo
 | map_string | MapTextWidget | MapTextWidget | Text key-value |
 | uuid | UuidWidget | UuidWidget | Auto-generated, hidden |
 
-**39 total widget plugins** in `/src/Plugin/CustomField/FieldWidget/`.
+**37 total widget plugins** -- 32 in the main module's `/src/Plugin/CustomField/FieldWidget/` (39 files; the other 7 are base classes), 5 more across the sub-modules (`LinkitWidget`, `LinkitUrlWidget`, `EntityReferenceBrowserWidget`, `MediaLibraryWidget`, `ViewfieldSelectWidget`).
+
+**New in 5.0.2:** `SelectOrOtherWidget` (id `select_or_other`, category *Lists*), for `string`, `integer` and `float`. It renders a select list or radio buttons plus a free-text "Other" input, with settings `select_element_type` (`list`|`buttons`), `other_field_label`, `other_placeholder` and `other_option`. It is backed by three new render elements, `src/Element/SelectOrOtherBase.php`, `SelectOrOtherSelect.php` and `SelectOrOtherRadios.php`.
 
 ## Common Mistakes
 
@@ -48,4 +51,5 @@ You need to choose the right widget for collecting data for each sub-field in yo
 
 ## See Also
 
+- [Field-Level Widgets](field-level-widgets.md) -- layout of the whole compound field, not per-sub-field widget choice
 - Reference: `/modules/contrib/custom_field/src/Plugin/CustomField/FieldWidget/`

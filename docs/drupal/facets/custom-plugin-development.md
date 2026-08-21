@@ -1,6 +1,6 @@
 ---
-description: Facets custom plugin development — custom processors, widgets, URL processors, and facet sources with PHP 8 attribute syntax
-tldr: "Use this guide when you need a custom processor, widget, query type, or URL processor that doesn't exist in the built-in set."
+description: "Building custom Facets processors, widgets, and URL processors when the built-in plugin set doesn't cover a case"
+tldr: "Use this guide when you need a custom processor, widget, query type, or URL processor that doesn't exist in the built-in set. Use the Facets-specific annotations and interfaces, not core equivalents."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when you need a custom processor, widget, query type, or URL processor that doesn't exist in the built-in set.
+> When you need a custom processor, widget, query type, or URL processor that doesn't exist in the built-in set.
 
 ## Decision
 
@@ -22,9 +22,9 @@ drupal_version: "11.x"
 | Handle URLs differently | URL processor | `Plugin/facets/url_processor/` |
 | Connect to a new backend | Facet source | `Plugin/facets/facet_source/` |
 
-## Pattern
+**As of 3.0.4**, URL processor plugins may declare themselves with either the `@FacetsUrlProcessor` annotation or the `#[Drupal\facets\Attribute\FacetsUrlProcessor]` attribute — `UrlProcessorPluginManager` accepts both. It is the only Facets plugin type with an attribute class; processors, widgets, query types, facet sources, and hierarchies remain annotation-only.
 
-**Custom processor:**
+## Pattern
 
 ```php
 namespace Drupal\my_module\Plugin\facets\processor;
@@ -48,6 +48,7 @@ class MyCustomProcessor extends ProcessorPluginBase implements BuildProcessorInt
 
   public function build(FacetInterface $facet, array $results): array {
     foreach ($results as $result) {
+      // Modify each result.
       $result->setDisplayValue(strtoupper($result->getDisplayValue()));
     }
     return $results;
@@ -55,8 +56,6 @@ class MyCustomProcessor extends ProcessorPluginBase implements BuildProcessorInt
 
 }
 ```
-
-**Custom widget:**
 
 ```php
 namespace Drupal\my_module\Plugin\facets\widget;
@@ -76,6 +75,7 @@ class MyCustomWidget extends WidgetPluginBase {
 
   public function build(FacetInterface $facet): array {
     $build = parent::build($facet);
+    // Customize the render array.
     $build['#attached']['library'][] = 'my_module/my_widget';
     return $build;
   }
@@ -85,12 +85,12 @@ class MyCustomWidget extends WidgetPluginBase {
 
 ## Common Mistakes
 
-- **Wrong**: Using core Drupal annotations instead of Facets-specific ones → **Right**: Use `@FacetsProcessor`, `@FacetsWidget`, etc. Not `@Plugin` or other core annotations.
-- **Wrong**: Declaring a processor without specifying stages → **Right**: Processors must declare which stages they support in the annotation's `stages` key.
-- **Wrong**: Implementing only `ProcessorInterface` for a build processor → **Right**: A build processor must implement `BuildProcessorInterface`, not just the base `ProcessorInterface`.
+- **Wrong**: Using core plugin annotations → **Right**: Use `@FacetsProcessor`, `@FacetsWidget`, etc. — not core annotations.
+- **Wrong**: Omitting the stage declaration on a processor → **Right**: Processors must declare which stages they support in the annotation.
+- **Wrong**: Implementing only `ProcessorInterface` → **Right**: A build processor must implement `BuildProcessorInterface`, not just `ProcessorInterface`.
 
 ## See Also
 
 - [Processing Pipeline](processing-pipeline.md) — where custom processors fit
 - [Widgets](widgets.md) — existing widgets to extend
-- Reference: `web/modules/contrib/facets/src/Plugin/facets/processor/`, `src/Plugin/facets/widget/`
+- Reference: `src/Plugin/facets/`

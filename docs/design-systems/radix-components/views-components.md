@@ -1,27 +1,25 @@
 ---
-description: Components for Drupal Views output and grid layouts
-tldr: "Components for Drupal Views output and grid layouts. Use these when rendering Views lists, grids, and tables with Radix styling patterns."
+description: "Components for displaying Views output with various formatters (grid, table, unformatted lists)"
+tldr: "Components for displaying Views output with various formatters (grid, table, unformatted lists). These components are automatically used when Radix preprocesses Views templates, but can also be included manually for custom Views styling."
 ---
 
 # Views Components
 
 ## When to Use
 
-> Components for Drupal Views output and grid layouts. Use these when rendering Views lists, grids, and tables with Radix styling patterns.
+> Components for displaying Views output with various formatters (grid, table, unformatted lists). These components are automatically used when Radix preprocesses Views templates, but can also be included manually for custom Views styling.
 
-Components for displaying Views output with various formatters (grid, table, unformatted lists). These components are automatically used when Radix preprocesses Views templates, but can also be included manually for custom Views styling.
+## Items
 
-### Items
-
-#### views-view
+### views-view
 **Description:** Implementation for main view component.
 **Status:** experimental
 
 **Props:**
 | Prop | Type | Default | Notes |
 |------|------|---------|-------|
-| `content` | string |  | Content |
-| `views_attributes` | Drupal\Core\Template\Attribute |  | Views attributes |
+| `content` | string |  | **Dead — not honoured by `views-view.twig`.** The template never outputs `content`; rows come from `rows` and `empty`. |
+| `views_attributes` | Drupal\Core\Template\Attribute |  | **Dead — not honoured by `views-view.twig`.** Line 33 overwrites it with `attributes ?: create_attribute()`. Pass `attributes` instead. The other `views_*_attributes` props below all use `X ?: create_attribute()` and *are* honoured. |
 | `views_title_attributes` | Drupal\Core\Template\Attribute |  | Views title attributes |
 | `views_header_attributes` | Drupal\Core\Template\Attribute |  | Views header attributes |
 | `views_filters_attributes` | Drupal\Core\Template\Attribute |  | Views filters attributes |
@@ -31,8 +29,9 @@ Components for displaying Views output with various formatters (grid, table, unf
 | `views_attachment_before_attributes` | Drupal\Core\Template\Attribute |  | Views attachment before attributes |
 | `views_attachment_after_attributes` | Drupal\Core\Template\Attribute |  | Views attachment after attributes |
 | `views_pager_attributes` | Drupal\Core\Template\Attribute |  | Views pager attributes |
-| `views_more_attributes` | Drupal\Core\Template\Attribute |  | Views more attributes |
+| `views_more_attributes` | Drupal\Core\Template\Attribute |  | **Dead — not honoured by `views-view.twig`.** Line 43 accepts it, but the `views_more` block at line 189 renders the link with `more|add_class(views_more_classes)` and never prints these attributes. Use `views_more_utility_classes` for classes. |
 | `views_feed_icons_attributes` | Drupal\Core\Template\Attribute |  | Views feed icons attributes |
+| `view_view_utility_classes` | array | [] | Utility classes for the outer `.view` wrapper (`views-view.twig:54`). Note the singular `view_view_` prefix, not `views_view_`. Absent from the YAML. |
 | `views_title_utility_classes` | array | [] | An array of utility classes. Use to add extra Bootstrap utility classes or custom CSS classes. |
 | `views_header_utility_classes` | array | [] | An array of utility classes. Use to add extra Bootstrap utility classes or custom CSS classes. |
 | `views_filters_utility_classes` | array | [] | An array of utility classes. Use to add extra Bootstrap utility classes or custom CSS classes. |
@@ -78,18 +77,18 @@ Components for displaying Views output with various formatters (grid, table, unf
 
 **Gotchas:**
 - Each section (title, header, filters, rows, etc.) has separate `*_attributes` and `*_utility_classes` props
-- The `content` prop is typically auto-populated by Views and shouldn't be manually set in template overrides
+- The `content` prop is declared in the YAML but `views-view.twig` never prints it — it is dead in both directions. Row output comes from `rows` (or `empty` when there are none)
 - Use preprocess functions to modify `*_utility_classes` arrays for views-wide styling patterns
 
-#### views-view--grid
+### views-view--grid
 **Description:** Component implementation for views to display rows in a grid.
 **Status:** experimental
 
 **Props:**
 | Prop | Type | Default | Notes |
 |------|------|---------|-------|
-| `content` | string |  | Content |
-| `attributes` | Drupal\Core\Template\Attribute |  |  |
+| `content` | string |  | **Dead — not honoured by `views-view--grid.twig`.** The template never prints a top-level `content`; it iterates `items` and prints `row.content` / `column.content`. |
+| `attributes` | Drupal\Core\Template\Attribute |  | Honoured — `views-view--grid.twig:47` calls `attributes.addClass(classes)` on the grid wrapper. |
 
 **Slots:**
 No slots defined.
@@ -99,7 +98,7 @@ No slots defined.
 {%
   include 'radix:views-view--grid' with {
     title: title,
-    rows: rows,
+    items: items,
     options: options,
     view_view__grid_utility_classes: ['row', 'row-cols-1', 'row-cols-md-3', 'g-4']
   }
@@ -107,11 +106,11 @@ No slots defined.
 ```
 
 **Gotchas:**
-- The `items` variable (not in props but available in template) contains the pre-structured grid data from Views
+- The grid renders from `items`, not `rows` — `views-view--grid.twig:49,59` iterates `items` and nothing reads `rows`. `items` is undeclared in the YAML but is the variable the template needs
 - Grid alignment (`horizontal` vs `vertical`) is controlled by Views settings, not component props
 - Don't confuse this with Bootstrap's CSS grid; this uses Views' own grid structure
 
-#### views-view--table
+### views-view--table
 **Description:** Schema for a view implementation that displays data in a table.
 **Status:** experimental
 
@@ -122,11 +121,12 @@ No slots defined.
 | `header` | array |  | An array for table header columns. |
 | `caption` | string |  | Caption for this table. |
 | `rows` | array |  | Table row data. |
-| `responsive` | boolean |  | Flag whether the table is responsive. |
-| `sticky` | boolean |  | Flag whether the table header is sticky. |
+| `responsive` | boolean |  | Adds the `.responsive-enabled` class only (`views-view--table.twig:36`). It does **not** control the `.table-responsive` wrapper. |
+| `sticky` | boolean |  | Adds `.sticky-header` and suppresses the `.table-responsive` wrapper (`views-view--table.twig:37,43`). |
+| `header_style` | string |  | `light` or `dark`; adds `.table-light` / `.table-dark` to the `<thead>` (`views-view--table.twig:63`). Absent from the YAML. |
 | `bordered` | boolean |  | Flag whether the table header is styled bordered. |
-| `accessibility_description` | string |  | Extended description of the table details for accessibility. |
-| `accessibility_summary` | string |  | Summary of the table details for accessibility. |
+| `accessibility_description` | string |  | **Dead.** The template reads `description`, not this prop (`views-view--table.twig:54`). |
+| `accessibility_summary` | string |  | **Dead.** The template reads `summary`, not this prop (`views-view--table.twig:51`). |
 | `caption_needed` | boolean |  | Flag to determine if the caption tag is required. |
 | `attributes` | Drupal\Core\Template\Attribute |  | HTML attributes for the table element. |
 
@@ -150,18 +150,18 @@ No slots defined.
 ```
 
 **Gotchas:**
-- The `responsive` flag wraps the table in a `.table-responsive` div for horizontal scrolling on small screens
+- The `.table-responsive` wrapper is emitted whenever `sticky` is falsy (`views-view--table.twig:43`), not by `responsive`. `responsive: true` only adds a `.responsive-enabled` class; `sticky: true` is what removes the scroll wrapper
 - The `header` and `rows` arrays are complex structures with nested `attributes` and `content` keys
-- `bordered` defaults to `true` in most Radix configurations; explicitly set to `false` if unwanted
+- `bordered` defaults to true in the template itself (`bordered ?? true`, `views-view--table.twig:39`); pass `bordered: false` to drop `.table-bordered`
 
-#### views-view--unformatted
+### views-view--unformatted
 **Description:** Component implementation to display a view of unformatted rows.
 **Status:** experimental
 
 **Props:**
 | Prop | Type | Default | Notes |
 |------|------|---------|-------|
-| `content` | string |  | Content |
+| `content` | string |  | **Dead — not honoured by `views-view--unformatted.twig`.** The template never prints a top-level `content`; it iterates `rows` and prints `row.content`. |
 
 **Slots:**
 No slots defined.
@@ -183,13 +183,13 @@ No slots defined.
 - Setting `default_row_class: false` removes Drupal's default `views-row` class
 - Each row in the `rows` array has its own `attributes` object that can be manipulated in preprocess
 
-### Common Mistakes
+## Common Mistakes
 - **Forgetting Views variables are auto-populated**: Variables like `header`, `rows`, `footer`, and `pager` come from Views and shouldn't be manually constructed in template includes
 - **Mixing up component-level vs row-level classes**: `views_rows_utility_classes` applies to the rows container wrapper, while `row_utility_classes` (in unformatted views) applies to individual row items
-- **Not using responsive flag for tables**: Mobile users will struggle with wide tables; always set `responsive: true` for tables with many columns
+- **Assuming `responsive` creates the scroll wrapper**: it does not. `.table-responsive` is emitted whenever `sticky` is falsy, so leave `sticky` off for wide tables
 - **Overriding grid structure manually**: The views-view--grid component expects Views-generated grid data structure; don't try to reconstruct it manually
 
-### See Also
+## See Also
 - Pagination Component for views pager styling
 - Table Component for standalone table structures
 - Card Component for common views row display patterns

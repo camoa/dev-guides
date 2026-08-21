@@ -1,5 +1,6 @@
 ---
 description: Image & Media Craft — front-end pipeline decisions for responsive images, format strategy, loading optimization, placeholders, video, SVG, effects, and Drupal integration
+tracks: []
 guide-meta:
   concepts:
     - responsive images HTML

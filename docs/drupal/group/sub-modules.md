@@ -16,9 +16,12 @@ drupal_version: "11.x"
 |---|---|---|
 | `gnode` | You want group-scoped node access | Nodes in groups use Group's access system instead of node.module |
 | `group_support_revisions` | Site uses content revisions + group-level revision access control | Group permissions control who views/reverts revisions |
-| `group_content_menu` (contrib) | Groups need their own menus | Per-group menus |
-| `gflex` (contrib) | Groups need flexible visibility or join methods | Open, private, or invite-only groups |
-| `subgroup` (contrib) | You need nested group hierarchies | Parent/child group relationships |
+| `group_content_menu` (contrib) | Groups need their own menus | **Group 3.3.x only** — newest release 3.0.8 declares `^3.0@beta`, excludes 4.x |
+| `group_permissions` (contrib) | Extra permission-UI improvements | **Group 3.3.x only** — newest release 2.0.0-alpha13 declares `^2.0 \|\| ^3.0`, excludes 4.x |
+| `group_flex` (contrib) | Groups need flexible visibility or join methods | **No Drupal 11 support at all** — newest release 1.0.0-beta5 (2021), core `^8.8 \|\| ^9`, never had a stable |
+| `subgroup` (contrib) | You need nested group hierarchies | **Group 3.3.x only** — newest release 3.1.0 declares `^3.0`, excludes 4.x; project is *Minimally maintained* |
+
+If your site needs any of these on Group 4.x, plan on Group **3.3.x** instead, or budget the work to add 4.x compatibility upstream.
 
 ## Pattern
 
@@ -43,6 +46,7 @@ plugin_config:
 
 - **Wrong**: Enabling `gnode` without understanding the access implications → **Right**: Once enabled, nodes added to groups are access-controlled by Group. Nodes NOT in any group still use standard node access. Incomplete permission configuration can lock users out.
 - **Wrong**: Installing sub-modules before creating any group types → **Right**: Define group types first, then install plugins. This avoids confusing plugin-not-installed errors.
+- **Wrong**: Assuming `group_content_menu`, `group_permissions`, `group_flex`, or `subgroup` install alongside `drupal/group:^4.0` → **Right**: none of them declares Group 4.x support (verified 2026-08-16); Composer will refuse to resolve. Stay on Group 3.3.x if you need one of these.
 
 ## See Also
 

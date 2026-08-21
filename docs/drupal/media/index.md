@@ -21,6 +21,12 @@ guide-meta:
     - drupal/entities
   specializes: ""
   category: drupal
+tracks:
+  - project: drupal
+    channel: stable
+    declared: null
+    verified: 2026-02-16
+    note: core topic; states no version of its own and inherits the guides.yml core baseline
 ---
 
 # Media Types

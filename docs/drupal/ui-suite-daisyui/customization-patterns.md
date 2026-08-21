@@ -1,5 +1,5 @@
 ---
-description: Add custom components, override DaisyUI tokens, and extend base components
+description: "Add custom components, override DaisyUI tokens, and extend base components"
 tldr: "Add custom components, override DaisyUI tokens, and extend base components"
 ---
 
@@ -105,7 +105,7 @@ To modify an existing component without fully replacing it, override only the Tw
 
 - **Adding Tailwind utility classes not scanned by `@source` directives** -- The build pipeline only includes Tailwind classes found in files matched by `@source` patterns in `app.pcss.css`. Classes used only in custom templates outside those patterns will be purged. WHY: Tailwind 4 tree-shakes unused classes at build time. Add appropriate `@source` directives or include classes in `safelist.txt`.
 - **Overriding `.component.yml` without copying all props** -- If you override a component's YAML in a sub-theme, you must include ALL props and slots, not just the ones you changed. WHY: UI Patterns reads the entire YAML; partial overrides result in missing props.
-- **Customizing a DaisyUI theme via `css/themes/<name>.pcss.css` without registering the compiled file** -- The cleanest way to override a single theme's tokens is a `@plugin "daisyui/theme"` block in `css/themes/<name>.pcss.css` (as the starterkit does for `dark`). But Vite compiles that to a STANDALONE `dist/css/themes/<name>.css` that must be added to your `daisyui` library, or the override never loads. WHY: see Sub-theming "Two-Layer CSS Model & Library Registration". The inline `:root`/`[data-theme]` library shown above is an alternative for token tweaks that does not go through the `css/themes/` build path.
+- **Customizing a DaisyUI theme via `css/themes/<name>.pcss.css` without registering the compiled file** -- The cleanest way to override a single theme's tokens is a `@plugin "daisyui/theme"` block in `css/themes/<name>.pcss.css` (as the starterkit does for `dark`). But Vite compiles that to a STANDALONE `dist/css/themes/<name>.css` that must be added to your `daisyui` library, or the override never loads. WHY: see Section 9 "Two-Layer CSS Model & Library Registration". The inline `:root`/`[data-theme]` library shown above is an alternative for token tweaks that does not go through the `css/themes/` build path.
 
 ## See Also
 

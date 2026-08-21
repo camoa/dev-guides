@@ -1,6 +1,7 @@
 ---
-description: Config management patterns, architecture decisions, and proven approaches for maintainable config workflows.
+description: "Config management patterns, architecture decisions, and proven approaches for maintainable config workflows."
 tldr: "When you need guidance on config management patterns, architecture decisions, and proven approaches for maintainable config workflows."
+drupal_version: "11.x"
 ---
 
 # Best Practices & Patterns

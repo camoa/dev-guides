@@ -1,6 +1,6 @@
 ---
-description: Programmatic access to icon packs and icons in PHP for controllers, services, forms, and preprocess
-tldr: "You need programmatic access to icon packs and icons in PHP (controllers, services, forms, preprocess) rather than templates."
+description: "IconPackManager's PHP API — getIcons() returns raw discovery data with no label, and render elements use #pack_id/#icon_id, never #pack/#icon"
+tldr: "You need programmatic icon access in PHP; getIcons() returns discovery arrays with no label (call getIcon()->getLabel() for that), and the render element properties are #pack_id/#icon_id — #pack/#icon renders nothing, raises nothing."
 drupal_version: "11.x"
 ---
 
@@ -14,10 +14,14 @@ You need programmatic access to icon packs and icons in PHP (controllers, servic
 
 | Method | Returns | Use for... |
 |---|---|---|
-| `getDefinitions()` | All pack definitions | Listing available packs |
-| `getIcon($full_id)` | Single icon data | Rendering specific icon |
-| `getIcons($pack_ids)` | Icons from packs | Building icon selectors |
+| `getDefinitions()` | All pack definitions, keyed by pack ID | Listing available packs |
+| `getIcon(string $full_id)` | `IconDefinitionInterface|null` | Reading one icon's metadata |
+| `getIcons(array $allowed_icon_pack = [])` | Raw discovery arrays keyed by `pack:id` | Enumerating icon IDs |
+| `listIconPackOptions(bool $with_description = FALSE)` | `pack_id => "Label (count)"` | A pack select element |
+| `getExtractorFormDefaults(string $pack_id)` | The pack's settings `default:` values | Seeding a settings form |
 | `hasDefinition($id)` | Boolean | Checking pack exists |
+
+`getIcons()` returns the **discovery** payload, not icon objects: each value is the array the extractor built (`['absolute_path' => …, 'source' => …, 'group' => …]`), with no `label`. To get a human label, call `getIcon($full_id)->getLabel()` — or `listIconPackOptions()` if you only need pack-level options.
 
 ## Pattern
 
@@ -33,7 +37,7 @@ class MyService {
   public function __construct(
     protected IconPackManagerInterface $iconPackManager
   ) {}
-
+  
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('plugin.manager.icon_pack')
@@ -70,12 +74,14 @@ if ($icon) {
 
 Render icon in PHP:
 
+The render element properties are `#pack_id` and `#icon_id` (`Render\Element\Icon::getInfo()`). `#pack` and `#icon` are not recognised: `getInfo()` defaults both real properties to `''`, `getIcon('':'')` returns NULL, `preRenderIcon()` returns the element untouched, and you get blank output with no error.
+
 ```php
 // Create render array
 $element = [
   '#type' => 'icon',
-  '#pack' => 'my_theme',
-  '#icon' => 'home',
+  '#pack_id' => 'my_theme',
+  '#icon_id' => 'home',
   '#settings' => [
     'size' => 32,
     'color' => '#007bff',
@@ -84,27 +90,28 @@ $element = [
 
 // In preprocess
 function my_theme_preprocess_page(&$variables) {
-  $icon_manager = \Drupal::service('plugin.manager.icon_pack');
-
   $variables['home_icon'] = [
     '#type' => 'icon',
-    '#pack' => 'my_theme',
-    '#icon' => 'home',
+    '#pack_id' => 'my_theme',
+    '#icon_id' => 'home',
     '#settings' => ['size' => 24],
   ];
 }
 ```
 
+`IconDefinition::getRenderable('my_theme:home', $settings)` builds the same array from a combined ID, which is convenient when the ID came out of a field or config.
+
 Get icons for form options:
 
 ```php
-// Build select options from icon pack
+// Build select options from icon pack.
+// getIcons() is keyed by the full "pack:id" and its values carry no label,
+// so derive the label from the loaded IconDefinition.
 $icon_manager = \Drupal::service('plugin.manager.icon_pack');
-$icons = $icon_manager->getIcons(['my_theme']);
 
 $options = [];
-foreach ($icons as $icon_id => $icon_data) {
-  $options[$icon_id] = $icon_data['label'] ?? $icon_id;
+foreach (array_keys($icon_manager->getIcons(['my_theme'])) as $full_id) {
+  $options[$full_id] = $icon_manager->getIcon($full_id)?->getLabel() ?? $full_id;
 }
 
 $form['icon'] = [
@@ -114,15 +121,17 @@ $form['icon'] = [
 ];
 ```
 
-Reference: `/core/lib/Drupal/Core/Theme/Icon/Plugin/IconPackManager.php`
+For large packs this loads every icon; prefer `IconDefinition::humanize($icon_id)` when you only need the display string, since that is exactly what `getLabel()` calls.
+
+Reference: `/core/lib/Drupal/Core/Theme/Icon/Plugin/IconPackManager.php`, `/core/lib/Drupal/Core/Render/Element/Icon.php`
 
 ## Common Mistakes
 
+- **Wrong**: `#pack` / `#icon` instead of `#pack_id` / `#icon_id` → **Right**: Renders nothing, raises nothing
+- **Wrong**: Reading `$icon_data['label']` off `getIcons()` → **Right**: No such key; use `getIcon()->getLabel()`
 - **Wrong**: Using static `\Drupal::service()` calls → **Right**: Inject IconPackManager via dependency injection
-- **Wrong**: Not checking icon exists → **Right**: Use `getIcon()` return value check before accessing
-- **Wrong**: Ignoring cache contexts → **Right**: Icon render arrays include cache tags automatically
-- **Wrong**: Building icon markup manually → **Right**: Use render arrays for proper caching and theming
-- **Wrong**: Accessing internal plugin properties → **Right**: Use public API methods only
+- **Wrong**: Not checking icon exists → **Right**: `getIcon()` returns NULL for an unknown pack or icon
+- **Wrong**: Expecting the render array to carry cache tags → **Right**: It carries none; add your own if the surrounding render array needs them
 
 ## See Also
 

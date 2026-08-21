@@ -1,11 +1,11 @@
 ---
-description: Complete reference of all 51 DaisyUI components with props, slots, variants, and usage examples
+description: "Complete reference of all 51 DaisyUI components with props, slots, variants, and usage examples"
 tldr: "Complete reference of all 51 DaisyUI components with props, slots, variants, and usage examples"
 ---
 
 # Theme Components Catalog
 
-The theme provides **51 SDC components** organized into 8 groups. Components with names in parentheses (e.g., `(Tab)`) are internal/child components meant to be used inside a parent component.
+The theme provides **51 SDC components** organized into 7 groups (Actions, Data display, Feedback, Grid, Layout, Mockup, Navigation). Components with names in parentheses (e.g., `(Tab)`) are internal/child components meant to be used inside a parent component.
 
 ## 4.1 Actions Group
 
@@ -25,7 +25,8 @@ The theme provides **51 SDC components** organized into 8 groups. Components wit
   - `ghost` (boolean) -- Ghost style
   - `link` (boolean) -- Link style
   - `url` ($ref: `ui-patterns://url`) -- Optional URL (renders as `<a>` instead of `<button>`)
-  - `modal_id` ($ref: `ui-patterns://identifier`) -- Opens a modal with matching ID
+  - `modal_id` ($ref: `ui-patterns://identifier`) -- Sets `onclick="<modal_id>.showModal()"`. Must be a valid JS identifier -- see the Modal warning below.
+  - `drawer_id` ($ref: `ui-patterns://identifier`) -- Changes the whole element to `<label for="<drawer_id>" class="... drawer-button">`. Takes precedence over `url`, so a button with both renders as a label, not a link.
   - `icon` ($ref: `ui-patterns://icon`) -- Heroicon integration
   - `icon_position` (string: `left`|`right`, default: `right`) -- Icon placement
 - **Slots**: `label`
@@ -48,19 +49,22 @@ The theme provides **51 SDC components** organized into 8 groups. Components wit
   - `close_outside` (boolean) -- Close on backdrop click
   - `close_corner` (boolean) -- Show corner close button
   - `custom_width` (boolean) -- Wide modal (`w-11/12 max-w-5xl`)
+  - `force_open` (boolean) -- Adds `modal-open`, rendering the dialog already open. The only way to show an open modal without JS.
   - `responsive_position` (string: `bottom`|`middle`|`top`|`start`|`end`) -- Mobile position
   - `position` (string: `bottom`|`middle`|`top`|`start`|`end`) -- Desktop position (md+)
-  - `heading_level` (integer: 2-6, default: 3) -- Title heading tag
+  - `heading_level` (integer: 2-6, default: 3, set by `modal.twig` via `|default(3)`) -- Title heading tag
 - **Slots**: `close_label`, `title`, `message`
+- **`modal_id` must be a valid JavaScript identifier.** `button.twig` writes it into an inline handler verbatim: `attributes.setAttribute('onclick', modal_id ~ '.showModal()')`. A hyphenated id such as `my-modal` renders `onclick="my-modal.showModal()"`, which the browser parses as the subtraction `my - modal.showModal()` -- a `ReferenceError`, so the modal never opens. Nothing catches this: UI Patterns' `IdentifierPropType` pattern explicitly allows `-`, and the error only appears in the console. **Use underscores**, as the theme's own story does (`modal.default.story.yml` uses `my_modal_1`).
+- Omitting `modal_id` on the modal is safe -- `modal.twig` falls back to `'modal-' ~ random()` -- but then no button can target it.
 - **Usage**:
 ```twig
 {{ include('ui_suite_daisyui:button', {
   label: 'Open Modal',
-  modal_id: 'my-modal',
+  modal_id: 'my_modal_1',
 }, with_context: false) }}
 
 {{ include('ui_suite_daisyui:modal', {
-  modal_id: 'my-modal',
+  modal_id: 'my_modal_1',
   title: 'Hello!',
   message: 'This is a modal dialog.',
   close_outside: true,
@@ -72,7 +76,7 @@ The theme provides **51 SDC components** organized into 8 groups. Components wit
 ### Accordion
 
 - **Machine name**: `ui_suite_daisyui:accordion`
-- **DaisyUI class**: `accordion` (rendered via child Collapse components)
+- **DaisyUI class**: none. `accordion.twig` is a single line -- `<div {{ attributes }}>{{ items }}</div>` -- and DaisyUI 5 has no `accordion` class. Accordion behaviour is entirely a property of the child Collapse components sharing an `accordion_id`.
 - **Slots**: `items` -- Expects a list of Collapse components with matching `accordion_id`
 - **Usage**: Wrap multiple Collapse components with the same `accordion_id`.
 
@@ -87,8 +91,9 @@ The theme provides **51 SDC components** organized into 8 groups. Components wit
   - `soft` (boolean) -- Soft color variant
   - `outline` (string: `outline`|`dash`) -- Border style
   - `responsive` (boolean) -- Vertical on mobile, horizontal on `sm:`
+  - `icon` ($ref: `ui-patterns://icon`) -- The alert's icon. **Caller-supplied; there is no default.**
 - **Slots**: `title`, `message`, `buttons`
-- **Notes**: Includes inline SVG icons matching the variant type.
+- **Notes**: `alert.twig` contains no SVG and no variant-to-icon mapping -- it renders `icon(icon.pack_id, icon.icon_id, icon.settings)` and nothing else. Pass an `icon` or the alert has none. The theme's own `status-messages.html.twig` passes no icon, so Drupal's status messages render icon-less out of the box. `role="alert"` is set unconditionally.
 
 ### Avatar
 
@@ -98,7 +103,7 @@ The theme provides **51 SDC components** organized into 8 groups. Components wit
 - **Props**:
   - `size` (integer: 8|10|12|16|20|24|28|32, default: 24) -- Tailwind size unit
   - `rounded` (string: `rounded`|`rounded-xl`|`rounded-full`)
-  - `mask` (string) -- 19 mask shapes (squircle, heart, hexagon, diamond, star, triangle, etc.)
+  - `mask` (string) -- one of 19 enum values, each **already prefixed**: `mask-squircle`, `mask-heart`, `mask-hexagon`, `mask-hexagon-2`, `mask-decagon`, `mask-pentagon`, `mask-diamond`, `mask-square`, `mask-circle`, `mask-parallelogram` (1-4), `mask-star`, `mask-star-2`, `mask-triangle` (1-4). `avatar.twig` emits `'mask ' ~ mask`, so passing a bare `squircle` yields `class="mask squircle"` -- no shape, no error.
   - `ring` (boolean) -- Ring border
   - `placeholder` (string) -- Text placeholder instead of image
 - **Slots**: `image`
@@ -133,8 +138,10 @@ The theme provides **51 SDC components** organized into 8 groups. Components wit
   - `centered` (boolean) -- Centered body with rounded image
   - `image_full` (boolean) -- Full-bleed image
   - `actions_top` (boolean) -- Actions above title
+  - `actions_position` (string) -- Emitted as `justify-<value>`; defaults to `justify-end` when omitted
   - `size` (string: `xs`|`sm`|`md`|`lg`|`xl`)
   - `border` (string: `border`|`dash`)
+  - `url` ($ref: `ui-patterns://url`) -- **Changes the wrapper element** from `<div>` to `<a href>`, making the whole card one link. Watch for nested interactive elements in the `actions` slot when you use it.
 - **Slots**: `image`, `title`, `text`, `actions`
 - **Usage**:
 ```twig
@@ -330,7 +337,7 @@ The theme provides **51 SDC components** organized into 8 groups. Components wit
 
 - **Machine name**: `ui_suite_daisyui:tabs`
 - **DaisyUI class**: `tabs`
-- **Variants**: default, border (bordered), lift (lifted), box (boxed)
+- **Variants**: `default`, `border`, `lift`, `box` -- emitted as `tabs-<variant>` (`default` emits nothing). These are DaisyUI 5 names; the DaisyUI 4 spellings `lifted`/`bordered`/`boxed` are not accepted and would render unstyled.
 - **Props**:
   - `size` (string: `xs`|`sm`|`md`|`lg`|`xl`)
 - **Slots**: `items` -- Expects Tab components
@@ -341,8 +348,10 @@ The theme provides **51 SDC components** organized into 8 groups. Components wit
 - **DaisyUI class**: `tab`
 - **Props**:
   - `active` (boolean) -- Active tab state
-- **Slots**: `link`
+- **Slots**: `link` -- **must be a render array, not an HTML string.**
+- **Notes**: `tab.twig` emits no element of its own. Its entire body is `{{ link|set_attribute('role','tab')|add_class('tab') }}`, so the `tab` class, the `role` and the `tab-active` state are all applied *to the slot's own markup*. UI Patterns' `AttributesFilterTrait::addClass()` opens with `if (!\is_array($element)) { return $element; }` -- hand it a plain string like `'<a href="/x">X</a>'` and it comes back untouched: no class, no role, no active state, and no error anywhere. Pass a link render array (`{'#type': 'link', ...}`), or the output of Drupal's own `menu-local-task.html.twig`, which is what the theme does.
 
+  The same filter behaviour applies more mildly elsewhere -- `join`, `carousel`, `hero` and `chat` add a `join-item` or a padding class to slot content the same way. There the string form only loses one utility class; on Tab it loses the component.
 ## 4.4 Layout Group
 
 ### Divider
@@ -423,46 +432,61 @@ The theme provides **51 SDC components** organized into 8 groups. Components wit
 
 All grid components share common props for responsive layout control.
 
-**Shared Grid Props** (present on all grid components):
+**Genuinely shared props** (all five grid components declare and read these):
 
-- `container_type` (string: `container mx-auto`|`breakout`|`bg-breakout`) -- Container behavior
-- `background_image` ($ref: `ui-patterns://url`) -- Section background image
+- `container_type` (string: `container mx-auto`|`breakout`|`bg-breakout`, default `container mx-auto` set in Twig) -- Container behavior
+- `background_image` ($ref: `ui-patterns://url`) -- Written into an inline `style="background-image: url(...)"`
 - `background_size` (string: `bg-auto`|`bg-cover`|`bg-contain`)
 - `background_position` (string: 9 Tailwind bg position values)
 - `background_repeat` (string: 6 Tailwind bg repeat values)
-- `gap` / `gap_sm` / `gap_md` / `gap_lg` / `gap_xl` / `gap_2xl` (integer: 0|2|4|8|12) -- Responsive gaps
-- `grid_cols` / `grid_cols_sm` through `grid_cols_2xl` (integer: 1-12) -- Responsive column counts
+
+**Not shared, despite looking like it:**
+
+| Prop family | Where it exists | Breakpoint ceiling |
+|---|---|---|
+| `gap` / `gap_sm` / `gap_md` / `gap_lg` | `grid_cols`, `grid_2_regions`, `grid_3_regions`, `grid_4_regions` -- **not** `grid_1_region` | `lg`. There is no `gap_xl` or `gap_2xl` on any component. |
+| `grid_cols` / `grid_cols_sm` / `grid_cols_md` / `grid_cols_lg` | `grid_cols` only | `lg`. There is no `grid_cols_xl` or `grid_cols_2xl`. |
+| `col_span` / `col_start` / `col_end` (+ `_sm` `_md` `_lg`) | the four region grids | `lg` |
+
+The region grids hardcode `grid-cols-12`; there is no way to change the column count on `grid_1_region` through `grid_4_regions`. Only `grid_cols` takes a column count, and only it takes `items`.
+
+> **Do not copy the theme's own `page.html.twig` here.** It passes full class strings into these props -- `col_span: ['col-span-12', 'col-span-12']`, `col_span_lg: ['lg:col-span-3', 'lg:col-span-9']` -- but the grid Twig concatenates, `'col-span-' ~ col_span[0]`, producing `col-span-col-span-12` and `lg:col-span-lg:col-span-3`. The schema is right (`type: integer`, enum 1-12) and the base theme's page template is wrong. Pass integers.
 
 ### Grid 1 Region
 
 - **Machine name**: `ui_suite_daisyui:grid_1_region`
 - **Slots**: `col_first`
+- **Props**: `col_span`, `col_start` + `_lg` / `_md` / `_sm` -- **scalars here**, not arrays, unlike the multi-region grids. `col_span` defaults to `12` in the Twig. No `col_end`, no `gap`.
 
 ### Grid 2 Regions
 
 - **Machine name**: `ui_suite_daisyui:grid_2_regions`
 - **Slots**: `col_first`, `col_second`
-- **Additional props**: `col_span`, `col_start`, `col_end` (arrays of 2) + responsive variants -- Per-column span/start/end control
+- **Additional props**: `col_span`, `col_start`, `col_end` (arrays of 2) + `_lg` / `_md` / `_sm` -- per-column span/start/end control. `col_span` defaults to `[12, 12]` and `col_span_md` to `[6, 6]` in the Twig, so the two regions stack on mobile and sit side by side from `md` up. Values are **integers** (`6`), not class strings: the Twig emits `'col-span-' ~ col_span[0]`.
+- **Additional props**: `gap` (+ `_lg` / `_md` / `_sm`), default `4`
 
 ### Grid 3 Regions
 
 - **Machine name**: `ui_suite_daisyui:grid_3_regions`
 - **Slots**: `col_first`, `col_second`, `col_third`
-- **Additional props**: `col_span`, `col_start`, `col_end` (arrays of 3) + responsive variants
+- **Additional props**: `col_span`, `col_start`, `col_end` (arrays of 3) + `_lg` / `_md` / `_sm`; `gap` (+ responsive)
 
 ### Grid 4 Regions
 
 - **Machine name**: `ui_suite_daisyui:grid_4_regions`
 - **Slots**: `col_first`, `col_second`, `col_third`, `col_fourth`
-- **Additional props**: `col_span`, `col_start`, `col_end` (arrays of 4) + responsive variants
+- **Additional props**: `col_span`, `col_start`, `col_end` (arrays of 4) + `_lg` / `_md` / `_sm`; `gap` (+ responsive)
 
 ### Grid Cols
 
 - **Machine name**: `ui_suite_daisyui:grid_cols`
 - **Slots**: `items` -- Flexible number of items
-- **Notes**: Unlike fixed-region grids, this accepts any number of items and distributes them across the configured column count.
+- **Additional props**: `grid_cols` (default `1`), `grid_cols_md` (default `2`), `grid_cols_lg` (default `4`), `grid_cols_sm`; `gap` (default `4`) + `_lg` / `_md` / `_sm`
+- **Notes**: Unlike fixed-region grids, this accepts any number of items and distributes them across the configured column count. It is the only grid with no `icon_map`, so it shows no region diagram in the Layout Builder picker.
 
 ## 4.6 Feedback Group
+
+> **Alert** also belongs to this group (`group: Feedback` in `alert.component.yml`) but is documented above under 4.2 for historical reasons. Look for it there.
 
 ### Loading
 
@@ -480,7 +504,8 @@ All grid components share common props for responsive layout control.
 - **Variants**: default, primary, secondary, accent, neutral, info, success, warning, error
 - **Props**:
   - `value` (number) -- Current progress value
-  - `max` (number) -- Maximum value (omit for indeterminate)
+  - `max` (number) -- Maximum value. HTML's own default is `1`, so passing `value: 70` without `max: 100` renders a full bar.
+- **Indeterminate requires omitting both props.** `progress.twig` sets the `value` attribute when `value or (not value and max)` -- so `max` alone still emits `value="0"` (an empty determinate bar), and only a `<progress>` with neither attribute animates as indeterminate.
 
 ### Toast
 

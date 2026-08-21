@@ -1,5 +1,6 @@
 ---
 description: DRY (Don't Repeat Yourself), code reuse, and abstraction strategies - when to abstract, when to duplicate, and how to avoid premature abstraction
+tracks: []
 guide-meta:
   concepts:
     - DRY principle

@@ -1,6 +1,6 @@
 ---
-description: Facet sources — how facets connect to Search API Views displays, auto-generated source IDs, and source configuration
-tldr: "Use this guide when you need to understand how facets connect to your search backend and Views displays, or when a facet source is not appearing."
+description: "How facet sources connect facets to Search API-backed Views displays"
+tldr: "Use this guide when you need to understand how facets connect to your search backend and Views displays, or when a facet source is not appearing. Each saved Views display generates its own source."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when you need to understand how facets connect to your search backend and Views displays, or when a facet source is not appearing.
+> When you need to understand how facets connect to your search backend and Views displays.
 
 ## Decision
 
@@ -24,7 +24,7 @@ search_api:views_{display_plugin}__{view_id}__{display_id}
 - `search_api:views_block__product_search__block_1` — Block display
 - `search_api:views_rest_export__api_search__rest_1` — REST display
 
-**Facet Source Configuration:**
+**Facet source configuration:**
 
 | Setting | Config Key | Default | Purpose |
 |---|---|---|---|
@@ -45,7 +45,7 @@ $facet_manager = \Drupal::service('facets.manager');
 $facets = $facet_manager->getFacetsByFacetSourceId('search_api:views_page__search__page_1');
 ```
 
-**FacetSourceInterface key methods:**
+Interface methods:
 
 | Method | Purpose |
 |---|---|
@@ -57,11 +57,11 @@ $facets = $facet_manager->getFacetsByFacetSourceId('search_api:views_page__searc
 
 ## Common Mistakes
 
-- **Wrong**: Expecting one facet source to cover multiple Views displays → **Right**: Each display is a separate source. Facets created for one display won't appear on another unless you use the exposed filters approach.
-- **Wrong**: Source not appearing in facet configuration → **Right**: Save the View first. Sources are only generated for saved Views displays.
+- **Wrong**: Expecting facets from one View display to appear on another → **Right**: Each display is a separate source. Facets created for one display won't appear on another unless you use the exposed filters approach.
+- **Wrong**: Creating facets against an unsaved View → **Right**: Sources are only generated for saved Views displays.
 
 ## See Also
 
 - [Facet Configuration](facet-configuration.md) — creating facets for a source
 - [URL Processors](url-processors.md) — the filter_key and URL format
-- Reference: `web/modules/contrib/facets/src/Entity/FacetSource.php`
+- Reference: `src/Plugin/facets/facet_source/`

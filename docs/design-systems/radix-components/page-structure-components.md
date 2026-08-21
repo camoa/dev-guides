@@ -1,19 +1,17 @@
 ---
-description: Components for HTML structure, page layout, and regions
-tldr: "Components for HTML structure, page layout, and regions. Use these for rendering the complete HTML document, page wrapper, regions, and block wrappers in Drupal templates."
+description: "Components for overall page layout, regions, and structural wrappers"
+tldr: "Components for overall page layout, regions, and structural wrappers. These are the foundational components that create the skeleton of every Drupal page in Radix."
 ---
 
 # Page Structure Components
 
 ## When to Use
 
-> Components for HTML structure, page layout, and regions. Use these for rendering the complete HTML document, page wrapper, regions, and block wrappers in Drupal templates.
+> Components for overall page layout, regions, and structural wrappers. These are the foundational components that create the skeleton of every Drupal page in Radix.
 
-Components for overall page layout, regions, and structural wrappers. These are the foundational components that create the skeleton of every Drupal page in Radix.
+## Items
 
-### Items
-
-#### html
+### html
 **Description:** This provides structure for an entire HTML document, from DOCTYPE declaration to closing HTML tag.
 **Status:** experimental
 
@@ -21,7 +19,7 @@ Components for overall page layout, regions, and structural wrappers. These are 
 | Prop | Type | Default | Notes |
 |------|------|---------|-------|
 | `doc_lang` | string | en | Defines the language used in the HTML document. Default language is English (en). |
-| `body_classes` | array | [] | An array of utility classes applied to the body of the HTML document. |
+| `body_classes` | array | [] | **Dead — not honoured by `html.twig`.** Line 27 rebuilds `body_classes` from `root_path`/`language` merged with `body_utility_classes`. Use `body_utility_classes`. |
 | `body_utility_classes` | array | [] | An array of utility classes for general use across the HTML document. |
 | `attributes` | Drupal\Core\Template\Attribute |  |  |
 
@@ -37,7 +35,7 @@ Components for overall page layout, regions, and structural wrappers. These are 
 ```twig
 {%
   embed "radix:html" with {
-    attributes: { class: ['custom-class'], id: 'custom-page-id' },
+    attributes: attributes.addClass('custom-class').setAttribute('id', 'custom-page-id'),
     doc_lang: 'en',
     body_utility_classes: ['overflow-hidden']
  }
@@ -49,18 +47,19 @@ Components for overall page layout, regions, and structural wrappers. These are 
 ```
 
 **Gotchas:**
+- **`attributes` must be an `Attribute` object, never a Twig hash.** `html.twig` renders `<body {{ attributes.addClass(body_classes) }}>`, and a hash has no `addClass()` method. Pass the `attributes` object Drupal already supplies in `html.html.twig` (as above), or build one with `create_attribute({'id': 'custom-page-id'}).addClass('custom-class')`
 - This component is typically only used in html.html.twig template overrides, not in node/block templates
 - Use `embed` instead of `include` when you need to populate slots
 - The `logged_in`, `root_path`, and `node_type` variables are auto-populated by Drupal's preprocess, not passed as props
 
-#### page
+### page
 **Description:** The main page component that gives the structural outline for every page.
 **Status:** experimental
 
 **Props:**
 | Prop | Type | Default | Notes |
 |------|------|---------|-------|
-| `page_attributes` | Drupal\Core\Template\Attribute |  | HTML attributes for the page component. |
+| `page_attributes` | Drupal\Core\Template\Attribute |  | **Dead — not honoured by `page.twig`.** Line 7 overwrites it with `attributes ?: create_attribute()`. Pass `attributes` instead. |
 | `page_utility_classes` | array |  | Additional utility classes added to the page component. |
 
 **Slots:**
@@ -74,7 +73,7 @@ Components for overall page layout, regions, and structural wrappers. These are 
 ```twig
 {%
   embed 'radix:page' with {
-    page_attributes: attributes.addClass('custom-page'),
+    attributes: attributes.addClass('custom-page'),
     page_utility_classes: ['d-flex', 'flex-column', 'min-vh-100']
   }
 %}
@@ -92,7 +91,7 @@ Components for overall page layout, regions, and structural wrappers. These are 
 - Used in page.html.twig template, not for individual nodes
 - Don't confuse `page_utility_classes` (for structural styling) with content-specific classes
 
-#### page-content
+### page-content
 **Description:** The main content component of a page, including a header section and main content area.
 **Status:** experimental
 
@@ -112,7 +111,7 @@ Components for overall page layout, regions, and structural wrappers. These are 
 | Slot | Description |
 |------|-------------|
 | `page_header` | The header section of the main content area. |
-| `page_content` | The actual content within the main content area. |
+| `page_inner_content` | The actual content within the main content area. The YAML calls this slot `page_content`, but the Twig block is named `page_inner_content` — the Twig name is the one that works. |
 
 **Usage Example:**
 ```twig
@@ -128,25 +127,27 @@ Components for overall page layout, regions, and structural wrappers. These are 
   {% block page_header %}
     {{ page.header }}
   {% endblock %}
-  {% block page_content %}
+  {% block page_inner_content %}
     {{ page.content }}
   {% endblock %}
 {% endembed %}
 ```
 
 **Gotchas:**
+- **The content block is `page_inner_content`, not `page_content`.** `page-content.twig` names it `page_inner_content`; Twig silently ignores a block that does not exist in the parent, so `{% block page_content %}` inside this embed drops your markup and renders `{{ page.content }}` instead — no error. (`{% block page_content %}` *is* correct against `radix:page`, which is a different component.)
+- **`content_attributes` is mandatory.** `page-content.twig` calls `content_attributes.addClass(...)` with no fallback, so trimming it out of the example above makes the component throw. Pass the page template's `content_attributes`, or `create_attribute()`
 - Setting container type to `false` removes the Bootstrap container wrapper entirely (full-width content)
 - The `page_header_container_type` and `page_content_container_type` can have different values for asymmetric layouts
 - Don't confuse `content_attributes` (wrapper attributes) with the actual page content
 
-#### page-footer
+### page-footer
 **Description:** Component for the page footer.
 **Status:** experimental
 
 **Props:**
 | Prop | Type | Default | Notes |
 |------|------|---------|-------|
-| `attributes` | Drupal\Core\Template\Attribute |  | HTML attributes for the footer component. |
+| `attributes` | Drupal\Core\Template\Attribute |  | **Dead — not honoured by `page-footer.twig`.** Line 7 reads `footer_attributes ?: create_attribute()` and never `attributes`. Pass `footer_attributes` instead. |
 | `footer_attributes` | Drupal\Core\Template\Attribute |  | HTML attributes specifically for the footer. |
 | `footer_utility_classes` | array |  | Additional utility classes to add to the footer. |
 
@@ -169,11 +170,11 @@ Components for overall page layout, regions, and structural wrappers. These are 
 ```
 
 **Gotchas:**
-- Both `attributes` and `footer_attributes` are available; `footer_attributes` is more specific
+- Only `footer_attributes` reaches the `<footer>` element (`page-footer.twig:7`); `attributes` is declared but never read
 - Typically embedded in the page component's `page_footer` slot
 - Footer regions must be defined in your theme's .info.yml file
 
-#### page-navigation
+### page-navigation
 **Description:** The navigation component of a page, containing the site branding and main navigation.
 **Status:** experimental
 
@@ -209,7 +210,7 @@ No props defined.
 - The left/right slots don't automatically create a navbar structure; you may need additional nav components
 - Region placement depends on your theme's layout configuration
 
-#### page-title
+### page-title
 **Description:** The Title component is responsible for rendering the page's main heading using the h1 HTML tag.
 **Status:** experimental
 
@@ -244,46 +245,45 @@ No slots defined.
 - `title_prefix` and `title_suffix` are typically populated by modules (e.g., contextual links), don't override unless necessary
 - Display classes (`display-1` through `display-6`) are much larger than regular h1 styling
 
-#### region
+### region
 **Description:** The structure and necessary styling for displaying a Drupal region.
 **Status:** experimental
 
 **Props:**
 | Prop | Type | Default | Notes |
 |------|------|---------|-------|
-| `attributes` | Drupal\Core\Template\Attribute |  |  |
+| `attributes` | Drupal\Core\Template\Attribute |  | **Dead.** `region.twig` emits no wrapper element and never prints `attributes`. Render your own wrapper inside `region_content` if you need one. |
 
 **Slots:**
 | Slot | Description |
 |------|-------------|
-| `region_content` | The block of the main content. |
-| `content` | The content of the region. |
+| `region_content` | The only Twig block. Override this to replace the region's output. |
+| `content` | The region's rendered content, printed *inside* `region_content`. Pass it as a variable with `include`; it is not a block you can override. |
 
 **Usage Example:**
 ```twig
-{%
-  embed 'radix:region' with {
-    attributes: attributes.addClass('sidebar').setAttribute('role', 'complementary')
-  }
-%}
-  {% block content %}
-    {{ content }}
+{% embed 'radix:region' %}
+  {% block region_content %}
+    <div{{ attributes.addClass('sidebar').setAttribute('role', 'complementary') }}>
+      {{ content }}
+    </div>
   {% endblock %}
 {% endembed %}
 ```
 
 **Gotchas:**
-- Both `region_content` and `content` slots exist; use `content` for most cases
+- **`region_content` is the only block.** `region.twig` contains exactly `{% block region_content %}{% if content %}{{ content }}{% endif %}{% endblock %}`. `{% block content %}` matches nothing and is silently discarded, so the default `{{ content }}` renders instead of yours
+- `content` is a slot in the sense that you pass it as a variable (`include 'radix:region' with { content: ... }`); it is not a Twig block you can override
+- The component outputs no wrapper element of its own — no div, no classes, and `attributes` is never printed. Emit the wrapper yourself inside `region_content`, as above
 - Region templates are called automatically by Drupal for each defined region
-- The `attributes` typically include region-specific classes automatically added by Drupal
 
-### Common Mistakes
+## Common Mistakes
 - **Using include instead of embed for slot-based components**: page, page-content, page-footer, page-navigation, html, and region all use slots and require `embed` + `block` syntax
 - **Forgetting container types control Bootstrap wrappers**: Setting container type to `false` removes the wrapper entirely (useful for full-width hero sections)
 - **Mixing page structure components in wrong contexts**: These components have a hierarchy (html → page → page-content/page-navigation/page-footer → region) and should not be used arbitrarily in node or block templates
 - **Overriding auto-populated Drupal variables**: Variables like `logged_in`, `root_path`, `title_prefix`, and `title_suffix` are set by Drupal's preprocess functions and shouldn't be manually overridden
 
-### See Also
-- Navigation Components section for navbar, nav, menu components
-- Layout Components section for container and grid components
-- Form Components section for form structure elements
+## See Also
+- [Navigation Components](navigation-components.md)
+- [Layout Components](layout-components.md)
+- [Form Components](form-components.md)

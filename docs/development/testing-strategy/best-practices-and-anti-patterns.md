@@ -1,6 +1,6 @@
 ---
 description: Cross-cutting testing best practices and the anti-pattern catalog — Liar, Giant, Slow Poke, Mockery, Sleeper, and more.
-tldr: Tests are production code — apply the same review standards. Key anti-patterns: The Liar (passes but verifies nothing), The Mockery (mocking your own code), The Sleeper (sleep instead of condition waits), The Optimist (happy path only). Every feature needs explicit security test cases for auth, permissions, and input handling.
+tldr: "Tests are production code — apply the same review standards. Key anti-patterns: The Liar (passes but verifies nothing), The Mockery (mocking your own code), The Sleeper (sleep instead of condition waits), The Optimist (happy path only). Every feature needs explicit security test cases for auth, permissions, and input handling."
 ---
 
 # Best Practices and Anti-Patterns

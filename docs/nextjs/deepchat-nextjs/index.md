@@ -1,5 +1,11 @@
 ---
 description: DeepChat + Next.js integration guides covering setup, API routes, streaming, Drupal backend, and security
+tracks:
+  - project: deep-chat
+    registry: npm
+    channel: stable
+    declared: "2.3.0"
+    verified: 2026-02-14
 guide-meta:
   concepts:
     - DeepChat web component

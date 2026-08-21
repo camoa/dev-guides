@@ -1,6 +1,6 @@
 ---
-description: Add icon pickers to menu link content entities and render icons in menu templates.
-tldr: Enable ui_icons_menu to add an icon widget to the menu_link_content form. Icons do not render automatically — override menu.html.twig or write a preprocess hook to extract icon data from link options, then call icon_preview() in the template.
+description: "Attach an icon to each menu link; icons render automatically into link titles, no template override needed."
+tldr: "Enable ui_icons_menu to add an icon widget to the menu_link_content form. Three hooks inject the icon markup into link titles automatically — no preprocess or template override is needed, and there is no data-icon-id attribute to read."
 drupal_version: "11.x"
 ---
 
@@ -8,45 +8,35 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Adding an icon to each menu item (navigation, sidebar menus, mega-menu themes).
+> Adding an icon to each menu item (used by navigation, sidebar menus, mega-menu themes).
 
 ## Pattern
 
-Enable `ui_icons_menu`. The module alters the `menu_link_content` entity to add an icon widget on the standard menu link form.
+Enable `ui_icons_menu`. The module alters the `menu_link_content` entity to add an icon widget on the standard menu link form (`/admin/structure/menu/manage/{menu}/add`).
 
-The icon data is stored in the menu link's link options. The default Drupal menu templates do **not** render it automatically — you must add a preprocess or override:
+Editors pick an icon (and settings) per menu link, plus an `icon_position` (before or after the title). The icon data is stored as link options — `icon` and `icon_display` — not as `data-*` attributes.
 
-```php
-function mytheme_preprocess_menu(&$variables): void {
-  foreach ($variables['items'] as &$item) {
-    $url = $item['url'];
-    $options = $url->getOptions();
-    if (isset($options['attributes']['data-icon-id'])) {
-      $item['icon_id'] = $options['attributes']['data-icon-id'];
-      $item['icon_settings'] = $options['attributes']['data-icon-settings'] ?? [];
-    }
-  }
-}
-```
+## Rendering
 
-Then in `menu.html.twig`, render via `icon_preview()` (see [Twig Rendering](twig.md)):
+**Icons render automatically. No template override or preprocess is needed.** `UiIconsMenuHooks` injects the icon markup into the link title, positioned by `icon_display`, through three hooks:
 
-```twig
-{% if item.icon_id %}
-  {{ icon_preview(item.icon_id|split(':')[0], item.icon_id|split(':')[1], item.icon_settings) }}
-{% endif %}
-```
+| Hook | Covers |
+|---|---|
+| `hook_preprocess_menu` | Ordinary rendered menus (skips `navigation_menu__*` hooks, which the next one handles) |
+| `hook_navigation_menu_link_tree_alter` | Core's Navigation module, on its own path |
+| `hook_link_alter` | Loose links, so icons also appear in the admin listing at `/admin/structure/menu/manage/{menu}` |
 
-## Decision: Navigation module
+Write a preprocess only if you want markup the module doesn't produce — and read the icon from `$url->getOption('icon')` / `$url->getOption('icon_display')`, since there is no `data-icon-id` attribute anywhere in this path.
 
-If using Drupal core's Navigation module, define a `class` setting in the icon pack so navigation styles can target the icon element via CSS.
+Core's Navigation module is handled by `hook_navigation_menu_link_tree_alter`, not by the menu preprocess — icons appear there without extra work. Define a `class` setting in your icon pack if navigation styles need a hook to target — see [Settings & Rendering](settings-rendering.md).
 
 ## Common Mistakes
 
-- **Wrong**: expecting icons to render in menus automatically after enabling the module → **Right**: menu templates need an explicit preprocess hook or Twig override; the data is stored but not output by default
+- **Wrong**: writing a preprocess that reads `$options['attributes']['data-icon-id']` → **Right**: that attribute does not exist; the preprocess silently does nothing. Read the `icon` link option instead
+- **Wrong**: overriding `menu.html.twig` to add icons → **Right**: icons are already in the link title; an override duplicates or fights the injected markup
 
 ## See Also
 
-- [Twig Rendering](twig.md)
 - [Settings & Rendering](settings-rendering.md)
-- Reference: `modules/ui_icons_menu/ui_icons_menu.module`
+- [UI Icons Overview](overview.md)
+- Reference: `modules/ui_icons_menu/src/Hook/UiIconsMenuHooks.php`

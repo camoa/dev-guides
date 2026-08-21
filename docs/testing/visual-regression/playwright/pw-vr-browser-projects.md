@@ -1,6 +1,6 @@
 ---
-description: Configure Playwright browser projects for cross-browser VR testing and decide which browsers to include.
-tldr: Define one project per browser in `playwright.config.ts` using `devices` presets; the project name flows into baseline filenames. Start with Chromium-only for VR — adding browsers multiplies baselines 2-3x and should only be done when your suite is stable.
+description: "Configure Playwright browser projects for cross-browser VR testing and decide which browsers to include."
+tldr: "Define one project per browser in `playwright.config.ts` using `devices` presets; the project name flows into baseline filenames. Start with Chromium-only for VR — adding browsers multiplies baselines 2-3x and should only be done when your suite is stable."
 ---
 
 # Browser Projects
@@ -44,7 +44,7 @@ projects: [
 ]
 ```
 
-Prefer bundled browsers over channels for VR — channels depend on what is installed on the host.
+The `channel` option uses the *system-installed* browser instead of the bundled Chromium. Mostly relevant for testing channel-specific behavior; for VR, prefer the bundled browser for determinism.
 
 ### Run a single project
 
@@ -59,6 +59,8 @@ Pattern: `<test-name>-<ordinal>-<projectName>-<platform>.png`
 
 - `homepage-1-chromium-linux.png`
 - `homepage-1-firefox-linux.png`
+
+If you only have one project, the project name field becomes the browser name (`chromium`).
 
 ## Common Mistakes
 

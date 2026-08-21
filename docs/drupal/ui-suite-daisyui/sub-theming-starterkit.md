@@ -1,6 +1,6 @@
 ---
-description: Generate a sub-theme with Vite, Tailwind CSS 4, DaisyUI 5, component overrides, and custom utilities
-tldr: "Create a sub-theme when you need to customize the base theme's components, add new components, override UI Styles, or set up a proper Tailwind/DaisyUI build pipeline. Alpha6 ships a full starterkit with Vite, Tailwind CSS 4, DaisyUI 5, and…"
+description: "Generate a sub-theme with Vite, Tailwind CSS 4, DaisyUI 5, component overrides, and custom utilities"
+tldr: "Create a sub-theme when you need to customize the base theme's components, add new components, override UI Styles, or set up a proper Tailwind/DaisyUI build pipeline. Alpha6 ships a full starterkit with Vite, Tailwind CSS 4, DaisyUI 5, and example component overrides."
 ---
 
 # Sub-theming (Starterkit)
@@ -211,11 +211,22 @@ The starterkit includes three example components showing both override and creat
 ```yaml
 name: Card
 replaces: 'ui_suite_daisyui:card'
-# Full schema defined -- adds url prop and actions_position prop
-# Twig template customizes card layout (link wrapper, action positioning)
+# The rest of the file is the base theme's card.component.yml, verbatim.
 ```
 
-The `replaces` key tells Drupal: "When anything references `ui_suite_daisyui:card`, use this sub-theme's card instead." The component defines its own full schema and Twig template. The card also includes `card.pcss.css` for custom styles (e.g., `.card-title { @apply title-md; }`).
+The `replaces` key tells Drupal: "When anything references `ui_suite_daisyui:card`, use this sub-theme's card instead."
+
+**What the starterkit's card actually changes is nothing but the CSS.** Its `card.component.yml` differs from the base theme's by exactly one line -- the `replaces` key -- and its `card.twig` is byte-for-byte identical to `ui_suite_daisyui/components/card/card.twig`. The `url` and `actions_position` props were already there in the base component. The only real content is `card.pcss.css`:
+
+```css
+@reference '../../css/app.pcss';
+
+.card-title {
+  @apply title-md;
+}
+```
+
+That makes it a better illustration of `replaces` than a rewritten template would be: you copy the schema and the Twig wholesale precisely *because* UI Patterns treats the replacement's YAML as authoritative and its Twig as the one that renders. The mechanism costs you a full copy even when you only wanted to restyle a heading.
 
 **CTA section** (`components/cta/`) -- New component (no `replaces`):
 

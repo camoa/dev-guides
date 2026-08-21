@@ -1,6 +1,7 @@
 ---
-description: Override config values per environment without modifying stored config or committing credentials to Git.
+description: "Override config values per environment without modifying stored config or committing credentials to Git."
 tldr: "When you need to override config values per environment (e.g., API keys, site name) without modifying stored config or committing credentials to Git."
+drupal_version: "11.x"
 ---
 
 # Config Override System

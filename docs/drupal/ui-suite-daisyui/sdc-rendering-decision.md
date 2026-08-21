@@ -1,19 +1,24 @@
 ---
-description: SDC rendering decision — UI Patterns wiring vs Twig include() for rendering custom block content types as DaisyUI SDCs
-tldr: For 1-3 simple block types without per-instance variants, use UI Patterns wiring (native, no templates). For 5+ block types, per-instance variants, or complex multi-field composition, use Twig include() — it avoids 3-level entity_field nesting per slot and reads LB block configuration directly for per-placement variants.
-drupal_version: "10.3+ / 11"
+description: "SDC rendering decision — UI Patterns wiring vs Twig include() for rendering custom block content types as DaisyUI SDCs"
+tldr: "For 1-3 simple block types without per-instance variants, use UI Patterns wiring (native, no templates). For 5+ block types, per-instance variants, or complex multi-field composition, use Twig include() — it avoids 3-level entity_field nesting per slot and reads LB block configuration directly for per-placement variants."
+drupal_version: "11.x"
 ---
 
 # SDC Rendering Decision
 
-## When to Use
+## Why This Decision Matters
 
-> Use **UI Patterns wiring** when block types are few and simple — it's the intended use case for `ui_patterns_component_per_item` and requires no template files. Use **Twig `include()`** when you have many block types, need per-instance variants via Layout Builder block configuration, or have components reading 5+ sibling fields.
+When a custom block content type renders as a DaisyUI SDC, you have two paths:
+
+1. **UI Patterns wiring** (declarative): configure the entity view display with `ui_patterns_component_per_item` formatter; map fields to props/slots in YAML
+2. **Twig include() pattern** (template-driven): write a block template (`block--inline-block--{type}.html.twig`) that calls the SDC with `{% include %}` or `{% embed %}`
+
+Both work. The dev-guides skill catalog and the `daisyui-sdc-generator` converter default to UI Patterns wiring. Real-world testing on multi-block, multi-variant projects has shown the template pattern is often the better trade — this section documents when to choose which.
 
 ## Decision
 
 | If your project... | Use... | Why |
-|--------------------|--------|-----|
+|---|---|---|
 | Has 1-3 simple block types, single variant each | UI Patterns wiring | Native, no template files; matches the formatter's intended use case |
 | Has 5+ block types with varied complexity | Twig `include()` pattern | Less repetition, per-instance variants supported, clearer diffs |
 | Needs per-instance variants (LB block configuration via Plus Suite or `BlockPropertiesEvent`) | Twig `include()` pattern | UI Patterns formatters cannot read LB block configuration |
@@ -22,20 +27,20 @@ drupal_version: "10.3+ / 11"
 | Complex composition (many sibling fields → one component, many slots) | Twig `include()` pattern | Avoids 3-level nested `entity_field` config per slot |
 | Must NOT have per-block-type templates (pure config-only shop) | UI Patterns wiring | No alternative |
 
-## Pattern
-
-### Trade-offs Matrix
+## Trade-offs
 
 | Aspect | UI Patterns wiring | Twig `include()` to SDC |
-|--------|--------------------|------------------------|
+|---|---|---|
 | Config complexity | High — 3-level nesting via `entity_field` for sibling fields | Low — single Twig file per block |
 | Per-block-type maintenance | Each block type = deep YAML edit | Each block type = ~10-line Twig template |
 | Per-instance variants | Hard — requires entity field OR custom source plugin | Trivial — `configuration.variant\|default('default')` |
-| Inline editing (Plus Suite Edit+) | Native — fields render through formatters | Requires preserving field render arrays (`{{ content.field_x }}` works; raw strings don't) |
+| Inline editing (Plus Suite Edit+) | Native — fields render through formatters | Requires preserving the field render array shape (`{{ content.field_x }}` works; raw value strings don't) |
+| Bulk generation by converter | Verbose YAML per block type | Short Twig file per block type |
 | Diff readability | Poor — dynamic colon-keyed nested keys | Good — clear field-to-prop mapping |
+| Programmatic composition | Hard — must construct the deep structure | Easy — write Twig |
 | Learning curve | Steep — source plugins, context switchers, scoping | Low — one `{% include %}` syntax |
 
-### Twig include() Pattern
+## The Twig include() Pattern
 
 ```twig
 {# templates/block--inline-block--hero.html.twig #}
@@ -49,10 +54,23 @@ drupal_version: "10.3+ / 11"
   image: content.field_image,
   cta_primary_text: content.field_cta_primary[0]['#title'],
   cta_primary_url: content.field_cta_primary[0]['#url'],
+  cta_secondary_text: content.field_cta_secondary[0]['#title'],
+  cta_secondary_url: content.field_cta_secondary[0]['#url'],
 } only %}
 ```
 
-### UI Patterns Wiring Pattern
+Pros:
+- All field-to-prop mapping visible in one file
+- `configuration.{prop}` reads LB block configuration directly (per-instance variants)
+- `|default()` filters and Twig logic handle missing fields elegantly
+- A designer can edit it without learning UI Patterns source plugins
+
+Cons:
+- Inline editing (Plus Suite Edit+) requires careful preservation of field render arrays — passing rendered strings instead of `content.field_x` breaks the `data-edit-plus-*` attribute correlation
+- Must remember `only` keyword to avoid context leakage
+- Each block type needs a template file (small, but a file)
+
+## The UI Patterns Wiring Pattern
 
 ```yaml
 # core.entity_view_display.block_content.hero.default.yml
@@ -86,25 +104,35 @@ content:
                             type: value
                           _weight: '0'
                 _weight: '0'
-          # ...repeat entity_field nesting for each additional sibling slot
+          # ...repeat the entity_field nesting for body, image, ctas
 ```
 
-### Recommended Default
+Pros:
+- No template file required
+- Editors see one Manage Display screen with field mappings
+- Native inline editing support via standard field rendering pipeline
 
-For new projects with multiple block content types and any per-instance variant requirement: **default to the Twig `include()` pattern**. Use UI Patterns wiring for genuine field-formatter use cases (a single field rendered as a single component instance, e.g., a tags field rendered as badges).
+Cons:
+- Verbose YAML — each sibling slot needs the 3-level `entity_field` nesting
+- Per-instance variants require either an extra field on the entity OR a custom source plugin
+- Hard to review in PRs — the colon-keyed nested keys are noisy
+
+## Recommended Default
+
+For new projects with multiple block content types and any per-instance variant requirement: **default to the Twig `include()` pattern**. Use UI Patterns wiring for the genuine field-formatter use cases (a single field rendered as a single component instance, e.g., a tags field rendered as badges).
 
 For projects already running pure UI Patterns wiring at scale and willing to live with the trade-offs: stay consistent. Mixing both patterns inconsistently is worse than either alone.
 
 ## Common Mistakes
 
-- **Wrong**: Defaulting to UI Patterns wiring without considering scale → **Right**: Works fine for 2 block types; becomes unmaintainable at 10+. Each new block type adds deeply-nested view display config; PR diffs are hard to review.
-- **Wrong**: Twig include() but passing rendered strings instead of field render arrays → **Right**: Pass `content.field_x` (render array), not `node.field_x.value` (string) — Plus Suite Edit+ inline editing attaches `data-edit-plus-*` attributes to render arrays only.
-- **Wrong**: Mixing both patterns within the same block type → **Right**: Pick one path per block type. Half props from view display, half from template is hard to debug and extend.
-- **Wrong**: Using UI Patterns wiring for blocks that need LB configuration variants → **Right**: Pure-wiring path cannot read `configuration.{prop}` from LB block config. Switch to template pattern or store the variant as an entity field.
+- **Defaulting to UI Patterns wiring without considering scale** — works fine for 2 block types, becomes unmaintainable at 10+. WHY: each new block type adds a deeply-nested view display config; generator output balloons; PR diffs are hard to review
+- **Using Twig include() but passing rendered strings instead of field render arrays** — breaks Plus Suite Edit+ inline editing because `data-edit-plus-*` attributes only attach to render arrays. WHY: pass `content.field_x` (render array) instead of `node.field_x.value` (string)
+- **Mixing both patterns within the same block type** — half the props from view display, half from template. Hard to debug, hard to extend. WHY: pick one path per block type
+- **Using UI Patterns wiring for blocks that need LB configuration variants** — pure-wiring path can't read `configuration.{prop}` from LB block config. WHY: switch to template pattern, or store the variant as an entity field
 
 ## See Also
 
-- [drupal/ui-patterns/field-formatters](../ui-patterns/field-formatters.md) — `ui_patterns_component_per_item` reference and source scoping
+- [drupal/ui-patterns/field-formatters](../ui-patterns/field-formatters.md) — `ui_patterns_component_per_item` reference
 - [drupal/ui-patterns/source-plugins](../ui-patterns/source-plugins.md) — `entity_field` context switcher
 - [drupal/ui-patterns/variants](../ui-patterns/variants.md) — Per-instance variants in Layout Builder
 - [drupal/plus-suite/custom-block-types](../plus-suite/custom-block-types.md) — `BlockPropertiesEvent` for adding LB configuration fields

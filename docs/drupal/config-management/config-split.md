@@ -1,6 +1,7 @@
 ---
-description: Manage environment-specific configuration with Config Split — dev modules, production settings, conditional overrides.
-tldr: "When you need to manage environment-specific configuration (dev modules, production settings) that should not be deployed to all environments."
+description: "Manage environment-specific configuration with Config Split — dev modules, production settings, conditional overrides."
+tldr: "When you need to manage environment-specific configuration (dev modules, production settings) that should not be deployed to all environments. Config Split 2.0.2 is the current stable release; install with composer require drupal/config_split:^2.0."
+drupal_version: "11.x"
 ---
 
 # Config Split
@@ -24,14 +25,17 @@ When you need to manage environment-specific configuration (dev modules, product
 
 ## Pattern
 
+Config Split **2.0.2** is the current stable release (2.x branch).
+
 ```bash
 # Install Config Split
-composer require drupal/config_split
+composer require drupal/config_split:^2.0
 
 # Enable Config Split
 drush en config_split -y
 
 # Create split via UI: /admin/config/development/configuration/config-split
+# Or create via config:
 ```
 
 **Example: Dev Split Configuration**

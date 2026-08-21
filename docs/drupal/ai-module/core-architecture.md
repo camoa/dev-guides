@@ -96,7 +96,7 @@ All provider calls go through `ProviderProxy` (`src/Plugin/ProviderProxy.php`):
 6. Dispatch `PostGenerateResponseEvent` — subscribers can modify output
 7. For streamed responses, attach metadata to the iterator
 
-**Drupal core requirement:** `^10.5 || ^11.2` (raised from `^10.3 || ^11` in earlier releases).
+**Drupal core requirement:** `^11.2`.
 
 ## Common Mistakes
 

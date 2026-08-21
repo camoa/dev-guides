@@ -1,6 +1,6 @@
 ---
-description: Key files, services, classes, and hooks in the UI Styles module for developers.
-tldr: Core services are plugin.manager.ui_styles (style definitions) and ui_styles.stylesheet_generator (optimized CSS). The ui_styles_styles form element type accepts selected+extra default_value. Use hook_ui_styles_styles_alter() to modify definitions programmatically.
+description: "Key files, services, classes, and hooks in the UI Styles module for developers."
+tldr: "Core services are plugin.manager.ui_styles (style definitions) and ui_styles.stylesheet_generator (optimized CSS). The ui_styles_styles form element type accepts selected+extra default_value. Use hook_ui_styles_styles_alter() to modify definitions programmatically."
 drupal_version: "11.x"
 ---
 
@@ -45,9 +45,10 @@ $form['styles'] = [
 
 ## Requirements
 
-- Drupal `^10.3 || ^11`
+- Drupal `^10.3 || ^11 || ^12`
 - PHP 8.3+
 - `sabberworm/php-css-parser ^9.0`
+- All eight integration submodules declare the same `core_version_requirement`
 
 ## See Also
 

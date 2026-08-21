@@ -1,6 +1,7 @@
 ---
-description: Sync configuration between environments — export from dev, commit to Git, import to staging/production.
+description: "Sync configuration between environments — export from dev, commit to Git, import to staging/production."
 tldr: "When you need to sync configuration between environments — export config from dev, commit to Git, import to staging/production."
+drupal_version: "11.x"
 ---
 
 # Config Synchronization

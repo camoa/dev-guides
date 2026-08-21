@@ -1,5 +1,6 @@
 ---
 description: Design System Recognition — extract tokens and components from HTML/CSS, Figma, or screenshots
+tracks: []
 guide-meta:
   concepts:
     - design token extraction

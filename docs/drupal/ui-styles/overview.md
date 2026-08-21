@@ -1,6 +1,6 @@
 ---
-description: When to use UI Styles module vs alternatives — curated CSS class choices for site builders in Drupal's editor UIs.
-tldr: Use UI Styles when site builders need curated, named CSS class options in block/LB/Views UIs without freeform input. It injects classes at render time from YAML-defined plugins; it is not a CSS generator and does not replace UI Skins or UI Patterns.
+description: "When to use UI Styles module vs alternatives — curated CSS class choices for site builders in Drupal's editor UIs."
+tldr: "Use UI Styles when site builders need curated, named CSS class options in block/LB/Views UIs without freeform input. It injects classes at render time from YAML-defined plugins; it is not a CSS generator and does not replace UI Skins or UI Patterns."
 drupal_version: "11.x"
 ---
 

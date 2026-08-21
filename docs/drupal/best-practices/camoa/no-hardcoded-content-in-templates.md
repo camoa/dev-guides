@@ -1,7 +1,7 @@
 ---
 description: All user-facing text must be CMS-editable — section headings come from block labels or view titles, never from Twig.
 drupal_version: "11.x"
-tldr: All user-facing text must be CMS-editable. Section headings come from block labels or view titles — never from Twig. Exception: structural labels like "by" or "//" separators in metadata.
+tldr: "All user-facing text must be CMS-editable. Section headings come from block labels or view titles — never from Twig. Exception: structural labels like \"by\" or \"//\" separators in metadata."
 ---
 
 # No Hardcoded Content in Templates

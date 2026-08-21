@@ -1,5 +1,5 @@
 ---
-description: Optimizing front-end performance when building/overriding components
+description: "Optimizing front-end performance when building/overriding components"
 tldr: "Optimizing front-end performance when building/overriding components."
 ---
 

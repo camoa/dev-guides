@@ -1,6 +1,6 @@
 ---
 description: Use CSS containment and content-visibility to skip rendering work for off-screen sections and isolate component reflows.
-tldr: Apply `content-visibility: auto` + `contain-intrinsic-size` to confirmed-off-screen sections to skip layout/paint; never apply to above-fold content; use `content-visibility: hidden` for SPA view caching but beware it removes content from the a11y tree.
+tldr: "Apply `content-visibility: auto` + `contain-intrinsic-size` to confirmed-off-screen sections to skip layout/paint; never apply to above-fold content; use `content-visibility: hidden` for SPA view caching but beware it removes content from the a11y tree."
 ---
 
 # CSS Containment Performance

@@ -1,5 +1,10 @@
 ---
 description: "Comprehensive guide for working with Drupal's JSON:API module (core) and JSON:API Extras (contrib). Covers spec-compliant REST API with filtering, includes, pagination, and customization."
+tracks:
+  - project: jsonapi_extras
+    channel: stable
+    declared: "8.x-3.28"
+    verified: 2026-08-16
 drupal_version: "11.x"
 topic: "drupal/jsonapi"
 guide-meta:

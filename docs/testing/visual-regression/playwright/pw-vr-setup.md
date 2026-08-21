@@ -1,6 +1,6 @@
 ---
-description: Install and configure Playwright for visual regression in a Node or Drupal/PHP project.
-tldr: Use `npm init playwright@latest` for new Node projects; isolate under `tests/playwright/` for Drupal repos. After any package upgrade, always re-run `npx playwright install --with-deps` or browser binaries will be stale and fail to launch.
+description: "Install and configure Playwright for visual regression in a Node or Drupal/PHP project."
+tldr: "Use `npm init playwright@latest` for new Node projects; isolate under `tests/playwright/` for Drupal repos. After any package upgrade, always re-run `npx playwright install --with-deps` or browser binaries will be stale and fail to launch."
 ---
 
 # Playwright Setup
@@ -24,6 +24,12 @@ tldr: Use `npm init playwright@latest` for new Node projects; isolate under `tes
 npm init playwright@latest
 ```
 
+Interactive prompts:
+- TypeScript or JavaScript (default: TypeScript)
+- Tests folder name (default: `tests`, or `e2e` if `tests` already exists)
+- GitHub Actions workflow (recommended for CI)
+- Install Playwright browsers (default: yes)
+
 Scaffolds: `playwright.config.ts`, `package.json`, `tests/example.spec.ts`.
 
 ### Drupal/PHP repo layout
@@ -42,6 +48,8 @@ Scaffolds: `playwright.config.ts`, `package.json`, `tests/example.spec.ts`.
 Run from inside `tests/playwright/`. `testDir` resolves relative to the config file.
 
 ### Browser binary management
+
+Playwright browser binaries are versioned with the Playwright package — they are **not** the system Chromium/Firefox/Safari already installed:
 
 ```bash
 npx playwright install                # all bundled browsers

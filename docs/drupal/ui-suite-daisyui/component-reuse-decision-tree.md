@@ -1,5 +1,5 @@
 ---
-description: When to reuse base components, override with replaces key, or create new components
+description: "When to reuse base components, override with replaces key, or create new components"
 tldr: "When deciding whether to use a base theme component as-is, override it in your sub-theme, or create a new component from scratch."
 ---
 
@@ -15,7 +15,7 @@ When deciding whether to use a base theme component as-is, override it in your s
 |---|---|---|
 | Standard DaisyUI component with no visual changes | Use `ui_suite_daisyui:button` directly | No code needed, maintained upstream |
 | Same component with different props/defaults | Use UI Styles to apply classes | Non-destructive, configurable per-instance |
-| Changed HTML structure but same DaisyUI class system | Create sub-theme SDC with `replaces: 'ui_suite_daisyui:card'` | Inherits props/slots schema, overrides Twig only |
+| Changed HTML structure but same DaisyUI class system | Create sub-theme SDC with `replaces: 'ui_suite_daisyui:card'` | Nothing is inherited -- copy the base `.component.yml` verbatim and add `replaces:`. `ComponentPluginManager::negotiateDefinition()` swaps in your whole definition and only restores the original `id`, `machineName` and `provider`. |
 | New component not in DaisyUI | Create new SDC in sub-theme `components/` dir | Own namespace: `my_theme:feature_card` |
 | Modified schema (new props, different types) | Create new component, don't use `replaces` | Different schema = different component |
 | Component A wraps component B | Use `replaces` for A, embed B via slot | Slot composition, not inheritance |
@@ -57,7 +57,7 @@ props:
     # ... additional props like url, actions_position
 ```
 
-The sub-theme's `card.twig` can completely rewrite the HTML while keeping the same component interface. Optional `card.pcss.css` adds custom styles compiled by Vite.
+The sub-theme's `card.twig` can completely rewrite the HTML while keeping the same component interface -- though the starterkit's own card does not: it copies the base Twig unchanged and does all its work in `card.pcss.css`, compiled by Vite.
 
 ## Namespace Resolution
 

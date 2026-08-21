@@ -30,6 +30,8 @@ bootstrap_dark:
   value: dark
 ```
 
+Bootstrap reads `data-bs-theme="dark"` on `<html>` and switches its component theming automatically.
+
 ## Pattern: Tailwind dark class
 
 ```yaml

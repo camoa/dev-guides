@@ -1,7 +1,7 @@
 ---
 description: Rebrand a required theme without forking it — ship neutral logo/favicon as permanent managed files (they travel via core Default Content) and override via theme-settings; beware Canvas re-seeding brand strings from the theme's SDC examples.
 drupal_version: "11.x"
-tldr: Reuse a required theme unmodified while replacing its branded logo/favicon: ship neutral binaries as PERMANENT managed files under `public://branding/` (core Default Content exports the file entities + binaries) and point `<theme>.settings` logo/favicon overrides at them (`use_default: false`). Theme untouched, no theme release. Beware: Canvas regenerates component-config `default_value` from the theme's SDC `examples:` on cache rebuild / component rediscovery (which routinely brackets an export or recipe-apply) — neutralize those upstream and patch post-export.
+tldr: "Reuse a required theme unmodified while replacing its branded logo/favicon: ship neutral binaries as PERMANENT managed files under `public://branding/` (core Default Content exports the file entities + binaries) and point `<theme>.settings` logo/favicon overrides at them (`use_default: false`). Theme untouched, no theme release. Beware: Canvas regenerates component-config `default_value` from the theme's SDC `examples:` on cache rebuild / component rediscovery (which routinely brackets an export or recipe-apply) — neutralize those upstream and patch post-export."
 ---
 
 # Rebrand a Required Theme Without Forking

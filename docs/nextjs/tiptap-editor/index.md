@@ -1,5 +1,11 @@
 ---
 description: TipTap Editor guides for React, Next.js, and Drupal integration
+tracks:
+  - project: tiptap
+    registry: npm
+    channel: stable
+    declared: "2.x"
+    verified: 2026-02-14
 guide-meta:
   concepts:
     - Tiptap v2

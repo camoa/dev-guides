@@ -1,6 +1,7 @@
 ---
-description: Identify and fix common config management mistakes — patterns that break deployment, cause data loss, or create security issues.
+description: "Identify and fix common config management mistakes — patterns that break deployment, cause data loss, or create security issues."
 tldr: "When you need to identify and fix common config management mistakes — patterns that break deployment, cause data loss, or create security issues."
+drupal_version: "11.x"
 ---
 
 # Anti-Patterns & Common Mistakes

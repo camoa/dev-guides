@@ -1,6 +1,6 @@
 ---
-description: Make Playwright VR captures deterministic with animation disabling, font waits, masking, and a global screenshot.css.
-tldr: Add `document.fonts.ready`, `animations: 'disabled'`, and a `stylePath` injecting `screenshot.css` to eliminate the three most common sources of VR flake: font swap, CSS animation frames, and dynamic content regions.
+description: "Make Playwright VR captures deterministic with animation disabling, font waits, masking, and a global screenshot.css."
+tldr: "Add `document.fonts.ready`, `animations: 'disabled'`, and a `stylePath` injecting `screenshot.css` to eliminate the three most common sources of VR flake: font swap, CSS animation frames, and dynamic content regions."
 ---
 
 # Stability Controls
@@ -25,7 +25,7 @@ expect: {
 await page.evaluate(() => document.fonts.ready);
 ```
 
-Without this, the first screenshot captures the fallback font; the second captures the web font — baselines drift.
+Standard CSS Font Loading API; not Playwright-specific. Without it, the first screenshot captures the fallback font; the second captures the web font — baselines drift.
 
 ### Wait for network idle
 
@@ -49,7 +49,7 @@ await expect(page).toHaveScreenshot({
 });
 ```
 
-Masks paint solid `#FF00FF` over the bounding box. Content inside cannot cause diffs.
+Masks paint solid `#FF00FF` over the bounding box (configurable with `maskColor`). Content inside cannot cause diffs.
 
 ### `stylePath` — global stabilization CSS
 

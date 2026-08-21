@@ -1,6 +1,6 @@
 ---
-description: Achieve consistent Playwright screenshots across local and CI by using the official Docker image and pinned versions.
-tldr: Always capture baselines inside the same Docker image that runs in CI. Pin `@playwright/test` and the Docker tag to the same version number. Never capture on macOS and compare in Linux — antialiasing differs every time.
+description: "Achieve consistent Playwright screenshots across local and CI by using the official Docker image and pinned versions."
+tldr: "Always capture baselines inside the same Docker image that runs in CI. Pin `@playwright/test` and the Docker tag to the same version number. Never capture on macOS and compare in Linux — antialiasing differs every time."
 ---
 
 # Determinism Across Environments
@@ -30,10 +30,14 @@ docker pull mcr.microsoft.com/playwright:v1.59.1-noble
 ```
 
 Tag taxonomy:
-- `v1.X.Y-noble` — Ubuntu 24.04 LTS (current default)
+- `v1.X.Y` — current default (Noble Numbat / Ubuntu 24.04)
+- `v1.X.Y-noble` — Ubuntu 24.04 LTS
 - `v1.X.Y-jammy` — Ubuntu 22.04 LTS
 
-Recommended flags: `--init`, `--ipc=host`
+Recommended `docker run` flags:
+- `--init` — avoid PID-1 zombie processes
+- `--ipc=host` — Chromium needs shmem
+- `--cap-add=SYS_ADMIN` — only for tricky local dev
 
 ### Pin everything
 
@@ -41,7 +45,7 @@ Recommended flags: `--init`, `--ipc=host`
 "devDependencies": { "@playwright/test": "1.59.1" }
 ```
 
-Pin the Docker tag to the same version. Never use `:latest`.
+Pin the Docker tag to the same version. Never use `:latest`. Mismatched browser binaries vs. Playwright client → "browser not found."
 
 ### Capture baselines inside Docker
 

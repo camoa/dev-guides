@@ -1,6 +1,7 @@
 ---
-description: Step-by-step creation of custom fields through the Drupal UI using config-first approach with column definitions and widget configuration.
-tldr: "You want to create a compound field through the Drupal UI using configuration, not code -- the recommended approach for site builders and most use cases."
+description: "Step-by-step creation of custom fields through the Drupal UI using config-first approach with column definitions and widget configuration."
+tldr: "Create a custom field via Structure > Manage fields, define sub-field columns before any data exists (column types lock once data is present), then configure widgets/formatters per sub-field."
+drupal_version: "11.x"
 ---
 
 # Creating a Custom Field (Config-First)
@@ -24,7 +25,7 @@ You want to create a compound field through the Drupal UI using configuration, n
    - Click "Add sub-field" for each column
    - Configure each column:
      - **Name**: Machine name (letters, numbers, single underscores only)
-     - **Type**: Select from 27 field types
+     - **Type**: Select from 23 field types (22 in the main module, plus `viewfield` from the `custom_field_viewfield` sub-module)
      - **Type-specific settings**: Length (string/telephone), size/unsigned (numeric), precision/scale (decimal), datetime type, target type (entity reference), URI scheme (file/image)
    - Remove unwanted columns before saving
    - **After data exists**: Column types are locked; use update service to modify
@@ -68,3 +69,5 @@ You want to create a compound field through the Drupal UI using configuration, n
 ## See Also
 
 - Reference: [Custom Field documentation](https://www.drupal.org/docs/extending-drupal/contributed-modules/contributed-module-documentation/custom-field)
+- [Custom Field Architecture](architecture.md)
+- [Schema Updates](schema-updates.md)

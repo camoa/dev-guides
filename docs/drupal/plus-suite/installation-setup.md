@@ -27,7 +27,7 @@ curl -sL 'https://git.drupalcode.org/project/plus_suite/-/raw/1.1.x/install.sh' 
 bash install.sh
 ```
 
-The script: creates a DDEV project with Drupal 11.3, installs Drush, adds the DropzoneJS repository, requires `drupal/plus_suite` 1.1.x-dev, applies the recipe, unpacks dependencies, clears caches, and launches with a one-time login.
+The script: creates a DDEV project with Drupal 11.3, installs Drush, adds the DropzoneJS repository, requires `drupal/plus_suite` 1.1.21 (stable) with `--prefer-source`, applies the recipe, unpacks dependencies, clears caches, and launches with a one-time login.
 
 **Existing site installation:**
 

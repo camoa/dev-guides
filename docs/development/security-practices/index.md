@@ -1,5 +1,6 @@
 ---
 description: Security best practices for modern web development - tool-agnostic principles covering OWASP Top 10, authentication, cryptography, supply chain security, and secure SDLC.
+tracks: []
 guide-meta:
   concepts:
     - OWASP Top 10

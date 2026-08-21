@@ -1,7 +1,7 @@
 ---
 description: Prevent duplicate JavaScript initialization on elements using the once() API
 tldr: "**Every time** you process elements in a behavior. The once() API prevents duplicate initialization and is required for proper AJAX compatibility."
-drupal_version: "10.x/11.x"
+drupal_version: "11.x"
 ---
 
 # Once API

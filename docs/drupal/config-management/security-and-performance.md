@@ -1,6 +1,7 @@
 ---
-description: Secure configuration data, prevent vulnerabilities, and optimize config access for performance.
+description: "Secure configuration data, prevent vulnerabilities, and optimize config access for performance."
 tldr: "When you need to secure configuration data, prevent vulnerabilities, and optimize config access for performance."
+drupal_version: "11.x"
 ---
 
 # Security & Performance

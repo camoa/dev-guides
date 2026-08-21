@@ -1,6 +1,6 @@
 ---
-description: How UI Styles generates an optimized stylesheet containing only the CSS rules matching declared style options.
-tldr: The ui_styles.stylesheet_generator service parses all theme/module CSS, filters it to only rules matching declared style option classes, and serves the result as ui_styles/generated_styles on every page. Output is cached; clear cache after editing CSS or style definitions.
+description: "How UI Styles generates an optimized stylesheet containing only the CSS rules matching declared style options."
+tldr: "The ui_styles.stylesheet_generator service parses all theme/module CSS, filters it to only rules matching declared style option classes, and serves the result as ui_styles/generated_styles on every page. Output is cached; clear cache after editing CSS or style definitions."
 drupal_version: "11.x"
 ---
 
@@ -32,7 +32,7 @@ The generated stylesheet is attached to every page via `hook_page_top()` as `ui_
 ## Common Mistakes
 
 - **Editing CSS files but not seeing changes** → Clear the `ui_styles` cache discovery and the page cache; the generator caches output
-- **Composer not having `php-css-parser`** → The generator may fail on certain CSS edge cases. Confirm `sabberworm/php-css-parser ^9.0` is installed
+- **Composer not patching `php-css-parser`** → The generator may fail on certain CSS edge cases. Confirm `cweagans/composer-patches` is active and patches applied
 
 ## See Also
 

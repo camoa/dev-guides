@@ -1,5 +1,6 @@
 ---
 description: AI tooling guides — MCP servers, AI agent integrations, and design-to-code workflows
+tracks: []
 guide-meta:
   concepts:
     - MCP servers

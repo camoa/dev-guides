@@ -1,5 +1,9 @@
 ---
 description: Drupal Form API decision guides - choose the right pattern, element, and approach
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-02-12
 guide-meta:
   concepts:
     - Form API

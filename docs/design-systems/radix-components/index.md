@@ -1,5 +1,10 @@
 ---
-description: Drupal Radix Components — Complete reference for all 57 Radix 6.x Single Directory Components
+description: "Drupal Radix Components — Complete reference for all 57 Radix 6.x Single Directory Components"
+tracks:
+  - project: radix
+    channel: stable
+    declared: "6.0.8"
+    verified: 2026-08-17
 guide-meta:
   concepts:
     - Radix 6.x SDC
@@ -34,8 +39,8 @@ guide-meta:
 | Create accessible Bootstrap-styled forms | [Form Components](form-components.md) | Components for form inputs, form structure, and form element wrappers. Use these components to build accessible, Bootstrap-styled forms in Drupal with Radix theme. |
 | Add alerts, badges, buttons, dropdowns, spinners | [UI Components](ui-components.md) | Components for interactive elements, user feedback, and visual indicators. Use these to provide contextual information, loading states, and user interaction controls. |
 | Render nodes, blocks, fields, media, comments | [Content Display Components](content-display-components.md) | Components for displaying Drupal content entities, fields, media, and user profiles. Use these when rendering nodes, blocks, taxonomy terms, comments, media items, images, or user profiles in various view modes. |
-| Structure HTML, page, regions | [Page Structure Components](page-structure-components.md) | Components for HTML structure, page layout, and regions. Use these for rendering the complete HTML document, page wrapper, regions, and block wrappers in Drupal templates. |
-| Display Views output with Radix styling | [Views Components](views-components.md) | Components for Drupal Views output and grid layouts. Use these when rendering Views lists, grids, and tables with Radix styling patterns. |
+| Structure HTML, page, regions | [Page Structure Components](page-structure-components.md) | Components for overall page layout, regions, and structural wrappers. These are the foundational components that create the skeleton of every Drupal page in Radix. |
+| Display Views output with Radix styling | [Views Components](views-components.md) | Components for displaying Views output with various formatters (grid, table, unformatted lists). These components are automatically used when Radix preprocesses Views templates, but can also be included manually for custom Views styling. |
 | Optimize component performance | [Performance Best Practices](performance-best-practices.md) | Optimizing front-end performance when building/overriding components. |
 | Ensure WCAG 2.2 AA compliance | [Accessibility Best Practices](accessibility-best-practices.md) | Ensuring WCAG 2.2 Level AA compliance. |
 | Maintain code quality and security | [Development Standards](development-standards.md) | Maintaining code quality, security, maintainability. |

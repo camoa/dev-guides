@@ -1,6 +1,6 @@
 ---
-description: Choose between toHaveScreenshot(), toMatchSnapshot(), and page.screenshot() for visual regression.
-tldr: Use `expect(page).toHaveScreenshot()` for all VR assertions — it auto-retries for stability and diffs against a baseline. `page.screenshot()` captures only; `toMatchSnapshot()` diffs but skips the stability retry.
+description: "Choose between toHaveScreenshot(), toMatchSnapshot(), and page.screenshot() for visual regression."
+tldr: "Use `expect(page).toHaveScreenshot()` for all VR assertions — it auto-retries for stability, auto-creates missing baselines, and diffs with pixelmatch. `page.screenshot()` captures only; `toMatchSnapshot()` diffs but skips the stability retry."
 ---
 
 # Screenshot APIs
@@ -16,6 +16,12 @@ tldr: Use `expect(page).toHaveScreenshot()` for all VR assertions — it auto-re
 | `expect(page).toHaveScreenshot()` | Assertion | Yes — waits for two consecutive matching frames | Yes (pixelmatch) | **Primary VR API** |
 | `expect(buffer).toMatchSnapshot()` | Assertion | No | Yes for images | Generic snapshot; buffer already captured |
 | `page.screenshot()` | Action | No | No | Raw capture; returns `Buffer` or writes file |
+
+## What Makes `toHaveScreenshot()` "Smart"
+
+1. **Auto-retry stability check** — re-screenshots until two consecutive frames are identical (handles spinners, layout shifts, font swap, lazy-loaded images settling)
+2. **Baseline auto-creation** — first run errors with `A snapshot doesn't exist at example.spec.ts-snapshots/example-test-1-chromium-darwin.png, writing actual.` — the file is created and committed-ready
+3. **Threshold-based comparison** — uses pixelmatch with default `threshold: 0.2` perceptual color tolerance
 
 ## Pattern
 

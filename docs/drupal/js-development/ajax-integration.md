@@ -1,87 +1,99 @@
 ---
-description: Integrate JavaScript with Drupal's AJAX framework for dynamic content updates
-tldr: "Use when loading content dynamically without full page refresh, or when JavaScript needs to respond to Drupal AJAX events."
-drupal_version: "10.x/11.x"
+description: "Choose between Drupal's legacy AJAX API and native HTMX for dynamic content loading"
+tldr: "Use HTMX (Drupal 11.3+) for new declarative dynamic-content work; use the legacy AJAX API for Drupal 10.x or existing systems. Drupal.behaviors work automatically with both via context — no manual re-init needed."
+drupal_version: "11.x"
 ---
 
 # AJAX Integration
 
 ## When to Use
 
-> Use when loading content dynamically without full page refresh, or when JavaScript needs to respond to Drupal AJAX events.
+> Use to decide between Drupal's legacy AJAX API and native HTMX when loading content dynamically without a full page refresh. This guide is orientation only — detailed coverage lives in the dedicated guides linked below.
 
 ## Decision
 
-Drupal provides comprehensive AJAX framework that automatically re-runs behaviors on updated content. Use Drupal.ajax for form submissions and commands; use fetch API for custom endpoints. Behaviors automatically work with AJAX - no special code needed if using context properly.
+| Situation | Choose | Why |
+|-----------|--------|-----|
+| New development on Drupal 11.3+ | HTMX | Declarative, HTML-first, officially supported by core |
+| Drupal 10.x or an existing AJAX codebase | AJAX API | HTMX is unavailable before 11.3; legacy imperative system still required |
+| Need fine-grained JavaScript command control | AJAX API | Callback/command objects give explicit imperative control |
+| Simple element interactivity (swap, toggle) | HTMX | HTML attributes only, no JavaScript callback needed |
+
+**Key architectural difference**: AJAX is imperative (JavaScript callbacks, command objects). HTMX is declarative (HTML attributes, server responses interpreted by the htmx client library).
 
 ## Pattern
 
-**Behavior AJAX compatibility** (automatic):
+**HTMX approach** (Drupal 11.3+, declarative):
+
+```php
+use Drupal\Core\Htmx\Htmx;
+
+// Make a select element interactive
+$htmx = new Htmx();
+$htmx->post()
+  ->select('*:has(>select[name="config_name"])')
+  ->target('*:has(>select[name="config_name"])')
+  ->swap('outerHTML');
+$htmx->applyTo($form['config_type']);
+
+// Result: HTML attributes, no JavaScript callback needed
+// <select data-hx-post="/form-url" data-hx-select="..." data-hx-target="..." data-hx-swap="outerHTML">
+```
+
+**AJAX API approach** (legacy, imperative):
+
+```php
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
+
+public function ajaxCallback(array &$form, FormStateInterface $form_state) {
+  $response = new AjaxResponse();
+  $response->addCommand(new InvokeCommand('.selector', 'addClass', ['active']));
+  return $response;
+}
+
+$form['element'] = [
+  '#ajax' => [
+    'callback' => '::ajaxCallback',
+    'event' => 'change',
+    'wrapper' => 'result-wrapper',
+  ],
+];
+```
+
+**Behavior compatibility** (works automatically with both):
 
 ```javascript
-Drupal.behaviors.ajaxAware = {
+Drupal.behaviors.dynamicContent = {
   attach(context, settings) {
-    // Works on initial load AND after AJAX updates
-    // No special AJAX handling needed if using context
-    once('ajax-compatible', '.dynamic-content', context).forEach(function (element) {
+    // Works on initial load AND after AJAX/HTMX updates
+    // No special handling needed if using context
+    once('dynamic', '.content', context).forEach(function (element) {
       element.addEventListener('click', handleClick);
     });
   }
 };
 ```
 
-**Custom AJAX command** (server-side PHP):
-
-```php
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\InvokeCommand;
-
-$response = new AjaxResponse();
-$response->addCommand(new InvokeCommand('.selector', 'addClass', ['active']));
-return $response;
-```
-
-**Custom AJAX command** (client-side JavaScript):
-
-```javascript
-Drupal.AjaxCommands.prototype.customCommand = function (ajax, response, status) {
-  // Custom command implementation
-  // Behaviors automatically re-run on updated content
-  console.log('Custom command executed', response.data);
-};
-```
-
-**Fetch API for custom endpoints** (modern alternative):
-
-```javascript
-fetch('/api/endpoint', {
-  method: 'POST',
-  headers: {'Content-Type': 'application/json'},
-  body: JSON.stringify(data)
-})
-.then(response => response.json())
-.then(data => {
-  // Update DOM - behaviors will run on new content
-  element.innerHTML = data.markup;
-  Drupal.attachBehaviors(element); // Manually trigger if needed
-});
-```
-
 ## Common Mistakes
 
 - **Wrong**: Not using context in behaviors → **Right**: Always query within context
-  - **Why**: AJAX-loaded content doesn't initialize, mysterious bugs
-- **Wrong**: Manually re-initializing after AJAX → **Right**: Let Drupal behaviors handle it
-  - **Why**: Drupal does this automatically via behaviors
-- **Wrong**: Custom AJAX without dependency → **Right**: Declare core/drupal.ajax dependency
-  - **Why**: Missing dependency causes undefined errors
-- **Wrong**: Forgetting detach() for AJAX-destroyed content → **Right**: Clean up in detach()
+  - **Why**: AJAX/HTMX-loaded content doesn't initialize, mysterious bugs
+- **Wrong**: Manually re-initializing after updates → **Right**: Let Drupal behaviors handle it
+  - **Why**: Drupal does this automatically via `Drupal.attachBehaviors()`/`Drupal.detachBehaviors()` on both systems
+- **Wrong**: Missing detach() for destroyed content → **Right**: Clean up in detach()
   - **Why**: Event listeners remain, memory leaks accumulate
-- **Wrong**: Using $.ajax() instead of Drupal AJAX → **Right**: Use Drupal AJAX framework
-  - **Why**: Misses automatic behavior re-execution, command system
+- **Wrong**: Choosing AJAX for new Drupal 11.3+ projects → **Right**: Start with HTMX
+  - **Why**: HTMX is simpler, more maintainable, and officially supported for new development
 
 ## See Also
 
-- [Drupal.behaviors Pattern](drupal-behaviors-pattern.md) - AJAX-compatible initialization
-- Reference: `/core/misc/ajax.js` - Core AJAX implementation
-- Reference: [AJAX API Documentation](https://www.drupal.org/docs/develop/drupal-apis/ajax-api/core-ajax-callback-commands)
+- [Drupal.behaviors Pattern](drupal-behaviors-pattern.md) - AJAX/HTMX-compatible initialization
+- [Once API](once-api.md) - Preventing duplicate processing
+- [Drupal AJAX Framework](../ajax/index.md) - Comprehensive AJAX API reference (callbacks, commands, forms)
+- [Drupal HTMX](../htmx/index.md) - HTMX implementation patterns (the modern approach)
+- [AJAX to HTMX Migration](../ajax-htmx-migration/index.md) - Converting AJAX to HTMX pattern-by-pattern
+- Reference: `/core/lib/Drupal/Core/Htmx/Htmx.php` - HTMX utility class
+- Reference: `/core/misc/htmx/htmx-behaviors.js` - Drupal.behaviors integration with HTMX
+- Reference: `/core/misc/ajax.js` - Legacy AJAX implementation
+- Reference: [Official AJAX API Documentation](https://www.drupal.org/docs/drupal-apis/ajax-api)

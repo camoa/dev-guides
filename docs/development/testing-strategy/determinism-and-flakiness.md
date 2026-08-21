@@ -1,6 +1,6 @@
 ---
 description: Flaky test prevention — root causes of non-determinism, the clock injection pattern, async waiting, and how to quarantine and fix flakiness.
-tldr: A test suite with 5% flakiness has a 99.9% chance of at least one failure per run, training teams to ignore failures. Root causes: time/date, randomness, shared state, async timing, real network calls, and filesystem. Fix by injecting clock/random dependencies, isolating test state, and waiting for specific conditions rather than sleeping.
+tldr: "A test suite with 5% flakiness has a 99.9% chance of at least one failure per run, training teams to ignore failures. Root causes: time/date, randomness, shared state, async timing, real network calls, and filesystem. Fix by injecting clock/random dependencies, isolating test state, and waiting for specific conditions rather than sleeping."
 ---
 
 # Determinism and Flakiness

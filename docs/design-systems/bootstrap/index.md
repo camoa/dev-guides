@@ -1,5 +1,11 @@
 ---
 description: Design system to Bootstrap 5.3 mapping guides using the 6px threshold decision framework
+tracks:
+  - project: bootstrap
+    registry: npm
+    channel: stable
+    declared: "5.3"
+    verified: 2026-02-13
 guide-meta:
   concepts:
     - Bootstrap 5.3 mapping

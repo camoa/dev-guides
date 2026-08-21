@@ -25,7 +25,7 @@ drupal_version: "11.x"
 
 ### Stability Warning
 
-Schema.org Blueprints is at **1.0.0-alpha37** — still the current release as of mid-2026, with no stable release yet (see the [project page](https://www.drupal.org/project/schemadotorg) for live status and adoption). Alpha status means:
+Schema.org Blueprints is at **1.0.0-alpha38** (tagged 2026-07-15) — still the current release as of mid-2026, with no stable release yet (see the [project page](https://www.drupal.org/project/schemadotorg) for live status and adoption). Alpha status means:
 
 - API changes between releases without deprecation periods
 - Database schema migrations may be required on update
@@ -115,7 +115,7 @@ Navigate to `/admin/config/search/schemadotorg` to:
 ## Common Mistakes
 
 - **Wrong**: Installing on an existing site and running `drush schemadotorg:create-type` over existing content types → **Right**: The drush command creates new content types; it does not retroactively map existing ones without manual field remapping
-- **Wrong**: Treating alpha37 as stable for client production sites → **Right**: Pin the version in composer.json and test updates in a staging environment before applying to production; subscribe to the project's release notifications
+- **Wrong**: Treating alpha38 as stable for client production sites → **Right**: Pin the version in composer.json and test updates in a staging environment before applying to production; subscribe to the project's release notifications
 - **Wrong**: Enabling all 50+ submodules → **Right**: Enable only what your use case needs; unused submodules add UI clutter and can slow admin pages
 - **Wrong**: Using Schema.org Blueprints and Schema Metatag on the same content type for JSON-LD → **Right**: Pick one per content type; running both causes duplicate `<script type="application/ld+json">` blocks which confuse validators
 - **Wrong**: Expecting field machine names to match your existing naming conventions → **Right**: Blueprints uses Schema.org-derived names (`field_schema_date_published`); plan your content architecture around this before creating types

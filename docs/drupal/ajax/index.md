@@ -1,5 +1,9 @@
 ---
 description: Drupal AJAX Framework — atomic decision guides for forms, commands, routes, security, performance, and accessibility
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-06-07
 guide-meta:
   concepts:
     - Drupal AJAX API

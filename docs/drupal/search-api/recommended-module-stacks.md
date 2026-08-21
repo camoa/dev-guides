@@ -15,9 +15,9 @@ drupal_version: "11.x"
 | Site Size | Backend | Key Modules |
 |---|---|---|
 | Small (<10K items) | Database | `search_api`, `search_api_db` |
-| Medium (10K-100K) | Solr 8/9 | + `search_api_solr`, `facets`, `better_exposed_filters`, `search_api_autocomplete` |
-| Large/Enterprise (100K+) | Solr Cloud | + `search_api_fast`, Solr Cloud config |
-| Decoupled | Any | + `jsonapi_search_api` OR `search_api_typesense` |
+| Medium (10K-100K) | Solr 9 or 10 | + `search_api_solr`, `facets`, `better_exposed_filters`, `search_api_autocomplete` |
+| Large/Enterprise (100K+) | Solr Cloud | + `search-api-solr:index-parallel` (built into `search_api_solr`), Solr Cloud config |
+| Decoupled | Any | + `jsonapi_search_api` (needs a pre-release exception) OR `search_api_typesense` |
 
 ## Pattern
 
@@ -42,12 +42,13 @@ drush en facets facets_exposed_filters better_exposed_filters
 
 **Large / Enterprise:**
 ```bash
-# Same as medium, plus:
-composer require drupal/search_api_fast
-# Solr Cloud, search_api_fast with workers=4
-# Cron batch size: 25; Solr index-only mode
-# Cache warming for popular queries
+# Same as medium — parallel indexing needs no extra module on Solr:
+drush search-api-solr:index-parallel my_index --threads=8 --batch-size=100
+# search_api_fast only if the backend is NOT Solr
 ```
+- Solr Cloud for horizontal scaling
+- Cron batch size: 25; Solr index-only mode
+- Cache warming for popular queries
 
 **Decoupled:**
 ```bash
@@ -61,6 +62,7 @@ composer require drupal/search_api_typesense
 
 - **Wrong**: Using DB backend + all processors for a 50K+ site → **Right**: Switch to Solr. DB will degrade severely.
 - **Wrong**: Not disabling Solr-duplicate processors on medium/large stacks → **Right**: Always disable Tokenizer, Stemmer, Stopwords, Ignore case when using Solr.
+- **Wrong**: Reaching for `search_api_fast` on a Solr stack → **Right**: Solr ships its own `search-api-solr:index-parallel` command. Reserve `search_api_fast` for non-Solr backends.
 
 ## See Also
 

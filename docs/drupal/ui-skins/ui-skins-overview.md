@@ -15,11 +15,11 @@ drupal_version: "11.x"
 | If you need... | Use... | Why |
 |---|---|---|
 | Site-wide brand color customization without theme forking | UI Skins CSS variables | YAML-declared variable plugins, color-picker form, `:root { --var: value; }` injected at render |
-| User-toggleable light/dark mode at runtime | DaisyUI `.theme-controller` or JS theme switcher | UI Skins is a config-time selection, not a runtime toggle |
+| User-toggleable light/dark mode at runtime | DaisyUI `.theme-controller` or JS theme switcher | UI Skins is a **build-/config-time** selection, not a runtime toggle |
 | Per-block CSS class application | UI Styles | UI Skins doesn't apply classes per element |
 | Configurable `--space-*` or `--font-size-*` tokens | UI Skins CSS variables | Same pattern as colors; pick `textfield` widget |
 | Multiple registered themes with one active | UI Skins themes | Site-builder picks active theme; UI Skins emits class/`data-theme` on `<html>` or `<body>` |
-| Per-section / per-page theme override | UI Skins selection scoped via Layout Builder | Not supported out of the box — UI Skins is global. Use DaisyUI per-page `data-theme` instead |
+| Per-section / per-page theme override | UI Skins selection scoped via Layout Builder | Not supported out of the box — UI Skins is global. Use DaisyUI per-page `data-theme` instead (see DaisyUI guide) |
 
 ## Pattern
 
@@ -67,6 +67,8 @@ UI Skins is part of the **UI Suite** family of complementary modules:
 | [UI Suite DaisyUI](../ui-suite-daisyui/index.md) | DaisyUI starter using the suite |
 
 UI Skins owns the *values* of design tokens; UI Styles owns the *classes that consume them*. UI Patterns owns *component structure*; UI Icons owns *iconography*.
+
+**Module version**: The current stable release is UI Skins 1.2.1, which requires Drupal `^11.4 || ^12`.
 
 ## See Also
 

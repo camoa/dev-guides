@@ -22,6 +22,10 @@ guide-meta:
     - drupal/breadcrumbs
   specializes: ""
   category: drupal
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-07-03
 ---
 
 # Drupal Menus & Navigation

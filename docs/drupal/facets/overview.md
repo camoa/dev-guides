@@ -1,6 +1,6 @@
 ---
-description: Facets vs BEF vs core exposed filters — architecture, sub-modules, and when to use each approach
-tldr: "Use Facets when you need faceted search navigation with result counts, narrowing behavior, and hierarchical filtering — and you are using Search API. Use Better Exposed Filters when you want enhanced widgets for any Views exposed form…"
+description: "Facets vs BEF vs core exposed filters — architecture, sub-modules, and when to use each approach"
+tldr: "Use Facets when you need faceted search navigation with result counts, narrowing behavior, and hierarchical filtering — and you are using Search API. Use Better Exposed Filters when you want enhanced widgets for any Views exposed form without Search API."
 drupal_version: "11.x"
 ---
 

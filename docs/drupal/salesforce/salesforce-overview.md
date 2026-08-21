@@ -1,5 +1,5 @@
 ---
-description: Salesforce module suite architecture — core components, service IDs, storage objects, and submodule responsibilities
+description: "Salesforce module suite architecture — core components, service IDs, storage objects, and submodule responsibilities"
 tldr: "Use the Salesforce module suite when you need bidirectional synchronization between Drupal entities and Salesforce objects. The base module is always required; submodules are added based on sync direction and features needed."
 drupal_version: "11.x"
 ---
@@ -35,6 +35,8 @@ salesforce (base module — always required)
 **Admin routes:**
 - `/admin/config/salesforce` — Main configuration
 - `/admin/config/salesforce/authorize` — Authorization setup
+
+**Module version**: The current stable release is Salesforce 5.1.3, which requires Drupal `^11.3`. A 6.x branch exists but carries no tagged release at all — it is dev-only, earlier in the release process than even an alpha — so it is not documented here; this guide targets 5.1.3.
 
 ## Common Mistakes
 

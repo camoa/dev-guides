@@ -1,6 +1,6 @@
 ---
-description: Apply curated UI Styles to blocks placed via Drupal's core Block layout UI.
-tldr: Enable ui_styles_block; each block's configuration form gains a UI Styles fieldset. Selections persist in block config entity third-party settings under ui_styles_block.selected and are injected into #attributes['class'] at render time.
+description: "Apply curated UI Styles to blocks placed via Drupal's core Block layout UI."
+tldr: "Enable ui_styles_block; each block's configuration form gains a UI Styles fieldset. Selections persist in block config entity third-party settings under ui_styles_block.selected and are injected into #attributes['class'] at render time."
 drupal_version: "11.x"
 ---
 

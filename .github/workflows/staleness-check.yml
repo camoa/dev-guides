@@ -1,0 +1,55 @@
+name: Staleness Check
+
+# Weekly audit of the guide-staleness convention (proposals/guide-staleness-
+# convention.md): compares each topic's declared `tracks` version against the
+# current tag on its supported branch, upstream.
+#
+# This is a report job, not a gate: it runs on a schedule, never on
+# pull_request, and is NOT wired into branch protection. Upstream projects tag
+# releases on their own timeline, so a PR into main should never fail because
+# some unrelated contrib module shipped a new version this week.
+#
+# scripts/check_staleness.py exits 0 unconditionally by design (see the
+# proposal's "Failure handling" / "Exit code" sections) — drift is data to
+# report, not a defect in this repo. The job below does not add
+# continue-on-error anywhere because there is nothing for it to fail on.
+on:
+  schedule:
+    # Monday 06:00 UTC. A fresh report waits at the start of the work week
+    # instead of landing over a weekend.
+    - cron: '0 6 * * 1'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  staleness-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+
+      - name: Run staleness checker
+        run: python scripts/check_staleness.py --format=markdown > staleness-report.md
+
+      # One standing issue, not one per run. A weekly job that opens a fresh
+      # issue every time produces 52 near-identical issues a year describing
+      # largely the same backlog (see the proposal's "Defaults chosen"
+      # section). Find it by a stable title and edit its body in place;
+      # create it only the first time it doesn't exist yet.
+      - name: Update standing tracking issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_TITLE: "Guide staleness report"
+        run: |
+          existing=$(gh issue list --state open --search "\"$ISSUE_TITLE\" in:title" --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue edit "$existing" --body-file staleness-report.md
+          else
+            gh issue create --title "$ISSUE_TITLE" --body-file staleness-report.md
+          fi

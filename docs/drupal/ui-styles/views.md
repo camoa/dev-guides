@@ -1,6 +1,6 @@
 ---
-description: Style Views display wrapper, pager, and exposed filter form via UI Styles instead of preprocess hooks.
-tldr: Enable ui_styles_views; each Views display configuration gains UI Styles fieldsets for the display wrapper, pager, and exposed form. Display-level styles target the outer View wrapper — per-row styling still requires template overrides or field formatters.
+description: "Style Views display wrapper, pager, and exposed filter form via UI Styles instead of preprocess hooks."
+tldr: "Enable ui_styles_views; each Views display configuration gains UI Styles fieldsets for the display wrapper, pager, and exposed form. Display-level styles target the outer View wrapper — per-row styling still requires template overrides or field formatters."
 drupal_version: "11.x"
 ---
 

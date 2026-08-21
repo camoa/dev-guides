@@ -1,5 +1,11 @@
 ---
 description: Adopting and building on EmDash — a beta full-stack TypeScript CMS on Astro + Cloudflare. Getting started, architecture, deploy targets, and content modeling with collections, generated types, and Portable Text.
+tracks:
+  - project: emdash
+    registry: npm
+    channel: stable
+    declared: "0.20.0"
+    verified: 2026-06-17
 guide-meta:
   concepts:
     - EmDash CMS

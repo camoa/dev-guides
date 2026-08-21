@@ -1,6 +1,6 @@
 ---
-description: How UI Styles auto-selects the form widget (Checkbox, Toolbar, Select) for each style definition.
-tldr: UI Styles picks the widget automatically — 1 option becomes a Checkbox, all options with icons become a Toolbar, everything else falls back to a Select dropdown. To force Toolbar, every option must have an icon field; to force Checkbox, declare exactly one option.
+description: "How UI Styles auto-selects the form widget (Checkbox, Toolbar, Select) for each style definition."
+tldr: "UI Styles picks the widget automatically — 1 option becomes a Checkbox, all options with icons become a Toolbar, everything else falls back to a Select dropdown. To force Toolbar, every option must have an icon field; to force Checkbox, declare exactly one option."
 drupal_version: "11.x"
 ---
 

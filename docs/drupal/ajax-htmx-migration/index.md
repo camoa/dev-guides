@@ -1,5 +1,9 @@
 ---
 description: AJAX to HTMX Migration — pattern-by-pattern guide for replacing Drupal AJAX API with core HTMX in Drupal 11.3+
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-06-07
 guide-meta:
   concepts:
     - AJAX to HTMX migration

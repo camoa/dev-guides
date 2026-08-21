@@ -1,5 +1,9 @@
 ---
 description: Image styles and responsive images — configuration-first approach to derivatives, effects, breakpoints, and modern format optimization.
+tracks:
+  - project: drupal
+    channel: stable
+    verified: 2026-05-29
 guide-meta:
   concepts:
     - image styles

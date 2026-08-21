@@ -19,6 +19,10 @@ drupal_version: "11.x"
 | `REINDEX_SCHEDULED` | ReindexScheduledEvent | Reindex triggered | Notification |
 | `QUERY_PRE_EXECUTE` | QueryPreExecuteEvent | Before backend executes | Modify query at last moment |
 | `PROCESSING_RESULTS` | ProcessingResultsEvent | After backend returns | Modify raw results |
+| `DETERMINING_SERVER_FEATURES` | DeterminingServerFeaturesEvent | Feature check | Alter backend capabilities |
+| `MAPPING_FIELD_TYPES` | MappingFieldTypesEvent | Field type mapping | Custom type mapping |
+| `MAPPING_VIEWS_HANDLERS` | MappingViewsHandlersEvent | Views handler mapping | Custom handler mapping |
+| `GATHERING_*` | GatheringPluginInfoEvent | Plugin discovery | Alter plugin definitions |
 
 ## Pattern
 

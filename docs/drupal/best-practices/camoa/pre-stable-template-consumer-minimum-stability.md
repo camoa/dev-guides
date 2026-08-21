@@ -1,7 +1,7 @@
 ---
 description: A site template with pre-stable deps blocks a plain composer require on stable-only roots — stability flags don't propagate transitively; the consumer must set minimum-stability dev + prefer-stable.
 drupal_version: "11.x"
-tldr: Plain `drupal/cms` roots are `minimum-stability: stable`. A template requiring non-stable deps (alpha/rc/beta), even with caret ranges, blocks a plain `composer require`. Composer stability flags don't propagate transitively — the template can't set them for its consumer. Document `composer config minimum-stability dev` + `prefer-stable true` in BOTH the README install steps AND the CI workflow. `site:export` already warns on non-stable deps, predicting this.
+tldr: "Plain `drupal/cms` roots are `minimum-stability: stable`. A template requiring non-stable deps (alpha/rc/beta), even with caret ranges, blocks a plain `composer require`. Composer stability flags don't propagate transitively — the template can't set them for its consumer. Document `composer config minimum-stability dev` + `prefer-stable true` in BOTH the README install steps AND the CI workflow. `site:export` already warns on non-stable deps, predicting this."
 ---
 
 # Pre-Stable Template Deps Require Consumer minimum-stability Config

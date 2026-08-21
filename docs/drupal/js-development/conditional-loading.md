@@ -1,7 +1,7 @@
 ---
 description: Load JavaScript conditionally based on content type, route, user role, or other conditions
 tldr: "Use when optimizing performance by loading JavaScript only when needed based on content type, route, user role, or other conditions."
-drupal_version: "10.x/11.x"
+drupal_version: "11.x"
 ---
 
 # Conditional Loading

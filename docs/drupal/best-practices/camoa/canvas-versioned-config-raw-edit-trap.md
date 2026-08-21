@@ -1,7 +1,7 @@
 ---
 description: Canvas component configs carry an active_version hash of their settings — raw-editing them (setData/cset/YAML) breaks the hash. site:install masks it, but the recipe CLI validator fails. Recompute hashes from a live install.
 drupal_version: "11.x"
-tldr: `canvas.component.*` configs store an `active_version` hash of their settings. Raw-editing the config (setData/cset/direct YAML) to genericize a value desyncs the hash from the settings. `drush site:install` and runtime DON'T re-validate, so it looks fine — but the recipe CLI validator (`recipe:apply` / ValidationTest) FAILS: "active_version … does not match hash of settings". Never raw-edit versioned Canvas configs; take the hash from a live install and sync every content ref that points at that version.
+tldr: "`canvas.component.*` configs store an `active_version` hash of their settings. Raw-editing the config (setData/cset/direct YAML) to genericize a value desyncs the hash from the settings. `drush site:install` and runtime DON'T re-validate, so it looks fine — but the recipe CLI validator (`recipe:apply` / ValidationTest) FAILS: \"active_version … does not match hash of settings\". Never raw-edit versioned Canvas configs; take the hash from a live install and sync every content ref that points at that version."
 ---
 
 # Canvas Versioned-Config Raw-Edit Trap

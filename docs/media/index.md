@@ -1,5 +1,6 @@
 ---
 description: Media decision guides — image optimization, responsive images, and media craft patterns
+tracks: []
 guide-meta:
   concepts:
     - image optimization

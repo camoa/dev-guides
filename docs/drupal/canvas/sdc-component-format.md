@@ -1,5 +1,5 @@
 ---
-description: Full file structure, YAML schema, and Twig template patterns for authoring SDC components compatible with Canvas.
+description: "Full file structure, YAML schema, and Twig template patterns for authoring SDC components compatible with Canvas."
 tldr: "Use this when creating a Canvas-compatible component using Drupal's Single Directory Component (SDC) system. This produces a server-side-rendered Twig component with Drupal field widget integration in the Canvas editor."
 drupal_version: "11.x"
 ---
@@ -10,6 +10,8 @@ drupal_version: "11.x"
 
 > Use this when creating a Canvas-compatible component using Drupal's Single Directory Component (SDC) system. This produces a server-side-rendered Twig component with Drupal field widget integration in the Canvas editor.
 
+**Discovery is not eligibility.** Canvas automatically discovers every SDC from every enabled module/theme — there is no registration step. Each discovered component is then run through a requirements check, and any component that fails is silently excluded: it never appears in the Canvas panel, and nothing is logged to the page. **One mistake is the exception and is not silent at all:** a `$ref` naming a definition that does not exist throws out of SDC discovery and takes the whole site down. See [SDC Props Reference](sdc-props-reference.md) for the full gate list and both failure modes.
+
 ## Decision
 
 | Prop type | YAML definition | Canvas editor widget |
@@ -17,11 +19,16 @@ drupal_version: "11.x"
 | Plain text | `type: string` | Single-line text input |
 | Rich text (block) | `type: string` + `contentMediaType: text/html` + `x-formatting-context: block` | CKEditor block editor |
 | Rich text (inline) | `type: string` + `contentMediaType: text/html` + `x-formatting-context: inline` | CKEditor inline editor |
-| Image | `type: object` + `$ref: 'json-schema-definitions://canvas.module/image'` | Media Library picker |
-| Link | `type: object` + `$ref: 'json-schema-definitions://canvas.module/link'` | URL + link text input |
+| Image | `type: object` + `$ref: 'json-schema-definitions://canvas.module/image'` | Media Library / image picker |
+| Video | `type: object` + `$ref: 'json-schema-definitions://canvas.module/video'` | File upload (mp4) |
+| Entity reference | `type: object` + `$ref: 'json-schema-definitions://canvas.module/content-entity-reference'` + `x-allowed-entity-type-id` | Entity autocomplete |
+| Link (any URL) | `type: string` + `format: uri-reference` | Link field, URL only — no link-text input |
+| Link (external only) | `type: string` + `format: uri` | Link field, URL only — no link-text input |
 | Number | `type: integer` or `type: number` | Numeric input |
 | Boolean | `type: boolean` | Toggle |
-| Enum/select | `type: string` + `enum: [value1, value2]` | Select dropdown |
+| Enum/select | `type: string` + `enum: [value1, value2]` (+ `meta:enum` for labels) | Select dropdown |
+
+**Three `$ref` URIs are the closed enum of storable `type: object` refs**: `.../image`, `.../video`, `.../content-entity-reference`. That is not the complete list of valid `$ref`s — Canvas's `schema.json` ships fourteen `$defs`, and string/integer-typed ones (`.../heading-element`, `.../column-width`, `.../image-uri`, `.../stream-wrapper-uri`, `.../stream-wrapper-image-uri`) resolve too, as does a `$ref` into another extension's own `schema.json`. What does not exist is `json-schema-definitions://canvas.module/link` — writing a `$ref` to a definition absent from the target extension's `schema.json` is **fatal, not silent**: it throws out of SDC plugin discovery on the next cache rebuild and 500s the whole site, not just the one component. See [SDC Props Reference](sdc-props-reference.md#the-one-failure-that-is-not-silent).
 
 ## Pattern
 
@@ -36,8 +43,6 @@ my_theme/
       hero.css              ← optional: component styles
       hero.js               ← optional: component JS behaviors
 ```
-
-Canvas automatically discovers ALL SDC components from all enabled modules and themes. There is no registration step.
 
 **`*.component.yml` schema:**
 
@@ -65,10 +70,17 @@ props:
     cta_text:
       type: string
       title: 'Button Label'
+      examples:
+        - 'Get started'
     cta_url:
-      type: object
+      # A link prop is a plain STRING with a `format` — NOT an object with a $ref.
+      # `uri-reference` accepts internal (/node/1) and external URLs;
+      # `uri` accepts absolute URLs only.
+      type: string
+      format: uri-reference
       title: 'Button URL'
-      $ref: 'json-schema-definitions://canvas.module/link'
+      examples:
+        - '/contact'
     body:
       type: string
       title: Description
@@ -85,8 +97,6 @@ slots:
 
 ```twig
 {# hero.twig #}
-{% set image_attrs = create_attribute() %}
-
 <section class="hero">
   {% if badge is not empty %}
     <div class="hero__badge">{{ badge }}</div>
@@ -100,34 +110,38 @@ slots:
       <div class="hero__body">{{ body }}</div>
     {% endif %}
     {% if cta_text and cta_url %}
-      <a href="{{ cta_url.url }}" class="btn btn-primary">
+      <a href="{{ cta_url }}" class="btn btn-primary">
         {{ cta_text }}
       </a>
     {% endif %}
   </div>
 
+  {# canvas:image reads `src` at top level — SPREAD the image object into the
+     include context with |merge. Passing `{image: image}` throws a TypeError. #}
   {% if image %}
-    {% include 'canvas:image' with {
-      image: image,
+    {% include 'canvas:image' with image|merge({
       loading: 'eager',
-      fetchpriority: 'high',
-    } only %}
+      class: 'hero__image',
+    }|filter((value) => value is not null)) only %}
   {% endif %}
 </section>
 ```
 
-**Link prop structure**: When a `$ref: canvas.module/link` prop is passed to Twig, it has `.url` and `.title` (link text) keys.
+**Link prop structure**: a link prop is a **plain string** — the URL. Render it directly with `{{ cta_url }}`. There is no `.url` and no `.title`: Canvas maps URI-format string props onto Drupal's `link` field with the instance setting `title: 0`, which switches the link widget's text field off. If you want editor-supplied link text, declare a **second** `type: string` prop for it (`cta_text` above).
 
 **Slot rendering**: Slots arrive as renderable Twig variables — render directly with `{{ slot_name }}`. No `{% block %}` needed.
 
 ## Common Mistakes
 
 - **Wrong**: Using `.html.twig` extension → **Right**: Canvas (and SDC) only recognize `.twig`
-- **Wrong**: `<img src="{{ image }}">` — image props are objects, not URLs → **Right**: Use `canvas:image` component
-- **Wrong**: Adding `$ref` for text strings that don't need the Media Library → **Right**: Use `$ref` only for image and link prop types
-- **Wrong**: Forgetting `x-formatting-context` on rich text props → **Right**: Without it, Canvas may not show the CKEditor widget
+- **Wrong**: Writing `$ref: 'json-schema-definitions://canvas.module/link'` → **Right**: that definition has never existed, and a `$ref` to a missing definition is **fatal**: the next cache rebuild throws out of SDC discovery and the site returns 500 — it does not quietly disable one component. Use `type: string` + `format: uri-reference`/`uri`
+- **Wrong**: `<img src="{{ image }}">` — image props are objects, not URLs → **Right**: Use `canvas:image`
+- **Wrong**: `{% include 'canvas:image' with {image: image} %}` — `canvas:image` takes `src`, not `image` → **Right**: Spread with `image|merge({...})`
+- **Wrong**: Assuming `$ref` is limited to image, video, and content-entity-reference → **Right**: those are only the storable `type: object` refs. String- and integer-typed refs such as `heading-element`, `column-width`, and `stream-wrapper-uri` resolve too — but a name absent from the target extension's `schema.json` entirely is fatal, not a graceful disqualification
+- **Wrong**: Forgetting `x-formatting-context` on rich text props → **Right**: without it, Canvas may not show the CKEditor widget
 - **Wrong**: Putting components in `templates/` → **Right**: SDC components must be in `components/`
-- **Wrong**: Using `{% embed %}` with `{% block %}` for Canvas:image → **Right**: Always use `{% include ... only %}`
+- **Wrong**: Using `{% embed %}` with `{% block %}` for canvas:image → **Right**: always use `{% include ... only %}`
+- **Wrong**: Relying on YAML `default:` → **Right**: Canvas strips it. The stored default comes from `examples[0]`
 
 ## See Also
 

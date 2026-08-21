@@ -1,5 +1,5 @@
 ---
-description: When and how to use SDC slots in Canvas — defining drop zones where editors can nest other Canvas components.
+description: "When and how to use SDC slots in Canvas — defining drop zones where editors can nest other Canvas components."
 tldr: "Use slots when your component has a region where editors should place other components — not just edit text or pick an image, but nest whole other Canvas components inside. Use props when you want editors to type text, pick an image, or…"
 drupal_version: "11.x"
 ---
@@ -51,8 +51,9 @@ Render slots in Twig with `{{ slot_name }}`:
 **Slot behavior in Canvas:**
 - Slots appear as drop zones in the Canvas editor
 - Editors drag other components into slots
-- Slots accept any Canvas component (SDC or Code Component) unless you add `allowedComponents` constraints (check current Canvas docs for this feature's status)
-- Slot names are **camelCased** when passed as parameters in Code Components (e.g., slot `call_to_action` becomes `callToAction` in Code Component props)
+- Slots accept any Canvas component (SDC or Code Component). No `allowedComponents` / `allowed_components` key exists in Canvas 1.10.1 — there is currently no per-slot component allow-list
+- **Every slot must have a `title`.** A slot without one disqualifies the entire component from Canvas (see [SDC Props Reference](sdc-props-reference.md))
+- Slot keys are used **exactly as authored** in the YAML — Canvas does not rename them. The camelCase you see on Code Component slots comes from the in-browser editor generating a machine name from the human-readable name you type, not from a transform applied at render
 
 ## Common Mistakes
 

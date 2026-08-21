@@ -1,6 +1,6 @@
 ---
 description: AI test generation anti-patterns — ranked list and the encode-current-behavior gotcha that causes AI tests to permanently enshrine bugs.
-tldr: The top anti-pattern is encode-current-behavior: the AI Planner observes the site as-is and asserts that bugs are expected behavior, causing the suite to pass forever while shipping the bug. Mitigations are mandatory plan review, negative assertions in every scenario, draft-only status until human edits, and Healer auto-commit disabled. The triple-review rule (plan intent, generated code, every Healer patch) applies without exception.
+tldr: "The top anti-pattern is encode-current-behavior: the AI Planner observes the site as-is and asserts that bugs are expected behavior, causing the suite to pass forever while shipping the bug. Mitigations are mandatory plan review, negative assertions in every scenario, draft-only status until human edits, and Healer auto-commit disabled. The triple-review rule (plan intent, generated code, every Healer patch) applies without exception."
 ---
 
 # Anti-Patterns

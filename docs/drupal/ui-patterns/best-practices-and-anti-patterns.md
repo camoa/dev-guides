@@ -1,18 +1,18 @@
 ---
 description: Best practices and anti-patterns — component naming, slot vs prop decisions, and when NOT to use UI Patterns
 tldr: "Best practices and anti-patterns — component naming, slot vs prop decisions, and when NOT to use UI Patterns"
-drupal_version: "10.3+ / 11"
+drupal_version: "11.x"
 ---
 
-## Best Practices & Anti-Patterns
+# Best Practices & Anti-Patterns
 
-### Component Naming
+## Component Naming
 
 **Do:** Use business-agnostic names: `Card`, `Hero`, `Accordion`, `Alert`.
 **Do not:** Use business-specific names: `EventCard`, `NewsSlideshow`, `ProductHero`.
 **Why:** Components should be reusable across content types. Business-specific names create artificial coupling and reduce reuse.
 
-### Slot vs Prop Decision
+## Slot vs Prop Decision
 
 | Content Type | Use | Reason |
 |---|---|---|
@@ -22,7 +22,7 @@ drupal_version: "10.3+ / 11"
 | Navigation links | Prop (`links` type) | Structured data with a defined schema |
 | CSS classes, HTML attributes | Prop (`attributes` type) | Key-value data, not renderables |
 
-### Avoid Prop Drilling
+## Avoid Prop Drilling
 
 **Anti-pattern:** Defining props in a parent component solely to pass them to a child component.
 
@@ -47,7 +47,7 @@ slots:
 
 **Why:** Prop drilling couples parent and child component schemas. When the child changes, the parent must change too. Slots provide decoupling.
 
-### Avoid Prop Paradoxes
+## Avoid Prop Paradoxes
 
 Design orthogonal props that do not create incompatible states:
 
@@ -67,7 +67,7 @@ props:
       "$ref": "ui-patterns://url"
 ```
 
-### Use `|default()` in Twig
+## Use `|default()` in Twig
 
 Always handle empty/missing values in templates:
 
@@ -81,7 +81,7 @@ Always handle empty/missing values in templates:
 <div class="card card--{{ variant }}">
 ```
 
-### Use Drupal Attributes
+## Use Drupal Attributes
 
 Always apply the `attributes` prop to the component wrapper element:
 
@@ -93,7 +93,7 @@ Always apply the `attributes` prop to the component wrapper element:
 
 **Why:** Drupal modules (contextual links, quick edit, translation, SEO tools) inject attributes into the wrapper. Without `{{ attributes }}`, these features break silently.
 
-### Mark Internal Components
+## Mark Internal Components
 
 Sub-components that only make sense as children of a parent should be clearly marked:
 
@@ -104,7 +104,7 @@ tags: ["Internal"]
 # In description or metadata, indicate this is internal
 ```
 
-### When NOT to Use UI Patterns
+## When NOT to Use UI Patterns
 
 | Situation | Better Approach |
 |---|---|
@@ -115,7 +115,7 @@ tags: ["Internal"]
 
 **Why:** UI Patterns adds an abstraction layer (source plugins, form generation, context resolution). This is valuable when site-builders need configurability, but overhead when developers control all rendering.
 
-### Common Mistakes
+## Common Mistakes
 
 | Mistake | Why It Is Wrong |
 |---|---|
@@ -123,7 +123,7 @@ tags: ["Internal"]
 | Hardcoding component IDs in Twig templates | Components should be nested through slots or render arrays, not Twig `include()`. Hardcoded IDs prevent replacement/override. If necessary, use `include()` with `with_context = false`. |
 | Hardcoding HTML IDs in components | If a component is used multiple times on a page, duplicate IDs break HTML validity and accessibility. Generate IDs with `random()` or accept them as props. |
 
-### See Also
+## See Also
 
 - [Defining Components](defining-components.md)
 - [Slots System](slots-system.md)

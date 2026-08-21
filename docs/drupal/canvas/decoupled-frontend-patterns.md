@@ -1,5 +1,5 @@
 ---
-description: Patterns for using Canvas with a decoupled JavaScript frontend (Next.js, Astro, Nuxt) — component tree API, CLI sync, canvas_extjs, and Lupus Decoupled.
+description: "Patterns for using Canvas with a decoupled JavaScript frontend (Next.js, Astro, Nuxt) — component tree API, CLI sync, canvas_extjs, and Lupus Decoupled."
 tldr: "Use this when your project needs a fully decoupled JavaScript frontend (Next.js, Astro, Nuxt) that renders content managed by Drupal Canvas. This is an advanced pattern — most Canvas projects do NOT need this."
 drupal_version: "11.x"
 ---

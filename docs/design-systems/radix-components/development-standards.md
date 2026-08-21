@@ -1,5 +1,5 @@
 ---
-description: Maintaining code quality, security, maintainability
+description: "Maintaining code quality, security, maintainability"
 tldr: "Maintaining code quality, security, maintainability."
 ---
 
@@ -38,7 +38,3 @@ tldr: "Maintaining code quality, security, maintainability."
   }
 %}
 ```
-
-## See Also
-
-- Tool: https://www.npmjs.com/package/drupal-radix-cli

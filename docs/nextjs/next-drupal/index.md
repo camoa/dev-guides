@@ -1,5 +1,11 @@
 ---
 description: "Comprehensive guide for integrating Next.js with Drupal using the next-drupal library. Covers architecture decisions, setup, content fetching, rendering strategies, and more."
+tracks:
+  - project: next-drupal
+    registry: npm
+    channel: stable
+    declared: "2.0.1"
+    verified: 2026-05-20
 drupal_version: "11.x"
 topic: "drupal/next-drupal"
 guide-meta:

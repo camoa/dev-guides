@@ -1,5 +1,6 @@
 ---
 description: Testing Strategy — stack-agnostic decisions for what to test, which test type to reach for, and how to build a balanced, maintainable suite.
+tracks: []
 guide-meta:
   concepts:
     - testing strategy

@@ -1,6 +1,6 @@
 ---
-description: Author *.ui_styles.yml plugin files in a theme or module — schema, category grouping, icons, and short vs long option form.
-tldr: Place {name}.ui_styles.yml at the theme/module root; prefix plugin IDs with the theme/module name to avoid collisions. Each style declares options as class => label (short) or class => {label, icon, description} (long). Use category to group related styles.
+description: "Author *.ui_styles.yml plugin files in a theme or module — schema, category grouping, icons, and short vs long option form."
+tldr: "Place {name}.ui_styles.yml at the theme/module root; prefix plugin IDs with the theme/module name to avoid collisions. Each style declares options as class => label (short) or class => {label, icon, description} (long). Use category to group related styles."
 drupal_version: "11.x"
 ---
 
@@ -26,10 +26,14 @@ plugin_id:                          # machine name, unique across all active mod
   enabled: true                     # optional, default true
   label: "Human-readable label"     # required
   description: "Helper text"        # optional
+  label_context: "ui_styles"        # optional translation context
+  description_context: "ui_styles"  # optional translation context
   category: "Typography"            # optional grouping; default "Other"
+  category_context: "ui_styles"     # optional
   icon: "mdi-format-color-text"     # optional — forces toolbar widget when all options have icons
   weight: -80                       # optional sort within category; default 0
   empty_option: "- None -"          # optional label for select widget empty state
+  empty_option_context: "ui_styles" # optional
 
   options:
     text-primary: "Primary"         # short form: class => label
@@ -46,8 +50,10 @@ plugin_id:                          # machine name, unique across all active mod
     - p-2
   previewed_as: "inside"            # inside | aside | hidden — library preview layout
 
-  links:
+  links:                             # optional reference links shown in the library page
     - "https://example.com/docs/text-utilities"
+    - url: "https://example.com/spec"
+      title: "Brand spec"
 ```
 
 ### Category Grouping

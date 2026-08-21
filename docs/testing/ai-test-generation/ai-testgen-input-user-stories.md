@@ -1,6 +1,6 @@
 ---
 description: Translating user stories, Jira tickets, and PRD excerpts into test plans — deterministic rewrite rules and scope-control patterns.
-tldr: Map "As an X, I want Y so that Z" to: Preconditions = X, scenario title = imperative "X does Y", first criterion = Z made observable. When pulling from Jira, extract Acceptance Criteria and Description only — tell the Planner explicitly not to add criteria from the comment thread or related tickets.
+tldr: "Map \"As an X, I want Y so that Z\" to: Preconditions = X, scenario title = imperative \"X does Y\", first criterion = Z made observable. When pulling from Jira, extract Acceptance Criteria and Description only — tell the Planner explicitly not to add criteria from the comment thread or related tickets."
 ---
 
 # Input: User Stories

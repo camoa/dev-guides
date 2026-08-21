@@ -1,6 +1,6 @@
 ---
-description: Render UI Icons directly in Twig templates using icon_preview() or a render array.
-tldr: Use icon_preview(pack_id, icon_id, settings) in Twig to render an icon with correct cache metadata; it takes three separate arguments, not the combined pack:icon_id string. For PHP, use the #type => icon render array or plugin.manager.icon_pack->getIcon()->getRenderable().
+description: "Render an icon in a custom Twig template with core's icon() function, not UI Icons' admin-only icon_preview()."
+tldr: "Use core's icon(pack_id, icon_id, settings) as the general renderer in theme templates; needs no contrib module. icon_preview() is the admin-preview renderer and forces size 48 (not the pack's own default) when settings are omitted."
 drupal_version: "11.x"
 ---
 
@@ -10,56 +10,68 @@ drupal_version: "11.x"
 
 > Rendering an icon directly in a custom Twig template (block, paragraph, layout).
 
-## Decision: which approach to use
+## Pattern
 
-| Twig context | Approach |
-|---|---|
-| Static, theme-author-defined icon | `{{ icon_preview(...) }}` with literal arguments |
-| Icon from a field on the entity | Pass through field rendering — the formatter handles it |
-| Icon from a UI Patterns prop | Pattern templates render the prop automatically |
-
-## Pattern: `icon_preview()` Twig function
+Use **core's** `icon(pack_id, icon_id, settings)`, from `Drupal\Core\Template\IconsTwigExtension`. It is the general-purpose renderer and needs no contrib module:
 
 ```twig
-{# Render with default settings #}
-{{ icon_preview('my_theme_icons', 'menu') }}
+{# Render with pack defaults #}
+{{ icon('my_theme_icons', 'menu') }}
 
 {# Render with overrides #}
-{{ icon_preview('my_theme_icons', 'menu', {
+{{ icon('my_theme_icons', 'menu', {
   size: 32,
   color: '#0066cc',
   decorative: true,
 }) }}
 ```
 
-The function returns a renderable array — cache metadata bubbles correctly.
+It returns the `#type: icon` render array below, so cache metadata bubbles correctly.
 
-## Pattern: programmatic render array (PHP)
+## `icon_preview()` is not the same function
+
+UI Icons also registers `icon_preview(pack_id, icon_id, settings)`, but it is the **admin-preview** renderer behind the Library page and the picker — not the one to reach for in a theme template. It returns `IconPreview::getPreview()`, which forces a size of **48** when you omit the settings argument, rather than using the pack's own defaults: `IconPreview::ICON_DEFAULT_SIZE` is `48` on the `preview:`-template path, and `templates/icon-preview.html.twig` writes `{{ settings.size|default(48) }}` on the fallback path.
+
+(The `?? ['size' => 32]` in `IconPreviewTwigExtension::getIconPreview()` is dead code from Twig's point of view — the parameter default is `[]`, not `NULL`, so `??` never fires on a two-argument call.)
+
+## Decision
+
+| Twig context | Approach |
+|---|---|
+| Static, theme-author-defined icon | `{{ icon(...) }}` with literal arguments |
+| Rendering a preview in an admin/config UI | `{{ icon_preview(...) }}` |
+| Icon from a field on the entity | Pass through field rendering — the field formatter handles it |
+| Icon from a UI Patterns prop | Pattern templates render the prop automatically |
+
+## Pattern: Programmatic Render Array (PHP)
 
 ```php
 $build = [
   '#type' => 'icon',
   '#pack_id' => 'my_theme_icons',
-  '#icon' => 'menu',
+  '#icon_id' => 'menu',
   '#settings' => ['size' => 32],
 ];
 ```
 
+The property is `#icon_id`. `#icon` is not a recognized property of core's `Icon` element — it is ignored, `#icon_id` stays empty, and the element renders nothing.
+
 Or via the plugin manager:
 
 ```php
-$icon = \Drupal::service('plugin.manager.icon_pack')
-  ->getIcon('my_theme_icons:menu');
+$icon = \Drupal::service('plugin.manager.icon_pack')->getIcon('my_theme_icons:menu');
 $build = $icon->getRenderable(['size' => 32]);
 ```
 
 ## Common Mistakes
 
-- **Wrong**: calling `icon_preview()` with the full ID string `'my_theme_icons:menu'` → **Right**: the function expects three arguments: `(pack_id, icon_id, settings)`, not one combined string
+- **Wrong**: calling `icon()` or `icon_preview()` with the full ID string (`my_theme_icons:menu`) → **Right**: both expect `(pack_id, icon_id, settings)` as separate arguments
+- **Wrong**: using `icon_preview()` as the general renderer in theme templates → **Right**: it's the admin preview helper and forces `size: 48` when settings are omitted
 - **Wrong**: hardcoding the SVG content from the source file → **Right**: bypasses settings, accessibility templating, and cache metadata
 
 ## See Also
 
-- [Settings & Rendering](settings-rendering.md)
-- [Menu Integration](menu.md)
+- [UI Patterns Integration](patterns.md)
+- [Field API Integration](field-api.md)
+- Reference: `\Drupal\Core\Template\IconsTwigExtension`
 - Reference: `src/Template/IconPreviewTwigExtension.php`

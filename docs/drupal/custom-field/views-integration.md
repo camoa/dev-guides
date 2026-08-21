@@ -1,6 +1,7 @@
 ---
-description: Querying, filtering, sorting, and displaying custom field data in Views with custom field, date, and entity reference plugins.
-tldr: "You need to query, filter, sort, or display custom field data in Views."
+description: "Querying, filtering, sorting, and displaying custom field data in Views with custom field, date, and entity reference plugins."
+tldr: "Custom Field ships native Views field/filter/sort/argument plugins so all columns query from one table with no relationships needed -- prefer them over entity query or Paragraphs-style joins."
+drupal_version: "11.x"
 ---
 
 # Views Integration
@@ -36,7 +37,7 @@ fields:
 
 **Sort plugin** (`CustomFieldDate`) -- sort by datetime columns
 
-**Date argument plugins** (7 total):
+**Date argument plugins** (6, all extending the shared `CustomFieldDate` base class):
 
 - `CustomFieldFullDate` -- full date (CCYYMMDD)
 - `CustomFieldYearDate` -- year (CCYY)

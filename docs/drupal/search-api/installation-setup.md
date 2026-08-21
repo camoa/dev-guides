@@ -41,6 +41,8 @@ composer require drupal/facets drupal/search_api_autocomplete
 drush en facets search_api_autocomplete
 ```
 
+Current stable releases are `search_api` 8.x-1.41 and `search_api_solr` 4.4.0. Pulling `search_api_solr` 4.4 also pulls `search_api ^1.41`, and 4.4.x requires Drupal 11.3 or newer.
+
 **Drush commands:**
 
 | Command | Purpose |
@@ -48,6 +50,7 @@ drush en facets search_api_autocomplete
 | `drush sapi-l` | List all indexes |
 | `drush sapi-i` | Index all items |
 | `drush sapi-i --batch-size=50` | Index with specific batch size |
+| `drush sapi-i --time-limit=300` | Index for max 5 minutes |
 | `drush sapi-r` | Mark all items for reindexing |
 | `drush sapi-c` | Clear all indexed data |
 | `drush sapi-rt` | Rebuild tracking information |

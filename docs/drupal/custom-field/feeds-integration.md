@@ -1,6 +1,7 @@
 ---
-description: Importing CSV and external data into custom field columns via Feeds module with 28 target handlers and mapping configuration.
-tldr: "You need to import CSV or other data sources into custom field columns via the Feeds module."
+description: "Importing CSV and external data into custom field columns via Feeds module -- one Feeds target dispatching to 23 per-column-type FeedsType plugins."
+tldr: "You need to import CSV or other data sources into custom field columns via the Feeds module. A single Feeds target delegates per sub-field to 23 FeedsType plugins, one per supported column type. Target format is field_name:column_name, not double-underscore."
+drupal_version: "11.x"
 ---
 
 # Feeds Import Integration
@@ -11,7 +12,7 @@ You need to import CSV or other data sources into custom field columns via the F
 
 ## Pattern
 
-**28 target handlers** for mapping CSV columns to custom field sub-fields.
+The module exposes a **single Feeds target** (`src/Feeds/Target/CustomField.php`) which delegates per sub-field to **23 FeedsType plugins** (`#[CustomFieldFeedsType]` in `src/Plugin/CustomField/FeedsType/`, discovered by `plugin.manager.custom_field_feeds`) -- one per supported column type. That is where a new source-value handler goes if you need one.
 
 **Import mapping** (via Feeds UI):
 
@@ -56,5 +57,6 @@ mappings:
 
 ## See Also
 
-- Reference: `/modules/contrib/custom_field/src/Feeds/Target/`
+- Reference: `/modules/contrib/custom_field/src/Plugin/CustomField/FeedsType/` -- the 23 per-column-type target plugins
+- Reference: `/modules/contrib/custom_field/src/Feeds/Target/CustomField.php` -- the single Feeds target that dispatches to them
 - Feeds module: https://www.drupal.org/project/feeds

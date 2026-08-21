@@ -1,19 +1,21 @@
 ---
 description: Layout Builder integration — exposing components as layout plugins with slot regions
 tldr: "Layout Builder integration — exposing components as layout plugins with slot regions"
-drupal_version: "10.3+ / 11"
+drupal_version: "11.x"
 ---
 
-## Layout Builder Integration
+# Layout Builder Integration
 
 **Sub-module:** `ui_patterns_layouts`
 **Dependencies:** `layout_discovery`, `ui_patterns`
 
-### What It Does
+## What It Does
 
-`ui_patterns_layouts` exposes every SDC component (that has slots) as a Drupal Layout plugin. Each component's slots become layout **regions**, and its props become configurable via the Layout Builder section configuration form.
+`ui_patterns_layouts` exposes every SDC component as a Drupal Layout plugin. Each component's slots become layout **regions**, and its props become configurable via the Layout Builder section configuration form.
 
-### How It Works
+There is no slot filter. `ComponentLayout::getDerivativeDefinitions()` iterates every negotiated component definition and creates a derivative unconditionally; `buildLayoutDefinition()` only calls `setRegions()`/`setDefaultRegion()` when the component declares at least one slot. A slotless component therefore still becomes a layout plugin — one with **zero regions**, so there is nowhere to place blocks and the section renders props only. That is rarely what you want: reach for `ui_patterns_blocks` instead.
+
+## How It Works
 
 `ComponentLayout` extends `LayoutDefault` and uses the `ComponentFormBuilderTrait`. A deriver (`ComponentLayout` deriver) creates one layout derivative per component, mapping slots to regions:
 
@@ -38,18 +40,18 @@ public function build(array $regions) {
 }
 ```
 
-### Configuration Form
+## Configuration Form
 
 When configuring a Layout Builder section using a UI Patterns layout, the form exposes:
 - **Props**: Each prop displays its source selector and widget
 - **Variant**: If the component has variants, a variant selector appears
 - **Slots are not configurable** in the layout form -- they are filled by blocks placed in regions
 
-### Entity Context
+## Entity Context
 
 The layout automatically resolves entity context through `ChainContextEntityResolver`, making entity field sources available for props.
 
-### Workflow
+## Workflow
 
 ```
 1. Enable ui_patterns_layouts
@@ -59,7 +61,7 @@ The layout automatically resolves entity context through `ChainContextEntityReso
 5. Props can pull from entity fields, manual input, or other sources
 ```
 
-### Config YAML
+## Config YAML
 
 When you enable Layout Builder on an entity display and add a UI Patterns layout section, the configuration is stored in the entity view display. After `drush config:export`, find it in `core.entity_view_display.{entity_type}.{bundle}.{view_mode}.yml`:
 
@@ -131,15 +133,15 @@ Key observations:
 - Components nested inside regions follow the block config schema (`block.settings.ui_patterns:*:*`).
 - The `layout_plugin.settings.*` schema adds the `ui_patterns` mapping to the standard layout settings.
 
-### Common Mistakes
+## Common Mistakes
 
 | Mistake | Why It Is Wrong |
 |---|---|
-| Expecting components without slots to appear as layouts | Layout plugins require at least one region. Components with only props and no slots will not be exposed as layouts. |
+| Expecting a slotless component to be a usable layout | The deriver exposes it as a layout anyway, but with zero regions — no block can be placed in it. Only slots become regions. |
 | Configuring slots in the layout form | Slots in layouts are filled by blocks in regions, not by the layout configuration form. Props are configured; slots receive blocks. |
 | Using `ckeditor_layouts` with UI Patterns layouts | Incompatible because `ckeditor_layouts` loads layouts through the theme manager, but SDC does not pass through the theme manager. |
 
-### See Also
+## See Also
 
 - Drupal Layout Builder Guide
 - [Blocks Integration](blocks-integration.md)

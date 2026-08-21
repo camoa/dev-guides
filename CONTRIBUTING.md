@@ -151,6 +151,28 @@ Each topic directory has an `index.md` routing table:
 - The partitioner updates this automatically after each run
 - Git history on the manifest provides full audit trail
 
+## Proposals
+
+`proposals/` holds briefs and design docs — the reasoning behind a change, written before the
+work. It is **gitignored**, so nothing in it has any history: the file is the only record.
+
+Every proposal carries a `Status:` line as its second or third line. Keep it true:
+
+```
+Status: proposal — not yet authored
+Status: in progress — checker implemented, backfill outstanding
+Status: DONE 2026-08-07 — merged as PR #33; recipes live at docs/process-recipes/php-cli/
+```
+
+**When the work lands, stamp the status DONE with the date and the commit or PR, and leave the
+file in place.** Do not delete it and do not move it. Because the directory has no git history,
+deleting a finished brief destroys the reasoning permanently — including the parts worth keeping
+most, such as findings that were investigated and turned out to be wrong. A future reader who
+cannot see why something was rejected will re-derive it.
+
+A stale status is worse than no status. Two briefs sat marked "not yet authored" months after
+shipping, which is how this rule came to be written down.
+
 ## Structure
 
 ```

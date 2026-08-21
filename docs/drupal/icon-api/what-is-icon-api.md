@@ -1,6 +1,6 @@
 ---
-description: Unified system for managing and rendering icons across Drupal 11.1+ sites with support for SVG, sprites, fonts, and remote sources
-tldr: "You need a unified, performant system for managing icons across your Drupal 11.1+ site rather than manually handling SVG files, icon fonts, or external resources in templates and CSS. Icon API provides the core infrastructure; the UI Icons…"
+description: "Unified system for managing and rendering icons across Drupal 11.1+ sites; core classes remain experimental/internal"
+tldr: "You need a unified, performant system for managing icons across Drupal 11.1+ rather than hand-rolling SVG, icon fonts, or external resources in templates and CSS; Icon API's PHP classes are marked experimental/internal, so treat *.icons.yml and icon() as the stable surface."
 drupal_version: "11.x"
 ---
 
@@ -10,13 +10,15 @@ drupal_version: "11.x"
 
 You need a unified, performant system for managing icons across your Drupal 11.1+ site rather than manually handling SVG files, icon fonts, or external resources in templates and CSS. Icon API provides the core infrastructure; the UI Icons contrib module adds field integration, widgets, and additional extractors.
 
+**Stability caveat**: every class in `core/lib/Drupal/Core/Theme/Icon/` is marked `@internal … This API is experimental` — including `IconPackManager`, whose docblock adds "is not meant for production use" (`core/lib/Drupal/Core/Theme/Icon/Plugin/IconPackManager.php:142-144`, still true in 11.3.11). The `*.icons.yml` format and the `icon()` Twig function are the stable-in-practice surface; the PHP classes can change in a patch release.
+
 ## Decision
 
 | If you need... | Use... | Why |
 |---|---|---|
-| Single SVG files in theme | SVG extractor (core) | Automatic discovery, template control, security sanitization |
-| Large icon sets (50+ icons) | SVG sprite extractor (core) | One HTTP request, smaller payload, faster rendering |
-| CDN/external icons | Path extractor (core) | Supports remote URLs, flexible formats (PNG, SVG, WebP) |
+| Single SVG files in theme | SVG extractor (core) | Automatic discovery, template control, SVG markup inlined into the page |
+| Large icon sets (50+ icons) | SVG sprite extractor (core) | Reads symbol IDs from one local sprite, renders `<use href>` |
+| CDN/external icons | Path extractor (core) | Only extractor that works with remote URLs; local files limited to `.svg`, `.png`, `.gif` |
 | Existing icon font | Font extractor (UI Icons contrib) | Leverages existing assets, codepoint metadata, CSS-controlled sizing/color |
 | Field/menu/CKEditor integration | UI Icons module | Field widget, menu icon picker, WYSIWYG embedding |
 | Programmatic icon access | IconPackManager service | Type-safe API, cache integration, plugin discovery |
@@ -40,23 +42,23 @@ my_icons:
     </svg>
 ```
 
-Use in templates with the `icon()` Twig function:
+Use in templates with the `icon()` Twig function. It takes **three separate arguments** — pack, icon, settings — never a combined `pack:id` string:
 
 ```twig
-{{ icon('my_theme:home', { size: 32, color: '#007bff' }) }}
+{{ icon('my_theme', 'home', { size: 32, color: '#007bff' }) }}
 ```
 
-**Core extractors** (Drupal 11.1+): `svg`, `svg_sprite`, `path`. **Contrib extractors** (UI Icons module): `font` for icon fonts with codepoint metadata, `iconify` for Iconify CDN integration.
+**Core extractors** (Drupal 11.1+): `svg`, `svg_sprite`, `path`. **Contrib extractors**: `font` (UI Icons module) for icon fonts, `iconify` (Iconify Icons module) for Iconify CDN integration.
 
-Reference: `/core/lib/Drupal/Core/Theme/Icon/` for API classes and interfaces.
+Reference: `/core/lib/Drupal/Core/Theme/Icon/` for API classes and interfaces; `/core/lib/Drupal/Core/Theme/Plugin/IconExtractor/` for the three core extractor plugins.
 
 ## Common Mistakes
 
-- **Wrong**: Manual SVG embedding in templates → **Right**: Use icon packs for discovery, caching, sanitization
-- **Wrong**: Hardcoded icon paths in templates → **Right**: Use `icon()` function for flexibility, cache participation
+- **Wrong**: Calling `icon('pack:id')` or `icon('pack:id', {…})` → **Right**: Fatal. `getIconRenderable(?string $pack_id, ?string $icon_id, ?array $settings = [])` has no default on `$icon_id`, and the file is `declare(strict_types=1)`; always pass three arguments
+- **Wrong**: Manual SVG embedding in templates → **Right**: Use icon packs for discovery, caching, and a single place to change markup
+- **Wrong**: Assuming the SVG extractor sanitizes → **Right**: It does not; it only refuses remote sources. Only ship SVG files you control
 - **Wrong**: One pack per icon → **Right**: Group related icons in packs for performance, organization
 - **Wrong**: Missing accessibility attributes → **Right**: Include `aria-hidden="true"` for decorative icons, `aria-label` for semantic
-- **Wrong**: Ignoring security on remote sources → **Right**: Use Path extractor with caution, validate URLs, prefer local sources
 
 ## See Also
 

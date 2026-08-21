@@ -1,5 +1,5 @@
 ---
-description: How Canvas handles design tokens, CSS custom properties, and Tailwind theming for both SDC and Code Components.
+description: "How Canvas handles design tokens, CSS custom properties, and Tailwind theming for both SDC and Code Components."
 tldr: "Use this when you need to understand how Canvas handles design tokens, CSS custom properties, and theming — both for the Canvas editor UI (where editors can adjust token values) and for component styling (how tokens flow into SDC and Code…"
 drupal_version: "11.x"
 ---

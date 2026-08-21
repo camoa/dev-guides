@@ -1,6 +1,6 @@
 ---
-description: Deciding scope, state, breakpoint, browser, and theme combinations for a visual regression test.
-tldr: Use the 5-axis cube (scope × state × breakpoint × browser × theme) and pick the smallest cross-section per test. Default to component-level scope, Chromium-only, 3 breakpoints for responsive components, and only capture states with distinct CSS.
+description: "Deciding scope, state, breakpoint, browser, and theme combinations for a visual regression test."
+tldr: "Use the 5-axis cube (scope × state × breakpoint × browser × theme); pick the smallest cross-section per test. Full-page baselines cost ~150 KB each — the real trade-off is coverage, not bytes: viewport-only can miss most of the page."
 ---
 
 # What to Capture
@@ -16,8 +16,12 @@ tldr: Use the 5-axis cube (scope × state × breakpoint × browser × theme) and
 | Approach | When | Notes |
 |----------|------|-------|
 | Component-level (`locator.screenshot()` or `clip`) | Default for shared atoms/molecules | Smaller PNG, less surface for false positives |
-| Above-the-fold full-page (`fullPage: false`) | Hero / landing-page header treatments | Captures one viewport-height of the page |
-| Full-page (`fullPage: true`) | Templates whose entire vertical rhythm matters | 5–15 MB PNGs; *will* find diffs you don't care about |
+| Above-the-fold full-page (`fullPage: false` — Playwright default) | Hero / landing-page header treatments | Captures one viewport-height of the page |
+| Full-page (`fullPage: true`) | Templates whose entire vertical rhythm matters (home, key landing) | ~150 KB per masked baseline; *will* find diffs you don't care about |
+
+**Full-page cost, measured, not assumed.** Full-page capture is routinely described as expensive; measured on a real Drupal site it isn't — fifteen masked full-page baselines across five surfaces and three viewports totalled 2.3 MB, about 150 KB each. PNG size tracks *photographic* content, not page height: flat type and background compress to almost nothing, so a photo-heavy landing page costs more, but megabytes per shot is not the default case.
+
+The real trade is coverage, not bytes. A viewport-only shot of one article on the same site covered **14% of the page**: the byline fell inside the baseline; an evidence callout, the closing question, and the footer fell outside it entirely. A refactor could rewrite all three and the gate would stay green. Decide which failure you'd rather have — a full-page baseline that goes red when editorial content moves, or a viewport baseline that stays green when the template below the fold breaks.
 
 ### Browser
 
@@ -44,7 +48,7 @@ For themes/dark-mode: capture each variant **only** for components whose tokens 
 
 ## Common Mistakes
 
-- **Wrong**: `fullPage: true` everywhere → **Right**: produces huge PNGs, captures editorial content, fails on every navigation tweak
+- **Wrong**: retreating to viewport-only capture because full-page PNGs seem expensive → **Right**: masked full-page baselines run ~150 KB each; the actual problem with unmasked `fullPage: true` is capturing editorial content, so fix it with masking and surface selection, not by dropping coverage
 - **Wrong**: one viewport baseline for responsive components → **Right**: "it looked fine in the screenshot. The desktop one. Mobile shipped broken"
 - **Wrong**: capturing all 7 button states → **Right**: only 3 of them have distinct CSS
 

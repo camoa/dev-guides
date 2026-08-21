@@ -1,5 +1,5 @@
 ---
-description: Architecture decision guide — when to choose Drupal Canvas page builder vs standard SDC theming, Layout Builder, or content types.
+description: "Architecture decision guide — when to choose Drupal Canvas page builder vs standard SDC theming, Layout Builder, or content types."
 tldr: "Use this when deciding whether to build a site with Drupal Canvas or with standard Drupal theming using SDC components, Layout Builder, or content types with Twig templates. Make this decision at project start."
 drupal_version: "11.x"
 ---
@@ -17,7 +17,6 @@ drupal_version: "11.x"
 | Non-technical content editors who need to build pages | Canvas | Visual drag-and-drop; no Drupal knowledge needed |
 | Marketing team managing landing pages | Canvas | Self-service page building; reduces developer bottleneck |
 | A small, fixed set of page layouts | Standard theming | Layout Builder or templates are simpler for fixed layouts |
-| Drupal 10 or earlier | Standard theming | Canvas requires Drupal ^11.2 |
 | Existing Paragraphs-heavy architecture | Standard theming (short-term) | Migration to Canvas is non-trivial |
 | Component-library governance requirement | Canvas | All pages built from approved SDC/Code Components enforces design system |
 | A headless/decoupled architecture | Evaluate carefully | Canvas decoupled is possible but complex |
@@ -34,7 +33,7 @@ drupal_version: "11.x"
 | Editor experience | Visual drag-and-drop with real-time preview | Drupal admin forms |
 | Component authoring | SDC or React Code Components | SDC (Twig only) |
 | Design enforcement | All pages must use defined components | Templates can be overridden; editors add free text |
-| Drupal version | ^11.2 required | Drupal 9+ |
+| Drupal version | ^11.3 required | Drupal 9+ |
 | Theming approach | Tailwind (Code) + CSS (SDC) | Bootstrap/any CSS framework |
 | Existing contrib module integration | Still maturing (many modules not Canvas-aware yet) | Full contrib ecosystem compatibility |
 

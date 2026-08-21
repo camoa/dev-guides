@@ -1,6 +1,6 @@
 ---
 description: Full end-to-end AI test generation loop — 10-step workflow, plan review checklist, code review checklist, and reviewer assignment guide.
-tldr: The full loop is 10 steps: state intent, gather inputs, invoke Planner, human reviews plan, commit plan, invoke Generator, human reviews code, run tests, commit on pass (or debug/Healer on fail), then CI runs with Healer on locator drift only. Three separate reviewers for plan, generated code, and every Healer patch — same-person review of all three defeats every gate.
+tldr: "The full loop is 10 steps: state intent, gather inputs, invoke Planner, human reviews plan, commit plan, invoke Generator, human reviews code, run tests, commit on pass (or debug/Healer on fail), then CI runs with Healer on locator drift only. Three separate reviewers for plan, generated code, and every Healer patch — same-person review of all three defeats every gate."
 ---
 
 # End-to-End Workflow

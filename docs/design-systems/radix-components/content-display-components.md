@@ -1,5 +1,5 @@
 ---
-description: Components for displaying Drupal content entities, fields, media, and user profiles
+description: "Components for displaying Drupal content entities, fields, media, and user profiles"
 tldr: "Components for displaying Drupal content entities, fields, media, and user profiles. Use these when rendering nodes, blocks, taxonomy terms, comments, media items, images, or user profiles in various view modes."
 ---
 
@@ -9,11 +9,9 @@ tldr: "Components for displaying Drupal content entities, fields, media, and use
 
 > Components for displaying Drupal content entities, fields, media, and user profiles. Use these when rendering nodes, blocks, taxonomy terms, comments, media items, images, or user profiles in various view modes.
 
-Components for displaying Drupal content entities, fields, media, and user profiles. Use these when rendering nodes, blocks, taxonomy terms, comments, media items, images, or user profiles in various view modes.
+## Items
 
-### Items
-
-#### node
+### node
 **Description:** A component template for rendering node entities in Drupal.
 **Status:** experimental
 
@@ -32,8 +30,8 @@ Components for displaying Drupal content entities, fields, media, and user profi
 | `metadata` | string | | Metadata associated with the node |
 | `label` | string | | Label of the node |
 | `url` | string\|null | | URL to the node |
-| `node_classes` | array | | Classes added to the node container |
-| `node_content_classes` | array | | Classes added to the node content area |
+| `node_classes` | array | | **Dead — not honoured by `node.twig`.** Line 33 rebuilds `node_classes` from the node entity before use. Use `node_utility_classes`. |
+| `node_content_classes` | array | | **Dead — not honoured by `node.twig`.** Line 53 rebuilds `node_content_classes` before use. Use `node_content_utility_classes`. |
 | `node_utility_classes` | array | | Bootstrap utility classes for the node |
 | `author_utility_classes` | array | | Bootstrap utility classes for the author |
 | `node_content_utility_classes` | array | | Bootstrap utility classes for the node content |
@@ -68,7 +66,7 @@ Components for displaying Drupal content entities, fields, media, and user profi
 - `display_submitted` must be true for author/date info to appear
 - `node_utility_classes` and `node_content_utility_classes` serve different purposes; use the former for outer spacing/layout, latter for content styling
 
-#### block
+### block
 **Description:** Customizable block component for displaying various types of content with configurable layout, label, and styling options.
 **Status:** experimental
 
@@ -77,7 +75,7 @@ Components for displaying Drupal content entities, fields, media, and user profi
 |------|------|---------|-------|
 | `id` | string | | ID |
 | `bundle` | string | | Bundle |
-| `layout` | string | default | Determines the layout of the block |
+| `layout` | string | none | Determines the layout of the block, emitted as `.layout--{layout}`. The YAML says `default`, but `block.twig` sets no fallback — omit it and no layout class is emitted |
 | `plugin_id` | string | | The ID of the block implementation |
 | `label` | string\|null\|boolean | | The configured label of the block if visible |
 | `title_prefix` | array | | Title prefix |
@@ -87,8 +85,8 @@ Components for displaying Drupal content entities, fields, media, and user profi
 | `title_attributes` | Drupal\Core\Template\Attribute | | HTML attributes for the main title tag |
 | `content_attributes` | Drupal\Core\Template\Attribute | | HTML attributes for the main content tag |
 | `block_html_tag` | string | | The HTML tag for the block |
-| `block_classes` | array | | Classes to be added to the block |
-| `block_content_classes` | array | | Classes to be added to the block content area |
+| `block_classes` | array | | **Dead — not honoured by `block.twig`.** Line 37 rebuilds `block_classes` from the plugin/configuration before use. Use `block_utility_classes`. |
+| `block_content_classes` | array | | **Dead — not honoured by `block.twig`.** Line 48 rebuilds `block_content_classes` before use. Use `block_content_utility_classes`. |
 | `block_utility_classes` | array | | Bootstrap utility classes for the block |
 | `block_content_utility_classes` | array | | Bootstrap utility classes for the block content area |
 
@@ -117,14 +115,18 @@ Components for displaying Drupal content entities, fields, media, and user profi
 - Separate utility class arrays for block wrapper vs. content allow granular styling control
 - `block_html_tag` defaults to semantic tags based on context; override for specific HTML structure
 
-#### field
+### field
 **Description:** Field container divisions with attributes.
 **Status:** experimental
 
 **Props:**
 | Prop | Type | Default | Notes |
 |------|------|---------|-------|
-| `label_display` | string | | Display the label of the field |
+| `label_display` | string | | Display setting for the label. `visually_hidden` adds `.visually-hidden` to the label, `inline` adds `.d-flex` to the wrapper (`field.twig:48,62`) |
+| `label_hidden` | boolean | false | **Branches the whole template** (`field.twig:66`): when true no label is printed and the markup collapses. Absent from the YAML |
+| `multiple` | boolean | false | Picks `.field--items` over `.field--item` and adds the `.field__items` wrapper (`field.twig:49,67,81`). Absent from the YAML |
+| `label` | string | | The label text (`field.twig:80`). Absent from the YAML |
+| `items` | array | | The field items, each `{ attributes, content }` — the only source of output (`field.twig:69,74,85`). Absent from the YAML |
 | `field_utility_classes` | array | [] | Bootstrap utility classes for the field wrapper |
 | `field_title_utility_classes` | array | [] | Bootstrap utility classes for the field title |
 | `field_item_utility_classes` | array | [] | Bootstrap utility classes for each field item |
@@ -152,15 +154,16 @@ No slots defined.
 - Use theme hook suggestions (e.g., `field--node--field-foo--article.html.twig`) for field-specific overrides
 - `field_item_utility_classes` applies to each item wrapper; useful for multi-value fields with badges or grid layouts
 - Access items via `content.field_name['#items']` in preprocessors; in templates use `items` variable
+- `field.twig` calls `.addClass()` on both `attributes` and `title_attributes` with no `?:` fallback, so a standalone include must supply `title_attributes` whenever `label_hidden` is falsy
 
-#### field-comment
+### field-comment
 **Description:** The structure and necessary styling for displaying a field comment section.
 **Status:** experimental
 
 **Props:**
 | Prop | Type | Default | Notes |
 |------|------|---------|-------|
-| `field_comment_attributes` | Drupal\Core\Template\Attribute | | Attributes for the field comment section |
+| `field_comment_attributes` | Drupal\Core\Template\Attribute | | **Dead — not honoured by `field-comment.twig`.** Line 7 overwrites it with `attributes ?: create_attribute()`. Pass `attributes` instead. |
 | `title_prefix` | array | | Prefix for the title of the field comment section |
 | `title_suffix` | array | | Suffix for the title of the field comment section |
 | `comments` | string | | The comments for the field |
@@ -175,7 +178,7 @@ No slots defined.
   include 'radix:field-comment' with {
     comments: content.comment,
     comment_form: content.comment_form,
-    field_comment_attributes: create_attribute().addClass('mt-4')
+    attributes: create_attribute().addClass('mt-4')
   }
 %}
 ```
@@ -184,7 +187,7 @@ No slots defined.
 - Automatically renders both comments list and form; no need to manually include form
 - Comment threading handled by Drupal core; component focuses on styling wrapper
 
-#### comment
+### comment
 **Description:** The structure and necessary styling for displaying a comment.
 **Status:** experimental
 
@@ -193,7 +196,7 @@ No slots defined.
 |------|------|---------|-------|
 | `attributes` | Drupal\Core\Template\Attribute | | HTML attributes for the comment wrapper |
 | `content_attributes` | Drupal\Core\Template\Attribute | | HTML attributes for the comment content |
-| `classes` | array | | Comment CSS Classes |
+| `classes` | array | | **Dead — not honoured by `comment.twig`.** Line 7 sets `classes` unconditionally to a fixed list. There is no utility-class prop either; override the component to add classes. |
 | `new_indicator_timestamp` | integer | | New Indicator Timestamp |
 | `user_picture` | string | | User picture URL |
 | `user_picture_alt` | string | | User Picture Alt Text |
@@ -227,18 +230,18 @@ No slots defined.
 - `new_indicator_timestamp` used by Drupal core to highlight new comments; component doesn't style this automatically
 - Threading is managed via `parent` prop; ensure preprocessing handles nested comments correctly
 
-#### media
+### media
 **Description:** A theme override for a media item display in Drupal. This includes configurations for media type, published status, and view mode.
 **Status:** experimental
 
 **Props:**
 | Prop | Type | Default | Notes |
 |------|------|---------|-------|
-| `media_type` | string | | The bundle classification of the media object (auto-generated, cleaned for class) |
-| `is_published` | boolean | | Flag indicating whether media is published; adds "media--unpublished" class when false |
+| `media_type` | string | | **Dead.** `media.twig:18` builds `media--type-<bundle>` from `media.bundle()` on the entity, never from this prop |
+| `is_published` | boolean | | **Dead.** `media.twig:19` calls `media.isPublished()` on the entity, never this prop |
 | `media_utility_classes` | array | | Bootstrap utility classes for the media item |
 | `view_mode` | string | | The view mode classification (cleansed for class addition) |
-| `media_attributes` | Drupal\Core\Template\Attribute | | Additional HTML attributes for the media item |
+| `media_attributes` | Drupal\Core\Template\Attribute | | **Dead — not honoured by `media.twig`.** Line 24 overwrites it with `attributes ?: create_attribute()`. Pass `attributes` instead. |
 
 **Slots:**
 | Slot | Description |
@@ -259,11 +262,11 @@ No slots defined.
 ```
 
 **Gotchas:**
-- `media_type` automatically generates classes like `media--image` or `media--video`; don't override manually
+- The bundle class is `media--type-<bundle>` (e.g. `media--type-image`), and it comes from the `media` entity via `media.bundle()`, not from `media_type`. Both `media_type` and `is_published` are inert — the component needs the `media` object itself
 - Use `media_utility_classes` with Bootstrap ratio classes for responsive video embeds
-- `is_published` check is preprocessed; unpublished media gets distinct styling class automatically
+- `.media--unpublished` is added from `media.isPublished()` on the entity, so it only appears when a real media object is in context
 
-#### image
+### image
 **Description:** A visually versatile image component with configurable attributes such as alignment, responsiveness, thumbnail style, and rounded edges.
 **Status:** experimental
 
@@ -304,7 +307,7 @@ No slots defined.
 - `loading: 'lazy'` defers loading until image approaches viewport; improves performance but may cause layout shift
 - Don't combine `thumbnails: true` with `rounded: true`; use one or the other
 
-#### figure
+### figure
 **Description:** Figure component with alignment options
 **Status:** experimental
 
@@ -313,7 +316,7 @@ No slots defined.
 |------|------|---------|-------|
 | `figure_attributes` | Drupal\Core\Template\Attribute | | HTML attributes for the figure element |
 | `figure_utility_classes` | array | | Additional classes for the figure component |
-| `align` | string | | Alignment of the figure: `left`, `right`, or `center` |
+| `align` | string | | Emits `text-` ~ align (`figure.twig:11`). Only `center` produces a live class: `left` / `right` yield `.text-left` / `.text-right`, removed in Bootstrap 5 in favour of `.text-start` / `.text-end`. For those two, use `figure_utility_classes` instead |
 | `image` | string | | The image of the figure component |
 | `caption` | string | | The caption of the figure component |
 
@@ -337,19 +340,19 @@ No slots defined.
 
 **Gotchas:**
 - Use `embed` instead of `include` to populate the `image` block; allows full control over image markup
-- `align` uses float/margin utilities; may require clearfix on parent container
+- `align` uses no float or margin utilities and needs no clearfix — `figure.twig:11` only concatenates `text-` ~ align. `align: 'left'` and `align: 'right'` therefore emit the Bootstrap 4 classes `.text-left` / `.text-right`, which do not exist in Bootstrap 5.3; pass `figure_utility_classes: ['text-start']` or `['text-end']` instead. Upstream Radix defect, not a doc error
 - Caption automatically uses `<figcaption>` tag with proper semantic HTML
 
-#### heading
+### heading
 **Description:** All HTML headings, `<h1>` through `<h6>`, are available.
 **Status:** experimental
 
 **Props:**
 | Prop | Type | Default | Notes |
 |------|------|---------|-------|
-| `heading_html_tag` | string | h1 | HTML header tag: `div`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6` |
+| `heading_html_tag` | string | h2 | HTML header tag: `div`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`. Both the YAML and Radix's own docblock claim `h1`; `heading.twig` sets `h2` |
 | `display` | string | | Display heading style: `display-1`, `display-2`, `display-3`, `display-4`, `display-5`, `display-6` |
-| `heading_classes` | array | [] | Classes to add to the heading (merges display and utility classes) |
+| `heading_classes` | array | [] | **Dead — not honoured by `heading.twig`.** Line 27 recomputes `heading_classes` as `display` merged with `heading_utility_classes`. Use `heading_utility_classes` (and `display`). |
 | `heading_utility_classes` | array | [] | Bootstrap utility or custom CSS classes |
 | `heading_link_utility_classes` | array | [] | Bootstrap utility classes for the heading link |
 | `title_link` | string\|boolean | | Link URL for the title |
@@ -379,7 +382,7 @@ No slots defined.
 - When `title_link` is set, entire heading becomes a link; use `heading_link_utility_classes` to style
 - Use `heading_html_tag: 'div'` when semantic heading isn't appropriate but heading style is needed
 
-#### taxonomy
+### taxonomy
 **Description:** A component template for rendering taxonomy entities in Drupal.
 **Status:** experimental
 
@@ -387,14 +390,14 @@ No slots defined.
 | Prop | Type | Default | Notes |
 |------|------|---------|-------|
 | `title_attributes` | Drupal\Core\Template\Attribute | | Custom HTML attributes for the taxonomy title |
-| `taxonomy_attributes` | Drupal\Core\Template\Attribute | | Custom HTML attributes for the taxonomy container |
-| `content_attributes` | Drupal\Core\Template\Attribute | | Custom HTML attributes for the taxonomy content area |
+| `taxonomy_attributes` | Drupal\Core\Template\Attribute | | **Dead — not honoured by `taxonomy.twig`.** Line 46 overwrites it with `attributes ?: create_attribute()`. Pass `attributes` instead. |
+| `content_attributes` | Drupal\Core\Template\Attribute | | **Dead — not honoured by `taxonomy.twig`.** The content wrapper uses `taxonomy_content_attributes`, which line 47 unconditionally sets to `create_attribute()`. Use `taxonomy_content_utility_classes` for classes. |
 | `title_prefix` | array | | Additional output displayed before the main title tag |
 | `title_suffix` | array | | Additional output displayed after the main title tag |
 | `name` | string | | Name of the taxonomy term |
 | `url` | string | | URL to the taxonomy term |
-| `taxonomy_classes` | array | | Classes added to the taxonomy container |
-| `taxonomy_content_classes` | array | | Classes added to the taxonomy content area |
+| `taxonomy_classes` | array | | **Dead — not honoured by `taxonomy.twig`.** Line 29 rebuilds `taxonomy_classes` from the term entity before use. Use `taxonomy_utility_classes`. |
+| `taxonomy_content_classes` | array | | **Dead — not honoured by `taxonomy.twig`.** Line 41 rebuilds `taxonomy_content_classes` before use. Use `taxonomy_content_utility_classes`. |
 | `taxonomy_utility_classes` | array | | Bootstrap utility classes for the taxonomy |
 | `taxonomy_content_utility_classes` | array | | Bootstrap utility classes for the taxonomy content |
 | `page` | boolean | | Flag for the full page state |
@@ -427,7 +430,7 @@ No slots defined.
 - `heading_html_tag` should match page hierarchy; default may not be appropriate for all contexts
 - Term display differs significantly between `page: true` (term page) and `page: false` (term reference)
 
-#### user
+### user
 **Description:** This schema defines properties for rendering a user profile.
 **Status:** experimental
 
@@ -459,7 +462,7 @@ No slots defined.
 - User picture/avatar typically rendered as a field within `content`, not separate prop
 - View modes must be defined in User entity display settings to work properly
 
-### Common Mistakes
+## Common Mistakes
 
 - **Confusing utility class arrays**: Components often have separate utility class props for wrapper vs. content (e.g., `node_utility_classes` vs. `node_content_utility_classes`). Use wrapper classes for spacing/layout, content classes for internal styling.
 - **Ignoring theme hook suggestions**: Many components support granular template overrides (e.g., `field--node--field-foo.html.twig`). Don't override the base component when a specific suggestion would suffice.
@@ -469,10 +472,9 @@ No slots defined.
 - **Forgetting accessibility**: Image `alt` attributes are required for accessibility; media components should always include descriptive alt text.
 - **Overriding preprocessing unnecessarily**: Many layout customizations can be achieved with utility class props; don't write custom preprocess functions when props exist.
 
-### See Also
+## See Also
 
 - **Forms & Inputs**: form, form-element, input, textarea, select, radios
 - **Layout Components**: card, list-group, table
 - **Bootstrap Documentation**: [Typography](https://getbootstrap.com/docs/5.3/content/typography/), [Images](https://getbootstrap.com/docs/5.3/content/images/), [Figures](https://getbootstrap.com/docs/5.3/content/figures/)
 - **Drupal Theming**: [Template suggestions](https://www.drupal.org/docs/theming-drupal/twig-in-drupal/working-with-twig-templates#s-theme-hook-suggestions), [Preprocess functions](https://www.drupal.org/docs/theming-drupal/twig-in-drupal/drupal-10-twig-template-folder-structure-and-namespace#s-creating-custom-preprocess-hooks)
-

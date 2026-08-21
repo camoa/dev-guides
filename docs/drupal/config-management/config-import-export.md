@@ -1,6 +1,7 @@
 ---
-description: Export config from active storage to sync directory and import config from sync to active using Drush commands.
+description: "Export config from active storage to sync directory and import config from sync to active using Drush commands."
 tldr: "When you need to export config from active storage to sync directory, or import config from sync directory to active storage using Drush commands."
+drupal_version: "11.x"
 ---
 
 # Config Import/Export (Drush)

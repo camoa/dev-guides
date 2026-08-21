@@ -1,6 +1,6 @@
 ---
-description: Facets built-in widgets — links, checkbox, dropdown, array — configuration options, data attributes, and rendering
-tldr: "Use this guide when choosing how facet results should be rendered to the user."
+description: "Built-in facet widgets — links, checkbox, dropdown, array — and their configuration"
+tldr: "Use this guide when choosing how facet results should be rendered to the user. Links is the default; checkbox extends it visually; dropdown suits space-constrained single-select; array returns raw PHP for REST."
 drupal_version: "11.x"
 ---
 
@@ -8,9 +8,11 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when choosing how facet results should be rendered to the user.
+> When choosing how facet results should be rendered to the user.
 
 ## Decision
+
+**Built-in widgets:**
 
 | ID | Class | Template Suffix | Features | Best For |
 |---|---|---|---|---|
@@ -32,8 +34,9 @@ drupal_version: "11.x"
 
 ## Pattern
 
+All widgets extend `WidgetPluginBase`:
+
 ```php
-// Build the facet render array
 public function build(FacetInterface $facet): array {
   // Returns render array with:
   // - #theme: facets_item_list__WIDGET_TYPE
@@ -44,7 +47,7 @@ public function build(FacetInterface $facet): array {
 }
 ```
 
-**Data attributes on widget container:**
+Data attributes on the widget container:
 
 | Attribute | Value | Purpose |
 |---|---|---|
@@ -54,12 +57,12 @@ public function build(FacetInterface $facet): array {
 
 ## Common Mistakes
 
-- **Wrong**: Expecting CheckboxWidget to use HTML form checkboxes natively → **Right**: `CheckboxWidget` extends `LinksWidget`. It renders as links with checkbox styling. Actual form checkboxes require JavaScript.
-- **Wrong**: Using dropdown with Views AJAX without verifying JS behavior → **Right**: The dropdown widget uses JS to trigger navigation on change. With AJAX views, this works via the `dropdown-widget.js` behavior.
-- **Wrong**: Setting `soft_limit: 0` expecting it to be hidden → **Right**: Zero means "show all items." Set a positive number to enable show more/less.
+- **Wrong**: Expecting real `<input type="checkbox">` elements from CheckboxWidget → **Right**: `CheckboxWidget` extends `LinksWidget`. It renders as links with checkbox styling; actual form checkboxes require JavaScript.
+- **Wrong**: Expecting the dropdown widget to work without JS → **Right**: The dropdown widget uses JS to trigger navigation on change. With AJAX views, this works via the `dropdown-widget.js` behavior.
+- **Wrong**: Setting soft limit to 0 expecting "show N items" → **Right**: Zero means "show all items." Set a positive number to enable show more/less.
 
 ## See Also
 
 - [Range Slider Widget](range-slider.md) — for numeric ranges
 - [Theming & Templates](theming-templates.md) — customizing widget output
-- Reference: `web/modules/contrib/facets/src/Plugin/facets/widget/`
+- Reference: `src/Plugin/facets/widget/`

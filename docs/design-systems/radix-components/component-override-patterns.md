@@ -1,5 +1,5 @@
 ---
-description: Modifying Radix base component for sub-theme
+description: "Modifying Radix base component for sub-theme"
 tldr: "Modifying Radix base component for sub-theme."
 ---
 
