@@ -151,6 +151,22 @@ Each topic directory has an `index.md` routing table:
 - The partitioner updates this automatically after each run
 - Git history on the manifest provides full audit trail
 
+### Renaming a partition breaks published URLs
+
+A partition slug becomes a published URL. `llms.txt` links only topic indexes, so a
+rename is invisible there and the build stays green — but anyone holding a direct
+link gets a 404, including a cached navigator lookup.
+
+When a slug changes, add the old path to `redirect_maps` in `mkdocs.yml`. Find what
+moved with:
+
+```
+git diff --name-status -M <before>..<after> -- docs | grep -E '^(D|R)'
+```
+
+Splitting one guide into several is the common case — pick the successor a reader
+following the old link would most expect, and redirect there.
+
 ## Proposals
 
 `proposals/` holds briefs and design docs — the reasoning behind a change, written before the

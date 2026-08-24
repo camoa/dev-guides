@@ -11,6 +11,14 @@ theme:
 plugins:
   - search
   - awesome-nav
+  # Published guide URLs are a contract: llms.txt links only topic indexes, but
+  # readers, bookmarks and any navigator cache hold direct guide URLs. When a
+  # partition slug changes, map the old path here rather than letting it 404.
+  - redirects:
+      redirect_maps:
+        drupal/custom-field/column-types.md: drupal/custom-field/column-types-text.md
+        drupal/custom-field/best-practices.md: drupal/custom-field/best-practices-performance.md
+        drupal/custom-field/widget-plugins.md: drupal/custom-field/widget-plugins-overview.md
   - llmstxt-md:
       enable_copy_button: false
       enable_llms_txt: false

@@ -15,3 +15,8 @@ PyYAML>=6.0
 # .github/workflows/pr-check.yml installs only this file and then needs a
 # runner to invoke.
 pytest>=8.0
+
+# Preserves published guide URLs when a partition slug changes. A renamed guide
+# is invisible to llms.txt (which links only topic indexes) but 404s for anyone
+# holding a direct link.
+mkdocs-redirects>=1.2
