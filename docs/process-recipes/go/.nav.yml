@@ -1,0 +1,6 @@
+nav:
+- Go prior-art research: prior-art.md
+- Go architecture: architecture.md
+- Go standards and tests: standards-and-tests.md
+- Go review checks: checks.md
+append_unmatched: true
