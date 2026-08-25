@@ -155,7 +155,7 @@ This recipe ships no executable verifier of its own — the checks above are the
 
 ## Change-impact globs
 
-The plugin's change-impact classifier ships a framework-neutral floor (stylesheet / plain-script / markup extensions) and asks the active framework's review recipe for the stack's own file types. This section is that declaration for Drupal: it maps each Drupal source file type to the review gates a change to it could justify — `visual_regression` (rendered output could change), `e2e` (behavior could change), or both. The plugin reconstructs this list on the fly each review run and unions it onto the neutral floor; nothing here is persisted as a project-local file a builder could edit to drop a gate.
+The plugin's change-impact classifier ships a framework-neutral floor (stylesheet / plain-script / markup extensions) and asks the active framework's review recipe for the stack's own file types. This section is that declaration for Drupal: it maps each Drupal source file type to the review gates a change to it could justify — `visual_regression` (rendered output could change), `e2e` (behavior could change), or both. The plugin reconstructs this list on the fly each review run and unions it onto the neutral floor; nothing here is persisted as a project-local file a builder could edit to drop a gate. **Both YAML spellings are declared.** Drupal core is `.yml` throughout, so a `.yaml` file is rarely a Drupal file — but the classifier runs over the whole diff, and a Drupal repository carries plenty of non-Drupal YAML. Neither the neutral floor nor this list previously matched the long extension, so those files classified as "no rule matched". Do not remove the `.yaml` rule for looking redundant.
 
 | Glob | Gates | Why |
 |---|---|---|
@@ -169,6 +169,7 @@ The plugin's change-impact classifier ships a framework-neutral floor (styleshee
 | `**/*.module` | `e2e`, `visual_regression` | Server-side module code — behavioral, and routinely carries `hook_preprocess_HOOK` / `hook_theme` / render-altering hooks that change output. |
 | `**/*.info.yml` | `e2e` | Module/theme info — dependency and configuration wiring. |
 | `**/*.yml` | `e2e`, `visual_regression` | Config / routing / services — broad blast radius. |
+| `**/*.yaml` | `e2e`, `visual_regression` | Same gates as `**/*.yml`. Drupal's own convention is the short extension, but the classifier reads the **whole diff**, not just the Drupal subtree — `.ddev/config.yaml`, `docker-compose.yaml`, and CI configs are routinely present and would otherwise match no rule at any layer. Symfony's YAML loader accepts either spelling. |
 
 Machine-readable form the plugin lifts directly into `--rules-from`:
 
@@ -184,7 +185,8 @@ Machine-readable form the plugin lifts directly into `--rules-from`:
     { "glob": "**/*.theme",    "gates": ["e2e", "visual_regression"] },
     { "glob": "**/*.module",   "gates": ["e2e", "visual_regression"] },
     { "glob": "**/*.info.yml", "gates": ["e2e"] },
-    { "glob": "**/*.yml",      "gates": ["e2e", "visual_regression"] }
+    { "glob": "**/*.yml",      "gates": ["e2e", "visual_regression"] },
+    { "glob": "**/*.yaml",     "gates": ["e2e", "visual_regression"] }
   ]
 }
 ```
