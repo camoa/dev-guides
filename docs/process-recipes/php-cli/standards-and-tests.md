@@ -50,6 +50,14 @@ The plugin owns the generic mechanism — when the implement phase runs, the tes
 - The code-quality-tools plugin is available for linter execution (`phpcs`, `phpstan` at the project's declared level); this recipe does not bundle or re-author those runners.
 - The plugin's generic implement phase is present: the test-first gate, the oracle-tamper guard, and the task record. This recipe supplies the PHP-CLI-specific standards-and-tests method; it does not recreate the gate.
 
+The runner bullet is the one the engine can check, so it is also declared in machine-readable form below. The rest stay prose: they are design-artifact and plugin-availability conditions with no argv-safe filesystem probe.
+
+preconditions:
+  - id: test-runner
+    what: a PHPUnit runner whose failure the RED step can observe
+    check: test -x vendor/bin/phpunit
+    owner: code-quality-tools:setup
+
 ## Input contract
 
 Source-agnostic, supplied by the caller (the orchestrator at the implement phase, or a human operator).

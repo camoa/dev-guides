@@ -57,6 +57,18 @@ The plugin owns the generic mechanism — when the implement phase runs, the tes
 - Where the project uses `golangci-lint`, its config is committed at the module root, so the same rule set runs locally and in review.
 - The plugin's generic implement phase is present: the test-first gate, the oracle-tamper guard, and the task record. This recipe supplies the Go-specific standards-and-tests method; it does not recreate the gate.
 
+The first bullet splits into two checkable claims, declared in machine-readable form below.
+
+One honest limitation worth recording rather than hiding. `go version` is both the check and its own subject, so when no Go toolchain is installed it exits 127 and the engine records `unknown / check_command_not_found` — the rule that a missing checker says nothing about the precondition, applied to a case where the missing checker *is* the finding. That is weaker than `unmet`, but it is not `met`, so the phase still does not proceed as though a toolchain were present. The module-root check has no such ambiguity: `test` is always available, so it returns a real answer either way.
+
+preconditions:
+  - id: go-module
+    what: a go.mod at the module root, so the go command resolves packages at all
+    check: test -f go.mod
+  - id: go-toolchain
+    what: a Go toolchain the go command can resolve, so gofmt / go vet / go test run without setup
+    check: go version
+
 ## Input contract
 
 Source-agnostic, supplied by the caller (the orchestrator at the implement phase, or a human operator).

@@ -57,6 +57,14 @@ The plugin owns the generic mechanism — when the implementation phase runs, th
 - The code-quality-tools plugin is available for linter execution (`phpcs --standard=Drupal,DrupalPractice`, `phpstan`); this recipe does not bundle or re-author those runners.
 - The plugin's generic implementation phase is present: the test-first gate and the task record. This recipe supplies the Drupal-specific standards-and-tests method; it does not recreate the gate.
 
+The first bullet is the one the engine can check, so it is also declared in machine-readable form below. The rest stay prose: they are design-artifact and plugin-availability conditions with no argv-safe filesystem probe.
+
+preconditions:
+  - id: test-runner
+    what: a PHPUnit runner whose failure the RED step can observe
+    check: test -x vendor/bin/phpunit
+    owner: code-quality-tools:setup
+
 ## Input contract
 
 Source-agnostic, supplied by the caller (the orchestrator at the implementation phase, or a human operator).

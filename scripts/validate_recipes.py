@@ -223,11 +223,23 @@ def validate_recipe(path: Path, is_process: bool = False) -> list[str]:
                 f"present, must equal `capability` ({meta.get('capability')!r}); "
                 f"found {atp!r}"
             )
-    elif meta.get("recipe_class") == "process":
-        errors.append(
-            "`recipe_class: process` is only valid under docs/process-recipes/; "
-            "move this file there so it routes to the process index, not the task index"
-        )
+    else:
+        # Task recipes MAY optionally declare `framework` to override the
+        # path-derived routing token generate_recipes.py emits on the index line
+        # (`[<capability> framework=<token>]`). Optional — checked only when
+        # present, so every existing recipe stays valid — but when present it must
+        # be token-shaped, or the emitted line stops parsing for every consumer.
+        fw = meta.get("framework")
+        if fw is not None and not (isinstance(fw, str) and TOKEN_RE.match(fw)):
+            errors.append(
+                f"`framework` must be a single token matching {TOKEN_RE.pattern} "
+                f"(lowercase letters, digits, hyphens); found {fw!r}"
+            )
+        if meta.get("recipe_class") == "process":
+            errors.append(
+                "`recipe_class: process` is only valid under docs/process-recipes/; "
+                "move this file there so it routes to the process index, not the task index"
+            )
 
     return errors
 
