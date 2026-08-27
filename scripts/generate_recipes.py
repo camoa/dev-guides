@@ -44,6 +44,11 @@ HEADER = (
     "capability below, then fetch the recipe (raw markdown via curl, never "
     "WebFetch) — it names the guides it needs. This index is separate from "
     "llms.txt (the guides index).\n>\n"
+    "> Each line: `- <name> [<capability> framework=<framework>] (sha:XXXXXXXX): "
+    "<when-to-use> — <site-url>`. The `framework` token is always present: a "
+    "stack-neutral recipe carries `framework=none` rather than omitting the "
+    "field, so \"this catalog has no recipes for X\" is answerable by lookup "
+    "instead of by reading prose.\n>\n"
     "> Each line carries `(sha:XXXXXXXX)` — a per-recipe content hash. Cache the "
     "recipe body once on first fetch keyed by name; on later need, re-fetch only "
     "if the line's sha differs from your cached sha. The body need not be "
@@ -70,6 +75,47 @@ def domain_of(path: Path) -> str:
     rel = path.relative_to(RECIPES_DIR)
     key = rel.parts[0] if len(rel.parts) > 1 else "general"
     return DOMAIN_MAP.get(key, key.title())
+
+
+# `framework` is a routing token emitted into the index line as
+# `framework=<token>`, matching the shape process-recipes.txt already uses. It
+# must be a single kebab token with no spaces or brackets so the line stays
+# deterministically parseable.
+#
+# This is deliberately NOT domain_of(), which returns a DISPLAY name — "Next.js"
+# carries a dot and "Design Systems" a space, either of which would corrupt the
+# bracket token. The path slug (the directory name) is already token-shaped.
+FRAMEWORK_TOKEN_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+
+# Emitted for a recipe that lives directly under docs/agentic-recipes/ with no
+# domain directory. A stack-neutral recipe gets an explicit token rather than no
+# token at all: an omitted field would leave a caller unable to distinguish a
+# neutral recipe from one whose generator predates this change, which is the same
+# "cannot tell" ambiguity this field exists to remove.
+NEUTRAL_FRAMEWORK = "none"
+
+
+def framework_of(path: Path, meta: dict) -> str:
+    """Routing token for a recipe: explicit frontmatter override, else path slug.
+
+    `framework:` in the frontmatter wins, so a recipe filed under one domain that
+    genuinely serves another can say so — the same optional key process recipes
+    require. An override that is not token-shaped is refused with a warning and
+    the path slug is used, rather than emitting a line no caller can parse.
+    """
+    declared = meta.get("framework")
+    if isinstance(declared, str) and declared.strip():
+        token = declared.strip()
+        if FRAMEWORK_TOKEN_RE.match(token):
+            return token
+        print(
+            f"  WARNING: {path.relative_to(PROJECT_ROOT)} declares "
+            f"framework: {declared!r}, which is not a single kebab token "
+            f"({FRAMEWORK_TOKEN_RE.pattern}) — falling back to the path slug",
+            file=sys.stderr,
+        )
+    rel = path.relative_to(RECIPES_DIR)
+    return rel.parts[0] if len(rel.parts) > 1 else NEUTRAL_FRAMEWORK
 
 
 def recipe_url(path: Path) -> str:
@@ -110,11 +156,15 @@ def collect_recipes() -> list[dict]:
                 "capability": capability,
                 "description": " ".join(str(description).split()),
                 "sha": sha,
+                "framework": framework_of(path, meta),
                 "domain": domain_of(path),
                 "url": recipe_url(path),
             }
         )
-        print(f"  {name} [{capability}] (sha:{sha}) — {domain_of(path)}")
+        print(
+            f"  {name} [{capability} framework={framework_of(path, meta)}] "
+            f"(sha:{sha}) — {domain_of(path)}"
+        )
     return recipes
 
 
@@ -133,8 +183,8 @@ def build_index(recipes: list[dict]) -> str:
         lines = [f"## {domain}\n"]
         for r in sorted(by_domain[domain], key=lambda x: x["name"]):
             lines.append(
-                f"- {r['name']} [{r['capability']}] (sha:{r['sha']}): "
-                f"{r['description']} — {r['url']}"
+                f"- {r['name']} [{r['capability']} framework={r['framework']}] "
+                f"(sha:{r['sha']}): {r['description']} — {r['url']}"
             )
         sections.append("\n".join(lines))
 

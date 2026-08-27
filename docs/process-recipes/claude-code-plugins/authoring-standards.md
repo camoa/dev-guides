@@ -50,6 +50,19 @@ The plugin owns the generic implement phase — when it runs and the oracle/enve
 - The component map is available (see the architecture recipe under this framework): every component with its type, responsibility, trigger, permissions, model, and body/`references/` split. The implementation builds what the map recorded, not a re-derived design.
 - The plugin's generic implement phase is present: the phase that invokes this method and emits its oracle/envelope. This recipe supplies the Claude-Code authoring standards and the paper-test discipline; it does not recreate the phase.
 
+Two of these are declared in machine-readable form below, and the split is deliberate.
+
+The manifest condition has a real filesystem probe. The plugin-availability one does not: whether `plugin-creation-tools` and `code-paper-test` are installed is not answerable from the project tree by any argv-safe command, so it is declared with no `check:` and the engine records it `unknown` — never `met`. That keeps a genuine precondition visible instead of dropping it for being unverifiable, which is the defect this declaration exists to close. It does mean this recipe cannot currently reach an overall `met` verdict; that is the honest state, not a bug in the declaration.
+
+preconditions:
+  - id: plugin-manifest
+    what: a .claude-plugin/ directory, so the project is a plugin or marketplace repo at all
+    check: test -d .claude-plugin
+    owner: plugin-creation-tools:create
+  - id: authoring-plugins
+    what: plugin-creation-tools and code-paper-test available — this recipe drives them rather than reproducing them
+    owner: plugin-creation-tools:create
+
 ## Input contract
 
 Source-agnostic, supplied by the caller (the orchestrator at the implement phase, or a human operator).
