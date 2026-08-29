@@ -1,0 +1,6 @@
+nav:
+- Python prior-art research: prior-art.md
+- Python CLI architecture: architecture.md
+- Python implementation standards and tests: standards-and-tests.md
+- Python review checks: checks.md
+append_unmatched: true
