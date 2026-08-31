@@ -20,6 +20,8 @@ tldr: "Tests are production code — apply the same review standards. Key anti-p
 
 ## Pattern
 
+These fixes are the test author's to apply, while writing or while the change is still theirs. A reviewer that finds one of these in a test it did not write raises it as a finding and does not edit the test — see [TDD & Spec-Driven Development — Changing Existing Tests](https://camoa.github.io/dev-guides/development/tdd-spec-driven/changing-existing-tests/).
+
 **Anti-pattern catalog:**
 
 | Anti-pattern | Problem | Fix |

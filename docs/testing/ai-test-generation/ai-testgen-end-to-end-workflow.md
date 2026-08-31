@@ -18,7 +18,7 @@ tldr: "The full loop is 10 steps: state intent, gather inputs, invoke Planner, h
 4. Review plan (human)   → PM/dev/QA reads; approves/edits
 5. Commit plan           → git add specs/contact-form.md
 6. Invoke Generator      → produces tests/contact-form.spec.ts
-7. Review code (human)   → developer reads; tweaks if needed
+7. Review code (human)   → developer reads. A tweak may fix a locator, a fixture or a name; it may not change what the test asserts. An assertion that looks wrong is a plan change, not a code edit.
 8. Run tests             → npx playwright test contact-form
 9. If pass → commit code → git add tests/contact-form.spec.ts
    If fail → debug:

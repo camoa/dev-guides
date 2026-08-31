@@ -17,6 +17,8 @@ Testing pure PHP logic with no Drupal dependencies: utility classes, value objec
 | Dependency-injected services | MAYBE -- mock the services | KernelTestBase if mocking too complex |
 | Translation (t()) or string formatting | YES -- mock TranslationInterface | -- |
 
+What a unit test may assert on is defined once, in the parent guide: a returned value, a persisted or observable state change, or a documented exit code or error type. The wording of a message is not a contract. See Unit Testing Concepts in the Testing Strategy guide.
+
 ## Pattern
 **Minimal unit test structure**:
 ```php
@@ -60,3 +62,4 @@ Reference: `/core/tests/Drupal/Tests/UnitTestCase.php`
 - [Kernel Tests with KernelTestBase](kernel-tests.md)
 - Reference: `/core/tests/Drupal/Tests/UnitTestCase.php`
 - Example: `/core/modules/system/tests/src/Unit/Menu/MenuLinkTreeTest.php`
+- Related: [Testing Strategy — Unit Testing Concepts](https://camoa.github.io/dev-guides/development/testing-strategy/unit-testing-concepts/)

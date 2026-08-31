@@ -31,6 +31,8 @@ Most tests should be fast unit tests; fewer integration tests; minimal E2E tests
 ```
 Integration tests give best ROI: test real interactions without full system overhead.
 
+The Trophy is stack-conditional, not universal. It fits UI-composition-heavy stacks (React, Next.js) where components are only meaningful in context. For logic-heavy backends, PHP/Drupal, CLI tools and services, the Pyramid holds - put logic at the unit level and reserve integration tests for seams. Choosing the Trophy for a logic-heavy codebase produces slow tests that fail for reasons unrelated to the behavior under test.
+
 **Test Diamond** (Emerging, 2024+)
 ```
      /\       E2E Tests - Some
@@ -162,5 +164,6 @@ If tests are slow, revisit what you're testing - might be E2E test disguised as 
 - Previous: [From Spec to Implementation](spec-to-implementation.md) | Next: [Test Coverage Strategy](test-coverage.md)
 - Related: [Test Doubles](test-doubles.md) (what to mock)
 - Related: [Unit Testing Fundamentals](unit-testing-fundamentals.md) (FIRST principles apply to integration tests too)
+- Related: [Testing Strategy - Test Pyramid vs Trophy](https://camoa.github.io/dev-guides/development/testing-strategy/test-pyramid-vs-trophy/) - which shape fits which stack
 - Reference: [Test Pyramid Guide 2025](https://fullscale.io/blog/modern-test-pyramid-guide/)
 - Reference: [Kent C. Dodds: Testing Trophy](https://kentcdodds.com/blog/the-testing-trophy-and-testing-classifications)

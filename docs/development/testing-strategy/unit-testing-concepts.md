@@ -47,10 +47,14 @@ def test_discount_skipped_below_minimum():
 - **Wrong**: Testing internal variable names or method call order → **Right**: Test observable outputs only; survives refactoring
 - **Wrong**: One HTTP call per assertion in a "unit test" → **Right**: A test that makes HTTP calls is not a unit test regardless of name
 - **Wrong**: Happy-path only → **Right**: Add parameterized cases for boundaries and nulls
+- **Wrong**: Asserting on a printed message to tell which branch ran → **Right**: The wording was never promised; give the code a return value or an error type to assert on instead
+
+Isolation says what a unit test must not touch. It does not say what the test may assert on — see [What a Test May Couple To](what-a-test-may-couple-to.md) for that half.
 
 ## See Also
 
 - [Test Pyramid vs. Trophy](test-pyramid-vs-trophy.md) | Next: [Integration Testing Concepts](integration-testing-concepts.md)
+- Related: [What a Test May Couple To](what-a-test-may-couple-to.md) — what a test may assert on
 - Related: [Test Doubles](test-doubles.md) — how to isolate dependencies
 - Related: [Test Structure and Naming](test-structure-and-naming.md) — AAA structure
 - Related: [development/tdd-spec-driven](https://camoa.github.io/dev-guides/development/tdd-spec-driven/) — TDD unit testing section

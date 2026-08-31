@@ -269,7 +269,7 @@ func ProcessOrder(order *Order) error {
 - Hard-coded dates/times/random values - Use dependency injection or test doubles for non-deterministic inputs
 - Assertions with no failure message - When test fails, message should explain what broke
 - Copy-paste test code - Leads to duplication and maintenance burden; use test helpers/factories
-- Not deleting obsolete tests - Old tests for removed features waste time and confuse developers
+- Not deleting obsolete tests - Old tests for removed features waste time and confuse developers. The change that removes the feature removes its tests, in the same commit. A reviewer that judges a test obsolete raises a finding and does not delete it (see [Changing Existing Tests](changing-existing-tests.md))
 
 ## See Also
 - Previous: [Refactoring with Confidence](refactoring-confidence.md) | Next: [Security Best Practices](security-best-practices.md)

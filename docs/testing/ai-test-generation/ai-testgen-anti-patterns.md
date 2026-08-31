@@ -22,6 +22,7 @@ A model crawling your site sees what *is*, not what *should be*. It will happily
 
 - **Wrong**: Skipping the plan stage and generating tests directly → **Right**: Plan → Review → Generate, every time
 - **Wrong**: Letting the Healer modify assertions → **Right**: Healer fixes locators only; assertion changes mean plan changes
+- **Wrong**: Treating an assertion change as a routine edit because it is small → **Right**: an assertion change is a contract change whoever makes it, and needs a recorded reason — see [Changing Existing Tests](https://camoa.github.io/dev-guides/development/tdd-spec-driven/changing-existing-tests/)
 - **Wrong**: Editing tests after generation instead of editing the plan → **Right**: plan is source of truth; regenerate code
 - **Wrong**: Putting selectors in plans → **Right**: plans stay behavioral
 - **Wrong**: One mega-test asserting 20 things → **Right**: one scenario, one purpose; split

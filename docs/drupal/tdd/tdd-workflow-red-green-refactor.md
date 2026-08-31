@@ -36,7 +36,7 @@ Applying the Test-Driven Development cycle to Drupal module development. Use thi
 4. REPEAT -> Next requirement or edge case
 ```
 
-**Cycle frequency target**: 3-6 cycles per hour for simple features, 1-2 per hour for complex integrations.
+**Cycle rhythm, not a quota**: a healthy cycle runs in minutes, so 3-6 per hour for simple features and 1-2 for complex integrations is what the pace tends to look like. It is a description, not a target. Do not write extra tests to reach it -- the number of cycles is set by the number of behaviors you were asked to build.
 
 **Step 1: RED -- Write a failing test**:
 ```php
@@ -157,9 +157,13 @@ class DiscountCalculatorTest extends KernelTestBase {
 - Tests too large (testing entire feature in one test) -- hard to debug when RED, slow feedback
 - Not running tests frequently -- accumulate failures, lose the RED-GREEN rhythm
 - Perfectionism in GREEN phase -- spend 30 minutes optimizing before REFACTOR (just make it pass, then improve)
+- Editing a test in GREEN to make it pass -- GREEN is for production code only; if the test is wrong, return to RED and change it deliberately
+- Growing assertions on tests you did not write while reviewing -- a reviewer emits findings, not commits
 
 ## See Also
 - [Test Type Decision Matrix](test-type-decision-matrix.md)
 - [PHPUnit Configuration](phpunit-configuration.md)
 - [Red, Green, Refactor | Codecademy](https://www.codecademy.com/article/tdd-red-green-refactor)
 - [The Cycles of TDD - Uncle Bob](https://blog.cleancoder.com/uncle-bob/2014/12/17/TheCyclesOfTDD.html)
+- Related: [TDD & Spec-Driven Development — Changing Existing Tests](https://camoa.github.io/dev-guides/development/tdd-spec-driven/changing-existing-tests/) -- who may change a test, and when
+- Related: [TDD & Spec-Driven Development — Fixing Bugs with TDD](https://camoa.github.io/dev-guides/development/tdd-spec-driven/fixing-bugs-with-tdd/)

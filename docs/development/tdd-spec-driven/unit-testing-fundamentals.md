@@ -1,6 +1,6 @@
 ---
-description: FIRST principles for unit tests and characteristics of good unit tests
-tldr: "Writing any unit test, whether in TDD workflow or traditional testing approach. These principles define what makes a good unit test."
+description: FIRST principles for unit tests, what a test may couple to, and characteristics of good unit tests
+tldr: "Writing any unit test: follow FIRST, and assert only on a promised contract - a return value, a state change, a documented error - never on a log line or call order nobody promised to keep stable."
 ---
 
 # Unit Testing Fundamentals
@@ -41,6 +41,22 @@ Good unit tests follow the **FIRST** acronym:
 - In TDD: tests written before production code
 - In traditional testing: tests written in same timeframe as code
 - Not "we'll add tests later" (which rarely happens)
+
+## What a Test May Couple To
+
+FIRST says what a unit test must not touch. It does not say what the test may assert on, and that is the gap that lets a test couple to something nobody promised.
+
+A test may depend only on a contract someone actually promised:
+
+- A returned value
+- A persisted or observable state change
+- A documented exit code or error type
+
+The exact wording of a log line, a printed message, or an internal call order is not a contract. It leaks out of the implementation; nobody agreed to keep it stable. A test that matches on it breaks when someone rewords a sentence, and that break carries no information.
+
+Size is a proxy for this and usually a good one, but it is not the property. A one-line assertion on a printed sentence is small and badly coupled.
+
+A test that depends on one contract has three reasons to change, and two of them are defects: the behavior changed (legitimate, and it should be stated in words), the interface changed, or the test was wrong.
 
 ## Pattern: FIRST in Action
 
@@ -108,8 +124,9 @@ class TestOrderCalculator:
 - Not running tests frequently - Fast, isolated tests can run on every save; slow/coupled tests get skipped
 
 ## See Also
-- Previous: [Red-Green-Refactor Workflow](red-green-refactor.md) | Next: [Test Doubles](test-doubles.md)
+- Previous: [Fixing Bugs with TDD](fixing-bugs-with-tdd.md) | Next: [Test Doubles](test-doubles.md)
 - Related: [Testing Patterns](testing-patterns.md) for test structure
 - Related: [TDD Anti-Patterns](anti-patterns.md)
+- Related: [Testing Strategy - Unit Testing Concepts](https://camoa.github.io/dev-guides/development/testing-strategy/unit-testing-concepts/) - what counts as a unit, and unit vs behavioral tests
 - Reference: [FIRST Principles of Testing](https://medium.com/pragmatic-programmers/unit-tests-are-first-fast-isolated-repeatable-self-verifying-and-timely-a83e8070698e)
 - Reference: [Apps Developer Blog: FIRST Principle](https://www.appsdeveloperblog.com/the-first-principle-in-unit-testing/)

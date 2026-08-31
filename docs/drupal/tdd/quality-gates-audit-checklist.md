@@ -103,6 +103,8 @@ fi
 exit 0
 ```
 
+A floor like this belongs on feature work. Running it on a bug fix pushes the author to add unrelated tests inside a change that should contain one reproducing test -- exempt fix branches, or make the gate advisory there.
+
 **Composer scripts** (standardized commands):
 ```json
 {
@@ -232,7 +234,7 @@ jobs:
 | **Unit test failures** | Critical | Fix immediately | Logic error, refactor code |
 | **Kernel test failures** | Critical | Fix immediately | Integration issue, check setup |
 | **Browser test failures** | High | Investigate within 1 hour | May be flaky, re-run; if persistent, fix |
-| **Coverage drop >5%** | Medium | Investigate before merge | Add tests for new code |
+| **Coverage drop >5%** | Medium | Investigate before merge | Check whether new code is untested. If the drop came from a bug fix or a refactor, record it and open separate work -- do not add tests inside that change |
 | **Security audit failures** | Critical | Fix immediately | Update dependencies, patch CVEs |
 
 **Flaky test protocol**: If browser/JS test fails intermittently:

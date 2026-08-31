@@ -104,7 +104,7 @@ class ContentExportTest extends BrowserTestBase {
 
 1. Provide specification to Claude Code
 2. Claude Code generates test file based on spec
-3. Review test, adjust assertions as needed
+3. Review the generated test against the spec and adjust assertions while authoring, before any implementation exists. Once implementation begins, an assertion changes only under the rules in the TDD guide's Changing Existing Tests section: with a recorded reason, and never by a reviewer
 4. Ask Claude Code to implement minimum code to pass tests
 5. Run tests, iterate until green
 6. Ask Claude Code to refactor while keeping tests green

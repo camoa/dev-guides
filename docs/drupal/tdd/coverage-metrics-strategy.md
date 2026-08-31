@@ -126,6 +126,7 @@ test:
 - **Coverage theater** -- hitting lines without asserting behavior (test runs code but verifies nothing)
 - **Excluding too much** -- `--coverage-exclude` hides real gaps instead of writing tests
 - **Coverage targets without context** -- 80% of what? If 80% excludes all security checks, target is meaningless
+- Reading a coverage target as a floor to reach in the current change -- targets describe a mature module, not a single commit
 
 ## See Also
 - [Running Tests](running-tests.md)

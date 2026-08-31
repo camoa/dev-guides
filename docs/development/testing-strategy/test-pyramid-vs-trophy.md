@@ -18,6 +18,7 @@ tldr: Use the Pyramid (many unit tests) for logic-heavy backends and PHP/Drupal;
 | Drupal (PHP modules, services, forms) | Pyramid with Kernel tests in the middle | PHPUnit Unit → Kernel → Functional matches the Drupal test type hierarchy |
 | Distributed microservices / APIs | Pyramid + contract tests at boundaries | Service boundaries need contract coverage; unit tests handle internal logic |
 | UI-heavy app (CMS, admin tools) | Trophy + selective VR | Interactions matter more than units; visual regression catches regressions unit tests miss |
+| CLI tools, shell scripts, build tooling | Pyramid — extract logic into callable units | A script driven end to end can only be asserted on stdout and exit codes, which are not contracts; pull decisions into functions that return values |
 
 ## Pattern
 

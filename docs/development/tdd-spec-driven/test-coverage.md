@@ -125,12 +125,17 @@ pytest --cov=myapp --cov-report=html
 - High risk + low coverage = urgent (business logic, security, money)
 - High risk + high coverage = maintain
 - Low risk + low coverage = acceptable (simple getters)
-- Low risk + high coverage = probably over-tested
+- Low risk + high coverage = probably over-tested; collapse or remove (Step 5)
 
 **Step 4: Write tests for gaps**
 - Focus on missing edge cases first
 - Add tests for uncovered branches
 - Don't write tests just to hit percentage
+
+**Step 5: Remove tests that don't pay rent**
+- Collapse near-identical cases into one parameterized test
+- Delete tests for behavior that no longer exists (in the same change that removed it)
+- A suite that shrank while keeping the same branch coverage got better, not worse
 
 ## Branch Coverage vs Line Coverage
 
