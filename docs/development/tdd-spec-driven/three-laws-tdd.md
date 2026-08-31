@@ -1,12 +1,12 @@
 ---
 description: Robert C. Martin's three laws of TDD and the rapid test-first discipline cycle
-tldr: "You're practicing strict TDD and need the precise discipline to maintain test-first workflow."
+tldr: "Every TDD cycle runs on these three laws; Law 2 - stop the test the moment it fails, not when it feels complete - is the one most often skipped."
 ---
 
 # The Three Laws of TDD
 
 ## When to Use
-You're practicing strict TDD and need the precise discipline to maintain test-first workflow.
+Every TDD cycle. These three laws are the default discipline, not an optional purist mode - Law 2 is the only rule in this guide that bounds how much test you write at once.
 
 ## The Laws (Robert C. Martin / Uncle Bob)
 
@@ -23,6 +23,8 @@ You're practicing strict TDD and need the precise discipline to maintain test-fi
    - Stop as soon as the test passes
    - Don't add "future" features or clever abstractions
    - Write the simplest thing that could possibly work
+
+Law 2 is the one most often skipped. "Sufficient to fail" means you stop writing the test the moment it fails - not when it feels complete. A test written past that point is specifying behavior you have not yet decided to build.
 
 ## Pattern: Following the Laws
 

@@ -36,13 +36,13 @@ Generate production-quality code that:
 5. Includes comprehensive error handling
 6. Follows [language] best practices and idioms
 
-Include unit tests that verify each behavior against the spec.
+Implement one behavior at a time, test first. Do not write tests for behaviors you have not yet been asked to implement.
 ```
 
 **3. Verification Against Spec**
 - Does code implement all specified behaviors? - Check each Given/When/Then
 - Does code handle all edge cases? - Test or code review each scenario
-- Do tests verify acceptance criteria? - Each criterion should have test coverage
+- Do tests verify acceptance criteria? - Each criterion has coverage by the time the spec is fully implemented, not before each is built
 - Are constraints respected? - Code review for technical requirements
 - Are integration points correct? - Check interfaces match spec
 
@@ -164,6 +164,7 @@ If optimization changes behavior (e.g., different error messages):
 - Updating code without updating spec - Spec becomes stale; changes should update spec first
 - Writing implementation details in spec to control AI - Spec should describe behavior, not implementation; let AI choose implementation
 - Not testing generated code - AI code looks good but may have subtle bugs; comprehensive testing required
+- Generating one test per acceptance criterion before any code exists - Contradicts Law 2; you are specifying behavior you have not decided to build. Drive them out one at a time
 
 ## See Also
 - Previous: [Writing Effective Specifications](writing-specs.md) | Next: [Integration Testing Strategy](integration-testing.md)

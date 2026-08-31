@@ -19,9 +19,11 @@ Code works but is messy, duplicated, or hard to understand. You want to improve 
 4. Commit
 5. Repeat
 
-If tests fail during refactoring:
-- You broke something - Undo and try smaller change
-- Or test was brittle (testing implementation) - Fix test to test behavior
+If tests fail during refactoring, the default is that you broke something: undo and try a smaller change.
+
+A test may only be judged brittle when you can name the implementation detail it asserts on - a private field, an internal call order, a message string nobody promised. Record that name. If you cannot name one, the code regressed.
+
+Correcting a test judged brittle is an assertion change, and [Changing Existing Tests](changing-existing-tests.md) governs who may make it.
 
 ## When to Refactor
 

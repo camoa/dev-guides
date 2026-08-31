@@ -41,6 +41,8 @@ fixtures/                       # data fixtures referenced by plans + tests
 
 Both `specs/` and `tests/` go to git. The spec is reviewable in PRs; the test is executable. The Healer modifies tests; humans modify specs.
 
+This is the general rule specialized for a generated E2E suite: the party that repairs a suite may not change what it asserts. See [Changing Existing Tests](https://camoa.github.io/dev-guides/development/tdd-spec-driven/changing-existing-tests/) for the role-and-phase form that applies outside Playwright.
+
 ### Why Split Into Four Phases
 
 | Phase | What it protects against |
@@ -62,3 +64,4 @@ Both `specs/` and `tests/` go to git. The spec is reviewable in PRs; the test is
 - [Test Plan Format](ai-testgen-plan-format.md)
 - [End-to-End Workflow](ai-testgen-end-to-end-workflow.md)
 - [Playwright Test Agents](ai-testgen-playwright-test-agents.md)
+- [TDD & Spec-Driven Development — Changing Existing Tests](https://camoa.github.io/dev-guides/development/tdd-spec-driven/changing-existing-tests/)

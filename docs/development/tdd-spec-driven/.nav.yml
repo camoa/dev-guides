@@ -1,8 +1,10 @@
 nav:
 - index.md
 - anti-patterns.md
+- changing-existing-tests.md
 - code-reference-map.md
 - development-standards.md
+- fixing-bugs-with-tdd.md
 - integration-testing.md
 - performance-best-practices.md
 - red-green-refactor.md

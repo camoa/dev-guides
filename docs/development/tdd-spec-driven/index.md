@@ -11,6 +11,8 @@ guide-meta:
     - unit testing
     - integration testing
     - test coverage strategy
+    - changing existing tests
+    - fixing bugs with TDD
   not:
     - Drupal PHPUnit testing
     - framework-specific test runners
@@ -30,9 +32,11 @@ guide-meta:
 |-------------|-------|---------|
 | Understand what TDD is and why it matters | [TDD Overview](tdd-overview.md) | You're starting a new feature, fixing a bug, or working on complex business logic where you want to catch errors early and design better code through tests. |
 | Know when to use TDD vs traditional testing | [TDD vs Traditional Testing](tdd-vs-traditional.md) | You're deciding whether to adopt TDD for a project or choosing testing strategy for different parts of your codebase. |
-| Learn the core rules of TDD | [The Three Laws of TDD](three-laws-tdd.md) | You're practicing strict TDD and need the precise discipline to maintain test-first workflow. |
+| Learn the core rules of TDD | [The Three Laws of TDD](three-laws-tdd.md) | Every TDD cycle runs on these three laws; Law 2 - stop the test the moment it fails, not when it feels complete - is the one most often skipped. |
 | Follow the TDD workflow step-by-step | [Red-Green-Refactor Workflow](red-green-refactor.md) | Every time you implement a new feature or fix a bug using TDD. This is the core TDD workflow. |
-| Write effective unit tests | [Unit Testing Fundamentals](unit-testing-fundamentals.md) | Writing any unit test, whether in TDD workflow or traditional testing approach. These principles define what makes a good unit test. |
+| Know whether I'm allowed to change an existing test | [Changing Existing Tests](changing-existing-tests.md) | Before changing an assertion or deleting a test, check the mutability matrix for who may touch it; an adversarial reviewer never edits or deletes a test it's judging - it files a finding instead. |
+| Fix a bug without growing the suite | [Fixing Bugs with TDD](fixing-bugs-with-tdd.md) | Fixing a bug: write one failing test that reproduces it, fix only until that test passes, then stop - don't add tests for untouched behavior or strengthen neighboring assertions in the same change. |
+| Write effective unit tests | [Unit Testing Fundamentals](unit-testing-fundamentals.md) | Writing any unit test: follow FIRST, and assert only on a promised contract - a return value, a state change, a documented error - never on a log line or call order nobody promised to keep stable. |
 | Use mocks, stubs, fakes, and spies correctly | [Test Doubles](test-doubles.md) | You need to test code that depends on external systems (databases, APIs, file systems) or collaborating objects that are slow, unavailable, or difficult to set up in tests. |
 | Structure my tests properly | [Testing Patterns](testing-patterns.md) | Structuring any test - unit, integration, or end-to-end. These patterns create readable, maintainable tests. |
 | Understand spec-driven development | [Spec-Driven Development Overview](spec-driven-overview.md) | You're using AI coding assistants and want to maintain control over architecture while leveraging AI for implementation. Essential for production-quality code generation with tools like Claude Code, GitHub Copilot, Cursor, or Amazon Kiro. |

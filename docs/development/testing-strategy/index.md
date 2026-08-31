@@ -35,6 +35,9 @@ guide-meta:
     - what to test
     - testing anti-patterns
     - FIRST properties
+    - test coupling
+    - behavioral test
+    - what a test may couple to
   not:
     - Drupal-specific test setup (see drupal/testing)
     - Playwright API usage (see testing/playwright)
@@ -63,6 +66,7 @@ guide-meta:
 | Understand the cost/confidence/speed model and risk-based investment | [Testing Strategy Overview](testing-strategy-overview.md) | Testing is a cost/confidence tradeoff, not a boolean. Use risk-based investment — test money, auth, and complex logic heavily; test trivial code lightly. Goodhart's Law applies — coverage targets without quality enforcement catch nothing. |
 | Choose between Pyramid and Trophy for my stack | [Test Pyramid vs. Trophy](test-pyramid-vs-trophy.md) | Use the Pyramid (many unit tests) for logic-heavy backends and PHP/Drupal; use the Trophy (mostly integration) for React/Next.js frontends. The right shape is the one that catches the bugs your stack actually produces. |
 | Know what belongs in a unit test and the FIRST properties | [Unit Testing Concepts](unit-testing-concepts.md) | Unit tests verify one function or class in isolation — no DB, no HTTP, no filesystem. Apply FIRST properties (Fast, Isolated, Repeatable, Self-validating, Timely). Test observable behavior, not private details; one logical assertion per test. |
+| Decide what a test is allowed to assert on | [What a Test May Couple To](what-a-test-may-couple-to.md) | A test may assert only on promised contracts — return values, state changes, exit codes, exception types, spec'd fields — not on printed message wording or call order. Whole-program output matching is a behavioral test, not a unit test. |
 | Know what integration tests cover and where their boundaries sit | [Integration Testing Concepts](integration-testing-concepts.md) | Integration tests verify seams between components using a real test database and real internal implementations, stubbing only external third-party services. They deliver the highest ROI per test in most modern applications. |
 | Know what functional/system tests cover vs. integration tests | [Functional Testing Concepts](functional-testing-concepts.md) | Functional tests verify feature behavior via HTTP or equivalent without a browser — real stack, real DB, no browser rendering engine. Use for permission enforcement, multi-step workflows, and feature regressions that integration tests cannot easily exercise. |
 | Understand E2E tests: value, cost, and when to add them | [E2E Testing Concepts](e2e-testing-concepts.md) | E2E tests verify complete user journeys through a real browser — use them sparingly for critical paths only. 10–100x slower than integration tests; use data-testid selectors and never test logic variants in E2E. |

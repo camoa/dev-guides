@@ -186,8 +186,8 @@
     "guides_extracted": 26
   },
   "drupal/tdd": {
-    "source_hash": "0a74f7c7a4d3d9efe6a5219c6e72c5342689ce3c9b4adac9449124fcb6c732ee",
-    "partitioned": "2026-05-21",
+    "source_hash": "7b25ddd86233a5ac35e6d2677a3b776029b790ff2fff489c7971f04f2035903b",
+    "partitioned": "2026-08-31",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 25
   },
@@ -228,10 +228,10 @@
     "guides_extracted": 14
   },
   "development/tdd-spec-driven": {
-    "source_hash": "204ec2da5579f28c51bc1fb6fc799d2ae9a49b0c0ea90d615cb0bf487e3924df",
-    "partitioned": "2026-02-14",
-    "partitioned_by": "camoa",
-    "guides_extracted": 18
+    "source_hash": "b9dfb5b9af0374604defebb7478b1eca2be22e4fe6676d6e55679f10a78ceb22",
+    "partitioned": "2026-08-31",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 20
   },
   "development/solid-principles": {
     "source_hash": "9e7af3ae4ff853b150dfa9b73892e196d0050747458a0c1c97b3977cda5f310a",
@@ -510,8 +510,8 @@
     "guides_extracted": 14
   },
   "testing/ai-test-generation": {
-    "source_hash": "0961d93238412c7dd9a56481d279a4f3fb0e67b72f4d2168fefbbf35b1abb60c",
-    "partitioned": "2026-06-10",
+    "source_hash": "9fc0c81554b80c2a28cd94c2aa22dfd35afa16989470a47a2501eabc45abaefd",
+    "partitioned": "2026-08-31",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 18
   },
@@ -528,10 +528,10 @@
     "guides_extracted": 12
   },
   "development/testing-strategy": {
-    "source_hash": "809dd5cebbfdc3aa410c18a2ca2122bef9795fc411d3c13a0c9bf1c5deebfcfc",
-    "partitioned": "2026-06-08",
+    "source_hash": "46f7602717a930d1d3e01018d7c35a23f09f79f99aa50db62b838981eda0ec41",
+    "partitioned": "2026-08-31",
     "partitioned_by": "Carlos Ospina",
-    "guides_extracted": 17
+    "guides_extracted": 18
   },
   "js/passkeys": {
     "source_hash": "33034df5ea13d3b831a099e5bc4bb006466f6e3195dc9d1c5f2f34dc25091c75",

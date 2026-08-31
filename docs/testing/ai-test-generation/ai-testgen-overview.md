@@ -19,6 +19,8 @@ tldr: Use AI generation when backfilling coverage on an existing site or transla
 | Maintaining a stable suite where UI changes | Let the Healer fix locators; review every change |
 | Writing a test for behavior you can't articulate yet | Don't generate — figure out the intent first |
 
+Reproduce-first is the general rule, not a Playwright one: write the failing test that demonstrates the bug before changing any production code, and add only that one. See [Fixing Bugs with TDD](https://camoa.github.io/dev-guides/development/tdd-spec-driven/fixing-bugs-with-tdd/).
+
 ## Pattern
 
 ```
@@ -53,3 +55,4 @@ Three review gates. Skipping any of them defeats the workflow.
 - [Anti-Patterns](ai-testgen-anti-patterns.md)
 - [Playwright (E2E)](../playwright/index.md)
 - [Automated Testing Kit (ATK)](../atk/index.md)
+- [TDD & Spec-Driven Development](https://camoa.github.io/dev-guides/development/tdd-spec-driven/) — the general TDD cycle this specializes for generated E2E suites

@@ -83,20 +83,20 @@ class UserNameParser {
 | RED | Test fails to compile | That's fine - compilation failures are failures; move to GREEN |
 | GREEN | Implementation seems too simple/dumb | That's fine - refactor will improve it, or next test will force better design |
 | GREEN | You're tempted to add extra features | Stop - add only enough to pass this test; write another test for new features |
-| REFACTOR | A test fails | You broke something - revert and refactor more carefully |
+| REFACTOR | A test fails | Default: you broke something - revert and refactor more carefully. Only judge the test brittle if you can name the implementation detail it asserts on (see [Refactoring with Confidence](refactoring-confidence.md)) |
 | REFACTOR | Code smells obvious but fix requires new behavior | Stop refactoring; write a new test for that behavior first |
 
 ## Common Mistakes
 
 - Skipping RED phase by writing code first - You lose the design benefit of thinking through behavior first
 - Writing complex tests that test multiple behaviors - Each test should verify one thing; break into multiple tests
-- Making tests pass with production changes instead of test fixes - If test is wrong, fix the test in RED phase
+- Editing a test in GREEN to make it pass - GREEN is for production code only. If the test itself is wrong, stop, return to RED, and change it there deliberately (see [Changing Existing Tests](changing-existing-tests.md))
 - Spending too long on GREEN trying to write perfect code - Green phase is about speed; refactor is about quality
 - Forgetting to refactor - The most common mistake; leads to messy code despite test coverage
 - Refactoring without running tests - Always run tests after each small refactor step
 - Adding features during REFACTOR - Refactoring should only improve structure, never change behavior
 
 ## See Also
-- Previous: [The Three Laws of TDD](three-laws-tdd.md) | Next: [Unit Testing Fundamentals](unit-testing-fundamentals.md)
+- Previous: [The Three Laws of TDD](three-laws-tdd.md) | Next: [Changing Existing Tests](changing-existing-tests.md)
 - Reference: [Test-Driven Development Wikipedia](https://en.wikipedia.org/wiki/Test-driven_development)
 - Reference: [Martin Fowler on TDD](https://martinfowler.com/bliki/TestDrivenDevelopment.html)

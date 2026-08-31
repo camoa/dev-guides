@@ -46,6 +46,7 @@ test_categorize_score(75)  # hits False branches only
 - **Wrong**: No coverage measurement at all → **Right**: Add coverage tooling even if you set no mandates; it reveals untested paths
 - **Wrong**: Gaming coverage with meaningless assertions → **Right**: `assert True` adds zero value; coverage ticks up, signal goes down
 - **Wrong**: Measuring coverage over generated/trivial code → **Right**: Exclude DTOs, getters, config classes; they inflate numbers without value
+- **Wrong**: Treating a coverage drop as an instruction to write tests here and now → **Right**: It is a signal to look; adding tests inside an unrelated bug fix makes that change harder to review and to revert
 
 ## See Also
 

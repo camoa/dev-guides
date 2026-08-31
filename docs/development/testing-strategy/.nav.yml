@@ -3,6 +3,7 @@ nav:
 - testing-strategy-overview.md
 - test-pyramid-vs-trophy.md
 - unit-testing-concepts.md
+- what-a-test-may-couple-to.md
 - integration-testing-concepts.md
 - functional-testing-concepts.md
 - e2e-testing-concepts.md
