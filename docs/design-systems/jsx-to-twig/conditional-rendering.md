@@ -10,6 +10,24 @@ drupal_version: "11.x"
 
 > Use this when converting JSX conditional expressions to Twig. React uses JavaScript expressions inside JSX; Twig uses `{% if %}` tags and filters.
 
+## Pattern: Null-Safe Nested Access
+
+**React**
+```jsx
+{user?.profile?.avatar && (
+  <img src={user.profile.avatar} alt={user.name} />
+)}
+```
+
+**Twig**
+```twig
+{% if user.profile.avatar is not empty %}
+  <img src="{{ user.profile.avatar }}" alt="{{ user.name }}">
+{% endif %}
+```
+
+Twig accesses nested properties with dot notation. If any level is null, Twig returns `null` silently (no error) -- unlike JavaScript which throws without `?.`. However, wrapping in `{% if %}` is still recommended for clarity.
+
 ## Decision
 
 | JSX Pattern | Twig Equivalent | Notes |

@@ -9,6 +9,24 @@ tldr: Integration tests verify seams between components using a real test databa
 
 > Use integration tests to verify that two or more components work correctly together — a service with its database, a controller with its service layer, a React component with its data-fetching hook. Mock outward (external); use real implementations inward (your code, your DB).
 
+## Boundary Strategy
+
+```
+┌─────────────────────────────────────────────────────┐
+│              Your Application                       │
+│                                                     │
+│  Controller → Service → Repository → [Database]    │
+│                                ↕                   │
+│              [Your test uses a real test DB here]  │
+│                                                     │
+│  Service → [EmailService] ← STUB THIS              │
+│  Service → [StripeAPI]    ← STUB THIS              │
+│  Service → [AnotherService you own] ← KEEP REAL    │
+└─────────────────────────────────────────────────────┘
+```
+
+Mock outward (third-party, slow, non-deterministic). Use real implementations inward (your code, your database).
+
 ## Decision
 
 | What integration tests cover | What unit tests miss |

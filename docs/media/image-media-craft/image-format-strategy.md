@@ -22,6 +22,10 @@ tldr: "Use this when deciding what format to produce and serve. Choosing the wro
 
 **2025 delivery strategy**: AVIF (93%+ browser support) → WebP (95%+ support) → JPEG fallback
 
+## Content Negotiation (CDN Auto-Format)
+
+Cloudinary, imgix, and Cloudflare Images support automatic format selection via `Accept` header: the CDN detects what the browser supports and serves the best format without `<picture>` elements. Trade-off: simpler markup, but you lose fine-grained control and are locked to the CDN.
+
 ## Pattern
 
 ```html

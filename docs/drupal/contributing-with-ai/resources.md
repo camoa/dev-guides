@@ -10,6 +10,15 @@ drupal_version: "11.x"
 
 > Use this when you need links to drupal.org governance issues, contribution workflow documentation, coding standards, or industry AI policies.
 
+## Drupal AI Policy & Related Issues
+
+| Resource | Topic | Status |
+|---|---|---|
+| [Adopted AI policy](https://www.drupal.org/docs/develop/issues/issue-procedures-and-etiquette/policy-on-the-use-of-ai-when-contributing-to-drupal) | The live policy (disclosure, responsibility, enforcement) | **Adopted** — last updated 2026-04-23 |
+| [#3565917](https://www.drupal.org/project/governance/issues/3565917) | Proposed guidelines — older governance issue | Postponed (maintainer needs more info) — stalled on copyright/licensing; historical context only |
+| [#3569240](https://www.drupal.org/project/ai/issues/3569240) | AI issue review guidelines | In progress — reviewer checklist from AI module project |
+| [ai_best_practices](https://www.drupal.org/project/ai_best_practices) | Canonical Drupal AI guidance (webchick, Dries) | Pre-MVP — watch, don't depend yet |
+
 ## Drupal.org Governance Issues
 
 | Issue | Topic | Status |

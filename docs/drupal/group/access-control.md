@@ -59,6 +59,20 @@ class MyAccessControl implements AccessControlInterface {
 
 **4.x access flow note:** The entity access check is implemented in `EntityHooks::entityAccess()` (an OOP hook class tagged `#[Hook('entity_access')]`), not the procedural `group_entity_access()` function that 3.x used. The "explicit forbid" semantics and `GroupAccessResult` are identical.
 
+## Query Access (Entity Queries & Views)
+
+Group automatically alters entity queries using three alter classes:
+
+| Entity Type | Alter Class |
+|---|---|
+| `group` | `GroupQueryAlter` |
+| `group_relationship` | `GroupRelationshipQueryAlter` |
+| Any other entity type | `EntityQueryAlter` |
+
+These classes LEFT JOIN the `group_relationship_field_data` table and add conditions based on the user's calculated permissions. The joins are only added when plugins with `entity_access: TRUE` are actually in use (checked via a fast `plugin_id IN (...)` query before proceeding).
+
+Group uses `hook_module_implements_alter()` to ensure its query alters run last, after all other modules.
+
 ## Common Mistakes
 
 - **Wrong**: Assuming ungrouped entities are affected by Group → **Right**: Group only checks entities that have at least one `group_relationship` record. Ungrouped entities return neutral.

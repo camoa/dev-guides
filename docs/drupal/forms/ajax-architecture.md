@@ -106,6 +106,19 @@ public function ajaxCallback(array &$form, FormStateInterface $form_state) {
 | InvokeCommand | Call JS method | selector, method, args |
 | OpenModalDialogCommand | Open modal | title, content, options |
 
+## Core AJAX System
+
+**System Components:**
+| Component | File | Purpose |
+|-----------|------|---------|
+| Response Builder | `/web/core/lib/Drupal/Core/Form/FormAjaxResponseBuilder.php` | Builds AJAX responses |
+| Event Subscriber | `/web/core/lib/Drupal/Core/Form/EventSubscriber/FormAjaxSubscriber.php` | Handles AJAX events |
+| Command Library | `/web/core/lib/Drupal/Core/Ajax/` | AJAX commands |
+
+**Reference Examples:**
+- Simple AJAX: `/web/core/modules/system/tests/modules/ajax_forms_test/src/Form/AjaxFormsTestSimpleForm.php`
+- Shows: Select, checkbox, grouped elements with AJAX callbacks
+
 ## Common Mistakes
 
 - **Wrong**: Missing wrapper ID in #ajax → **Right**: Always specify wrapper

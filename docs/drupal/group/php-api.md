@@ -62,6 +62,18 @@ mymodule.my_service:
   arguments: ['@group_permission.checker']
 ```
 
+## Services Reference
+
+| Service ID | Type | Purpose |
+|---|---|---|
+| `group_relation_type.manager` | `GroupRelationTypeManagerInterface` | Plugin manager for GroupRelationType plugins |
+| `access_policy_processor` (core) | `AccessPolicyProcessorInterface` | Core service that processes Group's `access_policy` services into calculated permissions |
+| `group_permission.calculator` | `GroupPermissionCalculatorInterface` | Calculate full permissions for an account |
+| `group_permission.checker` | `GroupPermissionCheckerInterface` | Check a specific permission for an account in a group |
+| `group.permissions` | `GroupPermissionHandler` | Enumerate all available group permissions |
+| `group_permission.hash_generator` | `GroupPermissionsHashGeneratorInterface` | Generate permission hash for cache vary |
+| `group.group_route_context` | context provider | Provides `group` context from the current route |
+
 ## Common Mistakes
 
 - **Wrong**: Calling `$group->addRelationship()` on an unsaved group → **Right**: Both the group and entity must be saved (have IDs) first.

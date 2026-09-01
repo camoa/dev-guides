@@ -9,6 +9,25 @@ tldr: Replace beforeEach with test.extend fixtures — they're typed, compose ac
 
 > Use fixtures when state needs to be shared across tests cleanly. Fixtures are Playwright's idiomatic alternative to `beforeEach`/globals — they're typed, composable, and guarantee teardown in reverse-of-setup order even on failure.
 
+## Built-In Fixtures
+
+| Fixture | Scope | What it is |
+|---|---|---|
+| `page` | test | Fresh `Page` in a fresh `BrowserContext` — most common dependency |
+| `context` | test | The `BrowserContext` for `page` — use when you need multiple pages |
+| `request` | test | An `APIRequestContext` honoring `baseURL`, `extraHTTPHeaders`, sharing cookies with browser context |
+| `browser` | worker | Shared `Browser` instance for the worker |
+| `browserName` | worker | `'chromium' \| 'firefox' \| 'webkit'` |
+| `baseURL`, `viewport`, `storageState`, `httpCredentials`, … | options | Read from `use:` config |
+
+## Real Use Cases
+
+- **Shared auth state per role** — see Section 5
+- **Database seeding per test** — fixture POSTs a node via JSON:API, yields the ID, deletes on teardown
+- **Mocked APIs** — fixture installs `page.route(...)` handlers on setup, removes on teardown
+- **Page objects** — each spec asks for the high-level POs it needs
+- **Per-test screenshot attachments** — auto fixture calls `testInfo.attach()` after each test
+
 ## Decision
 
 | Use worker scope (`{ scope: 'worker' }`) when | Use test scope (default) when |

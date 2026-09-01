@@ -140,6 +140,29 @@ for key, value in request.json.items():
         setattr(user, key, value)
 ```
 
+## API Versioning
+
+```python
+# URL versioning (recommended)
+@app.route('/api/v1/users')
+def get_users_v1():
+    # Version 1 implementation
+    return jsonify(users)
+
+@app.route('/api/v2/users')
+def get_users_v2():
+    # Version 2 with breaking changes
+    return jsonify(users_v2_format)
+
+# Header versioning (alternative)
+@app.route('/api/users')
+def get_users():
+    version = request.headers.get('API-Version', 'v1')
+    if version == 'v2':
+        return jsonify(users_v2_format)
+    return jsonify(users)
+```
+
 ## CORS (Cross-Origin Resource Sharing)
 
 ```python

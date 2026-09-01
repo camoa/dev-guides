@@ -9,6 +9,18 @@ tldr: Unit tests verify one function or class in isolation — no DB, no HTTP, n
 
 > Use unit tests when the code has meaningful logic that can be verified without external state. Do not write unit tests for pass-through functions, framework behavior, or private implementation details.
 
+## FIRST Properties
+
+Good unit tests are **FIRST**:
+
+| Property | Meaning | Why it matters |
+|---|---|---|
+| **Fast** | Milliseconds per test | Runs on every keystroke/save; 1,000 tests in < 2s |
+| **Isolated** | No shared state between tests | Tests can run in any order, any subset |
+| **Repeatable** | Same output for same input, always | No time, randomness, network, or environment dependencies |
+| **Self-validating** | Pass/fail determined automatically | No manual inspection needed |
+| **Timely** | Written at the right time (ideally first) | Late tests are lower quality; they verify rather than design |
+
 ## Decision
 
 | Write a unit test when... | Skip unit tests when... |

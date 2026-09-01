@@ -35,6 +35,82 @@ Three-layer stack:
 | Next.js | Two route handlers: `/api/deepchat/session` and `/api/deepchat` |
 | Drupal | `ai_chatbot` module — session controller + CSRF-protected chat endpoint |
 
+## Component Stack
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     Browser (Client-Side)                       │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │  deep-chat-react Component                                 │ │
+│  │  - User messages                                           │ │
+│  │  - SSE stream rendering                                    │ │
+│  │  - requestInterceptor (context injection)                  │ │
+│  │  - responseInterceptor (thread tracking)                   │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│                           ↓ HTTP POST                           │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│              Next.js Server (Route Handlers)                     │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │  /api/deepchat/session (POST)                              │ │
+│  │  - Initialize Drupal session                               │ │
+│  │  - Return CSRF token as plain text                         │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │  /api/deepchat (POST)                                      │ │
+│  │  - Fetch CSRF token via session endpoint                   │ │
+│  │  - Proxy to Drupal /api/deepchat?token=<csrf>             │ │
+│  │  - Stream SSE responses back to client                     │ │
+│  └────────────────────────────────────────────────────────────┘ │
+│                  ↓ Bearer: <access_token>                       │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│              Drupal Backend (AI Module)                          │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │  /api/deepchat/session (POST)                              │ │
+│  │  Route: ai_chatbot.session                                 │ │
+│  │  Requirements: _permission: 'access deepchat api'          │ │
+│  │  Controller: DeepChatApi::setSession()                     │ │
+│  │  - Start PHP session if not exists                         │ │
+│  │  - Generate CSRF seed in session metadata                  │ │
+│  │  - Return token via CsrfTokenGenerator::get("api/deepchat")│ │
+│  └────────────────────────────────────────────────────────────┘ │
+│  ┌────────────────────────────────────────────────────────────┐ │
+│  │  /api/deepchat?token=<csrf> (POST)                         │ │
+│  │  Route: ai_chatbot.api                                     │ │
+│  │  Requirements:                                              │ │
+│  │    - _permission: 'access deepchat api'                    │ │
+│  │    - _csrf_token: 'TRUE'                                   │ │
+│  │  Access Check: CsrfAccessCheck::access()                   │ │
+│  │  - Validates token against session seed                    │ │
+│  │  - Computes: HMAC(seed + private_key + hash_salt)         │ │
+│  │  Controller: DeepChatApi::api()                            │ │
+│  │  - Process AI assistant request                            │ │
+│  │  - Return JSON or StreamedResponse (SSE)                   │ │
+│  └────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## Key File Locations
+
+**Drupal Backend:**
+- `/web/modules/contrib/ai/modules/ai_chatbot/ai_chatbot.routing.yml` - Route definitions with CSRF requirements
+- `/web/modules/contrib/ai/modules/ai_chatbot/src/Controller/DeepChatApi.php` - API controller implementing session and chat endpoints
+- `/web/modules/contrib/ai/modules/ai_chatbot/js/deepchat-init.js` - Reference implementation for Drupal's native frontend integration
+- `/web/core/lib/Drupal/Core/Access/CsrfTokenGenerator.php` - Token generation logic
+- `/web/core/lib/Drupal/Core/Access/CsrfAccessCheck.php` - Token validation logic
+
+**Next.js Frontend:**
+- `/frontend/app/api/deepchat/route.ts` - Main chat proxy endpoint
+- `/frontend/app/api/deepchat/session/route.ts` - Session initialization proxy
+- `/frontend/src/components/chat/ChatWorkspace.tsx` - deep-chat-react wrapper component
+- `/frontend/src/components/chat/hooks/useChatSession.ts` - Session management hook
+- `/frontend/lib/drupal.ts` - next-drupal client configuration with OAuth
+
+---
+
 ## Common Mistakes
 
 - **Wrong**: Pointing `deep-chat` `connect.url` directly at Drupal → **Right**: Always proxy through Next.js to centralize token management

@@ -19,6 +19,15 @@ tldr: "Use the facade pattern for YouTube/Vimeo embeds on any performance-sensit
 | User-controlled video | `<video controls poster="thumb.jpg">` | Accessibility-compliant |
 | Replacing an animated GIF | `<video autoplay muted loop playsinline>` | 5–20x smaller; hardware-decoded |
 
+## Poster Frame Selection
+
+Never use the first frame as a poster — it is often a blank black frame or an unrepresentative composition. Select a frame at 10–25% through the video that shows the main subject clearly. Generate with FFmpeg:
+```bash
+ffmpeg -i video.mp4 -ss 00:00:02 -frames:v 1 poster.jpg
+```
+
+Poster image should follow the same format/optimization rules as regular images: WebP at 80% quality, explicit `width`/`height`.
+
 ## Pattern
 
 **YouTube facade** (static thumbnail, swap iframe on click):

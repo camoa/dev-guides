@@ -9,6 +9,18 @@ tldr: Use stubs to return controlled values, mocks to verify side effects occurr
 
 > Use test doubles to replace slow, non-deterministic, or unavailable dependencies (databases, HTTP, clocks, third-party APIs) in unit and integration tests. Mock at the boundary — external services — never inside your own application.
 
+## The Taxonomy (Meszaros)
+
+Gerard Meszaros coined the term "test double" (from "stunt double") and defined five distinct types. These names are often confused — using the wrong one produces brittle tests or missed coverage.
+
+| Type | Definition | Verifies? | Realistic? |
+|---|---|---|---|
+| **Dummy** | Passed to satisfy a parameter; never actually used | No | No |
+| **Stub** | Returns predetermined values to queries from the code under test | No | No |
+| **Spy** | Records calls; still delegates to a real or partial implementation | After the fact | Partially |
+| **Mock** | Pre-programmed with expectations; fails if not called correctly | Yes — interactions | No |
+| **Fake** | A working simplified implementation (in-memory DB, fake payment gateway) | Via behavior | Yes, simplified |
+
 ## Decision
 
 | If you need... | Use... | Why |

@@ -18,6 +18,21 @@ tldr: "Use `clamp()` for font sizes and spacing that scale smoothly between view
 | Type scale system (h1–h6) | `clamp()` per heading level | Consistent hierarchy at all sizes |
 | Container-relative sizing | `cqi` units | Scales with container, not viewport |
 
+## The clamp() Formula
+
+```
+clamp(MIN, PREFERRED, MAX)
+```
+- **MIN**: smallest the text will ever be (accessibility floor — usually ≥1rem for body)
+- **PREFERRED**: scales with viewport (e.g., `0.9rem + 1vw`)
+- **MAX**: largest the text will ever be (design ceiling)
+
+**Quick formula**: `clamp(minRem, calcRem + Xvw, maxRem)` where `X` = `(max - min) / (maxViewport - minViewport) * 100`.
+
+**Tools**: [Utopia.fyi](https://utopia.fyi/) generates fluid type/space scales with custom min/max viewports.
+
+**Browser support:** `clamp()`: all browsers (Baseline 2020). `cqi`: all browsers (Baseline 2023). Fully production-ready.
+
 ## Pattern
 
 ```css

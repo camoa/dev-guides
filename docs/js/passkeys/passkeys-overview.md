@@ -10,6 +10,18 @@ drupal_version: ""
 
 > Read this section before writing any passkey code to verify your environment satisfies WebAuthn requirements, select the correct server-side verification library, and identify which implementation flow maps to each use case.
 
+## Signal API Browser Support
+
+The WebAuthn Signal API (`signalAllAcceptedCredentials`, `signalCurrentUserDetails`, `signalUnknownCredential`) keeps password manager vaults synchronized with your server's credential state. It has **limited availability** — not supported in Firefox as of 2026. Always gate every call with feature detection:
+
+```js
+if (PublicKeyCredential.signalUnknownCredential) {
+  await PublicKeyCredential.signalUnknownCredential({ rpId, credentialId });
+}
+```
+
+Supported in: Chrome 132+, Edge 132+, Safari 26+ (Sep 2025). Not supported in Firefox. Treat the Signal API as progressive enhancement only.
+
 ## Decision
 
 | Requirement | Rule | Failure if violated |

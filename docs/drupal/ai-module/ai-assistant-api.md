@@ -48,6 +48,10 @@ Admin UI: `/admin/config/ai/ai-assistant`
 | `ai_agent` | Optional agent plugin ID (delegates to `AgentRunner`) |
 | `roles` | Roles that can use this assistant |
 
+## Function Calling Mode
+
+When `use_function_calling` is enabled, action plugins must implement `getFunctionCallSchema()` to return a JSON Schema describing their parameters. The runner passes these schemas as native tool definitions instead of embedding action lists in the pre-action prompt. The LLM responds with structured tool calls rather than JSON extracted from natural language.
+
 ## System Prompt Tokens
 
 `[instructions]`, `[pre_action_prompt]`, `[is_logged_in]`, `[user_roles]`, `[user_id]`, `[user_name]`, `[page_title]`, `[page_path]`, `[site_name]`

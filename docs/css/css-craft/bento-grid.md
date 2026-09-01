@@ -19,6 +19,37 @@ tldr: "Use CSS Grid with `span` values or `grid-template-areas` for bento layout
 | Interactive bento (hover effects) | Grid + card hover patterns | See [Hover Effects Collection](hover-effects-collection.md) |
 | Auto-filling bento | `grid-auto-flow: dense` | Fills gaps automatically |
 
+## Pattern: Bento with Hover Effects
+
+```css
+.bento__item {
+  transition: transform 0.3s var(--ease-standard),
+              box-shadow 0.3s var(--ease-standard);
+}
+
+.bento__item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px oklch(0% 0 0 / 0.1);
+}
+
+/* Image zoom inside bento tile */
+.bento__item img {
+  transition: transform 0.6s var(--ease-standard);
+}
+
+.bento__item:hover img {
+  transform: scale(1.05);
+}
+```
+
+## Styling Conventions
+
+- **Border radius**: 12-24px (Apple uses 16-20px)
+- **Gap**: 8-16px (denser = more "bento", wider = more "dashboard")
+- **Background**: Subtle surface color, not white on white
+- **Content**: Icon + heading + short text, or full-bleed image
+- **Overflow**: `hidden` on tiles to clip images and backgrounds
+
 ## Pattern
 
 ```css

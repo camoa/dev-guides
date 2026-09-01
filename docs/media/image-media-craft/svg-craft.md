@@ -9,6 +9,35 @@ tldr: "Use `css mask-image` for single-color icon systems — it separates shape
 
 > Use `css mask-image` for single-color icon systems — it separates shape from color and works with dark mode. Use inline `<svg>` with `currentColor` for multi-color icons or when you need animation. Use `<img src="icon.svg">` for static decorative images with no color theming.
 
+## Inline SVG with `currentColor`
+
+```html
+<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+  <path fill="currentColor" d="M12 2L2 7l10 5 10-5-10-5z"/>
+</svg>
+```
+
+Use `currentColor` as the `fill` value so the icon inherits its parent's text color. Combined with CSS `color` changes on hover/focus, this provides theme-adaptive icons without additional attributes.
+
+## Animated SVG
+
+| Approach | When to Use | Trade-off |
+|---|---|---|
+| CSS animations on SVG elements | Simple path color, opacity, transform | Easy; hardware-accelerated transforms |
+| WAAPI (Web Animations API) | Programmatic control, timeline, JS-driven | Good browser support; no library needed |
+| SMIL | Legacy or path morphing only | Do not use for new work; inconsistent browser behavior |
+| GSAP | Complex choreography, morphSVG | Best DX; requires library (~50KB) |
+
+CSS `transform` on SVG elements is now hardware-accelerated in all modern browsers. Use it for hover states and entrance animations. For complex path morphing or sequencing, use GSAP's MorphSVG plugin.
+
+```css
+/* SVG hover animation — GPU composited */
+.icon { transition: transform 0.15s var(--ease-standard, cubic-bezier(0.2, 0, 0, 1)); }
+.icon:hover { transform: scale(1.1) rotate(10deg); }
+```
+
+Always wrap SVG animations in `@media (prefers-reduced-motion: no-preference)`.
+
 ## Decision
 
 | If you need... | Use... | Why |

@@ -10,6 +10,31 @@ drupal_version: "11.x"
 
 > Use responsive image styles (not image styles) for any image that appears at different sizes across breakpoints. Use focal point module on any editorial site where editors upload images at multiple aspect ratios. Add WebP conversion via core effect or ImageAPI Optimize AVIF & WebP module.
 
+## Focal Point Module — Why It Matters
+
+Without focal point, Drupal's scale-and-crop centers the crop region. For user-uploaded portraits, this frequently crops the subject's face. Focal point:
+
+1. Adds a draggable focal point to image upload in Media Library
+2. Stores the focal point as x/y percentages on the file entity
+3. Focal point crop effect uses those coordinates when generating derivatives
+4. CKEditor5 Focal Point module integrates it into embedded media
+
+**When to use focal point**: Any site where editors upload images that will be displayed at multiple aspect ratios (hero, card, thumbnail). This is essentially every editorial site.
+
+```yaml
+# Image style using focal point crop instead of standard crop
+effects:
+  uuid-1:
+    id: focal_point_crop
+    weight: 0
+    data:
+      width: 800
+      height: 600
+      crop_type: focal_point
+```
+
+See `drupal-image-styles.md` → `core-image-effects` for the full effect configuration schema.
+
 ## Decision
 
 | If you need... | Use... | Config location |

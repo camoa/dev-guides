@@ -22,6 +22,10 @@ tldr: "Use native HTML for single elements (buttons, links). Use roving tabindex
 | Skip navigation to main content | Skip link (first in DOM, shown on focus) | WCAG 2.4.1 requirement |
 | Background content when overlay is open | `inert` attribute | Prevents interaction AND keyboard focus without JS |
 
+## Tab Order vs Visual Order
+
+Visual reordering via CSS `order`, `grid-template-areas`, or `flex-direction: row-reverse` does NOT change DOM order — Tab follows DOM order. If visual and DOM order diverge, keyboard users experience a confusing, non-linear Tab sequence. Fix: match DOM order to reading order, use CSS for visual reordering only when the relationship between elements is already visually clear.
+
 ## Pattern
 
 ```javascript

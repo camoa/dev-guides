@@ -10,6 +10,96 @@ drupal_version: "11.x"
 
 > Reference this when implementing HTMX features and wanting to follow security, performance, accessibility, and development standards.
 
+## Performance
+
+**Use minimal responses:**
+- Always use `onlyMainContent()` or `_htmx_route: TRUE` for HTMX-only endpoints
+- Return only necessary content via `select()` attribute
+- Cache render arrays with appropriate contexts and tags
+
+**Optimize swap strategies:**
+- Use `swap('innerHTML')` for content-only updates
+- Use `swap('outerHTML')` when wrapper changes
+- Use `swap('beforeend')` for append operations (load more, infinite scroll)
+- Avoid `swap('none')` unless using OOB swaps
+
+**Leverage differential asset loading:**
+- Drupal automatically loads only new CSS/JS files
+- Don't manually manage asset loading — trust `ajax_page_state` integration
+- Group related functionality in libraries to minimize requests
+
+**Cache aggressively:**
+```php
+$build['#cache'] = [
+  'keys' => ['my_module', 'content', $entity_id],
+  'contexts' => ['url.query_args:page'],
+  'tags' => ['node:' . $entity_id],
+  'max-age' => 3600,
+];
+```
+
+**Avoid N+1 queries in loops:**
+```php
+// GOOD: Load all at once
+$entities = $this->entityTypeManager
+  ->getStorage('node')
+  ->loadMultiple($ids);
+
+// BAD: Loop loading
+foreach ($ids as $id) {
+  $entity = $this->entityTypeManager->getStorage('node')->load($id);
+}
+```
+
+**Consider request debouncing:**
+```php
+// For live search, debounce keystrokes
+(new Htmx())
+  ->trigger('keyup changed delay:500ms')  // Wait 500ms after typing stops
+  ->applyTo($form['search']);
+```
+
+## Accessibility
+
+**Status messages:**
+- HtmxRenderer automatically includes `#type: 'status_messages'` in responses
+- Messages announce to screen readers via Drupal's messaging system
+
+**Focus management:**
+- HTMX maintains focus on triggering element by default
+- For modals or major swaps, set focus explicitly via `hx-on`:
+  ```php
+  (new Htmx())
+    ->on('::afterSwap', 'document.querySelector("#modal-content").focus()')
+    ->applyTo($build['trigger']);
+  ```
+
+**Keyboard navigation:**
+- Test all HTMX interactions with keyboard only
+- Ensure buttons/links are focusable and activatable with Enter/Space
+- Don't use `<div>` with HTMX attributes — use semantic HTML (`<button>`, `<a>`)
+
+**ARIA attributes:**
+- Add `aria-live` regions for dynamic content updates:
+  ```php
+  $build['results'] = [
+    '#type' => 'container',
+    '#attributes' => [
+      'id' => 'search-results',
+      'aria-live' => 'polite',
+      'aria-atomic' => 'true',
+    ],
+  ];
+  ```
+
+**Screen reader announcements:**
+- Use `aria-busy` during requests:
+  ```php
+  (new Htmx())
+    ->indicator('#status[aria-busy="true"]')
+    ->applyTo($form['submit']);
+  ```
+
 ## Decision
 
 | Area | Rule | Anti-pattern |

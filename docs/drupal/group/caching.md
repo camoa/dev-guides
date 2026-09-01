@@ -54,6 +54,24 @@ Group provides three cache bins:
 | `cache.group_memberships` | Persistent (default) | Cross-request membership cache |
 | `cache.group_memberships_chained` | Chained (memory + persistent) | Used by all membership lookups |
 
+## Cache Contexts
+
+| Context | Class | Varies on |
+|---|---|---|
+| `user.group_permissions` | `GroupPermissionsCacheContext` | User's full calculated group permissions (hash) |
+| `user.is_group_member` | `IsGroupMemberCacheContext` | Whether the user is a member of the current route group |
+| `route.group` | `RouteGroupCacheContext` | Which group is in the current route context |
+
+`user.group_permissions` is the most important. It generates a SHA-256 hash of the user's complete permission matrix across all scopes and groups. This hash is stored in a static cache keyed by user ID.
+
+For anonymous users: because reverse proxies cache full responses without calculating context values, the `AnonymousUserResponseSubscriber` adds the permission cache tags to responses that vary by `user.group_permissions`. This ensures proxy caches are invalidated when anonymous group permissions change.
+
+## Permission Hash Optimization
+
+The hash generator (`GroupPermissionsHashGenerator`) must track membership IDs for synchronized (outsider/insider) roles. Without this, two users with the same insider permissions but membership in different groups could share a cache entry and see each other's group lists.
+
+The trade-off: users with synchronized roles produce per-membership-set hashes with lower cache hit rates. If you have a site with many users who all have the same insider permissions, consider whether insider roles are actually needed vs. just using individual roles.
+
 ## Common Mistakes
 
 - **Wrong**: Missing `user.group_permissions` context in custom blocks that check `$group->hasPermission()` → **Right**: Without it, all users see the same cached output regardless of their group permissions.

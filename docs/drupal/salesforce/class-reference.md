@@ -93,6 +93,44 @@ MappingConstants::SALESFORCE_MAPPING_ARRAY_DELIMITER     // ';'
 - `listResources()` — list available REST API resources
 - `getVersions($reset)` — list available API versions
 
+## SalesforceAuthTokenStorage
+
+Service for storing OAuth tokens and identity in Drupal state.
+
+**Location:** `/web/modules/contrib/salesforce/src/Storage/SalesforceAuthTokenStorage.php`
+**Service ID:** `salesforce.auth_token_storage`
+
+**Key Methods:**
+- `storeAccessToken($service, $token)` - Store OAuth token
+- `retrieveAccessToken($service)` - Retrieve stored token
+- `hasAccessToken($service)` - Check if token exists
+- `clearToken($service)` - Remove stored token
+- `storeIdentity($service, $identity)` - Store user identity
+- `retrieveIdentity($service)` - Retrieve user identity
+
+## SoapClient
+
+Wrapper around the Salesforce Partner SOAP API.
+
+**Location:** `/web/modules/contrib/salesforce/modules/salesforce_soap/src/Soap/SoapClient.php`
+**Service ID:** `salesforce_soap.client`
+
+**Extends:** `SforcePartnerClient` (from developerforce/force.com-toolkit-for-php)
+
+**Key Methods:**
+- `connect()` - Establish SOAP connection using REST auth tokens
+- `isConnected()` - Check connection status
+- `trySoap($function, $params, $refresh)` - Execute SOAP call with auto-retry
+
+**Use Cases:**
+- Metadata API operations not available in REST
+- Bulk API operations
+- Legacy integrations requiring SOAP
+
+**Decision Point:** Prefer REST API for all standard operations. Use SOAP only when specific functionality is unavailable via REST.
+
+---
+
 ## Common Mistakes
 
 - **Wrong**: Comparing SFID strings directly with `==` — 15 and 18 char versions of the same record won't match → **Right**: Use the `SFID` value object and compare via `(string) $sfid` after normalization to 18 chars

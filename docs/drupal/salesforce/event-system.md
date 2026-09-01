@@ -56,6 +56,92 @@ public function pushAllowed(SalesforcePushAllowedEvent $event): void {
 }
 ```
 
+## Available Events
+
+**Push Events:**
+
+`SalesforceEvents::PUSH_ALLOWED` (`salesforce.push_allowed`)
+- Event class: `SalesforcePushAllowedEvent`
+- Purpose: Veto push operations
+- Method: `$event->disallowPush()`
+- Use case: Conditional push logic based on entity state
+
+`SalesforceEvents::PUSH_MAPPING_OBJECT` (`salesforce.push_mapping_object`)
+- Event class: `SalesforcePushOpEvent`
+- Purpose: Modify mapped object before push
+- Access: `$event->getMappedObject()`
+- Use case: Change SFID, modify mapping relationship
+
+`SalesforceEvents::PUSH_PARAMS` (`salesforce.push_params`)
+- Event class: `SalesforcePushParamsEvent`
+- Purpose: Modify field values before API call
+- Access: `$event->getParams()`, `$event->setParam()`
+- Use case: Field transformations, calculated values
+
+`SalesforceEvents::PUSH_SUCCESS` (`salesforce.push_success`)
+- Event class: `SalesforcePushParamsEvent`
+- Purpose: Post-push processing
+- Use case: Logging, notifications, related record updates
+
+`SalesforceEvents::PUSH_FAIL` (`salesforce.push_fail`)
+- Event class: `SalesforcePushOpEvent`
+- Purpose: Error handling
+- Use case: Custom error logging, retry logic
+
+**Pull Events:**
+
+`SalesforceEvents::PULL_QUERY` (`salesforce.pull_query`)
+- Event class: `SalesforceQueryEvent`
+- Purpose: Modify SOQL query
+- Access: `$event->getQuery()`
+- Use case: Add fields, subqueries, conditions, limits
+- Reference: `SalesforceExampleSubscriber::pullQueryAlter()`
+
+`SalesforceEvents::PULL_PREPULL` (`salesforce.pull_prepull`)
+- Event class: `SalesforcePullEvent`
+- Purpose: Pre-processing, veto pull
+- Method: `$event->disallowPull()`
+- Use case: Conditional pull, pre-validation
+
+`SalesforceEvents::PULL_ENTITY_VALUE` (`salesforce.pull_entity_value`)
+- Event class: `SalesforcePullEntityValueEvent`
+- Purpose: Modify field values during mapping
+- Use case: Field transformations, data cleanup
+
+`SalesforceEvents::PULL_PRESAVE` (`salesforce.pull_presave`)
+- Event class: `SalesforcePullEvent`
+- Purpose: Final entity modifications before save
+- Use case: Complex field logic, related entity operations, file attachments
+- Reference: `SalesforceExampleSubscriber::pullPresave()` (attachment fetch example)
+
+`SalesforceEvents::PULL_ENQUEUE` (`salesforce.pull_enqueue`)
+- Event class: `SalesforcePullEnqueueEvent`
+- Purpose: Modify queue item before enqueueing
+- Use case: Priority logic, conditional enqueueing
+
+**Delete Events:**
+
+`SalesforceEvents::DELETE_ALLOWED` (`salesforce.delete_allowed`)
+- Event class: `SalesforceDeleteAllowedEvent`
+- Purpose: Veto delete operations
+- Method: `$event->disallowDelete()`
+
+**Logging Events:**
+
+`SalesforceEvents::ERROR` (`salesforce.error`)
+- Event class: `SalesforceErrorEvent`
+- Purpose: Error logging
+
+`SalesforceEvents::WARNING` (`salesforce.warning`)
+- Event class: `SalesforceWarningEvent`
+- Purpose: Warning logging
+
+`SalesforceEvents::NOTICE` (`salesforce.notice`)
+- Event class: `SalesforceNoticeEvent`
+- Purpose: Notice logging
+
+---
+
 ## Common Mistakes
 
 - **Wrong**: Implementing legacy hooks from `salesforce.api.php` → **Right**: Use EventSubscriber — hooks are deprecated and may be removed

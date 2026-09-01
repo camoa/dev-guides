@@ -9,6 +9,18 @@ tldr: "Tests are production code — apply the same review standards. Key anti-p
 
 > Use as a checklist during code review, when evaluating an inherited test suite, or before merging a feature. These patterns apply across all test types.
 
+## Testing Checklist for New Features
+
+Before a feature is merged:
+- [ ] Happy path is covered by at least one test
+- [ ] Edge cases (null, empty, boundary values) are covered for all logic-heavy code
+- [ ] Error paths are tested (what happens when it fails?)
+- [ ] New code does not require changes to test for other features (isolation preserved)
+- [ ] Integration points (DB, external API) are tested with appropriate doubles
+- [ ] No new flaky tests introduced (all new tests pass 10 consecutive times)
+- [ ] Test names clearly describe scenario and expected outcome
+- [ ] CI passes on first run, not "retry until green"
+
 ## Decision
 
 **Core best practices:**

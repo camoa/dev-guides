@@ -20,6 +20,10 @@ drupal_version: "11.x"
 | Design tokens from Figma | Figma token export → CSS custom properties → `@theme` | Standard token pipeline; no Canvas-specific tool |
 | Component-specific overrides | Prop-driven CSS classes or inline styles | Per-component flexibility without global token changes |
 
+## Design Token Exposure in Canvas Editor
+
+Canvas allows token values to be surfaced in the editor for non-developer adjustment. This is a Canvas configuration concern, not a component concern. Currently tracked as an evolving feature — consult the Canvas project roadmap for the current state of the design token editor UI.
+
 ## Pattern
 
 Canvas approaches theming in layers:

@@ -9,6 +9,31 @@ tldr: E2E tests verify complete user journeys through a real browser — use the
 
 > Use E2E tests for the most critical user journeys where no cheaper test gives adequate confidence. Do NOT use E2E as the primary test type — it is the most expensive layer and the last resort, not the first.
 
+## What E2E Tests Are For
+
+E2E tests verify the **integrated system from the user's perspective**:
+- Real browser (Chromium, Firefox, WebKit) executes JavaScript
+- Real network requests hit a real (or realistic) server
+- Real CSS, rendering, layout, and interaction events occur
+- Client-side behavior (form validation, modals, AJAX updates) is exercised
+
+This is the only layer that catches:
+- CSS/JS conflicts that break interactive behavior
+- Network request failures that only appear in a real browser context
+- Client-side routing errors in SPAs
+- Cross-browser rendering or event handling differences
+- Third-party script interference
+
+## The Cost of E2E Tests
+
+E2E tests are 10–100× slower than integration tests. Each test typically:
+- Launches a browser process
+- Navigates to a URL (network + render)
+- Interacts with DOM elements (potentially with timing dependencies)
+- Can be flaky due to animation, network jitter, timing, or state pollution
+
+An E2E suite with 500 tests can take 30+ minutes to run, which pushes developers to skip it. **Keep E2E tests few. Cover critical paths only.**
+
 ## Decision
 
 | Cover in E2E | Do NOT cover in E2E |

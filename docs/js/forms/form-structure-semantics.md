@@ -60,6 +60,16 @@ drupal_version: ""
 - **Do not disable the submit button** for validation — keyboard users cannot trigger native error display.
 - **Disable after a valid submission click** to prevent double-posts.
 
+## Security & Responsive Rules
+
+- Use `lang` attribute on `<html>` — required for device translation and screen readers.
+- Use `font-size: 1rem` (16px minimum) on inputs — prevents automatic iOS zoom on focus.
+- Tap targets must be at least `48px` in height. Use padding to extend click area without layout shift.
+- Use CSS logical properties (`margin-inline-start`, `padding-block`) for RTL/LTR support.
+- Always HTTPS. Use cryptographically secure anti-CSRF tokens for all POST/PUT/DELETE actions.
+- Sanitize any user-supplied content before injecting into the DOM (e.g., DOMPurify). Client-side validation is UX; server-side is security.
+- Implement spam protection (honeypots or CAPTCHA) on open forms.
+
 ## Common Mistakes
 
 - **`<div>` for form controls** → no semantic role, no keyboard access, autofill blind

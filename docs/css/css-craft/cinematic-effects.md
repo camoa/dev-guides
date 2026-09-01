@@ -9,6 +9,92 @@ tldr: "Use cinematic effects on hero sections, primary CTAs, and feature highlig
 
 > Use cinematic effects on hero sections, primary CTAs, and feature highlights — one or two per page maximum. Do not use on navigation, body copy, form fields, dashboards, or secondary CTAs.
 
+## Neon Effects
+
+**What it is:** Electric neon sign aesthetics — text or borders that appear to emit colored light, achieved through stacked `text-shadow` or `box-shadow` layers building from tight inner glow to wide diffuse halo. Optional: flicker animation using opacity keyframes.
+
+**Performance:** Static neon = paint-only (acceptable). The neon flicker keyframe is fast because it animates `text-shadow` between two states — not a gradual change, but a snap. Prefer the `@keyframes` flicker over `opacity` transitions for the authentic electrical cut-off feel.
+
+**Pattern — neon text:**
+
+```css
+.neon-text {
+  --neon-color: hsl(150 90% 55%);
+  --neon-white: hsl(0 0% 100%);
+
+  color: var(--neon-white);
+  text-shadow:
+    0 0  4px var(--neon-white),
+    0 0 10px var(--neon-white),
+    0 0 21px var(--neon-color),
+    0 0 42px var(--neon-color),
+    0 0 82px hsl(150 90% 55% / 0.7),
+    0 0 92px hsl(150 90% 55% / 0.5);
+}
+```
+
+**Pattern — neon border:**
+
+```css
+.neon-border {
+  --neon-color: hsl(300 90% 60%);
+
+  border: 2px solid var(--neon-color);
+  border-radius: 8px;
+  box-shadow:
+    0 0  5px var(--neon-color),
+    0 0 10px var(--neon-color),
+    0 0 20px hsl(300 90% 60% / 0.6),
+    inset 0 0 5px  hsl(300 90% 60% / 0.3),
+    inset 0 0 20px hsl(300 90% 60% / 0.1);
+}
+```
+
+**Pattern — neon flicker animation:**
+
+```css
+.neon-flicker {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: neon-flicker 2.5s linear infinite;
+  }
+}
+
+/* Flicker snaps on/off — no interpolation, that's intentional */
+@keyframes neon-flicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+    text-shadow:
+      0 0 4px #fff, 0 0 10px #fff,
+      0 0 21px hsl(150 90% 55%),
+      0 0 42px hsl(150 90% 55%);
+    opacity: 1;
+  }
+  20%, 24%, 55% {
+    text-shadow: none;
+    opacity: 0.8;
+  }
+}
+```
+
+**Accessibility:**
+```css
+@media (prefers-reduced-motion: reduce) {
+  .neon-flicker { animation: none; }
+  /* Static neon glow remains */
+}
+
+/* WCAG note: neon text on dark backgrounds — verify 4.5:1 contrast ratio.
+   White (#fff) on very dark backgrounds passes easily.
+   Colored neon text alone may fail — always pair with white or near-white text color */
+```
+
+**Style compatibility:** Retro/Y2K, Memphis, cyberpunk, nightlife aesthetics. Completely wrong for corporate, healthcare, finance, or any context requiring trust signals.
+
+**Professional vs overdone:**
+- Professional: 1 neon element per section, matched to the brand palette, used for a label or border accent
+- Overdone: Every heading is neon, multiple colors competing, flicker on multiple elements simultaneously (seizure risk — WCAG 2.3.1 limits flashing to 3 times/second)
+
+---
+
 ## Decision
 
 ### When to Apply

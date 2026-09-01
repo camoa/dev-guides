@@ -26,6 +26,13 @@ tldr: "Use `clip-path` for shaped containers, animated reveals (wipes, sweeps, i
 - Animate `inset()` to `inset()` freely
 - Cannot animate between shape types (e.g., `circle()` to `polygon()`)
 
+## Animation Rules for clip-path
+
+- You can animate between `polygon()` values — but they must have the **same number of points**. A triangle cannot animate to a rectangle without adding a co-located extra point.
+- You can animate `inset()` to `inset()` freely (different values, same type).
+- You cannot animate between shape types (e.g., `circle()` to `polygon()`).
+- CSS 2025: the `shape()` function enables curves with fewer workarounds, but animating to/from `shape()` still requires matching point counts.
+
 ## Pattern
 
 **Wipe reveal on scroll:**

@@ -29,6 +29,15 @@ tldr: "Use optimistic UI when the expected server response is success and failur
 | Spinner inside button | Slow operations (> 1s) | Instant operations — spinner flash is worse than nothing |
 | No indicator | Toggle states with < 100ms server response | Slow connections — users retry a completed action |
 
+## Rollback UX
+
+Good rollback is invisible: the state snaps back, and a non-blocking toast explains what happened. Never use a blocking modal for rollback — the user has already moved on.
+
+The toast should:
+- Be dismissible immediately (not wait 5 seconds to disappear)
+- Offer a retry action if the action had user intent
+- Not interrupt what the user is currently doing
+
 ## Pattern
 
 ```javascript

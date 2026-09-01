@@ -9,6 +9,82 @@ tldr: "Copy this complete token set into any project as a starting point. All va
 
 > Copy this complete token set into any project as a starting point. All values are based on MD3 motion tokens, cross-design-system opacity standards, and layered shadow methodology.
 
+## Complete Token Set
+
+```css
+:root {
+  /* ===========================
+     EASING CURVES (MD3-aligned)
+     =========================== */
+  --ease-default:          cubic-bezier(0.2, 0, 0, 1);     /* General UI */
+  --ease-enter:            cubic-bezier(0.05, 0.7, 0.1, 1); /* Elements entering */
+  --ease-exit:             cubic-bezier(0.3, 0, 0.8, 0.15); /* Elements leaving */
+  --ease-decel:            cubic-bezier(0, 0, 0, 1);        /* Standard decelerate */
+  --ease-accel:            cubic-bezier(0.3, 0, 1, 1);      /* Standard accelerate */
+
+  /* ===========================
+     DURATION SCALE (50ms steps)
+     =========================== */
+  --duration-instant:  50ms;    /* Micro-feedback (ripple) */
+  --duration-micro:   100ms;    /* State changes (checkbox, toggle) */
+  --duration-fast:    150ms;    /* Hover/active states */
+  --duration-normal:  200ms;    /* Small component transitions */
+  --duration-medium:  300ms;    /* Component enter/exit (modal, popover) */
+  --duration-slow:    400ms;    /* Larger transitions */
+  --duration-slower:  500ms;    /* Complex choreographed motion */
+
+  /* ===========================
+     REVEAL DISTANCES
+     =========================== */
+  --reveal-distance:    20px;   /* Entrance animation translate */
+  --hover-lift:          2px;   /* Card hover translateY */
+  --active-scale:       0.97;   /* Button active scale */
+
+  /* ===========================
+     SHADOW SYSTEM
+     =========================== */
+  --shadow-color:     220deg 60% 50%;
+  --shadow-strength:  0.1;
+
+  /* ===========================
+     TEXT HIERARCHY (alpha)
+     =========================== */
+  --alpha-primary:     1.0;     /* Headlines, body, primary labels */
+  --alpha-secondary:   0.7;     /* Subtitles, descriptions, metadata */
+  --alpha-tertiary:    0.5;     /* Captions, hints, timestamps */
+  --alpha-disabled:    0.38;    /* Disabled labels, inactive controls */
+
+  /* ===========================
+     STATE OVERLAYS (alpha)
+     =========================== */
+  --state-hover:    0.08;
+  --state-focus:    0.12;
+  --state-pressed:  0.16;
+  --state-disabled: 0.38;
+
+  /* ===========================
+     STRUCTURAL OPACITY
+     =========================== */
+  --divider:        0.12;
+  --overlay-scrim:  0.32;
+
+  /* ===========================
+     SKELETON LOADING
+     =========================== */
+  --skeleton-bg:    hsl(220 15% 90%);
+  --skeleton-shine: hsl(220 15% 97%);
+  --skeleton-speed: 1.5s;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] {
+  --shadow-color:    220deg 40% 2%;
+  --shadow-strength: 0.25;
+  --skeleton-bg:    hsl(220 15% 18%);
+  --skeleton-shine: hsl(220 15% 25%);
+}
+```
+
 ## Decision
 
 | What | Value | Notes |

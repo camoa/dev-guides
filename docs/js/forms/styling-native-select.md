@@ -21,6 +21,50 @@ drupal_version: ""
 | Animated open/close picker | `appearance: base-select` + `@starting-style` | Limited |
 | Validation state on `<select>` | `:user-invalid` / `:user-valid` | Widely available (Baseline 2023) |
 
+## Grid / Flex Picker Layouts
+
+```css
+.grid-picker::picker(select) {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 15px;
+}
+
+/* Multiple indicators for checked state — not colour alone */
+.grid-picker option:checked {
+  border: 2px solid #007bff;
+  background-color: #f0f7ff;
+  font-weight: 700;
+}
+```
+
+**Accessibility warning:** A native `<select>` enforces linear (Up/Down) arrow key navigation. Arranging options in a visual grid creates a spatial mismatch — Left/Right arrows do not move focus between columns. If true 2D keyboard navigation is essential, use a custom ARIA `role="listbox"` composite widget with JavaScript matrix navigation instead of a native `<select>`.
+
+## Validation State on Select
+
+```css
+/* :user-invalid fires only after the user opens and closes without choosing */
+select:user-invalid { border-color: #d93025; background-color: #fce8e6; }
+select:user-invalid + .error-msg { display: block; }
+select:user-valid   { border-color: #188038; }
+```
+
+Placeholder option pattern for mandatory selects:
+
+```html
+<select id="country" name="country" required aria-errormessage="country-error">
+  <option value="" disabled selected>Select a country…</option>
+  <option value="us">United States</option>
+</select>
+```
+
+## Fallback Rules
+
+- Older browsers strip HTML tags from `<option>` elements — ensure plain text content is meaningful on its own.
+- Browsers that don't recognise `<button>` or `<selectedcontent>` inside `<select>` ignore them silently — no JS polyfill is required.
+- Always ensure the `<select>` has a `name` attribute and an associated `<label>` — critical for both screen readers and form submission regardless of visual customisation.
+
 ## Pattern
 
 **accent-color (widely available):**

@@ -10,6 +10,30 @@ drupal_version: "11.x"
 
 > Reference this when configuring how HTMX elements make requests, where content goes, and how it swaps. The `Htmx` class provides 30+ attribute methods.
 
+## Additional Control Attributes
+
+| Method | Attribute | Purpose |
+|--------|-----------|---------|
+| `vals(array)` | `data-hx-vals` | Additional values as JSON |
+| `headers(array)` | `data-hx-headers` | Additional request headers |
+| `confirm(string)` | `data-hx-confirm` | Confirmation dialog before request |
+| `disable()` | `data-hx-disable` | Disable HTMX processing on element |
+| `disabledElt(string)` | `data-hx-disabled-elt` | Elements to disable during request |
+| `include(string)` | `data-hx-include` | Include additional element values |
+| `indicator(string)` | `data-hx-indicator` | Loading indicator element |
+| `params(string\|array)` | `data-hx-params` | Filter submitted parameters |
+| `validate(bool)` | `data-hx-validate` | Validate before submit |
+
+**Usage:**
+```php
+(new Htmx())
+  ->vals(['extra' => 'value'])
+  ->confirm('Are you sure?')
+  ->indicator('#spinner');
+```
+
+Reference: Lines 860-1278 of Htmx.php
+
 ## Decision
 
 **Request attributes:**

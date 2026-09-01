@@ -9,6 +9,25 @@ tldr: "A test suite with 5% flakiness has a 99.9% chance of at least one failure
 
 > Apply these patterns whenever a test passes sometimes and fails others, or when designing tests to prevent flakiness. A flaky test is worse than no test: it trains developers to ignore failures and erodes trust in the entire suite.
 
+## Why Flakiness Is a First-Class Problem
+
+A test suite with 5% flakiness at 200 tests has a roughly 99.9% chance of at least one failure on any given run, even when all code is correct. That means CI fails every run for reasons unrelated to code. Teams respond by:
+- Re-running CI blindly until it passes
+- Marking flaky tests as "expected failures" (so they never catch real bugs)
+- Disabling the tests entirely
+
+The cost of a flaky test exceeds the cost of deleting it.
+
+## Quarantine vs. Fix
+
+When you find a flaky test:
+1. **Quarantine it immediately** — tag it as flaky, skip it in CI, open a ticket. Do not leave it breaking CI.
+2. **Investigate the root cause** — look for the sources above; add logging to understand when/why it fails
+3. **Fix the root cause** — do not simply increase timeouts or add retries
+4. **Remove the quarantine** — once fixed, verify it passes 10+ consecutive runs before unquarantining
+
+Retrying flaky tests in CI (`--retries=2`) is a temporary mitigation, not a fix. Each retry is wasted CI time and a lie that the test is reliable.
+
 ## Decision
 
 | Source | Mechanism | Fix |

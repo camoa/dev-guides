@@ -43,6 +43,16 @@ Utility-first means utilities are the default, and abstractions are earned throu
 - **Sanitize class attributes** — if user-provided data renders as CSS class attributes in HTML, sanitize it; non-existent class names can be used for CSS injection.
 - **Validate token values from APIs or CMS** — malformed oklch values won't cause XSS but may break rendering.
 
+## Accessibility Standards
+
+These are non-negotiable minimums — not optional:
+
+- **Always use `focus-visible:` not `focus:`** for keyboard focus rings — `focus:` triggers on mouse clicks, degrading UX; `focus-visible:` only activates for keyboard navigation
+- **Never use `outline-none` without a replacement** — `focus-visible:outline-none focus-visible:ring-2` is acceptable; bare `outline-none` makes the page unusable for keyboard users
+- **Color contrast** — Tailwind's default palette satisfies WCAG AA at most shade combinations, but verify: `gray-500` on `white` is ~4.4:1 (borderline); `gray-600` on `white` is ~5.5:1 (clear pass)
+- **Screen reader utilities** — use `sr-only` for accessible labels on icon-only buttons; use `not-sr-only` to conditionally reveal them
+- **Motion** — wrap animations in `motion-safe:` or test with `motion-reduce:hidden`
+
 ## Performance Standards
 
 - Avoid safelisting entire color scales when you only need 3 shades — `@source inline` generates CSS at build time.
