@@ -6,7 +6,7 @@ description: Use when a Python project enters the implementation phase and must 
 # Metadata — read only after a match.
 label: Python implementation standards and tests
 recipe_schema_version: 1.0.0
-version: 0.2.0
+version: 0.3.0
 # Machine-readable dependency declaration (recipe-loader resolves these
 # without parsing prose). The test-mutability rule is stack-neutral: it is
 # cited here, never restated per framework.
@@ -37,6 +37,20 @@ The plugin owns the generic implement phase — when it runs, the TDD discipline
 **The failing test comes first, and it fails for the right reason.** A test that fails with `ImportError` has not tested anything. Write it so it fails on the assertion, then make it pass.
 
 **Tests import the package; they do not shell out.** A test that runs the console script as a subprocess tests the wiring and nothing else, slowly. Test the entry point the design named. One test per console script may exercise the wiring end to end; the rest reach the library.
+
+**The test tier matches the dependency surface — pick the smallest that answers the question.** Five tiers, and naming one deliberately is the point:
+
+- **plain unit** — pure logic with no collaborators and no I/O. Constructs the object or calls the function and asserts on what comes back.
+- **unit with collaborators wired** — the behaviour needs its collaborators. Use the real ones where they are cheap and deterministic; reach for a double only at a boundary that must be isolated (network, clock, randomness).
+- **integration / fixture** — only the composed pieces answer the question: real file I/O against `tmp_path`, a real config tree, a real database.
+- **entry point** — calls the function the console script wraps, passing argv as a list and reading streams through `capsys`. This is the **default tier for CLI behaviour**: it exercises argument parsing, the exit-code mapping and the library call in one fast, coverage-instrumented, debuggable test with no build or subprocess.
+- **subprocess** — reserved for what only exists at the process boundary: the exit status the interpreter actually returns, signal handling, and stdin arriving from a real pipe. At most one per console script, per the rule above.
+
+Pushing pure logic into a fixture test that needs a temp tree, or doubling a collaborator a unit really needs so the test proves nothing, are both tier mismatches. `pytest.mark.parametrize` is the table-driven shape and is the default for a tier with more than two cases.
+
+**Every tier above is inside the TDD loop; browser E2E and visual regression are not.** The line is not whether a subprocess is spawned, it is whether the test was written before the code and run red. All five tiers are written from the contract the design fixed, so they constrain it. A Playwright suite or a snapshot baseline, where a project has one, runs against something already built, cannot drive a design decision, and does not count toward the test-first requirement here.
+
+**Adding a test is not automatically progress.** The loop's requirement for a change is one specification per behaviour it creates, at the smallest tier that answers the question, each seen to fail first. Past that, more tests make the change harder to review without specifying anything new. The full set of excess cases belongs to `development/tdd-spec-driven` and is cited, not restated. Two local forms worth naming: `parametrize` rows that differ only in input formatting while reaching the same branch are duplication wearing a table's clothes, and an assertion on `capsys` output text pins prose nobody promised — assert on the return value, the raised exception type, or the exit code the contract assigns, and where a behaviour has no surface but printed prose, that is a finding about the tool rather than a reason to match harder.
 
 **No logic in the console script.** If a change adds a branch to the script that is not argument parsing or wiring, it belongs in the package. This is the rule the design fixed and the one most easily eroded one commit at a time.
 
@@ -83,6 +97,8 @@ preconditions:
 code_path: string             # absolute path to the project root (the dir with pyproject.toml)
 architecture: string          # path to the component map the change must conform to
 scope: string                 # the capability or component being implemented
+test_tier: string             # optional; plain-unit | unit-with-collaborators | integration |
+                              # entry-point | subprocess — derived from the dependency surface if absent
 target_pythons: [string]      # optional; the versions the change must work on
 ```
 
@@ -92,29 +108,32 @@ If invoked in dry-run mode, perform all reads and report the plan and the comman
 
 1. **Read the component map for the scope.** Find the entry point this change delivers, the protocol it implements or consumes, and the entrypoint contract it must honour. A change with no corresponding entry in the map is out of scope; stop and say so.
 
-2. **Write the failing test.** Against the named entry point, importing the package. Run it and confirm it fails on the assertion rather than on an import. Record the failure message.
+2. **Select the test tier.** From the behaviour and the component's dependency surface, choose the smallest tier that answers the question: **plain unit** for pure logic; **unit with collaborators wired** where the behaviour needs them; **integration/fixture** where only the composed pieces answer it; the **entry-point** tier for anything the console script exposes; and the **subprocess** tier only for the real exit status, signals, or a real stdin pipe. Use `test_tier` if supplied; otherwise derive it.
 
-3. **Write the minimum code to pass it.** In the package module the map names, not in the console script. Annotate the public signature — the typing posture the design recorded applies from the first line, not as a later pass.
+3. **Write the failing test.** At the tier selected above, importing the package rather than shelling out. Run it and confirm it fails on the assertion rather than on an import. Record the failure message. Rewriting *this* test is the author's own move, made before the production code exists; once a test is committed, who may change or delete it is the mutability matrix's answer in `development/tdd-spec-driven`, not this phase's.
 
-4. **Wire the console script, if this capability is reached from one.** Argument parsing and a call to the entry point. Map each exception type the change can raise to the exit code the contract assigns it, in the one place the script does that mapping.
+4. **Write the minimum code to pass it.** In the package module the map names, not in the console script. Annotate the public signature — the typing posture the design recorded applies from the first line, not as a later pass.
 
-5. **Run the toolchain and make it silent.** Formatter, linter, type checker and tests, in that order, over the changed scope — the tools `pyproject.toml` declares, or the review recipe's floor (`ruff format --check`, `ruff check`, `mypy`, `pytest`) where it declares none. Each must report nothing. A warning left for later is a review-phase block moved into someone else's day.
+5. **Wire the console script, if this capability is reached from one.** Argument parsing and a call to the entry point. Map each exception type the change can raise to the exit code the contract assigns it, in the one place the script does that mapping.
 
-6. **Check the conformance rules a linter cannot see.** No logic added to the console script; no dependency added the design did not decide; no exception swallowed; no work moved to import time; no `shell=True` with an interpolated value; no mutable default argument. Each is a read of the diff, not a tool run.
+6. **Run the toolchain and make it silent.** Formatter, linter, type checker and tests, in that order, over the changed scope — the tools `pyproject.toml` declares, or the review recipe's floor (`ruff format --check`, `ruff check`, `mypy`, `pytest`) where it declares none. Each must report nothing. A warning left for later is a review-phase block moved into someone else's day.
 
-7. **Report the change against the map.** Which entry point it delivers, which tests cover it, what the toolchain said, and anything the change revealed that the design did not anticipate. Hand it to the caller; the plugin's implement phase records it.
+7. **Check the conformance rules a linter cannot see.** No logic added to the console script; no dependency added the design did not decide; no exception swallowed; no work moved to import time; no `shell=True` with an interpolated value; no mutable default argument. Each is a read of the diff, not a tool run.
+
+8. **Report the change against the map.** Which entry point it delivers, which tests cover it, what the toolchain said, and anything the change revealed that the design did not anticipate. Hand it to the caller; the plugin's implement phase records it.
 
 ## Data flow
 
 ```
-input:  code_path, architecture, scope, target_pythons (optional)
+input:  code_path, architecture, scope, test_tier (optional), target_pythons (optional)
 step 1: the map entry for this scope — entry point, protocol, contract obligations
-step 2: a failing test against the entry point, failing on its assertion
-step 3: package code that passes it, annotated
-step 4: script wiring, with exception type mapped to the contract's exit code
-step 5: formatter, linter, type checker, tests — each silent over the changed scope
-step 6: conformance reads over the diff, one per rule
-step 7: report — entry point delivered, tests, tool output, surprises against the design
+step 2: the chosen tier, derived from the dependency surface unless supplied
+step 3: a failing test at that tier, failing on its assertion
+step 4: package code that passes it, annotated
+step 5: script wiring, with exception type mapped to the contract's exit code
+step 6: formatter, linter, type checker, tests — each silent over the changed scope
+step 7: conformance reads over the diff, one per rule
+step 8: report — entry point delivered, tests, tool output, surprises against the design
 output: the change, and the report. The plugin's implement phase records it.
 ```
 
@@ -126,7 +145,7 @@ The recipe writes package code, tests and script wiring inside `code_path`. It d
 
 After the recipe runs, verify:
 
-1. A test exists for the entry point, it was written before the code, and it fails on its assertion when the code is removed.
+1. Every implemented behaviour has a test at a deliberately chosen tier (plain unit / unit-with-collaborators / integration / entry-point / subprocess), it was written before the code, and it fails on its assertion when the code is removed — no test passed on its first run unexamined.
 2. Tests import the package rather than running the console script, except for at most one end-to-end wiring test per script.
 3. No logic was added to a console script — the diff's script changes are argument parsing and wiring only.
 4. Every failure class the change introduces raises a distinct exception type, and the script maps it to the exit code the contract assigns.
@@ -134,6 +153,9 @@ After the recipe runs, verify:
 6. No dependency was added that the design did not decide; `pyproject.toml`'s dependency list is unchanged unless the design changed it.
 7. No swallowed exception, no import-time work, no `shell=True` with an interpolated value, no mutable default argument.
 8. Public signatures are annotated to the typing posture the design recorded.
+9. Each test names the behaviour it specifies, and no test in the change was written after the code it covers — a test that cannot name a behaviour is measuring or ratifying, and does not count toward item 1.
+10. No test asserts on the wording of captured stdout or stderr; assertions land on the return value, the raised exception type, or the exit code the contract assigns.
+11. Every `parametrize` row reaches a branch or boundary no other row reaches; rows differing only in input formatting are duplication, not coverage.
 
 This recipe ships no executable verifier of its own — the checks above are the agent-driven protocol; the plugin's implement phase owns the gate that blocks review.
 
