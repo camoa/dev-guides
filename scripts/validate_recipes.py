@@ -19,6 +19,7 @@ Exit code is non-zero if any recipe fails. Pure stdlib + PyYAML; safe to run
 locally and in CI before `mkdocs build`.
 """
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -105,6 +106,91 @@ def slug_resolves(slug: str) -> bool:
     return (DOCS_DIR / f"{slug}.md").is_file() or (
         DOCS_DIR / slug / "index.md"
     ).is_file()
+
+
+# `## Oracle files` is a CONSUMED contract as of 2026-09-01: the ai-dev-assistant
+# test-motion guard reads the first ```json fence under that H2 and takes the
+# `globs` off the row whose `type` is `test_delete`, instead of trusting a
+# caller-supplied list. That makes three things load-bearing that used to be
+# cosmetic — the fence must parse, the row keys must be the agreed set, and
+# `test_delete` must appear exactly once so it is a stable selector.
+ORACLE_H2 = "## Oracle files"
+ORACLE_KEYS = {"type", "globs", "changes", "oracle_class", "severity"}
+JSON_FENCE_RE = re.compile(r"```json\s*\n(.*?)\n```", re.S)
+
+
+def validate_oracle_block(body: str) -> list[str]:
+    """Check the `## Oracle files` JSON fence and its agreement with the table.
+
+    Returns [] when the recipe has no oracle section — declaring none is a valid
+    "no oracle configured" state, not an omission.
+    """
+    errors: list[str] = []
+    idx = body.find(ORACLE_H2)
+    if idx == -1:
+        return errors
+
+    # Bound the section at the next H2 so a later fence cannot be mistaken for it.
+    rest = body[idx + len(ORACLE_H2):]
+    nxt = re.search(r"^## ", rest, re.M)
+    section = rest[: nxt.start()] if nxt else rest
+
+    m = JSON_FENCE_RE.search(section)
+    if not m:
+        return ["`## Oracle files` has no ```json fence; the guard reads that fence"]
+
+    try:
+        rows = json.loads(m.group(1))
+    except json.JSONDecodeError as exc:
+        return [f"`## Oracle files` JSON does not parse: {exc}"]
+
+    if not isinstance(rows, list) or not all(isinstance(r, dict) for r in rows):
+        return ["`## Oracle files` JSON must be a top-level array of flat objects"]
+
+    for i, row in enumerate(rows):
+        if set(row) != ORACLE_KEYS:
+            errors.append(
+                f"oracle row {i} keys {sorted(row)} != the agreed set {sorted(ORACLE_KEYS)}"
+            )
+        globs = row.get("globs")
+        if not isinstance(globs, list) or not globs or not all(isinstance(g, str) for g in globs):
+            errors.append(f"oracle row {i} `globs` must be a non-empty list of strings")
+        if row.get("severity") not in ("halt", "flag"):
+            errors.append(f"oracle row {i} `severity` must be 'halt' or 'flag'; found {row.get('severity')!r}")
+        changes = row.get("changes")
+        if not isinstance(changes, list) or not set(changes) <= {"A", "M", "D"} or not changes:
+            errors.append(f"oracle row {i} `changes` must be a non-empty subset of A/M/D")
+
+    n_delete = sum(1 for r in rows if r.get("type") == "test_delete")
+    if n_delete > 1:
+        errors.append(
+            f"`type: test_delete` appears {n_delete} times; the guard selects on it, "
+            "so it must appear at most once per recipe"
+        )
+
+    # The markdown table above the fence and the fence itself state the same rules.
+    # Nothing reconciled them before, so they could drift apart silently — the
+    # table is what a person reads, the fence is what the guard applies.
+    table_rows = [
+        ln for ln in section.splitlines()
+        if ln.startswith("|") and "|" in ln[1:] and not re.match(r"^\|[\s:|-]+\|$", ln)
+    ]
+    # drop the header row
+    table_rows = [ln for ln in table_rows if "Oracle file" not in ln]
+    if table_rows and len(table_rows) != len(rows):
+        errors.append(
+            f"`## Oracle files` table has {len(table_rows)} rule row(s) but the JSON fence "
+            f"has {len(rows)}; the table a person reads and the rules the guard applies "
+            "must not drift apart"
+        )
+    for i, row in enumerate(rows):
+        sev = row.get("severity")
+        if i < len(table_rows) and sev and sev not in table_rows[i]:
+            errors.append(
+                f"oracle row {i} severity {sev!r} does not appear in the matching table row; "
+                "table and JSON disagree"
+            )
+    return errors
 
 
 def validate_recipe(path: Path, is_process: bool = False) -> list[str]:
@@ -240,6 +326,9 @@ def validate_recipe(path: Path, is_process: bool = False) -> list[str]:
                 "`recipe_class: process` is only valid under docs/process-recipes/; "
                 "move this file there so it routes to the process index, not the task index"
             )
+
+    if is_process:
+        errors.extend(validate_oracle_block(body))
 
     return errors
 

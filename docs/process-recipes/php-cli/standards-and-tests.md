@@ -147,9 +147,9 @@ After the recipe runs, verify:
 7. New code carries `declare(strict_types=1)` in every file, PSR-12 layout, docblocks and type hints, `readonly` value objects across the seams, no deprecated APIs, and no business logic in `bin/`.
 8. The code-quality-tools `phpcs` and `phpstan` run over the changed files (binaries included) is clean, or its findings are recorded for the gate; this recipe did not re-author that run.
 9. The tests are green and the refactor (if any) left them green; the results were returned to the caller for the plugin's implement phase to record — the recipe wrote no task record of its own.
+10. Every pre-existing test the change modified or deleted was changed by a role the mutability matrix permits — the only rows that may delete are a feature removal taking its own tests in the same commit; RED authoring is the only row that writes an assertion, and GREEN, REFACTOR and a bug fix change none. A reviewer that wanted a test changed filed a finding instead. See `development/tdd-spec-driven`.
 
 This recipe ships no executable verifier of its own — the checks above are the agent-driven protocol; the linter execution is the code-quality-tools plugin's, and the plugin's implement phase owns the test-first completion gate.
-
 ## Oracle files
 
 A measurement oracle is a file the gates read to decide pass or fail — a static-analysis baseline, a test, a coverage config. An autonomous builder must never weaken one to make a red gate go green: only adding tests or fixing code is allowed, never suppressing a finding. The plugin's deterministic oracle-tamper guard enforces this at the review/critique rung, but the guard itself is framework-agnostic — it carries no PHP knowledge and monitors only the file list it is handed. This section is that list for a PHP CLI project: the caller reconstructs it from here on every run (so there is no persistent project file a builder could empty to switch monitoring off) and hands it to the guard.
