@@ -18,7 +18,6 @@ guide-meta:
     - drupal/security
     - drupal/forms
     - drupal/services
-  specializes: ""
   category: drupal
 tracks:
   - project: drupal

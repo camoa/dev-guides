@@ -16,7 +16,6 @@ guide-meta:
   complements:
     - design-systems/bootstrap
     - design-systems/tailwind
-  specializes: ""
   category: css
 ---
 

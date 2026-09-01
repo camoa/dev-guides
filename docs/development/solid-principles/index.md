@@ -17,7 +17,6 @@ guide-meta:
   complements:
     - development/dry-principles
     - development/tdd-spec-driven
-  specializes: ""
   category: dev-practices
 ---
 

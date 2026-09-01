@@ -17,4 +17,5 @@ nav:
 - canvas-vs-standard-sdc-decision.md
 - security-considerations.md
 - component-creation-workflow.md
+- sources-maintenance.md
 append_unmatched: true

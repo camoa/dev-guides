@@ -3,9 +3,8 @@ description: Drupal Breadcrumbs — decision guides for core builders, Easy Brea
 tracks:
   - project: easy_breadcrumb
     channel: stable
-    declared: null
-    note: no version stated in prose
-    verified: 2026-02-26
+    declared: "2.0.10"
+    verified: 2026-09-01
 guide-meta:
   concepts:
     - breadcrumb builder
@@ -21,7 +20,6 @@ guide-meta:
     - drupal/seo-geo
     - drupal/twig
     - drupal/ui-suite-daisyui
-  specializes: ""
   category: drupal
 ---
 

@@ -10,7 +10,7 @@ drupal_version: "11.x"
 
 > When you need to hook into the facets processing pipeline without creating a full custom processor.
 
-## Decision
+## Decision: Available Events
 
 | Event Constant | Class | When Dispatched | Use Case |
 |---|---|---|---|
@@ -22,7 +22,7 @@ drupal_version: "11.x"
 | `GET_FACET_CACHE_MAX_AGE` | GetFacetCacheMaxAge | During cache metadata collection | Override cache max age |
 | `GET_FACET_CACHE_TAGS` | GetFacetCacheTags | During cache metadata collection | Add/override cache tags |
 
-## Pattern
+## Pattern: Subscribing to Events
 
 ```yaml
 # my_module.services.yml
@@ -60,7 +60,7 @@ class FacetsSubscriber implements EventSubscriberInterface {
 
 ## Common Mistakes
 
-- **Wrong**: Writing a custom processor just to tweak a URL format → **Right**: Subscribe to `QUERY_STRING_CREATED` or `URL_CREATED` instead — no plugin boilerplate needed.
+- **Writing a custom processor just to tweak a URL format** — Subscribe to `QUERY_STRING_CREATED` or `URL_CREATED` instead — no plugin boilerplate needed.
 
 ## See Also
 

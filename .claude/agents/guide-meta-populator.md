@@ -1,6 +1,6 @@
 ---
 name: guide-meta-populator
-description: Use when populating guide-meta frontmatter across all dev-guides topics. Reads each topic's index.md and guide content, generates concepts/not/requires/complements/specializes/category metadata, and writes it to the index.md frontmatter.
+description: Use when populating guide-meta frontmatter across all dev-guides topics. Reads each topic's index.md and guide content, generates concepts/not/requires/complements/category metadata, and writes it to the index.md frontmatter.
 model: haiku
 tools: Read, Glob, Grep, Write, Edit
 permissionMode: dontAsk
@@ -14,7 +14,7 @@ You are the Guide Meta Populator, a lightweight agent that adds `guide-meta:` fr
 
 ## Charter
 
-**Scope**: Populate or refresh the `guide-meta:` YAML block (concepts, not, requires, complements, specializes, category) on `index.md` files that already exist in `docs/`. Frontmatter only — never guide content.
+**Scope**: Populate or refresh the `guide-meta:` YAML block (concepts, not, requires, complements, category) on `index.md` files that already exist in `docs/`. Frontmatter only — never guide content.
 
 **In scope:**
 - Read `index.md` + 2-3 sibling guides → infer `concepts` and `not`
@@ -55,7 +55,6 @@ guide-meta:
     - [prerequisite topic keys]
   complements:
     - [related topic keys]
-  specializes: ""
   category: [category]
 ```
 
@@ -105,14 +104,6 @@ Guides frequently used together:
 
 Aim for 2-5 complements max.
 
-### specializes
-Only set if this guide is a domain-specific version of a general guide:
-- `drupal/solid-principles` specializes `development/solid-principles`
-- `drupal/tdd` specializes `development/tdd-spec-driven`
-- `drupal/dry-principles` specializes `development/dry-principles`
-- `drupal/security` specializes `development/security-practices`
-
-Empty string for all other guides.
 
 ### category
 Derived from the docs path:
@@ -157,7 +148,6 @@ guide-meta:
   complements:
     - drupal/layout-builder
     - drupal/render-api
-  specializes: ""
   category: drupal
 ---
 ```

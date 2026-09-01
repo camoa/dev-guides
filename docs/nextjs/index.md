@@ -14,7 +14,6 @@ guide-meta:
   complements:
     - drupal/jsonapi
     - design-systems/react-design-system
-  specializes: ""
   category: nextjs
 ---
 

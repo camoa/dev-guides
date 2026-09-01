@@ -20,7 +20,6 @@ guide-meta:
     - drupal/services
     - drupal/sdc
     - drupal/config-management
-  specializes: development/dry-principles
   category: drupal
 ---
 

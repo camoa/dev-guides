@@ -37,7 +37,6 @@ guide-meta:
     - drupal/blocks
     - drupal/media
     - drupal/recipes
-  specializes: ""
   category: drupal
 tracks:
   - project: plus_suite

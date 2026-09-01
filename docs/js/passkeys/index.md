@@ -27,7 +27,6 @@ guide-meta:
   complements:
     - js/forms
     - development/security-practices/authentication-best-practices
-  specializes: ""
   category: js
 ---
 

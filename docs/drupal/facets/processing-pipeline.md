@@ -10,7 +10,7 @@ drupal_version: "11.x"
 
 > When you need to understand how facets process data from query to rendering, or when debugging unexpected facet behavior.
 
-## Decision
+## Decision: Processing Stages
 
 | Stage | Interface | When | Purpose | Example Processors |
 |---|---|---|---|---|
@@ -19,9 +19,7 @@ drupal_version: "11.x"
 | **BUILD** | `BuildProcessorInterface` | Before rendering | Filter, limit, transform for display | `translate_entity`, `count_limit`, `hierarchy_processor` |
 | **SORT** | `SortProcessorInterface` | During build | Order results | `count_widget_order`, `display_value_widget_order` |
 
-## Pattern
-
-Execution flow:
+## Pattern: Execution Flow
 
 ```
 1. alterQuery($query, $facet_source_id)
@@ -49,7 +47,13 @@ Execution flow:
    └── Widget.build() → render array
 ```
 
-FacetManager service:
+## Pattern: Processor Weight System
+
+Each processor has a weight per stage. Lower weights execute first. Default weights are defined in the processor's `@FacetsProcessor` annotation. Facets has not migrated processors to PHP attributes — `src/Attribute/` contains only `FacetsUrlProcessor.php`, so url processors are the one plugin type using an attribute class. Weights can be reordered in the facet configuration UI.
+
+**Critical ordering:** `url_processor_handler` (LOCKED, always runs) must execute before other build processors so URLs are available. `hierarchy_processor` runs last (weight 100) because it restructures the result tree.
+
+## Pattern: FacetManager Service
 
 ```php
 $facet_manager = \Drupal::service('facets.manager');
@@ -64,13 +68,11 @@ $facet_manager->processFacets($facet_source_id);
 $build = $facet_manager->build($facet);
 ```
 
-Each processor has a weight per stage — lower weights execute first. Default weights are defined in the processor's `@FacetsProcessor` annotation. Facets has not migrated processors to PHP attributes — `src/Attribute/` contains only `FacetsUrlProcessor.php`, so url processors are the one plugin type using an attribute class. Weights can be reordered in the facet configuration UI.
-
 ## Common Mistakes
 
-- **Wrong**: Assuming processor order doesn't matter → **Right**: If `translate_entity` runs after `exclude_specified_items`, you must use raw values (IDs) in the exclude list, not labels.
-- **Wrong**: Trying to disable `url_processor_handler` or `hierarchy_processor` → **Right**: These are locked processors — essential to facet functionality, cannot be disabled.
-- **Wrong**: Expecting all processors to always be available → **Right**: Some processors have `supportsFacet()` checks. Hierarchy processors, for example, only appear when `use_hierarchy` is enabled.
+- **Processor order matters** — If `translate_entity` runs after `exclude_specified_items`, you must use raw values (IDs) in the exclude list, not labels.
+- **Locked processors** — `url_processor_handler` and `hierarchy_processor` cannot be disabled. They are essential to facet functionality.
+- **Processor not appearing** — Some processors have `supportsFacet()` checks. For example, hierarchy processors only appear when `use_hierarchy` is enabled.
 
 ## See Also
 

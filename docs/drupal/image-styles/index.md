@@ -24,7 +24,6 @@ guide-meta:
     - drupal/media-system
     - drupal/media
     - media/image-media-craft
-  specializes: ""
   category: drupal
 ---
 

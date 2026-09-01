@@ -19,7 +19,6 @@ guide-meta:
     - design-systems/bootstrap
     - design-systems/tailwind-tokens
     - ai-tooling/figma-mcp
-  specializes: ""
   category: design-systems
 ---
 

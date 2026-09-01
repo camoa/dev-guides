@@ -22,4 +22,5 @@ nav:
 - security-and-performance.md
 - simple-config-vs-config-entities.md
 - writing-config-schema.md
+- sources-maintenance.md
 append_unmatched: true

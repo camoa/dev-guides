@@ -28,6 +28,6 @@ Path: `~/workspace/contrib/web/`
 |---|---|---|---|
 | UI Suite DaisyUI theme | `themes/contrib/ui_suite_daisyui/` | 1-15 | 5.0.0-alpha6 |
 | UI Suite DaisyUI starterkit | `themes/contrib/ui_suite_daisyui/starterkits/ui_suite_daisyui_starterkit/` | 9, 10 | 5.0.0-alpha6 |
-| UI Patterns module | `modules/contrib/ui_patterns/` | 2, 4, 11 | 2.0.19 |
+| UI Patterns module | `modules/contrib/ui_patterns/` | 2, 4, 11 | 2.0.20 |
 | UI Styles module | `modules/contrib/ui_styles/` | 5, 11 | 8.x-1.21 |
 | UI Skins module | `modules/contrib/ui_skins/` | 6 | 1.2.1 |

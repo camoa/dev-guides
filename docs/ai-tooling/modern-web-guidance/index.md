@@ -29,7 +29,6 @@ guide-meta:
     - js/passkeys
     - js/forms
     - ai-tooling/figma-mcp
-  specializes: ""
   category: ai-tooling
 ---
 

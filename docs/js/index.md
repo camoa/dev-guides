@@ -13,7 +13,6 @@ guide-meta:
   complements:
     - css/css-craft
     - css/modern-css
-  specializes: ""
   category: js
 ---
 

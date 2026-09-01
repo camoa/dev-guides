@@ -23,7 +23,7 @@ drupal_version: "11.x"
 |---|---|---|
 | `8.x-1.x` / `2.3.x` | `^9.5\|\|^10` / `^10.3\|\|^11` | Legacy maintenance lines — start nothing new here |
 | `3.3.x` | `^10.3 \|\| ^11` | **Latest stable — 3.3.5** (2025-05-06). Only branch the contrib ecosystem supports. |
-| `4.0.x` | `^11.2` | Only tag is `4.0.0-alpha1` (2026-04-24) — no stable; requires `@alpha` install; not covered by Drupal security advisories |
+| `4.0.x` | `^11.2` | Release branch whose newest tag is **`4.0.0-alpha2`** (2026-08-21, after `4.0.0-alpha1` on 2026-04-24) — infrastructure rewrite, BC breaks complete, no stable. Requires an `@alpha` install; not covered by Drupal security advisories |
 
 **v2 and v3 are functionally identical** — only machine names differ. There is no in-place database upgrade from v2 to v3.
 
@@ -64,7 +64,7 @@ ContentEnablerBase    → GroupRelationBase
 
 **Prerequisites:**
 1. Upgrade the site to **Drupal 11.2 or newer** first.
-2. Accept an alpha — the 4.0.x branch has exactly one tag, `4.0.0-alpha1`, and alpha releases are not covered by Drupal security advisories.
+2. Accept an alpha — the newest tag on the 4.0.x branch is `4.0.0-alpha2`, and alpha releases are not covered by Drupal security advisories.
 3. Require it with an explicit stability flag, then run database updates:
    ```bash
    composer require 'drupal/group:^4.0@alpha' --update-with-dependencies

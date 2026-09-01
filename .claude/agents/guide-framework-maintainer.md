@@ -282,7 +282,6 @@ Fields the partitioner infers (see `.claude/agents/guide-partitioner.md` for ful
 - `concepts` — distinctive terms, API names, class names, hook names. Use these consistently across your guide's headings and code examples.
 - `not` — disambiguation terms (what should NOT route here). The partitioner detects these by cross-referencing other topics; if you know of a specific confusing term, mention it in a "Not to be confused with..." note.
 - `requires`, `complements` — derived from the "See Also" references at the bottom of each section. Cross-link generously.
-- `specializes` — set only if this guide is a domain-specific version of a general one (e.g., Drupal SOLID specializes general SOLID).
 - `category` — derived from docs path prefix.
 
 The maintainer's job is NOT to author this metadata inline — it's to write content with distinctive, searchable terminology so the partitioner's analysis yields good metadata.

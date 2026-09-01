@@ -21,7 +21,6 @@ guide-meta:
     - drupal/services
     - drupal/plugins
     - drupal/dry-principles
-  specializes: development/solid-principles
   category: drupal
 ---
 

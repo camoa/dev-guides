@@ -34,7 +34,6 @@ guide-meta:
   complements:
     - drupal/eca
     - drupal/modeler-api
-  specializes: ""
   category: drupal
 tracks:
   - project: orchestration

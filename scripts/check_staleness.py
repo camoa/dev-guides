@@ -979,7 +979,13 @@ def run_check(today: date, unverified_days: int) -> dict:
         "projects_fetched": sorted(wanted),
         "frontmatter_errors": find_unparseable_frontmatter(),
         "core_assertions": check_core_assertions(core),
-        "drift": drift,
+        # `unstated` is a documentation gap, not a version behind its tag. It was
+        # carried in `drift` and so inflated the drift count, which meant the
+        # number could never reach zero however current the catalog was. Split
+        # here so "Drift (0)" is a claim that can actually come true, and the
+        # gap stays visible in its own section.
+        "drift": [r for r in drift if r["verdict"] != "unstated"],
+        "unstated": [r for r in drift if r["verdict"] == "unstated"],
         "unjustified": unjustified,
         "unverified": unverified,
         "undeclared": undeclared,
@@ -1036,6 +1042,18 @@ def render_text(result: dict) -> str:
         out.append(
             f"  [{DRIFT_LABEL.get(row['verdict'], row['verdict'])}] {row['topic']} "
             f"({row['project']}): {row['note']}"
+        )
+        out.append(f"      current branch {row['branch']}, tagged {row['date'] or 'date unknown'}")
+
+    unstated = sorted(result.get("unstated", []), key=lambda r: r["topic"])
+    out.append("")
+    out.append(f"No version stated ({len(unstated)})")
+    if not unstated:
+        out.append("  every tracked project has a version in its guide.")
+    for row in unstated:
+        out.append(
+            f"  {row['topic']} ({row['project']}): upstream is at {row['current']}; "
+            "the guide states no version"
         )
         out.append(f"      current branch {row['branch']}, tagged {row['date'] or 'date unknown'}")
 

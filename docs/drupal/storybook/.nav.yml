@@ -6,4 +6,5 @@ nav:
 - addon-sdc-offline.md
 - ddev-storybook-setup.md
 - subtheme-stories.md
+- sources-maintenance.md
 append_unmatched: true

@@ -20,7 +20,6 @@ guide-meta:
     - design-systems/react-design-system
     - drupal/twig
     - design-systems/radix-sdc
-  specializes: ""
   category: design-systems
 ---
 

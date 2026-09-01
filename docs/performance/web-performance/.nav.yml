@@ -10,4 +10,5 @@ nav:
 - service-worker-caching.md
 - code-splitting.md
 - web-font-performance.md
+- sources-maintenance.md
 append_unmatched: true

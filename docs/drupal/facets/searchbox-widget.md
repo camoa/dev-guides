@@ -10,7 +10,7 @@ drupal_version: "11.x"
 
 > When a facet has many items and you want users to type-to-filter the visible options.
 
-## Decision
+## Decision: Searchbox Sub-Module
 
 **Module:** `facets_searchbox_widget`
 
@@ -23,7 +23,7 @@ drupal_version: "11.x"
 
 Both widgets add a text input that filters the facet item list client-side via JavaScript.
 
-## Pattern
+## Pattern: Setup
 
 ```bash
 drush en facets_searchbox_widget
@@ -33,7 +33,7 @@ Select "Searchbox Links" or "Searchbox Checkbox" as the widget in facet configur
 
 ## Common Mistakes
 
-- **Wrong**: Expecting server-side filtering from the searchbox → **Right**: The searchbox filters the already-rendered item list client-side; it does not requery the backend.
+- **Expecting server-side filtering from the searchbox** — The searchbox filters the already-rendered item list client-side; it does not requery the backend.
 
 ## See Also
 

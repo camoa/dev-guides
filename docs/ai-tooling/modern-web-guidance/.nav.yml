@@ -5,4 +5,5 @@ nav:
 - install-other-agents.md
 - using-it-effectively.md
 - relationship-to-dev-guides.md
+- sources-maintenance.md
 append_unmatched: true

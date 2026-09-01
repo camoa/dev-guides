@@ -12,4 +12,5 @@ nav:
 - security-best-practices.md
 - testing-and-debugging.md
 - yaml-escaping-rules.md
+- sources-maintenance.md
 append_unmatched: true

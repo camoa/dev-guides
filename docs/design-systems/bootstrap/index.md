@@ -27,7 +27,6 @@ guide-meta:
     - design-systems/recognition
     - design-systems/radix-sdc
     - design-systems/radix-components
-  specializes: ""
   category: design-systems
 ---
 

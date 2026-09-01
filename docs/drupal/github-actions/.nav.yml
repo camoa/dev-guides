@@ -13,4 +13,5 @@ nav:
 - theme-asset-compilation.md
 - troubleshooting.md
 - workflow-fundamentals.md
+- sources-maintenance.md
 append_unmatched: true

@@ -26,7 +26,6 @@ guide-meta:
     - drupal/routing
     - drupal/forms
     - drupal/twig
-  specializes: development/security-practices
   category: drupal
 ---
 

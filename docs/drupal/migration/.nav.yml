@@ -16,4 +16,5 @@ nav:
 - plan-custom-code-strategy.md
 - security-best-practices.md
 - test-migration-results.md
+- sources-maintenance.md
 append_unmatched: true

@@ -10,21 +10,23 @@ drupal_version: "11.x"
 
 > When you need to understand how facets connect to your search backend and Views displays.
 
-## Decision
+## Decision: What Is a Facet Source?
 
 A facet source is an adapter plugin that connects facets to a search display. Each Views display that uses a Search API index generates a facet source automatically.
 
 **Auto-generated source ID format:**
+
 ```
 search_api:views_{display_plugin}__{view_id}__{display_id}
 ```
 
 **Examples:**
+
 - `search_api:views_page__article_search__page_1` — Page display
 - `search_api:views_block__product_search__block_1` — Block display
 - `search_api:views_rest_export__api_search__rest_1` — REST display
 
-**Facet source configuration:**
+## Decision: Facet Source Configuration
 
 | Setting | Config Key | Default | Purpose |
 |---|---|---|---|
@@ -34,7 +36,7 @@ search_api:views_{display_plugin}__{view_id}__{display_id}
 | Breadcrumb label before | `breadcrumb.before` | FALSE | Show facet label before values |
 | Breadcrumb group | `breadcrumb.group` | FALSE | Group breadcrumb items by facet |
 
-## Pattern
+## Pattern: Key Service
 
 ```php
 // Get the facet source plugin manager
@@ -45,7 +47,7 @@ $facet_manager = \Drupal::service('facets.manager');
 $facets = $facet_manager->getFacetsByFacetSourceId('search_api:views_page__search__page_1');
 ```
 
-Interface methods:
+## Pattern: Interface Methods
 
 | Method | Purpose |
 |---|---|
@@ -57,8 +59,8 @@ Interface methods:
 
 ## Common Mistakes
 
-- **Wrong**: Expecting facets from one View display to appear on another → **Right**: Each display is a separate source. Facets created for one display won't appear on another unless you use the exposed filters approach.
-- **Wrong**: Creating facets against an unsaved View → **Right**: Sources are only generated for saved Views displays.
+- **Multiple Views displays = multiple sources** — Each display is a separate source. Facets created for one display won't appear on another unless you use the exposed filters approach.
+- **Source not appearing** — Save the View first. Sources are only generated for saved Views displays.
 
 ## See Also
 

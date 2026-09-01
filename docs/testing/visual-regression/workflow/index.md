@@ -43,7 +43,6 @@ guide-meta:
     - drupal/tdd
     - drupal/storybook
     - drupal/sdc
-  specializes: ""
   category: testing
 ---
 

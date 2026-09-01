@@ -47,7 +47,6 @@ guide-meta:
     - drupal/forms
     - drupal/entities
     - drupal/caching
-  specializes: ""
   category: drupal
 ---
 

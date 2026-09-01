@@ -43,7 +43,6 @@ guide-meta:
     - drupal/twig
     - drupal/config-management
     - design-systems/radix-sdc
-  specializes: ""
   category: drupal
 ---
 

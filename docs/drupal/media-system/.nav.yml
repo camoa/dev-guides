@@ -21,4 +21,5 @@ nav:
 - anti-patterns-mistakes.md
 - security-performance.md
 - code-reference-map.md
+- sources-maintenance.md
 append_unmatched: true

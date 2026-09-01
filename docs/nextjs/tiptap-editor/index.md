@@ -27,7 +27,6 @@ guide-meta:
   complements:
     - nextjs/next-drupal
     - design-systems/react-design-system
-  specializes: ""
   category: nextjs
 ---
 

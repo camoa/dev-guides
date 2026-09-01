@@ -26,4 +26,5 @@ nav:
 - token-support.md
 - views-integration.md
 - widget-plugins-overview.md
+- sources-maintenance.md
 append_unmatched: true

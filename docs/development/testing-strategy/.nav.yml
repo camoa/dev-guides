@@ -18,4 +18,5 @@ nav:
 - what-to-test-and-what-not.md
 - best-practices-and-anti-patterns.md
 - choosing-a-test-type.md
+- sources-maintenance.md
 append_unmatched: true

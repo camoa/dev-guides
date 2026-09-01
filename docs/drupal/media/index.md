@@ -19,7 +19,6 @@ guide-meta:
     - drupal/media-system
     - drupal/image-styles
     - drupal/entities
-  specializes: ""
   category: drupal
 tracks:
   - project: drupal

@@ -10,7 +10,7 @@ drupal_version: "11.x"
 
 > When faceted pages create duplicate content issues — the same results appearing at multiple URLs with different facet parameter ordering.
 
-## Decision
+## Decision: Duplicate Content Sources
 
 | Source | Example | Problem |
 |---|---|---|
@@ -20,9 +20,9 @@ drupal_version: "11.x"
 | Pagination + facets | `?page=2&f[0]=color:blue` | Each page × each facet combo |
 | Pretty paths combos | `/search/color/blue/size/large` vs `/search/size/large/color/blue` | Path order variants |
 
-## Pattern
+## Pattern: Emitting rel="canonical" on Faceted Pages
 
-**Emit `rel="canonical"` on faceted pages.** Point every faceted variation at the base search page — strip any canonical another module already set, then emit one for the unfiltered path:
+Point every faceted variation at the base search page. Strip any canonical another module already set, then emit one for the unfiltered path:
 
 ```php
 /**
@@ -52,20 +52,29 @@ function my_module_page_attachments_alter(array &$attachments) {
 }
 ```
 
-`getPathInfo()` drops the query string, so the canonical target is the unfiltered search page. Pair it with the meta `noindex` from [SEO & Bot Protection](seo-bot-protection.md) — canonical consolidates link signals, `noindex` keeps the combinations out of the index.
+`getPathInfo()` drops the query string, so the canonical target is the unfiltered search page. Pair this with the meta `noindex` from [SEO & Bot Protection](seo-bot-protection.md) — canonical consolidates signals, `noindex` keeps the combinations out of the index.
 
-The `query_string` URL processor generates parameters in a consistent order (by facet weight), which helps — but external links or bookmarks may use different orders.
+## Pattern: Consistent Parameter Ordering
 
-For multilingual sites, faceted URLs need hreflang tags; the facets module includes a `LanguageSwitcherLinksAlterer` that maintains facet parameters in language switcher links.
+The QueryString URL processor generates parameters in a consistent order (by facet weight), which helps. But external links or bookmarks may use different orders.
 
-Do NOT include faceted URLs in your XML sitemap. Configure your sitemap module (`simple_sitemap`, `xmlsitemap`) to exclude search pages with query parameters and any path matching facet URL patterns.
+## Pattern: Hreflang with Facets
+
+For multilingual sites, faceted URLs need hreflang tags. The facets module includes a `LanguageSwitcherLinksAlterer` that maintains facet parameters in language switcher links.
+
+## Pattern: Sitemap Exclusion
+
+Do NOT include faceted URLs in your XML sitemap. Configure your sitemap module (simple_sitemap, xmlsitemap) to exclude:
+
+- Search pages with query parameters
+- Any path matching facet URL patterns
 
 ## Common Mistakes
 
-- **Wrong**: Including faceted URLs in the sitemap → **Right**: This explicitly tells bots to crawl all combinations. Never include faceted URLs in sitemaps.
-- **Wrong**: Appending a canonical without removing the existing one → **Right**: Unset any `rel => canonical` already in `html_head_link` first, or the page ships two conflicting canonicals.
-- **Wrong**: Ignoring pagination combinations → **Right**: `?page=1&f[0]=color:blue` and `?page=2&f[0]=color:blue` are separate URLs. Canonical should typically point to page 1 or the unfiltered page.
-- **Wrong**: Handling canonical without rel=prev/next → **Right**: If faceted pages are paginated, you need both canonical handling and proper pagination signals.
+- **Including faceted URLs in sitemap** — This explicitly tells bots to crawl all those combinations. Never include faceted URLs in sitemaps.
+- **Appending a canonical without removing the existing one** — Unset any `rel => canonical` already in `html_head_link` first, or the page ships two conflicting canonicals.
+- **Forgetting pagination combinations** — `?page=1&f[0]=color:blue` and `?page=2&f[0]=color:blue` are separate URLs. Canonical should typically point to page 1 or the unfiltered page.
+- **Not handling rel=prev/next** — If faceted pages are paginated, you need both canonical handling and proper pagination signals.
 
 ## See Also
 

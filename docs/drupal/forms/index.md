@@ -26,7 +26,6 @@ guide-meta:
     - drupal/config-forms
     - drupal/render-api
     - drupal/services
-  specializes: ""
   category: drupal
 ---
 

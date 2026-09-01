@@ -17,4 +17,5 @@ nav:
 - solid-overview.md
 - solid-pragmatism.md
 - srp-in-practice.md
+- sources-maintenance.md
 append_unmatched: true

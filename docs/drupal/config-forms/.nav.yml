@@ -10,4 +10,5 @@ nav:
 - operations-implementation.md
 - performance-best-practices.md
 - security-best-practices.md
+- sources-maintenance.md
 append_unmatched: true

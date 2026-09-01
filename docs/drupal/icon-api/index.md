@@ -24,7 +24,6 @@ guide-meta:
   complements:
     - drupal/twig
     - drupal/ui-patterns
-  specializes: ""
   category: drupal
 ---
 

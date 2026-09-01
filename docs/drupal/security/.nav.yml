@@ -21,4 +21,5 @@ nav:
 - trusted-callbacks.md
 - twig-autoescape-and-safe-markup.md
 - xss-prevention.md
+- sources-maintenance.md
 append_unmatched: true

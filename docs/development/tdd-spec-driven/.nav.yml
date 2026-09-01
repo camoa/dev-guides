@@ -22,4 +22,5 @@ nav:
 - what-tdd-covers.md
 - when-not-to-write-a-test.md
 - writing-specs.md
+- sources-maintenance.md
 append_unmatched: true

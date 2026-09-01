@@ -18,7 +18,6 @@ guide-meta:
   complements:
     - drupal/tdd
     - drupal/github-actions
-  specializes: ""
   category: drupal
 ---
 

@@ -15,7 +15,6 @@ guide-meta:
     - drupal/tdd
     - drupal/dry-principles
     - drupal/security
-  specializes: ""
   category: dev-practices
 ---
 

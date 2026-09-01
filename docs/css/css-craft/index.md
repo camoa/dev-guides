@@ -53,7 +53,6 @@ guide-meta:
     - css/modern-css
     - js/interaction-craft
     - media/image-media-craft
-  specializes: ""
   category: css
 ---
 

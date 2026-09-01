@@ -22,7 +22,6 @@ guide-meta:
     - drupal/htmx
     - drupal/ajax-htmx-migration
     - drupal/js-development
-  specializes: ""
   category: drupal
 ---
 

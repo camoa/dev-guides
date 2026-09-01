@@ -30,7 +30,6 @@ guide-meta:
     - drupal/views
     - drupal/forms
     - drupal/ui-patterns
-  specializes: ""
   category: drupal
 ---
 

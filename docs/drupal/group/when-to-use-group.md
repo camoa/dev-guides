@@ -23,7 +23,7 @@ drupal_version: "11.x"
 | Complex nested group hierarchy | Via `subgroup` contrib (Group 3.x only) | No | No | No |
 | Simple "hide content from role" | Overkill | Overkill | **Yes** | Overkill |
 | Groups with their own menus | Via `group_content_menu` (Group 3.x only) | No | No | No |
-| Runs on Drupal 11.4 | **Yes** — 3.3.5 stable, or 4.0.0-alpha1 (alpha-only) | Not checked | Not checked | Not checked |
+| Runs on Drupal 11.4 | **Yes** — 3.3.5 stable, or 4.0.0-alpha2 (alpha-only) | Not checked | Not checked | Not checked |
 
 The two rows marked *Group 3.x only* are the practical constraint on choosing 4.0.x — see [Sub-modules](sub-modules.md) for the full contrib compatibility picture. The maintenance status of Domain Access, Permissions by Term, and Organic Groups was not re-verified in the August 2026 sweep.
 

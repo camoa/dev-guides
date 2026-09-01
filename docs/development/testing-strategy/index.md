@@ -55,7 +55,6 @@ guide-meta:
     - testing/atk
     - testing/ai-test-generation
     - development/security-practices
-  specializes: ""
   category: dev-practices
 ---
 

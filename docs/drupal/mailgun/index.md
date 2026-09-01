@@ -29,7 +29,6 @@ guide-meta:
   complements:
     - drupal/forms
     - drupal/services
-  specializes: ""
   category: drupal
 tracks:
   - project: mailgun

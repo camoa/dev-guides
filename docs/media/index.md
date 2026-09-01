@@ -12,7 +12,6 @@ guide-meta:
   requires: []
   complements:
     - css/css-craft
-  specializes: ""
   category: media
 ---
 

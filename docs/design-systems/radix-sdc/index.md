@@ -32,7 +32,6 @@ guide-meta:
     - design-systems/radix-components
     - design-systems/recognition
     - drupal/layout-builder
-  specializes: ""
   category: design-systems
 ---
 

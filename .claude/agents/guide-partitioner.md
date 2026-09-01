@@ -113,6 +113,41 @@ headings you are about to write. Every source subsection must be accounted for �
 the template name, published under its own name, or explicitly reported as deliberately dropped
 with the reason. If you cannot account for one, stop and report rather than writing the file.
 
+### Two ways content vanishes even when every heading survives
+
+Both were measured on a real repair (`drupal/facets`, 2026-09-01: 186 source sentences present in
+the source partitions and absent from the published guides, while the heading count matched).
+Section Preservation alone does not catch either.
+
+**1. Collapsing several source subsections under one template name.** The rule above says a source
+subsection that maps to a template section is "published under the template name" — read carelessly
+that permits three source subsections to become one `## Decision`, and whatever does not fit the
+merged prose is dropped. It does not permit that. **One source subsection produces one published
+heading.** Where two or more map to the same template name, each keeps its own, qualified with the
+source's own title:
+
+```
+## Decision: Hierarchy Plugins
+## Decision: Which Widget
+## Pattern: Layer 2 — Facet Bot Blocker Module
+```
+
+Never `## Decision` once with three subsections folded into it. Nothing then has to be summarised
+away to make it fit, which is the whole point.
+
+**2. Paraphrasing Common Mistakes into `Wrong → Right`.** The `- **Wrong**: … → **Right**: …` shape
+is the template's default, and rewriting a source bullet into it silently shortens the bullet — the
+explanation is what gets cut. **When the source already has Common Mistakes bullets, publish the
+source's own wording verbatim**, in the source's own form (`- **Label** — explanation.`). Use
+`Wrong → Right` only when you are authoring a mistake the source did not state. If a published file
+carries a Common Mistakes bullet that has no source counterpart, keep it and convert it to the
+source's form — published-only content is not surplus.
+
+**Counting headings is not enough to prove no loss.** Before writing a regenerated file, also
+compare the source partition's bullets and table rows against the ones you are about to emit. A
+bullet or row that exists in the source and not in your output is loss, whatever the heading count
+says.
+
 ## Frontmatter Fields
 
 | Field | Required | Purpose |
@@ -157,7 +192,6 @@ guide-meta:
     - [topic/slug of prerequisite guides — read before this one]
   complements:
     - [topic/slug of guides often used together with this one]
-  specializes: "[topic/slug of parent guide, or empty string]"
   category: [drupal|nextjs|design-systems|dev-practices|css|js|media|ai-tooling|decoupled]
 ---
 
@@ -200,7 +234,6 @@ When writing or updating `index.md`, ALWAYS generate the `guide-meta:` block by 
 | `not` | Check other guides with overlapping terminology. List specific terms that would cause wrong routing (e.g., UI Patterns lists `storybook` and `stories.yml` in `not`). Leave empty if no confusion risk. |
 | `requires` | If guide content assumes knowledge from another topic, list it. Use topic key format: `drupal/sdc`. |
 | `complements` | Guides referenced in "See Also" sections or frequently co-used. Use topic key format. |
-| `specializes` | Set parent topic key if this is a domain-specific version of a general guide (e.g., `drupal/solid-principles` specializes `development/solid-principles`). Empty string otherwise. |
 | `category` | Derived from the docs path prefix, with one exception: `docs/development/` topics use `dev-practices` as the category value. All others match prefix directly: `drupal`, `nextjs`, `design-systems`, `css`, `js`, `media`, `ai-tooling`, `decoupled`. |
 
 ## Navigation (awesome-nav)

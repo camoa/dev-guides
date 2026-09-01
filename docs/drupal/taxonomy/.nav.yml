@@ -16,4 +16,5 @@ nav:
 - term-reference-config.md
 - term-storage-querying.md
 - vocabulary-config-schema.md
+- sources-maintenance.md
 append_unmatched: true

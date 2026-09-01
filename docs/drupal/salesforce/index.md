@@ -25,7 +25,6 @@ guide-meta:
   complements:
     - drupal/config-management
     - drupal/caching
-  specializes: ""
   category: drupal
 ---
 

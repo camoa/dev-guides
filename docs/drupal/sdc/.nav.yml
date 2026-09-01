@@ -15,4 +15,5 @@ nav:
 - testing-sdcs.md
 - twig-templates-in-sdcs.md
 - ui-patterns-2-integration.md
+- sources-maintenance.md
 append_unmatched: true

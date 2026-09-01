@@ -18,7 +18,6 @@ guide-meta:
   complements:
     - drupal/config-management
     - drupal/entities
-  specializes: ""
   category: drupal
 tracks:
   - project: drupal

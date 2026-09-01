@@ -23,7 +23,6 @@ guide-meta:
   complements:
     - drupal/entities
     - drupal/forms
-  specializes: ""
   category: drupal
 ---
 

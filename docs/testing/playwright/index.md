@@ -61,7 +61,6 @@ guide-meta:
     - testing/visual-regression/workflow
     - testing/atk
     - testing/visual-regression/html-report
-  specializes: ""
   category: testing
 ---
 

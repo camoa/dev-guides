@@ -37,7 +37,7 @@ Install via config (after enabling `gnode`):
 
 ```yaml
 # group.relationship_type.project-group_node__article.yml
-content_plugin: 'group_node:article'
+relation_type: 'group_node:article'
 plugin_config:
   entity_cardinality: 1
 ```

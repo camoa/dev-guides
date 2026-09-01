@@ -10,7 +10,7 @@ drupal_version: "11.x"
 
 > When you need to understand how facet selections are translated into search backend queries.
 
-## Decision
+## Decision: Built-In Query Types
 
 | ID | Class | Data Types | Query Syntax |
 |---|---|---|---|
@@ -19,15 +19,7 @@ drupal_version: "11.x"
 | `search_api_range` | SearchApiRange | integer, decimal | Numeric range conditions |
 | `search_api_granular` | SearchApiGranular | integer | Grouped numeric ranges |
 
-Query types are auto-detected based on the Search API field type — you rarely need to override this:
-
-| Field Type | Query Type |
-|---|---|
-| string, fulltext, entity reference | `search_api_string` |
-| date | `search_api_date` |
-| integer, decimal, float | `search_api_string` (or `search_api_range` with range widget) |
-
-## Pattern
+## Pattern: How Query Types Execute
 
 ```php
 // 1. Set facet options on the Search API query
@@ -47,9 +39,19 @@ foreach ($active_items as $value) {
 $query->addConditionGroup($filter);
 ```
 
+## Pattern: Query Type Selection
+
+Query types are auto-detected based on the Search API field type. You rarely need to override this:
+
+| Field Type | Query Type |
+|---|---|
+| string, fulltext, entity reference | `search_api_string` |
+| date | `search_api_date` |
+| integer, decimal, float | `search_api_string` (or `search_api_range` with range widget) |
+
 ## Common Mistakes
 
-- **Wrong**: Expecting range filtering on a numeric field by default → **Right**: Numeric fields default to `search_api_string` (exact match). For range filtering, use `search_api_range` with the range widget sub-module.
+- **Wrong query type for numeric fields** — Numeric fields default to `search_api_string` (exact match). For range filtering, you need `search_api_range` with the range widget sub-module.
 
 ## See Also
 

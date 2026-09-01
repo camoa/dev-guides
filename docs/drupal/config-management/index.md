@@ -24,7 +24,6 @@ guide-meta:
     - drupal/recipes
     - drupal/config-forms
     - drupal/entities
-  specializes: ""
   category: drupal
 ---
 

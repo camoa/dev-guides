@@ -33,7 +33,7 @@ UI Suite DaisyUI relies on four companion modules:
 | `ui_patterns` (2.x) | Component discovery, props, slots, SDC integration | Yes (dependency) |
 | `ui_styles` | Utility class styles applied to blocks, Layout Builder sections | Recommended (not a dependency since alpha6) |
 | `ui_skins` | Theme switching (data-theme), CSS variable overrides | Recommended |
-| `ui_icons` | Icon pack integration (Heroicons) | Yes (dependency) |
+| `ui_icons` | Icon pack integration (Heroicons) | Yes (dependency, pinned `^1.1`) |
 
 ## See Also
 

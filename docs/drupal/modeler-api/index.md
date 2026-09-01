@@ -41,7 +41,6 @@ guide-meta:
   complements:
     - drupal/eca
     - drupal/orchestration
-  specializes: ""
   category: drupal
 tracks:
   - project: modeler_api

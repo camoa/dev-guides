@@ -12,15 +12,7 @@ drupal_version: "11.x"
 
 These guides document **Facets 3.0.6**, the current stable tag on the 3.x branch. Where they say "3.x" they mean a behaviour that holds across the branch, not a looser version claim.
 
-## Decision
-
-| Approach | When to Use | AJAX | Setup Complexity |
-|---|---|---|---|
-| **Exposed Filters** (3.x recommended) | Standard search pages with AJAX | Yes (native Views AJAX) | Low — add as Views filter criteria |
-| **Block-based** (2.x style) | Custom layouts, Layout Builder, sidebars | No | Medium — place blocks in regions |
-| **REST** | Headless/decoupled frontends | N/A | Medium — configure REST display |
-
-## Pattern
+## Pattern: Installation
 
 ```bash
 # Install Facets (requires Search API)
@@ -42,7 +34,7 @@ drush en facets_summary
 drush en facets_range_widget
 ```
 
-**Prerequisites checklist:**
+## Pattern: Prerequisites Checklist
 
 | Step | Action | Where |
 |---|---|---|
@@ -54,7 +46,15 @@ drush en facets_range_widget
 | 6 | Save the View | Must save before adding facets |
 | 7 | Create facets | `/admin/config/search/facets/add-facet` |
 
-**Admin routes:**
+## Decision: Block-Based vs Exposed Filter Facets
+
+| Approach | When to Use | AJAX | Setup Complexity |
+|---|---|---|---|
+| **Exposed Filters** (3.x recommended) | Standard search pages with AJAX | Yes (native Views AJAX) | Low — add as Views filter criteria |
+| **Block-based** (2.x style) | Custom layouts, Layout Builder, sidebars | No | Medium — place blocks in regions |
+| **REST** | Headless/decoupled frontends | N/A | Medium — configure REST display |
+
+## Pattern: Admin Routes
 
 | Route | Purpose |
 |---|---|
@@ -65,9 +65,9 @@ drush en facets_range_widget
 
 ## Common Mistakes
 
-- **Wrong**: Adding fields to the index without saving the View first → **Right**: You must save the View before facets can see it as a source.
-- **Wrong**: Forgetting to reindex after adding fields → **Right**: Facets only show results for indexed content — reindex after any field change.
-- **Wrong**: Using the Database server in production → **Right**: For development, use the "Database" server. For production, use Solr or Elasticsearch — hierarchy and range facets work better with Solr.
+- **Not saving the View first** — You must save the View before facets can see it as a source. If you add fields and don't save, facets won't find the View display.
+- **Forgetting to index content** — After adding fields to the index, you must reindex. Facets only show results for indexed content.
+- **Wrong Search API server** — For development, use the "Database" server. For production, use Solr or Elasticsearch. Some facet features (hierarchy, range) work better with Solr.
 
 ## See Also
 

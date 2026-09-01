@@ -22,7 +22,6 @@ guide-meta:
     - drupal/sdc
   complements:
     - drupal/ui-patterns
-  specializes: ""
   category: drupal
 ---
 

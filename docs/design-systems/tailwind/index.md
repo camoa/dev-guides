@@ -26,7 +26,6 @@ guide-meta:
     - design-systems/tailwind-tokens
     - design-systems/daisyui
     - design-systems/react-design-system
-  specializes: ""
   category: design-systems
 ---
 

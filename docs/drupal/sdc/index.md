@@ -22,7 +22,6 @@ guide-meta:
     - drupal/ui-patterns
     - drupal/twig
     - drupal/storybook
-  specializes: ""
   category: drupal
 ---
 

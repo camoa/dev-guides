@@ -16,4 +16,5 @@ nav:
 - services-shared-logic.md
 - traits-cross-cutting.md
 - twig-template-inheritance.md
+- sources-maintenance.md
 append_unmatched: true

@@ -10,4 +10,5 @@ nav:
 - form-interaction-craft.md
 - animation-orchestration.md
 - performance-and-event-handling.md
+- sources-maintenance.md
 append_unmatched: true

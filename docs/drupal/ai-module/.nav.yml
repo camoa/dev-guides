@@ -25,4 +25,5 @@ nav:
 - security.md
 - deprecated-modules.md
 - documentation-gaps.md
+- sources-maintenance.md
 append_unmatched: true

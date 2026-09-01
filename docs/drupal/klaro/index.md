@@ -16,7 +16,6 @@ guide-meta:
   complements:
     - drupal/security
     - drupal/seo-geo
-  specializes: ""
   category: drupal
 tracks:
   - project: klaro

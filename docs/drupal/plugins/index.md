@@ -18,7 +18,6 @@ guide-meta:
     - drupal/services
     - drupal/entities
     - drupal/blocks
-  specializes: ""
   category: drupal
 tracks:
   - project: drupal

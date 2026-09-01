@@ -26,7 +26,6 @@ guide-meta:
     - drupal/render-api
     - drupal/sdc
     - design-systems/radix-components
-  specializes: ""
   category: drupal
 ---
 

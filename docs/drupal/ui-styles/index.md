@@ -37,7 +37,6 @@ guide-meta:
     - drupal/sdc
     - drupal/layout-builder
     - drupal/views
-  specializes: ""
   category: drupal
 ---
 

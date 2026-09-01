@@ -14,7 +14,7 @@ drupal_version: "11.x"
 
 | Situation | Choose | Why |
 |---|---|---|
-| New site, Drupal 11.2+ | Group 4.x | No contrib dependencies, Access Policy API, OOP hooks — but 4.0.0-alpha1 is the only tag on the 4.0.x branch (no stable release), requires an `@alpha` install, and is not covered by Drupal security advisories |
+| New site, Drupal 11.2+ | Group 4.x | No contrib dependencies, Access Policy API, OOP hooks — but `4.0.0-alpha2` is the newest tag on the 4.0.x branch (no stable release), requires an `@alpha` install, and is not covered by Drupal security advisories |
 | Existing site on Drupal 11.2+ with Group 3.x | Upgrade to 4.x | Normal module update — same data model and machine names; the same alpha-only caveat applies |
 | Migrating from Group 2.x | Upgrade to 3.x first | Same data model as 3.x; then upgrade core to 11.2+ and upgrade to 4.x |
 

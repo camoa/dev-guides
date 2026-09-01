@@ -25,4 +25,5 @@ nav:
 - testing-routes-controllers.md
 - testing-services.md
 - unit-tests.md
+- sources-maintenance.md
 append_unmatched: true

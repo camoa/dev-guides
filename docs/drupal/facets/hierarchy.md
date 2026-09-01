@@ -10,16 +10,14 @@ drupal_version: "11.x"
 
 > When faceting on hierarchical data — taxonomy vocabularies with parent-child relationships or date facets with year → month → day grouping.
 
-## Decision
-
-**Hierarchy plugins:**
+## Decision: Hierarchy Plugins
 
 | ID | Class | Purpose |
 |---|---|---|
 | `taxonomy` | Taxonomy | Taxonomy term parent-child hierarchy |
 | `date_items` | DateItems | Year → Month → Day temporal hierarchy |
 
-**Hierarchy configuration:**
+## Decision: Hierarchy Configuration
 
 | Setting | Config Key | Default | Purpose |
 |---|---|---|---|
@@ -28,7 +26,7 @@ drupal_version: "11.x"
 | Expand hierarchy | `expand_hierarchy` | FALSE | Always show all levels expanded |
 | Enable parent on child disable | `enable_parent_when_child_gets_disabled` | FALSE | Re-enable parent when last child is deselected |
 
-## Pattern
+## Pattern: Search API Index Hierarchy
 
 To use hierarchy, the Search API index must know about it:
 
@@ -37,7 +35,7 @@ To use hierarchy, the Search API index must know about it:
 3. Configure which fields should have hierarchy indexed
 4. Reindex
 
-**Hierarchy-related processors:**
+## Pattern: Hierarchy-Related Processors
 
 | Processor | Purpose |
 |---|---|
@@ -48,9 +46,9 @@ To use hierarchy, the Search API index must know about it:
 
 ## Common Mistakes
 
-- **Wrong**: Enabling only `use_hierarchy` on the facet → **Right**: Must also enable "Index hierarchy" in Search API AND set `use_hierarchy: TRUE` on the facet.
-- **Wrong**: Assuming hierarchy always builds correctly → **Right**: `hierarchy_processor` runs at weight 100. If another processor removes parent items before weight 100, the tree can't be built.
-- **Wrong**: Looking for a "Build hierarchical tree" checkbox in `facets_exposed_filters` → **Right**: There is no such checkbox, despite what the module's own `docs/exposed_filters.md` still says. Enable the `hierarchy_processor` in the filter's processor list; **Hierarchy type** and **Always expand hierarchy** then become visible in the facet filter settings within the Views UI.
+- **Hierarchy not showing** — Must enable "Index hierarchy" in Search API AND set `use_hierarchy: TRUE` on the facet.
+- **Flat results despite hierarchy enabled** — The `hierarchy_processor` runs at weight 100. If something removes parent items before weight 100, the tree can't be built.
+- **Hierarchy with exposed filters** — There is no "Build hierarchical tree" checkbox, despite what the module's own `docs/exposed_filters.md` still says. Enable the `hierarchy_processor` in the filter's processor list; **Hierarchy type** and **Always expand hierarchy** then become visible in the facet filter settings within the Views UI.
 
 ## See Also
 

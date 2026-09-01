@@ -12,7 +12,6 @@ guide-meta:
   requires: []
   complements:
     - design-systems/recognition
-  specializes: ""
   category: ai-tooling
 ---
 

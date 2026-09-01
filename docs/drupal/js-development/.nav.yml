@@ -22,4 +22,5 @@ nav:
 - performance-optimization.md
 - security.md
 - testing-javascript.md
+- sources-maintenance.md
 append_unmatched: true

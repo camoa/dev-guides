@@ -36,7 +36,6 @@ guide-meta:
   complements:
     - drupal/views
     - drupal/ajax
-  specializes: ""
   category: drupal
 ---
 

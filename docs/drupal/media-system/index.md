@@ -19,7 +19,6 @@ guide-meta:
     - drupal/image-styles
     - drupal/entities
     - media/image-media-craft
-  specializes: ""
   category: drupal
 tracks:
   - project: drupal

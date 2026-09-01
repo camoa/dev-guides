@@ -1,3 +1,8 @@
+---
+description: "Source references and maintenance manifest for the layout builder guides — web sources, code sources, and version history"
+---
+
+# Sources & Maintenance
 ## Sources & Maintenance Manifest
 
 ### Drupal Research Install

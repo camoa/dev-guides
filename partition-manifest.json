@@ -216,8 +216,8 @@
     "guides_extracted": 16
   },
   "design-systems/radix-sdc": {
-    "source_hash": "f1165146f158e1866ac697a89dc1e4d28fea3569caeab39efd553bb4711c06a3",
-    "partitioned": "2026-08-17",
+    "source_hash": "c5b25c8a4705b94b8579c05f07941aea9707147f72cc1fcc56c13744491c3049",
+    "partitioned": "2026-09-01",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 16
   },
@@ -294,14 +294,14 @@
     "guides_extracted": 17
   },
   "drupal/ui-patterns": {
-    "source_hash": "2faa7fc08eb359f36ac18d740b763f5f1e75a608b53f4c5c39fd51c516d9164a",
-    "partitioned": "2026-08-18",
+    "source_hash": "15dd2d7f53764e89bec9308a5260b5eb850c61a843f65df4201e5c322573dc9b",
+    "partitioned": "2026-09-01",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 17
   },
   "drupal/ui-suite-daisyui": {
-    "source_hash": "74708b253f4d139f5d352a5be7cc998a427fb0565c74ff603145053322211f99",
-    "partitioned": "2026-08-18",
+    "source_hash": "33eb069719cd22e834692d1a029701224dc7cddccf477e5f959a6888e7e76e95",
+    "partitioned": "2026-09-01",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 16
   },
@@ -366,8 +366,8 @@
     "guides_extracted": 17
   },
   "drupal/breadcrumbs": {
-    "source_hash": "5d26a54f59d971abd7d7d4ad5df03c6649596dcfe04535f8ed6fc74867e9bac6",
-    "partitioned": "2026-02-26",
+    "source_hash": "1bf3e1f34925f84fd7f1a13ee472b6961f60f4fdbdbd402811c941aa1c34a8e9",
+    "partitioned": "2026-09-01",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 14
   },
@@ -402,8 +402,8 @@
     "guides_extracted": 25
   },
   "drupal/group": {
-    "source_hash": "26b51ce6b012b92dafdbb92ea14323d1ce6604f9c9e5dc19336c44e491d34158",
-    "partitioned": "2026-08-16",
+    "source_hash": "ead120fad68a13b6d9e14820a9117436bd8867bc68fec521207b9b52e73f0b22",
+    "partitioned": "2026-09-01",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 16
   },
@@ -420,8 +420,8 @@
     "guides_extracted": 20
   },
   "drupal/facets": {
-    "source_hash": "e1ebaebee6abbb237cf1617b02008bb005d60ad689972393138ebf811d4e1ca1",
-    "partitioned": "2026-08-20",
+    "source_hash": "8a566f338dc0282db8e2fbef0d70599f7b39f1060820cff75757f564f99bd591",
+    "partitioned": "2026-09-01",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 25
   },

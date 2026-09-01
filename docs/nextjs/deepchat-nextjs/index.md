@@ -23,7 +23,6 @@ guide-meta:
     - nextjs/deepchat-drupal-auth
     - nextjs/next-drupal
     - drupal/ai-content
-  specializes: ""
   category: nextjs
 ---
 

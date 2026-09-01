@@ -30,7 +30,6 @@ guide-meta:
     - drupal/layout-builder
     - design-systems/tailwind-tokens
     - design-systems/daisyui
-  specializes: ""
   category: drupal
 ---
 
