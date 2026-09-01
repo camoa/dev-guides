@@ -20,6 +20,10 @@ tldr: Use `<label for="id">` for every input, `aria-describedby` for hints, `ari
 | Auto-fill support | `autocomplete="email"` / `"given-name"` / etc. | Missing autocomplete on personal-info fields |
 | Hint placement | Above the input | Below (autocomplete popovers cover it) |
 
+## `aria-live` vs `aria-errormessage` for Immediate Announcement
+
+`aria-errormessage` links the input to error text, but screen readers only read it when the user focuses the field — not when the error first appears. If you need immediate announcement on blur, add `role="alert"` or `aria-live="polite"` to the error container. **Test for double announcement**: some AT reads the error both when it appears and when the user focuses the field.
+
 ## Pattern: Label and Error Structure
 
 ```html

@@ -90,6 +90,17 @@ ContentEnablerBase    → GroupRelationBase
 | Code relying on entity re-save when added to a group | Entities are no longer re-saved; only cache tags are invalidated |
 | Programmatic `Group::save()` expecting auto-created creator membership | Auto creator membership is form-only — call `addMember()` explicitly |
 
+## Handler System Migration (v1 to v2/v3)
+
+v1 plugin methods that were removed from `GroupRelationBase` and moved to handlers:
+
+| Removed from plugin | Now in handler |
+|---|---|
+| `checkAccess()` | `access_control` handler |
+| `getOperations()` | `operation_provider` handler |
+| `getPermissions()` | `permission_provider` handler |
+| `postInstall()` | `post_install` handler |
+
 ## Common Mistakes
 
 - **Wrong**: Attempting a direct v2-to-v3 in-place upgrade → **Right**: The module maintainer explicitly states this is unsafe. There is no upgrade hook.

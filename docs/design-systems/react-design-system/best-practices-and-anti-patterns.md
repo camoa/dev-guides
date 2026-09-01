@@ -9,6 +9,23 @@ tldr: "Use before shipping a component to design system consumers, and during co
 
 > Use before shipping a component to design system consumers, and during code review.
 
+## The Experienced Developer Checklist
+
+**Composition over configuration**
+Write components that compose, not configure. A `<Card>` with `headerSlot`, `bodySlot`, `footerSlot`, `hasImage`, `imagePosition`, `hasBadge`, and 12 more props is a configuration component — it's doing too much. A `<Card>` compound component with three sub-components composes into any layout without a prop for every variation. If you're adding a prop, ask: could this instead be a slot or a composed child?
+
+**Minimal API surface**
+Every prop you add is a commitment to support forever. Start with fewer props than you think you need. You can always add; you can't remove without a breaking change. The Radix UI philosophy: expose behavior, hide implementation.
+
+**Consistent naming conventions**
+- Event handlers: `on{Event}` (onClick, onValueChange, onOpenChange)
+- Boolean state: `is{State}` or `has{Thing}` (isLoading, isDisabled, hasError)
+- Slot props: `{slot}Slot` for named props, or compound sub-components
+- Variant names: match the design system vocabulary (primary/secondary/ghost, not style1/style2)
+
+**Documentation-driven development**
+Write the Storybook story before the component implementation. If you can't write a clear story, the component API isn't clear. The story is also the first consumer — it will immediately reveal prop naming problems.
+
 ## Decision
 
 | Principle | Rule |

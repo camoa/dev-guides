@@ -55,6 +55,15 @@ Avoid: vague feedback, bare "+1 RTBC" without substantive review, noise that doe
 
 Credit works identically for GitLab-migrated issues — Contribution Records is decoupled from issue hosting.
 
+## Best-Practice Differences by Workflow
+
+| Dimension | Core | Your own contrib | Someone else's contrib |
+|---|---|---|---|
+| RTBC discipline | Strict; no self-RTBC as sole author | Relaxed; self-RTBC OK | Strict; no self-RTBC unless allowed |
+| Credit decision | Core committers decide | You decide | Maintainer decides |
+| Pace expectation | Slow; release-phase limits | You control | Maintainer's pace — be patient |
+| Review burden | Multi-reviewer, very strict | You set it | Maintainer sets it |
+
 ## Code of Conduct — Five Pillars
 
 1. Consider others' needs

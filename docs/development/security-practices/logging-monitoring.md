@@ -58,6 +58,72 @@ handler.setFormatter(JSONFormatter())
 logger.addHandler(handler)
 ```
 
+## Security Event Logging
+
+```python
+# Authentication events
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.form['username']
+    password = request.form['password']
+    ip_address = request.remote_addr
+
+    user = authenticate(username, password)
+
+    if user:
+        logger.info('Successful login', extra={
+            'event_type': 'auth_success',
+            'user_id': user.id,
+            'username': username,
+            'ip_address': ip_address,
+            'user_agent': request.headers.get('User-Agent')
+        })
+        return redirect('/dashboard')
+    else:
+        logger.warning('Failed login attempt', extra={
+            'event_type': 'auth_failure',
+            'username': username,
+            'ip_address': ip_address,
+            'user_agent': request.headers.get('User-Agent')
+        })
+        return 'Invalid credentials', 401
+
+# Authorization failures
+@app.route('/admin/delete-user/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    if not current_user.is_admin:
+        logger.warning('Unauthorized access attempt', extra={
+            'event_type': 'authz_failure',
+            'user_id': current_user.id,
+            'requested_resource': f'/admin/delete-user/{user_id}',
+            'ip_address': request.remote_addr
+        })
+        return 'Forbidden', 403
+
+    # Proceed with deletion
+    logger.info('User deleted', extra={
+        'event_type': 'admin_action',
+        'actor_user_id': current_user.id,
+        'target_user_id': user_id,
+        'action': 'delete_user'
+    })
+
+# Input validation failures
+@app.route('/api/articles', methods=['POST'])
+def create_article():
+    try:
+        validate_json(request.json, article_schema)
+    except ValidationError as e:
+        logger.warning('Input validation failure', extra={
+            'event_type': 'validation_failure',
+            'user_id': current_user.id,
+            'endpoint': '/api/articles',
+            'error': str(e),
+            'ip_address': request.remote_addr
+        })
+        return {'error': 'Invalid input'}, 400
+```
+
 ## What NOT to Log
 
 ```python

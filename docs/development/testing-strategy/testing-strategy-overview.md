@@ -9,6 +9,20 @@ tldr: Testing is a cost/confidence tradeoff, not a boolean. Use risk-based inves
 
 > Use this decision model every time you start a new feature, plan a sprint, or evaluate a test suite. Testing is an economics problem, not a checkbox.
 
+## When to Test More, When to Test Less
+
+Test more when:
+- Code handles money, authentication, authorization, or PII
+- Logic will be maintained by multiple developers over years
+- Bugs in this area caused production incidents previously
+- Requirements are complex with many edge cases
+
+Test less (or differently) when:
+- You are exploring — spike code, throw it away when it works
+- The "tests" would just mirror the implementation
+- UI is still in flux and visual design is changing weekly
+- You are writing framework/infrastructure code that has its own test suite
+
 ## Decision
 
 | Risk category | Examples | Test investment |

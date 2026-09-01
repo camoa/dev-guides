@@ -10,6 +10,36 @@ drupal_version: "11.x"
 
 > Use ConfigFormBase for admin settings and system configuration. Use FormBase for non-configuration data or temporary workflow data.
 
+## Key Decisions
+
+| Pattern | When to Use | Complexity |
+|---------|-------------|------------|
+| #config_target | Simple config mapping | Low |
+| #config_target + ConfigTarget | Need transformations | Medium |
+| Manual get/set | Complex logic, conditional saving | High |
+
+**Override Detection:**
+```
+ConfigFormBase automatically shows override warnings
+Respects config overrides (settings.php)
+Use hasOverrides() to check programmatically
+```
+
+**Common Mistakes:**
+- Forgetting `getEditableConfigNames()` implementation
+  - **WHY BAD:** Config override detection breaks, can't determine which configs form modifies, permission system can't enforce restrictions
+- Not creating schema file (validation won't work)
+  - **WHY BAD:** #config_target validation fails, typed data constraints not enforced, no type checking, config import doesn't validate
+- Using ConfigFormBase for non-config storage
+  - **WHY BAD:** Expects config schema, requires getEditableConfigNames(), config override system confused, unnecessary complexity
+- Hardcoding config names instead of constants
+  - **WHY BAD:** Refactoring breaks all references, typos cause silent failures, IDE can't refactor, no autocomplete
+
+**See Also:**
+- Configuration API Guide
+- Typed Data Guide (for schema constraints)
+- Config Translation Guide
+
 ## Decision
 
 | Situation | Choose | Why |

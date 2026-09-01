@@ -9,6 +9,18 @@ tldr: "Structure every test as Arrange/Act/Assert with blank lines between phase
 
 > Apply AAA structure and descriptive naming to every test you write. Good structure is the difference between a test that communicates its intent when it fails and one that requires reverse-engineering.
 
+## Given-When-Then (GWT)
+
+BDD terminology for the same structure. Use GWT when writing tests from a behavior/specification perspective, especially in Gherkin-based tools or when tests serve as living documentation:
+
+```
+Given: a VIP customer with one item in their cart
+When: checkout total is calculated
+Then: the VIP discount of 10% is applied
+```
+
+GWT and AAA are semantically identical; choose based on team convention and tooling.
+
 ## Decision
 
 | Naming style | Pattern | Example |

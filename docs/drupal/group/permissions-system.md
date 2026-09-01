@@ -63,6 +63,50 @@ mymodule.group.custom_page:
 | `individual` | `IndividualGroupRoleAccessPolicy` | `access_policy` / -100 |
 | `outsider`, `insider` | `SynchronizedGroupRoleAccessPolicy` | `access_policy` / -50 |
 
+## Plugin-Generated Permissions
+
+When a plugin has `entity_access: TRUE`, the `PermissionProvider` handler automatically generates a set of permissions for the plugin. These follow naming conventions:
+
+| Permission name pattern | Purpose |
+|---|---|
+| `{plugin_id} relationship` admin permission | Administer all relationships of this type |
+| `view {plugin_id} relationship` | View any relationship entity |
+| `update any {plugin_id} relationship` | Edit any relationship entity |
+| `update own {plugin_id} relationship` | Edit own relationship entity |
+| `delete any {plugin_id} relationship` | Delete any relationship entity |
+| `delete own {plugin_id} relationship` | Delete own relationship entity |
+| `create {plugin_id} relationship` | Add an existing entity to the group |
+| `view {plugin_id} entity` | View any entity in the group |
+| `update any {plugin_id} entity` | Edit any entity in the group |
+| `update own {plugin_id} entity` | Edit own entity in the group |
+| `delete any {plugin_id} entity` | Delete any entity in the group |
+| `delete own {plugin_id} entity` | Delete own entity in the group |
+| `create {plugin_id} entity` | Create a new entity within the group |
+
+For derived plugins (e.g., `group_node:article`), `{plugin_id}` becomes `group_node:article`.
+
+## Route Access Requirements
+
+Group provides several custom access checks for routing:
+
+| `requirements` key | Class | Checks |
+|---|---|---|
+| `_group_permission: 'some permission'` | `GroupPermissionAccessCheck` | User has permission in the group from route context |
+| `_group_member: TRUE` | `GroupMemberAccessCheck` | User is a member of the group |
+| `_group_installed_content: 'plugin_id'` | `GroupInstalledContentAccessCheck` | Plugin is installed on the group type |
+| `_group_owns_content: TRUE` | `GroupOwnsContentAccessCheck` | User owns the group content |
+| `_group_relationship_create_access: 'plugin_id'` | `GroupRelationshipCreateAccessCheck` | User can create a relationship of this type |
+
+```yaml
+# routing.yml example
+mymodule.group.custom_page:
+  path: '/group/{group}/my-page'
+  defaults:
+    _controller: '\Drupal\mymodule\Controller\MyController::page'
+  requirements:
+    _group_permission: 'manage features'
+```
+
 ## Common Mistakes
 
 - **Wrong**: Using `AccessResult::allowedIfHasPermission()` for group permissions → **Right**: Use `GroupAccessResult::allowedIfHasGroupPermission()`. The former checks global Drupal permissions only.

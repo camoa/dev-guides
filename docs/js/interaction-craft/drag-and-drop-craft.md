@@ -24,6 +24,15 @@ tldr: "Use the HTML Drag API for simple desktop-only drag. Use Pointer Events fo
 - Drop targets require `dragover.preventDefault()` to accept drops
 - `dataTransfer` API is inconsistent across browsers
 
+## Visual Feedback Patterns
+
+| Feedback Type | Implementation | Notes |
+|---|---|---|
+| Drag ghost | CSS `opacity: 0.5` on source + custom `setDragImage()` | Native ghost is often ugly; custom image = better control |
+| Drop zone highlight | `is-drag-over` class on valid targets | Remove on `dragleave` AND `drop` to avoid stuck state |
+| Insertion marker | Absolutely positioned `::after` line at drop position | Shows exactly where item will land |
+| Invalid drop zone | `not-allowed` cursor via CSS `[data-drop-zone="inactive"]` | Give clear "can't drop here" signal |
+
 ## Pattern
 
 ```javascript

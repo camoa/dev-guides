@@ -9,6 +9,32 @@ tldr: Use when diagnosing which Core Web Vital to investigate first; INP replace
 
 > Use this section to understand which metric to investigate first and how to collect real-user data. LCP, INP, and CLS are the three Core Web Vitals Google uses for Search ranking. TTFB is an informational diagnostic metric — not a Core Web Vital itself but the first signal when a server or CDN is the bottleneck.
 
+## Metrics Reference
+
+## LCP — Largest Contentful Paint
+**Measures:** How long until the largest visible text or image block renders.
+**Thresholds:** Good ≤2.5s | Needs improvement ≤4.0s | Poor >4.0s
+**Primary causes of poor LCP:** Render-blocking resources, slow server response (TTFB), unoptimized LCP image (missing `fetchpriority`, JS-rendered element, lazy-loaded).
+**Fix first in:** [Critical Rendering Path](#critical-rendering-path), [LCP Image Optimization](#lcp-image-optimization).
+
+## INP — Interaction to Next Paint
+**Measures:** The worst-case interaction latency across the full page lifecycle. Replaced FID in March 2024.
+**Thresholds:** Good ≤200ms | Needs improvement ≤500ms | Poor >500ms
+**Primary causes of poor INP:** Long JS tasks blocking the main thread, excessive rendering work after interaction.
+**Fix first in:** [INP: Scheduler API](#inp-scheduler-api). Diagnose in: [INP: Field Measurement](#inp-field-measurement).
+
+## CLS — Cumulative Layout Shift
+**Measures:** Unexpected visual instability — how much content jumps around as the page loads.
+**Thresholds:** Good ≤0.1 | Needs improvement ≤0.25 | Poor >0.25
+**Primary causes of poor CLS:** Images without `width`/`height`, web fonts swapping (FOUT), dynamically injected content above existing content, `content-visibility` without `contain-intrinsic-size`.
+**Fix first in:** [LCP Image Optimization](#lcp-image-optimization) (image dimensions), [Web Font Performance](#web-font-performance), [CSS Containment Performance](#css-containment-performance).
+
+## TTFB — Time to First Byte
+**Measures:** Time from request to first byte of HTML response. Infrastructure metric, not a Core Web Vital.
+**Thresholds:** Good ≤800ms | Needs improvement ≤1800ms | Poor >1800ms
+**Primary causes:** Slow origin server, uncached dynamic pages, long redirect chains, poor CDN configuration.
+**Fix at:** Server/CDN layer — outside the scope of this guide.
+
 ## Decision
 
 | Metric | Measures | Good | Needs Improvement | Poor |

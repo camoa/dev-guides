@@ -42,6 +42,24 @@ plugin_config:
   entity_cardinality: 1
 ```
 
+## gnode (Group Node)
+
+**File**: `modules/gnode/`
+**Dependency**: `drupal:node`
+
+Provides the `group_node` plugin type which makes every node type a potential relation type. Uses a deriver so that when a new node type is created, a new `group_node:{bundle}` plugin derivative becomes available.
+
+Enables `entity_access: TRUE` so that nodes within groups are access-controlled by Group.
+
+Default entity cardinality: 1 (a node can only be in the same group once).
+
+Also provides:
+- `gnode.group.permissions.yml` with `access group_node overview` permission
+- Entity operation link to the group nodes View (if Views exists and the default view is present)
+- Clears plugin definitions cache on node type creation via `gnode_node_type_insert()`
+
+**When to enable**: Enable gnode whenever you want to scope node access to groups. Without gnode, all nodes are accessible by their standard Drupal node access regardless of group membership.
+
 ## Common Mistakes
 
 - **Wrong**: Enabling `gnode` without understanding the access implications → **Right**: Once enabled, nodes added to groups are access-controlled by Group. Nodes NOT in any group still use standard node access. Incomplete permission configuration can lock users out.

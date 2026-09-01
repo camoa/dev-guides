@@ -9,6 +9,16 @@ tldr: "Every AI test generation cycle runs four phases: Plan (Planner agent writ
 
 > Use this pattern for every AI test generation cycle. It is the spine — not a shortcut for large tests.
 
+## The Four Phases
+
+**1. Plan** — Planner agent explores the app (via Playwright MCP) and writes a Markdown test plan covering scenarios, steps, expected results, negative assertions, and scope. Output: `specs/<feature>.md`.
+
+**2. Review (human)** — A reviewer (developer, PM, QA, designer) reads the plan. Approves, rejects, or edits. The plan is the source of truth. Output: approved/edited `specs/<feature>.md`.
+
+**3. Generate** — Generator agent reads the approved plan and writes Playwright code. Each scenario in the plan maps to a `test()`; each step maps to a `// step:` comment + Playwright call; each acceptance criterion maps to an `expect()`. Output: `tests/<feature>.spec.ts`.
+
+**4. Heal** — When CI breaks because the UI changed, the Healer agent reads the failing test, opens the site, finds new locators, patches the test. The *plan stays unchanged* — only the code that fulfills the plan drifts. Output: updated `tests/<feature>.spec.ts`.
+
 ## Decision
 
 | Skip phase | When |

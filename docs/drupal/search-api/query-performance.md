@@ -10,6 +10,15 @@ drupal_version: "11.x"
 
 > Use this when optimizing search query speed and reducing server load.
 
+## Pattern: Cache Warming
+
+For high-traffic search pages:
+1. Identify popular search terms from analytics
+2. Create a cron job that pre-executes popular queries
+3. This warms Drupal's render cache and the backend's query cache
+
+For Solr: configure autowarming in `solrconfig.xml` for filter cache, query result cache, and document cache.
+
 ## Decision
 
 | Strategy | Impact | Applies To |

@@ -53,6 +53,23 @@ if (!isset($allowed[$plugin_id])) { throw new AccessDeniedHttpException(); }
 $storage->loadByPluginId($plugin_id);
 ```
 
+## Trust Model
+
+Group operates on the principle of **explicit group-level override**: for any entity type with an active `entity_access: TRUE` plugin, Group either explicitly allows or explicitly forbids access. Returning `forbidden` is intentional — it means no other module can override Group's denial for a grouped entity.
+
+This means: configure Group permissions carefully. If Group forbids access and the user does not have the right group role, no other module's `hook_entity_access()` implementation can grant access.
+
+## Config Wrapper Security
+
+Group wraps config entities (via `group_config_wrapper`) to allow them to be related to groups. Config entities are typically admin-only. Exposing config entities through group relations to non-admin users requires carefully verifying that the config entity type does not expose sensitive data through its views or fields.
+
+## Query Access and SQL Injection
+
+Group's `EntityQueryAlter`, `GroupQueryAlter`, and `GroupRelationshipQueryAlter` classes add conditions to SQL queries using parameterized queries via Drupal's database API. There is no SQL injection risk from Group's own code. However:
+
+- Never pass unsanitized user input as a `plugin_id` to `loadByPluginId()` or similar storage methods. Validate against known plugin IDs first.
+- Views with exposed filters on `plugin_id` should use allowed-values constraints.
+
 ## Common Mistakes
 
 - **Wrong**: Giving outsider roles too many permissions during development → **Right**: Lock down outsider permissions before going live. Outsider permissions apply to ALL authenticated non-member users.

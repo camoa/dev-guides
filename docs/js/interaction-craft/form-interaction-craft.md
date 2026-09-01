@@ -9,6 +9,22 @@ tldr: "Validate on blur for the first time. After the first error, switch to liv
 
 > Validate on blur for the first time. After the first error, switch to live validation. Never validate on every keystroke for format errors — it destroys UX.
 
+## Pattern: Input Masking (Phone Number)
+
+```javascript
+function phoneMask(input) {
+  input.addEventListener('input', (e) => {
+    const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
+    const parts = [digits.slice(0,3), digits.slice(3,6), digits.slice(6)].filter(Boolean);
+    e.target.value = parts.length === 1 ? parts[0]
+      : parts.length === 2 ? `(${parts[0]}) ${parts[1]}`
+      : `(${parts[0]}) ${parts[1]}-${parts[2]}`;
+  });
+}
+```
+
+**Input masking rules:** Always strip and reformat — never prevent keystrokes. Supporting copy-paste with existing formatting (e.g. `(555) 123-4567` pasted in) is critical for UX; strip all non-digits and reformat. The UK Government Digital Service research found flexible separators improved form completion by 18%.
+
 ## Decision
 
 | Timing | Trigger | Use When |

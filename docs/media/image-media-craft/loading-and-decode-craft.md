@@ -18,6 +18,10 @@ tldr: "Use `fetchpriority=\"high\"` on the one LCP image. Use `loading=\"lazy\"`
 | Below fold, non-critical | `lazy` | `async` | omit | Defers until ~1250px away |
 | Background/decorative image | `lazy` | `async` | omit | Or use CSS `background-image` instead |
 
+## `decoding="async"` — Always Use It
+
+`decoding="async"` tells the browser to decode the image off the main thread, allowing other rendering work to continue. There is no downside for below-fold images. For above-fold images, it may delay the image appearing slightly but improves overall page responsiveness. Use it universally unless profiling shows a specific problem.
+
 ## Pattern
 
 **Above-fold LCP image checklist**:

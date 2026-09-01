@@ -32,7 +32,7 @@ guide-meta:
 
 | I need to... | Guide | Summary |
 |-------------|-------|---------|
-| Understand what HTMX is and why Drupal adopted it | [HTMX Overview](htmx-overview.md) | Use HTMX when you're building interactive Drupal features that update page regions without full page reloads and want a simpler approach than traditional AJAX. Use traditional AJAX when you need complex command sequences or contrib module… |
+| Understand what HTMX is and why Drupal adopted it | [HTMX Overview](htmx-overview.md) | Use HTMX when you're building interactive Drupal features that update page regions without full page reloads and want a simpler approach than traditional AJAX. Use traditional AJAX when you need complex command sequences or contrib module compatibility. |
 | Decide between HTMX and traditional AJAX | [HTMX vs AJAX](htmx-vs-ajax.md) | Use HTMX when replacing content with simple swaps, dependent form fields, load more, or modals. Use traditional AJAX when you need complex command sequences, heavy client-side processing, or contrib module integration. |
 | Understand the request/response lifecycle | [Request/Response Lifecycle](request-response-lifecycle.md) | Reference this when debugging HTMX issues or building custom integrations that need to hook into specific lifecycle stages. |
 | Enable HTMX in my module with routes and controllers | [Basic Setup](basic-setup.md) | Use this when creating a custom module and adding HTMX functionality for the first time. |

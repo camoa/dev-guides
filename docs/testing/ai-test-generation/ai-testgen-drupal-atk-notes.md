@@ -66,6 +66,15 @@ Include these in every plan for a Drupal site:
 - The page does not redirect to `/user/login`
 ```
 
+## Pattern: when the codebase uses ATK
+
+If `composer.json` shows `drupal/automated_testing_kit`, the Planner can:
+- Reference ATK helpers (`drupalLogin`, `createNode`) instead of inlining setup
+- Use `qa_accounts` users for role-based tests
+- Reference ATK's pre-flight check (`drush atk:preflight`) as a precondition
+
+See the [ATK](../atk/index.md) topic for the full integration story.
+
 ## Common Mistakes
 
 - **Wrong**: Regenerating ATK's catalog with AI → **Right**: duplicates what ATK ships; use ATK for generic Drupal tests

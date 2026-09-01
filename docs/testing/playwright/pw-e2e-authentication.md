@@ -9,6 +9,15 @@ tldr: Run a one-time setup project that logs in via API, saves storageState to a
 
 > Use `storageState` to log in once per CI run per role and replay credentials across tests. Use programmatic API login (not UI login) when the API endpoint exists.
 
+## Pattern: session expiry
+
+`storageState` doesn't auto-refresh. Two strategies:
+
+1. **Re-run setup before every CI run** (default — setup project runs each invocation)
+2. **Detect expiry inside a fixture and re-login** — `authedPage` fixture navigates to a known URL; if it sees the login form, re-runs auth
+
+For long suites that hit token expiry mid-run, prefer (1) plus increasing worker count so individual workers complete inside the token TTL.
+
 ## Decision
 
 | Approach | When |

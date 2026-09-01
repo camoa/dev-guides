@@ -21,6 +21,10 @@ drupal_version: "11.x"
 | Let Drupal entity events trigger external workflows | **Orchestration webhooks + ECA dispatch action** | ECA observes the entity event; webhook action fires outbound HTTP |
 | Automate purely internal Drupal workflows | **ECA alone** | Orchestration is the external half; ECA is the internal half |
 
+## Context: DXP 2.0
+
+This module is the practical implementation of Dries Buytaert's "DXP 2.0" vision articulated at DrupalCon Vienna Oct 2025 and DrupalCon Chicago Mar 2026: Drupal as a composable platform wired into the broader automation ecosystem rather than a siloed CMS. The Activepieces integration is the first expression of this.
+
 ## Pattern
 
 The mental model: JSON:API handles **data**; Orchestration handles **behavior**.

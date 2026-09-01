@@ -9,6 +9,14 @@ tldr: Functional tests verify feature behavior via HTTP or equivalent without a 
 
 > Use functional tests when the feature involves configuration, routing, permissions, or multi-request workflows that integration tests cannot easily exercise. Do not use them for logic variants — those belong in unit tests.
 
+## What Functional Tests Catch
+
+- Feature regressions: "This endpoint used to return 200, now it returns 403"
+- Auth and permission enforcement at the feature level
+- Response format correctness (JSON schema, HTML structure)
+- Multi-step workflows (form submit → confirmation → database write → email)
+- Configuration-driven behavior (does enabling Feature Flag X change the response?)
+
 ## Decision
 
 | Term | Scope | Browser? | Real DB? |

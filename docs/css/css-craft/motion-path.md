@@ -19,6 +19,26 @@ tldr: "Use `offset-path` when a client wants an element to animate along a curve
 | Scroll-triggered path animation | `offset-path` + `animation-timeline: scroll()` | Path progress tied to scroll |
 | Logo/icon along a decorative curve | `offset-path` + `offset-rotate` | Element rotates to follow path tangent |
 
+## Pattern: Multiple Elements Staggered on Same Path
+
+```css
+.path-group > * {
+  offset-path: circle(100px at center);
+  animation: orbit 6s linear infinite;
+}
+.path-group > :nth-child(1) { animation-delay: 0s; }
+.path-group > :nth-child(2) { animation-delay: -2s; }
+.path-group > :nth-child(3) { animation-delay: -4s; }
+```
+
+**Key properties:**
+- `offset-path` — the path shape (circle, ellipse, path(), ray(), polygon())
+- `offset-distance` — how far along the path (0% to 100%)
+- `offset-rotate` — element rotation (`auto` follows tangent, `0deg` stays upright)
+- `offset-anchor` — which point of the element sits on the path
+
+**Browser support:** All browsers (Baseline 2022). Production-ready.
+
 ## Pattern
 
 ```css

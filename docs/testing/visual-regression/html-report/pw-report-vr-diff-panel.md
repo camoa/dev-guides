@@ -9,6 +9,14 @@ tldr: When toHaveScreenshot() fails, the per-test detail shows a diff panel with
 
 > Use this when triaging an `expect(page).toHaveScreenshot()` failure — the diff panel is the primary tool for deciding intentional change vs regression.
 
+## What You See
+
+When a screenshot assertion fails, the per-test detail page renders a dedicated **Image diff** panel above the rest of the test output. Three images are attached:
+
+1. **Expected** — the committed baseline PNG (`<test>-snapshots/<name>-<project>-<platform>.png`)
+2. **Actual** — the screenshot captured this run (`<name>-actual.png`)
+3. **Diff** — pixelmatch-style overlay highlighting changed pixels (`<name>-diff.png`)
+
 ## Decision
 
 | Mode | Use when |

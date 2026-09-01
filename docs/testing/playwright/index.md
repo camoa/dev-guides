@@ -68,7 +68,7 @@ guide-meta:
 # Playwright (E2E)
 
 | I need to... | Guide | Summary |
-|---|---|---|
+|-------------|-------|---------|
 | Choose between E2E, VR, unit tests, and Drupal FunctionalJavascript | [Layer Selection](pw-e2e-layer-selection.md) | Default to Playwright web-first E2E for any test whose acceptance criterion includes "the user sees" or "the user clicks." Keep VR and E2E in separate test files — VR demands frozen animations and network idle; mixing the two produces tests that are both over-sensitive and under-sensitive. |
 | Pick the right locator (role, text, test-id, CSS) | [Locators](pw-e2e-locators.md) | Use getByRole() first, then getByLabel() for form fields, then getByTestId() for explicit test contracts — the priority order doubles as a soft a11y check. Avoid CSS class chains; they break on every theme refactor. Locators are lazy and compose — chain and filter instead of reaching for .first(). |
 | Use every web-first assertion correctly | [Web-First Assertions](pw-e2e-assertions.md) | Always use expect(locator) — not isVisible() or textContent() — because only expect() auto-retries until the condition holds or expect.timeout elapses. Never use waitForTimeout(); replace with a web-first assertion or expect.poll() for conditions outside the DOM. |

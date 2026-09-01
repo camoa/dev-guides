@@ -51,6 +51,15 @@ Use neither when:
 
 Performance note: Group adds SQL JOINs to entity queries for all entity types with `entity_access: TRUE` plugins. On large sites, minimize the number of `entity_access: TRUE` plugins.
 
+## Performance Considerations
+
+Group adds SQL JOINs and sub-queries to entity queries for all entity types with active plugins using `entity_access: TRUE`. On large sites:
+
+- Minimize the number of `entity_access: TRUE` plugins — only enable this for entity types where group-level access control is actually needed
+- Use the `user.group_permissions` cache context aggressively — the hash-based approach makes this efficient
+- Consider Varnish/CDN with group-aware cache invalidation for anonymous users
+- Large groups (thousands of members) may benefit from limiting use of insider roles (which require membership ID tracking in the hash)
+
 ## Common Mistakes
 
 - **Wrong**: Installing gnode without understanding the access implications → **Right**: Once `entity_access: TRUE` plugins are installed, ALL node access for grouped nodes goes through Group. Incomplete config can lock users out.

@@ -153,6 +153,31 @@ public function buildForm(array $form, FormStateInterface $form_state) {
 }
 ```
 
+## Element-Level Optimization
+
+**Avoid Nested Loops:**
+```php
+// SLOW - nested entity loads
+foreach ($items as $item) {
+  $entity = $storage->load($item['id']); // N+1 queries
+}
+
+// FAST - batch load
+$ids = array_column($items, 'id');
+$entities = $storage->loadMultiple($ids); // 1 query
+```
+
+**Library Attachment:**
+```php
+// Attach libraries only when needed
+if ($complex_widget_needed) {
+  $form['#attached']['library'][] = 'mymodule/complex-widget';
+}
+
+// Not on every form:
+// $form['#attached']['library'][] = 'mymodule/rarely-used';
+```
+
 ## AJAX Performance
 
 **User Perception Thresholds:**

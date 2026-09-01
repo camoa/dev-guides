@@ -9,6 +9,38 @@ tldr: "The request fixture shares the browser context's cookie jar — use it to
 
 > Use the `request` fixture for HTTP contract tests and for setting up state via API before driving UI. Use the API+UI hybrid when you need both deterministic state and user-journey coverage.
 
+## Pattern: the `request` fixture
+
+```ts
+test('order API', async ({ request }) => {
+  const get = await request.get('/api/orders/42');
+  expect(get.ok()).toBeTruthy();          // 200–299
+  expect(get.status()).toBe(200);
+  expect(get.headers()['content-type']).toContain('application/json');
+  const body = await get.json();
+  expect(body.total).toBe(123.45);
+
+  const post = await request.post('/api/orders', {
+    data: { items: [{ sku: 'X', qty: 2 }] }, // auto-serializes to JSON
+    headers: { Authorization: 'Bearer …' },
+  });
+  await expect(post).toBeOK(); // web-first variant
+
+  await request.put('/api/orders/42', { data: { status: 'paid' } });
+  await request.delete('/api/orders/42');
+
+  // Multipart
+  await request.post('/api/upload', {
+    multipart: {
+      file: { name: 'a.png', mimeType: 'image/png', buffer: Buffer.from('...') },
+      caption: 'Hello',
+    },
+  });
+});
+```
+
+`request` reads `baseURL`, `extraHTTPHeaders`, `httpCredentials`, `ignoreHTTPSErrors`, and `proxy` from `use:` — same knobs as the browser context.
+
 ## Decision
 
 | Test value | Approach |

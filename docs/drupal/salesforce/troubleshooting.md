@@ -61,6 +61,36 @@ $client = \Drupal::service('salesforce.client');
 $usage = $client->getApiUsage(); // Returns usage from Sforce-Limit-Info header
 ```
 
+## Field Mapping Not Working
+
+**Check:**
+1. Field mapping direction correct
+2. Drupal field exists on bundle
+3. Salesforce field exists on object
+4. Field types compatible
+5. Required fields populated
+
+**Debug:**
+- Event: `PUSH_PARAMS` - Examine params before API call
+- Event: `PULL_ENTITY_VALUE` - Examine values during pull
+- Object describe: Check field metadata via `objectDescribe()`
+
+## Queue Stuck/Growing
+
+**Diagnose:**
+- Check queue size: `drush queue:list`
+- Check failed items: Query `salesforce_push_queue` with `fails > 0`
+- Check cron running: `drush core:cron`
+- Check processor: Default `rest` plugin available
+
+**Resolution:**
+- Increase limits: `global_push_limit`, `push_limit`
+- Fix mapping errors causing failures
+- Clear failed items: Custom query to delete permanent failures
+- Process manually: `drush sfpush` / `drush sfpull`
+
+---
+
 ## Common Mistakes
 
 - **Wrong**: Debugging push failures without enabling `salesforce_logger` → **Right**: Enable `salesforce_logger` first; it captures all sync errors to dblog

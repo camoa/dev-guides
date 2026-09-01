@@ -65,6 +65,19 @@ Multiple can apply:
     → Check both "AI Assisted Issue" + "AI Generated Code"
 ```
 
+## Pattern: The Responsible Path
+
+**"AI Assisted Code" with thorough human review** is the recommended approach:
+
+1. You understand the problem before involving AI
+2. You guide the AI toward the right approach
+3. AI helps with implementation details (boilerplate, API usage)
+4. You review every line and understand why it's there
+5. You test the result, including edge cases
+6. You can defend every technical decision in review
+
+This is how experienced developers use AI tools — as an assistant, not a replacement.
+
 ## Common Mistakes
 
 - **Wrong**: Checking "AI Assisted Code" when AI wrote entire functions → **Right**: Be honest about the level and scale; use the significant-portion test

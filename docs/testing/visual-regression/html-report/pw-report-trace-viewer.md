@@ -9,6 +9,15 @@ tldr: "Enable trace with `trace: 'on-first-retry'` (recommended CI default). The
 
 > Use the Trace Viewer when stepping through a test action-by-action with full DOM snapshots — it's the most powerful debugging tool Playwright ships.
 
+## What's in `trace.zip`
+
+- Action log with arguments and results
+- Full DOM snapshots at *before* and *after* each action — Trace Viewer reconstructs them in an iframe so you can inspect/scroll the page state at any point
+- Screenshots filmstrip across the timeline
+- Network requests with headers/bodies
+- Console messages
+- Test source code mapped to actions
+
 ## Decision
 
 | Trace mode | When |

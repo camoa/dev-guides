@@ -12,6 +12,14 @@ tldr: "Use `@container` when a reusable component needs to change its layout bas
 For feature syntax, `container-type` values, and browser support, see [modern-css — Container Queries](../modern-css/container-queries.md).
 For unit reference (`cqi`, `cqw`, `cqb`, `cqmin`, `cqmax`), see [modern-css — Container Query Units](../modern-css/container-units.md).
 
+## Performance
+
+Container queries are **net-positive for performance** in component architectures. `container-type: inline-size` tells the browser the element's inline size does not depend on its descendants — the browser can isolate layout recalculations to that subtree rather than recalculating the full document.
+
+- Avoid `container-type: size` — querying both axes requires the browser to do more work and forces the container to have an explicit height, which adds layout constraints
+- Avoid style queries inside animation loops — style queries recalculate when custom properties change; triggering this from a `@keyframes` or `transition` that affects a custom property can create expensive recalculation chains
+- Container query units (`cqi`, `cqw`) are computed at style resolution, not layout — they are cheap. No performance concern with using them in place of `vw`/`vh`
+
 ## Decision
 
 | If you need... | Use... | Why |

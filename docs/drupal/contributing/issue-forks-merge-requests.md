@@ -55,6 +55,16 @@ drupal_version: "11.x"
 
 Do not leave an MR in draft and set the issue to Needs review — the MR state is the primary signal on GitLab.
 
+## Handling an Existing Fork
+
+| Situation | Action |
+|---|---|
+| Your own existing fork | `drupalorg issue:checkout <issue-number>` to re-use it |
+| Someone else's fork/branch | Surface it via an issue comment; coordinate before starting parallel work |
+| No existing fork | `drupalorg issue:branch <issue-number>` to create one |
+
+Do not create a competing MR on top of an open MR without coordinating — it creates review confusion and discourages the original contributor.
+
 ## Pattern — drupalorg-cli Commands
 
 `mglaman/drupalorg-cli` (**v0.10.2**) — install `drupalorg.phar` from GitHub releases → `/usr/local/bin/drupalorg`. The `composer global require` route is deprecated.

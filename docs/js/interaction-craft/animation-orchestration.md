@@ -9,6 +9,32 @@ tldr: "Use CSS transitions for simple state changes. Use WAAPI (`element.animate
 
 > Use CSS transitions for simple state changes. Use WAAPI (`element.animate()`) when you need JS-driven values, sequencing, or mid-animation cancellation. Use rAF loops only for custom physics or canvas.
 
+## Pattern: requestAnimationFrame Custom Loop
+
+```javascript
+class AnimationLoop {
+  #rafId = null;
+  #startTime = null;
+
+  start(drawFn, duration) {
+    this.#startTime = null;
+    const tick = (timestamp) => {
+      this.#startTime ??= timestamp;
+      const elapsed = timestamp - this.#startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      drawFn(progress);
+      if (progress < 1) this.#rafId = requestAnimationFrame(tick);
+    };
+    this.#rafId = requestAnimationFrame(tick);
+  }
+
+  stop() {
+    if (this.#rafId) cancelAnimationFrame(this.#rafId);
+    this.#rafId = null;
+  }
+}
+```
+
 ## Decision
 
 | If you need... | Use... | Why |

@@ -10,6 +10,16 @@ drupal_version: "11.x"
 
 > Use this when optimizing how fast content gets indexed, especially for large sites or initial indexing.
 
+## Pattern: Solr Index-Only Mode
+
+For maximum query performance on Solr, skip entity loads entirely:
+
+1. Server config → Enable "Retrieve result data from Solr"
+2. Views query settings → Enable "Skip item access checks" (only for fully public content)
+3. Ensure all displayed fields are in the Search API index
+
+Result: Solr returns field data directly — no database queries for entity loading.
+
 ## Decision
 
 | Scenario | Recommended Batch Size | Why |

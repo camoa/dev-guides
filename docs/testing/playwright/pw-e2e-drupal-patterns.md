@@ -9,6 +9,13 @@ tldr: Wait for AJAX with waitForResponse targeting /system/ajax — not waitForT
 
 > Use these patterns for functional E2E against Drupal sites under DDEV. For DDEV plumbing (baseURL, ignoreHTTPSErrors, storage state), see the [VR guide's Drupal section](../visual-regression/playwright/pw-vr-drupal-ddev.md).
 
+## Drupal Session Cookies
+
+- Cookie name is `SESS<32-char-hash>` over HTTP, `SSESS<…>` over HTTPS
+- DDEV defaults to HTTPS — expect `SSESS…`
+- `secure: true, sameSite: 'Lax'` are typical; if injecting cookies manually, mirror those flags or login silently fails
+- Don't hard-code the name — use `context.cookies()` and filter by prefix
+
 ## Decision
 
 | Scenario | Approach |

@@ -9,6 +9,14 @@ tldr: The per-test detail page shows errors, test source, step timings, attachme
 
 > Use this when investigating a test failure beyond the diff — to understand context, diagnose flakes, or trace unexpected navigation.
 
+## Pattern: video for "what happened?"
+
+If `video: 'retain-on-failure'` is set, the report includes a `<video>` player. Useful when:
+
+- The page navigated to an unexpected URL
+- A click triggered a redirect you didn't expect
+- A modal appeared that wasn't visible in the screenshot
+
 ## Decision
 
 | Situation | Where to look |

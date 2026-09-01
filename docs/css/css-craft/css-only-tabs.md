@@ -19,6 +19,53 @@ tldr: "Use radio inputs + `:checked` + sibling selectors for CSS-only tab interf
 | Content switcher (A/B) | Checkbox `:checked` + sibling selectors | Binary toggle |
 | Dark mode toggle | Checkbox `:checked` + `:has()` on `html` | Parent-based state |
 
+## Pattern: Toggle Switch
+
+```css
+.toggle {
+  position: relative;
+  width: 48px;
+  height: 28px;
+}
+
+.toggle__input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.toggle__track {
+  width: 100%;
+  height: 100%;
+  background: oklch(80% 0 0);
+  border-radius: 14px;
+  transition: background 0.2s;
+}
+
+.toggle__input:checked + .toggle__track {
+  background: var(--color-primary);
+}
+
+.toggle__track::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px oklch(0% 0 0 / 0.2);
+  transition: transform 0.2s var(--ease-standard);
+}
+
+.toggle__input:checked + .toggle__track::after {
+  transform: translateX(20px);
+}
+```
+
 ## Pattern
 
 ```html

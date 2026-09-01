@@ -19,6 +19,22 @@ tldr: "Use `shape-outside` when a client wants the \"magazine layout\" effect â€
 | Pull quote with text wrap | `shape-outside: ellipse()` + `float` | Elegant wrap around pull quote |
 | Text indent from shape edge | `shape-margin` | Adds breathing room |
 
+## Pattern: Image Alpha Channel Wrap
+
+```css
+/* Text wraps around transparent areas of the image */
+.shaped-image {
+  float: left;
+  shape-outside: url('person-cutout.png');
+  shape-image-threshold: 0.5; /* Alpha threshold for shape edge */
+  shape-margin: 12px;
+}
+```
+
+**Requirement:** `shape-outside` only works on **floated** elements. It does not work with flexbox, grid, or absolute positioning.
+
+**Browser support:** All browsers (Baseline 2017). Fully production-ready.
+
 ## Pattern
 
 ```css

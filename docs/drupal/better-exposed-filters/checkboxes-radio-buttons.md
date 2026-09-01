@@ -10,6 +10,19 @@ drupal_version: "11.x"
 
 > Use this widget when you want to replace a select dropdown with checkboxes (multi-select) or radio buttons (single-select) on an exposed filter. Use the Links widget when you want clickable URL-based navigation instead.
 
+## Pattern: Template Variables (bef-checkboxes)
+
+| Variable | Type | Description |
+|---|---|---|
+| `element` | array | The form element |
+| `children` | array | Child element keys |
+| `show_select_all_none` | bool | Render select all/none links |
+| `show_select_all_none_nested` | bool | Nested hierarchy select |
+| `display_inline` | bool | Render items inline |
+| `is_nested` | bool | Hierarchical rendering |
+| `depth` | array | Nesting level per child |
+| `wrapper_attributes` | Attribute | Wrapper HTML attributes |
+
 ## Decision
 
 | Situation | Choose | Why |

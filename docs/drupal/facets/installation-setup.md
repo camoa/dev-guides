@@ -10,7 +10,7 @@ drupal_version: "11.x"
 
 > When setting up Facets on a Drupal site with Search API.
 
-These guides document **Facets 3.0.4**, the current stable tag on the 3.x branch. Where they say "3.x" they mean a behaviour that holds across the branch, not a looser version claim.
+These guides document **Facets 3.0.6**, the current stable tag on the 3.x branch. Where they say "3.x" they mean a behaviour that holds across the branch, not a looser version claim.
 
 ## Decision
 

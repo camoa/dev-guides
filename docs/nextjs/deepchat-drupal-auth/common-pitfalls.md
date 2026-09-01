@@ -78,6 +78,29 @@ public function setSession(Request $request): Response {
 }
 ```
 
+## 4. Mixed Session Cookies
+
+**Problem:**
+User has multiple session cookies from:
+- Standard Drupal login (cookie-based auth)
+- OAuth flow (Bearer token + session cookie)
+- Development testing (stale cookies)
+
+**Symptoms:**
+- Token works sometimes, fails randomly
+- Different behavior in incognito vs normal browsing
+- Works after clearing cookies
+
+**Solution:**
+```bash
+# Development: Clear all Drupal session cookies
+# Browser DevTools → Application → Cookies → Delete SESS*
+
+# Production: Use consistent auth flow
+# - Either pure OAuth (no session cookies) + explicit session creation
+# - Or cookie-based auth throughout
+```
+
 ## Common Mistakes
 
 - **Wrong**: `X-CSRF-Token` header or `body.token` → **Right**: Query param only (`?token=...`) — the route uses `_csrf_token: 'TRUE'` which reads from `$request->query->get('token')`

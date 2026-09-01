@@ -9,6 +9,11 @@ tldr: "Plans use a specific Markdown hierarchy: H2 = epic/area, H3 = scenario gr
 
 > Use this format when authoring or reviewing any Markdown test plan — whether written by the Planner agent or by hand.
 
+## Two Anti-Patterns That Recur
+
+- **Too vague** ("test the form works") — Generator invents its own success criteria; Healer can't distinguish regression from ambiguity
+- **Too detailed / imperative** (selectors, literal copy, exact wait times) — every UI tweak forces a plan rewrite; defeats the regenerable-code premise
+
 ## Decision
 
 | Markdown level | Maps to |

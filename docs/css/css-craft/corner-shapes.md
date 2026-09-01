@@ -20,6 +20,27 @@ tldr: "Use `corner-shape: squircle` for iOS-style superellipse corners on Chrome
 | Cross-browser squircle now | `mask-image` with SVG superellipse | Works everywhere |
 | Asymmetric rounding | 8-value `border-radius` | e.g., `30% 70% 70% 30% / 30% 30% 70% 70%` |
 
+## Pattern: Native Squircle (Chrome 2025+)
+
+```css
+.card {
+  border-radius: 20px;
+  corner-shape: squircle; /* Superellipse — smoother than circular */
+}
+
+/* Scooped corners */
+.badge {
+  border-radius: 16px;
+  corner-shape: scoop; /* Concave/inward curve */
+}
+
+/* Per-corner control */
+.notch-card {
+  border-radius: 20px;
+  corner-shape: round squircle round squircle; /* Mixed corners */
+}
+```
+
 ## Pattern
 
 ```css

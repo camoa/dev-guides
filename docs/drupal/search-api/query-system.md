@@ -10,6 +10,15 @@ drupal_version: "11.x"
 
 > Use this when building Search API queries programmatically or understanding how the query system works.
 
+## Decision: Query Architecture
+
+| Class | Purpose |
+|---|---|
+| `Query` | Main query object — keywords, conditions, sorts, options |
+| `ConditionGroup` | Hierarchical AND/OR condition groups |
+| `ResultSet` | Query results — items, count, warnings |
+| `Result/Item` | Individual result item with fields and values |
+
 ## Decision
 
 | Parse Mode | ID | Behavior |

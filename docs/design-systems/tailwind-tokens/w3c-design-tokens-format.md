@@ -9,6 +9,22 @@ tldr: "Use this when you need a vendor-neutral interchange format for sharing to
 
 > Use this when you need a vendor-neutral interchange format for sharing tokens across tools (Figma, Style Dictionary, Tailwind, native apps). The DTCG specification reached its first stable version (2025.10) in October 2025.
 
+## Composite Types
+
+The spec supports complex design properties (shadows, typography, borders) that combine multiple sub-values. Shadow example:
+
+```json
+{
+  "shadow": {
+    "card": {
+      "$value": { "offsetX": "0px", "offsetY": "2px", "blur": "8px",
+                  "spread": "0px", "color": "{color.neutral}" },
+      "$type": "shadow"
+    }
+  }
+}
+```
+
 ## Decision
 
 | Token Type | $type Value | Example $value |

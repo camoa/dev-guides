@@ -48,6 +48,38 @@ drupal_version: "11.x"
 2. Same Bearer token used for both requests (steps 3 and 12)
 3. Token value in `get()` and `validate()` must match (`"api/deepchat"`)
 
+## The Dual Authentication Challenge
+
+This integration involves **two distinct authentication mechanisms** that must work together:
+
+1. **OAuth Bearer Token Authentication** (next-drupal pattern)
+   - User authenticates via NextAuth.js → receives JWT access token
+   - Access token sent as `Authorization: Bearer <token>` header
+   - Identifies user and grants permission (`access deepchat api`)
+   - **Does NOT automatically create PHP session**
+
+2. **Session-Based CSRF Token Validation** (Drupal routing requirement)
+   - Drupal route has `_csrf_token: 'TRUE'` requirement
+   - CSRF token must match seed stored in PHP session metadata
+   - Token computed: `HMAC(value, seed + private_key + hash_salt)`
+   - **Requires active PHP session with stored seed**
+
+## Critical Insight: OAuth + Session Interaction
+
+**The Core Problem:**
+
+When using OAuth Bearer tokens with `simple_oauth` module:
+- Drupal authenticates the user via Bearer token
+- **NO PHP session is automatically created** (stateless by design)
+- CSRF token generation requires session metadata (`MetadataBag::getCsrfTokenSeed()`)
+- Without session, token seed is empty → validation always fails
+
+**The Solution Pattern:**
+
+1. **Explicitly start PHP session** before generating CSRF token
+2. **Use same Bearer token** for both session creation and API calls
+3. **Maintain session context** between token fetch and usage
+
 ## Common Mistakes
 
 - **Wrong**: Using different OAuth clients for session fetch and API call → **Right**: Call `auth()` once, reuse same `accessToken` for both requests

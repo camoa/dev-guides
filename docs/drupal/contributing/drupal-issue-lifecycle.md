@@ -58,6 +58,21 @@ Other labels: `priority::critical|major|normal|minor`, `category::bug|feature|pl
 - **Contrib:** follow the project's policy; self-assignment is fine if the maintainer allows
 - **Never** self-assign security advisories
 
+## GitLab-Specific Differences
+
+| Aspect | Classic drupal.org | GitLab |
+|---|---|---|
+| Metadata | Status/Priority/Category form fields | Scoped labels (`state::`, `priority::`, …) |
+| Triage access | Any logged-in user | Planner role+ (community UI pending) |
+| Issue summary | Mandatory Summary field | Description + repo markdown templates (`.gitlab/issue_templates/`) |
+| Editing the summary | Any logged-in user | Author or maintainers only |
+| "Ready for review" | Status = Needs review | MR marked **ready** (not draft) |
+| RTBC | Status = RTBC | `state::rtbc` + MR approvals (not standardized) |
+| Cross-reference | `[#123]` | `#123` in-project; full URL across projects/platforms |
+| Notifications | drupal.org subscriptions | GitLab Watch/Mention/Participate settings |
+
+**Notification setup on GitLab:** set a deliverable email at `git.drupalcode.org/profile/notifications` — the default `<username>@<uid>.no-reply.drupal.org` address discards mail.
+
 ## Issue Summary Template
 
 Standard sections:

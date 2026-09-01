@@ -9,6 +9,29 @@ tldr: "Use `object-fit: cover` with an explicit container height for card and he
 
 > Use `object-fit: cover` with an explicit container height for card and hero images. Use `transform: scale(1.05)` for hover zoom — keep scale under 1.06. Use `<dialog>` for lightbox — no library needed for basic implementation.
 
+## `object-fit` and `object-position`
+
+Controls how an image fills its container without distortion. Always define an explicit `width` and `height` on the container, not on `<img>` directly when using `object-fit`.
+
+| Value | When to Use | Effect |
+|---|---|---|
+| `cover` | Cards, hero images, thumbnails with fixed container | Fills container; crops to fit; no whitespace |
+| `contain` | Product images, logos, anything that must not crop | Fits inside container; may show letterboxing |
+| `fill` | Avoid — distorts image | Stretches to fill; aspect ratio lost |
+| `scale-down` | Prevents upscaling of small images | Like `contain` but won't upscale; useful for small icons in large containers |
+| `none` | Avoid for regular images | Displays at intrinsic size; may overflow |
+
+```css
+.card-image {
+  width: 100%;
+  height: 240px;       /* Fixed container height */
+  object-fit: cover;
+  object-position: center top; /* Favor top of image — shows faces */
+}
+```
+
+**`object-position` strategy**: Use `center top` for portraits (faces at top), `center center` for landscapes (default), `left center` for subjects at left edge. For user-uploaded content where subject position is unknown, implement focal point data (see Drupal section).
+
 ## Decision
 
 | If you need... | Use... | Why |

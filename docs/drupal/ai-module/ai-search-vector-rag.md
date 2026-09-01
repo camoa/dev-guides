@@ -62,6 +62,17 @@ $query->setOption('search_api_ai_get_chunks_result', TRUE);
 | `contextual_chunks` | Multiple vectors per item; each chunk enriched with title + context. Most accurate. Default. |
 | `average_pool` | Single composite vector via average pooling. Faster, less accurate. |
 
+## Backend Config
+
+| Setting | Description |
+|---------|-------------|
+| `database` | VDB provider plugin ID |
+| `database_settings` | `database_name`, `collection`, `metric` |
+| `embeddings_engine` | `provider_id__model_id` format |
+| `embedding_strategy` | Strategy plugin ID |
+| `chat_model` | Model for tokenizer (chunk size calculation) |
+| `include_raw_embedding_vector` | Expose raw vectors in results (for debugging/analysis) |
+
 ## Hybrid Search Processors
 
 | Processor | Backend | Description |

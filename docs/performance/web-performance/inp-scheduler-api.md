@@ -33,6 +33,38 @@ tldr: Yield mid-loop every 50ms budget using `scheduler.yield()` (Chrome 129+/Ed
 | `user-visible` | Non-blocking UI updates visible to the user (default) |
 | `background` | Analytics, prefetching, telemetry |
 
+## Pattern: Defer Work Until Scroll Ends
+
+The `scrollend` event fires exactly when a scroll has come to rest (all transitions finished, touch gesture released). Use it instead of debounced `scroll` to avoid firing layout-heavy work mid-scroll.
+
+**Newly Available** (Baseline since 2025-12-12): Chrome 114+, Edge 114+, Firefox 109+, Safari 26.2+.
+
+```javascript
+const scroller = document.querySelector('.scroll-container');
+
+// Light informational updates during scroll
+scroller.addEventListener('scroll', () => {
+  updateProgressIndicator();  // keep this cheap
+}, { passive: true });
+
+// Expensive work only after scroll rests
+scroller.addEventListener('scrollend', () => {
+  const section = findMostVisibleSection(scroller);
+  fetchAdditionalData(section);  // safe to do layout reads + fetches here
+});
+```
+
+Fallback for browsers without `scrollend`:
+```javascript
+if (!('onscrollend' in window)) {
+  scroller.addEventListener('scroll', () => {
+    clearTimeout(window._scrollendTimer);
+    window._scrollendTimer = setTimeout(() =>
+      scroller.dispatchEvent(new CustomEvent('scrollend')), 100);
+  });
+}
+```
+
 ## Pattern
 
 ```javascript

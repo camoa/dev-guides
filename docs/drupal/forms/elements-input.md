@@ -98,6 +98,31 @@ $form['event_time'] = [
 ];
 ```
 
+## Date/Time Elements
+
+| Element | Interface | Format | Properties |
+|---------|-----------|--------|------------|
+| date | Date picker | Y-m-d | #date_date_format |
+| datetime | Date + time | Y-m-d H:i:s | #date_time_format, #date_date_format |
+| datelist | Dropdowns | Custom | #date_part_order, #date_year_range |
+
+**Date Element Decision:**
+```
+Modern browser, single date? → date
+Date and time needed? → datetime
+Need granular control/old browsers? → datelist
+Complex date logic? → Custom element
+```
+
+**Common Mistakes:**
+- Not setting #date_date_format (uses site default)
+- Forgetting timezone handling
+- Using textfield for dates (accessibility issue)
+
+**See Also:**
+- DateTime API Guide
+- Timezone Handling Guide
+
 ## Common Mistakes
 
 - **Wrong**: Using textfield for dates → **Right**: Use date element (accessibility)

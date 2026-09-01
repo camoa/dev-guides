@@ -70,6 +70,12 @@ code.addEventListener('input',   () => { code.setCustomValidity(''); }); // Clea
 
 **Security note:** Client-side validation is UX only. Always validate and sanitize server-side.
 
+## Required Field Feedback
+
+- Mark required fields visually with an asterisk in the `<label>` — users need to know requirements *before* interacting.
+- Leave the submit button **enabled**. On submission of an invalid form, the browser triggers `:user-invalid` on all empty required fields and focuses the first one automatically.
+- Never show a required-field error on page load — `:user-invalid` handles this correctly without any JavaScript.
+
 ## Common Mistakes
 
 - **`:invalid` instead of `:user-invalid`** → errors shown on every required field immediately on page load

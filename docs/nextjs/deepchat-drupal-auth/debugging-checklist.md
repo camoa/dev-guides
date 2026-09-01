@@ -89,6 +89,46 @@ console.log('[DeepChat Proxy] Drupal status:', drupalResponse.status);
 if (!drupalResponse.ok) console.error(await drupalResponse.text());
 ```
 
+## Step 9: Compare with Reference Implementation
+
+Check how Drupal's native frontend does it:
+
+**File:** `/web/modules/contrib/ai/modules/ai_chatbot/js/deepchat-init.js`
+
+```javascript
+// Session creation pattern
+getSession: async function () {
+  return new Promise((resolve, reject) => {
+    fetch(drupalSettings.path.baseUrl + 'api/deepchat/session', {
+      method: 'POST',
+    }).then(response => {
+      return response.text();
+    }).then(token => {
+      Drupal.behaviors.deepChatToggle.csrfToken = token;
+      resolve(token);
+    });
+  })
+}
+
+// Token usage in request interceptor
+deepchatElement.requestInterceptor = async (request) => {
+  if (!Drupal.behaviors.deepChatToggle.csrfToken) {
+    Drupal.behaviors.deepChatToggle.csrfToken = await Drupal.behaviors.deepChatToggle.getSession();
+  }
+
+  // Add token to URL
+  let newUrl = deepchatElement.connect.url.replace(/\?token=[^&]+/, '');
+  deepchatElement.connect.url = newUrl + '?token=' + Drupal.behaviors.deepChatToggle.csrfToken;
+}
+```
+
+**Key Differences in OAuth Flow:**
+- Drupal's JS uses cookie-based auth (automatic session)
+- Your Next.js proxy uses OAuth Bearer tokens (explicit session creation)
+- Both need to maintain session between token fetch and API call
+
+---
+
 ## Common Mistakes
 
 - **Wrong**: Testing without `-b cookies.txt` and assuming cookie-less curl proves the issue → **Right**: Test both with and without cookie jar — difference isolates session persistence

@@ -61,6 +61,15 @@ protected function submitModalFormFillFields(array $form, FormStateInterface $fo
 }
 ```
 
+## FieldWidgetActionBase Key Methods
+
+| Method | Purpose |
+|--------|---------|
+| `returnSuggestions($suggestions, $selector)` | Returns an `AjaxResponse` showing suggestions in a modal dialog |
+| `getSuggestionsTarget($form, $form_state)` | Returns the CSS selector for the target field element |
+| `buildEntity($form, $form_state)` | Reconstructs the entity from form state (for context-aware actions) |
+| `processWidgetWithGroup($form, $form_state, $context)` | Processes widget actions grouped by field |
+
 ## Deploy via Recipe
 
 ```yaml

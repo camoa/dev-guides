@@ -123,6 +123,24 @@ slots:
 
 `entity_reference` uses the same 3-level structure: pick the reference field via `derivable_context`, repeat the colon-key, then nest sources that read from the referenced entity.
 
+## Context System
+
+Sources that need entity data rely on Drupal's context system. Contexts are passed through `#source_contexts` in the render array:
+
+```php
+$build = [
+  '#type' => 'component',
+  '#component' => 'my_theme:card',
+  '#ui_patterns' => $configuration,
+  '#source_contexts' => [
+    'entity' => EntityContext::fromEntity($entity),
+    'bundle' => new Context(ContextDefinition::create('string'), $entity->bundle()),
+  ],
+];
+```
+
+The `ChainContextEntityResolver` service attempts to discover entity context automatically in Layout Builder and Field Layout integrations.
+
 ## Common Mistakes
 
 - **Wrong**: `field_formatter:block_content:field_image` → **Right**: `field_formatter:block_content:hero:field_image` — the ID carries a bundle segment (empty for base fields), unlike `field_property`. Writing the wrong shape yields no plugin, and `ComponentElementBuilder::buildSource()` catches only `ContextException`, so the resulting `PluginNotFoundException` escapes the `#pre_render` and takes the page down.
