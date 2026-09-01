@@ -6,7 +6,7 @@ description: Use when a Claude Code plugin project enters the implementation pha
 # Metadata — read only after a match.
 label: Component authoring standards (Claude Code)
 recipe_schema_version: 1.0.0
-version: 0.2.0
+version: 0.3.0
 # Machine-readable dependency declaration (recipe-loader resolves these
 # without parsing prose). The test-discipline rules are stack-neutral: they are
 # cited here, never restated per framework.
@@ -146,8 +146,40 @@ After the recipe runs, verify:
 6. Each paper-test traces the component against what the design said it must do, not against the component's own body, and no trace duplicates a rule `/plugin-creation-tools:validate` already enforces deterministically.
 7. Where the change ships executable code, that code has a test at a deliberately chosen tier, written before it and seen to fail.
 8. The blocking structural verdict was left to review — this phase returned authored, paper-tested components and their trace results, not an acceptance decision.
+9. Every pre-existing test the change modified or deleted was changed by a role the mutability matrix permits — the only rows that may delete are a feature removal taking its own tests in the same commit; RED authoring is the only row that writes an assertion, and GREEN, REFACTOR and a bug fix change none. A reviewer that wanted a test changed filed a finding instead. See `development/tdd-spec-driven`.
 
 This recipe ships no executable verifier of its own — the authoring-and-trace steps are the agent-driven protocol, executed through the tools it drives; the plugin's implement phase owns its oracle/envelope, and the structural gate belongs to the review phase.
+## Oracle files
+
+A measurement oracle is a file the gates read to decide pass or fail — a test, a lint suppression baseline, a CI definition. An autonomous builder must never weaken one to make a red gate go green: only adding tests or fixing components is allowed, never suppressing a finding. The plugin's deterministic oracle-tamper guard enforces this at the review/critique rung, but the guard itself is framework-agnostic — it carries no Claude-Code knowledge and monitors only the file list it is handed. This section is that list for a plugin project: the caller reconstructs it from here on every run (so there is no persistent project file a builder could empty to switch monitoring off) and hands it to the guard.
+
+Each rule names the change kinds it watches (A added, M modified, D deleted), the oracle class the change touches, and a severity. A **halt** is terminal tamper unless the work-order's `oracle_update` field explicitly exempts that class; a **flag** is recorded and the work ships flagged, never blocked.
+
+This section exists because a plugin repository is exactly where the missing-glob-source problem was first found: a project whose substance is instructions looks like it has no test surface, so nothing gets declared, and a guard handed an empty list reports a clean run it never performed.
+
+| Oracle file | Watches | Class | Severity | Why |
+|---|---|---|---|---|
+| Shell spec files (`*-spec.sh` under any `tests/` directory) | delete | test-delete | halt | These are the executable tests of a plugin's scripts and hooks. Deleting one removes the behaviour it guards — the builder must add tests, never drop them, to pass. |
+| A lint suppression baseline (`lint-baseline.txt`, `.shellcheck-baseline`) | add / modify | lint-baseline | halt | A shellcheck baseline suppresses known findings by file and code — appending to it hides a *new* lint error instead of fixing it. Same shape as a phpstan baseline, and the same reason it halts. |
+| `Makefile` | modify | lint-config | flag | Where the repository drives its gates through make targets, the Makefile *is* the gate definition — a target that quietly stops running a check lowers the bar without touching a component; recorded for review. |
+| CI workflow files (`.github/workflows/*.yml`, `.github/workflows/*.yaml`) | modify | coverage-threshold | flag | A plugin project ships no coverage config, so which gates run and whether a failure blocks lives in the workflow — a change there can disable a gate without touching a line of the plugin; recorded for review. |
+
+The caller emits this list as the oracle-tamper guard's JSON input. The two columns the guard needs beyond the table are the path globs and the watched-change set:
+
+```json
+[
+  { "type": "test_delete",       "globs": ["**/tests/**/*-spec.sh", "**/tests/**/*-spec.bats"], "changes": ["D"],     "oracle_class": "test-delete",        "severity": "halt" },
+  { "type": "lint_baseline",     "globs": ["**/lint-baseline.txt", "**/.shellcheck-baseline"],  "changes": ["A","M"], "oracle_class": "lint-baseline",      "severity": "halt" },
+  { "type": "lint_config",       "globs": ["Makefile"],                                         "changes": ["M"],     "oracle_class": "lint-config",        "severity": "flag" },
+  { "type": "coverage_threshold","globs": [".github/workflows/*.yml", ".github/workflows/*.yaml"], "changes": ["M"],  "oracle_class": "coverage-threshold", "severity": "flag" }
+]
+```
+
+Two things about this list are worth stating, because they are what makes it worth declaring rather than assuming a plugin has no oracles.
+
+**A plugin's tests are shell specs, and they are the only executable oracle it has.** There is no phpstan baseline, no coverage threshold, no golden directory. What there is, in a mature plugin repository, is a `tests/` directory of `*-spec.sh` files per plugin plus a shared one under `scripts/`, and a `Makefile` that CI drives. The `**/`-prefixed test glob is required for the same reason it is in the other recipes: the guard expands `**/` to an optional prefix, so an unprefixed `tests/**` would match a repository-root test tree and miss every per-plugin one.
+
+**The paper-test is not an oracle and cannot be one.** The trace of a component's instructions is judgement applied at authoring time and leaves no file behind for a guard to watch. That is a real limit rather than an omission: for the part of a plugin that is prose, the protection against a weakened check is the review phase reading the diff, never the tamper guard. A project that declares no oracle files at all is an honest "no oracle configured" state — the guard reports it ran with nothing to watch, rather than reporting a pass it never checked.
 
 ## References
 
