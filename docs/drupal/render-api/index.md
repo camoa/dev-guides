@@ -23,7 +23,6 @@ guide-meta:
     - drupal/caching
     - drupal/sdc
     - drupal/blocks
-  specializes: ""
   category: drupal
 tracks:
   - project: drupal

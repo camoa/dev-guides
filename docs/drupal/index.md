@@ -14,7 +14,6 @@ guide-meta:
     - development/solid-principles
     - development/tdd-spec-driven
     - design-systems/radix-sdc
-  specializes: ""
   category: drupal
 ---
 

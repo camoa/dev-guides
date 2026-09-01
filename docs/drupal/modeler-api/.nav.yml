@@ -11,4 +11,5 @@ nav:
 - import-export-recipe.md
 - modeler-landscape.md
 - drush-commands.md
+- sources-maintenance.md
 append_unmatched: true

@@ -46,7 +46,6 @@ guide-meta:
     - drupal/breadcrumbs
     - drupal/multilingual
     - drupal/recipes
-  specializes: ""
   category: drupal
 ---
 

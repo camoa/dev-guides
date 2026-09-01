@@ -38,7 +38,6 @@ guide-meta:
   complements:
     - testing/visual-regression/workflow
     - testing/visual-regression/pixelmatch
-  specializes: ""
   category: testing
 ---
 

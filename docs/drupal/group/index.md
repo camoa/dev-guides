@@ -4,8 +4,8 @@ tracks:
   - project: group
     channel: alpha
     reason: no stable release exists on the 4.0.x branch
-    declared: 4.0.0-alpha1
-    verified: 2026-08-16
+    declared: 4.0.0-alpha2
+    verified: 2026-09-01
 guide-meta:
   concepts:
     - Group module
@@ -37,7 +37,6 @@ guide-meta:
     - drupal/security
     - drupal/views
     - drupal/blocks
-  specializes: ""
   category: drupal
 ---
 

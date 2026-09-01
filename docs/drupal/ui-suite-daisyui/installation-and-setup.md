@@ -9,7 +9,9 @@ tldr: "Composer install, theme enable, hard dependencies (ui_patterns, ui_icons)
 
 - Drupal 10.3+ or 11.x
 - PHP 8.3+
-- `ui_patterns` 2.x, `ui_icons` 2.0+ (hard dependencies)
+- `ui_patterns` ^2.0, `ui_icons` ^1.1, `ui_styles` ^1.11, `ui_skins` ^1.1 (hard dependencies, exactly as `composer.json` pins them at `5.0.0-alpha6`)
+
+> **`ui_icons` 2.x will not install with this theme.** `ui_icons` 2.0.0 shipped on 2026-08-03 and requires Drupal 11.3+, but `ui_suite_daisyui` still pins `^1.1` in its `composer.json` — verified on 2026-09-01 against both the installed theme and the `5.0.0-alpha6` tag. Composer refuses the combination; there is no flag that makes it work. Stay on `ui_icons` 1.x until the theme widens the constraint. The 2.0.0 release removed the `icon` setting type that gave UI Patterns 1.x back-compatibility and dropped every procedural function in favour of `#[Hook]` classes, so this is a real major, not a version-number formality.
 - `ui_styles` 1.11+, `ui_skins` 1.1+ (recommended, not required since alpha6)
 
 ## Installation

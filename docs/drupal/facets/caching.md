@@ -10,7 +10,7 @@ drupal_version: "11.x"
 
 > When you need to understand or debug facet caching behavior, or when facets show stale data.
 
-## Decision
+## Decision: Cache Architecture
 
 | Component | Cache Mechanism | Purpose |
 |---|---|---|
@@ -19,9 +19,11 @@ drupal_version: "11.x"
 | Facet blocks | Block cache with facet context | Vary by active facet state |
 | Config entities | Config cache | Facet/source configuration |
 
-`facets_filter` is a custom cache context that varies caching by active facet filter parameters, ensuring different filter combinations get different cached responses.
+## Pattern: Cache Context
 
-## Pattern
+**`facets_filter`** — A custom cache context that varies caching by active facet filter parameters. Ensures different filter combinations get different cached responses.
+
+## Pattern: Debug Mode
 
 Enable debug output in facet templates:
 
@@ -41,9 +43,9 @@ This adds cache metadata as HTML comments in facet templates:
 
 ## Common Mistakes
 
-- **Wrong**: Leaving Views caching enabled on block-based facets → **Right**: Block-based facets don't work with Views cache. Disable Views caching or use the exposed filters approach.
-- **Wrong**: Assuming counts are wrong forever after content changes → **Right**: If counts don't update, clear the search index cache and reindex.
-- **Wrong**: Ignoring identical results across different selections → **Right**: If facets show the same results regardless of selections, the `facets_filter` cache context may be missing — check block/View cache settings.
+- **Facets disappearing after caching** — Block-based facets don't work with Views cache. Disable Views caching or use exposed filters approach.
+- **Stale facet counts** — If counts don't update after content changes, clear the search index cache and reindex.
+- **Missing cache context** — If facets show the same results regardless of selections, the `facets_filter` cache context may not be applied. Check the block/View cache settings.
 
 ## See Also
 

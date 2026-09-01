@@ -24,31 +24,76 @@ drupal_version: "11.x"
 
 Install (Group 3.3.x sites only): `composer require 'drupal/group_action:^1.2'`
 
+## Overview
+
+The **Group Actions** module (`drupal/group_action`, newest release 1.2.2) provides configurable Drupal action plugins for Group operations. It bridges Group's API with Drupal's action system, enabling bulk and event-driven group management without custom code.
+
+**Install (Group 3.3.x sites):** `composer require 'drupal/group_action:^1.2'`
+
 ## Pattern
 
 Available action plugins:
 
-| Action ID | Entity Type | Operation |
-|---|---|---|
-| `group_add_content` | `node` (per entity type via deriver) | create |
-| `group_add_member` | `user` | create |
-| `group_remove_content` | `node` | delete |
-| `group_remove_member` | `user` | delete |
-| `group_update_content` | `node` | update |
-| `group_update_member` | `user` | update |
+| Action ID | Label | Entity Type | Operation | Derived |
+|---|---|---|---|---|
+| `group_add_content` | Group: add content | `node` | create | Yes (per entity type) |
+| `group_add_member` | Group: add user as member | `user` | create | No |
+| `group_remove_content` | Group: remove content | `node` | delete | Yes (per entity type) |
+| `group_remove_member` | Group: remove user as member | `user` | delete | No |
+| `group_update_content` | Group: update content | `node` | update | Yes (per entity type) |
+| `group_update_member` | Group: update user membership | `user` | update | No |
 
-ECA configuration example:
+Content actions use a **deriver** (`GroupActionDeriver`) that creates per-entity-type derivatives automatically. Member actions target `user` entities with a hardcoded `group_membership` plugin.
+
+## Configuration Options
+
+Every action accepts these configuration keys:
+
+| Key | Description | Supports Tokens |
+|---|---|---|
+| `operation` | `create`, `update`, or `delete` | No |
+| `relation_type` | Group relation type plugin ID (e.g., `group_node:article`). Named `content_plugin` at `4.0.0-alpha1`; renamed in `alpha2`. | No |
+| `group_id` | Group ID (numeric) or UUID | Yes |
+| `entity_id` | Entity ID or UUID; blank = use the entity the action runs on | Yes |
+| `values` | Key-value field values for the group relationship (e.g., `group_roles: mygroup-myrole`) | Yes |
+| `add_method` | `skip_existing` (default), `always_add`, or `update_existing` | No |
+
+## Add Method Behavior
+
+| Method | Behavior |
+|---|---|
+| `skip_existing` | Only creates the relationship if the entity is not already in the group |
+| `always_add` | Creates the relationship regardless (allows duplicates) |
+| `update_existing` | If relationship exists, updates its field values; otherwise creates |
+
+## Usage with VBO
+
+Create a View of nodes or users, add a VBO field, and select a Group Action:
+
+1. Add a "Views Bulk Operations" field to your View
+2. Select "Group: add content" (or the entity-type-specific derivative)
+3. Configure: select the group relation type, enter the target group ID
+4. Optionally set field values (e.g., `group_roles: mygroup-editor`)
+5. Users execute the bulk action from the View
+
+## Usage with ECA
+
+ECA provides event-driven automation. Group Actions integrate as ECA action plugins:
 
 ```
 Event: "After saving new content" (node)
 Condition: Content type = "article"
 Action: "Group: add content"
-  content_plugin: group_node:article
-  group_id: [node:field_target_group:entity:id]
-  add_method: skip_existing
+  - relation_type: group_node:article
+  - group_id: [node:field_target_group:entity:id]
+  - add_method: skip_existing
 ```
 
-Token support in `group_id`, `entity_id`, `values`:
+**ECA compatibility note:** The module includes a `Compatibility` class that temporarily raises ECA's recursion threshold by 1 during group operations. On **Group 3.x** this is necessary because Group re-saves the content entity to update access policies, which ECA would otherwise interpret as recursion and halt. The premise does not hold on Group 4.x — adding an entity to a group no longer re-saves the entity, it only invalidates cache tags (see [PHP API](php-api.md)) — but since `group_action` does not declare Group 4.x support, there is no released combination in which that matters.
+
+## Token Support
+
+Group and entity IDs support Drupal tokens, enabling dynamic resolution:
 
 ```
 group_id: [node:field_department:entity:id]
@@ -57,17 +102,39 @@ values:
   group_roles: [node:field_assigned_role]
 ```
 
+Token data automatically includes the entity being acted on plus the resolved group.
+
+## Access Control
+
+Actions check Group-level permissions before executing:
+
+1. Checks `PermissionProvider::getPermission($operation, 'relationship', 'any')`
+2. Falls back to `getPermission($operation, 'relationship', 'own')`
+3. Falls back to `getAdminPermission()`
+4. Admin users (uid 1 or admin role) bypass all checks
+
+## Dynamic Plugin Resolution
+
+When the content plugin ID has no bundle suffix (e.g., `group_node` instead of `group_node:article`), the action automatically appends the entity's bundle if the entity type supports bundles:
+
+```php
+// Automatic resolution:
+// relation_type = "group_node" + entity bundle = "article"
+// → resolved to "group_node:article"
+```
+
 ## Common Mistakes
 
-- **Wrong**: Using `always_add` without understanding it creates duplicates → **Right**: Use `skip_existing` (default) or `update_existing`.
-- **Wrong**: Setting `group_id` to a group title → **Right**: Only numeric IDs and UUIDs are supported. Use entity autocomplete in config forms or tokens.
-- **Wrong**: Forgetting to install the relation type on the group type → **Right**: The action silently skips if the plugin is not installed on the target group type.
-- **Wrong**: ECA recursion errors on group save → **Right**: Module handles this automatically via a `Compatibility` class. Ensure `group_action` is enabled.
+- **Wrong**: Using `always_add` without understanding it creates duplicate relationships → **Right**: Use `skip_existing` (default) or `update_existing`.
+- **Wrong**: Setting `group_id` to a group title → **Right**: Only numeric IDs and UUIDs are supported. Use the entity autocomplete in config forms, or tokens.
+- **Wrong**: Forgetting to install the relation type on the group type → **Right**: The action silently skips if the plugin is not installed. Install the group relation type (e.g., `group_node:article`) on the target group type first.
+- **Wrong**: Not handling dynamic bundles, producing a wrong or missing content plugin match → **Right**: Let automatic resolution handle it, or explicitly set `group_node:article`.
+- **Wrong**: ECA recursion errors on group save (Group 3.x) — Group 3.x re-saves the entity for the access cache, triggering ECA recursion → **Right**: The module handles this automatically via the `Compatibility` class; ensure `group_action` is enabled.
 - **Wrong**: Requiring `drupal/group_action` on a Group 4.x site → **Right**: The module caps at `^3@beta`; Composer refuses to resolve it against `drupal/group:^4.0`. Stay on Group 3.3.x or write the actions against the [PHP API](php-api.md) directly.
 
 ## See Also
 
-- [PHP API](php-api.md)
-- [Permissions System](permissions-system.md)
-- [Plugin System](plugin-system.md)
+- [PHP API](php-api.md) — programmatic alternatives without the action system
+- [Permissions System](permissions-system.md) — understanding what permissions the actions check
+- [Plugin System](plugin-system.md) — how group relation type plugins work
 - Reference: https://www.drupal.org/project/group_action

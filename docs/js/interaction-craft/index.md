@@ -22,7 +22,6 @@ guide-meta:
     - css/css-craft
     - drupal/js-development
     - media/image-media-craft
-  specializes: ""
   category: js
 ---
 

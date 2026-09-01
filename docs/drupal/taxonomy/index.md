@@ -20,7 +20,6 @@ guide-meta:
   complements:
     - drupal/views
     - drupal/config-management
-  specializes: ""
   category: drupal
 ---
 

@@ -15,4 +15,5 @@ nav:
 - knowledge-duplication.md
 - over-dry-anti-patterns.md
 - rule-of-three.md
+- sources-maintenance.md
 append_unmatched: true

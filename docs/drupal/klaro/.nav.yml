@@ -16,4 +16,5 @@ nav:
 - troubleshooting.md
 - url-pattern-exclusions.md
 - what-is-consent-management.md
+- sources-maintenance.md
 append_unmatched: true

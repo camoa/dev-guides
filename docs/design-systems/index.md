@@ -14,7 +14,6 @@ guide-meta:
   complements:
     - drupal/sdc
     - css/modern-css
-  specializes: ""
   category: design-systems
 ---
 

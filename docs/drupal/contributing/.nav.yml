@@ -10,4 +10,5 @@ nav:
 - issue-forks-merge-requests.md
 - contribution-etiquette-rtbc-credit.md
 - module-theme-maintainer.md
+- sources-maintenance.md
 append_unmatched: true

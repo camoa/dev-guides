@@ -28,7 +28,6 @@ guide-meta:
     - drupal/entities
     - drupal/caching
     - drupal/taxonomy
-  specializes: ""
   category: drupal
 ---
 

@@ -38,7 +38,6 @@ guide-meta:
     - testing/visual-regression/playwright
     - testing/visual-regression/workflow
     - drupal/tdd
-  specializes: ""
   category: testing
 ---
 

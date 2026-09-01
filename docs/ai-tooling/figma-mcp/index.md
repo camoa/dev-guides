@@ -19,7 +19,6 @@ guide-meta:
     - design-systems/recognition
     - design-systems/tailwind-tokens
     - design-systems/radix-sdc
-  specializes: ""
   category: ai-tooling
 ---
 

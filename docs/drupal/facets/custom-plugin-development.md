@@ -10,7 +10,7 @@ drupal_version: "11.x"
 
 > When you need a custom processor, widget, query type, or URL processor that doesn't exist in the built-in set.
 
-## Decision
+## Decision: Plugin Type Selection
 
 | I Need To... | Create A... | Namespace |
 |---|---|---|
@@ -22,9 +22,9 @@ drupal_version: "11.x"
 | Handle URLs differently | URL processor | `Plugin/facets/url_processor/` |
 | Connect to a new backend | Facet source | `Plugin/facets/facet_source/` |
 
-**As of 3.0.4**, URL processor plugins may declare themselves with either the `@FacetsUrlProcessor` annotation or the `#[Drupal\facets\Attribute\FacetsUrlProcessor]` attribute — `UrlProcessorPluginManager` accepts both. It is the only Facets plugin type with an attribute class; processors, widgets, query types, facet sources, and hierarchies remain annotation-only.
+**As of 3.0.4**, URL processor plugins may declare themselves with either the `@FacetsUrlProcessor` annotation or the `#[Drupal\facets\Attribute\FacetsUrlProcessor]` attribute — `UrlProcessorPluginManager` accepts both. It is the only Facets plugin type with an attribute class; processors, widgets, query types, facet sources and hierarchies remain annotation-only.
 
-## Pattern
+## Pattern: Custom Processor
 
 ```php
 namespace Drupal\my_module\Plugin\facets\processor;
@@ -57,6 +57,8 @@ class MyCustomProcessor extends ProcessorPluginBase implements BuildProcessorInt
 }
 ```
 
+## Pattern: Custom Widget
+
 ```php
 namespace Drupal\my_module\Plugin\facets\widget;
 
@@ -85,9 +87,9 @@ class MyCustomWidget extends WidgetPluginBase {
 
 ## Common Mistakes
 
-- **Wrong**: Using core plugin annotations → **Right**: Use `@FacetsProcessor`, `@FacetsWidget`, etc. — not core annotations.
-- **Wrong**: Omitting the stage declaration on a processor → **Right**: Processors must declare which stages they support in the annotation.
-- **Wrong**: Implementing only `ProcessorInterface` → **Right**: A build processor must implement `BuildProcessorInterface`, not just `ProcessorInterface`.
+- **Wrong annotation** — Use `@FacetsProcessor`, `@FacetsWidget`, etc. Not core annotations.
+- **Missing stage declaration** — Processors must declare which stages they support in the annotation.
+- **Not implementing the right interface** — A build processor must implement `BuildProcessorInterface`, not just `ProcessorInterface`.
 
 ## See Also
 

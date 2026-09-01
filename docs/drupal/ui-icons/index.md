@@ -48,7 +48,6 @@ guide-meta:
     - drupal/ui-skins
     - drupal/ui-suite-daisyui
     - drupal/canvas
-  specializes: ""
   category: drupal
 ---
 

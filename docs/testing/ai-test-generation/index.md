@@ -45,7 +45,6 @@ guide-meta:
     - testing/playwright
     - testing/visual-regression/playwright
     - testing/visual-regression/workflow
-  specializes: ""
   category: testing
 ---
 

@@ -27,7 +27,6 @@ guide-meta:
     - nextjs/next-drupal
     - drupal/security
     - drupal/caching
-  specializes: ""
   category: drupal
 ---
 

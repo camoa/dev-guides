@@ -13,4 +13,5 @@ nav:
 - service-collector-pattern.md
 - service-integration-patterns.md
 - testing-debugging.md
+- sources-maintenance.md
 append_unmatched: true

@@ -20,7 +20,6 @@ guide-meta:
   complements:
     - drupal/security
     - drupal/recipes
-  specializes: ""
   category: drupal
 ---
 

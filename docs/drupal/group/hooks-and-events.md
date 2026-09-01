@@ -93,7 +93,7 @@ Group registers the following event subscribers:
 | `group.latest_revision.route_subscriber` | `GroupLatestRevisionRouteSubscriber` | `RoutingEvents::ALTER` | Adds latest revision routes for groups |
 | `group.config_subscriber` | `ConfigSubscriber` | `ConfigEvents::SAVE` | Clears plugin caches when group type config changes |
 
-Group 4.x has no revision route subscriber of its own — plain revision routes come from Drupal core's revision UI, which is why `drupal/entity` was dropped as a dependency. There is no `group.revision.route_subscriber` service and no `GroupRevisionRouteSubscriber` class at tag `4.0.0-alpha1`; do not write code that expects one.
+Group 4.x has no revision route subscriber of its own — plain revision routes come from Drupal core's revision UI, which is why `drupal/entity` was dropped as a dependency. There is no `group.revision.route_subscriber` service and no `GroupRevisionRouteSubscriber` class at tag `4.0.0-alpha2`; do not write code that expects one.
 
 ## Common Mistakes
 

@@ -26,7 +26,6 @@ guide-meta:
     - drupal/jsonapi
     - nextjs/deepchat-nextjs
     - drupal/multilingual
-  specializes: ""
   category: nextjs
 ---
 

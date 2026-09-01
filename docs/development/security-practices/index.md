@@ -30,7 +30,6 @@ guide-meta:
   complements:
     - development/solid-principles
     - development/tdd-spec-driven
-  specializes: ""
   category: dev-practices
 ---
 

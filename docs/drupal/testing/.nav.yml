@@ -11,4 +11,5 @@ nav:
 - running-debugging-tests.md
 - testing-framework-overview.md
 - testing-infrastructure-setup.md
+- sources-maintenance.md
 append_unmatched: true

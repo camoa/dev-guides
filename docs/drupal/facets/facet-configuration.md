@@ -10,9 +10,7 @@ drupal_version: "11.x"
 
 > When creating or configuring a facet entity — selecting the source, field, widget, operators, and processors.
 
-## Decision
-
-**Facet entity configuration keys:**
+## Decision: Facet Entity Configuration Keys
 
 | Key | Type | Default | Purpose |
 |---|---|---|---|
@@ -37,7 +35,7 @@ drupal_version: "11.x"
 | `empty_behavior` | mapping | — | What to show when no results |
 | `processor_configs` | sequence | — | Processor configuration array |
 
-**AND vs OR operator:**
+## Decision: AND vs OR Operator
 
 | Operator | Behavior | Use Case |
 |---|---|---|
@@ -46,7 +44,7 @@ drupal_version: "11.x"
 
 OR is the most common choice. AND is useful when items can have multiple values for the same field (e.g., tags).
 
-## Pattern
+## Pattern: Creating a Facet Programmatically
 
 ```php
 use Drupal\facets\Entity\Facet;
@@ -79,9 +77,9 @@ $facet->save();
 
 ## Common Mistakes
 
-- **Wrong**: Using AND on a single-value field → **Right**: OR is almost always what users expect. AND on a single-value field returns no results when multiple are selected.
-- **Wrong**: Assuming hard limit sorts consistently on search_api_db → **Right**: On the database backend, hard limit sorts by count first, then by raw value (entity ID) — this can cut off items alphabetically later but with the same count.
-- **Wrong**: Reusing a `url_alias` across facets → **Right**: Each facet needs a unique URL alias. If two facets share the same alias, URL parameters will conflict.
+- **Wrong query operator** — OR is almost always what users expect. AND on a single-value field returns no results when multiple are selected.
+- **Hard limit with search_api_db** — On the database backend, hard limit sorts by count first, then by raw value (entity ID). This can cut off items alphabetically later but with the same count.
+- **Missing url_alias** — Each facet needs a unique URL alias. If two facets share the same alias, URL parameters will conflict.
 
 ## See Also
 

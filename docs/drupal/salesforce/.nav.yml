@@ -22,4 +22,5 @@ nav:
 - performance.md
 - extension-patterns.md
 - decision-framework.md
+- sources-maintenance.md
 append_unmatched: true

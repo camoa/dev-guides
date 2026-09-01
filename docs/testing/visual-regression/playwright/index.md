@@ -36,7 +36,6 @@ guide-meta:
     - testing/visual-regression/workflow
   complements:
     - testing/visual-regression/workflow
-  specializes: ""
   category: testing
 ---
 

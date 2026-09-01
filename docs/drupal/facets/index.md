@@ -52,7 +52,6 @@ guide-meta:
     - drupal/better-exposed-filters
     - drupal/views
     - drupal/seo-geo
-  specializes: ""
   category: drupal
 ---
 

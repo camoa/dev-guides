@@ -21,4 +21,5 @@ nav:
 - token-form-integration.md
 - token-receiver-interface.md
 - yaml-configuration.md
+- sources-maintenance.md
 append_unmatched: true

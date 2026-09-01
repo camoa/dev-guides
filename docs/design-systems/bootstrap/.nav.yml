@@ -16,4 +16,5 @@ nav:
 - scss-integration-order.md
 - templates-bootstrap-grid.md
 - token-to-utility-flow.md
+- sources-maintenance.md
 append_unmatched: true

@@ -16,4 +16,5 @@ nav:
 - templates-drupal-theme-layer.md
 - troubleshooting-sdc-components.md
 - twig-and-preprocess-best-practices.md
+- sources-maintenance.md
 append_unmatched: true

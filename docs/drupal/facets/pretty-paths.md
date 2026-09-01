@@ -10,7 +10,7 @@ drupal_version: "11.x"
 
 > When you want cleaner facet URLs — `/search/color/blue/size/large` instead of `?f[0]=color:blue&f[1]=size:large`.
 
-## Decision
+## Decision: facets_pretty_paths Module
 
 **Module:** `drupal/facets_pretty_paths` (contrib, not included in Facets core)
 
@@ -19,27 +19,31 @@ composer require drupal/facets_pretty_paths
 drush en facets_pretty_paths
 ```
 
+Enable the module, then configure the facet source's URL processor to use Pretty Paths instead of the default query string processor.
+
+## Pattern: URL Format Comparison
+
 | Approach | URL Format |
 |---|---|
 | Default (query string) | `/search?f[0]=color:blue&f[1]=size:large` |
 | Pretty Paths | `/search/color/blue/size/large` |
 
-Pretty paths are easier to block in robots.txt and easier to set up canonical URLs for, since the path structure is predictable:
+## Decision: SEO Advantage
+
+Pretty paths are easier to block in robots.txt:
 
 ```
 # Block all faceted variations under /search/
 Disallow: /search/*/
 ```
 
-## Pattern
-
-Enable the module, then configure the facet source's URL processor to use Pretty Paths instead of the default query string processor.
+And easier to set up canonical URLs since the path structure is predictable.
 
 ## Common Mistakes
 
-- **Wrong**: Mixing pretty paths and query string on the same facet source → **Right**: Choose one URL processor per facet source.
-- **Wrong**: Using a facet URL alias that collides with a real Drupal path (e.g., `node`) → **Right**: Check for path conflicts before assigning aliases.
-- **Wrong**: Ignoring cache growth after switching → **Right**: Pretty paths create more unique cache entries — monitor cache size.
+- **Pretty paths + query string conflict** — Don't mix both URL processors. Choose one per facet source.
+- **Path conflicts** — Ensure facet URL aliases don't conflict with actual Drupal paths (e.g., don't use 'node' as a facet alias).
+- **Cache invalidation** — Pretty paths create more unique cache entries. Monitor cache size.
 
 ## See Also
 

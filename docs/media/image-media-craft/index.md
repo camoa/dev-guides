@@ -21,7 +21,6 @@ guide-meta:
     - drupal/image-styles
     - drupal/media-system
     - css/css-craft
-  specializes: ""
   category: media
 ---
 

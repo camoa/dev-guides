@@ -26,4 +26,5 @@ nav:
 - submission-architecture.md
 - validation-architecture.md
 - validation-partial.md
+- sources-maintenance.md
 append_unmatched: true

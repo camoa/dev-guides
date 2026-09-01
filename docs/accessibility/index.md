@@ -18,7 +18,6 @@ guide-meta:
     - js/interaction-craft
     - css/css-craft
     - development/testing-strategy
-  specializes: ""
   category: accessibility
 ---
 

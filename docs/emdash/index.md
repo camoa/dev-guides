@@ -37,7 +37,6 @@ guide-meta:
   complements:
     - nextjs/next-drupal
     - css/modern-css
-  specializes: ""
   category: emdash
 ---
 

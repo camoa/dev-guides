@@ -12,4 +12,5 @@ nav:
 - native-dialog.md
 - document-metadata.md
 - accessibility-testing.md
+- sources-maintenance.md
 append_unmatched: true

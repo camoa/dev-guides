@@ -23,7 +23,6 @@ guide-meta:
     - drupal/ui-patterns
     - drupal/sdc
     - design-systems/radix-sdc
-  specializes: ""
   category: drupal
 tracks:
   - project: layout_builder_styles

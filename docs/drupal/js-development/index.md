@@ -25,7 +25,6 @@ guide-meta:
     - drupal/ajax-htmx-migration
     - drupal/sdc
     - js/interaction-craft
-  specializes: ""
   category: drupal
 ---
 

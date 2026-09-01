@@ -17,4 +17,5 @@ nav:
 - hybrid-ajax-htmx-approach.md
 - migration-strategy-best-practices.md
 - migration-checklist.md
+- sources-maintenance.md
 append_unmatched: true

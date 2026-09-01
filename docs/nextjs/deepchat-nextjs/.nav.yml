@@ -15,4 +15,5 @@ nav:
 - security.md
 - streaming-responses.md
 - styling-theming.md
+- sources-maintenance.md
 append_unmatched: true

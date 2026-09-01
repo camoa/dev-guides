@@ -22,7 +22,6 @@ guide-meta:
     - drupal/twig
     - drupal/views
     - drupal/caching
-  specializes: ""
   category: drupal
 tracks:
   - project: drupal

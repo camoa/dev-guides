@@ -42,7 +42,6 @@ guide-meta:
   complements:
     - testing/visual-regression/playwright
     - testing/visual-regression/workflow
-  specializes: ""
   category: testing
 ---
 

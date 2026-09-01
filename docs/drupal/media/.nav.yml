@@ -15,4 +15,5 @@ nav:
 - testing-strategies.md
 - thumbnail-generation.md
 - validation-constraints.md
+- sources-maintenance.md
 append_unmatched: true

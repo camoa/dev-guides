@@ -8,7 +8,7 @@ tracks:
     verified: 2026-08-16
   - project: ui_patterns
     channel: stable
-    declared: "2.0.19"
+    declared: "2.0.20"
     verified: 2026-08-16
   - project: ui_styles
     channel: stable
@@ -20,8 +20,9 @@ tracks:
     verified: 2026-08-16
   - project: ui_icons
     channel: stable
-    declared: null
-    note: prose states a dependency floor (`ui_icons` 2.0+, installation-and-setup.md), not a tag; sources-maintenance.md Code Sources has no ui_icons row. drupal/ui-icons owns this project's version claim and declares 2.0.0
+    declared: "^1.1"
+    reason: "not a stale declaration — the theme pins ^1.1 in composer.json at 5.0.0-alpha6, so ui_icons 2.0.0 cannot be installed with it. This row stays behind upstream on purpose until the theme widens the constraint; tracked in camoa/dev-guides#35."
+    note: "the theme pins `ui_icons: ^1.1` in composer.json at 5.0.0-alpha6 and will not install ui_icons 2.x; drupal/ui-icons documents the project itself, now at 2.0.0"
     verified: 2026-08-16
 guide-meta:
   concepts:
@@ -44,7 +45,6 @@ guide-meta:
     - design-systems/daisyui
     - design-systems/tailwind-tokens
     - drupal/layout-builder
-  specializes: ""
   category: drupal
 ---
 

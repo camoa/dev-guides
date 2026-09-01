@@ -26,7 +26,6 @@ guide-meta:
     - drupal/plugins
     - drupal/solid-principles
     - drupal/forms
-  specializes: ""
   category: drupal
 ---
 

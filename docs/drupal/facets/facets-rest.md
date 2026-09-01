@@ -10,11 +10,13 @@ drupal_version: "11.x"
 
 > When building a headless/decoupled frontend and need facet data in API responses.
 
-## Decision
+## Decision: Facets REST Sub-Module
 
-**Module:** `facets_rest` — provides `FacetsSerializer`, a Views REST display style plugin that includes facet data in the REST response alongside search results.
+**Module:** `facets_rest`
 
-## Pattern
+Provides `FacetsSerializer` — a Views REST display style plugin that includes facet data in the REST response alongside search results.
+
+## Pattern: Setup
 
 1. Enable: `drush en facets_rest`
 2. Create a Views REST export display using your Search API index
@@ -22,11 +24,13 @@ drupal_version: "11.x"
 4. Create facets for this display's facet source
 5. Use the `array` widget for facets used in REST
 
-The response includes a `facets` key with structured facet data — values, counts, active states, and URLs for each facet item.
+## Pattern: Response Format
+
+The REST response includes a `facets` key with structured facet data — values, counts, active states, and URLs for each facet item.
 
 ## Common Mistakes
 
-- **Wrong**: Using the `links` or `checkbox` widget for REST facets → **Right**: Use the `array` widget so the response contains raw structured data instead of rendered HTML.
+- **Using the `links` or `checkbox` widget for REST facets** — Use the `array` widget so the response contains raw structured data instead of rendered HTML.
 
 ## See Also
 

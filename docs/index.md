@@ -25,7 +25,7 @@ This site is built for **targeted, on-demand retrieval** — not monolithic cont
 |------|----------|---------|
 | 1. Cache check | [`llms.hash`](https://camoa.github.io/dev-guides/llms.hash) | Tiny SHA-256 of `llms.txt` — fetch first to check if cache is fresh |
 | 2. Topic catalog | [`llms.txt`](https://camoa.github.io/dev-guides/llms.txt) | ~1,500-line index of all topics with URLs to topic index pages and guide counts |
-| 3. Routing table | `docs/{topic}/index.md` | Each topic's `index.md` contains a "I need to..." routing table + `guide-meta:` frontmatter (concepts/not/requires/complements/specializes/category) for intent disambiguation |
+| 3. Routing table | `docs/{topic}/index.md` | Each topic's `index.md` contains a "I need to..." routing table + `guide-meta:` frontmatter (concepts/not/requires/complements/category) for intent disambiguation |
 | 4. Atomic guide | `docs/{topic}/{guide}.md` | Individual decision guide with `tldr:` summary — one decision per page, token-efficient |
 
 **For raw markdown (bypasses MkDocs HTML rendering):**
@@ -47,6 +47,5 @@ We deliberately avoid a monolithic `llms-full.txt` or per-topic `.txt` bundles. 
   - `not` — disambiguation terms that should NOT route here
   - `requires` — prerequisite topics (load first)
   - `complements` — related topics often used together
-  - `specializes` — parent topic if this is a domain-specific version
   - `category` — one of: `drupal`, `nextjs`, `design-systems`, `dev-practices`, `css`, `js`, `media`, `ai-tooling`, `decoupled`
 - **Content style**: Tables, bullets, minimal code. No prose paragraphs.

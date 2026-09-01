@@ -22,4 +22,5 @@ nav:
 - recipe-tooling.md
 - recipe-yaml-schema.md
 - security-performance.md
+- sources-maintenance.md
 append_unmatched: true

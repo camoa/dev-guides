@@ -23,4 +23,5 @@ nav:
 - sources-maintenance-manifest.md
 - sql-injection-prevention.md
 - xss-prevention-patterns.md
+- sources-maintenance.md
 append_unmatched: true

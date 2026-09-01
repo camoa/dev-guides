@@ -2,6 +2,7 @@
 description: TipTap Editor guide
 ---
 
+# Sources & Maintenance
 ## Sources & Maintenance Manifest
 
 ### Web Sources

@@ -19,4 +19,5 @@ nav:
 - plugin-system-ocp.md
 - service-container-dip.md
 - services-srp.md
+- sources-maintenance.md
 append_unmatched: true

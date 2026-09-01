@@ -27,7 +27,6 @@ guide-meta:
     - design-systems/daisyui
     - drupal/ui-suite-daisyui
     - drupal/sdc
-  specializes: ""
   category: design-systems
 ---
 

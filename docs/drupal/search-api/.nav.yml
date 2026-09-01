@@ -25,4 +25,5 @@ nav:
 - theming-templates.md
 - recommended-module-stacks.md
 - common-mistakes.md
+- sources-maintenance.md
 append_unmatched: true

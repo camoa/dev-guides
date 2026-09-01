@@ -45,7 +45,6 @@ guide-meta:
   complements:
     - drupal/contributing-with-ai
     - drupal/testing
-  specializes: ""
   category: drupal
 ---
 

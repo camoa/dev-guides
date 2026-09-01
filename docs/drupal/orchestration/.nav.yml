@@ -12,4 +12,5 @@ nav:
 - connecting-activepieces.md
 - custom-services-provider.md
 - security-considerations.md
+- sources-maintenance.md
 append_unmatched: true

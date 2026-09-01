@@ -8,9 +8,11 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use Facets when you need faceted search navigation with result counts, narrowing behavior, and hierarchical filtering — and you are using Search API. Use Better Exposed Filters when you want enhanced widgets for any Views exposed form without Search API. Use core exposed filters when default select dropdowns are sufficient.
+> When you need faceted search navigation — allowing users to filter search results by clicking on categories, price ranges, dates, or other attributes, with result counts showing how many items match each option.
 
-## Decision
+Use Facets when you need result counts, narrowing behavior, and hierarchical filtering — and you are using Search API. Use Better Exposed Filters when you want enhanced widgets for any Views exposed form without Search API. Use core exposed filters when default select dropdowns are sufficient.
+
+## Decision: Facets vs BEF vs Core Exposed Filters
 
 | Feature | Core Exposed Filters | Better Exposed Filters | Facets |
 |---|---|---|---|
@@ -24,9 +26,9 @@ drupal_version: "11.x"
 | AJAX support | Views AJAX | Views AJAX | Block: No / Exposed filter: Yes |
 | Works without Search API | Yes | Yes | No — requires Search API |
 
-## Pattern
+## Pattern: Architecture
 
-Facets uses a multi-plugin layered architecture:
+Facets uses a **multi-plugin layered architecture**:
 
 ```
 Facet Source (where data comes from)
@@ -37,12 +39,18 @@ Facet Source (where data comes from)
 ```
 
 **Six plugin types:**
+
 1. **Facet Source** — Connects to Search API displays (Views pages, blocks, REST)
 2. **Query Type** — Translates selections to search queries (string, date, range, granular)
 3. **Processor** — 25 built-in processors across 4 stages (pre_query, post_query, build, sort)
 4. **Widget** — Renders results (links, checkbox, dropdown, array)
 5. **URL Processor** — Manages URL parameters (query string by default)
 6. **Hierarchy** — Builds parent-child trees (taxonomy, dates)
+
+**Config entities:**
+
+- `facets_facet` — Individual facet configuration
+- `facets_facet_source` — Source-level settings (filter key, URL processor)
 
 **Sub-modules:**
 
@@ -56,14 +64,14 @@ Facet Source (where data comes from)
 
 ## Common Mistakes
 
-- **Wrong**: Using Facets without Search API → **Right**: Facets requires Search API. It does not work with core Views database queries.
-- **Wrong**: Expecting AJAX on facet blocks → **Right**: Block-based facets do NOT support AJAX. Use `facets_exposed_filters` for AJAX support.
-- **Wrong**: Not indexing fields before adding facets → **Right**: A field must be added to the Search API index before it can be used as a facet.
-- **Wrong**: Treating Facets 2.x and 3.x as equivalent → **Right**: Facets 3.x shifts toward exposed filters as the primary approach. Blocks still work but are secondary.
+- **Using Facets without Search API** — Facets requires Search API. It does not work with core Views database queries.
+- **Expecting AJAX on facet blocks** — Block-based facets do NOT support AJAX. Use facets_exposed_filters for AJAX support.
+- **Not indexing fields** — A field must be added to the Search API index before it can be used as a facet.
+- **Confusing Facets 2.x with 3.x** — Facets 3.x shifts toward exposed filters as the primary approach. Blocks still work but are secondary.
 
 ## See Also
 
-- [Installation & Setup](installation-setup.md)
+- [Installation & Setup](installation-setup.md) — getting started
 - [Facets Exposed Filters](facets-exposed-filters.md) — the recommended approach in 3.x
 - [SEO & Bot Protection](seo-bot-protection.md) — preventing crawl bloat
 - Reference: `web/modules/contrib/facets/`

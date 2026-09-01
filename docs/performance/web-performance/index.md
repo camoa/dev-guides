@@ -33,7 +33,6 @@ guide-meta:
     - css/css-craft
     - js/interaction-craft
     - media/image-media-craft
-  specializes: ""
   category: performance
 ---
 

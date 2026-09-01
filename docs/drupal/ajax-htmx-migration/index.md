@@ -20,7 +20,6 @@ guide-meta:
   complements:
     - drupal/forms
     - drupal/js-development
-  specializes: ""
   category: drupal
 ---
 

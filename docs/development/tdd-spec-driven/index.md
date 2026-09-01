@@ -24,7 +24,6 @@ guide-meta:
   complements:
     - development/solid-principles
     - development/security-practices
-  specializes: ""
   category: dev-practices
 ---
 

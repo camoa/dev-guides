@@ -10,7 +10,7 @@ drupal_version: "11.x"
 
 > When you have numeric facets (price, rating, year) and want a visual slider interface.
 
-## Decision
+## Decision: Range Widget Sub-Module
 
 **Module:** `facets_range_widget`
 
@@ -30,7 +30,7 @@ drupal_version: "11.x"
 
 **Dependencies:** jQuery UI Slider, jQuery UI Touch Punch (for touch device support)
 
-## Pattern
+## Pattern: Setup
 
 ```bash
 drush en facets_range_widget
@@ -40,8 +40,8 @@ Then on the facet configuration, select "Slider" or "Range Slider" as the widget
 
 ## Common Mistakes
 
-- **Wrong**: Assuming jQuery UI is available by default → **Right**: jQuery UI is not bundled with Drupal core. You may need `drupal/jquery_ui_slider`.
-- **Wrong**: Expecting noUiSlider behavior/styling → **Right**: Unlike BEF sliders (noUiSlider), Facets range widget uses jQuery UI Slider — a different library with a different look.
+- **jQuery UI dependency** — The range widget requires jQuery UI Slider. In Drupal 10+, jQuery UI is no longer bundled. You may need `drupal/jquery_ui_slider`.
+- **Not a noUiSlider** — Unlike BEF sliders (noUiSlider), Facets range widget uses jQuery UI Slider. Different library, different look.
 
 ## See Also
 

@@ -39,7 +39,6 @@ guide-meta:
     - drupal/forms
     - drupal/services
     - development/security-practices
-  specializes: ""
   category: drupal
 ---
 

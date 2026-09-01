@@ -28,4 +28,5 @@ nav:
 - pre-stable-template-consumer-minimum-stability.md
 - rebrand-required-theme-without-forking.md
 - canvas-versioned-config-raw-edit-trap.md
+- sources-maintenance.md
 append_unmatched: true

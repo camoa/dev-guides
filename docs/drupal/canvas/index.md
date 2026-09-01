@@ -25,7 +25,6 @@ guide-meta:
     - drupal/layout-builder
     - drupal/storybook
     - nextjs/next-drupal
-  specializes: ""
   category: drupal
 ---
 

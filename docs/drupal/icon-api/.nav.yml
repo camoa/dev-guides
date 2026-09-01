@@ -22,4 +22,5 @@ nav:
 - twig-icon-function.md
 - ui-icons-module-features.md
 - what-is-icon-api.md
+- sources-maintenance.md
 append_unmatched: true

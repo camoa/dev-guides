@@ -9,4 +9,5 @@ nav:
 - image-effects-craft.md
 - build-pipeline-optimization.md
 - drupal-media-pipeline.md
+- sources-maintenance.md
 append_unmatched: true

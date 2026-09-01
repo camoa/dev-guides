@@ -24,7 +24,6 @@ guide-meta:
     - drupal/ajax-htmx-migration
     - drupal/forms
     - drupal/routing
-  specializes: ""
   category: drupal
 ---
 

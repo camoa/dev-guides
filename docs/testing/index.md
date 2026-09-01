@@ -19,7 +19,6 @@ guide-meta:
     - drupal/tdd
     - drupal/storybook
     - testing/ai-test-generation
-  specializes: ""
   category: testing
 ---
 

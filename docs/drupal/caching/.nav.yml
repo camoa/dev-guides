@@ -20,4 +20,5 @@ nav:
 - page-cache.md
 - render-caching.md
 - security-performance.md
+- sources-maintenance.md
 append_unmatched: true

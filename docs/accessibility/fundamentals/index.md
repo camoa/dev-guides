@@ -35,7 +35,6 @@ guide-meta:
   complements:
     - js/interaction-craft
     - css/css-craft
-  specializes: ""
   category: accessibility
 ---
 

@@ -26,7 +26,6 @@ guide-meta:
     - drupal/render-api
     - drupal/blocks
     - drupal/views
-  specializes: ""
   category: drupal
 ---
 

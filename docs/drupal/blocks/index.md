@@ -21,7 +21,6 @@ guide-meta:
     - drupal/layout-builder
     - drupal/render-api
     - drupal/plugins
-  specializes: ""
   category: drupal
 ---
 

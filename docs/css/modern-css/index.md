@@ -41,7 +41,6 @@ guide-meta:
   complements:
     - css/css-craft
     - design-systems/tailwind
-  specializes: ""
   category: css
 ---
 

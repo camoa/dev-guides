@@ -10,7 +10,7 @@ drupal_version: "11.x"
 
 > When debugging facet issues or reviewing a faceted search implementation.
 
-## Decision
+## Decision: Common Issues and Solutions
 
 | Issue | Cause | Solution |
 |---|---|---|
@@ -28,9 +28,7 @@ drupal_version: "11.x"
 | Faceted URL not bookmarkable | AJAX without URL update | Use `views_ajax_history` module to update URLs |
 | Language mixing in facet results | No language filter on View | Add language filter to the View or use `hook_search_api_query_alter()` |
 
-## Pattern
-
-Debugging checklist:
+## Pattern: Debugging Checklist
 
 1. **Check Search API index** — Is the field indexed? Is the index up to date?
 2. **Check facet source** — Does it match the View display? Is the View saved?
@@ -42,10 +40,10 @@ Debugging checklist:
 
 ## Common Mistakes
 
-- **Wrong**: Staying on block-based facets by default in 3.x → **Right**: Block-based facets are still supported but are the legacy approach. Exposed filters give you AJAX, BEF integration, and simpler setup.
-- **Wrong**: Enabling every available processor "just in case" → **Right**: Too many processors, especially sort processors, causes unexpected ordering. Start with the defaults.
-- **Wrong**: Launching without an SEO strategy → **Right**: This is the single most damaging oversight — implement bot protection before launching.
-- **Wrong**: Designing facets desktop-first → **Right**: Faceted search on mobile needs different UX — consider collapsible facets, modal filters, or BEF secondary options.
+- **Not using exposed filters in 3.x** — Block-based facets are still supported but are the legacy approach. Exposed filters give you AJAX, BEF integration, and simpler setup.
+- **Over-processing** — Enabling too many processors (especially sort processors) can cause unexpected ordering. Start with the defaults.
+- **No SEO strategy** — This is the single most damaging oversight. Implement bot protection before launching.
+- **Ignoring mobile** — Faceted search on mobile needs different UX. Consider collapsible facets, modal filters, or BEF secondary options.
 
 ## See Also
 

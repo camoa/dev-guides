@@ -22,7 +22,6 @@ guide-meta:
     - drupal/config-management
     - drupal/entities
     - drupal/services
-  specializes: ""
   category: drupal
 ---
 

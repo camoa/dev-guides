@@ -18,4 +18,5 @@ nav:
 - troubleshooting.md
 - ajax-migration.md
 - core-file-reference.md
+- sources-maintenance.md
 append_unmatched: true

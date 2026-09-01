@@ -26,4 +26,5 @@ nav:
 - best-practices-performance.md
 - best-practices-development.md
 - best-practices-accessibility.md
+- sources-maintenance.md
 append_unmatched: true

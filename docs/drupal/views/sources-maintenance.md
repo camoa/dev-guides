@@ -1,3 +1,8 @@
+---
+description: "Source references and maintenance manifest for the views guides — web sources, code sources, and version history"
+---
+
+# Sources & Maintenance
 ## 33. Sources & Maintenance Manifest
 
 ### Drupal Research Install

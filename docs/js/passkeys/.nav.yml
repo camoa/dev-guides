@@ -6,4 +6,5 @@ nav:
 - passkey-authentication.md
 - passkey-management.md
 - passkey-reauthentication.md
+- sources-maintenance.md
 append_unmatched: true

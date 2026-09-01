@@ -31,7 +31,6 @@ guide-meta:
     - design-systems/tailwind
     - design-systems/daisyui
     - design-systems/jsx-to-twig
-  specializes: ""
   category: design-systems
 ---
 

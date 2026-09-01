@@ -7,4 +7,5 @@ nav:
 - common-pitfalls.md
 - debugging-checklist.md
 - reference-implementation.md
+- sources-maintenance.md
 append_unmatched: true

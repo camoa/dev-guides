@@ -10,15 +10,26 @@ drupal_version: "11.x"
 
 > When you need to understand how facet selections are represented in URLs, or when customizing URL behavior.
 
-## Decision
+## Decision: Default URL Format (QueryString)
 
-**Default URL format (QueryString), plugin ID `query_string`:**
+**Plugin ID:** `query_string`
+
+**URL format:**
 
 ```
 https://example.com/search?search_api_fulltext=drupal&f[0]=category:tutorials&f[1]=tag:php&f[2]=price:[10 TO 50]
 ```
 
-Breakdown: `f` is the filter key (configurable per facet source), `[0]`/`[1]`/`[2]` are array indices, `category` is the facet URL alias, `:` separates alias and value, `tutorials` is the filter value, `[10 TO 50]` is range syntax.
+**Breakdown:**
+
+- `f` — Filter key (configurable per facet source)
+- `[0]`, `[1]`, `[2]` — Array indices
+- `category` — Facet URL alias
+- `:` — Separator between alias and value
+- `tutorials` — The filter value
+- `[10 TO 50]` — Range syntax
+
+## Decision: URL Configuration
 
 | Setting | Where | Default | Purpose |
 |---|---|---|---|
@@ -26,9 +37,7 @@ Breakdown: `f` is the filter key (configurable per facet source), `[0]`/`[1]`/`[
 | URL processor | Facet source config | `query_string` | The URL processor plugin |
 | URL alias | Per-facet config | field name | The facet identifier in URLs |
 
-## Pattern
-
-Events for URL customization:
+## Pattern: Events for URL Customization
 
 | Event | When | Use Case |
 |---|---|---|
@@ -36,15 +45,18 @@ Events for URL customization:
 | `ACTIVE_FILTERS_PARSED` | After parsing URL params | Override active filter detection |
 | `URL_CREATED` | After building facet link URL | Modify link destinations |
 
-Multiple facet sources on one page — use different filter keys to prevent conflicts:
+## Pattern: Multiple Facet Sources on One Page
+
+Each facet source can have its own filter key. If two Views with facets appear on the same page, use different filter keys to prevent conflicts:
+
 - Source A: `filter_key: 'f'`
 - Source B: `filter_key: 'g'`
 
 ## Common Mistakes
 
-- **Wrong**: Changing the filter key on a live site → **Right**: Existing bookmarked faceted URLs will stop working once the filter key changes.
-- **Wrong**: Reusing a URL alias across facets on the same source → **Right**: Two facets on the same source cannot share the same URL alias.
-- **Wrong**: Assuming query string is the only option → **Right**: The default `query_string` uses `?f[]=` parameters. For cleaner URLs, see [Pretty Paths](pretty-paths.md).
+- **Changing filter key breaks existing links** — If you change the filter key after the site is live, all bookmarked faceted URLs will stop working.
+- **URL alias conflicts** — Two facets on the same source cannot share the same URL alias.
+- **Pretty paths vs query string** — The default `query_string` uses `?f[]=` parameters. For cleaner URLs, see [Pretty Paths](pretty-paths.md).
 
 ## See Also
 

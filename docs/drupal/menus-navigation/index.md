@@ -20,7 +20,6 @@ guide-meta:
     - drupal/blocks
     - drupal/taxonomy
     - drupal/breadcrumbs
-  specializes: ""
   category: drupal
 tracks:
   - project: drupal

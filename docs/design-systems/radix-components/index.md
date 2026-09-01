@@ -22,7 +22,6 @@ guide-meta:
     - design-systems/radix-sdc
     - design-systems/bootstrap
     - drupal/twig
-  specializes: ""
   category: design-systems
 ---
 

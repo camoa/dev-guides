@@ -18,7 +18,6 @@ guide-meta:
   complements:
     - drupal/testing
     - drupal/tdd
-  specializes: ""
   category: drupal
 ---
 

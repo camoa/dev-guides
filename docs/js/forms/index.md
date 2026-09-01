@@ -31,7 +31,6 @@ guide-meta:
     - js/interaction-craft
     - css/modern-css
     - js/passkeys
-  specializes: ""
   category: js
 ---
 

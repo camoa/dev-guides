@@ -21,7 +21,6 @@ guide-meta:
     - drupal/testing
     - drupal/github-actions
     - drupal/services
-  specializes: development/tdd-spec-driven
   category: drupal
 ---
 

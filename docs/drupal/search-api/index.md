@@ -74,7 +74,6 @@ guide-meta:
     - drupal/better-exposed-filters
     - drupal/views
     - drupal/multilingual
-  specializes: ""
   category: drupal
 ---
 

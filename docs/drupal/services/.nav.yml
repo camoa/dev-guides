@@ -21,4 +21,5 @@ nav:
 - services-yml-schema.md
 - service-tags.md
 - tagged-service-collectors.md
+- sources-maintenance.md
 append_unmatched: true

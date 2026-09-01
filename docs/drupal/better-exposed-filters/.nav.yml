@@ -20,4 +20,5 @@ nav:
 - integration-patterns.md
 - configuration-schema.md
 - common-mistakes.md
+- sources-maintenance.md
 append_unmatched: true

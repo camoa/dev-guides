@@ -22,7 +22,6 @@ guide-meta:
   complements:
     - drupal/security
     - nextjs/next-drupal
-  specializes: ""
   category: nextjs
 ---
 

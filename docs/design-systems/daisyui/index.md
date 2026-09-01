@@ -37,7 +37,6 @@ guide-meta:
     - design-systems/tailwind-tokens
     - design-systems/react-design-system
     - drupal/ui-suite-daisyui
-  specializes: ""
   category: design-systems
 ---
 
