@@ -46,7 +46,7 @@ namespace Drupal\Tests\my_module\FunctionalJavascript;
 use Drupal\FunctionalJavascriptTests\PerformanceTestBase;
 ```
 
-**Note**: Nightwatch.js is deprecated as of Drupal 9.4 and should not be used for new tests.
+**Note on Nightwatch.js**: it is **not** deprecated. It was added to core in 8.6, it still ships in 11.4.x (`nightwatch ^3.12.3`, with `core/tests/Drupal/Nightwatch/` and a `yarn test:nightwatch` script), and no change record announces a deprecation. What is true is a *decision*: core accepted a policy in November 2025 ([#3467492](https://www.drupal.org/project/drupal/issues/3467492)) to replace it with Playwright, and to move some coverage to PHPUnit FunctionalJavascript with Axe, on the grounds that Nightwatch causes frequent random pipeline failures. Nothing has landed — Playwright is in no core branch including `main`, and the migration issue ([#3553673](https://www.drupal.org/project/drupal/issues/3553673)) is still open, targets Drupal 12, and does not remove Nightwatch from 11.x. For a module today, FunctionalJavascript (`WebDriverTestBase`) is the recommendation for JavaScript and Ajax behaviour; new Nightwatch coverage is work that will eventually need migrating.
 
 ## Common Mistakes
 

@@ -72,8 +72,8 @@
     "guides_extracted": 21
   },
   "drupal/klaro": {
-    "source_hash": "9d70bce22c65d399886ac570e525df0fb899524845fafc59a1d9398c9fd53827",
-    "partitioned": "2026-08-16",
+    "source_hash": "6540ccc19cae41470e3ac92d374f371bf0dac9ae1faed79bed5d51cd9ccfd238",
+    "partitioned": "2026-09-01",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 16
   },
@@ -84,8 +84,8 @@
     "guides_extracted": 13
   },
   "drupal/testing": {
-    "source_hash": "f4b082b501fa6deffbafbbf25e4a0d66fcaa49457a196a0c46c04197eb16316a",
-    "partitioned": "2026-05-21",
+    "source_hash": "ca89d7ebffb24699edaff888a5e4a0ea5c72829c77aafa85fe518c347936468c",
+    "partitioned": "2026-09-01",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 11
   },
@@ -186,8 +186,8 @@
     "guides_extracted": 26
   },
   "drupal/tdd": {
-    "source_hash": "7b25ddd86233a5ac35e6d2677a3b776029b790ff2fff489c7971f04f2035903b",
-    "partitioned": "2026-08-31",
+    "source_hash": "1fb0e1054b8a8d3dc59d7cefb8eabfd3fe9048bf1b52c63851ddd16c2bf6b382",
+    "partitioned": "2026-09-01",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 25
   },
@@ -330,8 +330,8 @@
     "guides_extracted": 17
   },
   "drupal/ajax": {
-    "source_hash": "70416783ea35dd0ce4e2f50d100aa7672bd00590c6f925eb77dc3aef7b6953c9",
-    "partitioned": "2026-06-07",
+    "source_hash": "d024506356fa8190b3a411273cb06076dfcabe9d13d62a592153f59ec7b5868b",
+    "partitioned": "2026-09-01",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 26
   },

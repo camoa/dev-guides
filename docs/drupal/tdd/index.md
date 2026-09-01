@@ -51,7 +51,7 @@ guide-meta:
 | Test configuration | [Testing Configuration](testing-configuration.md) | Testing config schema, config import/export, default config, config overrides. |
 | Test events/hooks | [Testing Events & Hooks](testing-events-hooks.md) | Verifying event subscribers work, hooks fire correctly, alter hooks modify data as expected. |
 | Apply TDD to Drupal modules | [Spec-Driven Drupal Development](spec-driven-drupal-development.md) | Applying TDD principles to Drupal module development: write specification, write test, implement feature. |
-| Test JavaScript with Nightwatch | [Nightwatch.js Testing](nightwatch-testing.md) | JavaScript functional testing for complex UI interactions, accessibility testing, cross-browser testing. |
+| Test JavaScript with Nightwatch | [Nightwatch.js Testing](nightwatch-testing.md) | Reach for Nightwatch only for cross-browser runs and axe-based accessibility sweeps WebDriverTestBase can't do; it is not deprecated, but core accepted a policy in Nov 2025 to replace it with Playwright (not yet landed). |
 | Run tests | [Running Tests](running-tests.md) | Executing tests locally, in CI/CD, filtering by group/tag, debugging failures. |
 | Measure code coverage | [Coverage Metrics Strategy](coverage-metrics-strategy.md) | Measuring how much of your code is executed during tests, identifying untested code paths, setting coverage targets for CI/CD. |
 | Set up quality gates | [Quality Gates & Audit Checklist](quality-gates-audit-checklist.md) | Establishing automated quality checks at different stages of development to catch issues early, enforce standards, and prevent broken code from reaching production. |
