@@ -12,6 +12,10 @@ Process recipes are **resolved by an orchestrator**, keyed by **`(phase × frame
 
 | Phase | Framework | Recipe | When to use |
 |---|---|---|---|
+| `research` | `drupal` | [Contrib prior-art research](drupal/contrib-prior-art.md) | A Drupal project must establish prior art on drupal.org and in contrib — usage, maintenance, security coverage and core-version fit — before any custom build. |
+| `design` | `drupal` | [Service-based architecture design](drupal/architecture.md) | Turning researched requirements into a service-based architecture — business logic in injected services, a Drush entry point, and the form / entity / plugin pattern per component. |
+| `implement` | `drupal` | [Coding standards and test discipline](drupal/standards-and-tests.md) | Holding Drupal code to coding standards and the implementation-time security rules, with the PHPUnit tier selected per unit of logic and each test shaped Red-Green-Refactor. |
+| `review` | `drupal` | [Implementation review checks](drupal/checks.md) | Validating a Drupal implementation against its architecture and Drupal security — static `\Drupal::` in new code, logic in forms/controllers, Form API CSRF — before acceptance. |
 | `e2e-setup` | `drupal` | [ATK end-to-end test setup](drupal/e2e-setup-atk.md) | A Drupal project (DDEV + Playwright) needs a behavioural E2E harness. |
 | `visual-regression` | `drupal` | [Visual-regression setup](drupal/visual-regression-setup.md) | A Drupal project needs visual-regression coverage with deterministic baselines. |
 | `research` | `claude-code-plugins` | [Plugin prior-art research](claude-code-plugins/prior-art.md) | A Claude Code plugin project must establish prior art (reuse / extend / build-new) before scaffolding a component. |
@@ -38,6 +42,54 @@ Process recipes are **resolved by an orchestrator**, keyed by **`(phase × frame
 > **`go` binds only four phases, and declares no change-impact globs.** A Go module has no rendered or browser surface, so this framework declares **no `e2e-setup` or `visual-regression` recipe** — and, because change-impact globs exist to route a changed file to exactly those two gates, the review recipe deliberately declares none. A Go CLI's end-to-end shape is a test tier, not a phase: it lives in the `implement` recipe as the entry-point tier (calling `run(ctx, args, stdin, stdout, stderr) error` with buffers) and the subprocess tier (for the exit status, signals, and a real stdin pipe), and is checked under the test gate at `review`. The `review` recipe **does** declare `## Code-quality extensions`, and that one is load-bearing rather than optional: no Go extension is in the framework-neutral change-scoping floor, so without it a pure-Go change filters to an empty file list and every change-scoped gate skips itself — a clean-looking run that examined nothing.
 
 > **`python-cli` binds only four phases, and declares no change-impact globs.** A Python library or console-script tool has no rendered or browser surface, so this framework declares **no `e2e-setup` or `visual-regression` recipe** — and, because change-impact globs exist to route a changed file to exactly those two gates, the review recipe deliberately declares none. A CLI's end-to-end shape is a test tier, not a phase: it lives in the `implement` recipe as the entry-point tier the tests import, and is checked under the test gate at `review`. The `review` recipe **does** declare `## Code-quality extensions`, and that one is load-bearing rather than optional: no Python extension is in the framework-neutral change-scoping floor, so without it a pure-Python change filters to an empty file list and every change-scoped gate skips itself. It declares `.py`, `.pyi` (a stub is the declared public typing surface, not dead text) and `.toml` — the last one deliberately, because a change that touches only `pyproject.toml` carries the dependency and version decisions this framework blocks on. The `implement` recipe declares machine-checkable `## Preconditions`, which is the one declaration that fails closed.
+
+## What each phase type is for
+
+The authoring rules below specify a recipe's **form**. This section specifies its **job** — what a
+recipe of each type must decide, and what belongs to a different type. Read it before authoring a set
+for a new framework, because the form is identical across all six and the form alone will not stop you
+putting review's content in implement, or putting something in a recipe that should not be in one.
+
+**The invariant that governs every type.** The plugin owns the mechanism and the gate; the recipe owns
+only what is genuinely specific to its stack, and **references** canonical sources rather than restating
+them. A recipe ships no code assets. Two tests before anything goes in a recipe:
+
+- *Would this sentence be identical for another stack?* Then it is not framework knowledge, and it
+  belongs in a guide the recipe cites — not copied into each framework's recipe. A rule restated once per
+  stack has no single place to correct it, and nothing detects the copies diverging.
+- *Does this run something, or record a result?* Then it is the plugin's. The recipe supplies the method
+  the gate evaluates; it does not own the gate.
+
+| Type | Its job | Not its job |
+|---|---|---|
+| `research` | Establish what already exists, in the ecosystem and in the project, and return **named** candidates with a reuse / extend / build-new verdict and the evidence behind it. | Choosing the architecture. Judging code that does not exist yet. |
+| `design` | Turn researched requirements into structure — where business logic lives, the programmatic entry point, which of the stack's patterns each component takes, and the boundary the language or framework enforces. | Coding standards. Test tiers. Anything about how the code will be written. |
+| `implement` | The rules applied **while** code is written: coding standards, the implementation-time security guarantees, test-tier selection, and the test-first cycle. This is where a stack's best practices live. | Running linters — the recipe judges what a standard means, the tooling runs it. Post-hoc validation. |
+| `review` | The **blocking** validations run before work is accepted, in the stack's own terms, in a deliberate order. | Restating the generic review. Re-authoring checks `implement` already applied inline. |
+| `e2e-setup` | One-time wiring of a behavioural harness into the gate the plugin already owns — install, scaffold, bind authenticated journeys. | Running the suite. Deciding what to test. |
+| `visual-regression` | One-time wiring of surface discovery, the viewport matrix and baseline capture into the plugin's baseline-and-gate mechanism. | Capturing or approving baselines on an ongoing basis. |
+
+**Not every framework binds every type.** A stack with no rendered or browser surface declares no
+`e2e-setup` and no `visual-regression` recipe, and that is a complete set, not a gap — see the
+per-framework notes above the authoring rules. A CLI's end-to-end shape is a **test tier** inside
+`implement`, checked under `review`, never a phase of its own.
+
+### What each type may declare
+
+Only four of the six types carry machine-readable declarations at all. `research` and `design` carry
+none — they are prose method, consumed by an agent, not parsed by a script.
+
+| Type | Declaration (exact heading) | Posture |
+|---|---|---|
+| `implement` | `## Oracle files`, `## Routing hints`, `## Preconditions` | fail-open (`## Preconditions` fails closed) |
+| `review` | `## Change-impact globs`, `## Code-quality extensions` | fail-open |
+| `visual-regression` | `## Change-impact globs`, `## Screenshot capture` | fail-open |
+| `e2e-setup` | `e2e.preflight_command` (a YAML key in the registry seed) | **fail-closed** |
+
+Spelling is load-bearing. A fail-open declaration with a misspelled heading does not error — it silently
+degrades to the neutral floor, and the run looks clean while checking less than you think. Where a stack
+has no extension in the framework-neutral change-scoping floor, `## Code-quality extensions` stops being
+optional: without it every change-scoped gate filters to an empty file list and skips itself.
 
 ## Authoring a process recipe
 

@@ -6,7 +6,7 @@ description: Use when a PHP CLI project (a Composer library or application whose
 # Metadata — read only after a match.
 label: PHP CLI standards and tests
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -161,9 +161,15 @@ The caller emits this list as the oracle-tamper guard's JSON input. The two colu
   { "type": "phpstan_baseline",  "globs": ["phpstan-baseline.neon"],            "changes": ["A","M"], "oracle_class": "phpstan-baseline",   "severity": "halt" },
   { "type": "phpstan_config",    "globs": ["phpstan.neon", "phpstan.neon.dist"],"changes": ["M"],     "oracle_class": "phpstan-baseline",   "severity": "flag" },
   { "type": "coverage_threshold","globs": ["phpunit.xml", "phpunit.xml.dist"],  "changes": ["M"],     "oracle_class": "coverage-threshold", "severity": "flag" },
-  { "type": "test_delete",       "globs": ["tests/**/*Test.php"],               "changes": ["D"],     "oracle_class": "test-delete",        "severity": "halt" }
+  { "type": "test_delete",       "globs": ["tests/**/*Test.php", "**/tests/**/*Test.php"], "changes": ["D"],     "oracle_class": "test-delete",        "severity": "halt" }
 ]
 ```
+
+The test glob is declared **twice on purpose**. The guard anchors a glob at both ends, so
+`tests/**/*Test.php` matches a test tree at the repository root and nothing else. Any package whose
+tests sit below the repository root, such as a nested or multi-package layout, fails that pattern, so
+on its own it would leave the delete guard watching nothing on a real project.
+The second, `**/`-prefixed glob is what covers the nested layout. Do not collapse them to one.
 
 These are the standards-and-tests oracle files — the same set a standalone PHP CLI project carries as a Drupal one, since the measurement surface (the phpstan baseline, the phpstan config, the PHPUnit config, and the test files) is identical. A `php-cli` project binds no visual-regression or e2e-setup phase, so it declares no further oracle files from those recipes; the caller still unions declarations across every recipe that applies before handing the combined list to the guard. A project that declares no oracle files at all is an honest "no oracle configured" state: the guard reports it ran with nothing to watch, rather than reporting a pass it never checked.
 
