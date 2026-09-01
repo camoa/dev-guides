@@ -100,7 +100,19 @@ none — they are prose method, consumed by an agent, not parsed by a script.
 | `e2e-setup` | `e2e.preflight_command` (a YAML key in the registry seed) | **fail-closed** |
 
 Spelling is load-bearing. A fail-open declaration with a misspelled heading does not error — it silently
-degrades to the neutral floor, and the run looks clean while checking less than you think. Where a stack
+degrades to the neutral floor, and the run looks clean while checking less than you think.
+
+**`## Oracle files` is parsed, not just read.** As of 2026-09-01 a consumer takes the `globs` off the
+row whose `type` is `test_delete` to answer "which files in this repository are tests", instead of
+trusting a list the caller supplied. Three things are therefore load-bearing inside that section and
+are enforced by `scripts/validate_recipes.py`: the first ```json fence under the H2 must parse as a
+top-level array of flat objects; every row must carry exactly `type`, `globs`, `changes`,
+`oracle_class`, `severity`; and `test_delete` must appear at most once, because it is the selector.
+The markdown table above the fence and the fence itself state the same rules, and the validator now
+checks that they agree — before it did not, so the table a person reads could drift away from the
+rules a machine applies. When restructuring this section, keep a `test_delete` row resolvable from
+the recipe's own body: a row present only by inheritance is invisible to anything reading the
+published page. Where a stack
 has no extension in the framework-neutral change-scoping floor, `## Code-quality extensions` stops being
 optional: without it every change-scoped gate filters to an empty file list and skips itself.
 

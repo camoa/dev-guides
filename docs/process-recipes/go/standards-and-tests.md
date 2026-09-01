@@ -173,10 +173,10 @@ After the recipe runs, verify:
 10. Each test names the behaviour it specifies, and no test in the change was written after the code it covers — a test that cannot name a behaviour is measuring or ratifying, and does not count toward item 1.
 11. Every new table row reaches a branch or boundary no other row reaches; rows differing only in input formatting are duplication, not coverage.
 12. Any golden file the change adds was authored from the contract before the code existed, not generated from the program's output.
+13. Every pre-existing test the change modified or deleted was changed by a role the mutability matrix permits — the only rows that may delete are a feature removal taking its own tests in the same commit; RED authoring is the only row that writes an assertion, and GREEN, REFACTOR and a bug fix change none. A reviewer that wanted a test changed filed a finding instead. See `development/tdd-spec-driven`.
 10. The results were returned to the caller for the plugin's implement phase to record — the recipe wrote no task record of its own.
 
 This recipe ships no executable verifier of its own — the checks above are the agent-driven protocol, and every one of them is a command the Go toolchain already provides; the plugin's implement phase owns the test-first completion gate.
-
 ## Oracle files
 
 A measurement oracle is a file the gates read to decide pass or fail — a linter config, a test, an expected-output fixture. An autonomous builder must never weaken one to make a red gate go green: only adding tests or fixing code is allowed, never suppressing a finding or rewriting an expectation. The plugin's deterministic oracle-tamper guard enforces this at the review/critique rung, but the guard itself is framework-agnostic — it carries no Go knowledge and monitors only the file list it is handed. This section is that list for a Go project: the caller reconstructs it from here on every run (so there is no persistent project file a builder could empty to switch monitoring off) and hands it to the guard.
