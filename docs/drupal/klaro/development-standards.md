@@ -119,4 +119,4 @@ class KlaroConsentTest extends WebDriverTestBase {
 ## See Also
 
 - Reference: [Configuration API](https://www.drupal.org/docs/drupal-apis/configuration-api)
-- Testing: [FunctionalJavascript Tests](https://www.drupal.org/docs/testing/javascript-testing-using-nightwatch)
+- Testing: [FunctionalJavascript Tests](https://www.drupal.org/docs/develop/automated-testing/javascript-testing-using-nightwatch)

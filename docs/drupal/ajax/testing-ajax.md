@@ -64,4 +64,4 @@ Reference: `core/tests/Drupal/FunctionalJavascriptTests/Ajax/AjaxFormPageCacheTe
 
 - [Debugging Techniques](debugging-techniques.md)
 - [Frontend Framework Integration](frontend-framework-integration.md)
-- Reference: [JavaScript testing documentation](https://www.drupal.org/docs/automated-testing/javascript-testing-using-nightwatch)
+- Reference: [JavaScript testing documentation](https://www.drupal.org/docs/develop/automated-testing/javascript-testing-using-nightwatch)
