@@ -6,7 +6,7 @@ description: Use when a Drupal project enters the implementation phase and must 
 # Metadata — read only after a match.
 label: Coding standards and test discipline (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/tdd
@@ -164,9 +164,15 @@ The caller emits this list as the oracle-tamper guard's JSON input. The two colu
   { "type": "phpstan_baseline",  "globs": ["phpstan-baseline.neon"],            "changes": ["A","M"], "oracle_class": "phpstan-baseline",   "severity": "halt" },
   { "type": "phpstan_config",    "globs": ["phpstan.neon", "phpstan.neon.dist"],"changes": ["M"],     "oracle_class": "phpstan-baseline",   "severity": "flag" },
   { "type": "coverage_threshold","globs": ["phpunit.xml", "phpunit.xml.dist"],  "changes": ["M"],     "oracle_class": "coverage-threshold", "severity": "flag" },
-  { "type": "test_delete",       "globs": ["tests/**/*Test.php"],               "changes": ["D"],     "oracle_class": "test-delete",        "severity": "halt" }
+  { "type": "test_delete",       "globs": ["tests/**/*Test.php", "**/tests/**/*Test.php"], "changes": ["D"],     "oracle_class": "test-delete",        "severity": "halt" }
 ]
 ```
+
+The test glob is declared **twice on purpose**. The guard anchors a glob at both ends, so
+`tests/**/*Test.php` matches a test tree at the repository root and nothing else. A Drupal custom
+module keeps its tests at `web/modules/custom/<module>/tests/src/<Tier>/<Name>Test.php`, which that
+pattern does not match — on its own it would leave the delete guard watching nothing on a real project.
+The second, `**/`-prefixed glob is what covers the nested layout. Do not collapse them to one.
 
 These are the standards-and-tests oracle files. A Drupal project that also set up visual-regression or E2E testing has further oracle files — the VR snapshot baselines and the E2E spec files — declared by those setup recipes; the caller unions the declarations across every recipe that applies to the project before handing the combined list to the guard. A project that declares no oracle files at all is an honest "no oracle configured" state: the guard reports it ran with nothing to watch, rather than reporting a pass it never checked.
 
