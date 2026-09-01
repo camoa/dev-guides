@@ -3,8 +3,8 @@ description: Drupal Facets — decision guides for faceted search with Search AP
 tracks:
   - project: facets
     channel: stable
-    declared: "3.0.4"
-    verified: 2026-08-20
+    declared: "3.0.6"
+    verified: 2026-09-01
 guide-meta:
   concepts:
     - Facets
