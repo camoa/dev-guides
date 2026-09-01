@@ -74,6 +74,19 @@ them. A recipe ships no code assets. Two tests before anything goes in a recipe:
 per-framework notes above the authoring rules. A CLI's end-to-end shape is a **test tier** inside
 `implement`, checked under `review`, never a phase of its own.
 
+**`implement` owns the TDD loop; `e2e-setup` and `visual-regression` do not.** The tests an
+`implement` recipe selects a tier for are written before the code and run red then green — they
+constrain a design that does not exist yet. The suites the other two phases wire up run against
+something already built, cannot drive a design decision, and are therefore outer verification. The
+line is not whether a browser or a subprocess is involved: Drupal's `FunctionalJavascript` tier
+drives a real browser and belongs to `implement`, and a CLI's fixture-driven end-to-end tier spawns a
+process and belongs there too. What follows for an `implement` recipe is that e2e or visual-regression
+coverage never substitutes for a tier it must choose, and is reported separately rather than counted
+toward its test-first requirement. The stack-neutral statement of this, and of what makes an added
+test excess rather than coverage, lives in
+[development/tdd-spec-driven](https://camoa.github.io/dev-guides/development/tdd-spec-driven/) and is
+cited by each `implement` recipe rather than restated in it.
+
 ### What each type may declare
 
 Only four of the six types carry machine-readable declarations at all. `research` and `design` carry

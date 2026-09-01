@@ -19,5 +19,7 @@ nav:
 - testing-patterns.md
 - three-laws-tdd.md
 - unit-testing-fundamentals.md
+- what-tdd-covers.md
+- when-not-to-write-a-test.md
 - writing-specs.md
 append_unmatched: true

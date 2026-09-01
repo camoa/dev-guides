@@ -124,7 +124,7 @@ class TestOrderCalculator:
 - Not running tests frequently - Fast, isolated tests can run on every save; slow/coupled tests get skipped
 
 ## See Also
-- Previous: [Fixing Bugs with TDD](fixing-bugs-with-tdd.md) | Next: [Test Doubles](test-doubles.md)
+- Previous: [When Not to Write a Test](when-not-to-write-a-test.md) | Next: [Test Doubles](test-doubles.md)
 - Related: [Testing Patterns](testing-patterns.md) for test structure
 - Related: [TDD Anti-Patterns](anti-patterns.md)
 - Related: [Testing Strategy - Unit Testing Concepts](https://camoa.github.io/dev-guides/development/testing-strategy/unit-testing-concepts/) - what counts as a unit, and unit vs behavioral tests

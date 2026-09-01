@@ -38,6 +38,6 @@ If the bug reveals a whole class of untested cases, that is a real finding and w
 - Treating a fix round's rising assertion count as thoroughness - It usually means the tests cannot tell your branches apart
 
 ## See Also
-- Previous: [Changing Existing Tests](changing-existing-tests.md) | Next: [Unit Testing Fundamentals](unit-testing-fundamentals.md)
+- Previous: [Changing Existing Tests](changing-existing-tests.md) | Next: [What TDD Covers](what-tdd-covers.md)
 - Related: [Red-Green-Refactor Workflow](red-green-refactor.md) - the cycle this specializes
 - Related: [Refactoring with Confidence](refactoring-confidence.md) - why a fix and a refactor stay separate

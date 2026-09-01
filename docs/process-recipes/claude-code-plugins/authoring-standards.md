@@ -6,7 +6,12 @@ description: Use when a Claude Code plugin project enters the implementation pha
 # Metadata — read only after a match.
 label: Component authoring standards (Claude Code)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
+# Machine-readable dependency declaration (recipe-loader resolves these
+# without parsing prose). The test-discipline rules are stack-neutral: they are
+# cited here, never restated per framework.
+requires_guides:
+  - development/tdd-spec-driven
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -39,6 +44,10 @@ The plugin owns the generic implement phase — when it runs and the oracle/enve
 **Hooks are authored to the event and the handler, defensively.** A hook binds a recognised event and a valid handler type; it prefers the exec form with explicit `args` over a shell-form string; it braces its placeholders (`${CLAUDE_PLUGIN_ROOT}`, not a bare `$CLAUDE_PLUGIN_ROOT`); it sets an explicit timeout; and it never writes to `/dev/tty`, which has no controlling terminal. A one-time install belongs on a setup event, not on session start.
 
 **Test-first for a plugin is paper-testing the instructions.** A component's "code" is the instruction set it feeds the model, so the test that matters is a line-by-line trace of that instruction set with concrete values — does the skill's logic hold, does the command's argument handling do what the frontmatter promises, does the hook fire on the event it claims. This trace is run *before* the component is trusted, the Red-Green discipline applied to prose, and it is deferred to `code-paper-test:paper-test` (or `/code-paper-test:test-team` for a large or security-sensitive component) rather than re-implemented here.
+
+**The paper-test is the loop's analogue, and it is worth being precise about how far the analogy runs.** A plugin's substance is instructions, so there is no failing assertion to watch go red — what stands in for it is tracing the instruction set against what the component was designed to do, before anyone relies on it. That much is genuinely the same discipline: the contract comes first, and the component is judged against it rather than described by it. What it is not is a substitute for a test suite where a plugin ships executable code — a hook script, a validator, a helper — which is ordinary code and gets ordinary test-first treatment at the tier its dependency surface calls for.
+
+**Adding a check is not automatically progress.** The same brake applies here as to any suite: a check earns its place by specifying a behaviour the component promised, and past that it makes the component harder to review without constraining anything new. The full set of excess cases belongs to `development/tdd-spec-driven` and is cited, not restated. Two local forms worth naming: a paper-test that re-asserts the frontmatter rules `/plugin-creation-tools:validate` already enforces deterministically is duplication of a check that runs for free, and a trace that quotes a component's own body back as evidence that the body is correct is the ratifying case in its plainest form — the trace has to come from the design, not from the prose it is judging.
 
 **Every external reference is verified to exist.** A skill that tells the model to call a tool, invoke a sibling skill, or pass a flag is verified against the real surface — a hallucinated tool name, a non-existent flag, or a renamed API (the Agent SDK rename is the common one) is the plugin equivalent of a hallucinated symbol, and it is caught at authoring time, not left for a user to hit.
 
@@ -87,7 +96,7 @@ If invoked in dry-run mode, perform the reads and emit an authoring plan plus th
 
 4. **Author hooks defensively.** Bind the recognised event and a valid handler, prefer exec form with explicit `args`, brace every `${CLAUDE_*}` placeholder, set an explicit timeout, and route nothing to `/dev/tty`.
 
-5. **Paper-test every component before trusting it.** Trace each component's instructions with concrete values through `code-paper-test:paper-test` (or `/code-paper-test:test-team` for a large or security-sensitive component), and verify every external reference — tool, sibling skill, flag, API symbol — resolves to something real. Fix what the trace surfaces before the component is considered done.
+5. **Paper-test every component before trusting it.** Trace each component's instructions with concrete values through `code-paper-test:paper-test` (or `/code-paper-test:test-team` for a large or security-sensitive component), and verify every external reference — tool, sibling skill, flag, API symbol — resolves to something real. Fix what the trace surfaces before the component is considered done. Where the component ships executable code, its tests follow the ordinary test-first discipline, and once such a test is committed, who may change or delete it is the mutability matrix's answer in `development/tdd-spec-driven`, not this phase's.
 
 6. **Sanity-check, and hand the gate to review.** Optionally run `/plugin-creation-tools:validate --dry-run` to catch a structural slip early. The blocking structural verdict is not formed here — it is the review phase's; this phase returns the authored, paper-tested components and the trace results.
 
@@ -134,7 +143,9 @@ After the recipe runs, verify:
 3. Each `SKILL.md` body is imperative and within the designed length, with depth in `references/`, and every referenced file and script exists.
 4. Each hook binds a recognised event and a valid handler, uses exec form with braced `${CLAUDE_*}` placeholders and an explicit timeout, and writes nothing to `/dev/tty`.
 5. Every component was paper-tested before being trusted, and every external reference it names — tool, sibling skill, flag, API symbol — was verified to resolve; what the trace surfaced was fixed.
-6. The blocking structural verdict was left to review — this phase returned authored, paper-tested components and their trace results, not an acceptance decision.
+6. Each paper-test traces the component against what the design said it must do, not against the component's own body, and no trace duplicates a rule `/plugin-creation-tools:validate` already enforces deterministically.
+7. Where the change ships executable code, that code has a test at a deliberately chosen tier, written before it and seen to fail.
+8. The blocking structural verdict was left to review — this phase returned authored, paper-tested components and their trace results, not an acceptance decision.
 
 This recipe ships no executable verifier of its own — the authoring-and-trace steps are the agent-driven protocol, executed through the tools it drives; the plugin's implement phase owns its oracle/envelope, and the structural gate belongs to the review phase.
 

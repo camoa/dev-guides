@@ -29,6 +29,16 @@ tldr: "Map what you need to verify to the correct test type using this matrix. M
 | Drupal E2E with Playwright against a DDEV site | Playwright + ATK | VR for visual stability | [testing/playwright](https://camoa.github.io/dev-guides/testing/playwright/), [testing/atk](https://camoa.github.io/dev-guides/testing/atk/) |
 | AI-generated tests match spec and cover edge cases | AI test generation workflow | Unit + integration for gap coverage | [testing/ai-test-generation](https://camoa.github.io/dev-guides/testing/ai-test-generation/) |
 
+## Test type is not test discipline
+
+The matrix above picks a *type*. It does not say which **loop** the test belongs to, and mixing the two is how a suite ends up with a healthy count and unspecified behavior.
+
+A test written before the code and watched to fail is a **specification**, produced by the TDD loop: unit, integration, contract, property-based, and a framework's in-process functional or browser tier all qualify. A test that can only be written against a system that already stands is **outer verification**: browser E2E, visual regression, load and performance, accessibility and security scans, mutation testing, fuzzing. Both are necessary. Only the first can drive a design decision, and only the first should be counted as TDD coverage.
+
+The discriminator is not whether a browser is involved. Drupal's `BrowserTestBase` and `WebDriverTestBase` tiers drive real requests and a real browser, and are written red-green before the code — they are inside the loop. A Playwright journey against a running site is not, however similar it looks.
+
+See [TDD — What TDD Covers](https://camoa.github.io/dev-guides/development/tdd-spec-driven/what-tdd-covers/) for the full table, and [TDD — When Not to Write a Test](https://camoa.github.io/dev-guides/development/tdd-spec-driven/when-not-to-write-a-test/) for what the loop requires from a change and what counts as excess.
+
 ## Pattern
 
 ```
@@ -60,7 +70,7 @@ Security tests (integration level):
 
 | Stack | Unit | Integration | E2E |
 |---|---|---|---|
-| PHP/Drupal | PHPUnit Unit | PHPUnit Kernel | PHPUnit Functional / Playwright |
+| PHP/Drupal | PHPUnit Unit | PHPUnit Kernel | PHPUnit Functional (in the TDD loop) / Playwright (outer) |
 | JavaScript/React | Vitest/Jest | React Testing Library | Playwright |
 | TypeScript/Next.js | Vitest/Jest | Supertest + Testing Library | Playwright |
 | Python | pytest | pytest with real DB | Playwright / Selenium |
@@ -70,4 +80,5 @@ Security tests (integration level):
 
 - [Best Practices and Anti-Patterns](best-practices-and-anti-patterns.md)
 - Related: [development/tdd-spec-driven](https://camoa.github.io/dev-guides/development/tdd-spec-driven/) — TDD workflow that uses these test types
+- Related: [TDD — What TDD Covers](https://camoa.github.io/dev-guides/development/tdd-spec-driven/what-tdd-covers/) — which of these types the red-green loop actually produces
 - Related: [drupal/testing](https://camoa.github.io/dev-guides/drupal/testing/) — Drupal-specific test types and setup

@@ -6,7 +6,7 @@ description: Use when a Go project enters the implementation phase and must hold
 # Metadata — read only after a match.
 label: Go standards and tests
 recipe_schema_version: 1.0.0
-version: 0.2.0
+version: 0.3.0
 # Machine-readable dependency declaration (recipe-loader resolves these
 # without parsing prose). The test-mutability rule is stack-neutral: it is
 # cited here, never restated per framework.
@@ -53,6 +53,12 @@ The plugin owns the generic mechanism — when the implement phase runs, the tes
 
 **Test the entry point directly; build and exec the real binary only for what only the real process shows.** Because the design put a `run(ctx, args, stdin, stdout, stderr) error` entry point below `cmd/`, almost all end-to-end coverage is an ordinary Go test that calls `run` with `bytes.Buffer` streams and asserts on what came out and what error came back — fast, coverage-instrumented, debuggable, no build step. That is the default tier for CLI behaviour. Reserve building the binary and executing it as a subprocess for the handful of things that only exist at the process boundary: the actual exit status produced by `os.Exit`, signal handling, and stdin arriving from a real pipe. Build it into `t.TempDir()` so the test cleans up after itself.
 
+**Every tier above is inside the TDD loop, including the subprocess one; browser E2E and visual regression are not.** The line is not whether a process is spawned, it is whether the test was written before the code and run red. The entry-point and subprocess tiers are both written from the contract the design fixed, so they constrain it. A Playwright suite or a snapshot baseline, where a project has one, runs against something already built, cannot drive a design decision, and does not count toward the test-first requirement here.
+
+**A golden file is a specification only if it was written first.** Author the expected file from the contract and watch the test fail against it, and the golden constrains the code. Generate it with `-update` from the program's own output and it can never contradict the code — it ratifies whatever was produced, including a bug. This is why the oracle table halts on a golden modification rather than flagging it: the halt is not about carelessness, it is that a regenerated golden has stopped being a test.
+
+**Adding a test is not automatically progress.** The loop's requirement for a change is one specification per behaviour it creates, at the smallest tier that answers the question, each seen to fail first. Past that, more tests make the change harder to review without specifying anything new. The full set of excess cases belongs to `development/tdd-spec-driven` and is cited, not restated. The local form worth naming: a table that grows rows which differ only in input formatting, all exercising the same branch, reads as thoroughness and is duplication — a case earns its row by reaching a branch or a boundary no other row reaches.
+
 **The toolchain runs the standards; there is no plugin to defer to here.** Unlike the PHP CLI recipe, this one does not hand linting to the `code-quality-tools` plugin — that plugin detects Drupal and Next.js projects and lints PHP and JavaScript extensions, and has no Go arm. It does not need one: `gofmt`, `go vet`, `go test -race`, and `go mod tidy -diff` ship with the toolchain and run from the module root with no configuration, and the optional layer (`golangci-lint`, which as of v2 embeds the full staticcheck rule set) is a single binary with a committed config. Run them here as you write, and again as gates in review.
 
 ## Preconditions
@@ -94,7 +100,7 @@ If invoked in dry-run mode, perform all reads and emit a test-and-standards plan
 
 1. **Select the test tier.** From `behavior` and the component's dependency surface, choose the smallest tier that answers the question: a **plain unit** test for pure logic; a **unit with collaborators wired** where the behaviour needs them (real ones where cheap, a consumer-declared interface satisfied by a local fake where a boundary must be isolated); a **golden** tier where the output is large or structured enough that an inline literal would be unreadable; the **entry-point** tier that calls `run(ctx, args, stdin, stdout, stderr) error` with buffers for anything the command exposes; and the **subprocess** tier only for the exit status, signals, or a real stdin pipe. Use `test_tier` if supplied; otherwise derive it. Tests live beside the code they test.
 
-2. **Write the failing test (RED).** Author the test before any production code, shaped as a table of named cases ranged into `t.Run` unless the arrangement genuinely differs per case. Assert errors with `errors.Is` / `errors.As` against the sentinels the design exported — never against message text. Where the behaviour is safe to parallelise, call `t.Parallel()` and confirm the test uses `t.TempDir()` rather than a shared path and takes no dependency on `t.Setenv` or `t.Chdir`, which the standard library refuses in a parallel test. Run the tests and confirm each fails for the right reason. A test that passes immediately is rejected and rewritten.
+2. **Write the failing test (RED).** Author the test before any production code, shaped as a table of named cases ranged into `t.Run` unless the arrangement genuinely differs per case. Assert errors with `errors.Is` / `errors.As` against the sentinels the design exported — never against message text. Where the behaviour is safe to parallelise, call `t.Parallel()` and confirm the test uses `t.TempDir()` rather than a shared path and takes no dependency on `t.Setenv` or `t.Chdir`, which the standard library refuses in a parallel test. Run the tests and confirm each fails for the right reason. A test that passes immediately is rejected and rewritten. Rewriting *this* test is the author's own move, made before the production code exists; once a test is committed, who may change or delete it is the mutability matrix's answer in `development/tdd-spec-driven`, not this phase's.
 
 3. **Write the minimum code to pass (GREEN).** Implement only what the tests demand. As you write, hold the design's boundary: new packages under `internal/` unless the design promoted them, the command a shim over the entry point, `ctx` first on anything that blocks, errors wrapped with `%w`, no `init` side effects, no package-level mutable state, and `os.Exit` confined to `main`. Run `go test ./...` to green.
 
@@ -164,6 +170,9 @@ After the recipe runs, verify:
 7. `gofmt -l .` lists nothing (asserted on empty output, not on the exit code), and `go vet ./...` is clean over the whole module rather than left to the reduced analyzer subset `go test` runs.
 8. `go test -race ./...` is green, has been run at least once with `-shuffle=on`, and no reported race was left unfixed.
 9. `go mod tidy -diff` exits zero — no requirement was added, orphaned, or left un-tidied by the work.
+10. Each test names the behaviour it specifies, and no test in the change was written after the code it covers — a test that cannot name a behaviour is measuring or ratifying, and does not count toward item 1.
+11. Every new table row reaches a branch or boundary no other row reaches; rows differing only in input formatting are duplication, not coverage.
+12. Any golden file the change adds was authored from the contract before the code existed, not generated from the program's output.
 10. The results were returned to the caller for the plugin's implement phase to record — the recipe wrote no task record of its own.
 
 This recipe ships no executable verifier of its own — the checks above are the agent-driven protocol, and every one of them is a command the Go toolchain already provides; the plugin's implement phase owns the test-first completion gate.
