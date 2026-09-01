@@ -59,8 +59,14 @@ def read_tldr(guide_path: Path) -> str:
     return str(fm.get("tldr", "")).strip()
 
 
-def process_index(index_path: Path, dry_run: bool = False) -> str:
-    """Add Summary column to the routing table in a topic's index.md."""
+def process_index(index_path: Path, dry_run: bool = False, refresh: bool = False) -> str:
+    """Add a Summary column to the routing table in a topic's index.md.
+
+    With refresh=True, a table that already has a Summary column is rewritten so
+    every Summary cell is the target guide's `tldr:` verbatim. A hand-edited or
+    paraphrased Summary drifts from the guide it describes and the navigator
+    pre-filters on it, so a stale cell routes on text no guide actually says.
+    """
     content = index_path.read_text(encoding="utf-8")
     lines = content.splitlines(keepends=True)
 
@@ -80,7 +86,8 @@ def process_index(index_path: Path, dry_run: bool = False) -> str:
     separator_line = lines[header_idx + 1].rstrip("\n")
     # Count pipes in the separator — already 3 columns = already processed.
     col_count = separator_line.count("|") - 1  # leading/trailing pipes
-    if col_count >= 3:
+    already = col_count >= 3
+    if already and not refresh:
         return "already-has-summary"
 
     # Rebuild the header and separator.
@@ -113,8 +120,17 @@ def process_index(index_path: Path, dry_run: bool = False) -> str:
         # Escape pipe chars in tldr for table safety.
         tldr_safe = tldr.replace("|", "\\|")
 
-        # Insert the Summary column just before the trailing pipe.
+        # Insert the Summary column just before the trailing pipe. When refreshing an
+        # already-3-column table, drop the existing Summary cell first so the value is
+        # replaced rather than appended as a fourth column.
         new_row = row.rstrip()
+        if already:
+            # Split on UNESCAPED pipes only. A routing row legitimately contains `\|`
+            # inside a cell (Twig filter names such as `\|t`, `\|without`); splitting on
+            # those would tear the row apart and drop its guide link.
+            cells = re.split(r"(?<!\\)\|", new_row.strip().strip("|"))
+            if len(cells) >= 3:
+                new_row = "|" + "|".join(cells[:2]) + "|"
         if new_row.endswith("|"):
             new_row = new_row[:-1].rstrip() + f" | {tldr_safe} |\n"
         else:
@@ -147,6 +163,12 @@ def main():
     parser.add_argument(
         "--topic", help="Only process this topic (e.g., drupal/plus-suite)"
     )
+    parser.add_argument(
+        "--refresh",
+        action="store_true",
+        help="Also rewrite tables that already have a Summary column, restoring each "
+        "cell to the target guide's tldr verbatim",
+    )
     args = parser.parse_args()
 
     if args.topic:
@@ -160,7 +182,7 @@ def main():
     for index_path in targets:
         if not index_path.exists():
             continue
-        result = process_index(index_path, dry_run=args.dry_run)
+        result = process_index(index_path, dry_run=args.dry_run, refresh=args.refresh)
         bucket = result.split(":")[0]
         counts[bucket] = counts.get(bucket, 0) + 1
         if bucket in ("updated", "would-update") and len(samples) < 3:

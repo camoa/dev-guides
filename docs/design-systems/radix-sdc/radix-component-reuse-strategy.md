@@ -742,4 +742,4 @@ props:
 #### See Also
 - [8.1 Radix Component Catalog](#81-radix-component-catalog)
 - [3.5 SDC Component Best Practices](sdc-component-best-practices.md)
-- [Design System Bootstrap Mapping Guide](/home/camoa/workspace/claude_memory/guides/design-system-bootstrap-mapping.md)
+- [Design System Bootstrap Mapping](https://camoa.github.io/dev-guides/design-systems/bootstrap/)

@@ -32,7 +32,7 @@ guide-meta:
 
 | I need to... | Guide | Summary |
 |-------------|-------|---------|
-| Decide how many editorial roles and which content permissions each gets | [Editorial Role & Permission Model](editorial-role-permission-model.md) | The own/any permission model, the single-role (`content_editor`) vs two-tier (`author`/`editor`) decision, and provisioning permissions through recipe `grantPermissions` actions rather than baked-in role config or `is_admin`. |
+| Decide how many editorial roles and which content permissions each gets | [Editorial Role & Permission Model](editorial-role-permission-model.md) | Editorial roles are composed from own/any permission PAIRS (create, edit own/any, delete own/any, view own/any unpublished). Drupal CMS ships one content_editor role whose permissions accrete across recipes; demo_umami ships a two-tier author/editor split. Grant permissions via config actions, never is_admin. |
 
 ## Content Moderation
 

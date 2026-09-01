@@ -6,9 +6,10 @@ description: Use when a Drupal project enters the implementation phase and must 
 # Metadata — read only after a match.
 label: Coding standards and test discipline (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.2.0
+version: 0.3.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
+  - development/tdd-spec-driven
   - drupal/tdd
   - drupal/testing
   - drupal/security

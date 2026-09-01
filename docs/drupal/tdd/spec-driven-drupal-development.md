@@ -109,6 +109,8 @@ class ContentExportTest extends BrowserTestBase {
 5. Run tests, iterate until green
 6. Ask Claude Code to refactor while keeping tests green
 
+**Benefits**: Faster test generation, consistent patterns, catches missing test cases
+
 ## Common Mistakes
 - Writing implementation before tests -- defeats TDD purpose
 - Tests too broad (testing entire feature in one test) -- hard to debug failures

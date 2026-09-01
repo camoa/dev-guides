@@ -58,8 +58,8 @@ Every extracted guide MUST contain AT LEAST this structure. It is a minimum, not
 
 ```markdown
 ---
-description: One-line summary for llms.txt index
-tldr: One to two sentences stating the decision, the primary pattern, and the main gotcha. Dense enough to reason from without reading the full guide.
+description: "One-line summary for llms.txt index"
+tldr: "One to two sentences stating the decision, the primary pattern, and the main gotcha. Dense enough to reason from without reading the full guide."
 drupal_version: "11.x"
 ---
 
@@ -128,6 +128,8 @@ with the reason. If you cannot account for one, stop and report rather than writ
 
 Keep it under 240 characters. No code, no links — plain text. If "When to Use" starts with a markdown table or code fence, fall back to the `description:` field from the source guide's frontmatter (if present).
 
+**Always double-quote `tldr` and `description` in the emitted frontmatter** — write `tldr: "..."` and `description: "..."`, never a bare unquoted value. Both fields routinely contain a colon followed by a space, a backtick, or an arrow (`→`), and each of those breaks a plain YAML scalar: PyYAML treats `: ` as a mapping separator wherever it appears in unquoted text, and it treats a leading backtick as a reserved indicator it refuses to start a scalar with. A guide whose frontmatter fails to parse this way is invisible to every consumer that reads it — the index, the navigator, `check_staleness.py` — and the guide silently drops out of the site with no error at partition time. Before writing the line, escape any backslash as `\\` and any double quote inside the value as `\"` (backslashes first, so you don't double-escape the quotes you just inserted).
+
 **Handling outdated content:** Guides are a living document — when a pattern changes, **update or delete the guide**. Do not keep parallel "old vs new" versions. Version-specific guidance belongs in the `drupal_version:` field; historical context belongs in git history.
 
 ## Formatting Rules
@@ -170,6 +172,23 @@ guide-meta:
 - **Summary column**: copy the target guide's `tldr:` frontmatter value verbatim. This gives the navigator a pre-filter signal without a second fetch.
 - No explanations, just the routing table
 - Keep lean
+
+### Preserve frontmatter you did not generate
+
+When rewriting an existing `index.md`, carry over every top-level frontmatter key
+you do not own, unchanged. You own `description` and `guide-meta`. Anything else
+belongs to another system and dropping it destroys that system silently.
+
+`tracks:` is the current case. It records which upstream project the topic
+documents, the version its prose states, and when that was last checked; it
+drives `scripts/check_staleness.py` in the dev-guides repo. It is hand-maintained
+and cannot be regenerated from the source guide, so a rewrite that omits it loses
+the data permanently and the staleness report goes quiet about that topic.
+
+If you change what the topic documents — a new module version, a different
+project — leave `tracks.declared` alone anyway and say so in your return. Deciding
+whether the prose now states a new version is the caller's judgement, not a side
+effect of partitioning.
 
 ## guide-meta Population
 

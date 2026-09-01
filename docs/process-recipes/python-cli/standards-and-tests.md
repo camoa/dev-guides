@@ -6,7 +6,12 @@ description: Use when a Python project enters the implementation phase and must 
 # Metadata — read only after a match.
 label: Python implementation standards and tests
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
+# Machine-readable dependency declaration (recipe-loader resolves these
+# without parsing prose). The test-mutability rule is stack-neutral: it is
+# cited here, never restated per framework.
+requires_guides:
+  - development/tdd-spec-driven
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
