@@ -75,7 +75,8 @@ per-framework notes above the authoring rules. A CLI's end-to-end shape is a **t
 `implement`, checked under `review`, never a phase of its own.
 
 **`implement` owns the TDD loop; `e2e-setup` and `visual-regression` do not.** The tests an
-`implement` recipe selects a tier for are written before the code and run red then green — they
+`implement` recipe selects a tier for are written before the code and run red then green, where the
+red comes from a behaviour that does not exist yet rather than from code broken to force it — they
 constrain a design that does not exist yet. The suites the other two phases wire up run against
 something already built, cannot drive a design decision, and are therefore outer verification. The
 line is not whether a browser or a subprocess is involved: Drupal's `FunctionalJavascript` tier
