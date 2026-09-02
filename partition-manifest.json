@@ -228,10 +228,10 @@
     "guides_extracted": 14
   },
   "development/tdd-spec-driven": {
-    "source_hash": "edbc1620591de432ab4a8f7c1b88d2356283058d6fbf2753706574f6c1c99cd6",
-    "partitioned": "2026-09-01",
+    "source_hash": "e1ebc1472c7175286724f3b248575b1d11b26a8c35120d2367f1e3250d6e58fe",
+    "partitioned": "2026-09-02",
     "partitioned_by": "Carlos Ospina",
-    "guides_extracted": 22
+    "guides_extracted": 23
   },
   "development/solid-principles": {
     "source_hash": "9e7af3ae4ff853b150dfa9b73892e196d0050747458a0c1c97b3977cda5f310a",
@@ -528,7 +528,7 @@
     "guides_extracted": 12
   },
   "development/testing-strategy": {
-    "source_hash": "bbc6c445dcf84476c8d4df61a2f5e49311f325b836c67832b3afa1ae51d6151c",
+    "source_hash": "b614b670502274d90570957b878a09dbf8492c82db140a77817e76aa9f9a3fe7",
     "partitioned": "2026-09-02",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 18

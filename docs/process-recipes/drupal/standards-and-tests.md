@@ -37,7 +37,7 @@ The plugin owns the generic mechanism — when the implementation phase runs, th
 
 ## Opinion
 
-**The test is written first, and it is seen to fail.** No production code is written until a test for the behaviour exists and has been run to confirm it fails (RED) for the right reason — a missing implementation, not a typo in the test. Then the minimum code to pass (GREEN), then refactoring under a green bar (REFACTOR). A test that passes on its first run is suspect: it is probably asserting nothing. "Too simple to test" is not a reason to skip; simple now is complex later.
+**The test is written first, and it is seen to fail.** No production code is written until a test for the behaviour exists and has been run to confirm it fails (RED) for the right reason — the behaviour is absent. Not a typo in the test, and not working code you broke or reverted to produce the failure; that proves the test is sensitive, never that it came first (see `development/tdd-spec-driven/what-a-failing-test-proves`). Then the minimum code to pass (GREEN), then refactoring under a green bar (REFACTOR). A test that passes on its first run is suspect: it is probably asserting nothing. "Too simple to test" is not a reason to skip; simple now is complex later.
 
 **No static `\Drupal::` in new code.** New code names every collaborator it needs by constructor injection — `\Drupal::service(...)`, `\Drupal::entityTypeManager()`, and friends are a hidden, untestable dependency and are blocking in the service layer. Static `\Drupal::` is tolerated only in procedural `.module` glue and in code Drupal does not let you inject into, never in a class this phase writes. This is the implementation-time twin of the architecture phase's service rule, and it is what makes the code unit-testable in the first place.
 
@@ -139,7 +139,7 @@ Idempotent at the discipline level: re-running on a component whose tests alread
 
 After the recipe runs, verify:
 
-1. Every implemented behaviour has a PHPUnit test at a deliberately chosen tier (Unit / Kernel / Functional / FunctionalJavascript), and each test was seen to fail before the code existed — no test passed on its first run unexamined.
+1. Every implemented behaviour has a PHPUnit test at a deliberately chosen tier (Unit / Kernel / Functional / FunctionalJavascript), and each test was seen to fail before the code existed *because the behaviour was absent* — not because working code was broken or reverted, and no test passed on its first run unexamined.
 2. No new class reaches for a static `\Drupal::` service; every dependency is constructor-injected.
 3. The four security guarantees hold: Form API on every data-entry form (token present and checked), Twig auto-escaping intact (no unsanitised `|raw`/`#markup`), all database access parameterized, access checks on every route and operation.
 4. New code carries docblocks on classes and public methods, type hints on parameters and returns, no deprecated APIs, and Drupal layout/naming — and the code-quality-tools `phpcs --standard=Drupal,DrupalPractice` and `phpstan` run over the changed files is clean (or its findings are recorded for the gate).

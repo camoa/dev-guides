@@ -34,7 +34,7 @@ The plugin owns the generic implement phase — when it runs, the TDD discipline
 
 ## Opinion
 
-**The failing test comes first, and it fails for the right reason.** A test that fails with `ImportError` has not tested anything. Write it so it fails on the assertion, then make it pass.
+**The failing test comes first, and it fails for the right reason.** A test that fails with `ImportError` has not tested anything. Write it so it fails on the assertion, then make it pass. The right reason is that the behaviour is absent — deleting or breaking working code to watch an existing test fail proves the test is sensitive, never that it came first (see `development/tdd-spec-driven/what-a-failing-test-proves`).
 
 **Tests import the package; they do not shell out.** A test that runs the console script as a subprocess tests the wiring and nothing else, slowly. Test the entry point the design named. One test per console script may exercise the wiring end to end; the rest reach the library.
 
@@ -145,7 +145,7 @@ The recipe writes package code, tests and script wiring inside `code_path`. It d
 
 After the recipe runs, verify:
 
-1. Every implemented behaviour has a test at a deliberately chosen tier (plain unit / unit-with-collaborators / integration / entry-point / subprocess), it was written before the code, and it fails on its assertion when the code is removed — no test passed on its first run unexamined.
+1. Every implemented behaviour has a test at a deliberately chosen tier (plain unit / unit-with-collaborators / integration / entry-point / subprocess), it was written before the code, and it was seen to fail on its assertion *because the behaviour did not exist yet* — a failure produced by removing working code proves sensitivity, not authoring order, and no test passed on its first run unexamined.
 2. Tests import the package rather than running the console script, except for at most one end-to-end wiring test per script.
 3. No logic was added to a console script — the diff's script changes are argument parsing and wiring only.
 4. Every failure class the change introduces raises a distinct exception type, and the script maps it to the exit code the contract assigns.

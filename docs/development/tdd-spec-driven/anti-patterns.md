@@ -147,7 +147,31 @@ public function testUserCanPurchaseProduct() {
 }
 ```
 
-## Modern Anti-Patterns (2024-2025)
+## Modern Anti-Patterns (2024-2026)
+
+**Manufactured RED**
+Producing a failing run by breaking working code, and recording it as evidence the test came first.
+
+```python
+# BAD: the assertion was written while reading discount(), then watched to fail
+#      against a deliberately broken copy of it.
+def test_vip_discount():
+    # cites the implementation's own internal field, _rate
+    assert Order(vip=True)._rate == 0.9
+
+# $ git stash          # stashes the new test along with the code
+# $ pytest             # old test meets old code: green, and it looks correct
+# $ git stash pop
+# $ sed -i 's/0.9/1.0/' discount.py && pytest   # RED ❌ — but only because we broke it
+
+# GOOD: the assertion comes from the promised contract, and fails because
+#       nothing implements it yet.
+def test_vip_orders_get_ten_percent_off():
+    assert Order(vip=True, subtotal=100).total == 90
+# Output: AttributeError: 'Order' object has no attribute 'total' ❌
+```
+
+Both runs end in red. Only the second one constrains a design that does not exist yet. See [What a Failing Test Proves](what-a-failing-test-proves.md) for the three states a test can be in when it is written, and what each one proves.
 
 **The Mockery**
 Over-mocking that tests mocks instead of real code.
@@ -269,11 +293,13 @@ func ProcessOrder(order *Order) error {
 - Hard-coded dates/times/random values - Use dependency injection or test doubles for non-deterministic inputs
 - Assertions with no failure message - When test fails, message should explain what broke
 - Copy-paste test code - Leads to duplication and maintenance burden; use test helpers/factories
+- Recording a red run as proof of test-first without asking why it failed - Breaking working code produces red too, and proves only that the test is sensitive (see [What a Failing Test Proves](what-a-failing-test-proves.md))
 - Not deleting obsolete tests - Old tests for removed features waste time and confuse developers. The change that removes the feature removes its tests, in the same commit. A reviewer that judges a test obsolete raises a finding and does not delete it (see [Changing Existing Tests](changing-existing-tests.md))
 
 ## See Also
 - Previous: [Refactoring with Confidence](refactoring-confidence.md) | Next: [Security Best Practices](security-best-practices.md)
 - Related: [Unit Testing Fundamentals](unit-testing-fundamentals.md) (what makes good tests)
 - Related: [Test Doubles](test-doubles.md) (when to mock)
+- Related: [What a Failing Test Proves](what-a-failing-test-proves.md) (absence-RED, mutation-RED and green on arrival)
 - Reference: [TDD Anti-Patterns by James Carr](https://marabesi.com/tdd/tdd-anti-patterns.html)
 - Reference: [Software Testing Anti-patterns](https://blog.codepipes.com/testing/software-testing-antipatterns.html)

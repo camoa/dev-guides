@@ -144,7 +144,7 @@ After the recipe runs, verify:
 4. Each hook binds a recognised event and a valid handler, uses exec form with braced `${CLAUDE_*}` placeholders and an explicit timeout, and writes nothing to `/dev/tty`.
 5. Every component was paper-tested before being trusted, and every external reference it names — tool, sibling skill, flag, API symbol — was verified to resolve; what the trace surfaced was fixed.
 6. Each paper-test traces the component against what the design said it must do, not against the component's own body, and no trace duplicates a rule `/plugin-creation-tools:validate` already enforces deterministically.
-7. Where the change ships executable code, that code has a test at a deliberately chosen tier, written before it and seen to fail.
+7. Where the change ships executable code, that code has a test at a deliberately chosen tier, written before it and seen to fail *because the behaviour was absent* — not because working code was broken or reverted (see `development/tdd-spec-driven/what-a-failing-test-proves`).
 8. The blocking structural verdict was left to review — this phase returned authored, paper-tested components and their trace results, not an acceptance decision.
 9. Every pre-existing test the change modified or deleted was changed by a role the mutability matrix permits — the only rows that may delete are a feature removal taking its own tests in the same commit; RED authoring is the only row that writes an assertion, and GREEN, REFACTOR and a bug fix change none. A reviewer that wanted a test changed filed a finding instead. See `development/tdd-spec-driven`.
 
