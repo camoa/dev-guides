@@ -210,9 +210,9 @@
     "guides_extracted": 13
   },
   "design-systems/bootstrap": {
-    "source_hash": "7b97291a322efc309f59abd96008a643ee390078259c03b37036638c20682d1c",
-    "partitioned": "2026-02-13",
-    "partitioned_by": "camoa",
+    "source_hash": "416d79a6cb33cb051f14019ac3bab93f216abf80fc290def02d8b870f38e97ca",
+    "partitioned": "2026-09-01",
+    "partitioned_by": "Carlos Ospina",
     "guides_extracted": 16
   },
   "design-systems/radix-sdc": {

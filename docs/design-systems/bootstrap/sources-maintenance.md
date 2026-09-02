@@ -73,7 +73,7 @@ description: "Source references and maintenance manifest for the bootstrap guide
 
 | Topic | Source Location | Description |
 |-------|----------------|-------------|
-| Design System Recognition Guide | `/home/camoa/workspace/claude_memory/guides/design_system_recognition_guide.md` | Framework for identifying design system layers (tokens, atoms, molecules, organisms) |
+| Design System Recognition Guide | [Foundation Layer: Design Tokens](../recognition/foundation-layer-design-tokens.md) | Framework for identifying design system layers (tokens, atoms, molecules, organisms) |
 | Bootstrap Variables Source | `/core/scss/_variables.scss` | All Bootstrap SCSS variables |
 | Bootstrap Maps Source | `/core/scss/_maps.scss` | Bootstrap SCSS maps ($theme-colors, $spacers, etc.) |
 | Bootstrap Mixins Source | `/core/scss/mixins/_*.scss` | Bootstrap SCSS mixins (buttons, breakpoints, etc.) |
