@@ -1,5 +1,5 @@
 ---
-description: Create custom ECA Event plugins with EventBase and derivers for business logic triggers
+description: "Create custom ECA Event plugins with EventBase and derivers for business logic triggers"
 tldr: "Create custom Event plugins when you need to trigger ECA workflows based on custom application logic, third-party integrations, or domain-specific business events that core Drupal events don't cover."
 drupal_version: "11.x"
 ---
@@ -80,11 +80,11 @@ class MyEvent extends EventBase {
 
 ## Common Mistakes
 
-- **Wrong**: Missing event deriver → **Right**: Plugin won't discover event definitions
-- **Wrong**: Wrong event tags → **Right**: Events show in wrong admin UI categories
-- **Wrong**: Not implementing `getData()` for tokens → **Right**: Event data unavailable to actions
-- **Wrong**: Missing `appliesForWildcard()` → **Right**: Event filtering doesn't work
-- **Wrong**: Forgetting to dispatch event in code → **Right**: Events defined but never triggered
+- Missing event deriver → Plugin won't discover event definitions
+- Wrong event tags → Events show in wrong admin UI categories
+- Not implementing `getData()` for tokens → Event data unavailable to actions
+- Missing `appliesForWildcard()` → Event filtering doesn't work
+- Forgetting to dispatch event in code → Events defined but never triggered
 
 ## See Also
 

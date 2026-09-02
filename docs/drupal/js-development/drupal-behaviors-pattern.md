@@ -1,6 +1,6 @@
 ---
-description: Core Drupal JavaScript pattern for AJAX-compatible DOM manipulation and initialization
-tldr: "**Always** for DOM manipulation in Drupal. Behaviors are the foundation of Drupal JavaScript - they work with AJAX, BigPipe, and dynamic content loading."
+description: "Core Drupal JavaScript pattern for AJAX-compatible DOM manipulation and initialization"
+tldr: "Always use Drupal.behaviors for DOM manipulation, since $(document).ready() only runs once and breaks with AJAX and BigPipe. Gotcha: skip the once() wrapper or context parameter and behaviors re-scan the whole DOM or double-bind on every AJAX update."
 drupal_version: "11.x"
 ---
 
@@ -19,7 +19,6 @@ Drupal.behaviors is an object where each property is a behavior. Behaviors have 
 ## Pattern
 
 **Standard behavior structure**:
-
 ```javascript
 (function (Drupal, once) {
   'use strict';
@@ -45,7 +44,6 @@ Drupal.behaviors is an object where each property is a behavior. Behaviors have 
 ```
 
 **Global operation pattern** (runs once per page):
-
 ```javascript
 once('global-init', 'html').forEach(function () {
   // Page-level initialization
@@ -53,22 +51,22 @@ once('global-init', 'html').forEach(function () {
 });
 ```
 
+**Reference examples**:
+- `/core/misc/details-aria.js` - ARIA pattern
+- `/core/misc/progress.js` - Complex behavior with classes
+
+**Documentation**: https://www.drupal.org/docs/drupal-apis/javascript-api/javascript-api-overview
+
 ## Common Mistakes
 
-- **Wrong**: Using $(document).ready() → **Right**: Use Drupal.behaviors
-  - **Why**: Only runs once, breaks with AJAX/BigPipe
-- **Wrong**: Not using context parameter → **Right**: Always query within context
-  - **Why**: Scans entire DOM every time, severe performance penalty
-- **Wrong**: Missing once() wrapper → **Right**: Wrap element processing with once()
-  - **Why**: Code runs multiple times on same element, duplicate event bindings, memory leaks
-- **Wrong**: No detach() implementation → **Right**: Clean up in detach() when using intervals/global listeners
-  - **Why**: Memory leaks from event listeners and intervals that never clean up
-- **Wrong**: jQuery dependency in IIFE without declaring it → **Right**: Declare all IIFE parameters
-  - **Why**: Code breaks if jQuery loads after your script
+- **Using $(document).ready()** - WHY: Only runs once, breaks with AJAX/BigPipe
+- **Not using context parameter** - WHY: Scans entire DOM every time, severe performance penalty
+- **Missing once() wrapper** - WHY: Code runs multiple times on same element, duplicate event bindings, memory leaks
+- **No detach() implementation** - WHY: Memory leaks from event listeners and intervals that never clean up
+- **jQuery dependency in IIFE without declaring it** - WHY: Code breaks if jQuery loads after your script
 
 ## See Also
 
 - [Once API](once-api.md) - Preventing duplicate processing
 - [Event Handling](event-handling.md) - Event delegation patterns
-- Reference: `/core/misc/details-aria.js` - ARIA pattern example
 - Reference: [Official Behaviors Documentation](https://www.drupal.org/docs/drupal-apis/javascript-api/javascript-api-overview)

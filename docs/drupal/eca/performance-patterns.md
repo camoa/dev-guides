@@ -1,5 +1,5 @@
 ---
-description: Cache API calls, batch entity loading, and optimize token access in ECA plugins
+description: "Cache API calls, batch entity loading, and optimize token access in ECA plugins"
 tldr: "Apply performance optimizations when plugins perform expensive operations like external API calls, complex calculations, or repeated database queries. Cache results, batch operations, and avoid N+1 queries."
 drupal_version: "11.x"
 ---
@@ -84,12 +84,12 @@ class MyAction extends ConfigurableActionBase {
 
 ## Common Mistakes
 
-- **Wrong**: No cache invalidation → **Right**: Stale data persists indefinitely (use cache tags)
-- **Wrong**: Caching user-specific data in shared cache → **Right**: Privacy/security issue
-- **Wrong**: Loading entities in loops → **Right**: N+1 query problem (use loadMultiple)
-- **Wrong**: Not setting cache expiration → **Right**: Memory bloat over time
-- **Wrong**: Premature optimization → **Right**: Profile first, then optimize hot paths
-- **Wrong**: Caching in development → **Right**: Can't see changes (clear cache or disable caching)
+- No cache invalidation → Stale data persists indefinitely (use cache tags)
+- Caching user-specific data in shared cache → Privacy/security issue
+- Loading entities in loops → N+1 query problem (use loadMultiple)
+- Not setting cache expiration → Memory bloat over time
+- Premature optimization → Profile first, then optimize hot paths
+- Caching in development → Can't see changes (clear cache or disable caching)
 
 ## See Also
 
@@ -98,5 +98,5 @@ class MyAction extends ConfigurableActionBase {
 - [Debugging Workflows](debugging-workflows.md) for profiling
 
 **References:**
-- Drupal: https://api.drupal.org/api/drupal/core!core.api.php/group/cache
-- Performance: https://www.drupal.org/docs/drupal-apis/cache-api
+- Drupal: `https://api.drupal.org/api/drupal/core!core.api.php/group/cache`
+- Performance: `https://www.drupal.org/docs/drupal-apis/cache-api`

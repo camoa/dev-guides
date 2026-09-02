@@ -1,6 +1,6 @@
 ---
-description: Define JavaScript libraries in *.libraries.yml with dependencies and configuration
-tldr: "Use every time you add JavaScript to a module or theme. All JS must be defined in a library."
+description: "Define JavaScript libraries in *.libraries.yml with dependencies and configuration"
+tldr: "Every JS addition to a module or theme must be defined in a library. Core pattern: MODULE.libraries.yml with js:, dependencies:, and optional css:/version:/attributes:. Gotcha: missing core/drupal or core/once breaks behaviors and once() respectively."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use every time you add JavaScript to a module or theme. All JS must be defined in a library.
+> Every time you add JavaScript to a module or theme. All JS must be defined in a library.
 
 ## Decision
 
@@ -17,7 +17,6 @@ Libraries are defined in `*.libraries.yml` files and contain JavaScript files, C
 ## Pattern
 
 **Basic library structure** (`MODULE.libraries.yml`):
-
 ```yaml
 feature:
   js:
@@ -28,7 +27,6 @@ feature:
 ```
 
 **Advanced library with options**:
-
 ```yaml
 admin:
   version: 1.x
@@ -47,7 +45,6 @@ admin:
 ```
 
 **External library**:
-
 ```yaml
 external:
   js:
@@ -58,23 +55,22 @@ external:
         defer: true
 ```
 
+**Reference examples**:
+- `/core/core.libraries.yml` - Core library definitions
+- `/modules/contrib/webform/webform.libraries.yml` - Complex contrib patterns
+
+**Official documentation**: https://www.drupal.org/docs/develop/creating-modules/adding-assets-css-js-to-a-drupal-module-via-librariesyml
+
 ## Common Mistakes
 
-- **Wrong**: No core/drupal dependency → **Right**: Always include core/drupal
-  - **Why**: Drupal.behaviors won't exist, code breaks
-- **Wrong**: No core/once dependency → **Right**: Include core/once when using once()
-  - **Why**: once() function undefined, initialization fails
-- **Wrong**: No version number → **Right**: Include version for cache busting
-  - **Why**: Cache busting issues, outdated JS served
-- **Wrong**: Loading everything in header → **Right**: Footer is default and correct for most JS
-  - **Why**: Blocks rendering, poor performance
-- **Wrong**: No defer attribute → **Right**: Use defer for non-blocking load
-  - **Why**: Scripts block HTML parsing, slower page loads
+- **Missing core/drupal dependency** - WHY: Drupal.behaviors won't exist, code breaks
+- **Missing core/once dependency** - WHY: once() function undefined, initialization fails
+- **Omitting version number** - WHY: Cache busting issues, outdated JS served
+- **Loading everything in header** - WHY: Blocks rendering, poor performance. Footer is default and correct for most JS
+- **Not using defer attribute** - WHY: Scripts block HTML parsing, slower page loads
 
 ## See Also
 
 - [Core Dependencies](core-dependencies.md) - Common dependency patterns
 - [Conditional Loading](conditional-loading.md) - When to load libraries
 - [Performance Optimization](performance-optimization.md) - Library performance patterns
-- Reference: `/core/core.libraries.yml` - Core library examples
-- Reference: [Adding Assets to Modules](https://www.drupal.org/docs/develop/creating-modules/adding-assets-css-js-to-a-drupal-module-via-librariesyml)

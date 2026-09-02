@@ -49,12 +49,12 @@ Reference: `/core/lib/Drupal/Core/Theme/Plugin/IconExtractor/PathExtractor.php`
 
 ## Common Mistakes
 
-- **Wrong**: Using a `.webp` or `.jpg` local source → **Right**: Not in `ALLOWED_EXTENSION`; the pack is empty and only a logger warning records it
-- **Wrong**: Putting `{icon_id}` in a remote URL → **Right**: Placeholders are a local-path feature; for URLs the filename becomes the icon ID
-- **Wrong**: Using for user-uploaded content → **Right**: High XSS risk, use Media field with validation
-- **Wrong**: No lazy loading → **Right**: Add `loading="lazy"` for below-fold icons
-- **Wrong**: Missing alt text for semantic icons → **Right**: Decorative icons use empty alt, semantic icons need descriptive alt
-- **Wrong**: Hardcoded dimensions for responsive icons → **Right**: Use CSS or `srcset` for responsive images
+- Using a `.webp` or `.jpg` local source → Not in `ALLOWED_EXTENSION`; the pack is empty and only a logger warning records it
+- Putting `{icon_id}` in a remote URL → Placeholders are a local-path feature; for URLs the filename becomes the icon ID
+- Using for user-uploaded content → High XSS risk, use Media field with validation
+- No lazy loading → Add `loading="lazy"` for below-fold icons
+- Missing alt text for semantic icons → Decorative icons use empty alt, semantic icons need descriptive alt
+- Hardcoded dimensions for responsive icons → Use CSS or `srcset` for responsive images
 
 ## See Also
 

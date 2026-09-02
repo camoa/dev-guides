@@ -89,11 +89,11 @@ Reference: `/core/assets/schemas/v1/icon_pack.schema.json` for the complete sche
 
 ## Common Mistakes
 
-- **Wrong**: Adding `$schema:` to `*.icons.yml` → **Right**: Fatal at discovery, and the URL usually cited points at the SDC schema anyway
-- **Wrong**: Missing `extractor` or `template` → **Right**: `IconPackConfigErrorException` when json-schema validation is available; without it, `IconExtractorBase::createIcon()` throws "Missing `template` in your definition" at render time instead
-- **Wrong**: Expecting `settings: default:` to reach the template → **Right**: It never does; always mirror it with `|default()` in the template
-- **Wrong**: Template without accessibility → **Right**: Include `aria-hidden="true"` for decorative icons
-- **Wrong**: GPL-incompatible licenses → **Right**: Set `gpl-compatible: false` for non-compatible licenses
+- Adding `$schema:` to `*.icons.yml` → Fatal at discovery, and the URL usually cited points at the SDC schema anyway
+- Missing `extractor` or `template` → `IconPackConfigErrorException` when json-schema validation is available; without it, `IconExtractorBase::createIcon()` throws "Missing `template` in your definition" at render time instead
+- Expecting `settings: default:` to reach the template → It never does; always mirror it with `|default()` in the template
+- Template without accessibility → Include `aria-hidden="true"` for decorative icons
+- GPL-incompatible licenses → Set `gpl-compatible: false` for non-compatible licenses
 
 ## See Also
 

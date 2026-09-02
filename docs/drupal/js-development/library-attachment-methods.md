@@ -1,6 +1,6 @@
 ---
-description: Methods for attaching JavaScript libraries via PHP render arrays and hooks
-tldr: "Use when deciding how to attach libraries to pages based on context and conditions."
+description: "Methods for attaching JavaScript libraries via PHP render arrays and hooks"
+tldr: "Choose where to attach a library via #attached based on scope: global (hooks), form-specific (form arrays), template-specific (preprocess), or element-specific (render elements). Gotcha: drupal_add_js() was removed in Drupal 8+."
 drupal_version: "11.x"
 ---
 
@@ -8,24 +8,15 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when deciding how to attach libraries to pages based on context and conditions.
+> Choosing how to attach libraries to pages based on context and conditions.
 
 ## Decision
 
-| Situation | Choose | Why |
-|-----------|--------|-----|
-| Global site feature | Theme preprocess hook | Applies to all pages of that template type |
-| Form-specific enhancement | Form buildForm method | Scoped to that form only |
-| Template-specific feature | Preprocess for that template | Controlled per template type |
-| Element-specific behavior | Render element `#attached` | Tightly coupled to element |
-| Controller/route response | Controller return array | Associated with that route |
-
-Libraries attach via PHP render arrays using `#attached` property. Choose attachment location based on scope.
+Libraries attach via PHP render arrays using `#attached` property. Choose attachment location based on scope: global (hooks), form-specific (form arrays), template-specific (preprocess), or element-specific (render elements).
 
 ## Pattern
 
 **Theme/preprocess attachment**:
-
 ```php
 function theme_preprocess_page(&$variables) {
   $variables['#attached']['library'][] = 'module/feature';
@@ -33,7 +24,6 @@ function theme_preprocess_page(&$variables) {
 ```
 
 **Form attachment**:
-
 ```php
 public function buildForm(array $form, FormStateInterface $form_state) {
   $form['#attached']['library'][] = 'module/form-enhancement';
@@ -42,7 +32,6 @@ public function buildForm(array $form, FormStateInterface $form_state) {
 ```
 
 **Render element attachment**:
-
 ```php
 $build['element'] = [
   '#markup' => '<div class="enhanced"></div>',
@@ -53,7 +42,6 @@ $build['element'] = [
 ```
 
 **Controller/route attachment**:
-
 ```php
 public function content() {
   return [
@@ -65,14 +53,10 @@ public function content() {
 
 ## Common Mistakes
 
-- **Wrong**: Attaching globally when conditional loading better → **Right**: Use conditional attachment
-  - **Why**: Unnecessary JS on every page, poor performance
-- **Wrong**: Using drupal_add_js() → **Right**: Use `#attached` render array property
-  - **Why**: Drupal 7 API, removed in Drupal 8+
-- **Wrong**: Attaching in .info.yml globally → **Right**: Use conditional PHP attachment
-  - **Why**: No conditional control, loads everywhere regardless of need
-- **Wrong**: Multiple attachments of same library → **Right**: Review architecture
-  - **Why**: Drupal deduplicates automatically, indicates architectural issue
+- **Attaching globally when conditional loading better** - WHY: Unnecessary JS on every page, poor performance
+- **Using drupal_add_js()** - WHY: Drupal 7 API, removed in Drupal 8+
+- **Attaching in .info.yml globally** - WHY: No conditional control, loads everywhere regardless of need
+- **Multiple attachments of same library** - WHY: Drupal deduplicates automatically, indicates architectural issue
 
 ## See Also
 

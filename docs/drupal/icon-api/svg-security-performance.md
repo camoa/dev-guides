@@ -128,11 +128,11 @@ Reference: `/core/lib/Drupal/Core/Theme/Plugin/IconExtractor/SvgExtractor.php`, 
 
 ## Common Mistakes
 
-- **Wrong**: Believing the `svg` extractor sanitizes → **Right**: It does not; review the files instead
-- **Wrong**: Trusting user-uploaded SVG → **Right**: Never use Icon API for user content, use Media with SVG sanitizer
-- **Wrong**: Expecting a CSP to protect an inlined SVG → **Right**: CSP `img-src` governs `path` icons; an inlined `<script>` from an `svg` pack is same-origin page content
-- **Wrong**: Running svgo with `removeViewBox` → **Right**: Breaks `{{ attributes }}`-based scaling
-- **Wrong**: Storing sensitive data in SVG metadata → **Right**: SVGO removes metadata, but verify manually
+- Believing the `svg` extractor sanitizes → It does not; review the files instead
+- Trusting user-uploaded SVG → Never use Icon API for user content, use Media with SVG sanitizer
+- Expecting a CSP to protect an inlined SVG → CSP `img-src` governs `path` icons; an inlined `<script>` from an `svg` pack is same-origin page content
+- Running svgo with `removeViewBox` → Breaks `{{ attributes }}`-based scaling
+- Storing sensitive data in SVG metadata → SVGO removes metadata, but verify manually
 
 ## See Also
 

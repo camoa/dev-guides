@@ -54,11 +54,11 @@ Reference: `/core/lib/Drupal/Core/Theme/Icon/` for API classes and interfaces; `
 
 ## Common Mistakes
 
-- **Wrong**: Calling `icon('pack:id')` or `icon('pack:id', {…})` → **Right**: Fatal. `getIconRenderable(?string $pack_id, ?string $icon_id, ?array $settings = [])` has no default on `$icon_id`, and the file is `declare(strict_types=1)`; always pass three arguments
-- **Wrong**: Manual SVG embedding in templates → **Right**: Use icon packs for discovery, caching, and a single place to change markup
-- **Wrong**: Assuming the SVG extractor sanitizes → **Right**: It does not; it only refuses remote sources. Only ship SVG files you control
-- **Wrong**: One pack per icon → **Right**: Group related icons in packs for performance, organization
-- **Wrong**: Missing accessibility attributes → **Right**: Include `aria-hidden="true"` for decorative icons, `aria-label` for semantic
+- Calling `icon('pack:id')` or `icon('pack:id', {…})` → Fatal. `getIconRenderable(?string $pack_id, ?string $icon_id, ?array $settings = [])` has no default on `$icon_id`, and the file is `declare(strict_types=1)`; always pass three arguments
+- Manual SVG embedding in templates → Use icon packs for discovery, caching, and a single place to change markup
+- Assuming the SVG extractor sanitizes → It does not; it only refuses remote sources. Only ship SVG files you control
+- One pack per icon → Group related icons in packs for performance, organization
+- Missing accessibility attributes → Include `aria-hidden="true"` for decorative icons, `aria-label` for semantic
 
 ## See Also
 

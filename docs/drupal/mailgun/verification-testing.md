@@ -1,24 +1,24 @@
 ---
-description: Verify Mailgun + Drupal integration end-to-end using curl, drush eval, module test form, password reset, and test mode.
-tldr: Always run a direct curl test first to isolate Mailgun credential and DNS issues from Drupal, then confirm with drush eval through the full mail stack; API success ("Queued. Thank you.") does not mean delivered — check Mailgun Logs for actual delivery status.
-drupal_version: "11.x"
+description: "Verify Mailgun + Drupal integration end-to-end using curl, drush eval, module test form, password reset, and test mode."
+tldr: "Always run a direct curl test first to isolate Mailgun credential and DNS issues from Drupal, then confirm with drush eval through the full mail stack; API success (\"Queued. Thank you.\") does not mean delivered — check Mailgun Logs for actual delivery status."
+drupal_version: "10.3+/11/12"
 ---
 
 # Verification & Testing
 
 ## When to Use
 
-> Use this after every configuration change. End-to-end verification ensures DNS, API key, region, routing, and Drupal mail templates all align.
+> After every configuration change. End-to-end verification ensures DNS, API key, region, routing, and Drupal mail templates all align.
 
 ## Decision
 
 | Test type | Tool | When |
-|-----------|------|------|
+|---|---|---|
 | API connectivity | `curl` direct to Mailgun API | First check — isolates Drupal from credential issues |
-| Drush evaluation | `drush php:eval` with MailManager | Confirms full Drupal stack including `hook_mail` |
+| Drush evaluation | `drush php:eval` with MailManager | Confirms full Drupal stack including hook_mail |
 | Module test form | `/admin/config/services/mailgun/test` | Quick UI sanity check |
 | Production smoke test | Real account password reset | Validates end-to-end UX |
-| Automated test | PHPUnit `MailInterface` mock OR Mailgun test mode | CI |
+| Automated test | PHPUnit `MailInterface` mock OR Mailgun test mode | Continuous integration |
 
 ## Pattern
 
@@ -37,7 +37,7 @@ curl -s --user "api:$MAILGUN_API_KEY" \
   -F text='If you got this, Mailgun + DNS work.'
 ```
 
-Success: `{"id":"<...>","message":"Queued. Thank you."}`.
+Successful response: `{"id":"<...>","message":"Queued. Thank you."}`. If you get this, Mailgun is reachable.
 
 #### Test 2 — Drush eval (Drupal stack)
 
@@ -52,36 +52,49 @@ ddev drush php:eval "
 "
 ```
 
+If "sent" but no email arrives:
+- Check Mailgun dashboard → Logs → Status of the message
+- If `Rejected: domain not authorized`: sandbox restriction
+- If `Failed: relay denied`: wrong region
+
 #### Test 3 — Module test form
 
-`/admin/config/services/mailgun/test` (requires `mailgun_test_form` submodule). The form output shows the exact API request and response.
+Navigate to `/admin/config/services/mailgun/test` (requires `mailgun_test_form` submodule enabled). Fill in recipient, click Send.
+
+Useful because the form output shows the exact API request and response.
 
 #### Test 4 — Real password reset
 
-Most common transactional path. Login page → "Reset your password" → enter email → check inbox. If using Mailsystem, this exercises the User module's `password_reset` key routing through Mailgun.
+The most common transactional path. From login page → "Reset your password" → enter email → check inbox.
+
+If using Mailsystem, this exercises the User module's mail key (`password_reset`) routing through Mailgun.
 
 #### Test 5 — Test mode (CI)
+
+Enable Mailgun "Test mode" globally OR per-environment:
 
 ```php
 // settings.test.php
 $config['mailgun.settings']['test_mode'] = TRUE;
 ```
 
-Or mock the mail manager entirely:
+Test mode: Mailgun accepts the API call but does not deliver. Useful for CI tests that exercise the send path without real email.
+
+For full mock isolation, override the mail manager service:
 
 ```php
+// In test setup
 $container->set('plugin.manager.mail', new TestMailCollector());
-// assert $collector->getMails() after operations
 ```
 
-## Common Mistakes
+Then assert `$collector->getMails()` after operations.
 
+## Common Mistakes
 - **Wrong**: Skipping Test 1 (curl) when Drupal mail "doesn't work" → **Right**: Curl rules out region, API key, and DNS issues independently of Drupal.
 - **Wrong**: Testing only with admin's email → **Right**: Sandbox domain authorizes 5 recipients only; admin's email might be authorized while real users aren't.
 - **Wrong**: Sending tests from a domain that hasn't propagated DNS → **Right**: Wait for green checkmarks in Mailgun's domain page (5-60 min typically).
-- **Wrong**: Confusing "Queued. Thank you." with "Delivered" → **Right**: Check Mailgun dashboard → Logs for actual delivery status.
+- **Wrong**: Confusing "Queued. Thank you." (API success) with "Delivered" (actual receipt) → **Right**: Check Mailgun dashboard → Logs for actual delivery status.
 
 ## See Also
-
 - [Common Errors](common-errors.md)
-- Reference: [Mailgun logs UI](https://documentation.mailgun.com/docs/mailgun/user-manual/sending-email-with-mailgun/#logs)
+- Reference: [Mailgun logs UI](https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/logs)

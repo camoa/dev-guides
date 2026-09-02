@@ -103,11 +103,11 @@ Reference: `/core/lib/Drupal/Core/Cache/` for cache API.
 
 ## Common Mistakes
 
-- **Wrong**: Expecting a cache clear on `*.icons.yml` change → **Right**: Nothing watches those files; run `drush cr` (or invalidate the tags) after every edit
-- **Wrong**: Deleting a cid named `icon_pack_plugin` → **Right**: That is a tag. The cid is `icon_pack` in `cache.discovery`
-- **Wrong**: Calling `$this->getPackId()` in an extractor → **Right**: No such method; use `$this->configuration['id']`
-- **Wrong**: Keying `discoverIcons()` by bare icon ID → **Right**: Must be `pack_id:icon_id`; use `IconDefinition::createIconId()`
-- **Wrong**: Infinite cache age for dynamic icons → **Right**: Set an appropriate expiry for API-sourced icons
+- Expecting a cache clear on `*.icons.yml` change → Nothing watches those files; run `drush cr` (or invalidate the tags) after every edit
+- Deleting a cid named `icon_pack_plugin` → That is a tag. The cid is `icon_pack` in `cache.discovery`
+- Calling `$this->getPackId()` in an extractor → No such method; use `$this->configuration['id']`
+- Keying `discoverIcons()` by bare icon ID → Must be `pack_id:icon_id`; use `IconDefinition::createIconId()`
+- Infinite cache age for dynamic icons → Set an appropriate expiry for API-sourced icons
 
 ## See Also
 

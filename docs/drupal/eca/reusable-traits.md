@@ -1,5 +1,5 @@
 ---
-description: Use ECA traits for form fields, entity saving, lists, and YAML config to avoid code duplication
+description: "Use ECA traits for form fields, entity saving, lists, and YAML config to avoid code duplication"
 tldr: "Use ECA's built-in traits to avoid duplicating complex logic that's already implemented and tested. Traits encapsulate patterns like form field lookup, entity saving, list operations, and YAML configuration."
 drupal_version: "11.x"
 ---
@@ -69,11 +69,11 @@ class MyListCondition extends ConditionBase {
 
 ## Common Mistakes
 
-- **Wrong**: Duplicating trait logic in your plugin → **Right**: Maintenance nightmare when ECA updates
-- **Wrong**: Using wrong trait for the job → **Right**: FormFieldPluginTrait requires FormFieldActionBase
-- **Wrong**: Not reading trait source code → **Right**: Missing useful methods the trait provides
-- **Wrong**: Trait method name conflicts → **Right**: Use `use TraitName { method as renamedMethod; }`
-- **Wrong**: Reimplementing what traits provide → **Right**: Wasted effort, bugs
+- Duplicating trait logic in your plugin → Maintenance nightmare when ECA updates
+- Using wrong trait for the job → FormFieldPluginTrait requires FormFieldActionBase
+- Not reading trait source code → Missing useful methods the trait provides
+- Trait method name conflicts → Use `use TraitName { method as renamedMethod; }`
+- Reimplementing what traits provide → Wasted effort, bugs
 
 ## See Also
 
@@ -82,5 +82,6 @@ class MyListCondition extends ConditionBase {
 - [Common Pitfalls](common-pitfalls.md) for trait usage errors
 
 **References:**
-- Traits: `/modules/contrib/eca/src/Plugin/` (FormFieldPluginTrait, EntitySaveTrait, etc.)
+- Traits: `/modules/contrib/eca/src/Plugin/` (FormFieldPluginTrait, FormFieldYamlTrait, etc.)
+- Trait: `/modules/contrib/eca/modules/content/src/Plugin/EntitySaveTrait.php`
 - Traits: `/modules/contrib/eca/modules/base/src/Plugin/` (ListCountTrait)

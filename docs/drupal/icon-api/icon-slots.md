@@ -88,11 +88,11 @@ Reference: `core/lib/Drupal/Core/Template/ComponentNodeVisitor.php` for how slot
 
 ## Common Mistakes
 
-- **Wrong**: Rendering a slot as `{{ slot_name }}` → **Right**: Works only via `include()`. Under `{% embed %}` it is undefined and the content silently disappears
-- **Wrong**: Declaring a slot `default:` and printing `{{ content }}` → **Right**: Two different names; nothing renders
-- **Wrong**: Assuming `required: true` on a slot is enforced → **Right**: `ComponentNodeVisitor::validateSlots()` reports *undeclared* slots, never missing ones
-- **Wrong**: Using slots for simple icons → **Right**: Props are simpler for standard icon rendering
-- **Wrong**: Missing slot documentation → **Right**: Document expected slot content in the component description
+- Rendering a slot as `{{ slot_name }}` → Works only via `include()`. Under `{% embed %}` it is undefined and the content silently disappears
+- Declaring a slot `default:` and printing `{{ content }}` → Two different names; nothing renders
+- Assuming `required: true` on a slot is enforced → `ComponentNodeVisitor::validateSlots()` reports *undeclared* slots, never missing ones
+- Using slots for simple icons → Props are simpler for standard icon rendering
+- Missing slot documentation → Document expected slot content in the component description
 
 ## See Also
 

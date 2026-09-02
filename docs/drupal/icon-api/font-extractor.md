@@ -107,14 +107,14 @@ Reference: Font extractor provided by UI Icons contrib module. Core Drupal does 
 
 ## Common Mistakes
 
-- **Wrong**: Listing a `.woff2` source → **Right**: Silently skipped; the pack ends up empty. Use `.woff`, `.ttf`, `.json`, `.yaml`, or `.codepoints`
-- **Wrong**: Missing `library:` in the pack → **Right**: Icons render as empty `<i>` elements because the `@font-face` never loads. `library:` on the pack is what makes `preRenderIcon()` attach it; a `libraries.yml` entry alone does nothing
-- **Wrong**: No `font-display: swap` → **Right**: FOUT (Flash of Unstyled Text) on slow connections
-- **Wrong**: Using icon fonts for new projects → **Right**: SVG extractors (core) offer better accessibility and performance
-- **Wrong**: Printing bare `{{ content }}` in a font template → **Right**: Only `.codepoints` sources set it, and then as literal hex text. Use `{{ content|default(icon_id) }}` or drop it and drive the glyph from CSS
-- **Wrong**: Trying to use font extractor without UI Icons module → **Right**: Not available in core, install `drupal/ui_icons` and enable `ui_icons_font`
-- **Wrong**: Inline styles instead of CSS classes → **Right**: Violates CSP, harder to maintain
-- **Wrong**: Missing accessibility attributes → **Right**: Use `aria-hidden="true"` and provide text alternatives
+- Listing a `.woff2` source → Silently skipped; the pack ends up empty. Use `.woff`, `.ttf`, `.json`, `.yaml`, or `.codepoints`
+- Missing `library:` in the pack → Icons render as empty `<i>` elements because the `@font-face` never loads. `library:` on the pack is what makes `preRenderIcon()` attach it; a `libraries.yml` entry alone does nothing
+- No `font-display: swap` → FOUT (Flash of Unstyled Text) on slow connections
+- Using icon fonts for new projects → SVG extractors (core) offer better accessibility and performance
+- Printing bare `{{ content }}` in a font template → Only `.codepoints` sources set it, and then as literal hex text. Use `{{ content|default(icon_id) }}` or drop it and drive the glyph from CSS
+- Trying to use font extractor without UI Icons module → Not available in core, install `drupal/ui_icons` and enable `ui_icons_font`
+- Inline styles instead of CSS classes → Violates CSP, harder to maintain
+- Missing accessibility attributes → Use `aria-hidden="true"` and provide text alternatives
 
 ## See Also
 

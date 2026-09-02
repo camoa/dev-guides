@@ -158,13 +158,13 @@ Reference: `/core/lib/Drupal/Core/Theme/Icon/IconExtractorInterface.php`
 
 ## Common Mistakes
 
-- **Wrong**: Keying `discoverIcons()` by bare icon ID → **Right**: Icons appear in the admin listing and render as nothing
-- **Wrong**: Overriding `loadIcon()` with a different signature → **Right**: Fatal at class load; the interface is `loadIcon(array $icon_data): ?IconDefinitionInterface`
-- **Wrong**: Calling `$this->getPackId()` → **Right**: No such method on `IconExtractorBase`; use `$this->configuration['id']`
-- **Wrong**: Reading config from `$this->configuration['my_key']` → **Right**: Extractor config is nested under `config:`
-- **Wrong**: Not implementing caching → **Right**: `discoverIcons()` runs on every cache rebuild, and for an HTTP source that is a slow, failure-prone rebuild
-- **Wrong**: Missing error handling → **Right**: An uncaught exception in `discoverIcons()` propagates out of `processDefinition()` and takes down the cache rebuild
-- **Wrong**: Not using dependency injection → **Right**: Inject services properly for testability
+- Keying `discoverIcons()` by bare icon ID → Icons appear in the admin listing and render as nothing
+- Overriding `loadIcon()` with a different signature → Fatal at class load; the interface is `loadIcon(array $icon_data): ?IconDefinitionInterface`
+- Calling `$this->getPackId()` → No such method on `IconExtractorBase`; use `$this->configuration['id']`
+- Reading config from `$this->configuration['my_key']` → Extractor config is nested under `config:`
+- Not implementing caching → `discoverIcons()` runs on every cache rebuild, and for an HTTP source that is a slow, failure-prone rebuild
+- Missing error handling → An uncaught exception in `discoverIcons()` propagates out of `processDefinition()` and takes down the cache rebuild
+- Not using dependency injection → Inject services properly for testability
 
 ## See Also
 

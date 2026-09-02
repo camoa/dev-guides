@@ -1,35 +1,28 @@
 ---
-description: Use ATK's data-qa-id selector hooks and helper functions in plain Playwright tests without adopting ATK's full test catalog.
-tldr: Set testIdAttribute:'data-qa-id' in playwright.config.ts to get ATK's stable selector guarantees without writing your own preprocess hooks. Import only the ATK helper functions you need — drupalLogin, createNode — rather than adopting the full 36-test catalog.
+description: "Use ATK's data-qa-id selector hooks and helper functions in plain Playwright tests without adopting ATK's full test catalog."
+tldr: "Set testIdAttribute:'data-qa-id' in playwright.config.ts to get ATK's stable selector guarantees without writing your own preprocess hooks. Import only the ATK helper functions you need — drupalLogin, createNode — rather than adopting the full 36-test catalog."
 ---
 
 # ATK Integration
 
 ## When to Use
 
-> Use ATK integration when your project already has an existing Playwright test suite and you want ATK's Drupal-aware plumbing (stable selectors, login helpers, DB reset) without adopting ATK's full canned test catalog.
+> Using ATK's helpers and selector hooks in plain Playwright tests, without adopting ATK's full test catalog.
 
-## Decision
+## Pattern: ATK's Selector Hooks
 
-| Need | Approach |
-|---|---|
-| Stable Drupal element selectors | Set `testIdAttribute: 'data-qa-id'` — uses ATK's preprocess hooks |
-| Drupal login/logout/content helpers | Import selectively from `automated-testing-kit/helpers` |
-| Per-worker DB reset | Wrap `ddev drush testor:restore` in a worker-scoped auto fixture |
-| Full ATK test catalog (36 canned tests) | See [ATK guide](../atk/index.md) |
-
-## Pattern
-
-### ATK selector hooks
+ATK ships preprocess hooks decorating Drupal markup with stable selectors via `data-qa-id`. To make these first-class in Playwright, set the test ID attribute:
 
 ```ts
 // playwright.config.ts
 use: { testIdAttribute: 'data-qa-id' }
 ```
 
-Now `page.getByTestId('login-form')` matches `<form data-qa-id="login-form">` — ATK's preprocess hooks add these attributes to Drupal markup automatically.
+Now `page.getByTestId('login-form')` matches `<form data-qa-id="login-form">` — you get ATK's stability guarantees without writing your own preprocess hooks.
 
-### Importing ATK helpers without the catalog
+## Pattern: Importing ATK Helpers Without the Catalog
+
+ATK's Playwright package exports helper functions. Selectively import:
 
 ```ts
 import { drupalLogin, drupalLogout, createNode } from 'automated-testing-kit/helpers';
@@ -40,7 +33,11 @@ test('my custom flow', async ({ page }) => {
 });
 ```
 
-### Testor snapshots in fixtures
+The right model for projects with an existing test suite that want ATK's plumbing without its 36 canned tests.
+
+## Pattern: Testor Snapshots in Fixtures
+
+To get **per-worker DB state**, wrap a Testor restore in a worker-scoped fixture:
 
 ```ts
 export const test = base.extend<{}, { dbReset: void }>({
@@ -51,13 +48,13 @@ export const test = base.extend<{}, { dbReset: void }>({
 });
 ```
 
-Per-worker reset (not per-test) is the right default — per-test DB reset is expensive. Worker scope + good test isolation (each test creates its own content with a unique title) usually suffices.
+Per-test (not per-worker) is much more expensive — only do it when tests must not see each other's DB writes. Per-worker reset + good test isolation (each test creates its own node with a unique title) usually suffices.
 
 ## Common Mistakes
 
-- **Wrong**: Adopting ATK's full test catalog when you only want the helpers — import what you need
-- **Wrong**: Per-test DB reset without measuring cost — usually unnecessary; per-worker is sufficient
-- **Wrong**: Setting `testIdAttribute: 'data-qa-id'` without enabling the ATK module — selectors don't exist in the markup
+- **Adopting ATK's full test catalog** when you only want the helpers — copy what you need
+- **Per-test DB reset** without measuring cost — usually unnecessary
+- **Setting `testIdAttribute` to `data-qa-id` without enabling ATK module** — selectors don't exist
 
 ## See Also
 

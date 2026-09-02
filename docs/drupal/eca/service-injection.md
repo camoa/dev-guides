@@ -1,5 +1,5 @@
 ---
-description: Inject services into ECA plugins using parent::create pattern (NEVER new static)
+description: "Inject services into ECA plugins using parent::create pattern (NEVER new static)"
 tldr: "Inject services when your plugin needs functionality beyond what the base class provides, such as HTTP clients, external APIs, database access, or custom business logic services."
 drupal_version: "11.x"
 ---
@@ -67,11 +67,11 @@ class MyAction extends ConfigurableActionBase {
 
 ## Common Mistakes
 
-- **Wrong**: Using `new static()` with parent constructor args → **Right**: Fatal error (parent constructor is FINAL)
-- **Wrong**: Injecting parent's services again → **Right**: Duplicate dependencies, breaks when parent changes
-- **Wrong**: No typed properties → **Right**: Harder to debug, no IDE autocomplete
-- **Wrong**: Injecting in constructor instead of `create()` → **Right**: Bypasses Drupal's service container
-- **Wrong**: Not checking optional service existence → **Right**: Crashes when service not available
+- Using `new static()` with parent constructor args → Fatal error (parent constructor is FINAL)
+- Injecting parent's services again → Duplicate dependencies, breaks when parent changes
+- No typed properties → Harder to debug, no IDE autocomplete
+- Injecting in constructor instead of `create()` → Bypasses Drupal's service container
+- Not checking optional service existence → Crashes when service not available
 
 ## See Also
 
@@ -81,4 +81,4 @@ class MyAction extends ConfigurableActionBase {
 
 **References:**
 - Core: `/modules/contrib/eca/src/Plugin/ECA/EcaPluginBase.php` (FINAL constructor)
-- Example: `/modules/contrib/eca_base/src/Plugin/Action/EcaStateWrite.php`
+- Example: `/modules/contrib/eca/modules/base/src/Plugin/Action/EcaStateWrite.php`

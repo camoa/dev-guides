@@ -128,12 +128,12 @@ Reference: Browser DevTools for inspecting rendered SVG.
 
 ## Common Mistakes
 
-- **Wrong**: Stripping the `<svg>` root from source files → **Right**: Breaks XML parsing; the icon disappears with no error anywhere
-- **Wrong**: Debugging in production → **Right**: Remove debug code before deployment
-- **Wrong**: Not checking browser console → **Right**: SVG errors appear in console, not visible on page
-- **Wrong**: Forgetting `xmlns` attribute → **Right**: Required for inline SVG, icons won't render
-- **Wrong**: Hardcoded viewBox → **Right**: Print `{{ attributes }}` instead so the source file's own viewBox comes through
-- **Wrong**: Reaching for `|raw` on `{{ content }}` → **Right**: Already a `FormattableMarkup`; `|raw` adds nothing and hides the fact that it is unsanitized
+- Stripping the `<svg>` root from source files → Breaks XML parsing; the icon disappears with no error anywhere
+- Debugging in production → Remove debug code before deployment
+- Not checking browser console → SVG errors appear in console, not visible on page
+- Forgetting `xmlns` attribute → Required for inline SVG, icons won't render
+- Hardcoded viewBox → Print `{{ attributes }}` instead so the source file's own viewBox comes through
+- Reaching for `|raw` on `{{ content }}` → Already a `FormattableMarkup`; `|raw` adds nothing and hides the fact that it is unsanitized
 
 ## See Also
 

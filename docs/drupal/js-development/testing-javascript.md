@@ -1,6 +1,6 @@
 ---
-description: Test JavaScript functionality with Nightwatch.js for AJAX, accessibility, and browser compatibility
-tldr: "Use when verifying JavaScript functionality, especially AJAX interactions, accessibility, and cross-browser compatibility."
+description: "Test JavaScript functionality with Nightwatch.js for AJAX, accessibility, and browser compatibility"
+tldr: "Use Nightwatch.js — which replaced PHPUnit's FunctionalJavascriptTestBase — to verify JavaScript functionality in real browsers via WebDriver, especially AJAX interactions and accessibility. Gotcha: accessibility testing uses .axeInject() and .axeRun(), not .initAccessibility()/.assert.accessibility()."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when verifying JavaScript functionality, especially AJAX interactions, accessibility, and cross-browser compatibility.
+> Verifying JavaScript functionality, especially AJAX interactions, accessibility, and cross-browser compatibility.
 
 ## Decision
 
@@ -17,13 +17,11 @@ Drupal uses Nightwatch.js for JavaScript testing (replaced PHPUnit's FunctionalJ
 ## Pattern
 
 **Test file location**:
-
 ```
 modules/custom/MODULE/tests/src/Nightwatch/Tests/featureTest.js
 ```
 
 **Basic Nightwatch test**:
-
 ```javascript
 module.exports = {
   '@tags': ['module_name'],
@@ -42,7 +40,6 @@ module.exports = {
 ```
 
 **Testing AJAX**:
-
 ```javascript
 'Test AJAX interaction': (browser) => {
   browser
@@ -53,37 +50,33 @@ module.exports = {
 ```
 
 **Accessibility testing** (with aXe):
-
 ```javascript
 'Test accessibility': (browser) => {
   browser
     .drupalRelativeURL('/page')
-    .initAccessibility()
-    .assert.accessibility();
+    .axeInject()
+    .axeRun('body', {});
 }
 ```
 
 **Running tests**:
-
 ```bash
 # From Drupal root
 yarn test:nightwatch tests/Nightwatch/Tests/featureTest.js
 ```
 
+**Reference**:
+- https://www.drupal.org/docs/develop/automated-testing/javascript-testing-using-nightwatch
+- https://drupalize.me/tutorial/functional-javascript-testing-nightwatchjs
+
 ## Common Mistakes
 
-- **Wrong**: Testing with PHP instead of JavaScript → **Right**: Use Nightwatch for JS
-  - **Why**: Can't test actual JavaScript execution, Nightwatch is correct tool
-- **Wrong**: No accessibility tests → **Right**: Include accessibility assertions
-  - **Why**: Misses WCAG compliance issues that affect users
-- **Wrong**: Not testing AJAX scenarios → **Right**: Test AJAX interactions
-  - **Why**: Most common source of JavaScript bugs in Drupal
-- **Wrong**: Hardcoded waits instead of waitForElement → **Right**: Use smart waits
-  - **Why**: Flaky tests, timing issues
+- **Testing with PHP instead of JavaScript** - WHY: Can't test actual JavaScript execution, Nightwatch is correct tool
+- **No accessibility tests** - WHY: Misses WCAG compliance issues that affect users
+- **Not testing AJAX scenarios** - WHY: Most common source of JavaScript bugs in Drupal
+- **Hardcoded waits instead of waitForElement** - WHY: Flaky tests, timing issues
 
 ## See Also
 
 - [AJAX Integration](ajax-integration.md) - What to test
-- Reference: [JavaScript Testing with Nightwatch](https://www.drupal.org/docs/develop/automated-testing/javascript-testing-using-nightwatch)
 - Reference: [Nightwatch in Drupal Core](https://www.lullabot.com/articles/nightwatch-in-drupal-core)
-- Reference: [Functional JavaScript Testing](https://drupalize.me/tutorial/functional-javascript-testing-nightwatchjs)

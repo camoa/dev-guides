@@ -1,5 +1,5 @@
 ---
-description: Integrate external APIs, YAML config, dynamic forms, and structured error handling in ECA actions
+description: "Integrate external APIs, YAML config, dynamic forms, and structured error handling in ECA actions"
 tldr: "Use advanced action patterns when integrating with external APIs, processing complex data structures with YAML configuration, validating external service responses, or implementing sophisticated error handling."
 drupal_version: "11.x"
 ---
@@ -66,11 +66,11 @@ class ApiCallAction extends ConfigurableActionBase {
 
 ## Common Mistakes
 
-- **Wrong**: Not handling API failures → **Right**: Always use try-catch for graceful degradation
-- **Wrong**: Hardcoding API configuration → **Right**: Use YAML config fields for flexibility
-- **Wrong**: Missing structured error responses → **Right**: Include success/error fields for conditions
-- **Wrong**: Not logging errors → **Right**: Use `$this->logger` for debugging
-- **Wrong**: Injecting parent's services in child → **Right**: Parent already has them
+- Not handling API failures → Workflow crashes instead of graceful degradation (always use try-catch)
+- Hardcoding API configuration → Can't adapt to different environments (use YAML config fields)
+- Missing structured error responses → Conditions can't check if action succeeded
+- Not logging errors → Debugging becomes impossible (use `$this->logger`)
+- Injecting parent's services in child → Duplicates dependencies (parent already has them)
 
 ## See Also
 

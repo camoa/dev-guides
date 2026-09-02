@@ -88,11 +88,11 @@ Reference: `/core/lib/Drupal/Core/Template/IconsTwigExtension.php` for the `icon
 
 ## Common Mistakes
 
-- **Wrong**: `icon('pack:id')` or `icon('pack:id', {…})` → **Right**: Fatal, on every Drupal 11 release. Split into two arguments
-- **Wrong**: Assuming the render array carries cache metadata → **Right**: It does not. `getIconRenderable()` returns `#type`/`#pack_id`/`#icon_id`/`#settings` and nothing else, and `preRenderIcon()` adds no `#cache`
-- **Wrong**: Expecting an error when the icon does not exist → **Right**: You get an empty render array and blank output; check `/admin/appearance/ui/icons` or `getIcons()` instead
-- **Wrong**: Passing a setting the pack template does not print → **Right**: Silently ignored; settings are just context keys
-- **Wrong**: Not providing text alternatives → **Right**: Decorative icons need `aria-hidden`, semantic icons need labels
+- `icon('pack:id')` or `icon('pack:id', {…})` → Fatal, on every Drupal 11 release. Split into two arguments
+- Assuming the render array carries cache metadata → It does not. `getIconRenderable()` returns `#type`/`#pack_id`/`#icon_id`/`#settings` and nothing else, and `preRenderIcon()` adds no `#cache`
+- Expecting an error when the icon does not exist → You get an empty render array and blank output; check `/admin/appearance/ui/icons` or `getIcons()` instead
+- Passing a setting the pack template does not print → Silently ignored; settings are just context keys
+- Not providing text alternatives → Decorative icons need `aria-hidden`, semantic icons need labels
 
 ## See Also
 

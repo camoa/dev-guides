@@ -1,6 +1,6 @@
 ---
-description: Enable JavaScript aggregation and minification for production performance
-tldr: "Use in production environments - always enable JavaScript aggregation for performance."
+description: "Enable JavaScript aggregation and minification for production performance"
+tldr: "Always enable JavaScript aggregation in production — Drupal aggregates files into a single bundle, minifies, and serves with far-future cache headers. Gotcha: always test with aggregation enabled before deployment, since it works in dev and can break in production."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use in production environments - always enable JavaScript aggregation for performance.
+> Production environments - always enable JavaScript aggregation for performance.
 
 ## Decision
 
@@ -17,14 +17,12 @@ Drupal aggregates multiple JavaScript files into single bundle, minifies, and se
 ## Pattern
 
 **Enable in settings** (admin/config/development/performance):
-
 - "Aggregate JavaScript files" - ON (production)
 - Combines multiple JS files into fewer bundles
 - Reduces HTTP requests
 - Applies minification
 
 **Library configuration**:
-
 ```yaml
 feature:
   js:
@@ -34,7 +32,6 @@ feature:
 ```
 
 **Pre-minified external library**:
-
 ```yaml
 external:
   js:
@@ -48,14 +45,10 @@ external:
 
 ## Common Mistakes
 
-- **Wrong**: preprocess: false on custom JS → **Right**: Use default preprocess: true
-  - **Why**: Prevents aggregation, extra HTTP request per file
-- **Wrong**: Minifying already-minified files → **Right**: Mark as minified: true
-  - **Why**: Wastes processing time, potential corruption
-- **Wrong**: Not testing with aggregation → **Right**: Test production config before deploy
-  - **Why**: Works in dev, breaks in production
-- **Wrong**: Disabling aggregation for debugging → **Right**: Use dev settings, re-enable for prod
-  - **Why**: Easy to forget, production performance suffers
+- **preprocess: false on custom JS** - WHY: Prevents aggregation, extra HTTP request per file
+- **Minifying already-minified files** - WHY: Wastes processing time, potential corruption
+- **Not testing with aggregation** - WHY: Works in dev, breaks in production
+- **Disabling aggregation for debugging** - WHY: Forget to re-enable, production performance suffers
 
 ## See Also
 

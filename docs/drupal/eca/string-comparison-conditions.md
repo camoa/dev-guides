@@ -1,5 +1,5 @@
 ---
-description: Compare values with StringComparisonBase — override getLeftValue/getRightValue, NOT evaluate
+description: "Compare values with StringComparisonBase — override getLeftValue/getRightValue, NOT evaluate"
 tldr: "Use StringComparisonBase when comparing two values using standard operators (equals, contains, starts with, regex, etc.). The base class provides operator selection and comparison logic; you only implement value retrieval."
 drupal_version: "11.x"
 ---
@@ -66,11 +66,11 @@ class CompareValuesCondition extends StringComparisonBase {
 
 ## Common Mistakes
 
-- **Wrong**: Overriding `evaluate()` → **Right**: Fatal error (method is FINAL)
-- **Wrong**: Not calling `parent::buildConfigurationForm()` → **Right**: Missing operator dropdown
-- **Wrong**: Returning non-string from `getLeftValue()`/`getRightValue()` → **Right**: Type errors
-- **Wrong**: Forgetting token replacement → **Right**: Comparing literal strings instead of values
-- **Wrong**: Not handling NULL values → **Right**: Comparison failures
+- Overriding `evaluate()` → Fatal error (method is FINAL)
+- Not calling `parent::buildConfigurationForm()` → Missing operator dropdown
+- Returning non-string from `getLeftValue()`/`getRightValue()` → Type errors
+- Forgetting token replacement → Comparing literal strings instead of values
+- Not handling NULL values → Comparison failures
 
 ## See Also
 

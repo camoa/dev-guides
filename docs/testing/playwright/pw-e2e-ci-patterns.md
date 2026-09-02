@@ -1,15 +1,52 @@
 ---
-description: Run Playwright E2E efficiently in CI — sharding, blob reporter merge, worker limits, retries, timeout levels, and GitHub Actions matrix.
-tldr: Shard with --shard=N/M, collect blob reports from each node, then merge into one HTML report. Set workers:'50%' in CI (browsers are RAM-hungry), retries:2, trace:'on-first-retry', and artifacts failure-only. Add forbidOnly:true to catch committed test.only leaks.
+description: "Run Playwright E2E efficiently in CI — sharding, blob reporter merge, worker limits, retries, timeout levels, and GitHub Actions matrix."
+tldr: "Shard with --shard=N/M, collect blob reports from each node, then merge into one HTML report. Set workers:'50%' in CI (browsers are RAM-hungry), retries:2, trace:'on-first-retry', and artifacts failure-only. Add forbidOnly:true to catch committed test.only leaks."
 ---
 
 # CI Patterns
 
 ## When to Use
 
-> Use sharding for suites over 100 tests. Combine blob reporter on each shard with `merge-reports` to get a unified HTML report. Store artifacts on failure only.
+> Running E2E in CI efficiently.
 
-## Decision
+## Pattern: Sharding
+
+```bash
+npx playwright test --shard=1/4   # node 1
+npx playwright test --shard=2/4   # node 2
+```
+
+Playwright distributes by file by default; with `fullyParallel: true` it distributes by test, producing more even shards.
+
+## Pattern: Blob Reporter + Merge
+
+```ts
+// playwright.config.ts (CI)
+reporter: process.env.CI ? [['blob']] : 'html',
+```
+
+```bash
+# After all shards complete
+npx playwright merge-reports --reporter=html ./all-blob-reports
+```
+
+## Pattern: Parallelism Config
+
+```ts
+// In CI, halve cores at peak (browsers are RAM-hungry)
+workers: process.env.CI ? '50%' : undefined,
+fullyParallel: true,
+```
+
+## Pattern: Retries
+
+```ts
+retries: process.env.CI ? 2 : 0,
+```
+
+Retry on CI only. A test that needs a retry locally is a bug; on CI it's often a real flake worth tracking. `trace: 'on-first-retry'` captures the smoking gun cheaply.
+
+## Pattern: Timeouts — Four Levels
 
 | Knob | Default | Scope |
 |---|---|---|
@@ -18,36 +55,21 @@ tldr: Shard with --shard=N/M, collect blob reports from each node, then merge in
 | `actionTimeout` | 0 (falls back to test timeout) | Each `click`, `fill`, etc. |
 | `navigationTimeout` | 0 (falls back to test timeout) | `goto`, `waitForURL` |
 
-Bias toward defaults. Raising `expect.timeout` to mask flake hides bugs.
+Bias toward defaults; raising `expect.timeout` to mask flake hides bugs.
 
-## Pattern
+## Pattern: Artifact Strategy — Failure-Only
 
 ```ts
-// playwright.config.ts (CI-aware)
-export default defineConfig({
-  workers: process.env.CI ? '50%' : undefined,
-  fullyParallel: true,
-  retries: process.env.CI ? 2 : 0,
-  forbidOnly: !!process.env.CI,
-  reporter: process.env.CI ? [['blob']] : 'html',
-  use: {
-    trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
-  },
-});
+use: {
+  trace: 'on-first-retry',
+  screenshot: 'only-on-failure',
+  video: 'retain-on-failure',
+}
 ```
 
-```bash
-# Sharding
-npx playwright test --shard=1/4   # node 1
-npx playwright test --shard=2/4   # node 2
+Storing artifacts on success multiplies CI cost without adding triage value.
 
-# Merge after all shards complete
-npx playwright merge-reports --reporter=html ./all-blob-reports
-```
-
-### GitHub Actions matrix
+## Pattern: GitHub Actions Matrix
 
 ```yaml
 jobs:
@@ -87,10 +109,10 @@ jobs:
 
 ## Common Mistakes
 
-- **Wrong**: No sharding on suites > 100 tests — wastes wall time
-- **Wrong**: Sharding without `blob` + merge — N partial reports, no unified view
-- **Wrong**: `workers: 100%` — RAM exhaustion on small CI runners
-- **Wrong**: Storing artifacts on success — multiplies cost; failure-only is the default
+- **No sharding** on suites > 100 tests — wastes wall time
+- **Sharding without `blob` + merge** — N partial reports, no unified view
+- **`workers: 100%`** — RAM exhaustion on small CI runners
+- **Storing artifacts on success** — multiplies cost; failure-only is the default
 
 ## See Also
 

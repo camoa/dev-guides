@@ -162,12 +162,12 @@ Reference: `/core/lib/Drupal/Core/Theme/Icon/IconFinder.php:114-177` for the onl
 
 ## Common Mistakes
 
-- **Wrong**: Designing against SSRF for core extractors → **Right**: Not the threat; Drupal makes no outbound request for icons. Guard it only in custom extractors that fetch
-- **Wrong**: Expecting SRI to protect an icon URL → **Right**: SRI is a `<script>`/`<link>` attribute; `<img src>` and `<use href>` cannot carry it
-- **Wrong**: Listing a CDN source and a local source as "fallback" → **Right**: Sources merge, they do not fall back; the last matching ID wins
-- **Wrong**: Pointing `svg_sprite` at a CDN → **Right**: Zero icons, no error
-- **Wrong**: HTTP instead of HTTPS → **Right**: Mixed content warnings, MITM on the asset
-- **Wrong**: Not monitoring CDN availability → **Right**: Icons break silently when the CDN changes or removes files
+- Designing against SSRF for core extractors → Not the threat; Drupal makes no outbound request for icons. Guard it only in custom extractors that fetch
+- Expecting SRI to protect an icon URL → SRI is a `<script>`/`<link>` attribute; `<img src>` and `<use href>` cannot carry it
+- Listing a CDN source and a local source as "fallback" → Sources merge, they do not fall back; the last matching ID wins
+- Pointing `svg_sprite` at a CDN → Zero icons, no error
+- HTTP instead of HTTPS → Mixed content warnings, MITM on the asset
+- Not monitoring CDN availability → Icons break silently when the CDN changes or removes files
 
 ## See Also
 

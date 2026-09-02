@@ -58,11 +58,11 @@ Reference: `/core/lib/Drupal/Core/Theme/Plugin/IconExtractor/SvgSpriteExtractor.
 
 ## Common Mistakes
 
-- **Wrong**: Pointing `sources` at a CDN URL → **Right**: Zero icons discovered, no error. Vendor the sprite into your extension
-- **Wrong**: Using `<svg>` instead of `<symbol>` in sprite → **Right**: The extractor reads `$svg->symbol`, falling back to `$svg->defs->symbol`; both top-level and `<defs>`-wrapped symbols work, nothing else does
-- **Wrong**: Symbol IDs containing dots, colons, or spaces → **Right**: `extractIdsFromSymbols()` rejects any ID matching `/[^\w-]/` and drops it silently; keep IDs to letters, digits, underscore and hyphen
-- **Wrong**: Missing `viewBox` on symbols → **Right**: Each symbol needs `viewBox` for proper scaling; the sprite extractor exposes no `{{ attributes }}` to fall back on
-- **Wrong**: Not preloading critical sprite → **Right**: Use `<link rel="preload" as="image" href="sprite.svg">` for above-fold icons
+- Pointing `sources` at a CDN URL → Zero icons discovered, no error. Vendor the sprite into your extension
+- Using `<svg>` instead of `<symbol>` in sprite → The extractor reads `$svg->symbol`, falling back to `$svg->defs->symbol`; both top-level and `<defs>`-wrapped symbols work, nothing else does
+- Symbol IDs containing dots, colons, or spaces → `extractIdsFromSymbols()` rejects any ID matching `/[^\w-]/` and drops it silently; keep IDs to letters, digits, underscore and hyphen
+- Missing `viewBox` on symbols → Each symbol needs `viewBox` for proper scaling; the sprite extractor exposes no `{{ attributes }}` to fall back on
+- Not preloading critical sprite → Use `<link rel="preload" as="image" href="sprite.svg">` for above-fold icons
 
 ## See Also
 

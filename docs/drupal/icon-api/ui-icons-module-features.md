@@ -84,13 +84,13 @@ Reference: [UI Icons module page](https://www.drupal.org/project/ui_icons)
 
 ## Common Mistakes
 
-- **Wrong**: Installing UI Icons without enabling needed submodules → **Right**: Core module alone doesn't add field/menu features
-- **Wrong**: Enabling `ui_icons_ckeditor5` without `ui_icons_text` → **Right**: The editor inserts the markup but no text filter renders it
-- **Wrong**: Expecting core Icon API to include field types → **Right**: Fields, widgets, formatters are UI Icons contrib
-- **Wrong**: Reading `field_icon.pack_id` in Twig → **Right**: The property is `target_id` and it holds `pack:id` as one string
-- **Wrong**: `ui_icons_ckeditor5` + `ckeditor5_icons` conflict → **Right**: Both provide CKEditor icon integration, choose one
-- **Wrong**: Not limiting icon packs in field config → **Right**: Users see all packs, can cause overwhelming UI
-- **Wrong**: Forgetting to clear cache after enabling submodules → **Right**: Icon picker widgets won't appear
+- Installing UI Icons without enabling needed submodules → Core module alone doesn't add field/menu features
+- Enabling `ui_icons_ckeditor5` without `ui_icons_text` → The editor inserts the markup but no text filter renders it
+- Expecting core Icon API to include field types → Fields, widgets, formatters are UI Icons contrib
+- Reading `field_icon.pack_id` in Twig → The property is `target_id` and it holds `pack:id` as one string
+- `ui_icons_ckeditor5` + `ckeditor5_icons` conflict → Both provide CKEditor icon integration, choose one
+- Not limiting icon packs in field config → Users see all packs, can cause overwhelming UI
+- Forgetting to clear cache after enabling submodules → Icon picker widgets won't appear
 
 ## See Also
 

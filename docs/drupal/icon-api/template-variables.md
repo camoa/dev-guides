@@ -77,12 +77,12 @@ Reference: `/core/lib/Drupal/Core/Render/Element/Icon.php:59-99` for how the tem
 
 ## Common Mistakes
 
-- **Wrong**: Expecting `settings: default:` to populate a variable → **Right**: It builds a form; the template must use `|default()`
-- **Wrong**: Declaring a setting in YAML and assuming that is what makes it available → **Right**: Any key in `icon()`'s third argument reaches the template, declared or not. The `settings` schema only controls the admin form
-- **Wrong**: Naming a setting `icon_id` or `source` → **Right**: Overwritten by the render element, always
-- **Wrong**: Hardcoding `viewBox` in an `svg` pack template → **Right**: Print `{{ attributes }}` and let the source file decide
-- **Wrong**: Missing `clean_class` filter → **Right**: Use `|clean_class` for icon_id in class names
-- **Wrong**: Printing `{{ content }}` with `|raw` → **Right**: Unnecessary and unsafe. `SvgExtractor` already returns a `FormattableMarkup`, which Twig prints unescaped
+- Expecting `settings: default:` to populate a variable → It builds a form; the template must use `|default()`
+- Declaring a setting in YAML and assuming that is what makes it available → Any key in `icon()`'s third argument reaches the template, declared or not. The `settings` schema only controls the admin form
+- Naming a setting `icon_id` or `source` → Overwritten by the render element, always
+- Hardcoding `viewBox` in an `svg` pack template → Print `{{ attributes }}` and let the source file decide
+- Missing `clean_class` filter → Use `|clean_class` for icon_id in class names
+- Printing `{{ content }}` with `|raw` → Unnecessary and unsafe. `SvgExtractor` already returns a `FormattableMarkup`, which Twig prints unescaped
 
 ## See Also
 
