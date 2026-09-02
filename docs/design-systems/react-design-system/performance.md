@@ -7,17 +7,18 @@ tldr: "Use when a design system component is causing measurable performance issu
 
 ## When to Use
 
-> Use when a design system component is causing measurable performance issues, or when designing components that appear in long lists, frequently updating UIs, or high-traffic render paths. Profile first — do not optimize speculatively.
+> When a design system component is causing measurable performance issues, or when designing components that appear in long lists, frequently updating UIs, or high-traffic render paths.
 
 ## Decision
 
 | If you need... | Use... | Why |
 |---|---|---|
 | Skip re-render when props unchanged | `React.memo` | Wraps component; skips render if all props shallowly equal |
+| Skip expensive class computation | `useMemo` for `cn()` calls | Only beneficial if CVA/cn computation is genuinely expensive (it rarely is) |
 | Skip expensive derived values | `useMemo` with dependency array | Memoize filtered/sorted arrays, not primitive calculations |
-| Stop re-render caused by new function ref | `useCallback` | Memoizes event handlers passed to `React.memo` children |
 | Load component only when needed | `React.lazy` + `Suspense` | Reduces initial bundle; appropriate for heavy editors, charts, modals |
-| Let React Compiler handle it | No manual memos | React Compiler (React 17+, optimized for 19) auto-memoizes pure components |
+| Stop re-render caused by new function ref | `useCallback` | Memoizes event handlers passed to `React.memo` children |
+| Let React Compiler handle it | No manual memos | React Compiler (released for React 17+, optimized for 19) auto-memoizes pure components; enable via babel/SWC plugin |
 
 ## Pattern
 
@@ -34,8 +35,9 @@ const BadgeCount = React.memo(function BadgeCount({ count }: { count: number }) 
 // Skip when: Badge appears once or twice; memo overhead > render cost
 ```
 
-Lazy loading for heavy components:
+Lazy loading for heavy design system components:
 ```tsx
+// Heavy components (rich text editor, chart, code block) should be lazy
 const RichTextEditor = React.lazy(() => import('./RichTextEditor'));
 
 function EditorPage() {
@@ -49,16 +51,17 @@ function EditorPage() {
 
 ## Common Mistakes
 
-- **Wrong**: Adding `React.memo` to every component "just in case" → **Right**: Shallow comparison has cost too; profile first with React DevTools Profiler
-- **Wrong**: `useMemo` for `cn()` calls → **Right**: `cn()` is string concatenation; it's faster than the memo overhead; never memoize it
-- **Wrong**: Passing new object/array literals as props to memoized components → **Right**: `<Badge style={{ color: 'red' }}>` creates a new object on every render, defeating `React.memo`
-- **Wrong**: Using `useCallback` without `React.memo` on the child → **Right**: `useCallback` only helps when the receiving component is memoized; otherwise it's pure overhead
-- **Wrong**: Not profiling before optimizing → **Right**: React DevTools Profiler shows exactly what re-renders and why; never guess
-- **Wrong**: Over-splitting components for "performance" → **Right**: Split for code organization; component splitting has reconciliation overhead
+- Adding `React.memo` to every component "just in case" → shallow comparison has cost too; profile first; memoize only components with proven render waste
+- `useMemo` for `cn()` calls → `cn()` is a string concatenation; it's faster than the memo overhead; don't memoize it
+- Passing new object/array literals as props to memoized components → `<Badge style={{ color: 'red' }}>` creates new object on every render, defeating `React.memo`
+- Using `useCallback` without `React.memo` on the child → `useCallback` only helps when the receiving component is memoized; otherwise it's overhead with no benefit
+- Not profiling before optimizing → React DevTools Profiler shows exactly what re-renders and why; don't guess
+- Over-splitting components for "performance" → component splitting has its own overhead (more reconciliation nodes); split for code organization, not performance
 
 ## See Also
 
 - [Layout Components](layout-components.md)
 - [Testing](testing.md)
-- Reference: [React Docs — memo](https://react.dev/reference/react/memo)
+- Reference: [React memo](https://react.dev/reference/react/memo)
+- Reference: [Saeloun — memo vs useMemo](https://blog.saeloun.com/2024/02/15/memo-vs-usememo-when-to-use-each-for-better-react-performance/)
 - Reference: [React Docs — useMemo](https://react.dev/reference/react/useMemo)

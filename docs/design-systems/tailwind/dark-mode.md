@@ -7,7 +7,7 @@ tldr: "Use the default `dark:` variant for automatic system preference. Use clas
 
 ## When to Use
 
-> Use the default `dark:` variant for automatic system preference. Use class or data-attribute strategy when a manual toggle is required.
+> Implementing dark mode — whether automatic (system preference) or manually toggled.
 
 ## Decision
 
@@ -18,7 +18,7 @@ tldr: "Use the default `dark:` variant for automatic system preference. Use clas
 | Data-attribute theme system | `@custom-variant dark ([data-theme=dark] *)` | Supports multiple themes, not just light/dark |
 | Three-way toggle (light/dark/system) | Class strategy + `localStorage` JS snippet | Most complete UX |
 
-## Pattern — Automatic (No Config)
+## Pattern — Automatic (Media Query, No Config)
 
 ```html
 <!-- Default behavior — no configuration needed -->
@@ -34,7 +34,6 @@ tldr: "Use the default `dark:` variant for automatic system preference. Use clas
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 ```
-
 ```js
 // Inline script in <head> — prevents FOUC
 const isDark = localStorage.theme === 'dark' ||
@@ -42,7 +41,7 @@ const isDark = localStorage.theme === 'dark' ||
 document.documentElement.classList.toggle('dark', isDark);
 ```
 
-## Pattern — Design Token Approach
+## Pattern — Design Token Approach for Dark Mode
 
 ```css
 @import "tailwindcss";
@@ -51,29 +50,30 @@ document.documentElement.classList.toggle('dark', isDark);
 @layer base {
   :root {
     --color-surface: var(--color-white);
+    --color-surface-alt: var(--color-gray-50);
     --color-text-primary: var(--color-gray-900);
     --color-text-muted: var(--color-gray-600);
   }
   [data-theme="dark"] {
     --color-surface: var(--color-gray-900);
+    --color-surface-alt: var(--color-gray-800);
     --color-text-primary: var(--color-gray-100);
     --color-text-muted: var(--color-gray-400);
   }
 }
 ```
-
 ```html
-<!-- Semantic token utilities flip automatically — no dark: prefix needed -->
+<!-- Semantic token utilities don't need dark: prefix — they change with theme -->
 <div class="bg-[var(--color-surface)] text-[var(--color-text-primary)]">
 ```
 
-The token approach is preferable for large design systems: semantic color tokens flip automatically via CSS custom property reassignment, eliminating `dark:` prefixes from every component.
+The design token approach is preferable for large design systems: semantic color tokens flip automatically via CSS custom property reassignment, eliminating `dark:` prefixes from every component.
 
 ## Common Mistakes
 
-- **Wrong**: Forgetting the inline script for class strategy — causes Flash of Unstyled Content (FOUC) when page loads in dark mode. **Right**: Put the script inline in `<head>` before any CSS loads.
-- **Wrong**: Over-using `dark:` utilities when a token-based approach would be cleaner. **Right**: Every `dark:bg-gray-900` couples component markup to the color value; semantic tokens decouple this.
-- **Wrong**: Using `dark:` with media strategy AND class strategy simultaneously. **Right**: Pick one; mixing creates specificity conflicts.
+- **Forgetting the inline script for class strategy** — causes Flash of Unstyled Content (FOUC) when page loads in dark mode
+- **Over-using `dark:` utilities when a token-based approach would be cleaner** — every `dark:bg-gray-900` is coupling component markup to the color value
+- **Using `dark:` with media strategy AND class strategy simultaneously** — pick one; mixing creates specificity conflicts
 
 ## See Also
 

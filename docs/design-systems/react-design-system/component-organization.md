@@ -7,7 +7,7 @@ tldr: "Use when setting up a design system repository or deciding where to put a
 
 ## When to Use
 
-> Use when setting up a design system repository or deciding where to put a new component.
+> When setting up a design system repository or deciding where to put a new component.
 
 ## Decision
 
@@ -56,14 +56,15 @@ export type { ButtonProps } from './Button';
 
 ## Common Mistakes
 
-- **Wrong**: Deep barrel exports with `export * from '...'` at every level → **Right**: Prefer explicit named exports; wildcard re-exports break tree-shaking in some bundlers
-- **Wrong**: Mixing component files with page/feature files → **Right**: The components directory is for reusable UI only; page-specific code lives in `app/` or `pages/`
-- **Wrong**: No `index.ts` per component folder → **Right**: Always add one; without it callers import from `Button/Button` inconsistently
-- **Wrong**: Committing to atomic terminology too early → **Right**: Use flat structure until patterns emerge naturally; rename later
-- **Wrong**: Putting test utilities and mock data inside component folders → **Right**: Shared mocks belong in `src/test-utils/`; co-location is for component-specific tests only
+- Deep barrel exports with `export * from '...'` at every level → breaks tree-shaking in some bundlers; prefer explicit named exports
+- Mixing component files with page/feature files → components directory should only have reusable UI; page-specific code lives in `app/` or `pages/`
+- No `index.ts` per component folder → callers import from `Button/Button` instead of `Button`; inconsistent import paths
+- Committing to atomic terminology too early → if unsure whether something is an atom or molecule, use flat structure until patterns emerge
+- Putting test utilities and mock data inside component folders → shared mocks belong in `src/test-utils/`; co-location is for component-specific tests only
 
 ## See Also
 
 - [Storybook Integration](storybook-integration.md)
 - [Form Components](form-components.md)
 - Reference: [Robin Wieruch — React Folder Structure](https://www.robinwieruch.de/react-folder-structure/)
+- Reference: [Andela — Atomic Design in React](https://www.andela.com/blog-posts/structuring-your-react-application-atomic-design-principles)

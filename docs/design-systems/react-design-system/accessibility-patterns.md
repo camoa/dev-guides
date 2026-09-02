@@ -7,7 +7,7 @@ tldr: "Use in every interactive component. Accessibility is a correctness requir
 
 ## When to Use
 
-> Use in every interactive component. Accessibility is a correctness requirement — a design system that ships inaccessible components ships broken components.
+> Every interactive component. Accessibility is not an add-on — it's a correctness requirement. A design system that ships inaccessible components ships broken components.
 
 ## Decision
 
@@ -18,7 +18,7 @@ tldr: "Use in every interactive component. Accessibility is a correctness requir
 | Custom interactive component | Reference WAI-ARIA Authoring Practices | Defines keyboard patterns for each widget type |
 | Focus management (dialog, menu) | Radix `FocusTrap` or `@radix-ui/react-focus-scope` | Correct focus trap behavior without reimplementing |
 | Live region announcements | `aria-live="polite"` on status container | Screen readers announce updates; no JS library needed |
-| Icon-only button | `aria-label` required on the button | No visible text → no accessible name → screen reader silent |
+| Icon-only button | `aria-label` required on the button | No visible text → no name → screen reader silent |
 
 ## Pattern
 
@@ -41,7 +41,7 @@ Icon-only button:
 // aria-hidden on the icon prevents double-reading
 ```
 
-Ref forwarding for focus management:
+forwardRef for focus management:
 ```tsx
 // Radix requires refs for positioning and focus management
 export const Trigger = React.forwardRef<HTMLButtonElement, TriggerProps>(
@@ -54,12 +54,12 @@ Trigger.displayName = 'Trigger';
 
 ## Common Mistakes
 
-- **Wrong**: Building custom dropdowns/modals without Radix or ARIA patterns → **Right**: Radix handles keyboard nav, focus trap, and Escape key; raw divs do not
-- **Wrong**: Relying only on `onClick` for interactivity → **Right**: Keyboard users need `onKeyDown` for Enter/Space; Radix handles this automatically
-- **Wrong**: Setting `aria-hidden="true"` on focusable content → **Right**: Remove it from the tab order too (`tabIndex={-1}`) or it's still reachable by keyboard
-- **Wrong**: Forgetting `role` on custom interactive elements → **Right**: A `<div>` button without `role="button"` is not announced as interactive
-- **Wrong**: Testing a11y only with automated tools → **Right**: axe-core finds ~30-40% of issues; manual keyboard and screen reader testing is required
-- **Wrong**: Adding `tabIndex={0}` to non-interactive elements → **Right**: Only focusable elements should be in the tab sequence
+- Building custom dropdowns/modals without Radix or ARIA patterns → misses keyboard nav, focus trap, Escape handling; use Radix primitives instead
+- Relying only on `onClick` for interactivity → keyboard users need `onKeyDown` for Enter/Space; Radix handles this; raw divs do not
+- Setting `aria-hidden="true"` on focusable content → hides it from screen readers but keyboard navigation still reaches it; remove it from the tab order too (`tabIndex={-1}`)
+- Forgetting `role` on custom interactive elements → a `<div>` button without `role="button"` is not announced as interactive
+- Testing a11y only with automated tools → axe-core finds ~30-40% of accessibility issues; manual keyboard and screen reader testing is required
+- Adding `tabIndex={0}` to non-interactive elements unnecessarily → pollutes tab order; only focusable elements should be in the tab sequence
 
 ## See Also
 
@@ -67,4 +67,5 @@ Trigger.displayName = 'Trigger';
 - [Storybook Integration](storybook-integration.md)
 - Reference: [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/)
 - Reference: [Radix UI accessibility](https://www.radix-ui.com/primitives/docs/overview/introduction)
-- Reference: [React Aria — Accessibility](https://react-spectrum.adobe.com/react-aria/accessibility.html)
+- Reference: [Divotion — Accessible by Design](https://www.divotion.com/blog/accessible-by-design)
+- Reference: [React Aria — Accessibility](https://react-aria.adobe.com/quality#accessibility)

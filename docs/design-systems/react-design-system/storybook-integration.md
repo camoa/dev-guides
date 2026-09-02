@@ -7,7 +7,7 @@ tldr: "Use for all design system components. Storybook is the development enviro
 
 ## When to Use
 
-> Use for all design system components. Storybook is the development environment, living documentation, and visual regression baseline — not optional.
+> For all design system components. Storybook is the development environment, living documentation, and visual regression baseline — not optional.
 
 ## Decision
 
@@ -56,15 +56,17 @@ export const AllVariants: Story = {
 
 ## Common Mistakes
 
-- **Wrong**: One "catch-all" story with all props → **Right**: Create one story per meaningful variant state; each is an independent regression baseline
-- **Wrong**: Writing stories after the component → **Right**: Write the story first; it forces a clean API and acts as the first consumer
-- **Wrong**: Not using `satisfies Meta<typeof Component>` → **Right**: Use `satisfies` for full TypeScript support in CSF3; without it argTypes lose inference
-- **Wrong**: Skipping `@storybook/addon-a11y` → **Right**: Accessibility issues found in Storybook cost nothing; found in production they cost everything
-- **Wrong**: Default export only without named story exports (CSF2 style) → **Right**: CSF3 named exports enable individual story testing and better tooling integration
+- One "catch-all" story with all props — hard to use as a baseline; create one story per meaningful variant state
+- Storybook as an afterthought → write stories alongside the component; it forces you to design a clean API
+- Not using `satisfies Meta<typeof Component>` → loses type inference on argTypes; use `satisfies` for full TypeScript support in CSF3
+- Skipping `@storybook/addon-a11y` → accessibility issues found in Storybook cost nothing to fix; found in production they cost everything
+- Using default export only (CSF2 style) without named story exports → CSF3 named exports enable individual story testing and better tooling integration
 
 ## See Also
 
 - [Accessibility Patterns](accessibility-patterns.md)
 - [Component Organization](component-organization.md)
 - Reference: [Storybook CSF3](https://storybook.js.org/docs/api/csf)
-- Reference: [Storybook — Accessibility Testing](https://storybook.js.org/docs/writing-tests/accessibility-testing)
+- Reference: [Storybook a11y addon](https://storybook.js.org/docs/8/writing-tests/accessibility-testing)
+- Reference: [Storybook 10 Docs](https://storybook.js.org/docs/)
+- Reference: [Storybook — UI Testing Handbook: Accessibility](https://storybook.js.org/tutorials/ui-testing-handbook/react/en/accessibility-testing/)

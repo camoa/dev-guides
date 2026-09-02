@@ -7,7 +7,7 @@ tldr: "Use viewport breakpoints (`sm:`, `md:`) for layout changes at viewport wi
 
 ## When to Use
 
-> Use viewport breakpoints (`sm:`, `md:`) for layout changes at viewport widths. Use `@container` when a component needs to respond to its own width regardless of placement.
+> Building responsive layouts — both viewport-based breakpoints and component-level container queries.
 
 ## Decision
 
@@ -19,7 +19,7 @@ tldr: "Use viewport breakpoints (`sm:`, `md:`) for layout changes at viewport wi
 | One-off breakpoint | `min-[500px]:` / `max-[800px]:` | Arbitrary breakpoint without adding to theme |
 | Breakpoint not in defaults | Add `--breakpoint-xs: 30rem` to `@theme` | Generates `xs:` prefix |
 
-## Pattern
+## Pattern — Mobile-First with Container Queries
 
 ```html
 <!-- Mobile-first: unprefixed styles apply to all sizes -->
@@ -41,15 +41,20 @@ tldr: "Use viewport breakpoints (`sm:`, `md:`) for layout changes at viewport wi
   ">
 ```
 
+## Pattern — Viewport Breakpoints
+
 ```html
-<!-- Viewport breakpoints — mobile-first -->
+<!-- ✓ Mobile-first: applies class at sm and above -->
 <div class="text-base sm:text-lg lg:text-xl">
 
-<!-- Range: only between md and lg -->
+<!-- ✓ Range: only between md and lg -->
 <div class="md:max-lg:hidden">
+
+<!-- ✗ Wrong: non-mobile-first approach -->
+<div class="lg:max-xl:text-center">   <!-- fights the cascade, avoid -->
 ```
 
-## Default Breakpoints
+## Default Breakpoints Reference
 
 | Prefix | Min-width | Common use |
 |--------|-----------|------------|
@@ -59,10 +64,13 @@ tldr: "Use viewport breakpoints (`sm:`, `md:`) for layout changes at viewport wi
 | `xl` | 80rem (1280px) | Desktops |
 | `2xl` | 96rem (1536px) | Wide screens |
 
-## Container Query Sizes
+## Container Query Reference
+
+Container sizes from `--container-*` tokens (verified from `node_modules/tailwindcss/theme.css`):
 
 | Syntax | Min-width | Token |
 |--------|-----------|-------|
+| `@container` | Mark parent as a container | — |
 | `@3xs:` | 16rem | `--container-3xs` |
 | `@2xs:` | 18rem | `--container-2xs` |
 | `@xs:` | 20rem | `--container-xs` |
@@ -76,14 +84,15 @@ tldr: "Use viewport breakpoints (`sm:`, `md:`) for layout changes at viewport wi
 | `@5xl:` | 64rem | `--container-5xl` |
 | `@6xl:` | 72rem | `--container-6xl` |
 | `@7xl:` | 80rem | `--container-7xl` |
-| `@max-md:` | Container < 28rem | range modifier |
-| `@min-[475px]:` | Arbitrary width | arbitrary |
+| `@max-md:` | At container width < 28rem | range modifier |
+| `@min-[475px]:` | Arbitrary container width | arbitrary |
+| `@container/{name}` | Named container reference | — |
 
 ## Common Mistakes
 
-- **Wrong**: Using viewport breakpoints for component-level layout — the component breaks when placed in a narrow sidebar. **Right**: Use `@container` for components that must work in any context.
-- **Wrong**: Omitting `<meta name="viewport" content="width=device-width, initial-scale=1.0">`. **Right**: Required for Tailwind breakpoints to match expected pixel values.
-- **Wrong**: Using `max-*` variants as the primary approach. **Right**: Tailwind is mobile-first; `max-` variants should be exceptions.
+- **Using viewport breakpoints for component-level layout** — the component breaks when placed in a narrow sidebar; use `@container` instead
+- **Omitting `<meta name="viewport" content="width=device-width, initial-scale=1.0">`** — Tailwind's breakpoints match CSS `rem` to pixel expectations only with this tag
+- **Using `max-*` variants as the primary approach** — Tailwind is mobile-first; `max-` variants should be exceptions, not the rule
 
 ## See Also
 

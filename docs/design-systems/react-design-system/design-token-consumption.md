@@ -7,7 +7,9 @@ tldr: "Use when connecting design tokens (colors, spacing, typography scales) fr
 
 ## When to Use
 
-> Use when connecting design tokens (colors, spacing, typography scales) from a design tool or token file into React components. Tailwind v4 changes the approach significantly — there is no `tailwind.config.ts`.
+> When connecting design tokens (colors, spacing, typography scales) from a design tool or token file into React components.
+
+> **Tailwind v4 (installed: 4.2.0) changes this significantly.** There is no `tailwind.config.ts` in Tailwind v4. All theme configuration is done in CSS using `@theme inline { }`. The v3 JS config approach is superseded. See patterns below.
 
 ## Decision
 
@@ -60,19 +62,34 @@ Adding design tokens in Tailwind v4:
 /* Tailwind v4 generates utilities for every --color-*, --radius-*, --spacing-* token */
 ```
 
+Tailwind v3 reference (for v3 projects — not this install):
+```ts
+// tailwind.config.ts (v3 only — does not apply to Tailwind v4)
+export default {
+  theme: {
+    extend: {
+      colors: {
+        primary: 'hsl(var(--color-primary) / <alpha-value>)',
+      },
+    },
+  },
+};
+```
+
 ## Common Mistakes
 
-- **Wrong**: Using `tailwind.config.ts` in a Tailwind v4 project → **Right**: v4 ignores it; use `@theme inline { }` in CSS instead
-- **Wrong**: Hard-coding hex values in Tailwind classes → **Right**: Define tokens in `@theme inline`; hard-coded values require find-and-replace on change
-- **Wrong**: Importing JSON token files into JS and applying as inline styles → **Right**: Loses Tailwind utility integration and dark mode
-- **Wrong**: Creating a React Context just to distribute token values → **Right**: CSS custom properties already cascade; Context adds unnecessary re-renders
-- **Wrong**: Tailwind arbitrary values (`bg-[#0070f3]`) for design token colors → **Right**: Define in `@theme inline` then use the generated utility
-- **Wrong**: Defining colors without the `--color-` prefix in Tailwind v4 → **Right**: Only `--color-*` variables generate `bg-*` / `text-*` utilities
+- Using `tailwind.config.ts` in a Tailwind v4 project → v4 ignores it; use `@theme inline { }` in CSS instead
+- Hard-coding hex values in Tailwind classes → bypasses the token system; changes require find-and-replace across all components
+- Importing JSON token files into JS and applying as inline styles → loses Tailwind utility integration and dark mode
+- Creating a React Context just to distribute token values → CSS custom properties already cascade; Context adds unnecessary re-renders
+- Using Tailwind arbitrary values (`bg-[#0070f3]`) for design token colors → breaks the token abstraction; define in `@theme inline` then use the generated utility
+- In Tailwind v4: defining colors without the `--color-` prefix → only `--color-*` variables generate `bg-*` / `text-*` utilities; `--primary` alone won't generate `bg-primary`
 
 ## See Also
 
 - [Variant Management](variant-management.md)
 - [TypeScript Patterns](typescript-patterns.md)
-- Reference: [Tailwind CSS v4 upgrade guide](https://tailwindcss.com/docs/v4-upgrade)
-- Reference: [shadcn/ui Theming](https://ui.shadcn.com/docs/theming)
-- Reference: Source — `src/app/globals.css`
+- Reference: Installed `globals.css` — `src/app/globals.css`
+- Reference: [Tailwind v4 docs](https://tailwindcss.com/docs/upgrade-guide)
+- Reference: [shadcn/ui theming](https://ui.shadcn.com/docs/theming)
+- Reference: [UXPin — Managing Global Styles with Design Tokens](https://www.uxpin.com/studio/blog/managing-global-styles-in-react-with-design-tokens/)

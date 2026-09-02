@@ -7,41 +7,40 @@ tldr: "Use for projects running Tailwind v3, or when using `@config` in v4 to lo
 
 ## When to Use
 
-> Use for projects running Tailwind v3, or when using `@config` in v4 to load a JS config during gradual migration.
+> Projects running Tailwind v3, or when migrating an existing v3 codebase. Reference when using `@config` in v4 to load a JS config.
 
-## Decision
-
-| Situation | Approach | Effect |
-|-----------|----------|--------|
-| Add new color without losing defaults | `theme.extend.colors` | Merges; `bg-red-500` still works |
-| Replace all colors with brand-only set | `theme.colors` (no extend) | Removes all defaults |
-| Add custom spacing step | `theme.extend.spacing` | Keeps defaults, adds yours |
-| Change all breakpoints | `theme.screens` (no extend) | Replaces default breakpoint system |
-
-## Pattern
+## Pattern — Canonical v3 Config Structure
 
 ```js
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  // Required: paths to all files containing Tailwind classes
   content: [
     './src/**/*.{html,js,ts,jsx,tsx,vue,twig,php}',
     './templates/**/*.twig',
   ],
   theme: {
-    // Override (replaces entire key — no defaults)
+    // Override a default: replaces the entire key
     screens: {
       sm: '640px', md: '768px', lg: '1024px', xl: '1280px',
     },
     extend: {
-      // Extend (merges with existing defaults)
+      // Extend defaults: merges with existing values
       colors: {
-        brand: { 500: '#4f46e5', 600: '#4338ca' },
+        brand: {
+          500: '#4f46e5',
+          600: '#4338ca',
+        },
       },
       fontFamily: {
         display: ['Inter', 'sans-serif'],
       },
-      spacing: { 18: '4.5rem' },
-      borderRadius: { xl: '0.75rem' },
+      spacing: {
+        18: '4.5rem',
+      },
+      borderRadius: {
+        xl: '0.75rem',
+      },
     },
   },
   plugins: [
@@ -51,14 +50,24 @@ module.exports = {
 };
 ```
 
-## CSS Entry File
+## Decision: extend vs override
+
+| Situation | Approach | Effect |
+|-----------|----------|--------|
+| Add new color without losing defaults | `theme.extend.colors` | Merges; `bg-red-500` still works |
+| Replace all colors with brand-only set | `theme.colors` (no extend) | Removes all defaults |
+| Add custom spacing step | `theme.extend.spacing` | Keeps defaults, adds yours |
+| Change all breakpoints | `theme.screens` (no extend) | Replaces default breakpoint system |
+
+## v3 CSS Entry File
 
 ```css
+/* Replace the deprecated @tailwind directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom component classes */
+/* Custom component classes go in @layer components */
 @layer components {
   .btn-primary {
     @apply px-4 py-2 bg-brand-500 text-white rounded-lg font-semibold;
@@ -67,7 +76,7 @@ module.exports = {
 }
 ```
 
-## Presets (Sharing Configs Across Projects)
+## Presets (Sharing Configs)
 
 ```js
 // packages/ui-tokens/preset.js — shared across projects
@@ -88,9 +97,9 @@ module.exports = {
 
 ## Common Mistakes
 
-- **Wrong**: `theme.colors` instead of `theme.extend.colors` — overwrites all defaults, breaking `bg-white`, `text-gray-500`, etc. **Right**: Always use `theme.extend` unless intentionally replacing the entire scale.
-- **Wrong**: `./src/**/*` in content glob — scans binary files, slowing scanning. **Right**: Always include file extensions.
-- **Wrong**: Looking for v4 features (`@utility`, container queries built-in) in a v3 project — requires plugins in v3.
+- **Using `theme.colors` instead of `theme.extend.colors`** — overwrites all Tailwind defaults, breaking `bg-white`, `text-gray-500`, etc.
+- **Omitting file extensions in `content` glob** — `./src/**/*` matches binary files, slowing content scanning
+- **Checking for v4 features (container queries, `@utility`) in a v3 project** — requires plugins in v3
 
 ## See Also
 

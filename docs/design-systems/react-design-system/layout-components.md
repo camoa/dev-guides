@@ -7,7 +7,7 @@ tldr: "Use when building reusable spacing, flex, and grid primitives. Layout com
 
 ## When to Use
 
-> Use when building reusable spacing, flex, and grid primitives. Layout components standardize spacing and remove repetitive Tailwind class sets from feature code.
+> Building reusable spacing, flex, and grid primitives. Layout components standardize spacing and remove repetitive Tailwind class sets from feature code.
 
 ## Decision
 
@@ -23,6 +23,8 @@ tldr: "Use when building reusable spacing, flex, and grid primitives. Layout com
 
 Stack (most common layout primitive):
 ```tsx
+import { cn } from '@/lib/utils';
+
 type StackProps = {
   direction?: 'row' | 'col';
   gap?: 1 | 2 | 3 | 4 | 6 | 8 | 10 | 12; // constrain to spacing scale
@@ -53,14 +55,15 @@ export function Container({ children, className }: { children: React.ReactNode; 
 
 ## Common Mistakes
 
-- **Wrong**: Accepting arbitrary number for `gap` without constraining to spacing scale → **Right**: Constrain to valid spacing values; unlimited gap breaks design system consistency
-- **Wrong**: Using `margin` for spacing between layout items → **Right**: Use `gap` on flex/grid containers; margin breaks at edges and doesn't compose
-- **Wrong**: Building layout components with CSS-in-JS or style props → **Right**: Tailwind classes are tree-shaken and static; style props bypass optimization
-- **Wrong**: Duplicating layout logic in every feature component → **Right**: Extract Stack/Flex/Grid once; 20 components with `flex flex-col gap-4` is a Stack
-- **Wrong**: Making layout components too flexible with unlimited responsive prop combinations → **Right**: Constrain to the spacing scale; untested class combinations create visual bugs
+- Accepting arbitrary number for `gap` without constraining to spacing scale → breaks design system consistency; constrain to valid spacing values
+- Using `margin` for spacing between layout items → margin breaks at edges and doesn't compose; use `gap` on flex/grid containers
+- Building layout components with CSS-in-JS or style props → Tailwind classes are tree-shaken and static; style props bypass optimization
+- Duplicating layout logic in every feature component → extract Stack/Flex/Grid once; reuse everywhere; 20 components with `flex flex-col gap-4` is a Stack
+- Making layout components too flexible → unlimited responsive prop combinations create untested class combinations; constrain to the spacing scale
 
 ## See Also
 
 - [Form Components](form-components.md)
 - [Performance](performance.md)
 - Reference: [Marmelab — Box, Stack, Grid](https://marmelab.com/react-admin/BoxStackGrid.html)
+- Reference: [Laur.design — Layout Grid/Flexbox](https://laur.design/blog/react-layout-grid-flexbox/)

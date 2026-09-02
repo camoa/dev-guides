@@ -282,14 +282,14 @@
     "guides_extracted": 16
   },
   "design-systems/react-design-system": {
-    "source_hash": "02534ecc113fcb9da1d3ebb425e660ea46814dde8fc9c436086a2f8b4c28215c",
-    "partitioned": "2026-02-19",
+    "source_hash": "07a0e2fa62170cf382b40a45806109a0b759e6f9b0d3d625f8de2f66d438faf4",
+    "partitioned": "2026-09-02",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 18
   },
   "design-systems/tailwind": {
-    "source_hash": "1a94018ca2c9cc7eeab076a36f1c90656fd13c0af1e87f5fa977ec0da00e3df6",
-    "partitioned": "2026-02-19",
+    "source_hash": "5173c08f22700049e94707af46b0d021cc227aab7dceeb09dd948ddd36fde4ef",
+    "partitioned": "2026-09-02",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 17
   },
@@ -384,8 +384,8 @@
     "guides_extracted": 9
   },
   "js/interaction-craft": {
-    "source_hash": "8cf60a52902cdc4636f6f15656f90ac84b1771d6fc7632db3af22c4d883c8b44",
-    "partitioned": "2026-03-04",
+    "source_hash": "540fbd4ea1665d73f4c2c6d3b4f012253efe6fdac785104461ca9bd59743581b",
+    "partitioned": "2026-09-02",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 10
   },

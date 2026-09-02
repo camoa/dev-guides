@@ -7,19 +7,27 @@ tldr: "Use CVA when a component has 2+ orthogonal variant dimensions, needs comp
 
 ## When to Use
 
-> Use CVA when a component has 2+ orthogonal variant dimensions, needs compound variants, or requires TypeScript autocompletion on variant props.
+> CVA is a TypeScript utility for defining component variants with structured, type-safe class management. Install: `npm install class-variance-authority`.
 
 ## Decision
 
-| Situation | Use CVA? | Why |
-|-----------|----------|-----|
-| Component with 2+ variant dimensions (size + intent) | Yes | Structured; prevents combinatorial class explosion |
-| Compound variants (specific combo = extra styles) | Yes | CVA handles this natively |
-| TypeScript autocompletion on variant props | Yes | `VariantProps` type helper |
-| Single boolean variant | Maybe | `cx` from CVA may be enough |
-| Data-driven values (dynamic width, runtime colors) | No | Use inline `style={}` for truly dynamic values |
+**Use CVA when:**
 
-## Pattern
+- A component has 2+ orthogonal variant dimensions (size + intent, size + shape)
+- You need compound variants (specific combination triggers additional styles)
+- You want TypeScript autocompletion on variant props
+
+## Verified Exports
+
+(from `node_modules/class-variance-authority/dist/index.js`, v0.7.1)
+
+| Export | Purpose |
+|--------|---------|
+| `cva` | Creates a variant-aware class generator function |
+| `cx` | Re-export of `clsx`; use for ad-hoc class merging without variant logic |
+| `VariantProps` | TypeScript type helper for inferring prop types from a CVA definition |
+
+## Pattern — Button with CVA
 
 ```ts
 import { cva, cx, type VariantProps } from 'class-variance-authority';
@@ -41,6 +49,8 @@ const button = cva(
       },
     },
     compoundVariants: [
+      // Compound variant: danger + small gets extra visual emphasis
+      // Array values also work: { intent: ['danger', 'ghost'], size: 'sm', class: '...' }
       { intent: 'danger', size: 'sm', class: 'ring-1 ring-red-400' },
     ],
     defaultVariants: {
@@ -52,36 +62,34 @@ const button = cva(
 
 type ButtonProps = VariantProps<typeof button>;
 
-// Both 'class' and 'className' props are valid
+// Both 'class' and 'className' props are valid — CVA supports both
 <button class={button({ intent: 'ghost', size: 'sm' })}>Cancel</button>
 <button className={button({ intent: 'primary' })}>Submit</button>
 ```
 
-## CVA Exports (v0.7.1)
-
-| Export | Purpose |
-|--------|---------|
-| `cva` | Creates a variant-aware class generator function |
-| `cx` | Re-export of `clsx`; use for ad-hoc class merging without variant logic |
-| `VariantProps` | TypeScript type helper for inferring prop types from a CVA definition |
+**Important:** CVA requires complete static class names — dynamic string construction breaks Tailwind's class detection scanner. Always use the lookup-object pattern (see Performance section).
 
 ## cx for Ad-hoc Composition
 
-```ts
-import { cx } from 'class-variance-authority';
+(no variant logic needed):
 
+```ts
+import { cx } from 'class-variance-authority';  // same as clsx
+
+// Conditionally apply classes — cx handles falsy values
 const cls = cx('base-class', isActive && 'bg-brand-500', { 'font-bold': isPrimary });
 ```
 
 ## Common Mistakes
 
-- **Wrong**: Dynamic class string construction inside CVA — `bg-${color}-500` is invisible to Tailwind's scanner. **Right**: Always use complete class strings in lookup objects.
-- **Wrong**: Creating CVA variants for styles that aren't real design variants. **Right**: `style={{ width: dynamicWidth }}` is correct for data-driven values.
-- **Wrong**: Using `@apply` to build a class system when you have React/Vue/Twig components available. **Right**: The component IS the abstraction; use CVA inside the component.
+- **Using `@apply` to build a class system when you have React/Vue/Twig components available** — the component IS the abstraction
+- **Mixing CVA with dynamic class string construction** — `bg-${color}-500` is invisible to Tailwind's scanner
+- **Creating CVA variants for styles that aren't real design variants** — not every prop needs a variant; `style={{ width: dynamicWidth }}` is correct for data-driven values
 
 ## See Also
 
-- [tailwind-merge & clsx](tailwind-merge-clsx.md)
-- [Component Patterns](component-patterns.md)
-- Reference: https://cva.style/docs
-- Reference: https://cva.style/docs/getting-started/variants
+- [Design System Integration](design-system-integration.md)
+- [Dark Mode](dark-mode.md)
+- [Accessibility](accessibility.md)
+- Reference: https://cva.style/
+- Reference: https://tailwindcss.com/docs/styling-with-utility-classes#managing-duplication
