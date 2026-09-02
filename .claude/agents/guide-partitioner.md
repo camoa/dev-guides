@@ -194,6 +194,14 @@ verdict once already. A unit you cannot account for is still missing: say so.
   nor `llms.txt` — which links only topic indexes — will catch it. A deliberate rename needs a
   `redirect_maps` entry in `mkdocs.yml` and explicit confirmation first.
 
+- **A `Reference:` file path you have not opened.** The `## See Also` section is yours, not the
+  source's, so a path you write there has no source text behind it and no detector compares it to
+  anything. Measured 2026-09-02 on `drupal/plus-suite`: **7 of 14 published reference paths pointed
+  at nothing** — two named classes that exist nowhere in the codebase, four sat one directory off,
+  and one pointed at a recipe outside the docroot. Open the file before you cite it, or write no
+  `Reference:` line at all. A missing pointer costs a reader one search; a confident wrong one
+  costs them the search plus the belief that the guide knows.
+
 ## Frontmatter Fields
 
 | Field | Required | Purpose |

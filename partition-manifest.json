@@ -432,8 +432,8 @@
     "guides_extracted": 25
   },
   "drupal/plus-suite": {
-    "source_hash": "53997dd59999cac32a9eddf5c49f7434001edcf409e3046ee262f0257d523bf9",
-    "partitioned": "2026-08-16",
+    "source_hash": "c6d9da39f6716ac1d20c3f69ea758cd5ad5ca63982cdd72fa4236fc0ef3977eb",
+    "partitioned": "2026-09-02",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 29
   },

@@ -1,6 +1,6 @@
 ---
-description: Plus Suite sidebar system — left/right/settings sidebar types, cookie-based visibility, JS architecture, and building custom sidebar content
-tldr: "Build custom sidebar content in tool plugins. Avoid heavy content in sidebars — they rebuild on every tool switch."
+description: "Plus Suite sidebar system — left/right/settings sidebar types, cookie-based visibility, JS architecture, and building custom sidebar content"
+tldr: "Customize sidebar content for your tools or modes. Sidebar visibility is cookie-based, and sidebars rebuild on every tool switch."
 drupal_version: "11.x"
 ---
 
@@ -8,26 +8,39 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Build custom sidebar content in tool plugins. Avoid heavy content in sidebars — they rebuild on every tool switch.
+> When customizing sidebar content for your tools or modes, or understanding the sidebar visibility system.
 
-## Decision
+## Sidebar Types
 
 | Type | Position | Built By | Example |
-|------|----------|----------|---------|
+|---|---|---|---|
 | Left sidebar | Left of content | `buildLeftSideBar()` | PlaceBlock block list, Section Library templates |
 | Right sidebar | Right of content | `buildRightSideBar()` | Tool-specific options |
 | Settings sidebar | Right of content | `buildSettings()` | Hotkeys, media associations |
 
-## Pattern
+## Visibility Control
 
-**Visibility control** (cookie-based):
+Sidebar visibility is **cookie-based**:
 
 | Cookie | Values | Purpose |
-|--------|--------|---------|
+|---|---|---|
 | `{tool_id}_sidebar` | `open` / `closed` | Left sidebar toggle |
 | `{sidebar_id}_sidebar` | `open` / `closed` | Right sidebar toggle |
 
-**Building custom sidebar content in a tool plugin:**
+## JavaScript Architecture
+
+```
+sidebar-manager.js → Manages all sidebar instances
+  ├── sidebar-plugin-base.js → Base class for sidebar plugins
+  ├── default-sidebar.js → Standard sidebar behavior
+  └── notifications-sidebar.js → Notifications panel
+```
+
+Sidebar buttons use `data-right-sidebar-button-for` attribute to correlate with sidebar panels.
+
+## Building Custom Sidebar Content
+
+In your tool plugin:
 
 ```php
 public function buildLeftSideBar(): array {
@@ -41,20 +54,10 @@ public function buildLeftSideBar(): array {
 }
 ```
 
-**JavaScript architecture:**
-```
-sidebar-manager.js → Manages all sidebar instances
-  ├── sidebar-plugin-base.js → Base class for sidebar plugins
-  ├── default-sidebar.js → Standard sidebar behavior
-  └── notifications-sidebar.js → Notifications panel
-```
-
-Sidebar buttons use `data-right-sidebar-button-for` attribute to correlate with sidebar panels.
-
 ## Common Mistakes
 
-- **Wrong**: Rendering heavy DB queries or API calls in sidebar content → **Right**: Sidebars rebuild on every tool switch; cache or lazy-load expensive content
-- **Wrong**: Mixing left and right sidebar content in a single tool unless the workflow requires both → **Right**: Use left for browsing lists, right for selected-item options
+- **Do not** render heavy content in sidebars — they're rebuilt on every tool switch.
+- **Do not** mix left and right sidebar content in a single tool unless the workflow requires it.
 
 ## See Also
 

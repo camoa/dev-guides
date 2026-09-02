@@ -1,6 +1,6 @@
 ---
-description: Hotkeys and user settings — default keyboard shortcuts, per-user hotkey storage, SettingsSidebarEvent, and customization
-tldr: "Configure hotkeys during initial setup. Users can customize per-user via the Settings sidebar."
+description: "Hotkeys and user settings — default keyboard shortcuts, per-user hotkey storage, SettingsSidebarEvent, and customization"
+tldr: "Configure or customize keyboard shortcuts for tools. Hotkeys are stored per-user and customized via the Settings sidebar."
 drupal_version: "11.x"
 ---
 
@@ -8,12 +8,12 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Configure hotkeys during initial setup. Users can customize per-user via the Settings sidebar. Avoid key conflicts with browser shortcuts.
+> When configuring or customizing keyboard shortcuts for tools, or understanding how user preferences are stored.
 
-## Decision
+## Default Hotkeys
 
 | Tool | Default Key | Customizable? |
-|------|------------|---------------|
+|---|---|---|
 | Pointer (Preview) | `p` | Yes |
 | Place Block | `b` | Yes |
 | Change (Edit+) | `c` | Yes |
@@ -25,9 +25,9 @@ drupal_version: "11.x"
 | Section Library | `s` | Yes |
 | Show All Actions | `ALT` (hold) | Yes |
 
-## Pattern
+## Hotkey Storage
 
-**Hotkey storage** (per-user on user entity):
+Per-user, stored in the `navigation_plus_settings` base field on user entities:
 
 ```php
 $user->navigation_plus_settings[0]['hotkeys'] = [
@@ -38,20 +38,32 @@ $user->navigation_plus_settings[0]['hotkeys'] = [
 ];
 ```
 
-**Save route:** `navigation_plus.settings.save_user_hotkey`
-Path: `/navigation-plus/save-user-hotkey/{tool_id}/{hotkey}` (called via AJAX from Settings sidebar).
+## Saving Hotkeys
 
-**Settings sidebar** dispatches `SettingsSidebarEvent` — subscribers add settings forms:
+Route: `navigation_plus.settings.save_user_hotkey`
+Path: `/navigation-plus/save-user-hotkey/{tool_id}/{hotkey}`
+
+Called via AJAX from the Settings sidebar → Hotkey configuration section.
+
+## Settings Sidebar
+
+The right sidebar has a Settings panel that dispatches `SettingsSidebarEvent`:
+
+```php
+$event = new SettingsSidebarEvent();
+$this->eventDispatcher->dispatch($event);
+// Subscribers add their settings forms to the sidebar
+```
 
 | Subscriber | Priority | Adds |
-|------------|----------|------|
+|---|---|---|
 | `HotkeySettings` | 100 | Hotkey configuration UI |
 | `NewMediaFileAssociationSettings` | default | File extension → block type mapping |
 
 ## Common Mistakes
 
-- **Wrong**: Assigning hotkeys that conflict with browser shortcuts (`Ctrl+C`, `Ctrl+V`) → **Right**: Use single character keys that don't conflict with system shortcuts
-- **Wrong**: Trying multi-key combinations → **Right**: System only supports single character keys and modifier hold keys (like ALT)
+- **Do not** assign hotkeys that conflict with browser shortcuts (e.g., `Ctrl+C`, `Ctrl+V`).
+- **Do not** use multi-key combinations — the system only supports single character keys and modifier hold keys.
 
 ## See Also
 
