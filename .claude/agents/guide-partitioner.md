@@ -173,6 +173,16 @@ report it so the source can be corrected.
 three sections printed twice, back to back. After writing each file, read it back and confirm no
 `##` heading appears more than once.
 
+**7. Dropping a cross-guide link instead of translating it.** Source guides live as single files
+side by side, so they link to each other as `./other-guide.md#section-anchor` — correct between two
+source documents, meaningless on a site where that guide is twenty-odd separate pages. Measured on
+`js/interaction-craft` (2026-09-02): all seven such links had been **deleted** rather than
+translated, and every anchor mapped exactly onto a published slug, so the translation was available
+the whole time. **Translate it: `./other-guide.md#anchor` becomes a relative path to that anchor's
+own published page** — `../../css/css-craft/animation-performance.md`, the convention already used
+in `docs/js/forms/`. Open the target file to confirm it exists before you write the link; if the
+anchor maps to no published page, report it rather than dropping it in silence.
+
 **Counting headings is not enough to prove no loss.** Before writing a regenerated file, also
 compare the source partition's bullets and table rows against the ones you are about to emit. A
 bullet or row that exists in the source and not in your output is loss, whatever the heading count
