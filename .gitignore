@@ -11,17 +11,15 @@
 /web/themes/contrib/
 /web/profiles/contrib/
 
-# Ignore automatically scaffolded core files
-/web/index.php
-/web/update.php
-
 # ==============================================================================
 # Site-Specific Uploads and Configurations
 # ==============================================================================
 # Never commit user-uploaded files or local settings
 /web/sites/*/files/
-/web/sites/*/settings.local.php
-/web/sites/*/services.local.yml
+/web/sites/*/*settings*.php
+!/web/sites/*/default.settings.php
+/web/sites/*/*services*.yml
+!/web/sites/*/default.services.yml
 
 # Ignore environment configuration files
 .env
