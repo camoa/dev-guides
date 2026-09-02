@@ -1,6 +1,6 @@
 ---
-description: Use AJAX and HTMX together in the same application — coexistence patterns, library dependencies, and integration points
-tldr: "Use both AJAX and HTMX in the same application when you need AJAX for specific features (dialogs, contrib) but want HTMX for new form interactions. They coexist without conflict."
+description: "Hybrid AJAX-HTMX Approach — use AJAX and HTMX together in the same application without conflict"
+tldr: "Use AJAX for specific features (dialogs, contrib) and HTMX for new form interactions in the same app. Drupal.attachBehaviors() runs after both AJAX and HTMX swaps, and Drupal.behaviors.htmx initializes HTMX attributes on AJAX-inserted content."
 drupal_version: "11.x"
 ---
 
@@ -9,15 +9,6 @@ drupal_version: "11.x"
 ## When to Use
 
 > Use both AJAX and HTMX in the same application when you need AJAX for specific features (dialogs, contrib) but want HTMX for new form interactions. They coexist without conflict.
-
-## Decision
-
-| Scenario | Approach |
-|---|---|
-| AJAX inserts HTMX-enabled content | Return render array from AJAX callback; HTMX initializes on new content via `Drupal.behaviors.htmx` |
-| HTMX replaces AJAX content | Target the AJAX wrapper ID with HTMX `target()` |
-| Both update same container | Use carefully — avoid race conditions |
-| New features in existing AJAX forms | Add new elements with HTMX; leave existing AJAX elements unchanged |
 
 ## Pattern
 
@@ -29,14 +20,26 @@ use Drupal\Core\Url;
 $form['ajax_button'] = [
   '#type' => 'button',
   '#value' => t('Load via AJAX'),
-  '#ajax' => ['callback' => '::ajaxCallback', 'wrapper' => 'content-wrapper'],
+  '#ajax' => [
+    'callback' => '::ajaxCallback',
+    'wrapper' => 'content-wrapper',
+  ],
 ];
 
 public function ajaxCallback(array &$form, FormStateInterface $form_state) {
-  $build = ['#type' => 'container', '#attributes' => ['id' => 'content-wrapper']];
+  // Return HTMX-enabled content via AJAX
+  $build = [
+    '#type' => 'container',
+    '#attributes' => ['id' => 'content-wrapper'],
+  ];
 
   // HTMX button inside AJAX-inserted content
-  $build['htmx_button'] = ['#type' => 'html_tag', '#tag' => 'button', '#value' => t('Refresh via HTMX'), '#attributes' => ['type' => 'button']];
+  $build['htmx_button'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'button',
+    '#value' => t('Refresh via HTMX'),
+    '#attributes' => ['type' => 'button'],
+  ];
 
   (new Htmx())
     ->get(Url::fromRoute('my_module.refresh'))
@@ -50,29 +53,22 @@ public function ajaxCallback(array &$form, FormStateInterface $form_state) {
 
 **Key integration points:**
 
-- `Drupal.attachBehaviors()` runs after both AJAX and HTMX swaps
-- `Drupal.behaviors.htmx` initializes HTMX attributes on AJAX-inserted content
-- Both systems can update the same containers — avoid concurrent requests to the same target
+1. **Drupal behaviors work for both** — `Drupal.attachBehaviors()` runs after AJAX AND HTMX swaps
+2. **HTMX processes AJAX-inserted content** — The `Drupal.behaviors.htmx` behavior initializes HTMX attributes on AJAX content
+3. **Both can update same containers** — Just be careful about race conditions
 
-**Library dependencies:**
-```yaml
-# AJAX needs:
-core/drupal.ajax
-# HTMX needs:
-core/drupal.htmx
-# Both can be loaded on the same page
-```
+Reference: `/core/modules/system/tests/modules/test_htmx/src/Form/HtmxTestAjaxForm.php`
 
 ## Common Mistakes
 
-- **Using AJAX and HTMX on the same element** → Choose one. If `#ajax` exists on an element, HTMX attributes are ignored
-- **Not returning render arrays from AJAX callbacks** → Always return render arrays so `Drupal.attachBehaviors()` runs and HTMX initializes
-- **Expecting HTMX without the library** → HTMX needs `core/drupal.htmx` to be loaded. It does not self-initialize
-- **Forgetting library dependencies** → Both `core/drupal.ajax` and `core/drupal.htmx` can be on the same page
-- **Not testing interaction** → Test: AJAX inserting HTMX content, HTMX replacing AJAX content, both updating shared containers
+- **Using AJAX and HTMX on same element** — Choose one. If `#ajax` exists, HTMX attributes are ignored
+- **Not reattaching behaviors** — Always return render arrays from AJAX callbacks so behaviors attach to new content
+- **Expecting HTMX to work without behavior** — HTMX needs `Drupal.behaviors.htmx` to process `data-hx-*` attributes. It runs automatically if core HTMX library is loaded
+- **Forgetting library dependencies** — AJAX needs `core/drupal.ajax`, HTMX needs `core/drupal.htmx`. Both can be on same page
+- **Not testing interaction** — Test AJAX inserting HTMX content, HTMX replacing AJAX content, and both updating shared containers
 
 ## See Also
 
 - Previous: [When NOT to Migrate](when-not-to-migrate.md)
 - Next: [Migration Strategy Best Practices](migration-strategy-best-practices.md)
-- Source: `/core/modules/system/tests/modules/test_htmx/src/Form/HtmxTestAjaxForm.php`
+- Reference: Hybrid form test at `/core/modules/system/tests/modules/test_htmx/src/Form/HtmxTestAjaxForm.php`

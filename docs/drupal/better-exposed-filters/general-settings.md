@@ -1,5 +1,5 @@
 ---
-description: BEF general settings — auto-submit, secondary options panel, reset button, and input-required configuration keys
+description: "BEF general settings — auto-submit, secondary options panel, reset button, and input-required configuration keys"
 tldr: "Use this guide when configuring BEF's global options that apply to all exposed filters on a View — auto-submit, secondary options panel, reset button, and input-required behavior."
 drupal_version: "11.x"
 ---
@@ -8,9 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when configuring BEF's global options that apply to all exposed filters on a View — auto-submit, secondary options panel, reset button, and input-required behavior.
+> When configuring BEF's global options that apply to all exposed filters on a View — auto-submit, secondary options panel, reset button, and input-required behavior.
 
-## Decision
+## Decision: General Configuration Options
 
 | Option | Config Key | Default | Purpose |
 |---|---|---|---|
@@ -27,10 +27,10 @@ drupal_version: "11.x"
 | Secondary open | `secondary_open` | FALSE | Secondary panel open by default |
 | Reset always show | `reset_button_always_show` | FALSE | Show reset button even when no filters are active |
 
-## Pattern
+## Pattern: Accessing General Settings in Code
 
 ```php
-// Access general settings in a form alter or preprocess:
+// In a form alter or preprocess:
 $view = $variables['view'];
 $exposed_form = $view->display_handler->getPlugin('exposed_form');
 $bef_options = $exposed_form->options['bef']['general'];
@@ -39,12 +39,11 @@ $bef_options = $exposed_form->options['bef']['general'];
 
 ## Common Mistakes
 
-- **Wrong**: Enabling auto-submit without debounce for text fields → **Right**: Set `autosubmit_textfield_delay` to avoid excessive AJAX requests on every keystroke.
-- **Wrong**: Hiding the submit button without auto-submit enabled → **Right**: If `autosubmit_hide` is TRUE but auto-submit fails (JS error), users cannot submit the form.
-- **Wrong**: Expecting per-filter "is_secondary" options to appear without enabling secondary → **Right**: Enable "Allow secondary" in general settings first. Per-filter options are hidden until then.
+- **Enabling auto-submit without debounce** — For text fields, always set `autosubmit_textfield_delay` to avoid excessive AJAX requests on every keystroke.
+- **Hiding submit button without auto-submit** — If you hide the button but auto-submit fails (JS error), users can't submit the form at all.
+- **Forgetting to check "Allow secondary"** — Per-filter "is_secondary" options are invisible unless "Allow secondary" is enabled in general settings.
 
 ## See Also
 
-- [Auto-Submit](auto-submit.md)
-- [Secondary & Collapsible Options](secondary-collapsible.md)
-- Reference: `web/modules/contrib/better_exposed_filters/src/Plugin/views/exposed_form/BetterExposedFilters.php`
+- [Auto-Submit](auto-submit.md) — detailed auto-submit configuration
+- [Secondary & Collapsible Options](secondary-collapsible.md) — secondary panel details

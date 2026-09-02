@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use core `PathBasedBreadcrumbBuilder` when basic path-hierarchy breadcrumbs are sufficient. Use Easy Breadcrumb when you need real page titles, current page as final segment, or JSON-LD SEO output. Use a custom builder when breadcrumb logic must be driven by entity relationships, not URL structure.
+> Every Drupal site needs breadcrumbs. The decision is which layer to use: core's built-in path-based builder, the Easy Breadcrumb contrib module, or a fully custom implementation. Choose based on how much control you need over segment titles, hierarchy, and SEO output.
 
 ## Decision
 
@@ -22,17 +22,17 @@ drupal_version: "11.x"
 | Breadcrumb driven by entity type logic | Custom builder with `BreadcrumbBuilderInterface` | Full control, proper service priority, clean cache metadata |
 | Minor tweak to an existing breadcrumb | `hook_system_breadcrumb_alter()` | Low-overhead hook runs after any builder wins; add/remove/modify links |
 | Breadcrumb from menu hierarchy, not path | `menu_breadcrumb` contrib module | Builds from menu trail instead of URL segments |
-| Custom per-path breadcrumbs with no code | Easy Breadcrumb custom paths config | Define `path :: Crumb Title\|/crumb-url :: Another Crumb` in settings UI |
+| Custom per-path breadcrumbs with no code | Easy Breadcrumb custom paths config | Define `path :: Crumb Title \| /crumb-url :: Another Crumb` in settings UI |
 
 ## Common Mistakes
 
-- **Wrong**: Installing Easy Breadcrumb without enabling "Use the real page title when available" → **Right**: Enable `title_from_page_when_available` in Easy Breadcrumb settings; without it, Easy Breadcrumb guesses from URL slugs
-- **Wrong**: Custom builder with priority 0 → **Right**: Use priority > 0 (but < 1003 unless intentionally overriding Easy Breadcrumb); priority 0 ties with `PathBasedBreadcrumbBuilder`
-- **Wrong**: Using `hook_system_breadcrumb_alter()` for complex entity-loading logic → **Right**: Write a custom builder; the alter hook runs on every page load and should stay lightweight
-- **Wrong**: Assuming `hook_system_breadcrumb_alter` only fires when your builder wins → **Right**: Alters always fire after whichever builder won
+- Installing Easy Breadcrumb and expecting it to "take over" without configuring "Use the real page title when available" — it falls back to URL slug guessing without that flag
+- Writing a custom builder with priority 0 — it ties with `PathBasedBreadcrumbBuilder`; use priority > 0 (but < 1003 unless intentionally overriding Easy Breadcrumb)
+- Using `hook_system_breadcrumb_alter()` for complex logic — if you're loading entities or doing routing work in the hook, write a builder instead
+- Forgetting that `BreadcrumbManager` runs `hook_system_breadcrumb_alter` after every builder — alters always fire regardless of which builder won
 
 ## See Also
 
-- [Core Breadcrumb Architecture](core-breadcrumb-architecture.md)
-- [Easy Breadcrumb Module](easy-breadcrumb-module.md)
+- Core builder details → [Core Breadcrumb Architecture](core-breadcrumb-architecture.md)
+- Easy Breadcrumb setup → [Easy Breadcrumb Module](easy-breadcrumb-module.md)
 - Reference: `core/lib/Drupal/Core/Breadcrumb/BreadcrumbManager.php`

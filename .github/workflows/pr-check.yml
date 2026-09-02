@@ -35,6 +35,17 @@ jobs:
       # published a wrong version number — which has happened twice.
       - run: python -m pytest tests/
       - run: python scripts/validate_recipes.py
+      # Three publishing defects that `mkdocs build --strict` structurally
+      # cannot catch, each of which shipped before this check existed: an
+      # absolute /home/<user> path (mkdocs logs an absolute link as INFO, never
+      # a warning), a renamed slug (a slug IS a published URL, and llms.txt
+      # links only topic indexes so nothing notices the 404), and a guide whose
+      # When to Use section no longer carries the source's own text. Ratcheted
+      # against publish-invariants-baseline.json: pre-existing entries pass, a
+      # new one fails. The source guides live outside this repo, so CI enforces
+      # the local-path check and reports the other two as skipped — run the
+      # script locally, where the sources are, before a partition PR.
+      - run: python scripts/check_publish_invariants.py
       # --strict catches broken nav/links and unresolved anchors as build
       # failures. The legacy cross-partition anchor links and broken relative
       # links that previously blocked --strict were cleaned up; keep this strict

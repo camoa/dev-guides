@@ -1,6 +1,6 @@
 ---
-description: Quick reference mapping every Drupal AJAX command to its HTMX equivalent swap strategy or method
-tldr: "Use this reference when converting existing AJAX commands to HTMX patterns. Find the HTMX equivalent of a specific AJAX command before rewriting."
+description: "AJAX Command to HTMX Equivalents — quick reference mapping every AJAX command to its HTMX pattern"
+tldr: "Use this table to find the HTMX equivalent of a specific AJAX command before rewriting it. Multiple simultaneous updates use swapOob() — HTMX has no direct equivalent of stacking multiple AjaxResponse commands."
 drupal_version: "11.x"
 ---
 
@@ -8,12 +8,12 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this reference when converting existing AJAX commands to HTMX patterns. Find the HTMX equivalent of a specific AJAX command before rewriting.
+> Quick reference when converting existing AJAX commands to HTMX patterns. Use this to find the HTMX equivalent of specific AJAX commands.
 
-## Decision
+## Command Mapping
 
 | AJAX Command | HTMX Equivalent | Notes |
-|---|---|---|
+|--------------|-----------------|-------|
 | `ReplaceCommand` | `swap('outerHTML')` | Replace entire element including wrapper |
 | `HtmlCommand` | `swap('innerHTML')` | Replace inner content only |
 | `AppendCommand` | `swap('beforeend')` | Append inside element at end |
@@ -32,7 +32,7 @@ drupal_version: "11.x"
 
 ## Pattern
 
-**Multiple DOM updates — AJAX with multiple commands:**
+**Multiple DOM updates (AJAX with multiple commands):**
 ```php
 $response = new AjaxResponse();
 $response->addCommand(new ReplaceCommand('#content', $content));
@@ -40,7 +40,7 @@ $response->addCommand(new ReplaceCommand('#sidebar', $sidebar));
 $response->addCommand(new MessageCommand('Updated!'));
 ```
 
-**Multiple DOM updates — HTMX with out-of-band swaps:**
+**Multiple DOM updates (HTMX with out-of-band swaps):**
 ```php
 // Primary target
 $build['content'] = [...];
@@ -55,6 +55,8 @@ $build['sidebar'] = [...];
 return $build;
 ```
 
+Reference: `/core/lib/Drupal/Core/Render/MainContent/HtmxRenderer.php`
+
 ## Common Mistakes
 
 - **Trying to use `AjaxResponse` with HTMX** → HTMX uses render arrays, not response objects. Return build arrays from controllers
@@ -66,6 +68,5 @@ return $build;
 ## See Also
 
 - Previous: [AJAX vs HTMX Fundamentals](ajax-vs-htmx-fundamentals.md)
-- Next: [Dependent Dropdown Migration](dependent-dropdown-migration.md)
+- Next: [Dependent Dropdown Migration](dependent-dropdown-migration.md) — First migration pattern
 - Reference: [HTMX swap strategies](https://htmx.org/attributes/hx-swap/)
-- Source: `/core/lib/Drupal/Core/Render/MainContent/HtmxRenderer.php`

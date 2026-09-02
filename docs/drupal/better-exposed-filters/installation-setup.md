@@ -1,26 +1,20 @@
 ---
-description: Install Better Exposed Filters, enable on a View, and configure the noUiSlider library
-tldr: "Use this guide when installing BEF on a Drupal site and enabling it for Views."
-drupal_version: "11.x"
+description: "Install Better Exposed Filters, enable it on a View, and configure the noUiSlider library"
+tldr: "Use this guide when installing BEF on a Drupal site and enabling it for Views. BEF 7.1.3 requires Drupal core ^10.3 || ^11 — the 8.0.x branch is a separate, newer alpha line and is not production-safe."
+drupal_version: "10.3 / 11.x"
 ---
 
 # Installation & Setup
 
 ## When to Use
 
-> Use this guide when installing BEF on a Drupal site and enabling it for Views.
+> When installing BEF on a Drupal site and enabling it for Views.
 
-This guide documents **Better Exposed Filters 7.1.3**, which requires Drupal core `^11.4 || ^12`. An 8.x branch exists but is still in development and has no stable release — do not adopt it.
+## Pattern: Installation
 
-## Decision
+This guide documents Better Exposed Filters 7.1.3, which declares `core_version_requirement: ^10.3 || ^11` and is covered by Drupal's security advisory policy.
 
-| Situation | Choose | Why |
-|---|---|---|
-| New site, need enhanced filter widgets | Install BEF | One command gets you all widgets |
-| Sliders only needed | Install + enable noUiSlider | `drupal/nouislider_js` is required for sliders |
-| Just want auto-submit | BEF general settings | No extra library needed |
-
-## Pattern
+The 8.0.x branch is a separate, newer line: `8.0.0-alpha1` requires Drupal core `^11.4 || ^12`. It is an alpha, so it is **not** covered by security advisories — do not adopt it on a production site. Do not read the 8.0.x core requirement as 7.1.x's; 7.1.3 still supports Drupal 10.3.
 
 ```bash
 # Install via Composer (includes nouislider_js dependency)
@@ -30,7 +24,12 @@ composer require drupal/better_exposed_filters
 drush en better_exposed_filters
 ```
 
-**Enabling BEF on a View:**
+**Dependencies:**
+- `drupal:views` (core)
+- `drupal/nouislider_js` (composer dependency for sliders)
+
+## Pattern: Enabling BEF on a View
+
 1. Edit your View in the Views UI
 2. Under **Advanced** → **Exposed Form**, click the current style (usually "Basic")
 3. Change to **"Better Exposed Filters"**
@@ -38,20 +37,23 @@ drush en better_exposed_filters
 5. Configure general settings and per-filter widget options
 6. Save the View
 
-**Verify noUiSlider library (required for sliders):**
+## Pattern: noUiSlider Library
+
+The slider widget requires the noUiSlider JavaScript library at `/libraries/nouislider/`:
+- `nouislider.min.js`
+- `nouislider.min.css`
+
+The `drupal/nouislider_js` Composer package manages this. Verify the files exist:
 ```bash
 ls web/libraries/nouislider/nouislider.min.js
 ```
 
-Files must exist at `/libraries/nouislider/`: `nouislider.min.js` and `nouislider.min.css`
-
 ## Common Mistakes
 
-- **Wrong**: Expecting BEF widget options to appear without changing the exposed form style → **Right**: Select "Better Exposed Filters" as the exposed form style under Advanced → Exposed Form.
-- **Wrong**: Assuming Composer handles the noUiSlider files completely → **Right**: Some hosting setups strip `/libraries/` during deployment. Verify the files are in place after each deploy.
+- **Not switching the exposed form style** — BEF is a Views exposed form plugin. It does nothing until you select "Better Exposed Filters" as the exposed form style.
+- **Missing noUiSlider files** — If sliders don't work, check that the library files are in place. Some hosting setups strip `/libraries/` during deployment.
 
 ## See Also
 
-- [Overview](overview.md)
-- [General Settings](general-settings.md)
-- Reference: https://www.drupal.org/project/better_exposed_filters
+- [Overview](overview.md) — what BEF provides
+- [General Settings](general-settings.md) — configuring BEF after installation

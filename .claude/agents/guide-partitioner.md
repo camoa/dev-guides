@@ -67,7 +67,10 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use [this] when [condition]. Use [alternative] when [other condition].
+> [The source's own When-to-Use text, VERBATIM. Never the guide's `tldr`, never
+> a rewrite, never prepended with "Use this when". The source heading varies —
+> `### When to Use`, `### When to Use This Section` — and the published heading
+> is `## When to Use` either way.]
 
 ## Decision
 
@@ -82,7 +85,10 @@ Reference source files for full implementation.
 
 ## Common Mistakes
 
-- **Wrong**: [what people do wrong] → **Right**: [what to do instead]
+- **[Label]** — [the source's own explanation, VERBATIM]
+
+<!-- Use `- **Wrong**: … → **Right**: …` ONLY for a mistake the source does not
+     state. Rewriting a source bullet into that shape cuts the explanation. -->
 
 ## See Also
 
@@ -113,11 +119,10 @@ headings you are about to write. Every source subsection must be accounted for �
 the template name, published under its own name, or explicitly reported as deliberately dropped
 with the reason. If you cannot account for one, stop and report rather than writing the file.
 
-### Two ways content vanishes even when every heading survives
+### Ways content vanishes even when every heading survives
 
-Both were measured on a real repair (`drupal/facets`, 2026-09-01: 186 source sentences present in
-the source partitions and absent from the published guides, while the heading count matched).
-Section Preservation alone does not catch either.
+Each was measured on a real repair. Section Preservation alone catches none of them, and every one
+was found only because a detector compared source text against published text after the fact.
 
 **1. Collapsing several source subsections under one template name.** The rule above says a source
 subsection that maps to a template section is "published under the template name" — read carelessly
@@ -143,10 +148,51 @@ source's own wording verbatim**, in the source's own form (`- **Label** — expl
 carries a Common Mistakes bullet that has no source counterpart, keep it and convert it to the
 source's form — published-only content is not surplus.
 
+**3. Substituting the guide's own `tldr` for the source's When to Use.** Measured on
+`drupal/blocks` (2026-09-02): 19 of 22 published guides carried their `tldr` inside the When-to-Use
+blockquote instead of the source's sentence. The heading was present, the section looked complete,
+and 15 units of source text were gone. A milder form appeared in `drupal/contributing-with-ai`,
+where every blockquote read "Use this when you…" against a source reading "When you…". **The
+blockquote is the source's own text, byte for byte.**
+
+**4. Inventing content the source does not support.** Measured on `drupal/group` and
+`drupal/blocks` (2026-09-02): a Critical/High/Medium "risk level" column added to a permission
+table; an anti-patterns `tldr` asserting a pattern "shipped in production"; and, in
+`drupal/contributing-with-ai`, a governance table that filed a core issue under governance,
+retitled it, and gave two issues a status they did not have. **A partition run publishes what the
+source says.** It never adds a severity rating, a status, a title, a date, or a claim the source
+does not carry. If the source lacks something you believe it needs, report it — do not write it.
+
+**5. Coarsening a cross-reference.** Measured on `drupal/contributing` (2026-09-02): the source
+pointed at a topic directory, and the published pages pointed at five specific pages inside it.
+Regenerating from the source alone would have replaced five accurate links with one index link.
+**Where the published file has a more specific target than the source, keep the specific one** and
+report it so the source can be corrected.
+
+**6. Emitting a section twice.** Measured on `drupal/group`'s plugin-system page (2026-09-02):
+three sections printed twice, back to back. After writing each file, read it back and confirm no
+`##` heading appears more than once.
+
 **Counting headings is not enough to prove no loss.** Before writing a regenerated file, also
 compare the source partition's bullets and table rows against the ones you are about to emit. A
 bullet or row that exists in the source and not in your output is loss, whatever the heading count
 says.
+
+**After writing, measure.** Run `python scripts/check_content_loss.py <topic>` and account for
+**each** remaining unit individually — name the published file and quote the text that carries the
+same knowledge. "They are all navigation chrome" is not an answer; that summary shipped a wrong
+verdict once already. A unit you cannot account for is still missing: say so.
+
+### Never publish these
+
+- **An absolute local filesystem path.** `/home/<user>/…` in any published file is dead for every
+  reader and it publishes a home-directory layout. MkDocs logs an absolute link as INFO, so
+  `mkdocs build --strict` will not catch it. Write a repo-relative path instead. Measured
+  2026-09-02: 44 published pages were serving one.
+- **A renamed, added, or removed slug, unless you were explicitly asked for one.** A partition slug
+  **is** a live published URL. Renaming one 404s every existing link to it, and neither `--strict`
+  nor `llms.txt` — which links only topic indexes — will catch it. A deliberate rename needs a
+  `redirect_maps` entry in `mkdocs.yml` and explicit confirmation first.
 
 ## Frontmatter Fields
 

@@ -210,7 +210,7 @@
     "guides_extracted": 13
   },
   "design-systems/bootstrap": {
-    "source_hash": "416d79a6cb33cb051f14019ac3bab93f216abf80fc290def02d8b870f38e97ca",
+    "source_hash": "d93eac41b67346cd8d41586ceb5eaa233561e6731ff8f89b5b46eb1bb5e4d713",
     "partitioned": "2026-09-01",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 16
@@ -325,7 +325,7 @@
   },
   "drupal/ajax-htmx-migration": {
     "source_hash": "faa5f3cd513ddca9ff3b331654896dc18e9a75d2792eaafe264535163189647b",
-    "partitioned": "2026-06-07",
+    "partitioned": "2026-09-02",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 17
   },
@@ -366,8 +366,8 @@
     "guides_extracted": 17
   },
   "drupal/breadcrumbs": {
-    "source_hash": "1bf3e1f34925f84fd7f1a13ee472b6961f60f4fdbdbd402811c941aa1c34a8e9",
-    "partitioned": "2026-09-01",
+    "source_hash": "e90d171440d80de0a98bc2ad6a046a6441086d3dce8840ddd07f8d22d285912b",
+    "partitioned": "2026-09-02",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 14
   },
@@ -414,8 +414,8 @@
     "guides_extracted": 20
   },
   "drupal/better-exposed-filters": {
-    "source_hash": "5ff334e6c180ee8637c81cb39ab15b4d1829a7b665bdf22af8a7e6609681e3ab",
-    "partitioned": "2026-08-17",
+    "source_hash": "f04074f17376f037a3f9aea3704c1bb48209f4a5b5c02f05ca5ee402675c90c9",
+    "partitioned": "2026-09-02",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 20
   },

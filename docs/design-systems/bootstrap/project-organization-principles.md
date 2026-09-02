@@ -22,7 +22,7 @@ Based on proven methodology for systematic design system → Bootstrap conversio
 ### Pattern: Complete Project Folder Structure
 
 ```
-/home/agent/Documents/memory_files/
+~/Documents/memory_files/
 └── [project_name]/                              # e.g., company_bootstrap_personalization/
     ├── project-notes.md                         # Project overview and status
     ├── design-system-analysis/                  # Complete design system documentation

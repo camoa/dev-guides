@@ -1,6 +1,6 @@
 ---
-description: BEF hidden, single checkbox, and number widgets — plugin IDs, applicability, and treat_as_false behavior
-tldr: "Use the hidden widget to pre-set filter values without showing them to users. Use the single checkbox widget for boolean filters (on/off)."
+description: "BEF hidden, single checkbox, and number widgets — plugin IDs, applicability, and treat_as_false behavior"
+tldr: "Use hidden, single checkbox, or number widgets to hide a filter from the user, render a boolean as a single checkbox, or constrain a numeric input."
 drupal_version: "11.x"
 ---
 
@@ -8,68 +8,61 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use the hidden widget to pre-set filter values without showing them to users. Use the single checkbox widget for boolean filters (on/off). Use the number widget to constrain numeric inputs with HTML5 min/max attributes.
+> When you need to hide a filter from the user, render a boolean as a single checkbox, or constrain a numeric input.
 
-## Decision
-
-**Hidden widget (`bef_hidden`):**
+## Decision: Hidden Widget (`bef_hidden`)
 
 | Property | Value |
 |---|---|
 | Plugin ID | `bef_hidden` |
+| Class | `Hidden` |
 | Template | `bef-hidden.html.twig` (multi-value only) |
-| Applicable | All base-applicable filters, plus Date filters |
 
+**Behavior:**
 - Single-value: converts to `#type => 'hidden'` — standard hidden input
-- Multi-value: uses `bef_hidden` theme — renders multiple hidden inputs
+- Multi-value: uses `bef_hidden` theme — renders multiple hidden inputs with selected values
 
-**Single on/off checkbox (`bef_single`):**
+**Applicability:** All filters that match base `FilterWidgetBase::isApplicable()`, plus Date filters.
+
+**Use case:** Pre-set filter values via URL parameters or defaults, without showing the filter to the user.
+
+## Decision: Single On/Off Checkbox (`bef_single`)
 
 | Property | Value |
 |---|---|
 | Plugin ID | `bef_single` |
+| Class | `Single` |
 | Config | `treat_as_false` (default: FALSE) |
-| Applicable | `BooleanOperator` filters, or grouped filters with exactly 1 group item |
 
-| `treat_as_false` | Unchecked means |
-|---|---|
-| FALSE (default) | "ANY" — show all results |
-| TRUE | FALSE — filter to false values |
+**Applicability:** `BooleanOperator` filters, or grouped filters with exactly 1 group item.
 
-BEF adds a hidden fallback input (value `0`) so unchecked state is always submitted (HTML unchecked checkboxes are not sent).
+**Behavior:**
+- Converts the filter to a single checkbox (`#type => 'checkbox'`)
+- Adds a hidden fallback input (`#type => 'hidden'`, value 0) so unchecked state is submitted
+- **treat_as_false:** When FALSE (default), unchecked = "ANY" (show all). When TRUE, unchecked = FALSE (filter to false values).
 
-**Number widget (`bef_number`):**
+**The checkbox problem:** In HTML, unchecked checkboxes are not included in form submissions. BEF adds a hidden input with the same `name` and value `0` to ensure the unchecked state is always submitted.
+
+## Decision: Number Widget (`bef_number`)
 
 | Property | Value |
 |---|---|
 | Plugin ID | `bef_number` |
+| Class | `Number` |
 | Template | `bef-number.html.twig` |
 | Config | `min` (NULL), `max` (NULL) |
-| Applicable | `NumericFilter` only |
 
-Converts text inputs to `<input type="number">` with optional HTML5 `min` and `max` attributes. For "between" operators, converts both fields.
+**Applicability:** `NumericFilter` only.
 
-## Pattern
-
-```php
-// Hidden widget — set a default value via URL parameter:
-// /view-path?field_status=1
-
-// Single checkbox — treat_as_false = TRUE
-// Unchecked = filter to items where boolean = FALSE
-// Checked = filter to items where boolean = TRUE
-
-// Number widget — HTML5 browser validation
-// <input type="number" min="0" max="100">
-```
+**Behavior:** Converts text inputs to `<input type="number">` with optional HTML5 `min` and `max` attributes. For "between" operators, converts both min and max fields.
 
 ## Common Mistakes
 
-- **Wrong**: Using a hidden filter without a default value or URL parameter → **Right**: A hidden filter with no value does nothing. Set defaults or populate via URL.
-- **Wrong**: Confusing Number widget min/max with Slider min/max → **Right**: Number widget uses HTML5 `min`/`max` (browser validation only). Slider uses noUiSlider (visual constraint). Different mechanisms.
+- **Hidden filter not filtering** — Hidden filters still need a default value or URL parameter to be effective. A hidden filter with no value does nothing.
+- **Single checkbox always checked** — This is a known complexity. BEF handles the checkbox state via user input parsing, not the default value. If it seems stuck, check the form state logic.
+- **Number min/max vs slider min/max** — The Number widget uses HTML5 `min`/`max` attributes (browser validation only). The Slider widget uses noUiSlider (visual constraint). Different mechanisms.
 
 ## See Also
 
-- [Checkboxes & Radio Buttons](checkboxes-radio-buttons.md)
-- [Sliders Widget](sliders-widget.md)
-- Reference: `web/modules/contrib/better_exposed_filters/src/Plugin/better_exposed_filters/filter/`
+- [Checkboxes & Radio Buttons](checkboxes-radio-buttons.md) — for multi-value boolean filters
+- [Sliders Widget](sliders-widget.md) — for visual numeric ranges
