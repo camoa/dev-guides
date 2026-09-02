@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when deploying Canvas on a production site. Covers known vulnerabilities, access control model, and safe patterns for SDC and Code Component development.
+> You are deploying Canvas on a production site and need to understand its security surface, known vulnerabilities, access control model, and safe patterns for component development.
 
 ## Decision
 
@@ -20,10 +20,31 @@ drupal_version: "11.x"
 | Rich text input | Configure Canvas text formats carefully | Default toolbar is restricted; `canvas_full_html` expands it |
 | Full HTML format | Restrict which roles can use it | A poorly configured full_html format is an XSS vector |
 
-## Pattern
+## Known Issues and Patch Status
+
+**SA-CONTRIB-2026-006** — Canvas does not sufficiently validate access to Canvas Pages when they are unpublished. Mitigated by the fact that Canvas Pages don't have content moderation enabled by default. **Update to Canvas 1.0.4+ if using unpublished Canvas pages.** This is a real, disclosed vulnerability — check the security advisory for current status.
+
+## Access Control Model
+
+Canvas uses Drupal's standard role-based access control. Key permissions to configure correctly:
+
+| Role concern | Canvas permission | Notes |
+|---|---|---|
+| Who can build Canvas pages | `create canvas_page content` + `edit canvas_page content` | Separate from who can administer components |
+| Who can add/edit components to the library | Canvas component management permissions | Keep this restricted to developers/admins |
+| Who can access unpublished Canvas pages | Requires careful configuration | See SA-CONTRIB-2026-006 |
+| Who can enable/disable components | Admin-level Canvas configuration | Controls what appears in the editor component panel |
+
+## SDC Component Security
+
+SDC components render server-side via Drupal's Twig environment, which has Drupal's standard security protections:
+
+- **Twig auto-escaping**: Drupal's Twig environment escapes output by default — using `{{ variable }}` is safe for string props. Use `{{ variable|raw }}` ONLY for trusted rich text content where you explicitly want HTML output
+- **Rich text props**: `contentMediaType: text/html` props are stored through CKEditor and Drupal's text format filter system — the text format's allowed HTML defines what HTML is actually stored. Configure your Canvas text formats appropriately
+- **canvas_full_html module**: If using `canvas_full_html`, the `full_html` format must be properly configured — restrict which roles can use it, ensure CKEditor 5 is properly limiting what HTML is allowed
+- **Image props via `$ref: canvas.module/image`**: Go through Drupal's Media Library — standard Drupal media access control applies
 
 **Safe Twig patterns for SDC:**
-
 ```twig
 {# SAFE: string prop (auto-escaped) #}
 <h1>{{ headline }}</h1>
@@ -35,8 +56,16 @@ drupal_version: "11.x"
 {{ user_content|raw }}  {# Only safe if you control the input source #}
 ```
 
-**Safe Code Component patterns:**
+## Code Component Security
 
+Code Components render browser-side. Security considerations:
+
+- **No server-side exposure**: Code Components don't have direct PHP/Drupal API access — less server-side risk
+- **XSS in JSX**: React/Preact auto-escapes string interpolation in JSX — `{someString}` is safe. Use `dangerouslySetInnerHTML` ONLY for trusted rich text, and only when necessary
+- **External URLs in links**: Validate that link props resolve to expected domains if you are building internal-only link navigation
+- **Prop schema validation**: Canvas validates prop values against the `component.yml` JSON Schema before storing them — use `minLength`, `maxLength`, `pattern`, `enum` constraints to limit input surface
+
+**Safe Code Component patterns:**
 ```jsx
 {/* SAFE: JSX escapes strings automatically */}
 <h1>{headline}</h1>
@@ -48,33 +77,13 @@ drupal_version: "11.x"
 <a href={ctaUrl?.startsWith('http') ? ctaUrl : '#'}>{ctaLabel}</a>
 ```
 
-**Access control model:**
-
-| Role concern | Canvas permission | Notes |
-|---|---|---|
-| Who can build Canvas pages | `create canvas_page content` + `edit canvas_page content` | Separate from who can administer components |
-| Who can add/edit components to the library | Canvas component management permissions | Keep this restricted to developers/admins |
-| Who can access unpublished Canvas pages | Requires careful configuration | See SA-CONTRIB-2026-006 |
-| Who can enable/disable components | Admin-level Canvas configuration | Controls what appears in the editor component panel |
-
-**SDC component security notes:**
-- Drupal's Twig environment escapes output by default — `{{ variable }}` is safe for string props
-- `contentMediaType: text/html` props are stored through CKEditor and Drupal's text format filter system — configure Canvas text formats appropriately
-- Image props via `$ref: canvas.module/image` go through Drupal's Media Library — standard media access control applies
-
-**Code Component security notes:**
-- Code Components render browser-side — no direct PHP/Drupal API access; less server-side risk
-- React/Preact auto-escapes string interpolation in JSX — `{someString}` is safe
-- Use `dangerouslySetInnerHTML` only for trusted rich text, and only when necessary
-- Canvas validates prop values against the `component.yml` JSON Schema — use `minLength`, `maxLength`, `pattern`, `enum` constraints to limit input surface
-
 ## Common Mistakes
 
-- **Wrong**: Running Canvas 1.0.x with unpublished pages without upgrading → **Right**: Update to Canvas 1.0.4+ immediately (see SA-CONTRIB-2026-006)
-- **Wrong**: Granting "create canvas_page" to untrusted roles without testing access to unpublished pages → **Right**: Test access controls before production launch
-- **Wrong**: Using `{{ variable|raw }}` in SDC templates for any prop that editors can input → **Right**: This bypasses Twig's auto-escaping and creates XSS risk
-- **Wrong**: Granting the `full_html` text format to editor roles without reviewing what HTML CKEditor allows → **Right**: A poorly configured full_html format is an XSS vector
-- **Wrong**: Not applying Drupal's standard security modules (Security Kit, etc.) to Canvas sites → **Right**: Canvas is not exempt from site-wide security hardening
+- Running Canvas 1.0.x with unpublished pages without upgrading to 1.0.4+ — see SA-CONTRIB-2026-006
+- Granting "create canvas_page" to untrusted roles without testing access to unpublished pages
+- Using `{{ variable|raw }}` in SDC templates for any prop that editors can input — this bypasses Twig's auto-escaping and creates XSS risk
+- Granting the `full_html` text format to editor roles without reviewing what HTML CKEditor allows — a poorly configured full_html format is an XSS vector
+- Not applying Drupal's standard security modules (Security Kit, etc.) to Canvas sites — Canvas is not exempt from site-wide security hardening
 
 ## See Also
 

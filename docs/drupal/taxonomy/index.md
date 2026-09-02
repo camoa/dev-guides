@@ -42,4 +42,4 @@ guide-meta:
 | Follow taxonomy best practices | [Best Practices & Patterns](best-practices.md) | Use these guidelines when planning taxonomy architecture, naming conventions, and maintenance strategies. |
 | Avoid common mistakes | [Anti-Patterns & Common Mistakes](anti-patterns.md) | Use this guide when reviewing taxonomy implementations to identify and fix problematic patterns. |
 | Optimize security and performance | [Security & Performance](security-performance.md) | Use this guide when hardening taxonomy implementations against security vulnerabilities and optimizing for large-scale performance. |
-| Find key classes and files | [Code Reference Map](code-reference-map.md) |  |
+| Find key classes and files | [Code Reference Map](code-reference-map.md) | Use this reference to locate key taxonomy classes, methods, and files in the Drupal codebase. |

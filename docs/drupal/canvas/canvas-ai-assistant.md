@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you want content editors to build or modify Canvas pages using natural language prompts. The Canvas AI assistant (`canvas_ai` submodule) is an optional feature targeted at editorial workflows, not developer workflows.
+> You want content editors to be able to build or modify Canvas pages using natural language prompts — describing what they want ("Add a hero with a blue background and a contact us button") and having AI select and configure components automatically. The Canvas AI assistant is an optional submodule targeted at editorial workflows, not developer workflows.
 
 ## Decision
 
@@ -18,21 +18,21 @@ drupal_version: "11.x"
 | Developer-built components | Write good `description`, `title`, `examples` | AI reads metadata to select and configure components correctly |
 | New component generation on demand | Not supported (primary workflow) | AI primarily places existing approved components |
 
-## Pattern
+## Architecture
 
-**Architecture — how it works:**
+The Canvas AI assistant is the `canvas_ai` submodule (also known historically as `xb_ai_assistant`). It operates as an orchestration layer:
 
-1. The editor writes a prompt in the Canvas AI chat interface
-2. The orchestrator analyzes the prompt to determine intent (place existing components vs. generate new components)
-3. The `canvas_page_builder_agent` retrieves all enabled components and uses them as context
-4. AI selects components from the approved library and configures their props
-5. Components are placed on the Canvas page with AI-generated content
+1. **The editor writes a prompt** in the Canvas AI chat interface
+2. **The orchestrator analyzes the prompt** to determine intent (place existing components vs. generate new components)
+3. **The `canvas_page_builder_agent`** retrieves all enabled components and uses them as context
+4. **AI selects components** from the approved library and configures their props
+5. **Components are placed** on the Canvas page with AI-generated content
 
 **Prompt intent routing:**
 - Prompts with "place", "use", "add" → routes to page builder agent (uses existing components)
 - Prompts with "create", "generate", "build" → may trigger component creation (behavior depends on Canvas version)
 
-**Setup:**
+## Setup
 
 ```
 1. Enable canvas_ai submodule
@@ -41,37 +41,24 @@ drupal_version: "11.x"
 4. Enable the provider for all Chat operation types
 ```
 
-The AI provider must support function calling/tool use — the orchestrator uses structured function calls to select and configure components.
+**Requirements**: The AI provider must support function calling/tool use — the orchestrator uses structured function calls to select and configure components.
 
-**Making components AI-friendly** — the AI uses `name`, `description`, and prop `title`/`description` from `*.component.yml` as context:
+## Implications for Component Developers
 
-```yaml
-name: Hero Banner
-description: 'Full-width hero section for landing pages with headline, body text, and a call-to-action button.'
+The AI assistant uses your component's `name`, `description`, and prop `title`/`description` fields from `*.component.yml` as its context. **Good metadata = better AI selection and configuration.**
 
-props:
-  type: object
-  properties:
-    headline:
-      type: string
-      title: Headline
-      description: 'Main heading text for the hero section.'
-      examples:
-        - 'Transform Your Business Today'
-    body:
-      type: string
-      title: Body
-      description: 'Supporting paragraph text below the headline.'
-      examples:
-        - 'Start your journey with our platform.'
-```
+Best practices for AI-friendly components:
+- Write clear `description` in `*.component.yml` — the AI reads this to decide when to use the component
+- Write descriptive `title` and `description` on every prop — the AI uses these to configure prop values correctly
+- Provide `examples` in prop definitions — these guide the AI on appropriate values
+- Use meaningful `group` values — the AI can reason about component categories
 
 ## Common Mistakes
 
-- **Wrong**: Enabling `canvas_ai` without a function-calling-capable AI provider → **Right**: The AI will fail to use tools and will not work
-- **Wrong**: Expecting AI to generate new Code Components on demand → **Right**: The AI primarily selects and configures existing approved components; code generation is a separate workflow
-- **Wrong**: Providing no `description` on components → **Right**: The AI has no signal for when to select the component
-- **Wrong**: Expecting the AI to override the design system → **Right**: The AI is constrained to the available approved components; it cannot place arbitrary HTML
+- Enabling `canvas_ai` without a function-calling-capable AI provider — the AI will fail to use tools and will not work
+- Expecting AI to generate new Code Components on demand — the AI primarily selects and configures existing approved components; code generation is a separate workflow
+- Providing no `description` on components — the AI has no signal for when to select the component
+- Expecting the AI to override the design system — the AI is constrained to the available approved components; it cannot place arbitrary HTML
 
 ## See Also
 

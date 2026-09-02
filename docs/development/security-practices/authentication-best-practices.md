@@ -1,13 +1,13 @@
 ---
 description: Secure authentication covering password hashing (Argon2id, bcrypt), rate limiting, MFA, session management, and OAuth 2.0 with PKCE.
-tldr: "Every system that identifies users needs secure authentication. This covers password-based authentication, multi-factor authentication, session management, and modern authentication protocols."
+tldr: "Every system that identifies users needs secure authentication. This section covers password-based authentication, multi-factor authentication, session management, and modern authentication protocols."
 ---
 
 # Authentication Best Practices
 
 ## When to Use
 
-Every system that identifies users needs secure authentication. This covers password-based authentication, multi-factor authentication, session management, and modern authentication protocols.
+Every system that identifies users needs secure authentication. This section covers password-based authentication, multi-factor authentication, session management, and modern authentication protocols.
 
 ## Decision
 
@@ -148,11 +148,19 @@ session_start([
 - **Expire sessions:** Idle timeout (30 min) and absolute timeout (24 hr)
 - **Invalidate on logout:** Destroy session server-side
 - **One session per user (optional):** Invalidate old sessions on new login
+- **Bind to IP/User-Agent (risky):** Can break legitimate users (mobile switching networks)
 
 ## OAuth 2.0 / OpenID Connect
 
-**Use Authorization Code flow with PKCE** (Proof Key for Code Exchange). OAuth 2.0 Security Best Practices (RFC 9700 - Jan 2025):
+**When to use:**
 
+- Enterprise SSO (Single Sign-On)
+- "Login with Google/GitHub/etc."
+- Delegated authorization (access APIs on user's behalf)
+
+**OAuth 2.0 Security Best Practices (RFC 9700 - Jan 2025):**
+
+- Use **Authorization Code flow with PKCE** (Proof Key for Code Exchange)
 - **Short-lived access tokens** (15 min) with refresh tokens
 - **Bind tokens to client** (token binding, DPoP)
 - Never use Implicit Grant or Resource Owner Password Credentials (ROPC) flow — deprecated in 2025
@@ -171,13 +179,14 @@ function generatePKCE() {
 
 ## Common Mistakes
 
-- **Storing passwords in plaintext** — NEVER. Always hash with Argon2id/bcrypt. Even in development
+- **Storing passwords in plaintext** — NEVER. Always hash with Argon2id/bcrypt. Even in development environments
 - **Using weak work factors** — bcrypt cost < 10 is too fast. Use 12+ (target 200-500ms hash time)
-- **Predictable session IDs** — Use cryptographically secure random. NOT sequential IDs or MD5(username)
+- **Not salting hashes** — Argon2/bcrypt auto-salt. If using custom hash, ALWAYS add unique salt per user
+- **Predictable session IDs** — Use cryptographically secure random (crypto.randomBytes, secrets.token_hex). NOT sequential IDs or MD5(username)
 - **Not invalidating sessions on logout** — Client-side cookie deletion is insufficient. Destroy session server-side
 - **Credentials in URLs** — `https://site.com/login?password=123` exposes passwords in logs, browser history, referer headers
-- **No password complexity requirements** — Require minimum length (12+ chars). Check against compromised password lists
-- **Weak account recovery** — Email-based password reset must use time-limited, single-use tokens. No security questions
+- **No password complexity requirements** — Require minimum length (12+ chars). Check against compromised password lists (HaveIBeenPwned)
+- **Weak account recovery** — Email-based password reset must use time-limited, single-use tokens. No security questions (easily guessable)
 
 ## See Also
 

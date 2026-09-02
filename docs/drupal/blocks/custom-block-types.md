@@ -8,9 +8,38 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use custom block types when content editors need to manage block content with custom fields without code changes. Use block plugins instead for logic-driven or dynamic content.
+> Creating reusable, fieldable block types that content editors can manage without code changes.
 
-## Decision
+## Steps
+
+1. **Create block type via UI**
+   - Navigate to `/admin/structure/block-content/types`
+   - Click "Add block type"
+   - Enter label and description
+   - Save
+
+2. **Add fields to the block type**
+   - Click "Manage fields" for your block type
+   - Add fields (text, image, entity reference, etc.)
+   - Configure field settings and display
+
+3. **Configure display modes**
+   - "Manage display" tab
+   - Arrange field order, formatters
+   - Create additional view modes if needed
+
+4. **Create block content instances**
+   - Navigate to `/block/add/{block_type_machine_name}`
+   - Fill in fields
+   - Save
+   - Mark as "Reusable" if it should appear in block library
+
+5. **Place block instances**
+   - `/admin/structure/block`
+   - "Place block" → Find your content block
+   - Configure region, visibility, cache
+
+## Decision Points
 
 | At this step... | If... | Then... |
 |-----------------|-------|---------|
@@ -22,19 +51,11 @@ drupal_version: "11.x"
 
 ## Pattern
 
-**Via UI:**
-1. Navigate to `/admin/structure/block-content/types`
-2. Add block type, add fields
-3. Create instances at `/block/add/{type}`
-4. Place via `/admin/structure/block`
-
-**Programmatically:**
+Programmatically creating a block type:
 
 ```php
 use Drupal\block_content\Entity\BlockContentType;
-use Drupal\block_content\Entity\BlockContent;
 
-// Create block type
 $block_type = BlockContentType::create([
   'id' => 'call_to_action',
   'label' => 'Call to Action',
@@ -42,7 +63,14 @@ $block_type = BlockContentType::create([
 ]);
 $block_type->save();
 
-// Create block content instance
+// Add fields programmatically (see Field API)
+```
+
+Programmatically creating a block content instance:
+
+```php
+use Drupal\block_content\Entity\BlockContent;
+
 $block = BlockContent::create([
   'type' => 'call_to_action',
   'info' => 'Homepage CTA',
@@ -57,15 +85,15 @@ $block->save();
 
 ## Common Mistakes
 
-- **Wrong**: Creating block types when block plugin is more appropriate → **Right**: Use plugins for logic/dynamic content
-- **Wrong**: Making non-reusable blocks via UI instead of inline blocks → **Right**: Use Layout Builder inline blocks for one-off content
-- **Wrong**: Not planning field reuse across block types → **Right**: Leads to field proliferation and maintenance issues
-- **Wrong**: Forgetting to set "Reusable" checkbox → **Right**: Block won't appear in block library
-- **Wrong**: Over-using block content for simple static content → **Right**: Consider static blocks or page content instead
+- Creating block types when block plugin is more appropriate → Use plugins for logic/dynamic content
+- Making non-reusable blocks via UI instead of inline blocks → Use Layout Builder inline blocks for one-off content
+- Not planning field reuse across block types → Leads to field proliferation and maintenance issues
+- Forgetting to set "Reusable" checkbox → Block won't appear in block library
+- Over-using block content for simple static content → Consider static blocks or page content instead
 
 ## See Also
 
 - [Block Type Decision Matrix](block-type-decision.md)
-- [Content Block Entities](content-blocks.md)
-- [Layout Builder Integration](layout-builder-blocks.md)
+- [Content Block Entities](content-blocks.md) (working with instances)
+- [Layout Builder Integration](layout-builder-blocks.md) (inline blocks)
 - Reference: https://www.drupal.org/docs/core-modules-and-themes/core-modules/block-content-module

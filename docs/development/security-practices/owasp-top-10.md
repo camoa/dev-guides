@@ -58,7 +58,7 @@ The OWASP Top 10 is the industry-standard baseline for web application security.
 
 **Attack scenario:** SQL injection — `SELECT * FROM users WHERE name = '` **admin' OR '1'='1** `'`
 
-**Real-world impact:** 2025 BusinessOn breach — SQL injection leaked 179,386 user accounts, 200M won fine.
+**Real-world impact:** 2025 BusinessOn breach — SQL injection leaked 179,386 user accounts, ₩200M fine.
 
 **Prevention:**
 
@@ -67,16 +67,17 @@ The OWASP Top 10 is the industry-standard baseline for web application security.
 - Validate input against allowlist patterns
 - Escape special characters for interpreter context
 - Limit database permissions (least privilege)
+- See sections 7.0 (SQL Injection) and 5.0 (XSS)
 
 ## A04: Insecure Design
 
 **Attack scenario:** Password reset flow allows unlimited attempts with no rate limiting or CAPTCHA. Attacker brute-forces reset codes.
 
-**Real-world impact:** Design flaws cost 100x more to fix in production than during design phase.
+**Real-world impact:** Design flaws cost 100× more to fix in production than during design phase.
 
 **Prevention:**
 
-- Threat modeling during design (STRIDE)
+- Threat modeling during design (STRIDE — see section 18.0)
 - Security requirements in user stories
 - Secure design patterns library
 - Principle of least privilege in architecture
@@ -96,7 +97,7 @@ The OWASP Top 10 is the industry-standard baseline for web application security.
 - Review/update configurations with patches
 - Disable directory listing
 - Segmented application architecture (containers, cloud security groups)
-- Security headers (see [Security Headers](security-headers.md))
+- Security headers (see section 12.0)
 - Turn off detailed error messages in production
 
 ## A06: Vulnerable and Outdated Components
@@ -113,10 +114,13 @@ The OWASP Top 10 is the industry-standard baseline for web application security.
 - Prefer signed packages
 - Monitor unmaintained libraries — plan migrations
 - **7-day dependency cooldown** — wait 7 days before updating; would have prevented 8 of 10 major 2025 supply chain attacks
+- See section 15.0 (Dependency Security)
 
 ## A07: Identification and Authentication Failures
 
 **Attack scenario:** Application allows unlimited login attempts. Attacker brute-forces common passwords.
+
+**Real-world impact:** Credential stuffing attacks succeed due to weak authentication.
 
 **Prevention:**
 
@@ -127,6 +131,7 @@ The OWASP Top 10 is the industry-standard baseline for web application security.
 - Use strong session ID generation
 - Invalidate session IDs after logout, idle timeout
 - Don't expose session IDs in URLs
+- See section 9.0 (Authentication)
 
 ## A08: Software and Data Integrity Failures
 
@@ -158,6 +163,7 @@ The OWASP Top 10 is the industry-standard baseline for web application security.
 - Encrypt logs containing sensitive data
 - Implement effective monitoring and alerting
 - Establish incident response plan
+- See section 16.0 (Logging & Monitoring)
 
 ## A10: Server-Side Request Forgery (SSRF)
 
@@ -177,7 +183,7 @@ The OWASP Top 10 is the industry-standard baseline for web application security.
 ## Common Mistakes
 
 - **Treating OWASP Top 10 as complete security** — It's the MINIMUM baseline. Secure applications address dozens more vulnerability classes
-- **"We'll fix security later"** — Retrofitting security is 100x more expensive than building it in. Capital One breach settlement: $190M
+- **"We'll fix security later"** — Retrofitting security is 100× more expensive than building it in. Capital One breach settlement: $190M
 - **Compliance checkbox mentality** — PCI DSS compliance didn't prevent Target breach. Focus on actual risk reduction
 - **Not tracking changes** — OWASP Top 10 evolves. A04 (Insecure Design) and A08 (Integrity Failures) are new in 2021. Subscribe to OWASP announcements
 

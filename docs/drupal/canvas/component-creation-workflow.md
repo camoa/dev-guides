@@ -8,27 +8,11 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when building a new component for a Canvas site from scratch. Covers the full process for both SDC (Twig) and Code Components (React) — from deciding which type to use through verifying it works in the Canvas editor.
+> You are building a new component for a Canvas site — from scratch — and need a step-by-step process for creating it correctly, deciding which type to use, setting it up, and validating it works in Canvas.
 
-## Decision
+## Steps for SDC Components (Twig)
 
-| At this step... | If... | Then... |
-|---|---|---|
-| Choosing SDC vs Code Component | Server-side rendering + Drupal field widgets needed | SDC component |
-| Choosing SDC vs Code Component | Interactive React state or Tailwind-only needed | Code Component |
-| Writing props | The prop needs the Media Library | Use `type: object` + `$ref: canvas.module/image` |
-| Writing props | The prop needs a link input | Use `type: string` + `format: uri-reference` (internal + external) or `format: uri` (external only). There is no link `$ref` |
-| Writing props | The prop needs rich text | Add `contentMediaType: text/html` + `x-formatting-context` |
-| Writing props | You want a default value | Write it as `examples[0]`. `default:` is stripped by Canvas |
-| Component missing from the panel | It was discovered but disqualified | Open `/admin/appearance/component/status` and read the recorded reason |
-| Testing reveals missing widget | Canvas shows raw text input instead of expected widget | Check `$ref` and `contentMediaType` spelling exactly |
-| Push fails | Auth or build error | Check `.env` credentials; run `build` before `push` |
-
-## Pattern
-
-### Steps for SDC Components (Twig)
-
-1. **Define the component's purpose** — What does it display? What props does a content editor need? Are there nested component areas (slots)?
+1. **Define the component's purpose** — What does it display? What props does a content editor need to configure? Are there nested component areas (slots)?
 
 2. **Create the directory** — Under any enabled module or theme's `components/` folder:
    ```
@@ -57,13 +41,13 @@ drupal_version: "11.x"
      # Add slots here if needed — see SDC Slots section
    ```
 
-4. **Define props and slots** — Use the prop types from the [SDC Props Reference](sdc-props-reference.md). `title` is mandatory on **every** prop and **every** slot, and `examples` is mandatory on every required prop — omitting either removes the component from Canvas entirely. Put the value you want as the default first in `examples`; Canvas ignores `default:`.
+4. **Define props and slots** — Use the prop types from the [SDC Props Reference](sdc-props-reference.md) section. `title` is mandatory on **every** prop and **every** slot, and `examples` is mandatory on every required prop — omitting either removes the component from Canvas entirely. Put the value you want as the default first in `examples`; Canvas ignores `default:`.
 
 5. **Write the Twig template** — Render each prop; use `canvas:image` for image props; check for empty values before rendering wrappers.
 
 6. **Clear Drupal caches** — `drush cr` to trigger SDC component discovery.
 
-7. **Check eligibility before hunting in the panel** — visit **`/admin/appearance/component/status`**. Canvas discovers every SDC but only *admits* the ones that pass its requirements check, and a failing component is excluded silently. This page lists every excluded component with the exact reason. If yours is listed, fix the reason and repeat step 6. If this page itself 500s, you are looking at the one non-silent failure — a `$ref` to a definition that doesn't exist crashes SDC discovery site-wide (see [SDC Props Reference](sdc-props-reference.md#the-one-failure-that-is-not-silent)) — diagnose from the log instead.
+7. **Check eligibility before hunting in the panel** — visit **`/admin/appearance/component/status`**. Canvas discovers every SDC but only *admits* the ones that pass its requirements check, and a failing component is excluded silently. This page lists every excluded component with the exact reason. If yours is listed, fix the reason and repeat step 6 — do not go looking for it in the panel.
 
 8. **Verify in Canvas editor** — Open Canvas, create a new page, find your component in the component panel (by its `group` and `name`), drag it onto the page, and confirm all prop widgets appear correctly.
 
@@ -71,7 +55,7 @@ drupal_version: "11.x"
 
 10. **Test empty/missing props** — Verify the component doesn't break when optional props are empty.
 
-### Steps for Code Components (React)
+## Steps for Code Components (React)
 
 1. **Set up a Nebula codebase** (if not already done):
    ```bash
@@ -109,14 +93,28 @@ drupal_version: "11.x"
 
 9. **Verify in Canvas editor** — Find the component in the panel; test prop editing; test slot drop zones.
 
+## Decision Points
+
+| At this step... | If... | Then... |
+|---|---|---|
+| Choosing SDC vs Code Component | Server-side rendering + Drupal field widgets needed | SDC component |
+| Choosing SDC vs Code Component | Interactive React state or Tailwind-only needed | Code Component |
+| Writing props | The prop needs the Media Library | Use `type: object` + `$ref: canvas.module/image` |
+| Writing props | The prop needs a link input | Use `type: string` + `format: uri-reference` (internal + external) or `format: uri` (external only). There is no link `$ref` |
+| Writing props | The prop needs rich text | Add `contentMediaType: text/html` + `x-formatting-context` |
+| Writing props | You want a default value | Write it as `examples[0]`. `default:` is stripped by Canvas |
+| Component missing from the panel | It was discovered but disqualified | Open `/admin/appearance/component/status` and read the recorded reason |
+| Testing reveals missing widget | Canvas shows raw text input instead of expected widget | Check `$ref` and `contentMediaType` spelling exactly |
+| Push fails | Auth or build error | Check `.env` credentials; run `build` before `push` |
+
 ## Common Mistakes
 
-- **Wrong**: Building a component without checking if an existing Canvas or contrib component already does it → **Right**: Duplicate components create editor confusion; check the component panel first
-- **Wrong**: Not clearing caches after adding an SDC component → **Right**: It won't appear in Canvas until `drush cr`
-- **Wrong**: Assuming a missing component means a discovery problem → **Right**: far more often it was discovered and then disqualified; `/admin/appearance/component/status` tells you which
-- **Wrong**: Writing `default:` in the YAML → **Right**: Canvas strips it; the stored default is `examples[0]`
-- **Wrong**: Defining a prop but not rendering it in the template → **Right**: Editors fill in the field but see no change on screen
-- **Wrong**: Skipping the Storybook preview step for Code Components → **Right**: You catch broken props faster in Storybook than in Canvas
+- Building a component without checking if an existing Canvas or contrib component already does it — duplicate components create editor confusion
+- Not clearing caches after adding an SDC component — it won't appear in Canvas until `drush cr`
+- Assuming a missing component means a discovery problem — far more often it was discovered and then disqualified; `/admin/appearance/component/status` tells you which
+- Writing `default:` in the YAML — Canvas strips it; the stored default is `examples[0]`
+- Defining a prop but not rendering it in the template — editors fill in the field but see no change on screen
+- Skipping the Storybook preview step for Code Components — you catch broken props faster in Storybook than in Canvas
 
 ## See Also
 

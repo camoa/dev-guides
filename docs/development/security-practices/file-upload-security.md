@@ -140,6 +140,34 @@ def scan_file(file_path):
     return False, virus_name
 ```
 
+## Filename Sanitization
+
+```python
+from werkzeug.utils import secure_filename
+import re
+
+def sanitize_filename(filename):
+    # 1. Use werkzeug's secure_filename
+    filename = secure_filename(filename)
+
+    # Remove null bytes
+    filename = filename.replace('\x00', '')
+
+    # Remove Unicode control characters
+    filename = re.sub(r'[\x00-\x1f\x7f-\x9f]', '', filename)
+
+    # Limit length
+    if len(filename) > 255:
+        name, ext = filename.rsplit('.', 1)
+        filename = name[:250] + '.' + ext
+
+    # Ensure it's not empty after sanitization
+    if not filename:
+        filename = 'upload'
+
+    return filename
+```
+
 ## Path Traversal Prevention
 
 ```python
@@ -184,15 +212,16 @@ def sanitize_image(file):
 
 ## Common Mistakes
 
+- **2025 CVE-2025-42910: SAP SRM SQL injection via file upload** — Insufficient MIME validation, no magic byte checking
 - **Trusting Content-Type header** — Attacker fully controls this. Validate magic bytes, not headers
-- **Storing files in web root** — `/var/www/html/uploads/shell.php` is accessible and executable
-- **Not randomizing filenames** — User uploads `shell.php`, visits `/uploads/shell.php`, code executes
-- **No file size limits** — Attacker uploads 10GB file repeatedly. Disk fills, DoS
-- **Serving files inline** — `Content-Disposition: inline` displays HTML/JS files in browser. Use `attachment`
-- **Allowing .htaccess uploads** — User uploads `.htaccess` to enable PHP execution. Block dotfiles
-- **Double extension bypass** — `shell.php.jpg` — some servers execute as PHP
-- **Not scanning for malware** — User uploads ransomware, another user downloads it
-- **SVG uploads without sanitization** — SVG can contain `<script>` tags
+- **Storing files in web root** — `/var/www/html/uploads/shell.php` is accessible and executable. Store outside web root
+- **Not randomizing filenames** — User uploads `shell.php`, visits `/uploads/shell.php`, code executes. Use UUIDs
+- **No file size limits** — Attacker uploads 10GB file repeatedly. Disk fills, DoS. Enforce limits in web server AND application
+- **Serving files inline** — `Content-Disposition: inline` displays HTML/JS files in browser. Use `attachment` to force download
+- **Allowing .htaccess uploads** — User uploads `.htaccess` to enable PHP execution in uploads folder. Block dotfiles
+- **Double extension bypass** — `shell.php.jpg` — some servers execute as PHP. Validate final extension only
+- **Not scanning for malware** — User uploads ransomware, another user downloads it. Scan all uploads with ClamAV or similar
+- **SVG uploads without sanitization** — SVG can contain `<script>` tags. Either block SVG or use strict sanitization library
 
 ## See Also
 

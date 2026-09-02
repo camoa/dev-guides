@@ -54,7 +54,7 @@ The `|filter((value) => value is not null)` is not decoration: it drops unset ke
 
 | Parameter | Type | Effective default | Purpose |
 |---|---|---|---|
-| `src` | string (`format: uri-reference`, `contentMediaType: image/*`) | — | **Required.** Relative/absolute URL, or a stream-wrapper URI (`public://…`) — `file_url()` resolves it |
+| `src` | string (`format: uri-reference`, `contentMediaType: image/*`) | — | **Required.** Relative or absolute URL, or a stream-wrapper URI (`public://…`) — `file_url()` resolves it |
 | `alt` | string | none (attribute omitted) | Alt text |
 | `width` | integer | derived from `src` via `\|getWidth` | Intrinsic width |
 | `height` | integer | derived from `src` via `\|getHeight` | Intrinsic height |
@@ -65,21 +65,26 @@ The `|filter((value) => value is not null)` is not decoration: it drops unset ke
 
 Notes on what is *not* there:
 
-- **No `fetchpriority` parameter.** `image.twig` never reads it — put it in `attributes`: `attributes: create_attribute({fetchpriority: 'high'})`
+- **No `fetchpriority` parameter.** `image.twig` never reads it; passing it is inert. If you need `fetchpriority="high"` on an LCP image, put it in `attributes`: `attributes: create_attribute({fetchpriority: 'high'})`
 - **No `image_attributes` parameter.** The key is `attributes`
 - **`srcset` is computed, not passed.** `image.twig` derives it from `src|toSrcSet(width)`. There is no `srcset` prop and no `image.srcset` value
 
 `canvas:image` is itself a worked example of the defaults rule: its YAML says `default: lazy` on `loading`, Canvas ignores that, and the `lazy` you actually get comes from `loading ?? 'lazy'` on the last line of `image.twig`.
 
+**Performance guidance:**
+- Use `loading: eager` for the first visible image on a page (LCP candidate); add `fetchpriority: 'high'` through `attributes`
+- Use `loading: lazy` (the default) for all below-the-fold images
+- Only one image on a page should carry `fetchpriority="high"` — using it on several defeats the purpose
+
 ## Common Mistakes
 
-- **Wrong**: `{% include 'canvas:image' with {image: image} only %}` → **Right**: the killer mistake. `canvas:image` reads `src`, so this throws a `TypeError` under strict types. Spread with `image|merge({...})`
-- **Wrong**: `<img src="{{ image }}">` → **Right**: the image prop is an object, not a URL string; this outputs nothing or breaks
-- **Wrong**: `<img src="{{ image.url }}">` → **Right**: `image.url` does not exist — the key is `image.src`, and building your own tag still bypasses srcset and stream-wrapper URL resolution; use `canvas:image`
-- **Wrong**: Passing `fetchpriority:` or `image_attributes:` → **Right**: neither is a `canvas:image` parameter; use `attributes: create_attribute({...})`
-- **Wrong**: Using `{% embed 'canvas:image' %}` → **Right**: `canvas:image` must be included with `{% include ... only %}`, not embedded
-- **Wrong**: Setting `fetchpriority="high"` on every image → **Right**: only the LCP image should have this
-- **Wrong**: Missing `{% if image %}` guard → **Right**: the prop can be empty if the editor hasn't uploaded an image yet
+- `{% include 'canvas:image' with {image: image} only %}` — the killer. `canvas:image` reads `src`, so this throws a `TypeError` under strict types. Spread with `image|merge({...})`
+- `<img src="{{ image }}">` — the image prop is an object, not a URL string; this outputs nothing or breaks
+- `<img src="{{ image.url }}">` — `image.url` does not exist. The key is `image.src`, and building your own tag still bypasses srcset and the stream-wrapper URL resolution; use `canvas:image`
+- Passing `fetchpriority:` or `image_attributes:` — neither is a `canvas:image` parameter. Use `attributes: create_attribute({...})`
+- Using `{% embed 'canvas:image' %}` — Canvas:image must be included with `{% include ... only %}`, not embedded
+- Setting `fetchpriority="high"` on every image — only the LCP image should have this
+- Missing `{% if image %}` guard — the prop can be empty if the editor hasn't uploaded an image yet
 
 ## See Also
 

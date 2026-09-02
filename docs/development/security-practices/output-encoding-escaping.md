@@ -47,7 +47,7 @@ Escape ALL output that includes untrusted data before rendering in HTML, JavaScr
 | JavaScript data | JSON.stringify() | Automatic safe encoding |
 | URL parameter | URL encoding (percent encoding) | Non-alphanumeric characters |
 | CSS value | CSS escaping | Hex escape sequences |
-| SQL query | **Never escape manually** | Use parameterized queries |
+| SQL query | **Never escape manually** | Use parameterized queries (section 7.0) |
 
 ## Pattern
 
@@ -154,7 +154,7 @@ function buildSearchUrl(string $query): string {
 - **Double encoding** — Escaping already-escaped data causes display bugs. Escape once at output time, not at input time
 - **Encoding too early** — Encode at output, not input. Storing pre-encoded data in database causes issues when outputting to different contexts
 - **Manual escaping when framework provides it** — Use your framework's built-in escaping. Don't reinvent the wheel with regex replacements
-- **Trusting "safe" bypass mechanisms** — React's `dangerouslySetInnerHTML`, Django's `| safe`, Vue's `v-html` — these disable protection. Only use when HTML is from TRUSTED source
+- **Trusting "safe" bypass mechanisms** — React's `dangerouslySetInnerHTML`, Django's `| safe`, Vue's `v-html` — these disable protection. Only use when HTML is from TRUSTED source (your own templates, not user input)
 - **Not escaping in JSON API responses** — JSON APIs still need output escaping. Use `JSON.stringify()`, don't concatenate strings
 
 ## See Also

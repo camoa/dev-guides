@@ -8,23 +8,20 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use visibility conditions for UI-configurable placement rules (pages, roles, node type). Use `blockAccess()` for programmatic logic that can't be expressed in conditions.
+> Controlling block visibility based on pages, user roles, content types, or custom logic.
 
-## Decision
+## Items
 
-| Condition | Use when... | Plugin ID |
-|-----------|-------------|-----------|
-| request_path | Show/hide based on URL patterns | `request_path` |
-| user_role | Show/hide based on user's roles | `user_role` |
-| entity_bundle:node | Show/hide based on node content type | `entity_bundle:node` |
-| current_theme | Show/hide based on active theme | `current_theme` |
-| response_status | Show/hide based on HTTP status (404, 403) | `response_status` |
-| Custom condition | Complex logic needed | Create `#[Condition]` plugin |
+#### request_path
+**Description:** Show/hide block based on URL patterns
+**Plugin ID:** `request_path`
+**Configuration:**
+| Setting | Type | Description |
+|---------|------|-------------|
+| pages | string | One path per line, wildcards supported (`/user/*`, `<front>`) |
+| negate | boolean | Reverse the condition |
 
-## Pattern
-
-**Core visibility conditions:**
-
+**Usage Example:**
 ```php
 'visibility' => [
   'request_path' => [
@@ -32,6 +29,22 @@ drupal_version: "11.x"
     'pages' => "/admin/*\n/user/*/edit",
     'negate' => TRUE, // Hide on these pages
   ],
+],
+```
+**Gotchas:** Paths must start with `/`; `<front>` is special keyword for homepage; comparison is case-insensitive
+
+#### user_role
+**Description:** Show/hide block based on user's roles
+**Plugin ID:** `user_role`
+**Configuration:**
+| Setting | Type | Description |
+|---------|------|-------------|
+| roles | array | Machine names of roles (e.g., `['authenticated', 'administrator']`) |
+| negate | boolean | Reverse the condition |
+
+**Usage Example:**
+```php
+'visibility' => [
   'user_role' => [
     'id' => 'user_role',
     'roles' => [
@@ -40,9 +53,27 @@ drupal_version: "11.x"
     ],
     'negate' => FALSE,
   ],
+],
+```
+**Gotchas:** Empty roles array shows to all users; cache context `user.roles` automatically added
+
+#### entity_bundle:node
+**Description:** Show/hide block based on node content type
+**Plugin ID:** `entity_bundle:node`
+**Configuration:**
+| Setting | Type | Description |
+|---------|------|-------------|
+| bundles | array | Node type machine names (e.g., `['article', 'page']`) |
+| negate | boolean | Reverse the condition |
+
+**Usage Example:**
+```php
+'visibility' => [
   'entity_bundle:node' => [
     'id' => 'entity_bundle:node',
-    'bundles' => ['article' => 'article'],
+    'bundles' => [
+      'article' => 'article',
+    ],
     'negate' => FALSE,
     'context_mapping' => [
       'node' => '@node.node_route_context:node',
@@ -50,9 +81,39 @@ drupal_version: "11.x"
   ],
 ],
 ```
+**Gotchas:** Requires node context; only works on node pages; check context mapping
 
-**Custom visibility condition:**
+#### current_theme
+**Description:** Show/hide block based on active theme
+**Plugin ID:** `current_theme`
+**Configuration:**
+| Setting | Type | Description |
+|---------|------|-------------|
+| theme | string | Theme machine name |
+| negate | boolean | Reverse the condition |
 
+**Gotchas:** Rarely needed; blocks already theme-specific via placement
+
+#### response_status
+**Description:** Show/hide block based on HTTP response status
+**Plugin ID:** `response_status`
+**Configuration:**
+| Setting | Type | Description |
+|---------|------|-------------|
+| status_codes | array | HTTP status codes (e.g., `[403, 404]`) |
+| negate | boolean | Reverse the condition |
+
+**Gotchas:** Useful for error pages; ensure cache contexts set properly
+
+## Creating Custom Visibility Conditions
+
+**Steps:**
+1. Create condition plugin in `{module}/src/Plugin/Condition/`
+2. Extend `ConditionPluginBase`
+3. Use `#[Condition]` attribute
+4. Implement `evaluate()` method
+
+**Pattern:**
 ```php
 namespace Drupal\mymodule\Plugin\Condition;
 
@@ -81,15 +142,15 @@ class TimeOfDay extends ConditionPluginBase {
 
 ## Common Mistakes
 
-- **Wrong**: Using `request_path` without leading slash → **Right**: Condition never matches; paths must start with `/`
-- **Wrong**: Forgetting context mapping for entity-based conditions → **Right**: Plugin can't access entity; condition fails
-- **Wrong**: Not considering cache implications → **Right**: Add appropriate cache contexts in condition
-- **Wrong**: Using complex logic in `request_path` → **Right**: Create custom condition plugin for complex rules
-- **Wrong**: Negating conditions when positive logic is clearer → **Right**: Use `negate => FALSE` and adjust condition instead
+- Using `request_path` without leading slash → Condition never matches; paths must start with `/`
+- Forgetting context mapping for entity-based conditions → Plugin can't access entity; condition fails
+- Not considering cache implications → Add appropriate cache contexts in condition
+- Using complex logic in `request_path` → Create custom condition plugin for complex rules
+- Negating conditions when positive logic is clearer → Use `negate => FALSE` and adjust condition instead
 
 ## See Also
 
-- [Block Access Control](block-access-control.md)
+- [Block Access Control](block-access-control.md) (programmatic access)
 - [Block Placement & Configuration](block-placement.md)
 - Reference: https://www.drupal.org/docs/drupal-apis/plugin-api/plugin-api-overview
 - Reference: https://www.jaypan.com/tutorial/custom-drupal-block-visibility-plugins-and-condition-plugin-api

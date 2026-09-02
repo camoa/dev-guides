@@ -18,6 +18,12 @@ Every project uses third-party dependencies — npm packages, PyPI libraries, Ma
 - **s1ngularity campaign (Aug-Nov 2025):** Compromised Nx packages, harvested 2,349 credentials from 1,079 developer systems
 - **8 out of 10 major 2025 supply chain attacks** could have been prevented with 7-day dependency cooldown
 
+**Attack evolution:**
+
+- Traditional attacks: Typosquatting, dependency confusion
+- 2025 trend: **Worm-like propagation** through build tools and package managers
+- Attackers target developer tooling for high-leverage access downstream
+
 ## Decision
 
 | If you need to... | Use... | Why |
@@ -134,6 +140,40 @@ function debounce(func, delay) {
 }
 ```
 
+## Package Source Verification
+
+```bash
+# npm - use only official registry
+npm config set registry https://registry.npmjs.org/
+
+# Verify package publisher
+npm view package-name
+
+# Check for typosquatting
+# Installing "reqeusts" instead of "requests"
+# Installing "python-dateutil" instead of "dateutil"
+
+# Python - use only PyPI
+pip install --index-url https://pypi.org/simple/ package-name
+
+# Verify package authenticity
+pip show package-name
+```
+
+## Signed Packages
+
+```bash
+# npm - verify package signatures (npm 7+)
+npm config set audit-signatures true
+npm audit signatures
+
+# Python - verify package signatures with GPG
+# (Most PyPI packages not signed - rely on HTTPS + lock files)
+
+# Maven - verify signatures
+mvn verify
+```
+
 ## Subresource Integrity (SRI) for CDN
 
 ```html
@@ -146,6 +186,26 @@ function debounce(func, delay) {
     integrity="sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GqQ8K/uxy9rx7HNQlGYl1kPzQho1wx4JwY8wC"
     crossorigin="anonymous">
 </script>
+
+<!-- Generate SRI hash -->
+<!-- cat lib.js | openssl dgst -sha384 -binary | openssl base64 -A -->
+```
+
+## Dependency Policies
+
+```json
+// package.json - define acceptable licenses
+{
+  "license-checker": {
+    "allowed": ["MIT", "Apache-2.0", "BSD-3-Clause"],
+    "blocked": ["GPL", "AGPL"]  // Copyleft licenses
+  }
+}
+```
+
+```bash
+# Check licenses
+npx license-checker --production --onlyAllow 'MIT;Apache-2.0;BSD-3-Clause'
 ```
 
 ## Private Package Registries
@@ -155,24 +215,29 @@ function debounce(func, delay) {
 npm config set @mycompany:registry https://npm.mycompany.com
 
 # Prevent dependency confusion attacks
-# Scope all internal packages: @mycompany/utils
+# Attacker publishes "mycompany-utils" to public npm
+# Developer accidentally installs public malicious package instead of private
+
+# Defense: Scope all internal packages
+@mycompany/utils  # Private scoped package
 ```
 
 ## Common Mistakes
 
-- **A06:2021 Vulnerable and Outdated Components is #6 OWASP Top 10** — Enables remote code execution
-- **Not using lock files** — Different developers get different versions. Malicious package can be injected
-- **Running `npm install` as root** — Packages can run arbitrary code during install
-- **Not reviewing dependency updates** — Dependabot PRs auto-merged without review
-- **Installing dev dependencies in production** — `npm install --production` to skip devDependencies
-- **Ignoring indirect dependencies** — Scan entire dependency tree
-- **Not monitoring for advisories** — Subscribe to security advisories for your ecosystem
-- **Typosquatting** — `npm install reqeusts` instead of `requests`. Double-check spelling
-- **Dependency confusion** — Public package with same name as private. Use scoped packages
-- **Not removing unused dependencies** — Dead code is still attack surface
+- **A06:2021 Vulnerable and Outdated Components is #6 OWASP Top 10** — Extremely common, enables remote code execution
+- **Not using lock files** — Different developers get different versions. Malicious package can be injected between installs
+- **Running `npm install` as root** — Packages can run arbitrary code during install. Use non-root user, sandbox
+- **Not reviewing dependency updates** — Dependabot PRs auto-merged without review. Compromised package slips in
+- **Installing dev dependencies in production** — `npm install --production` to skip devDependencies. Smaller attack surface
+- **Ignoring indirect dependencies** — You depend on A, A depends on B (has vulnerability). Scan entire tree
+- **Not monitoring for advisories** — Subscribe to security advisories for your ecosystem (GitHub Security Advisories, npm security alerts)
+- **Typosquatting** — `npm install reqeusts` instead of `requests`. Attacker registers similar names. Double-check spelling
+- **Dependency confusion** — Public package with same name as private package. Use scoped packages, configure registry priority
+- **Not removing unused dependencies** — Dead code is still attack surface. Prune regularly
 
 ## See Also
 
 - Previous: [File Upload Security](file-upload-security.md) | Next: [Logging and Monitoring](logging-monitoring.md)
 - Reference: [OWASP Dependency-Check](https://owasp.org/www-project-dependency-check/)
+- Reference: [Sonatype 2026 State of the Software Supply Chain Report](https://www.sonatype.com/state-of-the-software-supply-chain/2026)
 - Reference: [Snyk](https://snyk.io/)

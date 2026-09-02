@@ -8,9 +8,53 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when controlling where blocks appear (regions, themes) and their configuration (weight, visibility, settings). Block config entities are the placement layer — distinct from the block plugin itself.
+> Controlling where blocks appear (regions, themes) and their configuration (weight, visibility, settings).
 
-## Decision
+## Steps
+
+1. **Understanding Block config entity**
+   - References a block plugin (via `plugin` property)
+   - Stores instance-specific settings
+   - Tied to specific theme and region
+   - Contains visibility conditions
+
+2. **Placing blocks via UI**
+   - Navigate to `/admin/structure/block`
+   - Select theme
+   - Click "Place block" in desired region
+   - Configure and save
+
+3. **Placing blocks programmatically**
+   ```php
+   $block = Block::create([
+     'id' => 'my_block_instance',
+     'plugin' => 'system_branding_block',
+     'region' => 'header',
+     'theme' => 'bartik',
+     'weight' => -10,
+     'settings' => [
+       'label' => 'Site branding',
+       'label_display' => 0,
+     ],
+   ]);
+   $block->save();
+   ```
+
+4. **Modifying placement**
+   ```php
+   $block = Block::load('my_block_instance');
+   $block->setRegion('sidebar_first');
+   $block->setWeight(5);
+   $block->save();
+   ```
+
+5. **Removing placement**
+   ```php
+   $block = Block::load('my_block_instance');
+   $block->delete(); // Only deletes placement, not the plugin
+   ```
+
+## Decision Points
 
 | At this step... | If... | Then... |
 |-----------------|-------|---------|
@@ -61,30 +105,15 @@ $blocks = \Drupal::entityTypeManager()
   ]);
 ```
 
-**Modifying placement:**
-
-```php
-$block = Block::load('my_block_instance');
-$block->setRegion('sidebar_first');
-$block->setWeight(5);
-$block->save();
-```
-
-**Block config entity structure:**
-- References a block plugin (via `plugin` property)
-- Stores instance-specific settings
-- Tied to specific theme and region
-- Contains visibility conditions
-
 **Reference:** `core/modules/block/src/Entity/Block.php`, `core/modules/block/src/BlockRepository.php`
 
 ## Common Mistakes
 
-- **Wrong**: Using same block ID across themes → **Right**: Each Block config entity must have unique ID
-- **Wrong**: Deleting Block entity thinking it deletes the plugin → **Right**: Only removes placement; plugin still exists
-- **Wrong**: Not setting `theme` property → **Right**: Required; block won't render
-- **Wrong**: Hardcoding region names → **Right**: Check theme regions; they vary per theme
-- **Wrong**: Placing disabled blocks without checking status → **Right**: Set `status => TRUE` for active blocks
+- Using same block ID across themes → Each Block config entity must have unique ID
+- Deleting Block entity thinking it deletes the plugin → Only removes placement; plugin still exists
+- Not setting `theme` property → Required; block won't render
+- Hardcoding region names → Check theme regions; they vary per theme
+- Placing disabled blocks without checking status → Set `status => TRUE` for active blocks
 
 ## See Also
 

@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Apply these patterns when building any block plugin. These are the architectural decisions that keep blocks maintainable, testable, and performant.
+> Architectural guidance for building maintainable, performant, testable block plugins.
 
 ## Decision
 
@@ -56,12 +56,25 @@ class RecentContentBlock extends BlockBase implements ContainerFactoryPluginInte
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static($configuration, $plugin_id, $plugin_definition, $container->get('entity_type.manager'));
+  public static function create(
+    ContainerInterface $container,
+    array $configuration,
+    $plugin_id,
+    $plugin_definition
+  ) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('entity_type.manager')
+    );
   }
 
   public function defaultConfiguration() {
-    return ['items_count' => 5, 'content_type' => 'article'] + parent::defaultConfiguration();
+    return [
+      'items_count' => 5,
+      'content_type' => 'article',
+    ] + parent::defaultConfiguration();
   }
 
   public function blockForm($form, FormStateInterface $form_state) {
@@ -69,7 +82,8 @@ class RecentContentBlock extends BlockBase implements ContainerFactoryPluginInte
       '#type' => 'number',
       '#title' => $this->t('Number of items'),
       '#default_value' => $this->configuration['items_count'],
-      '#min' => 1, '#max' => 20,
+      '#min' => 1,
+      '#max' => 20,
     ];
     return $form;
   }
@@ -87,46 +101,68 @@ class RecentContentBlock extends BlockBase implements ContainerFactoryPluginInte
 
   public function build() {
     $storage = $this->entityTypeManager->getStorage('node');
-    $nids = $storage->getQuery()
+    $query = $storage->getQuery()
       ->condition('type', $this->configuration['content_type'])
       ->condition('status', 1)
       ->sort('created', 'DESC')
       ->range(0, $this->configuration['items_count'])
-      ->accessCheck(TRUE)
-      ->execute();
+      ->accessCheck(TRUE);
 
+    $nids = $query->execute();
+
+    // Return empty when no results
     if (empty($nids)) {
-      return []; // No render when empty
+      return [];
     }
 
     $nodes = $storage->loadMultiple($nids);
     $view_builder = $this->entityTypeManager->getViewBuilder('node');
-    return array_map(fn($n) => $view_builder->view($n, 'teaser'), $nodes);
+
+    $build = [];
+    foreach ($nodes as $node) {
+      $build[] = $view_builder->view($node, 'teaser');
+    }
+
+    return $build;
   }
 
   public function getCacheTags() {
-    return Cache::mergeTags(parent::getCacheTags(), ['node_list:' . $this->configuration['content_type']]);
+    return Cache::mergeTags(
+      parent::getCacheTags(),
+      ['node_list:' . $this->configuration['content_type']]
+    );
   }
 
   public function getCacheContexts() {
-    return Cache::mergeContexts(parent::getCacheContexts(), ['user.permissions']);
+    return Cache::mergeContexts(
+      parent::getCacheContexts(),
+      ['user.permissions']
+    );
   }
 }
 ```
 
 **Code organization:**
-- One block plugin per file: `{module}/src/Plugin/Block/{ClassName}.php`
+- One block plugin per file
+- File location: `{module}/src/Plugin/Block/{ClassName}.php`
+- Class name matches filename
 - Use typed properties (PHP 8.0+)
-- Test: Unit (mock services), Kernel (real services), Functional (UI placement)
+- Document complex logic with comments
+
+**Testing:**
+- Unit test: Mock services, test `build()` logic
+- Kernel test: Test with real services, database
+- Functional test: Test UI placement, visibility
+- Always test cache metadata
 
 ## Common Mistakes
 
-- **Wrong**: Not calling `parent::defaultConfiguration()` → **Right**: Loses base block settings
-- **Wrong**: Using global functions (`\Drupal::`, `node_load()`) → **Right**: Not testable, tight coupling
-- **Wrong**: Complex logic in `build()` without service extraction → **Right**: Hard to test, reuse
-- **Wrong**: Not handling empty results → **Right**: Block wrapper renders even when empty
-- **Wrong**: Hardcoding translatable strings → **Right**: Breaks multilingual sites
-- **Wrong**: Over-configuring simple blocks → **Right**: Keep UI simple; expose only necessary settings
+- Not calling `parent::defaultConfiguration()` → Loses base block settings
+- Using global functions (`\Drupal::`, `node_load()`) → Not testable, tight coupling
+- Complex logic in `build()` without service extraction → Hard to test, reuse
+- Not handling empty results → Block wrapper renders even when empty
+- Hardcoding translatable strings → Breaks multilingual sites
+- Over-configuring simple blocks → Keep UI simple; expose only necessary settings
 
 ## See Also
 

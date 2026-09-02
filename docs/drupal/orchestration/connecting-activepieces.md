@@ -10,39 +10,50 @@ drupal_version: "11.x"
 
 > Follow this when setting up the Activepieces platform integration — the first and currently only built connector for Orchestration.
 
-## Decision
+## What Activepieces Is
 
-| Situation | Action |
-|---|---|
-| Activepieces Cloud + local Drupal | Use self-hosted Activepieces Docker or a tunnel (ngrok) — Cloud cannot reach `localhost` |
-| n8n / Make / Zapier | No built connector as of May 2026; implement against raw Orchestration API endpoints manually |
-| Need content CRUD in Activepieces | Enable JSON:API (`drush pm-enable jsonapi -y`) — Orchestration does not replace it |
+Activepieces is an open-source workflow automation platform comparable to Zapier or n8n. It connects external services via a visual workflow builder. The Drupal connector in Activepieces handles authentication and wraps both JSON:API (for content CRUD) and the Orchestration API (for workflow/agent/tool invocation).
 
-## Pattern
+**Deployment options**:
+- **Activepieces Cloud** — hosted SaaS; cannot reach a `localhost` Drupal instance
+- **Self-hosted Docker** — suitable for local development (DDEV-compatible); can reach a local Drupal site
 
-**Step 1: Enable required Drupal modules**
+## Setup Steps
 
+**1. Enable required Drupal modules**
+
+At minimum for JSON:API data access:
 ```bash
-# Minimum for JSON:API data access:
 drush pm-enable jsonapi basic_auth -y
+```
 
-# Full Orchestration capability:
+For the full Orchestration capability:
+```bash
 composer require drupal/orchestration drupal/ai drupal/ai_agents drupal/tool drupal/eca
 drush pm-enable ai ai_agents tool eca eca_base \
   orchestration orchestration_ai_agents orchestration_ai_function \
   orchestration_tool orchestration_eca -y
 drush cache-rebuild
-
-# AI providers (optional):
-composer require drupal/ai_provider_anthropic drupal/ai_provider_openai
-drush pm-enable ai_provider_anthropic ai_provider_openai -y && drush cache-rebuild
 ```
 
-**Step 2:** Create a Drupal service account with `use orchestration connect` permission.
+For AI providers:
+```bash
+composer require drupal/ai_provider_anthropic drupal/ai_provider_openai
+drush pm-enable ai_provider_anthropic ai_provider_openai -y
+drush cache-rebuild
+```
 
-**Step 3:** In Activepieces → add a new piece → search "Drupal" → configure with Drupal site URL, service account username and password.
+**2. Create a Drupal service account**
 
-**What the integration unlocks:**
+Create a user with `use orchestration connect` permission plus any content access permissions needed.
+
+**3. Configure the Activepieces Drupal connector**
+
+In Activepieces: add a new piece → search "Drupal" → configure connection with:
+- Drupal site URL (must be publicly reachable for Activepieces Cloud)
+- Service account username and password
+
+**4. What the integration unlocks**
 
 | Capability | How |
 |---|---|
@@ -50,19 +61,25 @@ drush pm-enable ai_provider_anthropic ai_provider_openai -y && drush cache-rebui
 | Create/update/delete Drupal content | JSON:API CRUD |
 | Trigger an ECA workflow | Orchestration `service/execute` with `eca::…` UUID |
 | Invoke a Drupal AI Agent | Orchestration `service/execute` with `ai_agent::…` UUID |
-| Receive Drupal events (push) | ECA fires `orchestration_dispatch_webhook` → Activepieces webhook trigger |
-| Receive Drupal events (pull) | Activepieces polls `/orchestration/poll` periodically |
+| Receive Drupal events in Activepieces (push) | ECA fires `orchestration_dispatch_webhook` → Activepieces webhook trigger |
+| Receive Drupal events in Activepieces (pull) | Activepieces polls `/orchestration/poll` periodically |
 
-**Webhook auto-registration:** When you add a webhook trigger in Activepieces, the platform automatically calls `/orchestration/webhook/register`. The webhook appears in Drupal admin at `/admin/config/workflow/orchestration/webhooks` with no Edit link (`remote: true`).
+**5. Platform registers webhooks automatically**
+
+When you add a webhook-based Drupal trigger in Activepieces, the platform calls `/orchestration/webhook/register` automatically. The webhook appears in the Drupal admin at `/admin/config/workflow/orchestration/webhooks` with no Edit link (it is `remote: true`).
+
+## Other Platforms (n8n, Make, Zapier, etc.)
+
+As of May 2026, no built connector exists for these platforms. You can integrate them manually using the raw Orchestration API endpoints (Basic Auth + JSON requests), but you must implement the connection logic yourself. The module's architecture is designed to support future platform-specific drivers.
 
 ## Common Mistakes
 
-- **Wrong**: Pointing Activepieces Cloud at a `localhost` Drupal → **Right**: Cloud instances cannot reach non-public URLs; use Activepieces self-hosted or a tunnel
-- **Wrong**: Forgetting JSON:API for content CRUD → **Right**: Activepieces uses both APIs; Orchestration handles behavior only
-- **Wrong**: Expecting webhook delivery to work if Activepieces Cloud cannot reach your Drupal → **Right**: Use poll mode for local development
+- **Pointing Activepieces Cloud at a `localhost` Drupal** — Cloud instances cannot reach non-public URLs; use Activepieces self-hosted or a tunnel (e.g., `ngrok`)
+- **Forgetting that JSON:API is needed for content CRUD** — Orchestration does not replace JSON:API; Activepieces uses both APIs together
+- **Expecting webhook delivery to work if Activepieces Cloud cannot reach your Drupal** — use poll mode for local development
 
 ## See Also
 
-- [Authentication and Permissions](authentication-and-permissions.md)
-- [Orchestration API Reference](orchestration-api-reference.md)
+- [Authentication and Permissions](authentication-and-permissions.md) → for service account setup
+- [Orchestration API Reference](orchestration-api-reference.md) → for the endpoints Activepieces calls
 - Reference: https://dri.es/connecting-drupal-with-activepieces

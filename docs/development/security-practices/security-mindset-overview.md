@@ -25,7 +25,7 @@ Every developer must adopt a security-first mindset from day one. Security is no
 **Before writing code, ask:**
 
 1. What are we building? (Data flow diagrams, architecture)
-2. What can go wrong? (STRIDE analysis)
+2. What can go wrong? (STRIDE analysis — see section 18.0)
 3. What are we doing about it? (Mitigations, controls)
 4. Did we do a good job? (Testing, verification)
 

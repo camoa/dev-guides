@@ -1,6 +1,6 @@
 ---
 description: "Step-by-step workflow for developing Canvas Code Components locally using the CLI — scaffold, build, push, and pull."
-tldr: "Use this when developing Code Components in a local IDE/editor rather than (or in addition to) the Canvas in-browser editor. The CLI enables full local development with version control and CI/CD, while staying in sync with the Canvas…"
+tldr: "Use this when developing Code Components in a local IDE/editor rather than (or in addition to) the Canvas in-browser editor. The CLI enables full local development with version control and CI/CD, while staying in sync with Canvas."
 drupal_version: "11.x"
 ---
 
@@ -8,19 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when developing Code Components in a local IDE/editor rather than (or in addition to) the Canvas in-browser editor. The CLI enables full local development with version control and CI/CD, while staying in sync with the Canvas Drupal environment.
+> You are developing Code Components in a local IDE/editor rather than (or in addition to) the Canvas in-browser editor. The CLI enables full local development with your own tooling, version control, and CI/CD, while staying in sync with the Canvas Drupal environment.
 
-## Decision
-
-| At this step... | If... | Then... |
-|---|---|---|
-| Choosing push vs pull | You edited in Canvas browser editor | `pull` to get the latest to your local codebase |
-| Choosing push vs pull | You edited in your IDE | `pull` first to avoid overwrite conflicts, then `push` |
-| Build fails | Tailwind classes not found | Check that `index.jsx` uses standard Tailwind v4 classes |
-| Push fails | Auth error | Verify `.env` credentials; check Drupal Canvas API module is enabled |
-| Pull gives conflicts | Both local and remote changed | Manual merge required; CLI does not auto-merge |
-
-## Pattern
+## Steps
 
 1. **Scaffold a new codebase** — Initialize the development environment using Nebula or a custom template
    ```bash
@@ -72,13 +62,23 @@ drupal_version: "11.x"
    npx @drupal-canvas/cli pull
    ```
 
+## Decision Points
+
+| At this step... | If... | Then... |
+|---|---|---|
+| Choosing push vs pull | You edited in Canvas browser editor | `pull` to get the latest to your local codebase |
+| Choosing push vs pull | You edited in your IDE | `pull` first to avoid overwrite conflicts, then `push` |
+| Build fails | Tailwind classes not found | Check that `index.jsx` uses standard Tailwind v4 classes |
+| Push fails | Auth error | Verify `.env` credentials; check Drupal Canvas API module is enabled |
+| Pull gives conflicts | Both local and remote changed | Manual merge required; CLI does not auto-merge |
+
 ## Common Mistakes
 
-- **Wrong**: Editing in both the browser editor and locally without pulling first → **Right**: Always `pull` before editing locally after browser edits; leads to overwrite conflicts otherwise
-- **Wrong**: Not committing the `component.yml` to version control → **Right**: This is the source of truth for prop schema
-- **Wrong**: Running `push` in production without a review process → **Right**: Treat push like a deployment; use staging environments
-- **Wrong**: Skipping `build` before `push` → **Right**: Pushing un-built source files will produce broken components
-- **Wrong**: Using old command names `upload`/`download` → **Right**: These are deprecated; use `push`/`pull`
+- Editing in both the browser editor and locally without pulling first — leads to overwrite conflicts
+- Not committing the `component.yml` to version control — this is the source of truth for prop schema
+- Running `push` in production without a review process — treat push like a deployment; use staging environments
+- Skipping `build` before `push` — pushing un-built source files will produce broken components
+- Using old command names `upload`/`download` — these are deprecated; use `push`/`pull`
 
 ## See Also
 

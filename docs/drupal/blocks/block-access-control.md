@@ -8,9 +8,38 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use `blockAccess()` for programmatic access control tied to code logic. Use Visibility Conditions for UI-configurable per-placement access (pages, roles, content type).
+> Controlling whether a block should be displayed based on user permissions, roles, or custom logic.
 
-## Decision
+## Steps
+
+1. **Override blockAccess() method**
+   ```php
+   use Drupal\Core\Access\AccessResult;
+   use Drupal\Core\Session\AccountInterface;
+
+   protected function blockAccess(AccountInterface $account) {
+     return AccessResult::allowedIfHasPermission($account, 'access content');
+   }
+   ```
+
+2. **Return AccessResult object**
+   - `AccessResult::allowed()` — Show the block
+   - `AccessResult::forbidden()` — Hide the block (uncacheable)
+   - `AccessResult::neutral()` — No opinion (default to other checks)
+
+3. **Add cache metadata** for dynamic access
+   ```php
+   return AccessResult::allowedIfHasPermission($account, 'edit own content')
+     ->addCacheContexts(['user']);
+   ```
+
+4. **Combine multiple conditions**
+   ```php
+   return AccessResult::allowedIf($condition1 && $condition2)
+     ->addCacheTags(['node:1']);
+   ```
+
+## Decision Points
 
 | At this step... | If... | Then... |
 |-----------------|-------|---------|
@@ -25,9 +54,6 @@ drupal_version: "11.x"
 Common access patterns:
 
 ```php
-use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Session\AccountInterface;
-
 // Permission-based
 protected function blockAccess(AccountInterface $account) {
   return AccessResult::allowedIfHasPermission($account, 'access content');
@@ -56,23 +82,18 @@ protected function blockAccess(AccountInterface $account) {
 }
 ```
 
-**AccessResult options:**
-- `allowed()` — Show the block
-- `forbidden()` — Hide the block (uncacheable)
-- `neutral()` — No opinion (default to other checks)
-
 **Reference:** `core/modules/user/src/Plugin/Block/UserLoginBlock.php` (lines 85-92)
 
 ## Common Mistakes
 
-- **Wrong**: Using `forbidden()` when `neutral()` is appropriate → **Right**: `forbidden()` prevents caching; use `neutral()` to defer to other systems
-- **Wrong**: Forgetting cache contexts on dynamic access → **Right**: Block will show incorrectly for different users
-- **Wrong**: Checking access in `build()` instead of `blockAccess()` → **Right**: Bypasses access control system and caching
-- **Wrong**: Not returning `AccessResult` object → **Right**: Must return `AccessResult`, not boolean
-- **Wrong**: Using `allowed()` when should use `allowedIf($condition)` → **Right**: `allowed()` always grants access regardless of condition
+- Using `forbidden()` when `neutral()` is appropriate → `forbidden()` prevents caching; use `neutral()` to defer to other systems
+- Forgetting cache contexts on dynamic access → Block will show incorrectly for different users
+- Checking access in `build()` instead of `blockAccess()` → Bypasses access control system and caching
+- Not returning `AccessResult` object → Must return `AccessResult`, not boolean
+- Using `allowed()` when should use `allowedIf($condition)` → `allowed()` always grants access regardless of condition
 
 ## See Also
 
 - [Block Caching Strategies](block-caching.md)
-- [Visibility Conditions](visibility-conditions.md)
+- [Visibility Conditions](visibility-conditions.md) (for UI-configurable access)
 - Reference: https://www.drupal.org/docs/drupal-apis/services-and-dependency-injection/access-checking-on-routes

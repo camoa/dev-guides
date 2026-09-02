@@ -45,5 +45,3 @@ Claims here were checked against a local Drupal install of core and the modules 
 | Date | Change |
 |------|--------|
 | 2026-02-14 | Initial guide creation — Drupal 11.x, comprehensive config-first approach |
-
-<!-- END PARTITION: sources-maintenance -->

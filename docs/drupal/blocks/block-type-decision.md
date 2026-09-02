@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use block plugins when you need logic, DI, or dynamic content. Use content blocks when editors need to manage content without code changes. Use inline blocks for one-off content in Layout Builder layouts.
+> Before creating any block, decide which approach fits your use case.
 
 ## Decision
 
@@ -50,10 +50,10 @@ class CurrentTimeBlock extends BlockBase {
 
 ## Common Mistakes
 
-- **Wrong**: Using block plugins for static content → **Right**: Use content blocks; site builders can manage without code changes
-- **Wrong**: Using content blocks for dynamic logic → **Right**: Use block plugins; entities add overhead and can't easily inject services
-- **Wrong**: Creating reusable content blocks when content only appears once → **Right**: Use inline blocks in Layout Builder
-- **Wrong**: Hardcoding placement in code → **Right**: Use config entities for placement flexibility
+- Using block plugins for static content → Use content blocks; site builders can manage without code changes
+- Using content blocks for dynamic logic → Use block plugins; entities add overhead and can't easily inject services
+- Creating reusable content blocks when content only appears once → Use inline blocks in Layout Builder
+- Hardcoding placement in code → Use config entities for placement flexibility
 
 ## See Also
 

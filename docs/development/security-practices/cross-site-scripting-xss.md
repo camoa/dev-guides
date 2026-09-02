@@ -72,11 +72,11 @@ echo "You searched for: " . $_GET['q'];  // No escaping!
 
 **Defense layers (all required):**
 
-1. **Input validation** — allowlist validation
-2. **Output encoding** — context-specific escaping
-3. **Content Security Policy** — restrict script sources
+1. **Input validation** (section 3.0) — allowlist validation
+2. **Output encoding** (section 4.0) — context-specific escaping
+3. **Content Security Policy** (section 6.0) — restrict script sources
 4. **HTTPOnly cookies** — prevent JavaScript access to session cookies
-5. **Security headers** — X-XSS-Protection, X-Content-Type-Options
+5. **Security headers** (section 12.0) — X-XSS-Protection, X-Content-Type-Options
 
 ## Pattern
 
@@ -135,7 +135,7 @@ document.getElementById('container').appendChild(welcome);  // Safe
 - **Blocklist filtering** — Trying to block `<script>` tags fails. Attackers use `<img onerror="...">`, `<svg onload="...">`, `<iframe>`, etc. Use allowlist sanitization
 - **Trusting "read-only" data** — Database content can be poisoned. URL parameters can be manipulated. Cookies can be set by attacker. Escape everything
 - **Not setting HTTPOnly on session cookies** — Without HTTPOnly flag, XSS can steal session cookies. ALWAYS set HTTPOnly on authentication cookies
-- **Forgetting about JSON responses** — API responses with user data need proper Content-Type (`application/json`) and escaping
+- **Forgetting about JSON responses** — API responses with user data need proper Content-Type (`application/json`) and escaping. Don't return `text/html` with JSON
 
 ## See Also
 

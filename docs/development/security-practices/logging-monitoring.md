@@ -162,8 +162,8 @@ handler = TimedRotatingFileHandler('/var/log/app/security.log',
 
 **Retention policies:**
 
-- **Security logs:** 90+ days (compliance requirements)
-- **Audit logs:** 1-7 years (depending on industry)
+- **Security logs:** 90+ days (compliance requirements — GDPR, PCI DSS)
+- **Audit logs:** 1-7 years (depending on industry regulations)
 - **Application logs:** 30 days
 - **Debug logs:** 7 days
 
@@ -188,6 +188,30 @@ def detect_privilege_escalation(user_id):
         alert_security_team(
             f'Possible privilege escalation: user {user_id}',
             severity='critical')
+```
+
+## Centralized Logging (SIEM)
+
+```python
+# Send logs to centralized SIEM (Splunk, ELK, Datadog)
+import logging
+from logging.handlers import SysLogHandler
+
+# Syslog to SIEM
+syslog_handler = SysLogHandler(address=('siem.company.com', 514))
+syslog_handler.setFormatter(JSONFormatter())
+logger.addHandler(syslog_handler)
+
+# HTTP to Datadog
+import datadog
+datadog.initialize(api_key='YOUR_API_KEY')
+
+def log_to_datadog(event_type, message, **kwargs):
+    datadog.api.Event.create(
+        title=event_type,
+        text=message,
+        tags=[f'{k}:{v}' for k, v in kwargs.items()]
+    )
 ```
 
 ## Audit Trails
@@ -218,15 +242,16 @@ cat security.log | jq -r 'select(.event_type == "authz_failure") | .user_id' | s
 
 ## Common Mistakes
 
-- **Not logging authentication events** — Can't detect brute force attacks
+- **A09:2021 Security Logging and Monitoring Failures** — 204-day average breach detection time when logging is insufficient
+- **Not logging authentication events** — Can't detect brute force attacks, credential stuffing. Log ALL login attempts
 - **Logging passwords or tokens** — Logs have weak access control. Attacker gets logs = full compromise
 - **Only logging errors** — Need success events too for baseline and anomaly detection
-- **No log monitoring** — Logs are useless if no one reads them. Set up alerts
+- **No log monitoring** — Logs are useless if no one reads them. Set up alerts and SIEM
 - **Logging to application database** — Database breach exposes logs. Use separate log storage
-- **No log integrity protection** — Attacker modifies logs to hide tracks. Use HMAC signatures
-- **Generic log messages** — "Error occurred" is useless. Include context: user ID, IP, resource
-- **Not correlating events** — Login from New York, 5 minutes later from Russia. Correlate by user ID
-- **Verbose logging in production** — DEBUG-level logs with PII. Use INFO/WARNING/ERROR in production
+- **No log integrity protection** — Attacker modifies logs to hide tracks. Use HMAC signatures or append-only storage
+- **Generic log messages** — "Error occurred" is useless. Include context: user ID, IP, resource accessed
+- **Not correlating events** — Login from New York, 5 minutes later login from Russia. Correlate by user ID
+- **Verbose logging in production** — DEBUG-level logs with PII, slow performance. Use INFO/WARNING/ERROR in production
 
 ## See Also
 

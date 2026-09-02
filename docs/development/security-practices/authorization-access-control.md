@@ -156,14 +156,14 @@ invoice_id = str(uuid.uuid4())  # '550e8400-e29b-41d4-a716-446655440000'
 ## Common Mistakes
 
 - **A01:2021 Broken Access Control is #1 OWASP Top 10** — Most common vulnerability, found in 3.81% of applications tested
-- **Client-side access control** — Hiding UI elements is NOT security. Always enforce server-side
-- **No re-authorization for sensitive actions** — Password change, email change should require re-entering password
+- **Client-side access control** — Hiding UI elements (buttons, menu items) is NOT security. Always enforce server-side
+- **No re-authorization for sensitive actions** — Password change, email change, money transfer should require re-entering password even if already logged in
 - **Trusting user-supplied IDs** — Never use `request.json['user_id']` for access control. Get user from session/token
 - **Horizontal privilege escalation** — User A modifying User B's data (IDOR). Always check resource ownership
 - **Vertical privilege escalation** — Regular user accessing admin functions. Check role/permissions on EVERY request
 - **Missing function-level access control** — API endpoint `/api/admin/delete-user` not checking if user is admin
-- **Not checking access on file downloads** — `/uploads/invoices/123.pdf` accessible without authentication
-- **Caching access control decisions** — User permissions change. Don't cache for > 5 minutes
+- **Not checking access on file downloads** — `/uploads/invoices/123.pdf` accessible without authentication. Serve files through controller that checks access
+- **Caching access control decisions** — User permissions change (promoted/demoted). Don't cache for > 5 minutes
 
 ## See Also
 

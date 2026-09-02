@@ -1,5 +1,6 @@
 ---
-description: Key classes, files, and code references for Drupal taxonomy
+description: "Key classes, files, and code references for Drupal taxonomy"
+tldr: "Use this reference to locate key taxonomy classes, methods, and files in the Drupal codebase."
 drupal_version: "11.x"
 ---
 
@@ -9,7 +10,7 @@ drupal_version: "11.x"
 
 > Use this reference to locate key taxonomy classes, methods, and files in the Drupal codebase.
 
-## Decision
+## Key Classes & Files
 
 ### Entity Classes
 
@@ -38,7 +39,7 @@ drupal_version: "11.x"
 |-------|------|---------|
 | **VocabularyForm** | `/core/modules/taxonomy/src/VocabularyForm.php` | Vocabulary edit form |
 | **TermForm** | `/core/modules/taxonomy/src/TermForm.php` | Term edit form |
-| **OverviewTerms** | `/core/modules/taxonomy/Form/OverviewTerms.php` | Draggable term overview with weight management |
+| **OverviewTerms** | `/core/modules/taxonomy/src/Form/OverviewTerms.php` | Draggable term overview with weight management |
 
 ### Views Integration
 
@@ -62,11 +63,7 @@ drupal_version: "11.x"
 | **tags_taxonomy/recipe.yml** | `/core/recipes/tags_taxonomy/recipe.yml` | Recipe for tags vocabulary |
 | **article_tags/recipe.yml** | `/core/recipes/article_tags/recipe.yml` | Recipe for article tags field + displays |
 
-## Pattern
-
-All file paths relative to Drupal root.
-
 ## See Also
 
-- [Security & Performance](security-performance.md)
-- [Taxonomy System Overview](taxonomy-overview.md)
+- ← Previous: [Security & Performance](security-performance.md) | Next: [Sources & Maintenance Manifest](sources-maintenance.md) →
+- All file paths are relative to the Drupal root.

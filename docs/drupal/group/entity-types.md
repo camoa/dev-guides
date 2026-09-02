@@ -12,20 +12,52 @@ drupal_version: "11.x"
 
 ## Decision
 
-| Entity Type ID | Class | Type | Purpose |
+| Entity Type ID | Class | Type | Bundle of |
 |---|---|---|---|
-| `group` | `Drupal\group\Entity\Group` | Content | The group container itself |
-| `group_type` | `Drupal\group\Entity\GroupType` | Config (bundle for `group`) | Defines group types |
-| `group_relationship` | `Drupal\group\Entity\GroupRelationship` | Content | Relates any entity to a group |
-| `group_relationship_type` | `Drupal\group\Entity\GroupRelationshipType` | Config (bundle for `group_relationship`) | Internal — do not expose to users |
-| `group_role` | `Drupal\group\Entity\GroupRole` | Config | Per-group-type role with permissions |
-| `group_config_wrapper` | `Drupal\group\Entity\ConfigWrapper` | Content | Wraps config entities for group relations |
+| `group` | `Drupal\group\Entity\Group` | Content | — |
+| `group_type` | `Drupal\group\Entity\GroupType` | Config (bundle for `group`) | — |
+| `group_relationship` | `Drupal\group\Entity\GroupRelationship` | Content | — |
+| `group_relationship_type` | `Drupal\group\Entity\GroupRelationshipType` | Config (bundle for `group_relationship`) | — |
+| `group_role` | `Drupal\group\Entity\GroupRole` | Config | — |
+| `group_config_wrapper` | `Drupal\group\Entity\ConfigWrapper` | Content | — |
 
-**GroupRelationship key fields:** `id`, `uuid`, `type` (bundle), `gid` (group reference), `entity_id` (related entity reference), `plugin_id` (denormalized), `group_type` (denormalized), `uid`, `created`, `changed`
+## Group Entity (`group`)
 
-**GroupRole ID format:** `{group_type_id}-{role_machine_name}` — e.g., `project-editor`
+Base tables: `groups` (base), `groups_field_data` (data), `groups_revision`, `groups_field_revision`
 
-**GroupRole config file pattern:** `group.role.{group_type_id}-{role_id}.yml`
+Key base fields: `id`, `uuid`, `uid` (owner), `langcode`, `type` (bundle), `label`, `status` (published), `revision_id`, `created`, `changed`
+
+Implements: `ContentEntityInterface`, `EntityOwnerInterface`, `EntityChangedInterface`, `EntityPublishedInterface`, `RevisionLogInterface`
+
+The Group entity supports full revisioning, translation, and publishing workflow out of the box.
+
+## GroupRelationship Entity (`group_relationship`)
+
+Base tables: `group_relationship` (base), `group_relationship_field_data` (data)
+
+Key fields: `id`, `uuid`, `type` (bundle, equals `GroupRelationshipType` id), `gid` (group reference), `entity_id` (related entity reference), `plugin_id` (denormalized for fast querying), `group_type` (denormalized), `uid` (owner), `created`, `changed`
+
+The `plugin_id` and `group_type` fields are denormalized copies stored on the data table to allow fast SQL filtering without joins.
+
+The bundle of `group_relationship` is `group_relationship_type`, which is an internal config entity (marked `internal = TRUE`) and not directly user-facing.
+
+## GroupRole Entity (`group_role`)
+
+Config entity. ID format: `{group_type_id}-{role_machine_name}` (e.g., `project-editor`).
+
+Key fields: `scope` (`outsider`, `insider`, or `individual`), `global_role` (if scope is `outsider`/`insider`, references a Drupal user role), `admin` (boolean bypass), `permissions` (array).
+
+Config file pattern: `group.role.{group_type_id}-{role_id}.yml`
+
+## GroupConfigWrapper (`group_config_wrapper`)
+
+Internal entity that wraps config entities so they can be used as group relationship targets. Created automatically. Never interact with this directly unless writing a plugin that handles config entity types.
+
+## Shared Bundle Classes
+
+A `GroupRelationship` entity can have a **shared bundle class** — a PHP class that gets used for all relationship bundles backed by the same plugin. The `group_membership` plugin uses `Drupal\group\Entity\GroupMembership` as its shared bundle class, providing membership-specific methods (`getRoles()`, `addRole()`, `removeRole()`, `hasPermission()`).
+
+To leverage the shared bundle class, load membership entities through normal entity storage and cast to `GroupMembership` (or `GroupMembershipInterface`).
 
 ## Pattern
 
@@ -44,15 +76,14 @@ $memberships = GroupMembership::loadByUser($account);
 // Load all memberships for a group.
 $members = GroupMembership::loadByGroup($group);
 
-// Load filtered by role — 4.x: the $roles filter must be an array.
+// Load filtered by role (4.x: the role filter is an array).
 $editors = GroupMembership::loadByGroup($group, ['project-editor']);
 ```
 
 ## Common Mistakes
 
-- **Wrong**: Calling `GroupRelationshipType::label()` and displaying it to users → **Right**: It is labeled "INTERNAL USE ONLY". Use the plugin's label instead.
-- **Wrong**: Querying `group_relationship` with `accessCheck(TRUE)` in non-user-context code → **Right**: Use `accessCheck(FALSE)` in backend operations and apply manual authorization checks. Full permission calculation is expensive.
-- **Wrong**: Passing a string to `loadByGroup($group, 'role_id')` as the roles filter → **Right**: In 4.x the filter must be an array: `loadByGroup($group, ['role_id'])`.
+- Calling `GroupRelationshipType::label()` and displaying it to users. It is labeled "INTERNAL USE ONLY" and is not user-facing. Use the plugin's label instead.
+- Querying `group_relationship` with `accessCheck(TRUE)` in non-user-context code. Access checks on group relationships require full permission calculation which can be expensive. Use `accessCheck(FALSE)` in backend operations and apply manual authorization checks.
 
 ## See Also
 

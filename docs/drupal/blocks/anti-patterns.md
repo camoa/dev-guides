@@ -1,6 +1,6 @@
 ---
 description: Avoid common pitfalls that cause bugs, performance issues, or security vulnerabilities in blocks
-tldr: "Reference when reviewing block code or debugging unexpected behavior. Every pattern here has been shipped in production and caused real problems."
+tldr: "Avoid common pitfalls that lead to bugs, performance issues, or maintenance problems when building block plugins."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Reference when reviewing block code or debugging unexpected behavior. Every pattern here has been shipped in production and caused real problems.
+> Avoiding common pitfalls that lead to bugs, performance issues, or maintenance problems.
 
 ## Decision
 
@@ -38,6 +38,7 @@ public function build() {
   $nodes = \Drupal::entityTypeManager()
     ->getStorage('node')
     ->loadByProperties(['type' => 'article']);
+  // ...
 }
 
 // RIGHT
@@ -56,23 +57,38 @@ public function build() {
 // WRONG - hits database every request
 public function build() {
   $user = User::load(\Drupal::currentUser()->id());
-  return ['#markup' => $user->getDisplayName(), '#cache' => ['max-age' => 0]];
+  return [
+    '#markup' => $user->getDisplayName(),
+    '#cache' => ['max-age' => 0],
+  ];
 }
 
 // RIGHT - cache per user
 public function build() {
   $user = User::load($this->currentUser->id());
-  return ['#markup' => $user->getDisplayName(), '#cache' => ['contexts' => ['user']]];
+  return [
+    '#markup' => $user->getDisplayName(),
+    '#cache' => ['contexts' => ['user']],
+  ];
 }
 ```
 
 **Anti-pattern: HTML in build()**
 ```php
 // WRONG - not themeable, XSS risk
-return ['#markup' => '<div class="my-block"><h2>' . $title . '</h2></div>'];
+public function build() {
+  return [
+    '#markup' => '<div class="my-block"><h2>' . $title . '</h2></div>',
+  ];
+}
 
 // RIGHT - themeable, safe
-return ['#theme' => 'my_block', '#title' => $title]; // Auto-escaped in template
+public function build() {
+  return [
+    '#theme' => 'my_block',
+    '#title' => $title, // Auto-escaped in template
+  ];
+}
 ```
 
 **Anti-pattern: Not handling empty**
@@ -80,23 +96,31 @@ return ['#theme' => 'my_block', '#title' => $title]; // Auto-escaped in template
 // WRONG - renders empty wrapper
 public function build() {
   $items = $this->getItems();
-  return ['#theme' => 'item_list', '#items' => $items];
+  return [
+    '#theme' => 'item_list',
+    '#items' => $items, // Could be empty array
+  ];
 }
 
 // RIGHT - no wrapper when empty
 public function build() {
   $items = $this->getItems();
   if (empty($items)) {
-    return [];
+    return []; // No render
   }
-  return ['#theme' => 'item_list', '#items' => $items];
+  return [
+    '#theme' => 'item_list',
+    '#items' => $items,
+  ];
 }
 ```
 
 **Anti-pattern: Forgetting cache merge**
 ```php
 // WRONG - loses parent cache metadata
-public function getCacheTags() { return ['node:1']; }
+public function getCacheTags() {
+  return ['node:1'];
+}
 
 // RIGHT - preserves parent tags
 public function getCacheTags() {
@@ -104,13 +128,20 @@ public function getCacheTags() {
 }
 ```
 
+**Why these matter:**
+- **Performance:** Poor caching = slow site, expensive hosting
+- **Security:** Unescaped output = XSS vulnerabilities
+- **Maintainability:** Static calls = hard to test, refactor
+- **Flexibility:** Hardcoded values = brittle across environments
+- **User Experience:** Empty wrappers = weird spacing, confusing CSS
+
 ## Common Mistakes
 
-- **Wrong**: "It works on my machine" without testing caching → **Right**: Works uncached, fails in production
-- **Wrong**: Not profiling block performance → **Right**: 500ms query in block destroys page load time
-- **Wrong**: Copying patterns from Drupal 7 → **Right**: D7 patterns don't apply; use D10+ APIs
-- **Wrong**: Not reading core examples → **Right**: Core blocks demonstrate best practices
-- **Wrong**: Skipping code review → **Right**: Blocks affect every page; errors expensive
+- "It works on my machine" without testing caching → Works uncached, fails in production
+- Not profiling block performance → 500ms query in block destroys page load time
+- Copying patterns from Drupal 7 → D7 patterns don't apply; use D10+ APIs
+- Not reading core examples → Core blocks demonstrate best practices
+- Skipping code review → Blocks affect every page; errors expensive
 
 ## See Also
 

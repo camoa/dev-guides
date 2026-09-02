@@ -1,5 +1,5 @@
 ---
-description: Harden taxonomy against security vulnerabilities and optimize for scale
+description: "Harden taxonomy against security vulnerabilities and optimize for scale"
 tldr: "Use this guide when hardening taxonomy implementations against security vulnerabilities and optimizing for large-scale performance."
 drupal_version: "11.x"
 ---
@@ -10,30 +10,11 @@ drupal_version: "11.x"
 
 > Use this guide when hardening taxonomy implementations against security vulnerabilities and optimizing for large-scale performance.
 
-## Decision
+## Security
 
-### Security
+### Access Control
 
-| Situation | Choose | Why |
-|-----------|--------|-----|
-| Vocabulary-level permissions | Per-vocabulary permissions (`edit terms in $vid`) | Granular control vs overly permissive `administer taxonomy` |
-| Term view access | Ensure users have `access content` permission | Terms require published status AND `access content` |
-| Auto-create validation | Implement `hook_taxonomy_term_presave()` | Prevent spam/XSS in auto-created terms |
-| Custom output | Use `Html::escape($term->getName())` | Prevent XSS attacks |
-| CSRF protection | Use Form API | Automatic CSRF token inclusion |
-
-### Performance
-
-| Term Count | Performance Impact | Mitigation |
-|------------|-------------------|------------|
-| <100 | Negligible | Use default approaches |
-| 100-1,000 | loadTree() slows; dropdown widgets lag | Cache trees; use autocomplete widgets |
-| 1,000-10,000 | loadTree() with load_entities causes memory issues | Use load_entities = FALSE; paginate admin UI |
-| >10,000 | Admin UI fails; exposed filters timeout | Disable overview form; use Search API/Solr for faceting |
-
-## Pattern
-
-**Access control:**
+**Vocabulary-level permissions:**
 ```php
 // GOOD: Granular per-vocabulary permissions
 $account->hasPermission("edit terms in $vid");
@@ -42,12 +23,17 @@ $account->hasPermission("edit terms in $vid");
 $account->hasPermission('administer taxonomy');
 ```
 
+**Term view access:**
+- Terms require `access content` permission AND published status
+- Unpublished terms only visible to users with `administer taxonomy`
+- No per-term access control in core — use contrib Permissions by Term for fine-grained control
+
 **XSS prevention:**
 ```php
 // ALWAYS sanitize term names in custom output
 $safe_name = Html::escape($term->getName());
 
-// Twig auto-escapes
+// Twig auto-escapes; raw output requires |raw filter
 {{ term.name }} {# Safe #}
 {{ term.name|raw }} {# Dangerous unless sanitized #}
 ```
@@ -70,11 +56,24 @@ function mymodule_taxonomy_term_presave(Term $term) {
 }
 ```
 
+**SQL injection:**
+- Entity queries are parameterized — safe by default
+- NEVER build raw SQL with term names: `$db->query("SELECT * FROM node WHERE title LIKE '%{$term->getName()}%'")` → Use entity query or placeholders
+
+**CSRF protection:**
+- Term edit/delete forms include CSRF tokens automatically
+- Custom forms must use Form API for CSRF protection
+
+## Performance
+
+### Query Optimization
+
 **N+1 query problem:**
 ```php
 // BAD: N+1 queries
 foreach ($nodes as $node) {
   $terms = $node->get('field_tags')->referencedEntities();
+  // Queries database for each node
 }
 
 // GOOD: Preload all referenced terms
@@ -112,6 +111,20 @@ if ($cache) {
 }
 ```
 
+**Index optimization:**
+- `taxonomy_index` table indexes `nid`, `tid`, and composite `(nid, tid)`
+- For custom entity types, add index on term reference field: `indexes: { target_id: ['target_id'] }`
+- Views taxonomy filters use taxonomy_index for fast lookups
+
+### Scalability Thresholds
+
+| Term Count | Performance Impact | Mitigation |
+|------------|-------------------|------------|
+| <100 | Negligible | Use default approaches |
+| 100-1,000 | loadTree() slows; dropdown widgets lag | Cache trees; use autocomplete widgets |
+| 1,000-10,000 | loadTree() with load_entities causes memory issues | Use load_entities = FALSE; paginate admin UI |
+| >10,000 | Admin UI fails; exposed filters timeout | Disable overview form; use Search API/Solr for faceting |
+
 **Large vocabulary strategies:**
 - Disable term overview page: `hook_entity_operation_alter()` to remove "List terms" link
 - Use autocomplete everywhere: never render full term list
@@ -120,17 +133,16 @@ if ($cache) {
 
 ## Common Mistakes
 
-- **Wrong**: Trusting user input in auto-created terms → **Right**: Always validate and sanitize in presave hook
-- **Wrong**: Not setting cache tags on term-dependent data → **Right**: Use `['taxonomy_term:' . $tid]` cache tag
-- **Wrong**: Exposing term overview form for large vocabularies → **Right**: Restrict access or provide filtered views
-- **Wrong**: Using taxonomy_index for non-nodes → **Right**: Use entity reference queries or build custom index table
-- **Wrong**: Not invalidating term tree cache → **Right**: Use cache tag `taxonomy_term_list:$vid`
-- **Wrong**: Granting 'administer taxonomy' to untrusted roles → **Right**: Use per-vocabulary permissions
+- **Trusting user input in auto-created terms** → Allows XSS, spam, database bloat. Always validate and sanitize in presave hook
+- **Not setting cache tags on term-dependent data** → Stale data when terms update. Use `['taxonomy_term:' . $tid]` cache tag
+- **Exposing term overview form for large vocabularies** → Page times out loading >5k terms. Restrict access or provide filtered views instead
+- **Using taxonomy_index for non-nodes** → Only nodes are indexed. Use entity reference queries or build custom index table
+- **Not invalidating term tree cache** → Outdated hierarchy after term save. Use cache tag `taxonomy_term_list:$vid` and invalidate on term changes
+- **Granting 'administer taxonomy' to untrusted roles** → Allows term deletion, vocabulary structure changes, permission escalation. Use per-vocabulary permissions
 
 ## See Also
 
-- [Anti-Patterns & Common Mistakes](anti-patterns.md)
-- [Code Reference Map](code-reference-map.md)
+- ← Previous: [Anti-Patterns & Common Mistakes](anti-patterns.md) | Next: [Code Reference Map](code-reference-map.md) →
 - Reference: [Drupal.org Issue: DB caching for loadTree()](https://www.drupal.org/project/drupal/issues/106015)
 - Reference: [Seth Shaw: Large Vocab loadTree Error](https://seth-shaw-unlv.github.io/2020-09-07/large_vocab_list_error)
 - Reference: [Drupal.org Permissions by Term module](https://www.drupal.org/project/permissions_by_term)

@@ -1,5 +1,5 @@
 ---
-description: Configure entity reference field widgets and formatters for taxonomy term fields
+description: "Configure entity reference field widgets and formatters for taxonomy term fields"
 tldr: "Use this guide to configure entity reference field widgets and formatters for taxonomy term fields. Widget choice affects UX and term creation workflow."
 drupal_version: "11.x"
 ---
@@ -8,12 +8,14 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide to configure entity reference field widgets and formatters for taxonomy term fields. Widget choice affects UX and term creation workflow.
+> Use this guide when configuring entity reference field widgets and formatters for taxonomy term fields.
+
+Widget choice affects UX and term creation workflow.
 
 ## Decision
 
-| Situation | Use Widget | Why |
-|-----------|-----------|-----|
+| If you need... | Use widget... | Why |
+|---|---|---|
 | Tag-style entry with autocomplete and auto-creation | `entity_reference_autocomplete_tags` | Users type comma-separated terms, creates non-existent terms on-the-fly (requires `auto_create: true`) |
 | Single term selection from dropdown | `options_select` | Simple, accessible, good for small vocabularies (<50 terms) |
 | Multiple term checkboxes | `options_buttons` | Clear visual selection, best for small sets (<20 terms) |
@@ -61,7 +63,11 @@ field_tags:
 - `entity_reference_entity_view` — Rendered term entity (custom view mode)
 - `entity_reference_rss_category` — RSS-specific formatter
 
-**TermSelection handler settings:**
+## TermSelection Handler
+
+**Purpose:** Controls which terms appear in autocomplete/select widgets
+
+**Default handler settings:**
 ```php
 'handler_settings' => [
   'target_bundles' => ['tags' => 'tags'], // Restrict to vocabulary
@@ -74,18 +80,29 @@ field_tags:
 ]
 ```
 
+**Custom selection with Views:**
+```yaml
+# Use View to filter available terms
+handler: 'views'
+handler_settings:
+  view:
+    view_name: taxonomy_term_reference
+    display_name: entity_reference_1
+    arguments: []
+```
+
+Reference: `/core/modules/taxonomy/src/Plugin/EntityReferenceSelection/TermSelection.php`
+
 ## Common Mistakes
 
-- **Wrong**: Not enabling `auto_create` for tag-style fields → **Right**: Set `auto_create: true` for tag autocomplete widgets
-- **Wrong**: Using checkboxes for large vocabularies → **Right**: Switch to autocomplete for >20 terms
-- **Wrong**: Forgetting `target_bundles` restriction → **Right**: Widget shows terms from ALL vocabularies without restriction
-- **Wrong**: Not configuring placeholder text → **Right**: Add helpful placeholder: "Start typing to add tags..."
-- **Wrong**: Linking to terms that have no content → **Right**: Either add term view or disable link in formatter
-- **Wrong**: Assuming auto-created terms validate → **Right**: Auto-created terms bypass normal validation; add `hook_ENTITY_TYPE_presave()` to enforce rules
+- Not enabling `auto_create` for tag-style fields → Users can't create terms, must use taxonomy UI first. Set `auto_create: true` for tag autocomplete widgets
+- Using checkboxes for large vocabularies → Renders all terms on page load. Switch to autocomplete for >20 terms
+- Forgetting `target_bundles` restriction → Widget shows terms from ALL vocabularies. Always restrict to specific vocabulary
+- Not configuring placeholder text → Empty autocomplete is confusing. Add helpful placeholder: "Start typing to add tags..."
+- Linking to terms that have no content → If term page has no view, links go to empty page. Either add term view or disable link in formatter
+- Assuming auto-created terms validate → Auto-created terms bypass normal validation. Add hook_ENTITY_TYPE_presave() to enforce rules (e.g., max length, allowed characters)
 
 ## See Also
 
-- [Programmatic Term Operations](programmatic-terms.md)
-- [Config Export & Recipes](taxonomy-config-recipes.md)
-- Reference: `/core/modules/taxonomy/src/Plugin/EntityReferenceSelection/TermSelection.php`
+- ← Previous: [Programmatic Term Operations](programmatic-terms.md) | Next: [Config Export & Recipes](taxonomy-config-recipes.md) →
 - Reference: `/core/recipes/article_tags/recipe.yml` (lines 17-42)

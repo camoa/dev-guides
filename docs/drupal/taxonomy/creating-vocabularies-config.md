@@ -1,5 +1,5 @@
 ---
-description: Create vocabularies for deployment via config management or module installation
+description: "Create vocabularies for deployment via config management or module installation"
 tldr: "Use config-first approach for vocabularies to ensure consistent structure across environments. Create YAML files for module installation or config sync."
 drupal_version: "11.x"
 ---
@@ -8,55 +8,60 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use config-first approach for vocabularies to ensure consistent structure across environments. Create YAML files for module installation or config sync.
+> Use this workflow when creating vocabularies for deployment via config management or module installation.
 
-## Decision
+Config-first approach ensures consistent vocabulary structure across environments.
 
-| Situation | Choose | Why |
-|-----------|--------|-----|
-| Vocabulary ships with module | `config/install/` directory | Imports on module enable |
-| Vocabulary is site-specific config | Export to sync directory | Import via config management |
-| Vocabulary is essential to module functionality | Add enforced module dependency | Ensures cleanup on module uninstall |
-| Creating reusable taxonomy setup | Use recipe.yml with config import | Packages vocabulary + field + display configs |
+## Steps
 
-## Pattern
+1. **Create YAML file** — Place in `MODULE_NAME/config/install/taxonomy.vocabulary.VOCAB_ID.yml`
+   ```yaml
+   langcode: en
+   status: true
+   name: Topics
+   vid: topics
+   description: 'Article topics'
+   weight: 0
+   new_revision: false
+   ```
 
-**Create YAML file** — Place in `MODULE_NAME/config/install/taxonomy.vocabulary.VOCAB_ID.yml`:
-```yaml
-langcode: en
-status: true
-dependencies:
-  enforced:
-    module:
-      - my_content_module
-name: Topics
-vid: topics
-description: 'Article topics'
-weight: 0
-new_revision: false
-```
+2. **Add dependencies** — Enforce module dependency if vocabulary is module-specific
+   ```yaml
+   dependencies:
+     enforced:
+       module:
+         - my_content_module
+   ```
 
-**Install module** — Vocabulary imports automatically:
-```bash
-drush en my_content_module
-```
+3. **Install module** — On module enable, vocabulary imports automatically from `config/install/`
+   ```bash
+   drush en my_content_module
+   ```
 
-**Or import config directly** — For config changes after installation:
-```bash
-drush config:import --partial --source=modules/custom/my_module/config/install/
-```
+4. **Or import config directly** — For config changes after installation
+   ```bash
+   drush config:import --partial --source=modules/custom/my_module/config/install/
+   ```
+
+## Decision Points
+
+| At this step... | If... | Then... |
+|---|---|---|
+| File location | Vocabulary ships with module | `config/install/` (imports on enable) |
+| File location | Vocabulary is site-specific config | Export to sync directory, import via config management |
+| Dependencies | Vocabulary is essential to module functionality | Add enforced module dependency |
+| Recipe pattern | Creating reusable taxonomy setup | Use recipe.yml with config import (see Recipes section) |
 
 ## Common Mistakes
 
-- **Wrong**: Placing config in `config/optional/` when it should be required → **Right**: Use `install/` for required config, `optional/` only when dependencies might not exist
-- **Wrong**: Not enforcing module dependencies → **Right**: Always add enforced dependency for module-owned vocabularies
-- **Wrong**: Using `drush cex` instead of hand-crafting config → **Right**: For module config, write YAML manually following schema
-- **Wrong**: Forgetting to clear cache after config import → **Right**: Run `drush cr` after importing vocabulary config
-- **Wrong**: Mixing content (terms) with config (vocabulary) → **Right**: Vocabularies are config, terms are content. Export vocabularies as YAML, manage terms separately
+- Placing config in `config/optional/` when it should be required → Use `install/` for required config, `optional/` only when dependencies might not exist
+- Not enforcing module dependencies → Vocabulary persists after module uninstall, becomes orphaned config. Always add enforced dependency for module-owned vocabularies
+- Using `drush cex` instead of hand-crafting config → Exports include UUIDs and unnecessary metadata. For module config, write YAML manually following schema
+- Forgetting to clear cache after config import → Drupal caches entity definitions. Run `drush cr` after importing vocabulary config
+- Mixing content (terms) with config (vocabulary) → Vocabularies are config, terms are content. Export vocabularies as YAML, manage terms separately (or use content_as_config contrib)
 
 ## See Also
 
-- [Vocabulary Configuration Schema](vocabulary-config-schema.md)
-- [Term Reference Field Configuration](term-reference-config.md)
+- ← Previous: [Vocabulary Configuration Schema](vocabulary-config-schema.md) | Next: [Term Reference Field Configuration](term-reference-config.md) →
 - Reference: `/core/recipes/tags_taxonomy/config/taxonomy.vocabulary.tags.yml`
 - Reference: [Drupal.org Configuration Management](https://www.drupal.org/docs/administering-a-drupal-site/configuration-management/managing-your-sites-configuration)

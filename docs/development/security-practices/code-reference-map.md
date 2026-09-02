@@ -1,12 +1,13 @@
 ---
-description: Security tools and libraries mapped by category and language - SAST, DAST, dependency scanning, security libraries, OWASP resources, online scanners, and learning resources.
+description: "Security tools and libraries mapped by category and language - SAST, DAST, dependency scanning, security libraries, OWASP resources, online scanners, and learning resources."
+tldr: "This section maps security topics to specific tools, libraries, and resources for each major programming language/framework. Use this to find language-specific implementations of security patterns."
 ---
 
 # Code Reference Map
 
 ## When to Use
 
-Maps security topics to specific tools, libraries, and resources for each major programming language/framework.
+This section maps security topics to specific tools, libraries, and resources for each major programming language/framework. Use this to find language-specific implementations of security patterns.
 
 ## Static Application Security Testing (SAST)
 
@@ -49,44 +50,88 @@ Maps security topics to specific tools, libraries, and resources for each major 
 ### JavaScript/Node.js
 
 ```javascript
-import Joi from 'joi';              // Schema validation
+// Input validation
+import Joi from 'joi';  // Schema validation
+import validator from 'validator';  // String validation
+
+// Output encoding
 import DOMPurify from 'dompurify';  // HTML sanitization
-import crypto from 'crypto';        // Built-in crypto
-import bcrypt from 'bcrypt';        // Password hashing
-import passport from 'passport';    // Authentication middleware
-import helmet from 'helmet';        // Security headers
+import he from 'he';  // HTML entity encoding
+
+// Cryptography
+import crypto from 'crypto';  // Built-in crypto
+import bcrypt from 'bcrypt';  // Password hashing
+
+// Authentication
+import passport from 'passport';  // Authentication middleware
+import jsonwebtoken from 'jsonwebtoken';  // JWT
+
+// Security middleware
+import helmet from 'helmet';  // Security headers
+import csurf from 'csurf';  // CSRF protection
 import rateLimit from 'express-rate-limit';  // Rate limiting
 ```
 
 ### Python
 
 ```python
-import jsonschema        # JSON schema validation
-import bleach            # HTML sanitization
+# Input validation
+import jsonschema  # JSON schema validation
+import validators  # Common validators
+
+# Output encoding
+import html  # HTML escaping (built-in)
+import bleach  # HTML sanitization
+
+# Cryptography
 from cryptography.fernet import Fernet  # Encryption
-from argon2 import PasswordHasher       # Password hashing
-import secrets           # Secure random (built-in)
-from flask_limiter import Limiter       # Rate limiting
-from flask_talisman import Talisman    # Security headers
+from argon2 import PasswordHasher  # Password hashing
+import secrets  # Secure random (built-in)
+
+# Authentication
+from flask_login import LoginManager  # Flask auth
+from django.contrib.auth import authenticate  # Django auth
+
+# Security
+from flask_limiter import Limiter  # Rate limiting
+from flask_talisman import Talisman  # Security headers
 ```
 
 ### PHP
 
 ```php
+// Input validation
 filter_var($input, FILTER_VALIDATE_EMAIL);  // Built-in filters
-htmlspecialchars($output, ENT_QUOTES, 'UTF-8');  // Built-in escaping
-password_hash($password, PASSWORD_ARGON2ID);  // Built-in hashing
+use Respect\Validation\Validator;  // Validation library
+
+// Output encoding
+htmlspecialchars($output, ENT_QUOTES, 'UTF-8');  // Built-in
+use HTML_Purifier;  // HTML sanitization
+
+// Cryptography
+password_hash($password, PASSWORD_ARGON2ID);  // Built-in
 random_bytes(32);  // Secure random (built-in)
+
+// Database
 use PDO;  // Parameterized queries
 ```
 
 ### Java
 
 ```java
+// Input validation
 import javax.validation.constraints.*;  // Bean validation
-import org.owasp.encoder.Encode;        // OWASP encoder
-import javax.crypto.Cipher;             // Built-in crypto
-import org.mindrot.jbcrypt.BCrypt;      // Password hashing
+import org.apache.commons.validator.*;  // Apache validator
+
+// Output encoding
+import org.owasp.encoder.Encode;  // OWASP encoder
+import org.apache.commons.text.StringEscapeUtils;  // Apache
+
+// Cryptography
+import javax.crypto.Cipher;  // Built-in crypto
+import org.mindrot.jbcrypt.BCrypt;  // Password hashing
+
+// Authentication
 import org.springframework.security.*;  // Spring Security
 ```
 
@@ -107,7 +152,7 @@ import org.springframework.security.*;  // Spring Security
 | Tool | URL | Purpose |
 |---|---|---|
 | **Security Headers** | https://securityheaders.com | Check HTTP security headers |
-| **Mozilla Observatory** | https://observatory.mozilla.org | Security and privacy scan |
+| **Mozilla Observatory** | https://observatory.mozilla.org | Security & privacy scan |
 | **SSL Labs** | https://www.ssllabs.com/ssltest/ | TLS/SSL configuration test |
 | **HaveIBeenPwned** | https://haveibeenpwned.com | Check if email/password compromised |
 | **CSP Evaluator** | https://csp-evaluator.withgoogle.com | Validate Content Security Policy |

@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use Canvas when you need a visual page-building experience for non-technical editors on Drupal 11.3+. Use standard content types + SDC theming when layouts are fixed or developer-managed.
+> You are building a Drupal 11.3+ site that needs a visual page-building experience for content editors — drag-and-drop layout, in-place editing, and component-based design — without requiring editor knowledge of Drupal's templates or layout system. Canvas is Drupal's first-party answer to page builders like Elementor, shipped as a contributed module and the default page builder in Drupal CMS 2.0.
 
 ## Decision
 
@@ -20,7 +20,7 @@ drupal_version: "11.x"
 | Existing Paragraphs-based architecture | Migration needed | Canvas replaces, not extends, Paragraphs for page composition |
 | Decoupled/headless frontend | Supported but complex | See [Decoupled Frontend Patterns](decoupled-frontend-patterns.md) |
 
-## Pattern
+## Architecture
 
 Canvas introduces a distinct page entity type (`canvas_page`) that stores its layout as a **component tree** — a structured JSON field referencing versioned Component config entities. This is fundamentally different from standard Drupal content types:
 
@@ -42,15 +42,15 @@ Canvas introduces a distinct page entity type (`canvas_page`) that stores its la
 - Design token editing (color, typography overrides)
 - AI assistant (optional `canvas_ai` submodule)
 
-**Module version**: Canvas 1.0 stable released November 2025. The current stable release is Canvas 1.10.1, which requires Drupal ^11.3 — the minimum supported Drupal is 11.3. Adoption is growing — see the live install count on the [project page](https://www.drupal.org/project/canvas). Security advisory SA-CONTRIB-2026-006 exists — update to Canvas 1.0.4+ if using unpublished Canvas pages.
+**Module version**: Canvas 1.0 stable released November 2025. The current stable release is Canvas 1.10.1, which requires Drupal ^11.3 — the minimum supported Drupal is 11.3. Adoption is growing — see the live install count on the project page (https://www.drupal.org/project/canvas). Security advisory SA-CONTRIB-2026-006 exists — update to Canvas 1.0.4+ if using unpublished Canvas pages.
 
 ## Common Mistakes
 
-- **Wrong**: Treating Canvas pages like standard content types — they are a separate entity; standard fields cannot be added to the page entity → **Right**: Use the component tree for all content and layout
-- **Wrong**: Assuming any Drupal 11 version works → **Right**: Minimum is Drupal 11.3
-- **Wrong**: Enabling Canvas on existing sites without planning component migration → **Right**: Paragraphs content cannot be auto-converted to Canvas pages; plan migration carefully
-- **Wrong**: Confusing "Canvas" (the page builder) with "canvas_page" (the entity type) and "Component" (the config entity) → **Right**: These are three distinct concepts
-- **Wrong**: Forgetting that theme changes break SDC dependencies if components reference a theme's SDC → **Right**: Track component-to-theme dependencies carefully
+- Treating Canvas pages like standard content types — they are a separate entity; standard fields cannot be added to the page entity (this is an open issue)
+- Assuming any Drupal 11 version works — minimum Drupal is 11.3
+- Enabling Canvas on existing sites without planning component migration — Paragraphs content cannot be auto-converted to Canvas pages
+- Confusing "Canvas" (the page builder) with "canvas_page" (the entity type) and "Component" (the config entity)
+- Forgetting that theme changes break SDC dependencies if components reference a theme's SDC — track this carefully
 
 ## See Also
 

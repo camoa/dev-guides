@@ -8,9 +8,65 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when exporting block configuration for deployment, syncing between environments, or using `placeBlock` recipe actions (Drupal 11.1+). Block plugins have no exportable config — only Block config entities do.
+> Exporting block configuration for deployment, syncing between environments, or using in recipes.
 
-## Decision
+## Steps
+
+1. **Understanding block config structure**
+   - Block plugins → No exportable config (they're code)
+   - Block config entities → Exportable YAML (`block.block.*.yml`)
+   - Visibility conditions → Stored in `visibility` key
+   - Plugin settings → Stored in `settings` key
+
+2. **Exporting block config**
+   - Single config: `/admin/config/development/configuration/single/export`
+   - Full config export: `drush config:export`
+   - File location: `config/sync/block.block.{id}.yml`
+
+3. **Config file structure**
+   ```yaml
+   uuid: abc-123
+   langcode: en
+   status: true
+   dependencies:
+     module: [system]
+     theme: [olivero]
+   id: olivero_branding
+   theme: olivero
+   region: header
+   weight: -10
+   provider: null
+   plugin: system_branding_block
+   settings:
+     id: system_branding_block
+     label: 'Site branding'
+     label_display: '0'
+     use_site_logo: true
+     use_site_name: true
+     use_site_slogan: false
+   visibility: {}
+   ```
+
+4. **Importing block config**
+   - UI: `/admin/config/development/configuration/single/import`
+   - Drush: `drush config:import`
+   - Programmatic: `\Drupal::service('config.installer')->installOptionalConfig()`
+
+5. **Using PlaceBlock recipe action** (Drupal 11.1+)
+   ```yaml
+   name: 'Place custom blocks'
+   config:
+     actions:
+       block.block.olivero_myblock:
+         placeBlock:
+           plugin: my_custom_block
+           region: sidebar_first
+           theme: olivero
+           settings:
+             label: 'My Block'
+   ```
+
+## Decision Points
 
 | At this step... | If... | Then... |
 |-----------------|-------|---------|
@@ -21,37 +77,7 @@ drupal_version: "11.x"
 
 ## Pattern
 
-**Block config structure:**
-- Block plugins → No exportable config (they're code)
-- Block config entities → Exportable YAML (`block.block.*.yml`)
-- Visibility conditions → Stored in `visibility` key
-- Plugin settings → Stored in `settings` key
-
-**Config file structure (block.block.olivero_branding.yml):**
-```yaml
-uuid: abc-123
-langcode: en
-status: true
-dependencies:
-  module: [system]
-  theme: [olivero]
-id: olivero_branding
-theme: olivero
-region: header
-weight: -10
-provider: null
-plugin: system_branding_block
-settings:
-  id: system_branding_block
-  label: 'Site branding'
-  label_display: '0'
-  use_site_logo: true
-  use_site_name: true
-  use_site_slogan: false
-visibility: {}
-```
-
-**Exporting via Drush:**
+**Exporting block config via Drush:**
 ```bash
 drush config:export --destination=/tmp/config
 # Review block.block.*.yml files
@@ -59,18 +85,26 @@ cp /tmp/config/block.block.* config/sync/
 drush config:import
 ```
 
-**Programmatic config:**
+**Programmatic config creation:**
 ```php
 use Drupal\block\Entity\Block;
 
-$block = Block::create([
+// Create from array
+$config = [
   'id' => 'olivero_search',
   'plugin' => 'search_form_block',
   'region' => 'header',
   'theme' => 'olivero',
   'settings' => ['label' => 'Search'],
-]);
+];
+
+$block = Block::create($config);
 $block->save();
+
+// Or load config and modify
+$config = \Drupal::configFactory()->getEditable('block.block.olivero_search');
+$config->set('region', 'sidebar_first');
+$config->save();
 ```
 
 **Recipe example (recipes/myrecipe/recipe.yml):**
@@ -102,11 +136,11 @@ config:
 
 ## Common Mistakes
 
-- **Wrong**: Exporting UUID when not needed → **Right**: UUIDs change per environment; remove for reusable config
-- **Wrong**: Not checking dependencies → **Right**: Block config requires theme and module dependencies; verify they exist
-- **Wrong**: Hardcoding entity IDs in visibility conditions → **Right**: Use UUIDs or labels for portability
-- **Wrong**: Importing config without reviewing diffs → **Right**: Can overwrite production customizations
-- **Wrong**: Not updating config after code changes → **Right**: Block plugin changes don't auto-update placed block settings
+- Exporting UUID when not needed → UUIDs change per environment; remove for reusable config
+- Not checking dependencies → Block config requires theme and module dependencies; verify they exist
+- Hardcoding entity IDs in visibility conditions → Use UUIDs or labels for portability
+- Importing config without reviewing diffs → Can overwrite production customizations
+- Not updating config after code changes → Block plugin changes don't auto-update placed block settings
 
 ## See Also
 

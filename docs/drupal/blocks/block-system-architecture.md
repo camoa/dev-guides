@@ -8,9 +8,11 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Understand the 4 layers before starting any block development. Use this to orient yourself when deciding which layer to work with.
+> Understanding the 4 layers of Drupal's block system before starting any block development.
 
 ## Decision
+
+Drupal's block system consists of 4 distinct layers that work together:
 
 | Layer | Purpose | Location | Key Classes |
 |-------|---------|----------|-------------|
@@ -27,6 +29,8 @@ drupal_version: "11.x"
 4. **Layout Builder** creates its own block plugins for inline blocks and exposes entity fields as blocks
 
 ## Pattern
+
+Every block plugin extends `BlockBase` and implements the `#[Block]` attribute:
 
 ```php
 use Drupal\Core\Block\Attribute\Block;
@@ -48,10 +52,10 @@ class MyBlock extends BlockBase {
 
 ## Common Mistakes
 
-- **Wrong**: Confusing block plugins (programmatic) with content blocks (fieldable entities) → **Right**: Use block plugins for logic, content blocks for editor-managed content
-- **Wrong**: Placing blocks via code when config entity placement is appropriate → **Right**: Use `Block` config entities for standard placement
-- **Wrong**: Not understanding that `BlockContent` entities are wrapped by `BlockContentBlock` plugin → **Right**: Content blocks use BOTH layers
-- **Wrong**: Treating Layout Builder inline blocks like regular blocks → **Right**: Inline blocks are non-reusable and owned by the layout
+- Confusing block plugins (programmatic) with content blocks (fieldable entities) → Use block plugins for logic, content blocks for editor-managed content
+- Placing blocks via code when config entity placement is appropriate → Use `Block` config entities for standard placement
+- Not understanding that `BlockContent` entities are wrapped by `BlockContentBlock` plugin → Content blocks use BOTH layers
+- Treating Layout Builder inline blocks like regular blocks → Inline blocks are non-reusable and owned by the layout
 
 ## See Also
 

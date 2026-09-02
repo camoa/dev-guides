@@ -20,9 +20,7 @@ drupal_version: "11.x"
 | Group role (insider) | `group.role.{group_type}-insider_{drupal_role}.yml` | `scope: insider`, `global_role: authenticated` |
 | Relationship type | `group.relationship_type.{group_type}-{plugin_id__dots_to_double_underscore}.yml` | ID convention: `{group_type}-{plugin_id}` where `:` → `__` |
 
-## Pattern
-
-### Group Type Config Schema
+## Group Type Config Schema
 
 ```yaml
 # config/install/group.type.project.yml
@@ -40,7 +38,7 @@ creator_roles:
 
 > **3.x:** Group 3.x group types also had a `creator_wizard` boolean controlling whether the creator had to complete a second membership-config step. The two-step wizard was removed in 4.x, so `creator_wizard` no longer exists — drop it from any config being migrated to 4.x.
 
-### Group Role Config Schema
+## Group Role Config Schema
 
 ```yaml
 # config/install/group.role.project-manager.yml
@@ -64,7 +62,7 @@ permissions:
   - 'delete any group_node:article entity'
 ```
 
-#### Synchronized Role Example (insider scope)
+**Synchronized Role Example (insider scope):**
 
 ```yaml
 # group.role.project-insider_authenticated.yml
@@ -77,7 +75,7 @@ permissions:
   - 'view group_node:article entity'
 ```
 
-### Relationship Type Config Schema
+## Relationship Type Config Schema
 
 ```yaml
 # config/install/group.relationship_type.project-group_node__article.yml
@@ -123,12 +121,12 @@ group_relation.config.my_setting:
 
 ## Common Mistakes
 
-- **Wrong**: Group type IDs longer than 22 characters → **Right**: `GroupTypeInterface::ID_MAX_LENGTH = 22` enforces this. Role IDs append `-anonymous` and must stay under 32 characters total.
-- **Wrong**: Forgetting to clear caches after installing new plugin-generated config → **Right**: Relationship types are bundles, and Drupal caches bundle info aggressively — clear caches after install.
-- **Wrong**: Deploying relationship type config without the dependent module's entity config → **Right**: Include `node.type.article` (or equivalent) in the same config import batch, or config dependencies will fail during import.
-- **Wrong**: Keeping `creator_wizard` in `group.type.*` config when upgrading to 4.x → **Right**: The 4.x config schema no longer defines it; config validation will flag it.
-- **Wrong**: Keeping `use_creation_wizard` in `plugin_config` of relationship type config for 4.x → **Right**: The two-step wizard was removed in 4.x; drop this key from all relationship type config.
-- **Wrong**: Writing `content_plugin` as the plugin key on `4.0.0-alpha2` → **Right**: The key is `relation_type` as of `4.0.0-alpha2` (renamed in issue #3604203, no back-compatible alias). Only a site still on `4.0.0-alpha1` uses `content_plugin`; run database updates after upgrading so `group_update_11401()` rewrites existing config.
+- Group type IDs longer than 22 characters. The `GroupTypeInterface::ID_MAX_LENGTH = 22` constant enforces this. The reason is that role IDs append `-anonymous` and must stay under 32 characters total.
+- Forgetting to clear caches after installing new plugin-generated config. Relationship types are bundles, and Drupal caches bundle info aggressively.
+- Deploying relationship type config without the dependent module's entity config (e.g., a `node.type.article` file). Config dependencies will fail during import.
+- Keeping `creator_wizard` in `group.type.*` config when upgrading to 4.x. The 4.x config schema no longer defines it; config validation will flag it.
+- Keeping `use_creation_wizard` in `plugin_config` of relationship type config for 4.x. The two-step wizard was removed in 4.x; drop this key from all relationship type config.
+- Writing `content_plugin` as the plugin key on `4.0.0-alpha2`. The key is `relation_type` as of `4.0.0-alpha2` (renamed in issue #3604203, no back-compatible alias). Only a site still on `4.0.0-alpha1` uses `content_plugin`; run database updates after upgrading so `group_update_11401()` rewrites existing config.
 
 ## See Also
 
