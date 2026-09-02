@@ -1,5 +1,5 @@
 ---
-description: Create, update, or delete terms via code (migrations, imports, install hooks)
+description: "Create, update, or delete terms via code (migrations, imports, install hooks)"
 tldr: "Use programmatic approach for migrations, imports, install hooks, drush commands. Complements config-first vocabulary management."
 drupal_version: "11.x"
 ---
@@ -8,39 +8,38 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use programmatic approach for migrations, imports, install hooks, drush commands. Complements config-first vocabulary management.
+> Use this guide when creating, updating, or deleting terms via code (migrations, imports, install hooks, drush commands).
 
-## Decision
+Programmatic approach complements config-first vocabulary management.
 
-| Situation | Choose | Why |
-|-----------|--------|-----|
-| Single term creation | `Term::create()` + `save()` | Simple, direct |
-| Update existing term | Load, modify, `save()` | Standard entity pattern |
-| Delete term | `load()` + `delete()` or `delete($terms)` | Single or bulk delete |
-| Bulk creation (>100 terms) | Batch API or queue workers | Prevents timeouts and memory issues |
-| Hierarchical term creation | Set `parent` field array | `['parent' => [$parent_tid]]` |
-
-## Pattern
+## Steps
 
 **Create single term:**
-```php
-use Drupal\taxonomy\Entity\Term;
 
-$term = Term::create([
-  'vid' => 'tags',
-  'name' => 'Drupal 11',
-  'description' => [
-    'value' => 'Posts about Drupal 11',
-    'format' => 'basic_html',
-  ],
-  'weight' => 0,
-  'parent' => [0], // Root level
-]);
-$term->save();
-$tid = $term->id();
-```
+1. **Use Term::create()** — Instantiate term entity
+   ```php
+   use Drupal\taxonomy\Entity\Term;
+
+   $term = Term::create([
+     'vid' => 'tags',
+     'name' => 'Drupal 11',
+     'description' => [
+       'value' => 'Posts about Drupal 11',
+       'format' => 'basic_html',
+     ],
+     'weight' => 0,
+     'parent' => [0], // Root level
+   ]);
+   ```
+
+2. **Call save()** — Persist to database
+   ```php
+   $term->save();
+   $tid = $term->id();
+   ```
 
 **Update existing term:**
+
 ```php
 $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
 $term = $term_storage->load($tid);
@@ -52,6 +51,7 @@ $term->save();
 ```
 
 **Delete term:**
+
 ```php
 $term = $term_storage->load($tid);
 $term->delete();
@@ -61,7 +61,39 @@ $terms = $term_storage->loadMultiple($tids);
 $term_storage->delete($terms);
 ```
 
+**Batch creation (>100 terms):**
+
+```php
+function mymodule_import_terms_batch($data) {
+  $batch = [
+    'title' => t('Importing terms'),
+    'operations' => [],
+    'finished' => 'mymodule_import_terms_finished',
+  ];
+
+  foreach ($data as $item) {
+    $batch['operations'][] = [
+      'mymodule_import_term_operation',
+      [$item],
+    ];
+  }
+
+  batch_set($batch);
+}
+
+function mymodule_import_term_operation($item, &$context) {
+  Term::create([
+    'vid' => 'categories',
+    'name' => $item['name'],
+    'parent' => [$item['parent_tid']],
+  ])->save();
+
+  $context['message'] = t('Imported @name', ['@name' => $item['name']]);
+}
+```
+
 **Hierarchy manipulation:**
+
 ```php
 // Add child term
 $parent = $term_storage->load($parent_tid);
@@ -85,16 +117,15 @@ $term->save();
 
 ## Common Mistakes
 
-- **Wrong**: Not setting `parent` field → **Right**: Always set `'parent' => [0]` for top-level or `[$parent_tid]` for children
-- **Wrong**: Using `create()` in loops without batching → **Right**: Use Batch API or queue workers for >100 terms
-- **Wrong**: Forgetting description format → **Right**: Description is formatted text: `['value' => '...', 'format' => 'basic_html']`
-- **Wrong**: Saving terms without checking duplicates → **Right**: Use `loadByProperties(['vid' => $vid, 'name' => $name])` first
-- **Wrong**: Deleting parent term without handling children → **Right**: Load and re-parent or delete children explicitly
-- **Wrong**: Not validating vocabulary exists → **Right**: Check vocabulary entity exists before creating terms
-- **Wrong**: Calling `save()` unnecessarily → **Right**: Every save triggers hooks, cache clear, search indexing; only save when changing data
+- Not setting `parent` field → Defaults to root (0), but explicit is better. Always set `'parent' => [0]` for top-level or `[$parent_tid]` for children
+- Using `create()` in loops without batching → Causes timeouts and memory issues with >100 terms. Use Batch API or queue workers for bulk operations
+- Forgetting description format → Description is formatted text: `['value' => '...', 'format' => 'basic_html']`. Omitting format causes default (plain_text)
+- Saving terms without checking duplicates → Use `loadByProperties(['vid' => $vid, 'name' => $name])` to check for existing terms before creating
+- Deleting parent term without handling children → Children become orphans or deleted (depending on config). Load and re-parent or delete children explicitly
+- Not validating vocabulary exists → Loading non-existent vid fails silently. Check vocabulary entity exists before creating terms
+- Calling `save()` unnecessarily in read-only operations → Every save triggers hooks, cache clear, search indexing. Only save when changing data
 
 ## See Also
 
-- [Term Storage & Querying](term-storage-querying.md)
-- [Taxonomy with Entity Reference](entity-reference-taxonomy.md)
+- ← Previous: [Term Storage & Querying](term-storage-querying.md) | Next: [Taxonomy with Entity Reference](entity-reference-taxonomy.md) →
 - Reference: `/core/modules/taxonomy/src/Entity/Term.php` (lines 137-143)

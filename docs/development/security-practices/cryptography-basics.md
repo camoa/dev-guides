@@ -1,13 +1,13 @@
 ---
 description: Cryptography fundamentals including AES-256-GCM encryption, RSA asymmetric encryption, Argon2id password hashing, HMAC, secure random generation, and key rotation.
-tldr: "Cryptography protects data confidentiality (encryption), integrity (hashing), and authenticity (signatures). Use for sensitive data at rest and in transit, password storage, message authentication, and digital signatures."
+tldr: "Cryptography protects data confidentiality (encryption), integrity (hashing), and authenticity (signatures). Use cryptography for sensitive data at rest and in transit, password storage, message authentication, and digital signatures."
 ---
 
 # Cryptography Basics
 
 ## When to Use
 
-Cryptography protects data confidentiality (encryption), integrity (hashing), and authenticity (signatures). Use for sensitive data at rest and in transit, password storage, message authentication, and digital signatures.
+Cryptography protects data confidentiality (encryption), integrity (hashing), and authenticity (signatures). Use cryptography for sensitive data at rest and in transit, password storage, message authentication, and digital signatures.
 
 ## Decision
 
@@ -32,6 +32,13 @@ hash_value = hashlib.sha256(data.encode()).hexdigest()
 # Can verify integrity but can't recover original data
 ```
 
+**Use hashing for:**
+
+- Password storage (with Argon2/bcrypt)
+- File integrity verification (SHA-256 checksums)
+- Digital fingerprints
+- Proof of work (blockchain)
+
 **Encryption (two-way):**
 
 ```python
@@ -41,6 +48,13 @@ cipher = Fernet(key)
 ciphertext = cipher.encrypt(b"sensitive data")
 recovered = cipher.decrypt(ciphertext)  # b"sensitive data"
 ```
+
+**Use encryption for:**
+
+- Storing sensitive data (credit cards, SSNs)
+- Data in transit (HTTPS/TLS)
+- Encrypted backups
+- Secure communication
 
 ## Symmetric Encryption (AES)
 
@@ -116,7 +130,11 @@ except VerifyMismatchError:
     print("Password incorrect")
 ```
 
-**Requirements:** Random per-user salt, intentionally slow, memory-hard (resists GPU/ASIC).
+**Password hashing requirements:**
+
+- **Salt:** Random per-user (prevents rainbow tables)
+- **Slow:** Intentionally slow to prevent brute force
+- **Memory-hard:** Resists GPU/ASIC attacks (Argon2)
 
 ## Hashing for Integrity
 
@@ -196,15 +214,15 @@ class KeyManager:
 ## Common Mistakes
 
 - **Using MD5 or SHA-1** — Broken, collision attacks exist. Use SHA-256+ or SHA-3
-- **ECB mode for encryption** — AES-ECB leaks patterns. Use GCM or CBC
-- **Not using authenticated encryption** — CBC without HMAC allows padding oracle attacks. Use GCM
-- **Hardcoded keys** — Keys in source code get committed to git. Use environment variables or KMS
-- **Weak random for security** — `random.random()`, `Math.random()` are predictable. Use `secrets`, `os.urandom()`
-- **Encrypting passwords** — Passwords should be hashed (one-way), not encrypted (reversible)
-- **Rolling your own crypto** — Don't implement cryptographic algorithms. Use vetted libraries
-- **Insufficient key length** — AES-128 acceptable, use AES-256 for future-proofing. RSA < 2048 is broken
-- **No key rotation** — Compromised key compromises all data. Rotate quarterly
-- **Storing plaintext keys with encrypted data** — Store keys separately (KMS, HSM)
+- **ECB mode for encryption** — AES-ECB leaks patterns (famous penguin image). Use GCM or CBC
+- **Not using authenticated encryption** — CBC without HMAC allows padding oracle attacks. Use GCM (built-in authentication)
+- **Hardcoded keys** — Keys in source code get committed to git, leaked. Use environment variables or key management service
+- **Weak random for security** — `random.random()`, `Math.random()` are predictable. Use `secrets`, `os.urandom()`, `crypto.randomBytes()`
+- **Encrypting passwords** — Passwords should be hashed (one-way), not encrypted (reversible). Use Argon2id/bcrypt
+- **Rolling your own crypto** — Don't implement cryptographic algorithms. Use vetted libraries (cryptography, libsodium)
+- **Insufficient key length** — AES-128 is acceptable but use AES-256 for future-proofing. RSA < 2048 is broken
+- **No key rotation** — Compromised key compromises all data ever encrypted. Rotate keys quarterly
+- **Storing plaintext keys with encrypted data** — If database is dumped, attacker gets keys and data. Store keys separately (KMS, HSM)
 
 ## See Also
 

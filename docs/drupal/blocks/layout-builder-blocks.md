@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use Layout Builder blocks when placing content within layouts. Use inline blocks for one-off content, field blocks to display entity fields, and extra field blocks for pseudo-fields.
+> Understanding how Layout Builder uses blocks differently: inline blocks, field blocks, and extra field blocks.
 
 ## Decision
 
@@ -16,7 +16,7 @@ drupal_version: "11.x"
 |----------------|--------|-----|
 | One-off content specific to this layout | Inline Block | Non-reusable, owned by layout, no block library clutter |
 | Entity field displayed as block in layout | Field Block | Native entity display, automatic updates when entity changes |
-| Pseudo-field (like "author" or "submitted by") as block | Extra Field Block | Exposes `hook_entity_extra_field_info()` items as blocks |
+| Pseudo-field (like "author" or "submitted by") as block | Extra Field Block | Exposes hook_entity_extra_field_info() items as blocks |
 | Reusable block in Layout Builder | Regular Block Plugin | Can be placed via Layout Builder and traditional regions |
 | Block content that might become reusable later | Start with Inline Block, convert if needed | Easier to promote to reusable than demote from reusable |
 
@@ -88,11 +88,11 @@ class MyLayoutBlock extends BlockBase {
 
 ## Common Mistakes
 
-- **Wrong**: Trying to edit inline blocks from block library → **Right**: They're not reusable; must edit in Layout Builder
-- **Wrong**: Creating reusable content blocks when inline blocks suffice → **Right**: Clutters block library unnecessarily
-- **Wrong**: Not understanding inline blocks are BlockContent entities → **Right**: Same entity type, different `reusable` flag
-- **Wrong**: Deleting node/entity without handling inline blocks → **Right**: Orphaned BlockContent entities; consider cleanup
-- **Wrong**: Expecting field blocks to work outside Layout Builder → **Right**: They require entity context from layout
+- Trying to edit inline blocks from block library → They're not reusable; must edit in Layout Builder
+- Creating reusable content blocks when inline blocks suffice → Clutters block library unnecessarily
+- Not understanding inline blocks are BlockContent entities → Same entity type, different `reusable` flag
+- Deleting node/entity without handling inline blocks → Orphaned BlockContent entities; consider cleanup
+- Expecting field blocks to work outside Layout Builder → They require entity context from layout
 
 ## See Also
 

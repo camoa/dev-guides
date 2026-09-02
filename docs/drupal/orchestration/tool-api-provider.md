@@ -10,17 +10,30 @@ drupal_version: "11.x"
 
 > Use this when you want external platforms to call `drupal/tool` Tool API plugins directly via Orchestration.
 
-## Decision
+## How It Works
 
-| Situation | Notes |
-|---|---|
-| Tool API plugin with scalar inputs | Pass value directly in config |
-| Tool API plugin with entity-typed inputs | Pass the entity's numeric/string ID — provider resolves to entity object internally |
-| Production use | Hedge against upstream instability — the Tool API docs explicitly warn structure is subject to change |
+The `orchestration_tool` submodule registers a `ServicesProvider` that iterates all `plugin.manager.tool` definitions and exposes each as an Orchestration service.
+
+**Service UUID format**: `tool::{tool_plugin_id}`
+
+**ServiceConfig entries** are built from each tool's `InputDefinition` objects, preserving: key, label, description, required flag, data type, editability (`!$input->isLocked()`), default value, and constraints.
+
+**Execute workflow**:
+1. Instantiate the tool plugin via `ToolManager`
+2. For each `InputDefinition`: if data type starts with `entity:`, load the entity via `EntityTypeManagerInterface` using the config value as the ID; otherwise use the value directly
+3. Call `$executableTool->execute()`
+4. Return `$executableTool->getResultMessage()`
+
+**Entity resolution**: Entity-typed inputs expect the entity's numeric/string ID in the config — the provider resolves them internally before calling `execute()`.
+
+## Stability Warning
+
+The `drupal/tool` module documentation explicitly states: "the Tool API is still in development and that their structure and functionality are still subject to change." Treat `orchestration_tool` as similarly early-stage. Input parameter structures and entity resolution behavior may change in minor releases of `drupal/tool`.
 
 ## Pattern
 
 ```json
+// Calling a Tool API plugin via Orchestration:
 POST /orchestration/service/execute
 {
   "id": "tool::my_tool_plugin_id",
@@ -31,23 +44,15 @@ POST /orchestration/service/execute
 }
 ```
 
-**Execute workflow:**
-1. Instantiate tool plugin via `ToolManager`
-2. For each `InputDefinition`: if data type starts with `entity:`, load the entity via `EntityTypeManagerInterface` using the config value as the ID; otherwise use the value directly
-3. Call `$executableTool->execute()`
-4. Return `$executableTool->getResultMessage()`
-
-**ServiceConfig entries** are built from each tool's `InputDefinition` objects, preserving: key, label, description, required flag, data type, editability, default value, and constraints.
-
-**Stability warning:** The `drupal/tool` module explicitly states its Tool API is still in development and subject to change. Treat `orchestration_tool` as similarly early-stage.
+Reference: `modules/tool/src/ServicesProvider.php`
 
 ## Common Mistakes
 
-- **Wrong**: Passing entity UUIDs when entity IDs are expected → **Right**: The provider uses `EntityTypeManagerInterface::getStorage()->load($value)` which expects the entity ID, not UUID
-- **Wrong**: Enabling `orchestration_tool` alongside `orchestration_ai_function` and being surprised by deduplication → **Right**: `orchestration_ai_function` skips Tool-provider FunctionCall plugins; the combination is safe
-- **Wrong**: Relying on Tool API plugin structure in production → **Right**: The upstream module warns structure may change in minor releases
+- **Passing entity UUIDs when entity IDs are expected** — the provider uses `EntityTypeManagerInterface::getStorage()->load($value)`, which expects the entity ID
+- **Enabling `orchestration_tool` alongside `orchestration_ai_function` and being surprised when Tool-provider FunctionCall plugins only appear once** — `orchestration_ai_function` skips them; the combination is safe
+- **Relying on Tool API plugin structure in production without hedging against the upstream instability warning**
 
 ## See Also
 
-- [AI Agents and AI Function Providers](ai-agents-and-ai-function-providers.md)
+- [AI Agents and AI Function Providers](ai-agents-and-ai-function-providers.md) → for the de-duplication relationship
 - Reference: `modules/tool/src/ServicesProvider.php`, `modules/tool/orchestration_tool.services.yml`

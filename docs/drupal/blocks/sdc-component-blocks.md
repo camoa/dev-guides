@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when exposing Twig SDC components as placeable blocks. Component Block module handles zero-PHP cases. UI Patterns auto-registers all SDC components as blocks when `ui_patterns_blocks` sub-module is enabled.
+> Using Single Directory Components (SDC) as blocks, making Twig components available in the block system.
 
 ## Decision
 
@@ -18,12 +18,37 @@ drupal_version: "11.x"
 | Component with server-side data processing | Custom block plugin rendering component | Full PHP control, inject services |
 | Component exposed in Layout Builder | Component Block with Layout Builder | Site builders can add components via UI |
 | Component with complex configuration | Block plugin + component render element | More control over configuration form |
-| Component as block with props exposed to editors | UI Patterns block (`ui_patterns_blocks`) | Zero PHP, admin form auto-generated from schema |
 
 ## Pattern
 
-**Using component in custom block plugin:**
+**Component Block module approach:**
 
+1. Install module: `composer require drupal/component_block`
+2. Create SDC component in `{module}/components/my_component/`
+3. Component automatically appears as block plugin
+4. Block configuration maps to component props
+
+**Component structure (my_component/my_component.component.yml):**
+```yaml
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/metadata.schema.json
+name: My Component
+status: stable
+props:
+  type: object
+  properties:
+    title:
+      type: string
+      title: Title
+    description:
+      type: string
+      title: Description
+  required: [title]
+slots:
+  default:
+    title: Content
+```
+
+**Using component in custom block plugin:**
 ```php
 #[Block(
   id: "component_demo",
@@ -64,42 +89,30 @@ class ComponentDemoBlock extends BlockBase {
 }
 ```
 
-**Component structure (my_component/my_component.component.yml):**
-```yaml
-$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/metadata.schema.json
-name: My Component
-status: stable
-props:
-  type: object
-  properties:
-    title:
-      type: string
-      title: Title
-    description:
-      type: string
-      title: Description
-  required: [title]
-slots:
-  default:
-    title: Content
-```
+**Reference:** https://www.drupal.org/project/component_block, `core/lib/Drupal/Core/Render/Element/Component.php`
 
-**Component Block module approach:**
-1. Install module: `composer require drupal/component_block`
-2. Create SDC component in `{module}/components/my_component/`
-3. Component automatically appears as block plugin
-4. Block configuration maps to component props
+## UI Patterns Auto-Block Registration
 
-**UI Patterns auto-block registration:**
+When the `ui_patterns_blocks` sub-module is enabled, every SDC component is automatically registered as a block plugin — no custom PHP needed.
 
-When `ui_patterns_blocks` sub-module is enabled, every SDC component is automatically registered as a block plugin — no custom PHP needed.
-
-- Plugin ID pattern: `ui_patterns:namespace:component_name`
+**How it works:**
+- UI Patterns scans all SDC `component.yml` files at cache rebuild
+- Each component becomes a block plugin with ID pattern: `ui_patterns:namespace:component_name`
   - Example: `ui_patterns:ui_suite_daisyui:hero`, `ui_patterns:my_theme:card`
 - Props become block configuration form fields (auto-generated from JSON Schema)
 - Slots become block regions that accept other blocks
+- Config schema follows pattern: `block.settings.ui_patterns:*:*:`
 
-**Placing a UI Patterns block in config:**
+**When to use UI Patterns blocks vs custom block plugins:**
+
+| If you need... | Use... | Why |
+|---|---|---|
+| Component as block with props exposed to editors | UI Patterns block | Zero PHP, admin form auto-generated from schema |
+| Server-side data processing before rendering | Custom block plugin rendering `#type: component` | Full PHP control, service injection |
+| Complex configuration beyond component schema | Custom block plugin + component render element | Custom form elements, validation logic |
+
+**Pattern: Placing a UI Patterns block in config**
+
 ```yaml
 # block.block.ui_patterns_hero.yml
 plugin: 'ui_patterns:my_theme:hero'
@@ -111,19 +124,18 @@ settings:
   provider: ui_patterns
 ```
 
-**Reference:** https://www.drupal.org/project/component_block, `core/lib/Drupal/Core/Render/Element/Component.php`
-
 ## Common Mistakes
 
-- **Wrong**: Not validating component props in block config → **Right**: Invalid props cause component render errors
-- **Wrong**: Mixing component logic with block logic → **Right**: Keep components pure; put business logic in block plugin
-- **Wrong**: Hardcoding component props when they should be configurable → **Right**: Use `blockForm()` to expose props
-- **Wrong**: Not handling missing components gracefully → **Right**: Check component exists before rendering
-- **Wrong**: Forgetting component library must be enabled → **Right**: SDC components require the component's module enabled
-- **Wrong**: Installing `ui_patterns_blocks` without complete `component.yml` schemas → **Right**: Missing prop titles/descriptions produce poor auto-generated forms
+- Not validating component props in block config → Invalid props cause component render errors
+- Mixing component logic with block logic → Keep components pure; put business logic in block plugin
+- Hardcoding component props when they should be configurable → Use `blockForm()` to expose props
+- Not handling missing components gracefully → Check component exists before rendering
+- Forgetting component library must be enabled → SDC components require the component's module enabled
+- Installing `ui_patterns_blocks` without complete `component.yml` schemas → Missing prop titles/descriptions produce poor auto-generated forms
 
 ## See Also
 
 - [Creating Block Plugins](creating-block-plugins.md)
-- Reference: `drupal-ui-patterns.md` — full UI Patterns documentation
+- → SDC Development Guide (for component creation)
+- → `drupal-ui-patterns.md` — full UI Patterns documentation
 - Reference: https://www.drupal.org/docs/develop/theming-drupal/using-single-directory-components

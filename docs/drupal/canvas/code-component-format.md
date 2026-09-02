@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use Code Components when you need browser-rendered React/Preact with interactive state, dynamic behavior, or Tailwind CSS styling without a separate Drupal theme build. Use SDC components when you need server-side Drupal field integration.
+> You need a browser-rendered React/Preact component with interactive state, dynamic behavior, or you want to use Tailwind CSS for styling without a separate Drupal theme build process. Code Components are authored in JSX and CSS, stored as Drupal config entities, and rendered entirely in the browser (no server-side Twig rendering).
 
 ## Decision
 
@@ -19,9 +19,9 @@ drupal_version: "11.x"
 | Server-side rendering + Drupal fields | SDC Component | Works with Drupal's render + caching system |
 | Static text/image layout | SDC Component | Less overhead than React |
 
-## Pattern
+## File Structure
 
-**File structure** (local development with CLI):
+When working locally (with the CLI), a Code Component lives in its own directory:
 
 ```
 my-components/
@@ -32,7 +32,11 @@ my-components/
       index.css       ← optional: component styles (Tailwind utility classes)
 ```
 
-**`component.yml` for Code Components:**
+**The CLI discovers components by looking for `component.yml` files** and then expects `index.{js,jsx,ts,tsx}` and optionally `index.css` in the same folder.
+
+## component.yml for Code Components
+
+Code Component YAML shares structure with SDC YAML but the rendering is React instead of Twig:
 
 ```yaml
 # component.yml (Code Component)
@@ -62,9 +66,9 @@ slots:
     title: Badge
 ```
 
-Note: Code Component props use camelCase names (e.g., `ctaLabel`), unlike SDC props which use snake_case.
+**Note on naming**: prop and slot keys in `component.yml` are used **exactly as authored** — the CLI does no renaming. camelCase is a convention here, not a rule, and it exists because the *in-browser* code editor derives the machine name from the human-readable name you type by running it through lodash `camelCase` (so typing "CTA label" or "cta_label" both yield `ctaLabel`). If you author `component.yml` by hand, name props in camelCase yourself for consistency with components round-tripped through the editor.
 
-**`index.jsx` — The React Component:**
+## index.jsx — The React Component
 
 ```jsx
 // index.jsx — MUST use default export, not named export
@@ -90,14 +94,17 @@ export default function HeroBanner({ headline, body, ctaLabel, ctaUrl, badge }) 
 }
 ```
 
-**Critical rules:**
+**Critical rules for Code Components:**
+
 1. **Default export only** — named exports are not allowed and will cause errors
 2. **Preact under the hood** — Canvas uses Preact with the React compatibility layer; the import map aliases `react`, `react-dom`, and `react-dom/client` onto Preact's compat build. Import `react`, not `preact/compat` — the latter is not in the map
-3. **Tailwind CSS 4 is available globally** — Tailwind utility classes work without any build configuration
+3. **Tailwind CSS 4 is available globally** — Tailwind utility classes work in all Code Components without any build configuration
 4. **Props arrive as component parameters** — same names as defined in `component.yml`
 5. **Slots arrive as React children** — a slot named `badge` in YAML becomes a `badge` prop containing renderable content
 
-**Allowed package imports** — the complete base import map (bare specifiers that resolve without any build step):
+## Allowed Package Imports
+
+Code Components run in a browser import-map environment. Canvas ships a base import map, and that map is the complete list of bare specifiers that resolve without any build step:
 
 | Import | Notes |
 |---|---|
@@ -122,25 +129,27 @@ Four legacy specifiers — `@/lib/FormattedText`, `@/lib/utils`, `@/lib/jsonapi-
 
 **Third-party npm packages: it depends which path you are on.**
 
-- **In-browser code editor** — you get the base import map and nothing else. An arbitrary `import _ from 'lodash'` will not resolve
-- **CLI (`@drupal-canvas/cli`)** — third-party packages *are* supported. `canvas build` walks your imports, bundles anything it classifies as third-party into a vendor bundle, and `canvas push` writes those bundles into the site's global asset library, appending them to the runtime import map (overriding same-named base entries). So a package installed in your codebase and imported from a component works in production after a push
+- **In-browser code editor** — you get the base import map and nothing else. An arbitrary `import _ from 'lodash'` will not resolve.
+- **CLI (`@drupal-canvas/cli`)** — third-party packages *are* supported. `canvas build` walks your imports, bundles anything it classifies as third-party into a vendor bundle, and `canvas push` writes those bundles into the site's global asset library. Canvas then appends the asset library's entries to the runtime import map, where they override same-named base entries. So a package installed in your codebase and imported from a component works in production after a push.
 
-**Your own shared code** uses the `@/` alias, rooted at `aliasBaseDir` from `canvas.config.json`. Relative `./` and `../` JS/TS *module* imports are **not** supported — use `@/` (relative *asset* imports — images, SVG, fonts — are fine). Font packages (`@fontsource/*`) and CSS side-effect imports are rejected outright.
+**Your own shared code** uses the `@/` alias, rooted at the `aliasBaseDir` from `canvas.config.json`. `@/…` imports are resolved and bundled at build time. Relative `./` and `../` JS/TS *module* imports are **not** supported — use `@/`. (Relative *asset* imports — images, SVG, fonts by file — are fine.) Font packages (`@fontsource/*`) and CSS side-effect imports are rejected outright.
 
 ## Common Mistakes
 
-- **Wrong**: Named exports (`export function MyComponent`) → **Right**: Canvas requires `export default`
-- **Wrong**: Importing `preact/compat` → **Right**: not in the import map; import `react` instead
-- **Wrong**: Importing an arbitrary npm package while working in the **in-browser** editor → **Right**: only the base import map resolves there. Through the CLI, install it and let `build`/`push` bundle it
-- **Wrong**: Using `./` or `../` to import a sibling helper → **Right**: Canvas rejects relative module imports; use the `@/` alias
-- **Wrong**: Writing your own file at `@/lib/utils` (or the other three reserved `@/lib/*` paths) → **Right**: Canvas owns those specifiers
-- **Wrong**: Server-side expectations — Code Components render only in the browser → **Right**: No PHP/Drupal preprocess available
-- **Wrong**: Forgetting that slots are renderable content, not strings → **Right**: Render `{badge}` directly, not `{badge.toString()}`
+- Named exports (`export function MyComponent`) — Canvas requires `export default`
+- Importing `preact/compat` — not in the import map; import `react` instead
+- Importing an arbitrary npm package while working in the **in-browser** editor — only the base import map resolves there. Through the CLI, install it and let `build`/`push` bundle it
+- Using `./` or `../` to import a sibling helper — Canvas rejects relative module imports; use the `@/` alias
+- Writing your own file at `@/lib/utils` (or the other three reserved `@/lib/*` paths) — Canvas owns those specifiers
+- Using `className` the React way then wondering why Tailwind isn't working — Tailwind IS available; double-check class names
+- Server-side expectations — Code Components render only in the browser; there is no PHP/Drupal preprocess
+- Using React-specific APIs not available in Preact — most React APIs work, but some edge cases differ; test in the Canvas environment
+- Forgetting that slots are renderable content, not strings — render `{badge}` directly, not `{badge.toString()}`
 
 ## See Also
 
 - [Canvas CLI](canvas-cli.md) for the local development workflow
-- [Canvas NPM Tools](canvas-npm-tools.md) for full npm tooling context
+- [Allowed Packages](canvas-npm-tools.md) for full npm tooling context
 - Canvas Code Component docs: https://project.pages.drupalcode.org/canvas/code-components/
 - Packages: https://project.pages.drupalcode.org/canvas/code-components/packages/
 - canvas-starter (Balint Kleri's preconfigured dev environment): https://github.com/balintbrews/canvas-starter

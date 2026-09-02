@@ -8,20 +8,12 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when developing Canvas Code Components locally and you want to build, preview, and test components in isolation before pushing to Drupal. Storybook is the recommended isolated development environment for Canvas Code Components.
+> You are developing Canvas Code Components locally (using Nebula or a similar setup) and want to build, preview, and test components in isolation before pushing to Drupal. Storybook is the recommended isolated development environment for Canvas Code Components.
 
-## Decision
-
-| Component type | Storybook approach | Story format |
-|---|---|---|
-| Code Component (React/Preact) | Standard Storybook in Nebula | `.stories.jsx` / `.stories.tsx` |
-| SDC Component (Twig) with Canvas SDC Starterkit | Starterkit's built-in Storybook | Component YAML drives stories automatically |
-| SDC Component (Twig) with Drupal Storybook module | Drupal Storybook module | `.stories.twig` with `{% story %}` tags |
-
-## Pattern
+## Architecture
 
 Nebula includes Storybook preconfigured with:
-- Viewports that match Canvas editor breakpoints
+- Viewports that match Canvas editor breakpoints (so components look correct in Canvas preview)
 - Vite-based Storybook builder (fast HMR)
 - SWC for JSX compilation
 
@@ -52,19 +44,32 @@ export const MinimalContent = {
 };
 ```
 
-Canvas Code Component stories are regular React/Preact stories — no special Canvas-specific story format is required.
+**Note**: Canvas Code Component stories are regular React/Preact stories — no special Canvas-specific story format is required. The component is a standard JSX default export; Storybook renders it directly.
 
-**SDC Components and Storybook** (separate tools):
+## SDC Components and Storybook
+
+For SDC components (Twig-based), Storybook integration is separate and uses different tools:
+
 - **Drupal Storybook module** (`drupal.org/project/storybook`) — Allows writing stories in Twig using `{% stories %}` and `{% story %}` tags
 - **SDC Storybook addon** (`storybook-addon-sdc`) — Dynamically loads `*.component.yml` definitions as stories
 - **Canvas SDC Starterkit** — Includes Storybook integration where SDC components appear automatically without separate story files
 
+The choice depends on whether you are building SDC or Code Components. The Nebula template Storybook is for Code Components only.
+
+## Decision
+
+| Component type | Storybook approach | Story format |
+|---|---|---|
+| Code Component (React/Preact) | Standard Storybook in Nebula | `.stories.jsx` / `.stories.tsx` |
+| SDC Component (Twig) with Canvas SDC Starterkit | Starterkit's built-in Storybook | Component YAML drives stories automatically |
+| SDC Component (Twig) with Drupal Storybook module | Drupal Storybook module | `.stories.twig` with `{% story %}` tags |
+
 ## Common Mistakes
 
-- **Wrong**: Expecting Canvas-specific story formats → **Right**: Code Component stories are standard Storybook; no special Canvas story format exists
-- **Wrong**: Not mocking slot content in stories → **Right**: Slots arrive as React children; in stories, pass mock components or JSX as the slot arg
-- **Wrong**: Stories passing the wrong prop types → **Right**: The `component.yml` is the source of truth for props; keep stories consistent with it
-- **Wrong**: Running Storybook Tailwind CSS separately from the Canvas CLI build → **Right**: Ensure the Tailwind configuration in Storybook matches what the CLI builds
+- Expecting Canvas-specific story formats — Code Component stories are standard Storybook; no special Canvas story format exists
+- Not mocking slot content in stories — slots arrive as React children; in stories, pass mock components or JSX as the slot arg
+- Stories passing the wrong prop types — the `component.yml` is the source of truth for props; keep stories consistent with it
+- Running Storybook Tailwind CSS separately from the Canvas CLI build — ensure the Tailwind configuration in Storybook matches what the CLI builds
 
 ## See Also
 

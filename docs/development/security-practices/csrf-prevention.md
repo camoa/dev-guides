@@ -31,7 +31,7 @@ Protect ALL state-changing operations: POST/PUT/DELETE requests, password change
 
 | If you need to... | Use... | Why |
 |---|---|---|
-| CSRF protection (modern apps) | **SameSite cookies + CSRF tokens** | Double protection |
+| CSRF protection (modern apps) | **SameSite cookies + CSRF tokens** | Double protection - SameSite blocks most attacks, tokens catch edge cases |
 | CSRF protection (legacy browsers) | CSRF tokens (synchronizer token pattern) | SameSite not supported in old browsers |
 | API authentication | Token-based auth (JWT, API keys) instead of cookies | No automatic credential inclusion |
 | Simple protection | SameSite=Lax cookies | Blocks CSRF for POST/PUT/DELETE (not GET) |
@@ -60,6 +60,8 @@ app.use(session({
     }
 }));
 ```
+
+**SameSite browser support (2025):** All modern browsers support SameSite. Chrome defaults to Lax since 2021 if not specified.
 
 **CSRF tokens (defense in depth):**
 
@@ -128,6 +130,20 @@ fetch('/api/update', {
 // Attacker can't read cookies from other domains (same-origin policy)
 ```
 
+**Origin/Referer header validation (supplementary check):**
+
+```python
+def validate_origin(request):
+    origin = request.headers.get('Origin') or request.headers.get('Referer')
+    if origin:
+        allowed_origins = ['https://yourapp.com', 'https://www.yourapp.com']
+        if not any(origin.startswith(allowed) for allowed in allowed_origins):
+            return False  # Request from unauthorized origin
+    return True
+
+# Use alongside SameSite + CSRF tokens
+```
+
 ## Defense Layers
 
 **Recommended 2025+ approach (multiple layers):**
@@ -141,11 +157,11 @@ fetch('/api/update', {
 
 - **Using only SameSite cookies** — SameSite has edge cases and browser inconsistencies. Use tokens too
 - **CSRF protection on GET requests** — GET should never change state. If your GET endpoints modify data, that's the real problem
-- **Checking Referer header only** — Referer can be stripped by proxies, privacy extensions, HTTPS to HTTP transitions
-- **Not protecting JSON APIs** — CSRF affects JSON APIs too. SameSite cookies + custom header required
-- **Weak token generation** — Use cryptographically secure random. NOT Math.random() or predictable patterns
-- **Token reuse across sessions** — Generate new token per session or per request
-- **SameSite=None without reason** — `SameSite=None` disables protection. Only use for legitimate cross-site embedding
+- **Checking Referer header only** — Referer can be stripped by proxies, privacy extensions, HTTPS→HTTP transitions. Not reliable alone
+- **Not protecting JSON APIs** — CSRF affects JSON APIs too. SameSite cookies + custom header (X-CSRF-Token) required
+- **Weak token generation** — Use cryptographically secure random (crypto.randomBytes, secrets.token_bytes). NOT Math.random() or predictable patterns
+- **Token reuse across sessions** — Generate new token per session or per request. Don't use same token for all users
+- **SameSite=None without reason** — `SameSite=None` disables protection. Only use for legitimate cross-site embedding (OAuth callbacks, payment gateways)
 
 ## See Also
 

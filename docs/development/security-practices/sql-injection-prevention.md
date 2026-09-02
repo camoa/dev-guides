@@ -13,9 +13,9 @@ EVERY database query that includes any untrusted data — user input, URL parame
 
 **Real-world impact:**
 
-- **2025 BusinessOn breach:** SQL injection exposed 179,386 user accounts, 200M won fine
+- **2025 BusinessOn breach:** SQL injection exposed 179,386 user accounts, ₩200M fine
 - **SQL injection is still rampant in 2025** despite being a solved problem since the 1990s
-- Consequences: Data theft, data destruction, authentication bypass, remote code execution
+- Consequences: Data theft, data destruction, authentication bypass, remote code execution (via xp_cmdshell, LOAD_FILE, etc.)
 
 **Attack example:**
 
@@ -140,10 +140,10 @@ END
 
 - **Using parameterized queries sometimes** — 100% of queries with untrusted data MUST use parameters. One vulnerable query = compromised database
 - **Concatenating LIKE patterns** — `WHERE name LIKE '%{user_input}%'` is injectable. Use: `WHERE name LIKE ?` with parameter `f'%{user_input}%'`
-- **Second-order SQL injection** — Attacker stores malicious SQL in database via safe query. Later, vulnerable query reads and executes it
+- **Second-order SQL injection** — Attacker stores malicious SQL in database via safe query. Later, vulnerable query reads and executes it. Validate data when reading from database
 - **Trusting ORM completely** — ORMs are safe for standard queries but allow raw SQL. Django `extra()`, Laravel `DB::raw()` can be vulnerable if misused
 - **Manual escaping functions** — `mysql_real_escape_string()`, `pg_escape_string()` are error-prone and bypassable. Use parameterized queries instead
-- **Storing SQL queries in user-editable files** — Configuration files with SQL templates accessible to users can be exploited
+- **Storing SQL queries in user-editable files** — Configuration files with SQL templates accessible to users can be exploited. Use code-based query builders
 
 ## See Also
 

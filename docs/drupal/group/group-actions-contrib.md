@@ -10,7 +10,7 @@ drupal_version: "11.x"
 
 > Read this when you need to automate group operations — adding/removing members or content — via Views Bulk Operations (VBO), ECA workflows, or any Drupal action-based system.
 
-> **This section applies to Group 3.3.x, not Group 4.x.** `drupal/group_action` 1.2.2 (2025-08-29) declares `"drupal/group": "^1 || ^2@beta || ^3@beta"`, and the HEAD of its only branch carries the identical constraint — 4.x is excluded, so `composer require` will not resolve on a Group 4.x site. Verified 2026-08-16. Until the module declares 4.x support, automating group operations on 4.0.x means either staying on Group 3.3.x or writing the actions yourself against the [PHP API](php-api.md).
+> **This section applies to Group 3.3.x, not Group 4.x.** `drupal/group_action` 1.2.2 (2025-08-29) declares `"drupal/group": "^1 || ^2@beta || ^3@beta"`, and the HEAD of its only branch carries the identical constraint — 4.x is excluded, so the install command below will not resolve on a Group 4.x site. Verified 2026-08-16. Until the module declares 4.x support, automating group operations on 4.0.x means either staying on Group 3.3.x or writing the actions yourself against the [PHP API](php-api.md).
 
 ## Decision
 
@@ -125,12 +125,15 @@ When the content plugin ID has no bundle suffix (e.g., `group_node` instead of `
 
 ## Common Mistakes
 
-- **Wrong**: Using `always_add` without understanding it creates duplicate relationships → **Right**: Use `skip_existing` (default) or `update_existing`.
-- **Wrong**: Setting `group_id` to a group title → **Right**: Only numeric IDs and UUIDs are supported. Use the entity autocomplete in config forms, or tokens.
-- **Wrong**: Forgetting to install the relation type on the group type → **Right**: The action silently skips if the plugin is not installed. Install the group relation type (e.g., `group_node:article`) on the target group type first.
-- **Wrong**: Not handling dynamic bundles, producing a wrong or missing content plugin match → **Right**: Let automatic resolution handle it, or explicitly set `group_node:article`.
-- **Wrong**: ECA recursion errors on group save (Group 3.x) — Group 3.x re-saves the entity for the access cache, triggering ECA recursion → **Right**: The module handles this automatically via the `Compatibility` class; ensure `group_action` is enabled.
-- **Wrong**: Requiring `drupal/group_action` on a Group 4.x site → **Right**: The module caps at `^3@beta`; Composer refuses to resolve it against `drupal/group:^4.0`. Stay on Group 3.3.x or write the actions against the [PHP API](php-api.md) directly.
+| Mistake | Why it fails | Fix |
+|---|---|---|
+| Using `always_add` without understanding | Creates duplicate relationships | Use `skip_existing` (default) or `update_existing` |
+| Setting `group_id` to a group title | Only numeric IDs and UUIDs are supported | Use the entity autocomplete in config forms, or tokens |
+| Forgetting to install the relation type on the group type | Action silently skips if plugin not installed | Install the group relation type (e.g., `group_node:article`) on the target group type first |
+| Not handling dynamic bundles | Wrong or missing content plugin match | Let automatic resolution handle it, or explicitly set `group_node:article` |
+| ECA recursion errors on group save (Group 3.x) | Group 3.x re-saves the entity for the access cache, triggering ECA recursion | Module handles this automatically via `Compatibility` class — ensure `group_action` is enabled |
+
+Requiring `drupal/group_action` on a Group 4.x site does not work: the module caps at `^3@beta`; Composer refuses to resolve it against `drupal/group:^4.0`. Stay on Group 3.3.x, or write the actions against the [PHP API](php-api.md) directly.
 
 ## See Also
 

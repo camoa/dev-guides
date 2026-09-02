@@ -21,22 +21,60 @@ drupal_version: "11.x"
 | Access | Missing `user.group_permissions` context in permission-checking blocks | All users see same cached output — security leak |
 | Access | `entity_access: FALSE` (default) on plugin but expecting group access control | Group never calls `entityAccess()` without `entity_access: TRUE` |
 | API | Using `group.membership_loader` service | Removed in 4.0.0 (deprecated since 3.2.0) |
-| API | Passing string to `$roles` filter in 4.x | Must be an array: `loadByGroup($group, ['role_id'])` |
 | API | Calling `$group->addRelationship()` before saving the group | Throws `EntityStorageException: "Cannot add an entity to an unsaved group."` |
-| API | Expecting auto-created creator membership from programmatic `Group::save()` | In 4.x, creator_membership is form-only — call `addMember()` explicitly |
 | API | Loading members with entity storage in a loop | Each call fires a SQL query; use `GroupMembership::loadByGroup()` which uses the cache |
-| API | Expecting `hook_ENTITY_TYPE_update()` on entity when added to a group | In 4.x, Group only invalidates cache tags — it does not re-save the entity |
-| Config | Keeping `creator_wizard` in group type config for 4.x | Removed in 4.x — config validation flags it |
-| Config | Keeping `use_creation_wizard` in relationship type plugin_config for 4.x | Removed in 4.x — config validation flags it |
 | Plugin | Handler services without `shared: false` | Each handler instance is tied to a specific plugin ID — must be unshared |
 | Plugin | Not calling `clearCachedDefinitions()` when a bundle is added | New bundle plugins won't appear until plugin cache is cleared |
-| Plugin | Using `flexible_permissions_calculator` service tag in 4.x | Tag changed to `access_policy`; re-implement as `AccessPolicyBase` subclass |
 | Views | Relying on Group auto-filtering for `group_relationship_field_data` Views | Only entity-based Views get automatic access filtering |
 
-## Common Mistakes
+## Architecture Mistakes
 
-- **Wrong**: Installing Group and expecting all content to be immediately group-scoped → **Right**: Configure plugins with `entity_access: TRUE` and add entities to groups.
-- **Wrong**: Using `admin: true` on roles without careful thought → **Right**: Admin roles bypass ALL permission checks — assign to trusted users only.
+**Mistake**: Installing Group and expecting all content to be immediately scoped by groups.
+**Why it fails**: Group only restricts access to entities that ARE in a group (via a plugin with `entity_access: TRUE`). Ungrouped entities are unaffected. You must add entities to groups for access control to apply.
+
+**Mistake**: Creating group types with IDs longer than 22 characters.
+**Why it fails**: `GroupTypeInterface::ID_MAX_LENGTH = 22`. Group role IDs append suffixes like `-anonymous` and must stay under 32 characters. Longer group type IDs break role creation.
+
+**Mistake**: Defining a `GroupRelationType` plugin without a config schema entry for each custom `defaultConfiguration()` key.
+**Why it fails**: Config system validation fails on config import/export. Follow the `group_relation.config.{KEY}` schema pattern.
+
+## Access Mistakes
+
+**Mistake**: Using `AccessResult::allowedIfHasPermission($account, 'some group permission')` for group permissions.
+**Why it fails**: This checks global Drupal permissions. Use `GroupAccessResult::allowedIfHasGroupPermission($group, $account, 'some group permission')` for group-scoped permission checks.
+
+**Mistake**: Building render arrays that depend on group permissions without `user.group_permissions` cache context.
+**Why it fails**: Users with different group permissions see the same cached output, causing security leaks or broken UI.
+
+**Mistake**: Not checking `entity_access: TRUE` on your plugin when you expect Group to restrict access to that entity type.
+**Why it fails**: Without `entity_access: TRUE`, Group never calls `entityAccess()` and never forbids access to the entity. The entity remains governed by Drupal's default access system.
+
+**Mistake**: Using `admin: true` on a group role without careful thought.
+**Why it fails**: Admin roles bypass ALL permission checks. Assign to trusted users only.
+
+## API Mistakes
+
+**Mistake**: Using the `group.membership_loader` service.
+**Why it fails**: Removed in 4.0.0 (deprecated since 3.2.0). Use the `GroupMembership::loadSingle()`, `::loadByGroup()`, `::loadByUser()` static methods.
+
+**Mistake**: Calling `$group->addRelationship()` before saving the group.
+**Why it fails**: Throws `EntityStorageException: "Cannot add an entity to an unsaved group."` Both group and entity must be saved first.
+
+**Mistake**: Loading group members with `\Drupal::entityTypeManager()->getStorage('group_relationship')->loadByGroup($group, 'group_membership')` in a loop.
+**Why it fails**: Each call fires a SQL query. Use `GroupMembership::loadByGroup($group)` which uses the chained cache.
+
+## Plugin Mistakes
+
+**Mistake**: Registering handler services without `shared: false`.
+**Why it fails**: Handler services must be unshared (`shared: false` in services.yml) because each handler instance is tied to a specific plugin ID.
+
+**Mistake**: Forgetting to call `clearCachedDefinitions()` on the plugin manager when a bundle is added/removed.
+**Why it fails**: Derived plugins (like `group_node:{bundle}`) are cached. New bundles will not appear as available plugins until the cache is cleared.
+
+## Views Mistakes
+
+**Mistake**: Relying on Group's automatic access filtering for a View based on `group_relationship_field_data`.
+**Why it fails**: Group only auto-filters Views based on entity base tables (node, media, etc.). Views on `group_relationship_field_data` directly are NOT access-filtered.
 
 ## See Also
 

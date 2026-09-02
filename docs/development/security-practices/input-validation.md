@@ -104,7 +104,7 @@ function validateComment(string $comment): string {
 - **Validating after use** — Validate immediately when data enters your system, not just before database insert. Time-of-check/time-of-use vulnerabilities
 - **Client-side validation only** — JavaScript validation improves UX but provides zero security. All validation MUST occur server-side
 - **Type coercion attacks** — JavaScript `'0' == false` is true. PHP `'0e1234' == '0e5678'` is true (scientific notation). Use strict equality (`===`) and explicit type casting
-- **Not validating file uploads** — File upload validation is complex (MIME spoofing, path traversal, malicious content)
+- **Not validating file uploads** — See section 14.0. File upload validation is complex (MIME spoofing, path traversal, malicious content)
 
 ## See Also
 

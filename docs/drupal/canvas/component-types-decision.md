@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when creating a new component for Canvas and you need to decide which component type to use. Canvas supports three distinct types, each with different authoring patterns, capabilities, and tradeoffs.
+> You are creating a new component for use in Canvas and need to decide which component type to use. Canvas supports three distinct types, each with different authoring patterns, capabilities, and tradeoffs.
 
 ## Decision
 
@@ -43,10 +43,10 @@ Is it an existing Vue/Nuxt component?
 
 ## Common Mistakes
 
-- **Wrong**: Defaulting to Code Components for everything → **Right**: SDC is simpler for most content components, has better Drupal field integration, and server-renders
-- **Wrong**: Using Code Components for components that only display static text → **Right**: Unnecessary React overhead; use SDC
-- **Wrong**: Mixing SDC and Code Component patterns in one component definition → **Right**: Pick one type per component
-- **Wrong**: Expecting Code Components to have access to Drupal's full PHP/Twig API → **Right**: Code Components are browser-only React components
+- Defaulting to Code Components for everything — SDC is simpler for most content components, has better Drupal field integration, and server-renders
+- Using Code Components for components that only display static text — unnecessary React overhead
+- Mixing SDC and Code Component patterns in one component definition — pick one type per component
+- Expecting Code Components to have access to Drupal's full PHP/Twig API — they are browser-only React components
 
 ## See Also
 

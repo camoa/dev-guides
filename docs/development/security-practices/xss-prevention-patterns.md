@@ -7,7 +7,7 @@ tldr: "Implement these defense-in-depth XSS protections in addition to (not inst
 
 ## When to Use
 
-Implement these defense-in-depth XSS protections in addition to (not instead of) input validation and output encoding.
+Implement these defense-in-depth XSS protections in addition to (not instead of) input validation and output encoding from sections 3.0-5.0.
 
 ## Decision
 
@@ -177,9 +177,9 @@ Defense-in-Depth XSS Prevention Stack:
 - **CSP with 'unsafe-inline'** — Defeats the purpose. `script-src 'unsafe-inline'` allows ALL inline scripts including XSS. Use nonces instead
 - **CSP with overly broad allowlist** — `script-src *` or `script-src https:` allows too many sources. Be specific
 - **Not testing CSP in Report-Only mode first** — CSP can break functionality. Test with `Content-Security-Policy-Report-Only` before enforcing
-- **Sanitizing input instead of output** — Sanitize at output time (just before display), not at input time
-- **Trusting sanitization libraries blindly** — DOMPurify and Bleach are excellent but not perfect. Keep libraries updated
-- **Using eval() or Function() with user data** — NEVER use `eval()`, `Function()`, `setTimeout(string)`, `setInterval(string)` with untrusted data
+- **Sanitizing input instead of output** — Sanitize at output time (just before display), not at input time. Sanitized data in DB causes issues with different output contexts
+- **Trusting sanitization libraries blindly** — DOMPurify and Bleach are excellent but not perfect. Keep libraries updated (mutation XSS bypass techniques emerge)
+- **Using eval() or Function() with user data** — NEVER use `eval()`, `Function()`, `setTimeout(string)`, `setInterval(string)` with untrusted data. These execute arbitrary code
 
 ## See Also
 

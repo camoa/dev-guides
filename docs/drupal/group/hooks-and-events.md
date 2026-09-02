@@ -20,48 +20,24 @@ drupal_version: "11.x"
 | Alter routes | Event subscriber on `RoutingEvents::ALTER` | Standard Symfony routing |
 | Custom permission source | `AccessPolicyBase` subclass tagged `access_policy` | 4.x replaces `flexible_permissions_calculator` |
 
-## Pattern
+## Hooks Are OOP in 4.x
+
+Group 4.x has **no `.module` file**. All hook implementations are object-oriented methods on hook classes in `src/Hook/` (`CoreHooks`, `EntityHooks`, `FieldHooks`, `FormHooks`, `QueryHooks`, `ThemeHooks`, `TokenHooks`, `UserHooks`, `ViewsHooks`), each method tagged with the core `#[Hook('hook_name')]` attribute. This does not change *how you implement your own hooks* — your module can still use either procedural `.module` functions or OOP hook classes. It only matters if you previously called or referenced Group's procedural hook functions directly (e.g. `group_entity_access()`), which no longer exist.
+
+> **3.x:** Group 3.x implemented these hooks procedurally in `group.module`.
+
+## Available Hooks (group.api.php)
+
+`hook_group_operations_alter(array &$operations, GroupInterface $group)` — alter the operations shown in the `group_operations` block. Called in `GroupOperationsBlock::build()`.
 
 ```php
-// React to an article being added to a group.
-function mymodule_group_relationship_insert(GroupRelationshipInterface $relationship) {
-  if ($relationship->getPluginId() === 'group_node:article') {
-    $group = $relationship->getGroup();
-    $node = $relationship->getEntity();
-    // custom logic...
-  }
-}
-
-// Alter group operations block.
 function mymodule_group_operations_alter(array &$operations, GroupInterface $group) {
+  // Remove the leave operation for a specific group type.
   if ($group->bundle() === 'company') {
     unset($operations['group-leave']);
   }
 }
-
-// Dynamic permissions callback.
-class MyModuleGroupPermissions {
-  public function permissions(): array {
-    $permissions = [];
-    foreach (MyEntityType::loadMultiple() as $id => $type) {
-      $permissions["manage $id content"] = [
-        'title' => t('Manage @type content', ['@type' => $type->label()]),
-        'allowed for' => ['member'],
-      ];
-    }
-    return $permissions;
-  }
-}
 ```
-
-**4.x note:** Group 4.x has no `.module` file. All hook implementations are OOP methods in `src/Hook/` (`CoreHooks`, `EntityHooks`, `FieldHooks`, `FormHooks`, `QueryHooks`, etc.), each tagged with `#[Hook('hook_name')]`. Your own module can still use either procedural `.module` functions or OOP hook classes — the change only affects Group's own hooks.
-
-Registered event subscribers by Group core:
-
-| Service ID | Listens to | Purpose |
-|---|---|---|
-| `group.anonymous_user_response_subscriber` | `KernelEvents::RESPONSE` | Adds permission cache tags for anonymous users |
-| `group.config_subscriber` | `ConfigEvents::SAVE` | Clears plugin caches on group type config changes |
 
 ## Standard Drupal Hooks Used by Group
 
@@ -95,11 +71,56 @@ Group registers the following event subscribers:
 
 Group 4.x has no revision route subscriber of its own — plain revision routes come from Drupal core's revision UI, which is why `drupal/entity` was dropped as a dependency. There is no `group.revision.route_subscriber` service and no `GroupRevisionRouteSubscriber` class at tag `4.0.0-alpha2`; do not write code that expects one.
 
+## Reacting to Relationship Creation/Deletion
+
+There is no dedicated Group-specific event for relationship CRUD. Use standard entity hooks:
+
+```php
+/**
+ * Implements hook_ENTITY_TYPE_insert() for group_relationship.
+ */
+function mymodule_group_relationship_insert(GroupRelationshipInterface $relationship) {
+  if ($relationship->getPluginId() === 'group_node:article') {
+    // React to an article being added to a group.
+    $group = $relationship->getGroup();
+    $node = $relationship->getEntity();
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete() for group_relationship.
+ */
+function mymodule_group_relationship_delete(GroupRelationshipInterface $relationship) {
+  // React to removal.
+}
+```
+
+## Extending the Permission System
+
+Register a callable in your `.group.permissions.yml` under `permission_callbacks`:
+
+```php
+// MyModuleGroupPermissions.php
+namespace Drupal\mymodule;
+
+class MyModuleGroupPermissions {
+  public function permissions(): array {
+    $permissions = [];
+    foreach (MyEntityType::loadMultiple() as $id => $type) {
+      $permissions["manage $id content"] = [
+        'title' => t('Manage @type content', ['@type' => $type->label()]),
+        'allowed for' => ['member'],
+      ];
+    }
+    return $permissions;
+  }
+}
+```
+
 ## Common Mistakes
 
-- **Wrong**: Listening to Group-specific Symfony events for relationship changes → **Right**: Group does not dispatch custom Symfony events for relationship changes. Use entity hooks instead.
-- **Wrong**: Not reacting before deletion → **Right**: If you need pre-deletion logic, implement `hook_ENTITY_TYPE_predelete` on the entity type being removed from the group (not on `group_relationship`).
-- **Wrong**: Calling `group_entity_access()` directly in 4.x → **Right**: The procedural function no longer exists in 4.x. The equivalent is `EntityHooks::entityAccess()` inside Group's codebase, which you should not call directly.
+- Trying to listen to Group-specific events via a tagged event subscriber. Group does not dispatch custom Symfony events for relationship changes. Use entity hooks instead.
+- Forgetting that `EntityHooks::entityDelete()` auto-deletes all relationships. If you need to react before deletion, implement `hook_ENTITY_TYPE_predelete` on the entity type being removed from the group.
 
 ## See Also
 

@@ -22,45 +22,140 @@ drupal_version: "11.x"
 | Load groups for entity | `$storage->loadByEntity($node)` then `$r->getGroup()` | |
 | Load members with role filter | `GroupMembership::loadByGroup($group, ['project-editor'])` | 4.x: filter must be an array |
 
-## Pattern
+## Group CRUD
 
 ```php
 use Drupal\group\Entity\Group;
-use Drupal\group\Entity\GroupMembership;
 
-// Create a group. In 4.x, creator_membership is form-only —
-// call addMember() explicitly when creating groups programmatically.
-$group = Group::create(['type' => 'project', 'label' => 'My Project']);
+// Create a group.
+$group = Group::create([
+  'type' => 'project',
+  'label' => 'My Project',
+  'uid' => \Drupal::currentUser()->id(),
+]);
 $group->save();
-$group->addMember($account, ['group_roles' => ['project-manager']]);
+// 4.x: the creator_membership config on the group type auto-adds the creator as a
+// member ONLY when the group is created through a form. A purely programmatic
+// Group::save() does NOT create the creator membership — add it explicitly with
+// addMember() if you need it.
+```
 
-// Add content to the group.
+## Adding Members
+
+```php
+use Drupal\user\Entity\User;
+
+$account = User::load($uid);
+
+// Add a member with a specific role.
+$group->addMember($account, [
+  'group_roles' => ['project-editor'],
+]);
+
+// Add a member with no explicit roles (gets insider permissions only).
+$group->addMember($account);
+
+// Remove a member.
+$group->removeMember($account);
+
+// Check membership.
+$membership = $group->getMember($account); // Returns GroupMembership or FALSE.
+
+// Load all members of a group.
+$members = $group->getMembers();
+
+// Load members with a specific role.
+// 4.x: the role filter must be an array.
+$editors = $group->getMembers(['project-editor']);
+```
+
+## Adding Content / Relationships
+
+```php
+$node = Node::load($nid);
+
+// Add an existing node to the group.
+// Returns the GroupRelationship entity.
 $relationship = $group->addRelationship($node, 'group_node:article');
 
-// Query all relationships in a group for a specific plugin.
+// Add with extra fields on the relationship.
+$relationship = $group->addRelationship($node, 'group_node:article', [
+  'field_relationship_note' => 'Important article',
+]);
+
+// Remove: delete the relationship entity.
+$relationships = $group->getRelationshipsByEntity($node, 'group_node:article');
+foreach ($relationships as $rel) {
+  $rel->delete();
+}
+```
+
+> **3.x → 4.x:** In 4.x, adding an entity to a group no longer re-saves the entity itself — Group invalidates the entity's cache tags instead. Code or tests that relied on `hook_ENTITY_TYPE_update()` firing when an entity was added to a group will no longer see that side effect.
+
+## Querying Relationships
+
+```php
+use Drupal\group\Entity\Storage\GroupRelationshipStorageInterface;
+
 $storage = \Drupal::entityTypeManager()->getStorage('group_relationship');
+assert($storage instanceof GroupRelationshipStorageInterface);
+
+// All relationships in a group.
+$all = $storage->loadByGroup($group);
+
+// All relationships in a group for a specific plugin.
 $articles = $storage->loadByGroup($group, 'group_node:article');
 
-// Load all groups a node belongs to.
+// All groups an entity belongs to (via any plugin).
+$rels = $storage->loadByEntity($node);
+
+// All groups an entity belongs to via a specific plugin.
+$rels = $storage->loadByEntity($node, 'group_node:article');
+
+// Relationships for entity+group pair.
+$rels = $storage->loadByEntityAndGroup($node, $group, 'group_node:article');
+
+// All relationships for a plugin globally.
+$all_project_articles = $storage->loadByPluginId('group_node:article');
+```
+
+Alternatively, use the convenience methods on the `Group` entity:
+
+```php
+$group->getRelationships('group_node:article');
+$group->getRelationshipsByEntity($node, 'group_node:article');
+$group->getRelatedEntities('group_node:article');
+```
+
+## Loading Groups for an Entity
+
+```php
+// Get all groups a node belongs to.
+$storage = \Drupal::entityTypeManager()->getStorage('group_relationship');
 $relationships = $storage->loadByEntity($node);
 $groups = array_map(fn($r) => $r->getGroup(), $relationships);
 ```
 
-Injecting services:
+## Loading GroupMembership Statically
 
 ```php
-use Drupal\group\Access\GroupPermissionCheckerInterface;
+use Drupal\group\Entity\GroupMembership;
 
-class MyService {
-  public function __construct(
-    protected GroupPermissionCheckerInterface $permissionChecker,
-  ) {}
-}
+// Get a user's membership in a specific group.
+$membership = GroupMembership::loadSingle($group, $account);
 
-# services.yml
-mymodule.my_service:
-  arguments: ['@group_permission.checker']
+// Get all groups the current user belongs to.
+$memberships = GroupMembership::loadByUser(\Drupal::currentUser());
+
+// Get all members of a group.
+$memberships = GroupMembership::loadByGroup($group);
+
+// Get all members with a specific role.
+// 4.x: loadByGroup() and loadByUser() take the $roles filter as an array.
+$memberships = GroupMembership::loadByGroup($group, ['project-editor']);
 ```
+
+Membership lookups are cached in the `group_memberships` cache bin (chained memory + persistent cache) keyed by `group_memberships:entity_id[{uid}]:roles[any-roles]`.
 
 ## Services Reference
 
@@ -74,14 +169,52 @@ mymodule.my_service:
 | `group_permission.hash_generator` | `GroupPermissionsHashGeneratorInterface` | Generate permission hash for cache vary |
 | `group.group_route_context` | context provider | Provides `group` context from the current route |
 
+## Injecting Services
+
+```php
+use Drupal\group\Plugin\Group\Relation\GroupRelationTypeManagerInterface;
+use Drupal\group\Access\GroupPermissionCheckerInterface;
+
+class MyService {
+  public function __construct(
+    protected GroupRelationTypeManagerInterface $pluginManager,
+    protected GroupPermissionCheckerInterface $permissionChecker,
+  ) {}
+}
+
+# services.yml
+mymodule.my_service:
+  class: 'Drupal\mymodule\MyService'
+  arguments:
+    - '@group_relation_type.manager'
+    - '@group_permission.checker'
+```
+
+## Programmatic Plugin Installation
+
+```php
+use Drupal\group\Entity\GroupType;
+use Drupal\group\Entity\Storage\GroupRelationshipTypeStorageInterface;
+
+$group_type = GroupType::load('project');
+
+// Install a plugin on a group type.
+if (!$group_type->hasPlugin('group_node:article')) {
+  $storage = \Drupal::entityTypeManager()->getStorage('group_relationship_type');
+  assert($storage instanceof GroupRelationshipTypeStorageInterface);
+  $storage->createFromPlugin($group_type, 'group_node:article', [
+    'group_cardinality' => 0,
+    'entity_cardinality' => 1,
+  ])->save();
+}
+```
+
 ## Common Mistakes
 
-- **Wrong**: Calling `$group->addRelationship()` on an unsaved group → **Right**: Both the group and entity must be saved (have IDs) first.
-- **Wrong**: Using the `group.membership_loader` service → **Right**: Removed in 4.0.0 (deprecated since 3.2.0). Use `GroupMembership::loadSingle()`, `::loadByGroup()`, or `::loadByUser()`.
-- **Wrong**: Calling `Group::save()` programmatically and expecting the creator membership to be created automatically → **Right**: In 4.x, `creator_membership` is applied only when the group is created through a form. Call `$group->addMember()` explicitly in programmatic code.
-- **Wrong**: Passing a string to the `$roles` filter: `loadByGroup($group, 'project-editor')` → **Right**: In 4.x the filter must be an array: `loadByGroup($group, ['project-editor'])`.
-- **Wrong**: Expecting `hook_ENTITY_TYPE_update()` to fire on the entity when adding it to a group → **Right**: In 4.x, adding an entity to a group no longer re-saves the entity. Only its cache tags are invalidated.
-- **Wrong**: Using `accessCheck(TRUE)` in background/admin code → **Right**: Use `accessCheck(FALSE)`; Group's query access is expensive and context-dependent.
+- Calling `$group->addRelationship()` on an unsaved group. Both the group and the entity must be saved (have IDs) before a relationship can be created.
+- Calling `$group->addMember()` in API context expecting creator roles. In 4.x, creator membership and creator roles are applied only when the group is created through a form — never on a purely programmatic `Group::save()`. If you're adding a member programmatically and want roles, call `addMember()` yourself and pass the roles explicitly.
+- Using the `group.membership_loader` service. It was **removed in 4.0** (deprecated since 3.2.0). Use the `GroupMembership::loadSingle()`, `::loadByGroup()`, or `::loadByUser()` static methods instead.
+- Forgetting `accessCheck(FALSE)` on entity queries in administrative/background code. Group's query access checks compute full permission calculations, which is expensive and context-dependent.
 
 ## See Also
 

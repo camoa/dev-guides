@@ -8,9 +8,48 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when your block plugin needs configurable settings that site builders can set per block instance. Use content block fields instead when editors (not devs) need to manage the values.
+> Your block plugin needs configurable settings that site builders can set per block instance.
 
-## Decision
+## Steps
+
+1. **Define default configuration**
+   ```php
+   public function defaultConfiguration() {
+     return [
+       'show_title' => TRUE,
+       'items_count' => 5,
+     ] + parent::defaultConfiguration();
+   }
+   ```
+
+2. **Build configuration form**
+   ```php
+   public function blockForm($form, FormStateInterface $form_state) {
+     $form['show_title'] = [
+       '#type' => 'checkbox',
+       '#title' => $this->t('Show title'),
+       '#default_value' => $this->configuration['show_title'],
+     ];
+     return $form;
+   }
+   ```
+
+3. **Handle form submission**
+   ```php
+   public function blockSubmit($form, FormStateInterface $form_state) {
+     $this->configuration['show_title'] = $form_state->getValue('show_title');
+   }
+   ```
+
+4. **Use configuration in build()**
+   ```php
+   public function build() {
+     $show = $this->configuration['show_title'];
+     // Use $show to control output
+   }
+   ```
+
+## Decision Points
 
 | At this step... | If... | Then... |
 |-----------------|-------|---------|
@@ -57,11 +96,11 @@ public function blockSubmit($form, FormStateInterface $form_state) {
 
 ## Common Mistakes
 
-- **Wrong**: Not calling `parent::defaultConfiguration()` → **Right**: Loses base settings like `label`, `label_display`
-- **Wrong**: Forgetting `+ parent::defaultConfiguration()` → **Right**: Same as above
-- **Wrong**: Storing form values without filtering → **Right**: Use `$form_state->getValue()` to get specific values
-- **Wrong**: Not validating user input → **Right**: Implement `blockValidate()` for complex rules
-- **Wrong**: Changing configuration structure without update path → **Right**: Breaks existing block instances; provide update hook
+- Not calling `parent::defaultConfiguration()` → Loses base settings like `label`, `label_display`
+- Forgetting to add `+ parent::defaultConfiguration()` → Same as above
+- Storing form values without filtering → Use `$form_state->getValue()` to get specific values
+- Not validating user input → Implement `blockValidate()` for complex rules
+- Changing configuration structure without update path → Breaks existing block instances; provide update hook
 
 ## See Also
 

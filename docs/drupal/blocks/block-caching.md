@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Ensure blocks are cached properly for performance while varying by necessary contexts and invalidating when data changes. Wrong caching = slow site or incorrect content shown to users.
+> Ensuring blocks are cached properly for performance while varying by necessary contexts and invalidating when data changes.
 
 ## Decision
 
@@ -63,12 +63,12 @@ public function getCacheMaxAge() {
 
 ## Common Mistakes
 
-- **Wrong**: Using `max-age = 0` without considering performance → **Right**: Every request hits the database; use cache contexts instead
-- **Wrong**: Not adding cache contexts for varying content → **Right**: Wrong content shown to users (cache poisoning)
-- **Wrong**: Adding too-specific cache contexts (e.g., `user` when `user.roles` suffices) → **Right**: Cache fragmentation, poor hit rates
-- **Wrong**: Not invalidating with cache tags → **Right**: Stale content after entity updates
-- **Wrong**: Forgetting to merge with `parent::getCacheTags()` → **Right**: Loses important base cache metadata
-- **Wrong**: Setting `#cache` in both `build()` and `getCacheTags()` → **Right**: Redundant; choose one approach and stick with it
+- Using `max-age = 0` without considering performance → Every request hits the database; use cache contexts instead
+- Not adding cache contexts for varying content → Wrong content shown to users (cache poisoning)
+- Adding too-specific cache contexts (e.g., `user` when `user.roles` suffices) → Cache fragmentation, poor hit rates
+- Not invalidating with cache tags → Stale content after entity updates
+- Forgetting to merge with `parent::getCacheTags()` → Loses important base cache metadata
+- Setting `#cache` in both `build()` and `getCacheTags()` → Redundant; choose one approach and stick with it
 
 ## See Also
 

@@ -19,7 +19,9 @@ drupal_version: "11.x"
 | Where are webhooks stored? | Drupal's `KeyValue` store, `orchestration` collection |
 | Is the poll API stable? | No — `PollEventBase` and subclasses are marked `@internal` |
 
-## Pattern
+## Architecture Overview
+
+The module has three layers:
 
 ```
 External Platform (Activepieces, etc.)
@@ -36,9 +38,25 @@ External Platform (Activepieces, etc.)
   ├── orchestration_ai_agents → AI Agent entities
   ├── orchestration_ai_function → AI FunctionCall plugins
   └── orchestration_tool      → Tool API plugins
+        |
+        v
+  Drupal internals (ECA engine, AI module, Tool plugin system)
 ```
 
-**Provider registration** (Symfony service collector pattern):
+**Key classes:**
+
+| Class | Role |
+|---|---|
+| `Drupal\orchestration\Controller\Connect` | Handles all five REST routes; parses JSON bodies; dispatches to manager or webhooks |
+| `Drupal\orchestration\ServicesProviderManager` | Collects all tagged services providers; aggregates `getAll()` across them; delegates `executeService()` to the matching provider |
+| `Drupal\orchestration\Webhooks` | Persists webhook config in Drupal's `KeyValue` store (`orchestration` collection); dispatches outbound HTTP via Guzzle |
+| `Drupal\orchestration\Service` | Value object: provider ref + id + label + description + sorted `ServiceConfig` list; `JsonSerializable` |
+| `Drupal\orchestration\ServiceConfig` | Value object: key, label, description, required, type, isEditable, defaultValue, weight, constraints (options extracted from constraints) |
+| `Drupal\orchestration\ServicesProviderInterface` | Contract all provider services must implement: `getId()`, `getAll()`, `execute()` |
+
+**Service UUID format**: `Service::uuid()` returns `$provider->getId() . '::' . $this->id` (double colon). This double-colon string is what the API uses as the `id` field in request/response JSON.
+
+**Services provider discovery** uses Symfony's service collector pattern — no plugin manager, no annotation scanning:
 
 ```yaml
 # orchestration.services.yml
@@ -48,31 +66,22 @@ orchestration.services_manager:
     - { name: 'service_collector', tag: 'orchestration_services_provider', call: 'addServicesProvider' }
 ```
 
-**Key classes:**
-
-| Class | Role |
-|---|---|
-| `Connect` | Handles all five REST routes; parses JSON bodies |
-| `ServicesProviderManager` | Aggregates `getAll()` across providers; delegates `executeService()` to matching provider |
-| `Webhooks` | Persists webhook config in KeyValue; dispatches outbound HTTP via Guzzle |
-| `Service` | Value object: provider ref + id + label + description + `ServiceConfig` list; `JsonSerializable` |
-| `ServiceConfig` | Value object: key, label, description, required, type, isEditable, defaultValue, weight, constraints |
-| `ServicesProviderInterface` | Contract: `getId()`, `getAll()`, `execute()` |
+Any Drupal service tagged `orchestration_services_provider` is automatically collected via `addServicesProvider()`. Each submodule registers exactly one such tagged service.
 
 **Bidirectional communication:**
 
-- **Inbound** (external → Drupal): External platform calls `/orchestration/service/execute`; manager finds the matching provider and calls `execute()`
-- **Outbound** (Drupal → external): ECA model fires `orchestration_dispatch_webhook` action → `Webhooks::dispatch()` POSTs to registered URL
-- **Poll** (external pulls): `/orchestration/poll` dispatches a `PollEventTimestamp` or `PollEventId` Symfony event; ECA poll action plugins collect matching items
+- **Inbound** (external → Drupal): External platform calls `/orchestration/service/execute` with a service UUID and config. The manager finds the matching provider and calls its `execute()`.
+- **Outbound** (Drupal → external): ECA model reacts to a Drupal event, triggers the "Dispatch webhook" ECA action, which calls `Webhooks::dispatch()` to POST to the registered remote URL.
+- **Poll** (external pulls): For platforms that cannot receive webhooks, `/orchestration/poll` dispatches a `PollEventTimestamp` or `PollEventId` Symfony event into Drupal's event system; ECA's poll event/action plugins collect matching items and return them in the response.
 
 ## Common Mistakes
 
-- **Wrong**: Looking for a plugin annotation system → **Right**: Providers register as tagged Symfony services; no `@Plugin` annotation
-- **Wrong**: Adding providers after the first `getAllServices()` call and expecting them to appear → **Right**: The manager caches `$services` on first call; re-registration requires a cache rebuild
-- **Wrong**: Treating `PollEventBase` subclasses as stable API → **Right**: They are `@internal` and may change on minor versions
+- **Assuming there is a plugin annotation system** — there is not; providers register as tagged Symfony services
+- **Forgetting that `ServicesProviderManager::getAllServices()` is lazily built and then cached in a `$services` property on the manager instance** — if multiple providers are added after first call, the cache is stale
+- **Treating `PollEventBase` and its subclasses as stable API** — they are marked `@internal` and may change without notice even on minor versions
 
 ## See Also
 
-- [Custom Services Provider](custom-services-provider.md)
-- [Orchestration API Reference](orchestration-api-reference.md)
-- Reference: `orchestration.services.yml`, `orchestration.routing.yml`
+- [Custom Services Provider](custom-services-provider.md) → for the implementation pattern
+- [Orchestration API Reference](orchestration-api-reference.md) → for the endpoint contracts
+- Reference: `orchestration.services.yml`, `orchestration.routing.yml` (commit `a31a0a0`, 1.0.x branch)

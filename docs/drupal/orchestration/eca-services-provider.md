@@ -10,24 +10,23 @@ drupal_version: "11.x"
 
 > Use this when you want external automation platforms to trigger ECA workflows from Drupal. This is the most common Orchestration integration pattern.
 
-## Decision
+## How It Works
 
-An ECA model appears in the Orchestration service catalog only when:
+The `orchestration_eca` submodule registers a `ServicesProvider` tagged `orchestration_services_provider`. When `/orchestration/services` is called, this provider discovers all ECA models that subscribe to the `eca_base.tool` event and exposes each as a callable service.
 
-- It subscribes to the `eca_base.tool` (Tool) event
-- The Tool event configuration has an `arguments` field (YAML-encoded) — those become the callable `ServiceConfig` parameters
+An ECA model appears in the service catalog only if:
+- It exists (not deleted) and is found in ECA's state data (`eca.subscribed`)
+- It has at least one subscription to the `eca_base.tool` (Tool) event
+- The Tool event configuration has an `arguments` field (YAML-encoded) — those become the `ServiceConfig` entries per callable parameter
 
-| Scenario | Solution |
-|---|---|
-| External platform should call an ECA model | Add Tool event to the model; configure `arguments` YAML |
-| External platform should receive data from Drupal events | Register a webhook; use `orchestration_dispatch_webhook` ECA action |
-| Platform cannot receive webhooks (firewall) | Use `/orchestration/poll` with `orchestration_add_item_to_poll_result_*` actions |
+**Service UUID format**: `eca::{wildcard}` where `{wildcard}` is the wildcard identifier from the ECA event subscription configuration.
 
-## Pattern
+## Pattern: ECA Model as Orchestration Service
 
-**Arguments YAML in the ECA Tool event configuration:**
+Configure an ECA model to use the Tool event (`eca_base.tool`). In the event's configuration, set the **Arguments** field with YAML that defines callable parameters:
 
 ```yaml
+# Arguments YAML in the ECA Tool event configuration:
 user_id:
   label: 'User ID'
   description: 'The numeric user ID to send the email to.'
@@ -38,10 +37,9 @@ message_template:
   required: false
 ```
 
-**External platform executes the service:**
+When an external platform calls `/orchestration/service/execute`:
 
 ```json
-POST /orchestration/service/execute
 {
   "id": "eca::my-tool-event-wildcard",
   "config": {
@@ -51,29 +49,44 @@ POST /orchestration/service/execute
 }
 ```
 
-**ECA plugins added by `orchestration_eca`:**
+The `ServicesProvider::execute()` method:
+1. Injects each config value into the ECA token service under its key name
+2. Dispatches a `ToolEvent` with the wildcard into the Symfony event system
+3. ECA catches it, matches the wildcard to the subscribed model, runs the model's actions
+4. Returns the `ToolEvent`'s output, coerced to `array|string`
 
-| Type | Plugin | Purpose |
+**Output coercion** (from source): If the output is an `EntityAdapter`, it extracts the entity. If it is a `DataTransferObject`, it calls `getValue()`. If it is an `EntityInterface`, it calls `toArray()`. If it is a `FieldItemListInterface`, it calls `getValue()`. Scalars become strings. `null` becomes the string `"undefined"`.
+
+## ECA Plugins Added by orchestration_eca
+
+**ECA Events** (external → Drupal push):
+
+| Plugin | Event Name | Triggered when |
 |---|---|---|
-| Event | `orchestration_poll:timestamp` | Fires when `/orchestration/poll` receives a `timestamp` field |
-| Event | `orchestration_poll:id` | Fires when `/orchestration/poll` receives an `id` field |
-| Action | `orchestration_dispatch_webhook` | Dispatches outbound webhook with optional YAML/token data |
-| Action | `orchestration_add_item_to_poll_result_timestamp` | Appends `{timestamp, data}` item to poll result |
-| Action | `orchestration_add_item_to_poll_result_id` | Appends `{id, data}` item to poll result |
+| `orchestration_poll:timestamp` | `orchestration_poll.timestamp` | `/orchestration/poll` receives a `timestamp` field |
+| `orchestration_poll:id` | `orchestration_poll.id` | `/orchestration/poll` receives an `id` field |
 
-**Poll ECA tokens:**
-- `[last_poll]` — epoch timestamp from the poll request (timestamp mode)
-- `[last_id]` — last ID from the poll request (ID mode)
+Each poll event carries a `wildcard` that must match the poll request's `name` field. Available ECA tokens during these events:
+- `[last_poll]` — the epoch timestamp from the poll request (timestamp mode only)
+- `[last_id]` — the last ID from the poll request (ID mode only)
+
+**ECA Actions** (Drupal → external push):
+
+| Plugin ID | Action |
+|---|---|
+| `orchestration_dispatch_webhook` | Dispatches an outbound webhook with optional YAML/token data; stores response under a token name |
+| `orchestration_add_item_to_poll_result_timestamp` | Appends `{timestamp, data}` item to current poll event output |
+| `orchestration_add_item_to_poll_result_id` | Appends `{id, data}` item to current poll event output |
 
 ## Common Mistakes
 
-- **Wrong**: Building an ECA model without a Tool event subscription → **Right**: The model must subscribe specifically to `eca_base.tool` to appear in `/orchestration/services`
-- **Wrong**: Omitting the `arguments` YAML in the Tool event config → **Right**: Without it, the service appears with no configuration fields; external callers cannot pass parameters
-- **Wrong**: Dispatching webhooks from ECA before registering them → **Right**: `Webhooks::dispatch()` returns `null` silently if the webhook ID is not in KeyValue storage
-- **Wrong**: Using `orchestration_add_item_to_poll_result_timestamp` inside a "Poll by ID" model → **Right**: The action's `access()` check verifies the event type and returns forbidden if mismatched
+- **Building an ECA model without a Tool event subscription and wondering why it does not appear in `/orchestration/services`** — the model must subscribe specifically to `eca_base.tool`
+- **Omitting the `arguments` YAML in the Tool event config** — the service appears with no configuration fields; the external caller has no way to pass parameters
+- **Dispatching webhooks from ECA without first registering the webhook** — `Webhooks::dispatch()` looks up the webhook config by ID from KeyValue storage and returns `null` silently if not found
+- **Using `orchestration_add_item_to_poll_result_timestamp` inside a "Poll by ID" ECA model** — the action's `access()` check verifies the event type and returns forbidden if mismatched
 
 ## See Also
 
-- [Webhooks and Outbound Events](webhooks-and-outbound-events.md)
-- [Orchestration API Reference](orchestration-api-reference.md)
-- Reference: `modules/eca/src/ServicesProvider.php`, `modules/eca/src/Plugin/ECA/Event/Poll.php`
+- [Webhooks and Outbound Events](webhooks-and-outbound-events.md) → for outbound webhook setup
+- [Orchestration API Reference](orchestration-api-reference.md) → for the `/orchestration/poll` endpoint details
+- Reference: `modules/eca/src/ServicesProvider.php`, `modules/eca/src/Plugin/ECA/Event/Poll.php`, `modules/eca/src/Plugin/Action/`

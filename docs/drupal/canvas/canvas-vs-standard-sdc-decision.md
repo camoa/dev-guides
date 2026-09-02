@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when deciding whether to build a site with Drupal Canvas or with standard Drupal theming using SDC components, Layout Builder, or content types with Twig templates. Make this decision at project start.
+> You are deciding whether to build a site with Drupal Canvas (the page builder) or with standard Drupal theming using SDC components, Layout Builder, or content types with Twig templates. This is an architectural decision made at project start.
 
 ## Decision
 
@@ -19,13 +19,11 @@ drupal_version: "11.x"
 | A small, fixed set of page layouts | Standard theming | Layout Builder or templates are simpler for fixed layouts |
 | Existing Paragraphs-heavy architecture | Standard theming (short-term) | Migration to Canvas is non-trivial |
 | Component-library governance requirement | Canvas | All pages built from approved SDC/Code Components enforces design system |
-| A headless/decoupled architecture | Evaluate carefully | Canvas decoupled is possible but complex |
+| A headless/decoupled architecture | Evaluate carefully | Canvas decoupled is possible but complex (see [Decoupled Frontend Patterns](decoupled-frontend-patterns.md)) |
 | Budget for component library development | Canvas | Requires upfront investment building Canvas-compatible components |
 | Pure developer-managed content | Standard theming | Canvas editorial features add no value if developers edit everything |
 
-## Pattern
-
-**Key architectural differences:**
+## Key Architectural Differences
 
 | Concern | Canvas | Standard SDC Theming |
 |---|---|---|
@@ -37,20 +35,22 @@ drupal_version: "11.x"
 | Theming approach | Tailwind (Code) + CSS (SDC) | Bootstrap/any CSS framework |
 | Existing contrib module integration | Still maturing (many modules not Canvas-aware yet) | Full contrib ecosystem compatibility |
 
-**Hybrid approach (recommended for most sites):**
+## Pattern: Hybrid Approach
 
-Canvas does not replace all Drupal content — it is targeted at landing pages, marketing pages, and editorial-built pages:
+Canvas does not replace all Drupal content — it is targeted at landing pages, marketing pages, and editorial-built pages. A typical hybrid site:
 
 - **Canvas pages**: Homepage, campaign pages, landing pages, team/about pages
 - **Standard content types**: Blog posts, news articles, product catalog pages, documentation
 - **SDC components**: Used in BOTH contexts — Canvas uses them as page components; standard templates use them via `{% include %}`
 
+This hybrid is the recommended approach for most sites. Develop SDC components that work in both contexts.
+
 ## Common Mistakes
 
-- **Wrong**: All-or-nothing thinking → **Right**: Most production sites will use Canvas for some content and standard Drupal for others
-- **Wrong**: Rewriting existing SDC components into Code Components when they could stay as SDC → **Right**: Only convert if you need React interactivity
-- **Wrong**: Choosing Canvas solely because it is new → **Right**: Evaluate against actual project requirements and editor personas
-- **Wrong**: Not accounting for the component library investment → **Right**: Canvas requires a library of Canvas-compatible components before editors can be productive
+- All-or-nothing thinking — most production sites will use Canvas for some content and standard Drupal for others
+- Rewriting existing SDC components into Code Components when they could stay as SDC — only convert if you need React interactivity
+- Choosing Canvas solely because it is new — evaluate against actual project requirements and editor personas
+- Not accounting for the component library investment — Canvas requires a library of Canvas-compatible components before editors can be productive
 
 ## See Also
 

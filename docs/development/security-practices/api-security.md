@@ -42,7 +42,7 @@ def get_data():
     return {"data": [...]}
 ```
 
-**JWT (JSON Web Tokens):**
+**JWT (JSON Web Tokens) for stateless authentication:**
 
 ```python
 import jwt
@@ -193,15 +193,15 @@ def disable_introspection(info):
 
 ## Common Mistakes
 
-- **No rate limiting** — APIs get abused. Brute force, data scraping, DoS
-- **Verbose error messages** — Don't expose database structure in errors. Return generic errors in production
+- **No rate limiting** — APIs get abused. Brute force attacks, data scraping, DoS. Implement per-IP and per-API-key limits
+- **Verbose error messages** — `{"error": "User not found", "sql": "SELECT * FROM users WHERE id = 123"}` leaks database structure. Return generic errors in production
 - **No API versioning** — Breaking changes break all clients. Version APIs from day one
-- **CORS misconfiguration** — `Access-Control-Allow-Origin: *` with credentials is dangerous
-- **Mass assignment vulnerabilities** — Accepting all JSON fields allows privilege escalation
-- **Exposing internal IDs** — Sequential IDs leak business metrics. Use UUIDs for public APIs
-- **No authentication on "internal" APIs** — Internal APIs become external when containers get compromised
-- **GraphQL N+1 queries** — Recursive nested queries cause DoS. Implement depth limiting and pagination
-- **Not validating content-type** — Accept `application/json` only for JSON APIs
+- **CORS misconfiguration** — `Access-Control-Allow-Origin: *` with credentials enabled is dangerous. Use specific origins
+- **Mass assignment vulnerabilities** — Accepting all JSON fields allows privilege escalation. Use field allowlists or DTOs
+- **Exposing internal IDs** — Sequential IDs leak business metrics (user count, order volume). Use UUIDs for public APIs
+- **No authentication on "internal" APIs** — Internal APIs become external when containers/microservices get compromised. Authenticate everything
+- **GraphQL N+1 queries** — Recursive nested queries cause DoS. Implement depth limiting, query cost analysis, and pagination
+- **Not validating content-type** — Accept `application/json` only for JSON APIs. Reject `text/plain`, `application/x-www-form-urlencoded` to prevent attacks
 
 ## See Also
 

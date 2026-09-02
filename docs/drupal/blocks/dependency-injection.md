@@ -8,9 +8,59 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when your block plugin needs access to Drupal services (database, config, entity manager, custom services). Always prefer DI over static `\Drupal::service()` calls.
+> Your block plugin needs access to Drupal services (database, config, entity manager, custom services).
 
-## Decision
+## Steps
+
+1. **Implement ContainerFactoryPluginInterface**
+   ```php
+   use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+
+   class MyBlock extends BlockBase implements ContainerFactoryPluginInterface {
+   ```
+
+2. **Add static create() method**
+   ```php
+   public static function create(
+     ContainerInterface $container,
+     array $configuration,
+     $plugin_id,
+     $plugin_definition
+   ) {
+     return new static(
+       $configuration,
+       $plugin_id,
+       $plugin_definition,
+       $container->get('entity_type.manager'),
+       $container->get('current_user')
+     );
+   }
+   ```
+
+3. **Add constructor with services**
+   ```php
+   public function __construct(
+     array $configuration,
+     $plugin_id,
+     $plugin_definition,
+     protected EntityTypeManagerInterface $entityTypeManager,
+     protected AccountInterface $currentUser,
+   ) {
+     parent::__construct($configuration, $plugin_id, $plugin_definition);
+   }
+   ```
+
+4. **Use services in your methods**
+   ```php
+   public function build() {
+     $nodes = $this->entityTypeManager
+       ->getStorage('node')
+       ->loadByProperties(['type' => 'article']);
+     // Build render array
+   }
+   ```
+
+## Decision Points
 
 | At this step... | If... | Then... |
 |-----------------|-------|---------|
@@ -101,15 +151,15 @@ class RecentArticlesBlock extends BlockBase implements ContainerFactoryPluginInt
 
 ## Common Mistakes
 
-- **Wrong**: Using `\Drupal::service()` in block plugins → **Right**: Use dependency injection; it's testable and follows best practices
-- **Wrong**: Not implementing `ContainerFactoryPluginInterface` → **Right**: Required for DI; without it services can't be injected
-- **Wrong**: Wrong parameter order in `__construct()` → **Right**: Must match parent: `($configuration, $plugin_id, $plugin_definition, ...services)`
-- **Wrong**: Forgetting to call `parent::__construct()` → **Right**: BlockBase needs to initialize; always call parent
-- **Wrong**: Injecting too many services → **Right**: If you need >5 services, consider refactoring logic into a custom service
-- **Wrong**: Not type-hinting services → **Right**: Use interfaces (e.g., `EntityTypeManagerInterface`) not classes for flexibility
+- Using `\Drupal::service()` in block plugins → Use dependency injection; it's testable and follows best practices
+- Not implementing `ContainerFactoryPluginInterface` → Required for DI; without it services can't be injected
+- Wrong parameter order in `__construct()` → Must match parent: `($configuration, $plugin_id, $plugin_definition, ...services)`
+- Forgetting to call `parent::__construct()` → BlockBase needs to initialize; always call parent
+- Injecting too many services → If you need >5 services, consider refactoring logic into a custom service
+- Not type-hinting services → Use interfaces (e.g., `EntityTypeManagerInterface`) not classes for flexibility
 
 ## See Also
 
 - [Creating Block Plugins](creating-block-plugins.md)
-- [Best Practices](best-practices.md)
+- [Best Practices](best-practices.md) (DI patterns)
 - Reference: https://www.drupal.org/docs/drupal-apis/services-and-dependency-injection/dependency-injection-in-plugin-block

@@ -167,14 +167,14 @@ def delete_old_records():
 ## Common Mistakes
 
 - **A02:2021 Cryptographic Failures is #2 OWASP Top 10** — Sensitive data exposure is extremely common
-- **Storing unnecessary sensitive data** — Don't collect SSN if you don't need it. Every field is a liability
-- **Encryption key in same database as encrypted data** — Store keys separately (KMS, environment variables, HSM)
+- **Storing unnecessary sensitive data** — Don't collect SSN if you don't need it. Every field is a liability in a breach
+- **Encryption key in same database as encrypted data** — If attacker dumps database, they get both. Store keys separately (KMS, environment variables, hardware security module)
 - **Using weak encryption** — AES-128-ECB, DES, RC4 are broken. Use AES-256-GCM
-- **Not encrypting backups** — Encrypted production database but plaintext backups
-- **Logging sensitive data** — Never log passwords, credit cards, SSNs
-- **Sensitive data in URLs** — Use POST requests, not GET with sensitive query params
-- **Not using HTTPS everywhere** — Even non-sensitive pages need HTTPS
-- **Caching sensitive responses** — Set `Cache-Control: no-store, private` for PII/payment data
+- **Not encrypting backups** — Encrypted production database but plaintext backups. Encrypt backups too
+- **Logging sensitive data** — Never log passwords, credit cards, SSNs. Logs often have weak access control
+- **Sensitive data in URLs** — `https://site.com/profile?ssn=123-45-6789` leaks to server logs, browser history, proxy servers. Use POST requests
+- **Not using HTTPS everywhere** — Even non-sensitive pages need HTTPS (prevents session hijacking). Use HSTS to force HTTPS
+- **Caching sensitive responses** — Set `Cache-Control: no-store, private` for responses with PII/payment data
 
 ## See Also
 

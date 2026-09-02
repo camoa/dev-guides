@@ -10,27 +10,45 @@ drupal_version: "11.x"
 
 > Review this before deploying Orchestration in any environment beyond local development. The module's design — an open HTTP API executing arbitrary Drupal logic — requires deliberate hardening.
 
-## Decision
+## Attack Surface
 
-The attack surface scales with the number and capability of enabled providers. If `orchestration_ai_agents` is enabled and an agent can query the database or send emails, then any authenticated caller of `/orchestration/service/execute` can do so as well.
+The Orchestration API exposes whatever your enabled providers expose. If `orchestration_ai_agents` is enabled and an AI Agent can query the database or send emails, then any authenticated caller of `/orchestration/service/execute` can do so as well. The attack surface scales with the number and capability of enabled providers.
 
-| Risk | Mitigation |
-|---|---|
-| Credential exposure via Basic Auth | HTTPS only in production — enforce at web server or load balancer |
-| Overprivileged service account | Dedicated role + user; grant only permissions strictly needed |
-| No per-service permission granularity | Design `execute()` implementations defensively; validate input; enforce content ownership checks inside `execute()` |
-| Webhook SSRF | Validate webhook URLs against an allowlist; be aware that the service account can reach internal network resources if it can register webhooks |
-| Failed webhook delivery not logged | Monitor at the receiving platform; Drupal-side failure logging not available in 1.0.0 |
-| Poll endpoint data leakage | Include content access condition checks in ECA models that add poll items |
-| TLS verification disabled on outbound webhooks | Never `verify: false` in production |
+## Key Risks and Mitigations
 
-## Pattern
+**Credential exposure (Basic Auth)**
+- Risk: Basic Auth credentials travel Base64-encoded (not encrypted) in every HTTP request header
+- Mitigation: **HTTPS only in production** — enforce at the web server or load balancer. Never allow HTTP for `/orchestration/*` endpoints.
 
-**Production checklist:**
+**Overprivileged service account**
+- Risk: A compromised credential gives the attacker access to all Orchestration-exposed capabilities
+- Mitigation: Assign `use orchestration connect` to a dedicated role on a dedicated user. Grant only the additional Drupal permissions strictly needed by the services being invoked. Audit periodically.
+
+**No per-service permission granularity**
+- Risk: Any user with `use orchestration connect` can call any service — there is no service-level access control in 1.0.0
+- Mitigation: Design your enabled providers' `execute()` implementations defensively. Validate input. If a service should only operate on content a user owns, enforce that in `execute()`.
+
+**Webhook SSRF (Server-Side Request Forgery)**
+- Risk: The webhook admin form accepts any URL. An admin with `use orchestration connect` could register a webhook pointing to an internal network address and trigger it via ECA, causing Drupal to make outbound requests to internal infrastructure
+- Mitigation: Validate webhook URLs server-side against an allowlist of trusted external domains. Be aware that the service account (if it can register webhooks) can reach internal network resources. The `verify: true` default mitigates TLS-stripping on external URLs but does not prevent SSRF to internal HTTP endpoints.
+
+**Webhook delivery not logged on failure**
+- Risk: `Webhooks::dispatch()` silently discards `GuzzleException` and `\JsonException` (source has `// @todo Log this exception.`). Failed outbound webhook deliveries are invisible in Drupal logs
+- Mitigation: Monitor delivery at the receiving platform. Until this is patched upstream, do not rely on Drupal-side webhook failure logs.
+
+**Poll endpoint data leakage**
+- Risk: The poll endpoint returns whatever ECA "Add item to poll result" actions have accumulated; if ECA models add sensitive data without checking content access, any caller with `use orchestration connect` can retrieve it
+- Mitigation: In ECA models that add poll items, include condition checks that limit what data is added based on content access rules.
+
+**TLS verification disabled on outbound webhooks**
+- Risk: Setting `verify: false` on a webhook allows MITM attacks on outbound requests
+- Mitigation: Never use `verify: false` in production. Use it only for local development with self-signed certificates.
+
+## Production Checklist
 
 - [ ] HTTPS enforced for all `/orchestration/*` endpoints
-- [ ] Service account user has minimal permissions (`use orchestration connect` + only what the services genuinely require)
-- [ ] `use orchestration connect` NOT assigned to `authenticated` or `anonymous`
+- [ ] Service account user has minimal permissions (only `use orchestration connect` plus what the services genuinely require)
+- [ ] `use orchestration connect` not assigned to `authenticated` or `anonymous`
 - [ ] Only the needed submodules are enabled (minimize exposed service surface)
 - [ ] All registered webhook URLs use HTTPS with `verify: true`
 - [ ] Service account credentials stored in a secrets manager, not in VCS or `.env` committed to git
@@ -39,13 +57,13 @@ The attack surface scales with the number and capability of enabled providers. I
 
 ## Common Mistakes
 
-- **Wrong**: Treating `use orchestration connect` as a low-stakes permission → **Right**: ECA can send emails, modify entities, call external APIs, and more — the permission is high-privilege
-- **Wrong**: Disabling TLS verification for any webhook beyond local development → **Right**: `verify: false` is acceptable only for self-signed certs in local dev
-- **Wrong**: Not auditing which ECA models subscribe to the Tool event after enabling `orchestration_eca` → **Right**: Every Tool-subscribed model becomes callable via the Orchestration API; audit periodically
+- **Treating `use orchestration connect` as a low-stakes permission because the endpoint "just calls ECA"** — ECA can send emails, modify entities, call external APIs, and more
+- **Disabling TLS verification for any webhook beyond local development**
+- **Not auditing which ECA models subscribe to the Tool event after enabling `orchestration_eca`** — every Tool-subscribed model becomes callable via the Orchestration API
 
 ## See Also
 
-- [Authentication and Permissions](authentication-and-permissions.md)
-- [Webhooks and Outbound Events](webhooks-and-outbound-events.md)
-- Reference: OWASP API Security Top 10 — https://owasp.org/API-Security/
-- Reference: OWASP SSRF — https://owasp.org/www-community/attacks/Server_Side_Request_Forgery
+- [Authentication and Permissions](authentication-and-permissions.md) → for the permission and service account setup
+- [Webhooks and Outbound Events](webhooks-and-outbound-events.md) → for webhook configuration options
+- OWASP API Security Top 10: https://owasp.org/API-Security/
+- OWASP SSRF: https://owasp.org/www-community/attacks/Server_Side_Request_Forgery

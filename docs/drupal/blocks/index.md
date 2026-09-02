@@ -47,7 +47,7 @@ guide-meta:
 | Export block config or use in recipes | [Config Management & Recipes](config-recipes.md) | Use when exporting block configuration for deployment, syncing between environments, or using `placeBlock` recipe actions (Drupal 11.1+). Block plugins have no exportable config — only Block config entities do. |
 | Use SDC components or UI Patterns as blocks | [SDC Component Blocks](sdc-component-blocks.md) | Use when exposing Twig SDC components as placeable blocks. Component Block module handles zero-PHP cases. |
 | Follow best practices and patterns | [Best Practices](best-practices.md) | Apply these patterns when building any block plugin. These are the architectural decisions that keep blocks maintainable, testable, and performant. |
-| Avoid common mistakes and anti-patterns | [Anti-Patterns & Common Mistakes](anti-patterns.md) | Reference when reviewing block code or debugging unexpected behavior. Every pattern here has been shipped in production and caused real problems. |
+| Avoid common mistakes and anti-patterns | [Anti-Patterns & Common Mistakes](anti-patterns.md) | Avoid common pitfalls that lead to bugs, performance issues, or maintenance problems when building block plugins. |
 | Ensure security and performance | [Security & Performance](security-performance.md) | Apply these patterns when blocks handle user input, load entities, or call external APIs. Security issues in blocks affect every page they appear on. |
-| Find key classes and interfaces | [Code Reference Map](code-reference-map.md) |  |
+| Find key classes and interfaces | [Code Reference Map](code-reference-map.md) | Quick lookup of key classes, interfaces, and services in Drupal's block system when building or debugging block code. |
 | Check source references and maintenance notes | [Sources & Maintenance](sources-maintenance.md) |  |
