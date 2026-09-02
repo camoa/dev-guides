@@ -1,5 +1,5 @@
 ---
-description: Validate plugin config in access() before execution with AccessResult patterns
+description: "Validate plugin config in access() before execution with AccessResult patterns"
 tldr: "Implement `access()` to validate plugin configuration before execution. This prevents workflows from running with invalid settings, provides clear error messages, and catches problems early."
 drupal_version: "11.x"
 ---
@@ -73,12 +73,12 @@ public function access($object, ?AccountInterface $account = NULL, $return_as_ob
 
 ## Common Mistakes
 
-- **Wrong**: Not calling `parent::access()` → **Right**: Bypasses base class validation
-- **Wrong**: Throwing exceptions instead of returning AccessResult → **Right**: Breaks access checking
-- **Wrong**: Not respecting `$return_as_object` parameter → **Right**: Type errors in some contexts
-- **Wrong**: Missing clear error messages → **Right**: Users can't diagnose problems
-- **Wrong**: Expensive operations in `access()` → **Right**: Slows down all workflow evaluations
-- **Wrong**: Validating in `execute()` instead → **Right**: Errors occur during execution, not during config
+- Not calling `parent::access()` → Bypasses base class validation
+- Throwing exceptions instead of returning AccessResult → Breaks access checking
+- Not respecting `$return_as_object` parameter → Type errors in some contexts
+- Missing clear error messages → Users can't diagnose problems
+- Expensive operations in `access()` → Slows down all workflow evaluations
+- Validating in `execute()` instead → Errors occur during execution, not during config
 
 ## See Also
 
@@ -88,4 +88,4 @@ public function access($object, ?AccountInterface $account = NULL, $return_as_ob
 
 **References:**
 - Core: `/modules/contrib/eca/src/Plugin/ECA/EcaPluginBase.php`
-- Example: `/modules/contrib/eca_base/src/Plugin/Action/EcaStateWrite.php`
+- Example: `/modules/contrib/eca/modules/base/src/Plugin/Action/EcaStateWrite.php`

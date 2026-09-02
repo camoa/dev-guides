@@ -1,5 +1,5 @@
 ---
-description: Implement CleanupInterface to restore state after event actions complete (account switching, locks)
+description: "Implement CleanupInterface to restore state after event actions complete (account switching, locks)"
 tldr: "Implement `CleanupInterface` when your event plugin needs to perform cleanup operations after all successor actions complete, such as restoring switched user accounts, releasing resources, or processing accumulated state."
 drupal_version: "11.x"
 ---
@@ -82,11 +82,11 @@ class MyEvent extends EventBase implements CleanupInterface {
 
 ## Common Mistakes
 
-- **Wrong**: Not using static storage → **Right**: State lost between registration and cleanup
-- **Wrong**: Missing cleanup → **Right**: Resources remain locked, accounts not restored
-- **Wrong**: Complex logic in cleanup → **Right**: Should be simple state restoration
-- **Wrong**: Not checking if state exists → **Right**: Errors when cleanup called without setup
-- **Wrong**: Forgetting to pop from stack → **Right**: Memory leak over time
+- Not using static storage → State lost between registration and cleanup
+- Missing cleanup → Resources remain locked, accounts not restored
+- Complex logic in cleanup → Should be simple state restoration
+- Not checking if state exists → Errors when cleanup called without setup
+- Forgetting to pop from stack → Memory leak over time
 
 ## See Also
 

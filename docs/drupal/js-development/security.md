@@ -1,6 +1,6 @@
 ---
-description: JavaScript security best practices for XSS prevention and CSP compliance
-tldr: "Use any time JavaScript handles user input, manipulates DOM, or processes data from external sources."
+description: "JavaScript security best practices for XSS prevention and CSP compliance"
+tldr: "Sanitize all user input before inserting into the DOM, use Drupal.checkPlain() for escaping, and never pass sensitive data through drupalSettings. Gotcha: never use innerHTML with unsanitized data, and avoid eval() or new Function() — both break CSP."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use any time JavaScript handles user input, manipulates DOM, or processes data from external sources.
+> Any JavaScript that handles user input, manipulates DOM, or processes data from external sources.
 
 ## Decision
 
@@ -17,7 +17,6 @@ Prevent XSS by sanitizing all user input before inserting into DOM. Use Drupal.c
 ## Pattern
 
 **Safe text insertion**:
-
 ```javascript
 // SAFE: textContent escapes HTML automatically
 element.textContent = userInput;
@@ -30,7 +29,6 @@ element.innerHTML = Drupal.checkPlain(userInput);
 ```
 
 **Safe attribute setting**:
-
 ```javascript
 // SAFE: setAttribute escapes automatically
 element.setAttribute('title', userInput);
@@ -41,7 +39,6 @@ element.setAttribute('data-value', userInput);
 ```
 
 **drupalSettings security**:
-
 ```php
 // NEVER pass sensitive data
 $build['#attached']['drupalSettings'] = [
@@ -54,7 +51,6 @@ $build['#attached']['drupalSettings'] = [
 ```
 
 **CSP-compatible patterns**:
-
 ```javascript
 // AVOID inline event handlers
 // <button onclick="handler()">  // Breaks CSP
@@ -69,22 +65,20 @@ button.addEventListener('click', handler);
 const data = JSON.parse(jsonString);
 ```
 
+**Reference**:
+- https://www.drupal.org/docs/administering-a-drupal-site/security-in-drupal/writing-secure-code-for-drupal
+- https://www.drupal.org/node/2513818 - CSP-compatible drupalSettings
+
 ## Common Mistakes
 
-- **Wrong**: innerHTML with user input → **Right**: Use textContent or Drupal.checkPlain()
-  - **Why**: Direct XSS vulnerability, allows script injection
-- **Wrong**: Passing API keys in drupalSettings → **Right**: Never pass secrets
-  - **Why**: Visible in page source to all users
-- **Wrong**: Using eval() or new Function() → **Right**: Use JSON.parse or safe alternatives
-  - **Why**: Security risk, breaks CSP, code injection vector
-- **Wrong**: Not sanitizing URL parameters → **Right**: Sanitize before DOM insertion
-  - **Why**: Reflected XSS vulnerability
-- **Wrong**: Inline event handlers in templates → **Right**: Use addEventListener in behaviors
-  - **Why**: Breaks CSP, mixes concerns
+- **innerHTML with user input** - WHY: Direct XSS vulnerability, allows script injection
+- **Passing API keys in drupalSettings** - WHY: Visible in page source to all users
+- **Using eval() or new Function()** - WHY: Security risk, breaks CSP, code injection vector
+- **Not sanitizing URL parameters** - WHY: Reflected XSS vulnerability
+- **Inline event handlers in templates** - WHY: Breaks CSP, mixes concerns
 
 ## See Also
 
 - [DOM Manipulation](dom-manipulation.md) - Safe DOM patterns
 - [drupalSettings](drupal-settings.md) - What not to pass
-- Reference: [Writing Secure Code for Drupal](https://www.drupal.org/docs/administering-a-drupal-site/security-in-drupal/writing-secure-code-for-drupal)
 - Reference: [DOM XSS Prevention](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)

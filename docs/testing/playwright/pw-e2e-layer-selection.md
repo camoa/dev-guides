@@ -1,13 +1,13 @@
 ---
-description: Choose the right test layer — E2E, VR, unit, or Drupal FunctionalJavascript — for the question you're actually answering.
-tldr: Default to Playwright web-first E2E for any test whose acceptance criterion includes "the user sees" or "the user clicks." Keep VR and E2E in separate test files — VR demands frozen animations and network idle; mixing the two produces tests that are both over-sensitive and under-sensitive.
+description: "Choose the right test layer — E2E, VR, unit, or Drupal FunctionalJavascript — for the question you're actually answering."
+tldr: "Default to Playwright web-first E2E for any test whose acceptance criterion includes \"the user sees\" or \"the user clicks.\" Keep VR and E2E in separate test files — VR demands frozen animations and network idle; mixing the two produces tests that are both over-sensitive and under-sensitive."
 ---
 
 # Layer Selection
 
 ## When to Use
 
-> Use Playwright E2E when the acceptance criterion includes "the user sees" or "the user clicks." Use unit tests when testing pure functions; use VR when asserting visual sameness; use Drupal FunctionalJavascript when you need `\Drupal::state()` / service container assertions mid-test.
+> Picking the right test layer for the question you're actually trying to answer.
 
 ## Decision
 
@@ -20,23 +20,18 @@ tldr: Default to Playwright web-first E2E for any test whose acceptance criterio
 | "Does the JS-on-the-page work against a fully-bootstrapped Drupal kernel?" | Drupal FunctionalJavascript | PHPUnit `FunctionalJavascript` (Mink + ChromeDriver) |
 | "Does the HTTP route return the right JSON?" | API | Playwright `request` fixture **or** Pest/PHPUnit |
 
-## Pattern
+## Practical Rules
 
-```ts
-// E2E: user-visible behavior
-test('user can publish a node', async ({ page }) => {
-  await page.goto('/node/1/edit');
-  await page.getByLabel('Published').check();
-  await page.getByRole('button', { name: 'Save' }).click();
-  await expect(page.getByText('Article has been updated')).toBeVisible();
-});
-```
+- **Default to Playwright web-first E2E** for any test whose acceptance criterion includes "the user sees" or "the user clicks"
+- **Prefer Playwright over Drupal FunctionalJavascript** for user-visible behavior tests; FunctionalJavascript stays appropriate when you need `\Drupal::state()` / service container assertions during the test, or for contrib modules destined for drupal.org CI
+- **Keep VR and E2E in separate test files / projects** — VR demands frozen animations, fonts loaded, network idle; E2E only demands the action completed. Mixing produces tests that are simultaneously over-sensitive (VR diffs) and under-sensitive (missed behavior)
+- **Unit tests are not optional** even when Playwright is "easy" — booting Chromium to test a regex is 100–1000× more expensive than Vitest
 
 ## Common Mistakes
 
-- **Wrong**: Using Playwright as a unit-test runner — booting Chromium for a function is two orders of magnitude too expensive. **Right**: Use Vitest for pure logic
-- **Wrong**: Converting all PHPUnit Functional tests to Playwright — Drupal contrib modules need PHPUnit coverage. **Right**: Playwright supplements, doesn't replace
-- **Wrong**: Single mega-suite with VR + E2E mixed — different stability requirements, different failure modes. **Right**: Keep VR and E2E in separate test files/projects
+- **Using Playwright as a unit-test runner** — booting Chromium for a function is two orders of magnitude too expensive
+- **Converting all PHPUnit Functional tests to Playwright** — Drupal contrib modules need PHPUnit coverage; Playwright supplements, doesn't replace
+- **Single mega-suite with VR + E2E mixed** — different stability requirements, different failure modes
 
 ## See Also
 

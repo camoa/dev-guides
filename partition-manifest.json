@@ -18,8 +18,8 @@
     "guides_extracted": 15
   },
   "drupal/js-development": {
-    "source_hash": "eaee185221f661c70f493f070031686459aae4356bd49bfd38169c4c3d1094af",
-    "partitioned": "2026-08-20",
+    "source_hash": "b56ca0b431ffa6f263b0066ee99668223a3da83173c1ca97ea05a60a41a0f159",
+    "partitioned": "2026-09-02",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 22
   },
@@ -49,7 +49,7 @@
   },
   "drupal/icon-api": {
     "source_hash": "e924728059b91f033b56563e63c6ddcf7be57ee8c3f2cbeaeec3647f5243f6d0",
-    "partitioned": "2026-08-18",
+    "partitioned": "2026-09-02",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 22
   },
@@ -66,8 +66,8 @@
     "guides_extracted": 16
   },
   "drupal/eca": {
-    "source_hash": "843984299f2d3b31eca3120e2976eac46fc9d98f56be53a932385d8e654436c0",
-    "partitioned": "2026-08-20",
+    "source_hash": "a9a79c70d6f17019e96f8474951823f4b81c968c63e53b5e0b61ad78fd7a1390",
+    "partitioned": "2026-09-02",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 21
   },
@@ -450,8 +450,8 @@
     "guides_extracted": 22
   },
   "drupal/mailgun": {
-    "source_hash": "7aaa59a3f44e21f3071ccc5b9e92bce544e4bce4cb1b1fa541248462f338dc78",
-    "partitioned": "2026-04-26",
+    "source_hash": "8dc8b7e7da93f9f4bdf5db95036347ac31e51f4eee735712b715d07de7eb26a4",
+    "partitioned": "2026-09-02",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 17
   },
@@ -504,8 +504,8 @@
     "guides_extracted": 18
   },
   "testing/playwright": {
-    "source_hash": "58973bf50be0bc2d4d21c6922783c9fa6d4bd75c6ef2b490b8c1e261d2a717bb",
-    "partitioned": "2026-05-08",
+    "source_hash": "dc5f177b54bb383d14985fceeed310947587988daa775c6dc301939a5eb56d25",
+    "partitioned": "2026-09-02",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 14
   },
@@ -552,8 +552,8 @@
     "guides_extracted": 5
   },
   "performance/web-performance": {
-    "source_hash": "796cad3dcde237752fb7ca2f6cf4c5d8cf03d018c5a15534182b575910933c64",
-    "partitioned": "2026-06-09",
+    "source_hash": "e4868f9f8c2cafb3b865fe767b21077161a9bf3e3bd470d487a675f475aba046",
+    "partitioned": "2026-09-02",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 10
   },

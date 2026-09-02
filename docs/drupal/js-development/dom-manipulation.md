@@ -1,6 +1,6 @@
 ---
-description: Safe DOM manipulation patterns with vanilla JavaScript preferred over jQuery
-tldr: "Use when modifying page structure, content, or attributes in response to user interaction or dynamic updates."
+description: "Safe DOM manipulation patterns with vanilla JavaScript preferred over jQuery"
+tldr: "Prefer vanilla JavaScript (querySelector, addEventListener, classList) over jQuery for DOM manipulation; jQuery stays acceptable for existing jQuery-heavy code or complex traversal. Gotcha: never use innerHTML with unsanitized user input."
 drupal_version: "11.x"
 ---
 
@@ -8,23 +8,17 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when modifying page structure, content, or attributes in response to user interaction or dynamic updates.
+> Modifying page structure, content, or attributes in response to user interaction or dynamic updates.
 
 ## Decision
 
-| Situation | Choose | Why |
-|-----------|--------|-----|
-| Simple DOM queries and updates | Vanilla JavaScript | Better performance, no jQuery dependency |
-| Complex DOM traversal | jQuery (with core/jquery dependency) | Still acceptable for complex cases |
-| User input insertion | textContent or Drupal.checkPlain() | XSS-safe, prevents script injection |
-| Existing jQuery-heavy code | jQuery (with dependency declared) | Maintain consistency in legacy code |
-
 **Modern Drupal**: Prefer vanilla JavaScript over jQuery. Drupal is phasing out jQuery dependency - use native DOM APIs (querySelector, addEventListener, classList) for better performance and future compatibility.
+
+**When jQuery is acceptable**: Working with existing jQuery-heavy code, complex DOM traversal, or jQuery-specific plugins. Always declare `core/jquery` dependency.
 
 ## Pattern
 
 **Vanilla JavaScript** (preferred):
-
 ```javascript
 Drupal.behaviors.vanillaDOM = {
   attach(context) {
@@ -53,7 +47,6 @@ Drupal.behaviors.vanillaDOM = {
 ```
 
 **jQuery pattern** (when necessary):
-
 ```javascript
 (function ($, Drupal, once) {
   Drupal.behaviors.jqueryDOM = {
@@ -69,7 +62,6 @@ Drupal.behaviors.vanillaDOM = {
 ```
 
 **Safe HTML insertion** (avoid XSS):
-
 ```javascript
 // NEVER use innerHTML with user input
 // element.innerHTML = userInput; // XSS vulnerability!
@@ -83,20 +75,18 @@ const sanitized = Drupal.checkPlain(userInput);
 element.innerHTML = sanitized;
 ```
 
+**Reference**: Drupal coding standards prefer vanilla JS - https://project.pages.drupalcode.org/coding_standards/javascript/best-practice/
+
 ## Common Mistakes
 
-- **Wrong**: Using innerHTML with unsanitized data → **Right**: Use textContent or Drupal.checkPlain()
-  - **Why**: XSS vulnerability, allows script injection
-- **Wrong**: jQuery for simple operations → **Right**: Use vanilla JS
-  - **Why**: Unnecessary 30KB dependency for operations vanilla JS handles
-- **Wrong**: Not using context in selectors → **Right**: Query within context
-  - **Why**: Queries entire document, performance penalty
-- **Wrong**: Modifying DOM outside behaviors → **Right**: Always use behaviors
-  - **Why**: Breaks AJAX compatibility, timing issues
+- **Using innerHTML with unsanitized data** - WHY: XSS vulnerability, allows script injection
+- **jQuery for simple operations** - WHY: Unnecessary 30KB dependency for operations vanilla JS handles
+- **Not using context in selectors** - WHY: Queries entire document, performance penalty
+- **document.createElement() without need** - WHY: More verbose than native methods, no benefit
+- **Modifying DOM outside behaviors** - WHY: Breaks AJAX compatibility, timing issues
 
 ## See Also
 
 - [Security](security.md) - XSS prevention in DOM manipulation
 - [Event Handling](event-handling.md) - addEventListener patterns
-- Reference: [Drupal JavaScript Coding Standards](https://project.pages.drupalcode.org/coding_standards/javascript/best-practice/)
 - Reference: [DOM XSS Prevention](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)

@@ -1,6 +1,6 @@
 ---
-description: Common JavaScript mistakes in Drupal and how to avoid them
-tldr: "Use when reviewing code for mistakes and understanding what NOT to do."
+description: "Common JavaScript mistakes in Drupal and how to avoid them"
+tldr: "Review these eight anti-patterns when checking JavaScript code — each includes the WRONG and CORRECT form plus why it matters. Gotcha: an anti-pattern often works initially but fails with AJAX, caching, or scale."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when reviewing code for mistakes and understanding what NOT to do.
+> Reviewing code for mistakes and understanding what NOT to do.
 
 ## Decision
 
@@ -17,7 +17,6 @@ Avoid these patterns that create bugs, performance issues, or maintainability pr
 ## Pattern
 
 **Anti-Pattern 1: No context parameter**
-
 ```javascript
 // WRONG
 Drupal.behaviors.bad = {
@@ -37,17 +36,14 @@ Drupal.behaviors.good = {
   }
 };
 ```
-
-**Why**: Without context, code scans entire DOM on every AJAX request. Severe performance penalty, especially on large pages.
-
----
+**WHY**: Without context, code scans entire DOM on every AJAX request. Severe performance penalty, especially on large pages.
 
 **Anti-Pattern 2: Missing once()**
-
 ```javascript
 // WRONG
 $('.button', context).on('click', handler);
 // Binds handler multiple times on AJAX updates
+// Memory leak + handler fires multiple times per click
 
 // CORRECT
 once('click-handler', '.button', context).forEach(function(button) {
@@ -55,13 +51,9 @@ once('click-handler', '.button', context).forEach(function(button) {
   // Binds exactly once per element
 });
 ```
-
-**Why**: Without once(), event handlers bind multiple times on AJAX updates, causing memory leaks and duplicate execution.
-
----
+**WHY**: Without once(), event handlers bind multiple times on AJAX updates, causing memory leaks and duplicate execution.
 
 **Anti-Pattern 3: jQuery for simple operations**
-
 ```javascript
 // WRONG - Adds 30KB jQuery dependency
 $(element).addClass('active');
@@ -71,13 +63,9 @@ $(element).on('click', handler);
 element.classList.add('active');
 element.addEventListener('click', handler);
 ```
-
-**Why**: jQuery adds significant weight for operations vanilla JS handles. Drupal is phasing out jQuery.
-
----
+**WHY**: jQuery adds significant weight for operations vanilla JS handles. Drupal is phasing out jQuery.
 
 **Anti-Pattern 4: Missing detach()**
-
 ```javascript
 // WRONG - No cleanup
 Drupal.behaviors.leaky = {
@@ -102,13 +90,9 @@ Drupal.behaviors.clean = {
   }
 };
 ```
-
-**Why**: Intervals and global event listeners persist after content removal, causing memory leaks.
-
----
+**WHY**: Intervals and global event listeners persist after content removal, causing memory leaks.
 
 **Anti-Pattern 5: Inline JavaScript**
-
 ```twig
 {# WRONG #}
 <button onclick="doSomething()">Click</button>
@@ -120,13 +104,9 @@ Drupal.behaviors.clean = {
 <button class="action-button">Click</button>
 {# JavaScript in behavior with library attachment #}
 ```
-
-**Why**: Inline JS bypasses asset system, breaks CSP, prevents aggregation, violates separation of concerns.
-
----
+**WHY**: Inline JS bypasses asset system, breaks CSP, prevents aggregation, violates separation of concerns.
 
 **Anti-Pattern 6: Global scope pollution**
-
 ```javascript
 // WRONG - Pollutes global scope
 function myFunction() { }
@@ -143,13 +123,9 @@ var myVariable = 'value';
   Drupal.behaviors.myBehavior = { };
 })(Drupal);
 ```
-
-**Why**: Global variables conflict with other scripts, create unpredictable bugs.
-
----
+**WHY**: Global variables conflict with other scripts, create unpredictable bugs.
 
 **Anti-Pattern 7: $(document).ready()**
-
 ```javascript
 // WRONG - Only runs once, breaks with AJAX
 $(document).ready(function() {
@@ -165,13 +141,9 @@ Drupal.behaviors.widget = {
   }
 };
 ```
-
-**Why**: $(document).ready() only executes on initial page load. AJAX-loaded content never initializes.
-
----
+**WHY**: $(document).ready() only executes on initial page load. AJAX-loaded content never initializes.
 
 **Anti-Pattern 8: innerHTML with user data**
-
 ```javascript
 // WRONG - XSS vulnerability
 element.innerHTML = '<div>' + userInput + '</div>';
@@ -180,17 +152,13 @@ element.innerHTML = '<div>' + userInput + '</div>';
 element.textContent = userInput;  // Text only
 element.innerHTML = Drupal.checkPlain(userInput); // Escaped HTML
 ```
-
-**Why**: Direct innerHTML with user input allows script injection and XSS attacks.
+**WHY**: Direct innerHTML with user input allows script injection and XSS attacks.
 
 ## Common Mistakes
 
-- **Wrong**: Not understanding WHY anti-patterns are bad → **Right**: Learn the consequences
-  - **Why**: Prevents repeating mistakes in different forms
-- **Wrong**: Copy-pasting old Drupal 7 patterns → **Right**: Use modern Drupal patterns
-  - **Why**: Many D7 patterns are anti-patterns in modern Drupal
-- **Wrong**: Thinking "it works" means "it's correct" → **Right**: Test with AJAX, caching, scale
-  - **Why**: Anti-patterns often work initially but fail in production
+- **Not understanding WHY anti-patterns are bad** - WHY: Repeat mistakes in different forms
+- **Copy-pasting old Drupal 7 patterns** - WHY: Many D7 patterns are anti-patterns in modern Drupal
+- **Thinking "it works" means "it's correct"** - WHY: Anti-patterns often work initially but fail with AJAX, caching, or scale
 
 ## See Also
 

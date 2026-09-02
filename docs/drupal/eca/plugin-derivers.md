@@ -1,5 +1,5 @@
 ---
-description: Generate multiple plugin instances from one class using DeriverBase and ContainerDeriverInterface
+description: "Generate multiple plugin instances from one class using DeriverBase and ContainerDeriverInterface"
 tldr: "Use plugin derivers to generate multiple plugin instances from a single class definition. This enables creating variant plugins based on external data (like tamper plugins, field widgets, or AI models) without code duplication."
 drupal_version: "11.x"
 ---
@@ -81,11 +81,11 @@ class MyDynamicAction extends ConfigurableActionBase {
 
 ## Common Mistakes
 
-- **Wrong**: Not implementing `ContainerDeriverInterface` → **Right**: Can't inject services into deriver
-- **Wrong**: Missing `getDerivativeDefinitions()` → **Right**: No derivatives generated
-- **Wrong**: Not setting unique derivative keys → **Right**: Plugins overwrite each other
-- **Wrong**: Derivative logic in main plugin → **Right**: Should be in deriver class
-- **Wrong**: Not updating derivatives when source changes → **Right**: Stale plugin list
+- Not implementing `ContainerDeriverInterface` → Can't inject services into deriver
+- Missing `getDerivativeDefinitions()` → No derivatives generated
+- Not setting unique derivative keys → Plugins overwrite each other
+- Derivative logic in main plugin → Should be in deriver class
+- Not updating derivatives when source changes → Stale plugin list
 
 ## See Also
 
@@ -95,4 +95,4 @@ class MyDynamicAction extends ConfigurableActionBase {
 
 **References:**
 - Core: `/modules/contrib/eca_tamper/src/Plugin/Action/TamperDeriver.php`
-- Drupal: https://api.drupal.org/api/drupal/core!lib!Drupal!Component!Plugin!Derivative!DeriverInterface.php
+- Drupal: `https://api.drupal.org/api/drupal/core!lib!Drupal!Component!Plugin!Derivative!DeriverInterface.php`

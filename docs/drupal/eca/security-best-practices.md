@@ -1,5 +1,5 @@
 ---
-description: Sanitize input, check access, validate API responses, and secure credentials in ECA plugins
+description: "Sanitize input, check access, validate API responses, and secure credentials in ECA plugins"
 tldr: "Apply security patterns to all plugins that handle user input, external data, API credentials, or entity access. Security is mandatory, not optional."
 drupal_version: "11.x"
 ---
@@ -109,14 +109,14 @@ class MySecureAction extends ConfigurableActionBase {
 
 ## Common Mistakes
 
-- **Wrong**: Trusting user input → **Right**: XSS, SQL injection vulnerabilities
-- **Wrong**: Missing access checks on queries → **Right**: Data leaks
-- **Wrong**: Hardcoding API credentials → **Right**: Credentials exposed in version control
-- **Wrong**: Not validating external data → **Right**: Malicious payloads processed
-- **Wrong**: Using `eval()` or `unserialize()` on user data → **Right**: Remote code execution
-- **Wrong**: Missing rate limiting → **Right**: DoS attacks possible
-- **Wrong**: Exposing detailed errors to users → **Right**: Information disclosure
-- **Wrong**: Not using HTTPS for API calls → **Right**: Man-in-the-middle attacks
+- Trusting user input → XSS, SQL injection vulnerabilities
+- Missing access checks on queries → Data leaks
+- Hardcoding API credentials → Credentials exposed in version control
+- Not validating external data → Malicious payloads processed
+- Using `eval()` or `unserialize()` on user data → Remote code execution
+- Missing rate limiting → DoS attacks possible
+- Exposing detailed errors to users → Information disclosure
+- Not using HTTPS for API calls → Man-in-the-middle attacks
 
 ## See Also
 
@@ -125,5 +125,5 @@ class MySecureAction extends ConfigurableActionBase {
 - [Performance Patterns](performance-patterns.md) for rate limiting
 
 **References:**
-- OWASP: https://owasp.org/www-project-top-ten/
-- Drupal Security: https://www.drupal.org/security
+- OWASP: `https://owasp.org/www-project-top-ten/`
+- Drupal Security: `https://www.drupal.org/security`

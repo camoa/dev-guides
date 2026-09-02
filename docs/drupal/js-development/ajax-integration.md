@@ -1,6 +1,6 @@
 ---
 description: "Choose between Drupal's legacy AJAX API and native HTMX for dynamic content loading"
-tldr: "Use HTMX (Drupal 11.3+) for new declarative dynamic-content work; use the legacy AJAX API for Drupal 10.x or existing systems. Drupal.behaviors work automatically with both via context — no manual re-init needed."
+tldr: "Understand the landscape of dynamic content loading in Drupal: HTMX (Drupal 11.3+) is the modern declarative path, the legacy AJAX API is imperative and required for Drupal 10.x or existing systems. Gotcha: both work automatically with Drupal.behaviors via context — no manual re-init needed."
 drupal_version: "11.x"
 ---
 
@@ -8,23 +8,23 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use to decide between Drupal's legacy AJAX API and native HTMX when loading content dynamically without a full page refresh. This guide is orientation only — detailed coverage lives in the dedicated guides linked below.
+> Understanding the landscape of dynamic content loading in Drupal - choosing between legacy AJAX API and modern HTMX approach.
 
 ## Decision
 
-| Situation | Choose | Why |
-|-----------|--------|-----|
-| New development on Drupal 11.3+ | HTMX | Declarative, HTML-first, officially supported by core |
-| Drupal 10.x or an existing AJAX codebase | AJAX API | HTMX is unavailable before 11.3; legacy imperative system still required |
-| Need fine-grained JavaScript command control | AJAX API | Callback/command objects give explicit imperative control |
-| Simple element interactivity (swap, toggle) | HTMX | HTML attributes only, no JavaScript callback needed |
+**Critical context shift in Drupal 11.x**: the htmx library was vendored into Drupal core in 11.2, and the developer-facing `Drupal\Core\Htmx\Htmx` API plus the Ajax subsystem integration landed in 11.3.0. HTMX is a modern, declarative alternative to the traditional AJAX API. This section provides orientation - detailed coverage lives in dedicated guides.
 
-**Key architectural difference**: AJAX is imperative (JavaScript callbacks, command objects). HTMX is declarative (HTML attributes, server responses interpreted by the htmx client library).
+**Choose your path**:
+- **HTMX** (Drupal 11.3+) - Modern, declarative, HTML-first. Start here for new development.
+- **AJAX API** (legacy) - Imperative, callback-based. Required for Drupal 10.x and existing systems, where HTMX is unavailable before 11.3.
+
+**Key architectural difference**:
+- **AJAX** = Imperative (JavaScript callbacks, command objects)
+- **HTMX** = Declarative (HTML attributes, server responses interpreted by the htmx client library)
 
 ## Pattern
 
 **HTMX approach** (Drupal 11.3+, declarative):
-
 ```php
 use Drupal\Core\Htmx\Htmx;
 
@@ -36,22 +36,23 @@ $htmx->post()
   ->swap('outerHTML');
 $htmx->applyTo($form['config_type']);
 
-// Result: HTML attributes, no JavaScript callback needed
+// Result: HTML attributes, no JavaScript callbacks needed
 // <select data-hx-post="/form-url" data-hx-select="..." data-hx-target="..." data-hx-swap="outerHTML">
 ```
 
 **AJAX API approach** (legacy, imperative):
-
 ```php
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 
+// Callback function
 public function ajaxCallback(array &$form, FormStateInterface $form_state) {
   $response = new AjaxResponse();
   $response->addCommand(new InvokeCommand('.selector', 'addClass', ['active']));
   return $response;
 }
 
+// Form element
 $form['element'] = [
   '#ajax' => [
     'callback' => '::ajaxCallback',
@@ -61,8 +62,20 @@ $form['element'] = [
 ];
 ```
 
-**Behavior compatibility** (works automatically with both):
+**JavaScript integration with HTMX** (automatic via core):
+```javascript
+// From core/misc/htmx/htmx-behaviors.js
+// Drupal.behaviors automatically run on HTMX-loaded content
+htmx.on('htmx:drupal:load', ({ detail }) => {
+  Drupal.attachBehaviors(detail.elt, drupalSettings);
+});
 
+htmx.on('htmx:drupal:unload', ({ detail }) => {
+  Drupal.detachBehaviors(detail.elt, drupalSettings, 'unload');
+});
+```
+
+**Behavior AJAX/HTMX compatibility** (works with both):
 ```javascript
 Drupal.behaviors.dynamicContent = {
   attach(context, settings) {
@@ -77,23 +90,25 @@ Drupal.behaviors.dynamicContent = {
 
 ## Common Mistakes
 
-- **Wrong**: Not using context in behaviors → **Right**: Always query within context
-  - **Why**: AJAX/HTMX-loaded content doesn't initialize, mysterious bugs
-- **Wrong**: Manually re-initializing after updates → **Right**: Let Drupal behaviors handle it
-  - **Why**: Drupal does this automatically via `Drupal.attachBehaviors()`/`Drupal.detachBehaviors()` on both systems
-- **Wrong**: Missing detach() for destroyed content → **Right**: Clean up in detach()
-  - **Why**: Event listeners remain, memory leaks accumulate
-- **Wrong**: Choosing AJAX for new Drupal 11.3+ projects → **Right**: Start with HTMX
-  - **Why**: HTMX is simpler, more maintainable, and officially supported for new development
+- **Not using context in behaviors** - WHY: AJAX/HTMX-loaded content doesn't initialize, mysterious bugs
+- **Manually re-initializing after updates** - WHY: Drupal does this automatically via `Drupal.attachBehaviors()`/`Drupal.detachBehaviors()` on both systems
+- **Missing detach() for destroyed content** - WHY: Event listeners remain, memory leaks accumulate
+- **Choosing AJAX for new Drupal 11.3+ projects** - WHY: HTMX is simpler, more maintainable, and officially supported for new development
 
 ## See Also
 
+**Within this guide**:
 - [Drupal.behaviors Pattern](drupal-behaviors-pattern.md) - AJAX/HTMX-compatible initialization
 - [Once API](once-api.md) - Preventing duplicate processing
+
+**Dedicated guides for deep coverage**:
 - [Drupal AJAX Framework](../ajax/index.md) - Comprehensive AJAX API reference (callbacks, commands, forms)
 - [Drupal HTMX](../htmx/index.md) - HTMX implementation patterns (the modern approach)
 - [AJAX to HTMX Migration](../ajax-htmx-migration/index.md) - Converting AJAX to HTMX pattern-by-pattern
+
+**Core references**:
 - Reference: `/core/lib/Drupal/Core/Htmx/Htmx.php` - HTMX utility class
-- Reference: `/core/misc/htmx/htmx-behaviors.js` - Drupal.behaviors integration with HTMX
+- Reference: `/core/misc/htmx/htmx-behaviors.js` - Drupal.behaviors integration
 - Reference: `/core/misc/ajax.js` - Legacy AJAX implementation
 - Reference: [Official AJAX API Documentation](https://www.drupal.org/docs/drupal-apis/ajax-api)
+- Reference: ["Ajax subsystem now includes HTMX" change record](https://www.drupal.org/node/3539472) (Drupal 11.3.0)

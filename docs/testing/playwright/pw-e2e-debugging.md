@@ -1,81 +1,106 @@
 ---
-description: Investigate Playwright test failures and flake with UI Mode, Trace Viewer, Inspector, page.pause(), and Codegen.
-tldr: Start with UI Mode (npx playwright test --ui) — it caches setup, has a locator picker, and shows DOM snapshots per action. Set trace:'on-first-retry' in CI config so the first lean run is fast and the retry captures the smoking gun cheaply.
+description: "Investigate Playwright test failures and flake with UI Mode, Trace Viewer, Inspector, page.pause(), and Codegen."
+tldr: "Start with UI Mode (npx playwright test --ui) — it caches setup, has a locator picker, and shows DOM snapshots per action. Set trace:'on-first-retry' in CI config so the first lean run is fast and the retry captures the smoking gun cheaply."
 ---
 
 # Debugging
 
 ## When to Use
 
-> Use UI Mode for local debugging — it's the fastest feedback loop. Use Trace Viewer (`trace: 'on-first-retry'`) for CI failure investigation. Use Inspector or `page.pause()` for inline step-through.
+> Investigating test failures or flake.
 
-## Decision
-
-| Tool | When |
-|---|---|
-| **UI Mode** (`--ui`) | Local debugging — start here always |
-| **Trace Viewer** (`show-trace trace.zip`) | CI failure investigation |
-| **Inspector** (`--debug` / `PWDEBUG=1`) | Step-through debugging of a single test |
-| **`page.pause()`** | Inline breakpoint inside a test |
-| **Codegen** | Bootstrapping a new test, discovering the right locator |
-
-## Pattern
+## Pattern: UI Mode (Start Here)
 
 ```bash
-# UI Mode — interactive runner with DOM snapshots and locator picker
 npx playwright test --ui
-
-# Trace Viewer — open a trace archive from CI
-npx playwright show-trace trace.zip
-
-# Inspector — step/play/pause controls
-npx playwright test login.spec.ts --debug
-PWDEBUG=1 npx playwright test login.spec.ts
 ```
 
-### Trace config (playwright.config.ts)
+Interactive runner with:
+- Sidebar listing every test
+- Timeline of every action with DOM snapshots
+- **Locator picker** — hover to highlight, click to copy the recommended Playwright locator
+- Watch mode (re-runs on file change)
+- Network log, console log, test source, call log in one pane
+
+Use it for everything except CI. Faster than headed runner because it caches setup.
+
+## Pattern: Trace Viewer
 
 ```ts
+// playwright.config.ts
 use: {
-  trace: 'on-first-retry',       // recommended CI default
+  trace: 'on-first-retry',          // best CI default
   video: 'retain-on-failure',
   screenshot: 'only-on-failure',
 }
 ```
 
-Trace modes: `'on'` (dev only — heavy), `'on-first-retry'` (CI default), `'retain-on-failure'`, `'off'`.
+Modes:
+- `'on'` — every test (heavy, dev only)
+- `'on-first-retry'` — first attempt lean; retry records (recommended CI default)
+- `'retain-on-failure'` — always record; keep only on failure
+- `'off'` — no trace
 
-### Inline breakpoint
+Open with `npx playwright show-trace trace.zip`.
+
+The trace contains DOM snapshots before/after every action, network waterfall, console messages, source line of every action. **Killer feature for debugging CI flakes.**
+
+## Pattern: Inspector
+
+```bash
+PWDEBUG=1 npx playwright test login.spec.ts
+# or
+npx playwright test login.spec.ts --debug
+```
+
+Opens Chromium + Playwright Inspector pane with play/step/pause/resume controls and live locator suggestions. `PWDEBUG=console` is a quieter variant exposing a `playwright` global in DevTools.
+
+## Pattern: `page.pause()`
+
+Inline breakpoint:
 
 ```ts
 test('debug me', async ({ page }) => {
   await page.goto('/');
-  await page.pause(); // Inspector opens here when run with --debug
+  await page.pause(); // inspector opens here when run with --debug
+  /* ... */
 });
 ```
 
-### Codegen
+## Pattern: Codegen
 
 ```bash
-npx playwright codegen https://example.com
+npx playwright codegen
+npx playwright codegen https://playwright.dev
 npx playwright codegen --browser=firefox
 npx playwright codegen --save-har=tests/.fixtures/orders.har https://example.com
 ```
 
-Codegen records interactions and emits Playwright code with recommended locators. Use as starting-point quality — refactor into Page Objects or fixtures.
+Records interactions and emits Playwright code with recommended locators. Useful for:
+- Bootstrapping a new test
+- Discovering the right `getByRole` for an unfamiliar element
+- Recording HAR files
 
-### VS Code extension
+Codegen output is starting-point quality — refactor into Page Objects or fixtures.
 
-The official `Playwright Test for VSCode` extension adds run/debug gutters, watch mode, locator picker integrated with editor, one-click trace viewing, and record-new-test action.
+## Pattern: VS Code Extension
+
+The official `Playwright Test for VSCode` extension adds:
+- Run/debug gutters on each test
+- Watch mode
+- Locator picker integrated with editor
+- One-click trace viewing
+- Record-new-test action
 
 ## Common Mistakes
 
-- **Wrong**: Skipping UI Mode — learn it first; it's friction-free
-- **Wrong**: `trace: 'on'` in CI — gigabytes of trace data. **Right**: `'on-first-retry'`
-- **Wrong**: Unzipping `trace.zip` before opening — viewer expects the archive intact
+- **Skipping UI Mode** — friction-free debugging; learn it first
+- **`trace: 'on'` in CI** — gigabytes of trace data; use `'on-first-retry'`
+- **Unzipping `trace.zip` before opening** — viewer expects archive intact
+- **`PWDEBUG=1` reaching CI** — it forces headed browsers and sets every action, navigation and test timeout to 0, so a hung test never fails; the job runs until the CI runner kills it. `--debug` is the same thing plus `--timeout=0 --max-failures=1 --headed --workers=1`. Keep both out of CI env
 
 ## See Also
 
-- [Test Organization](pw-e2e-test-organization.md) — `test.step()` for collapsible trace sections
+- [Test Organization](pw-e2e-test-organization.md) — `test.step` entries in Trace Viewer
 - [Anti-Patterns](pw-e2e-anti-patterns.md) — ranked list of flake causes
 - Reference: [Playwright Debugging](https://playwright.dev/docs/debug)

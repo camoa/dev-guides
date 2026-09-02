@@ -1,5 +1,5 @@
 ---
-description: Test HTTP APIs with the request fixture, share cookies between API and browser contexts, and use the API+UI hybrid pattern for fast deterministic E2E.
+description: "Test HTTP APIs with the request fixture, share cookies between API and browser contexts, and use the API+UI hybrid pattern for fast deterministic E2E."
 tldr: "The request fixture shares the browser context's cookie jar — use it to log in via API then drive UI as an authenticated user. The killer pattern: create state via JSON:API (fast), drive UI for the feature under test, verify via API (authoritative)."
 ---
 
@@ -7,9 +7,9 @@ tldr: "The request fixture shares the browser context's cookie jar — use it to
 
 ## When to Use
 
-> Use the `request` fixture for HTTP contract tests and for setting up state via API before driving UI. Use the API+UI hybrid when you need both deterministic state and user-journey coverage.
+> Verifying HTTP responses directly, or setting up state via API + verifying via UI (the killer pattern).
 
-## Pattern: the `request` fixture
+## Pattern: The `request` Fixture
 
 ```ts
 test('order API', async ({ request }) => {
@@ -41,33 +41,9 @@ test('order API', async ({ request }) => {
 
 `request` reads `baseURL`, `extraHTTPHeaders`, `httpCredentials`, `ignoreHTTPSErrors`, and `proxy` from `use:` — same knobs as the browser context.
 
-## Decision
+## Pattern: Cookie Sharing Between API and UI
 
-| Test value | Approach |
-|---|---|
-| HTTP contract (status, JSON shape, headers) | Pure API — no browser; 10–100× faster |
-| User journey (forms, JS-rendered components, navigation) | UI-only E2E |
-| Both: verify a feature end-to-end with deterministic state | **API + UI hybrid** |
-
-## Pattern
-
-```ts
-// Basic request fixture usage
-test('order API', async ({ request }) => {
-  const get = await request.get('/api/orders/42');
-  await expect(get).toBeOK(); // 200–299
-  expect(get.status()).toBe(200);
-  const body = await get.json();
-  expect(body.total).toBe(123.45);
-
-  await request.post('/api/orders', {
-    data: { items: [{ sku: 'X', qty: 2 }] }, // auto-serializes to JSON
-    headers: { Authorization: 'Bearer …' },
-  });
-});
-```
-
-### Cookie sharing between API and UI
+The `request` fixture and the `page` fixture share their `BrowserContext`'s cookie jar:
 
 ```ts
 test('login via API, drive UI as authed user', async ({ request, page }) => {
@@ -83,7 +59,7 @@ test('login via API, drive UI as authed user', async ({ request, page }) => {
 });
 ```
 
-### API + UI hybrid (the killer pattern)
+## Pattern: UI + API Hybrid (the Killer Pattern)
 
 ```ts
 test('publishing a node updates JSON:API', async ({ request, page }) => {
@@ -103,11 +79,21 @@ test('publishing a node updates JSON:API', async ({ request, page }) => {
 });
 ```
 
+The most under-used Playwright pattern. Keeps the UI surface tiny while asserting against authoritative state.
+
+## Decision: API vs UI E2E vs Hybrid
+
+| Test value | Approach |
+|---|---|
+| HTTP contract (status, JSON shape, headers) | Pure API — no browser; 10–100× faster |
+| User journey (forms, JS-rendered components, navigation) | UI-only E2E |
+| Both: verify a feature behaves end-to-end with deterministic state | API + UI hybrid |
+
 ## Common Mistakes
 
-- **Wrong**: Using UI for state setup that could be done via API — slow tests
-- **Wrong**: Asserting only via UI when API verification would be more authoritative
-- **Wrong**: Spinning up `request` for every assertion instead of using the shared fixture
+- **Using UI for state setup** that could be done via API — slow tests
+- **Asserting only via UI** when API verification would be more authoritative
+- **Spinning up `request` for every assertion** instead of using the shared fixture
 
 ## See Also
 

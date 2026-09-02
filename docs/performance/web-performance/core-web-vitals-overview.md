@@ -1,6 +1,6 @@
 ---
-description: Reference table for LCP, INP, CLS, and TTFB thresholds with the web-vitals library collection pattern.
-tldr: Use when diagnosing which Core Web Vital to investigate first; INP replaced FID in March 2024; always confirm fixes in CrUX field data, not just Lighthouse lab scores.
+description: "Reference table for LCP, INP, CLS, and TTFB thresholds with the web-vitals library collection pattern."
+tldr: "Use to decide which Core Web Vital to investigate first and how to collect real-user data; INP replaced FID in March 2024; always confirm fixes in CrUX field data, not just Lighthouse lab scores."
 ---
 
 # Core Web Vitals Overview
@@ -11,47 +11,42 @@ tldr: Use when diagnosing which Core Web Vital to investigate first; INP replace
 
 ## Metrics Reference
 
-## LCP — Largest Contentful Paint
+#### LCP — Largest Contentful Paint
 **Measures:** How long until the largest visible text or image block renders.
 **Thresholds:** Good ≤2.5s | Needs improvement ≤4.0s | Poor >4.0s
 **Primary causes of poor LCP:** Render-blocking resources, slow server response (TTFB), unoptimized LCP image (missing `fetchpriority`, JS-rendered element, lazy-loaded).
-**Fix first in:** [Critical Rendering Path](#critical-rendering-path), [LCP Image Optimization](#lcp-image-optimization).
+**Fix first in:** [Critical Rendering Path](critical-rendering-path.md), [LCP Image Optimization](lcp-image-optimization.md).
 
-## INP — Interaction to Next Paint
+#### INP — Interaction to Next Paint
 **Measures:** The worst-case interaction latency across the full page lifecycle. Replaced FID in March 2024.
 **Thresholds:** Good ≤200ms | Needs improvement ≤500ms | Poor >500ms
 **Primary causes of poor INP:** Long JS tasks blocking the main thread, excessive rendering work after interaction.
-**Fix first in:** [INP: Scheduler API](#inp-scheduler-api). Diagnose in: [INP: Field Measurement](#inp-field-measurement).
+**Fix first in:** [INP: Scheduler API](inp-scheduler-api.md). Diagnose in: [INP: Field Measurement](inp-field-measurement.md).
 
-## CLS — Cumulative Layout Shift
+#### CLS — Cumulative Layout Shift
 **Measures:** Unexpected visual instability — how much content jumps around as the page loads.
 **Thresholds:** Good ≤0.1 | Needs improvement ≤0.25 | Poor >0.25
 **Primary causes of poor CLS:** Images without `width`/`height`, web fonts swapping (FOUT), dynamically injected content above existing content, `content-visibility` without `contain-intrinsic-size`.
-**Fix first in:** [LCP Image Optimization](#lcp-image-optimization) (image dimensions), [Web Font Performance](#web-font-performance), [CSS Containment Performance](#css-containment-performance).
+**Fix first in:** [LCP Image Optimization](lcp-image-optimization.md) (image dimensions), [Web Font Performance](web-font-performance.md), [CSS Containment Performance](css-containment-performance.md).
 
-## TTFB — Time to First Byte
+#### TTFB — Time to First Byte
 **Measures:** Time from request to first byte of HTML response. Infrastructure metric, not a Core Web Vital.
 **Thresholds:** Good ≤800ms | Needs improvement ≤1800ms | Poor >1800ms
 **Primary causes:** Slow origin server, uncached dynamic pages, long redirect chains, poor CDN configuration.
 **Fix at:** Server/CDN layer — outside the scope of this guide.
 
-## Decision
-
-| Metric | Measures | Good | Needs Improvement | Poor |
-|--------|----------|------|-------------------|------|
-| **LCP** | Largest visible text or image block renders | ≤2.5s | ≤4.0s | >4.0s |
-| **INP** | Worst-case interaction latency (replaced FID March 2024) | ≤200ms | ≤500ms | >500ms |
-| **CLS** | Cumulative unexpected visual instability | ≤0.1 | ≤0.25 | >0.25 |
-| **TTFB** | Time to first byte — server/CDN metric, not a CWV | ≤800ms | ≤1800ms | >1800ms |
+## Field vs Lab Data
 
 | Data type | Tools | What it tells you |
 |-----------|-------|-------------------|
-| **Field (RUM)** | CrUX, `web-vitals` library, PageSpeed Insights | Real-user devices, networks, interactions. Use for Search ranking signals. |
-| **Lab (Synthetic)** | Lighthouse, WebPageTest, DevTools Performance | Repeatable, controllable. Use for debugging, not for ranking. |
+| **Field (RUM)** | Chrome UX Report (CrUX), `web-vitals` library, PageSpeed Insights | Real-user devices, networks, interactions. Use for Google Search ranking signals. |
+| **Lab (Synthetic)** | Lighthouse, WebPageTest, Chrome DevTools Performance panel | Repeatable, controllable. Use for debugging specific issues, not for ranking. |
 
 **Rule:** Always confirm fixes improve field data — lab scores do not directly determine Search ranking.
 
-## Pattern
+## The `web-vitals` Library
+
+The official Google library for collecting CWV in the field with minimal overhead.
 
 ```javascript
 // Basic build — collect and beacon all Core Web Vitals
@@ -72,13 +67,14 @@ onCLS(sendToAnalytics);
 onTTFB(sendToAnalytics);
 ```
 
-Use the attribution build (`web-vitals/attribution`) for INP subparts and Long Animation Frame data — see [INP: Field Measurement](inp-field-measurement.md).
+Use the attribution build (`web-vitals/attribution`) to get INP subparts and Long Animation Frame data. See [INP: Field Measurement](inp-field-measurement.md) for the full pattern.
 
 ## Common Mistakes
 
-- **Wrong**: Optimizing only for Lighthouse scores without checking CrUX → **Right**: Verify fixes in field data; Lighthouse misses real device/network conditions
-- **Wrong**: Treating all three CWV equally → **Right**: Prioritize the metric with the worst field rating first (usually LCP or INP)
-- **Wrong**: Using `onFID` (removed in web-vitals v4) → **Right**: Switch to `onINP`; INP replaced FID
+- Optimizing only for Lighthouse scores without checking CrUX field data — Lighthouse runs in a controlled lab environment and misses real-user device/network conditions
+- Treating all three CWV equally — prioritize the one with the worst field rating first; usually LCP or INP
+- Forgetting that CWV signals affect Google Search ranking — fixes need to propagate to field data to impact ranking
+- Using `onFID` (deprecated in web-vitals v4.0.0, removed in v5.0.0) — INP replaced FID; update any legacy RUM implementations
 
 ## See Also
 

@@ -126,13 +126,13 @@ Reference: Migration is theme-specific, no core migration path.
 
 ## Common Mistakes
 
-- **Wrong**: Migrating everything at once → **Right**: Migrate incrementally by component/template
-- **Wrong**: Search-and-replacing old markup into `icon('pack:id')` → **Right**: That form is fatal; the Twig function takes pack and icon as separate arguments
-- **Wrong**: Migrating `.webp`/`.jpg` icons to a `path` pack → **Right**: Not discoverable; convert to `.png`/`.svg` first
-- **Wrong**: Not updating documentation → **Right**: Update theme docs with new icon() usage
-- **Wrong**: Breaking existing functionality → **Right**: Test thoroughly, icons are high-visibility
-- **Wrong**: Forgetting to remove old assets → **Right**: Clean up unused font files, image directories
-- **Wrong**: Not updating CSS → **Right**: Remove icon-specific CSS that's now in Icon API templates
+- Migrating everything at once → Migrate incrementally by component/template
+- Search-and-replacing old markup into `icon('pack:id')` → That form is fatal; the Twig function takes pack and icon as separate arguments
+- Migrating `.webp`/`.jpg` icons to a `path` pack → Not discoverable; convert to `.png`/`.svg` first
+- Not updating documentation → Update theme docs with new icon() usage
+- Breaking existing functionality → Test thoroughly, icons are high-visibility
+- Forgetting to remove old assets → Clean up unused font files, image directories
+- Not updating CSS → Remove icon-specific CSS that's now in Icon API templates
 
 ## See Also
 

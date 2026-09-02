@@ -1,5 +1,5 @@
 ---
-description: Create custom ECA Action plugins with ConfigurableActionBase for user-configurable operations
+description: "Create custom ECA Action plugins with ConfigurableActionBase for user-configurable operations"
 tldr: "Create custom Action plugins when you need to perform operations that existing ECA actions cannot handle, such as integrating with external APIs, processing custom data structures, or implementing specialized business logic."
 drupal_version: "11.x"
 ---
@@ -90,11 +90,11 @@ class CustomAction extends ConfigurableActionBase {
 
 ## Common Mistakes
 
-- **Wrong**: Missing `parent::buildConfigurationForm()` call → **Right**: ALWAYS call parent LAST
-- **Wrong**: Missing `#eca_token_replacement` attribute → **Right**: Add attribute to enable token replacement
-- **Wrong**: Accessing `$this->configuration` directly in `execute()` → **Right**: Use `tokenService->getOrReplace()`
-- **Wrong**: Using `new static()` in `create()` → **Right**: Use `parent::create()`
-- **Wrong**: Missing both `#[Action]` and `#[EcaAction]` attributes → **Right**: Include both attributes
+- Missing `parent::buildConfigurationForm()` call → Token browser won't appear (ALWAYS call parent LAST)
+- Missing `#eca_token_replacement` attribute → Tokens won't be replaced in field values
+- Accessing `$this->configuration` directly in `execute()` → Ignores token replacement (use `tokenService->getOrReplace()`)
+- Using `new static()` in `create()` → Breaks when parent changes (use `parent::create()`)
+- Missing both `#[Action]` and `#[EcaAction]` attributes → Plugin won't register properly
 
 ## See Also
 
@@ -104,4 +104,4 @@ class CustomAction extends ConfigurableActionBase {
 
 **References:**
 - Core: `/modules/contrib/eca/src/Plugin/Action/ConfigurableActionBase.php`
-- Example: `/modules/contrib/eca_base/src/Plugin/Action/EcaStateWrite.php`
+- Example: `/modules/contrib/eca/modules/base/src/Plugin/Action/EcaStateWrite.php`

@@ -121,11 +121,11 @@ Reference: `/core/assets/schemas/v1/metadata.schema.json` for the component sche
 
 ## Common Mistakes
 
-- **Wrong**: Using a `pack:id` prop and passing it straight to `icon()` → **Right**: Fatal. Either model the prop as `{pack_id, icon_id}` or split the string in the template
-- **Wrong**: Relying on the YAML `default:` for `pack_id` or `settings` → **Right**: Never applied; put the fallback in the Twig
-- **Wrong**: Relying on `required:` to guarantee a value at runtime → **Right**: Validation is behind `assert()` and is off in production
-- **Wrong**: Not handling missing icons gracefully → **Right**: Use `{% if icon and icon.icon_id %}` checks
-- **Wrong**: Complex nested objects → **Right**: Keep icon prop structure flat for easier usage
+- Using a `pack:id` prop and passing it straight to `icon()` → Fatal. Either model the prop as `{pack_id, icon_id}` or split the string in the template
+- Relying on the YAML `default:` for `pack_id` or `settings` → Never applied; put the fallback in the Twig
+- Relying on `required:` to guarantee a value at runtime → Validation is behind `assert()` and is off in production
+- Not handling missing icons gracefully → Use `{% if icon and icon.icon_id %}` checks
+- Complex nested objects → Keep icon prop structure flat for easier usage
 
 ## See Also
 

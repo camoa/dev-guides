@@ -1,6 +1,6 @@
 ---
-description: Handle user interactions with addEventListener, event delegation, and debouncing
-tldr: "Use when responding to user interactions (clicks, input changes, scrolling) or custom application events."
+description: "Handle user interactions with addEventListener, event delegation, and debouncing"
+tldr: "Use vanilla addEventListener for user interactions, event delegation for dynamic content, and debounce/throttle for performance-intensive events, with keyboard handling for accessibility. Gotcha: no debounce on scroll/resize/input executes hundreds of times per second and freezes the UI."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when responding to user interactions (clicks, input changes, scrolling) or custom application events.
+> Responding to user interactions (clicks, input changes, scrolling) or custom application events.
 
 ## Decision
 
@@ -17,7 +17,6 @@ Use vanilla JavaScript addEventListener for modern code. Implement event delegat
 ## Pattern
 
 **Standard event handling**:
-
 ```javascript
 Drupal.behaviors.eventHandling = {
   attach(context) {
@@ -32,7 +31,6 @@ Drupal.behaviors.eventHandling = {
 ```
 
 **Event delegation** (for dynamic content):
-
 ```javascript
 // Instead of binding to individual elements
 // Bind to parent, filter by selector
@@ -45,7 +43,6 @@ document.addEventListener('click', function (event) {
 ```
 
 **Debounced events** (performance):
-
 ```javascript
 // Dependency: core/drupal.debounce
 const handleInput = Drupal.debounce(function (event) {
@@ -57,7 +54,6 @@ element.addEventListener('input', handleInput);
 ```
 
 **Keyboard accessibility**:
-
 ```javascript
 element.addEventListener('keydown', function (event) {
   // Enter or Space activates like click
@@ -69,7 +65,6 @@ element.addEventListener('keydown', function (event) {
 ```
 
 **Custom events**:
-
 ```javascript
 // Dispatch custom event
 const customEvent = new CustomEvent('drupal:moduleEvent', {
@@ -84,21 +79,17 @@ document.addEventListener('drupal:moduleEvent', function (event) {
 });
 ```
 
+**Reference**: Debounce in core - https://medium.com/@cristinallamas/debounce-functions-in-drupal-js-scripts-3727bdefa11c
+
 ## Common Mistakes
 
-- **Wrong**: No debounce on scroll/resize/input → **Right**: Debounce high-frequency events
-  - **Why**: Executes hundreds of times per second, freezes UI
-- **Wrong**: Binding events without once() → **Right**: Wrap with once() in behaviors
-  - **Why**: Duplicate bindings on AJAX updates, memory leaks
-- **Wrong**: Missing keyboard handling → **Right**: Support keyboard activation
-  - **Why**: Breaks accessibility, fails WCAG compliance
-- **Wrong**: Using jQuery .on() unnecessarily → **Right**: Use addEventListener
-  - **Why**: addEventListener is native, faster, no jQuery dependency
-- **Wrong**: Not removing listeners in detach() → **Right**: Clean up in detach()
-  - **Why**: Memory leaks, ghost event handlers
+- **No debounce on scroll/resize/input** - WHY: Executes hundreds of times per second, freezes UI
+- **Binding events without once()** - WHY: Duplicate bindings on AJAX updates, memory leaks
+- **Missing keyboard handling** - WHY: Breaks accessibility, fails WCAG compliance
+- **Using jQuery .on() unnecessarily** - WHY: addEventListener is native, faster, no jQuery dependency
+- **Not removing listeners in detach()** - WHY: Memory leaks, ghost event handlers
 
 ## See Also
 
 - [Debounce and Throttle](debounce-and-throttle.md) - Performance patterns
-- Reference: [Debounce in Drupal](https://medium.com/@cristinallamas/debounce-functions-in-drupal-js-scripts-3727bdefa11c)
 - Reference: [Accessibility Event Patterns](https://www.drupal.org/docs/drupal-apis/javascript-api/accessibility-tools-for-javascript-in-drupal)

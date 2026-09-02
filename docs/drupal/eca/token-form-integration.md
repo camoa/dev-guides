@@ -1,5 +1,5 @@
 ---
-description: Add token replacement, reference, and selection to ECA form fields
+description: "Add token replacement, reference, and selection to ECA form fields"
 tldr: "Add token integration to form fields whenever users need to reference dynamic values from the workflow. Tokens enable accessing event data, global values, and previous action results."
 drupal_version: "11.x"
 ---
@@ -69,11 +69,11 @@ public function execute(): void {
 
 ## Common Mistakes
 
-- **Wrong**: Not calling `parent::buildConfigurationForm()` → **Right**: Token browser missing (call it LAST)
-- **Wrong**: Missing `#eca_token_replacement` → **Right**: Tokens appear as literal text `[entity:title]`
-- **Wrong**: Using `$this->configuration['field']` directly in `execute()` → **Right**: Use `tokenService->getOrReplace()`
-- **Wrong**: No description mentioning tokens → **Right**: Users don't know they can use tokens
-- **Wrong**: Wrong attribute on wrong field type → **Right**: Token features won't work properly
+- Not calling `parent::buildConfigurationForm()` → Token browser missing (call it LAST)
+- Missing `#eca_token_replacement` → Tokens appear as literal text `[entity:title]`
+- Using `$this->configuration['field']` directly in `execute()` → Ignores token replacement (use `tokenService->getOrReplace()`)
+- No description mentioning tokens → Users don't know they can use tokens
+- Wrong attribute on wrong field type → Token features won't work properly
 
 ## See Also
 

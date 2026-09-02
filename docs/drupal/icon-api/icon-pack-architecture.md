@@ -55,11 +55,11 @@ Reference: `/core/lib/Drupal/Core/Theme/Icon/` for interfaces and base classes.
 
 ## Common Mistakes
 
-- **Wrong**: Defining icons in `config/install/` → **Right**: Use `*.icons.yml` in the extension root for YAML discovery
-- **Wrong**: Adding a top-level `$schema:` key to `*.icons.yml` → **Right**: Fatal. Plugin YamlDiscovery turns *every* top-level key into a plugin ID, so `$schema` is treated as an icon pack. None of the 15 `*.icons.yml` files shipped by core and contrib carry one
-- **Wrong**: Expecting the rendered icon to carry cache tags → **Right**: `Render\Element\Icon` adds no `#cache` at all; invalidation happens at the plugin-definition layer, via the `icon_pack_plugin` / `icon_pack_collector` tags
-- **Wrong**: Complex logic in templates → **Right**: Keep templates lean, move logic to preprocess or extractor
-- **Wrong**: Hardcoded library dependencies → **Right**: Use the `library` property; `preRenderIcon()` attaches it automatically
+- Defining icons in `config/install/` → Use `*.icons.yml` in the extension root for YAML discovery
+- Adding a top-level `$schema:` key to `*.icons.yml` → Fatal. Plugin YamlDiscovery turns *every* top-level key into a plugin ID, so `$schema` is treated as an icon pack. None of the 15 `*.icons.yml` files shipped by core and contrib carry one
+- Expecting the rendered icon to carry cache tags → `Render\Element\Icon` adds no `#cache` at all; invalidation happens at the plugin-definition layer, via the `icon_pack_plugin` / `icon_pack_collector` tags
+- Complex logic in templates → Keep templates lean, move logic to preprocess or extractor
+- Hardcoded library dependencies → Use the `library` property; `preRenderIcon()` attaches it automatically
 
 ## See Also
 

@@ -1,6 +1,6 @@
 ---
-description: Load JavaScript conditionally based on content type, route, user role, or other conditions
-tldr: "Use when optimizing performance by loading JavaScript only when needed based on content type, route, user role, or other conditions."
+description: "Load JavaScript conditionally based on content type, route, user role, or other conditions"
+tldr: "Evaluate conditions in PHP before attaching libraries, and declare cache contexts so conditional libraries work with page caching. Gotcha: checking conditions in JavaScript instead of PHP defeats the optimization since the JS is already loaded."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when optimizing performance by loading JavaScript only when needed based on content type, route, user role, or other conditions.
+> Optimizing performance by loading JavaScript only when needed based on content type, route, user role, or other conditions.
 
 ## Decision
 
@@ -17,7 +17,6 @@ Evaluate conditions in PHP (preprocess, hooks, controllers) before attaching lib
 ## Pattern
 
 **Content type condition**:
-
 ```php
 function theme_preprocess_node(&$variables) {
   if ($variables['node']->bundle() === 'article') {
@@ -27,7 +26,6 @@ function theme_preprocess_node(&$variables) {
 ```
 
 **Route-based condition**:
-
 ```php
 function theme_preprocess_page(&$variables) {
   $route_name = \Drupal::routeMatch()->getRouteName();
@@ -38,7 +36,6 @@ function theme_preprocess_page(&$variables) {
 ```
 
 **User permission condition** (with cache context):
-
 ```php
 $build['#cache']['contexts'][] = 'user.permissions';
 if (\Drupal::currentUser()->hasPermission('access administration pages')) {
@@ -47,23 +44,20 @@ if (\Drupal::currentUser()->hasPermission('access administration pages')) {
 ```
 
 **Field-based condition**:
-
 ```php
 if (!$variables['content']['field_enable_feature']['#items']->isEmpty()) {
   $variables['#attached']['library'][] = 'module/conditional-feature';
 }
 ```
 
+**Reference**: Cache API documentation for conditional attachments ensuring proper caching behavior
+
 ## Common Mistakes
 
-- **Wrong**: Checking conditions in JavaScript instead of PHP → **Right**: Evaluate in PHP before attachment
-  - **Why**: JS already loaded and parsed, defeats optimization purpose
-- **Wrong**: Not declaring cache contexts → **Right**: Add appropriate `#cache['contexts']`
-  - **Why**: Wrong library served from cache, broken functionality
-- **Wrong**: Overly specific conditions → **Right**: Balance specificity with cache efficiency
-  - **Why**: Cache fragmentation, performance degradation
-- **Wrong**: Conditional loading without testing cached pages → **Right**: Test with caching enabled
-  - **Why**: Works uncached, fails with caching enabled
+- **Checking conditions in JavaScript instead of PHP** - WHY: JS already loaded and parsed, defeats optimization purpose
+- **Not declaring cache contexts** - WHY: Wrong library served from cache, broken functionality
+- **Overly specific conditions** - WHY: Cache fragmentation, performance degradation
+- **Conditional loading without testing cached pages** - WHY: Works uncached, fails with caching enabled
 
 ## See Also
 

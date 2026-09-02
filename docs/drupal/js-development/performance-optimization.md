@@ -1,6 +1,6 @@
 ---
-description: JavaScript performance optimization strategies for better user experience and SEO
-tldr: "Use for every JavaScript implementation - performance is not optional. Frontend performance directly impacts user experience and SEO."
+description: "JavaScript performance optimization strategies for better user experience and SEO"
+tldr: "Minimize JavaScript weight, load conditionally, use defer, implement debounce/throttle, and avoid layout thrashing on every implementation — performance is not optional. Gotcha: reading layout properties in a loop forces multiple reflows."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use for every JavaScript implementation - performance is not optional. Frontend performance directly impacts user experience and SEO.
+> Every JavaScript implementation - performance is not optional. Frontend performance directly impacts user experience and SEO.
 
 ## Decision
 
@@ -17,7 +17,6 @@ Minimize JavaScript weight, load conditionally, use defer attribute, implement d
 ## Pattern
 
 **Script loading strategy**:
-
 ```yaml
 optimized:
   js:
@@ -30,7 +29,6 @@ optimized:
 ```
 
 **Conditional loading**:
-
 ```php
 // Only load on article nodes
 if ($node->bundle() === 'article') {
@@ -39,7 +37,6 @@ if ($node->bundle() === 'article') {
 ```
 
 **Lazy initialization**:
-
 ```javascript
 // Don't initialize heavy features until needed
 element.addEventListener('click', function init() {
@@ -52,7 +49,6 @@ element.addEventListener('click', function init() {
 ```
 
 **Avoid layout thrashing**:
-
 ```javascript
 // BAD: Read-write-read-write causes reflows
 elements.forEach(el => {
@@ -67,22 +63,17 @@ elements.forEach((el, i) => {
 });
 ```
 
+**Reference**: https://www.drupal.org/project/drupal/issues/1587536 - Defer/async patterns
+
 ## Common Mistakes
 
-- **Wrong**: Loading JS globally without conditions → **Right**: Use conditional loading
-  - **Why**: Unused JS on most pages, wasted bandwidth
-- **Wrong**: No defer attribute → **Right**: Add defer to library definition
-  - **Why**: Blocks HTML parsing, poor Core Web Vitals
-- **Wrong**: Disabling aggregation in production → **Right**: Enable aggregation
-  - **Why**: Multiple HTTP requests, no minification
-- **Wrong**: Heavy operations without debounce → **Right**: Debounce high-frequency handlers
-  - **Why**: Executes too frequently, freezes UI
-- **Wrong**: Reading layout properties in loops → **Right**: Batch reads, then writes
-  - **Why**: Forces multiple reflows, severe performance penalty
+- **Loading JS globally without conditions** - WHY: Unused JS on most pages, wasted bandwidth
+- **No defer attribute** - WHY: Blocks HTML parsing, poor Core Web Vitals
+- **Disabling aggregation in production** - WHY: Multiple HTTP requests, no minification
+- **Heavy operations without debounce** - WHY: Executes too frequently, freezes UI
+- **Reading layout properties in loops** - WHY: Forces multiple reflows, severe performance penalty
 
 ## See Also
 
 - [Debounce and Throttle](debounce-and-throttle.md) - Event optimization
 - [Conditional Loading](conditional-loading.md) - When to load libraries
-- [Aggregation and Minification](aggregation-and-minification.md) - Production optimization
-- Reference: [Defer/Async Patterns](https://www.drupal.org/project/drupal/issues/1587536)

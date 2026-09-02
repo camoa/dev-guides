@@ -1,6 +1,6 @@
 ---
-description: Optimize high-frequency events with debounce and throttle patterns
-tldr: "Use for events that fire rapidly (scroll, resize, input, mousemove) where executing handler every time causes performance issues."
+description: "Optimize high-frequency events with debounce and throttle patterns"
+tldr: "For events that fire rapidly (scroll, resize, input, mousemove), use Drupal's built-in debounce to execute after events stop, or throttle to cap execution rate. Gotcha: requestAnimationFrame suits visual updates better than throttle since it syncs with refresh rate."
 drupal_version: "11.x"
 ---
 
@@ -8,23 +8,15 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use for events that fire rapidly (scroll, resize, input, mousemove) where executing handler every time causes performance issues.
+> Events that fire rapidly (scroll, resize, input, mousemove) where executing handler every time causes performance issues.
 
 ## Decision
 
-| Situation | Choose | Why |
-|-----------|--------|-----|
-| Search input, form validation | Debounce | Execute only after user stops typing |
-| Window resize handlers | Debounce | Execute only after resize completes |
-| Scroll progress tracking | Throttle | Execute at controlled intervals |
-| Visual updates, animations | requestAnimationFrame | Sync with browser refresh rate |
-
-**Debounce**: Execute handler only after events stop for specified time. **Throttle**: Execute handler at most once per specified interval.
+**Debounce**: Execute handler only after events stop for specified time. **Throttle**: Execute handler at most once per specified interval. Use Drupal's built-in debounce (core/drupal.debounce dependency).
 
 ## Pattern
 
 **Debounce pattern** (wait until events stop):
-
 ```javascript
 // Dependency: core/drupal.debounce
 Drupal.behaviors.search = {
@@ -42,7 +34,6 @@ Drupal.behaviors.search = {
 ```
 
 **Throttle pattern** (limit execution rate):
-
 ```javascript
 // Execute at most once per 100ms
 let lastRun = 0;
@@ -56,7 +47,6 @@ window.addEventListener('scroll', function () {
 ```
 
 **requestAnimationFrame** (visual updates):
-
 ```javascript
 // Better than throttle for visual changes
 let ticking = false;
@@ -71,19 +61,21 @@ window.addEventListener('scroll', function () {
 });
 ```
 
+**When to use which**:
+- **Debounce**: Search input, form validation, window resize
+- **Throttle**: Scroll handlers, progress tracking
+- **requestAnimationFrame**: Animations, visual updates, position tracking
+
+**Reference**: https://medium.com/@cristinallamas/debounce-functions-in-drupal-js-scripts-3727bdefa11c
+
 ## Common Mistakes
 
-- **Wrong**: No debounce on input events → **Right**: Debounce search/validation
-  - **Why**: Handler fires on every keystroke, performance penalty
-- **Wrong**: Scroll handler without throttle → **Right**: Throttle or use requestAnimationFrame
-  - **Why**: Executes hundreds of times during scroll, freezes UI
-- **Wrong**: Using setTimeout instead of debounce → **Right**: Use Drupal.debounce
-  - **Why**: setTimeout doesn't cancel previous calls, accumulates
-- **Wrong**: requestAnimationFrame for non-visual logic → **Right**: Use throttle instead
-  - **Why**: Tied to refresh rate, not appropriate for all throttling
+- **No debounce on input events** - WHY: Handler fires on every keystroke, performance penalty
+- **Scroll handler without throttle** - WHY: Executes hundreds of times during scroll, freezes UI
+- **Using setTimeout instead of debounce** - WHY: Doesn't cancel previous timeouts, accumulates calls
+- **requestAnimationFrame for non-visual logic** - WHY: Tied to refresh rate, not appropriate for all throttling
 
 ## See Also
 
 - [Event Handling](event-handling.md) - Event patterns
-- Reference: [Debounce in Drupal](https://medium.com/@cristinallamas/debounce-functions-in-drupal-js-scripts-3727bdefa11c)
 - Reference: [Debounce vs Throttle Visual Guide](https://drupalsun.com/david-corbacho/2012/10/10/debounce-and-throttle-visual-explanation)

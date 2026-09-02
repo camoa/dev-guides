@@ -127,11 +127,11 @@ Reference: `/core/lib/Drupal/Core/Theme/Icon/Plugin/IconPackManager.php`, `/core
 
 ## Common Mistakes
 
-- **Wrong**: `#pack` / `#icon` instead of `#pack_id` / `#icon_id` → **Right**: Renders nothing, raises nothing
-- **Wrong**: Reading `$icon_data['label']` off `getIcons()` → **Right**: No such key; use `getIcon()->getLabel()`
-- **Wrong**: Using static `\Drupal::service()` calls → **Right**: Inject IconPackManager via dependency injection
-- **Wrong**: Not checking icon exists → **Right**: `getIcon()` returns NULL for an unknown pack or icon
-- **Wrong**: Expecting the render array to carry cache tags → **Right**: It carries none; add your own if the surrounding render array needs them
+- `#pack` / `#icon` instead of `#pack_id` / `#icon_id` → Renders nothing, raises nothing
+- Reading `$icon_data['label']` off `getIcons()` → No such key; use `getIcon()->getLabel()`
+- Using static `\Drupal::service()` calls → Inject IconPackManager via dependency injection
+- Not checking icon exists → `getIcon()` returns NULL for an unknown pack or icon
+- Expecting the render array to carry cache tags → It carries none; add your own if the surrounding render array needs them
 
 ## See Also
 

@@ -1,33 +1,38 @@
 ---
-description: Structure Playwright tests with describe blocks, hooks, tags, annotations, parameterization, and test.step for readable traces.
-tldr: Use fullyParallel:true globally and reserve test.describe.serial only for genuine multi-step wizards where each step depends on the previous. Use test.step() aggressively in long tests — steps appear collapsibly in the HTML report and Trace Viewer, making triage dramatically faster.
+description: "Structure Playwright tests with describe blocks, hooks, tags, annotations, parameterization, and test.step for readable traces."
+tldr: "Use fullyParallel:true globally and reserve test.describe.serial only for genuine multi-step wizards where each step depends on the previous. Use test.step() aggressively in long tests — steps appear collapsibly in the HTML report and Trace Viewer, making triage dramatically faster."
 ---
 
 # Test Organization
 
 ## When to Use
 
-> Use `describe` to group related tests, `tags` for selective runs, `test.step()` to annotate long flows in the trace, and fixtures over hooks whenever the setup produces state.
+> Structuring describe blocks, hooks, tags, and parallelism.
 
-## Decision
-
-| Concurrency mode | When |
-|---|---|
-| `fullyParallel: true` (global default) | Independent tests — the normal case |
-| `test.describe.serial` | Multi-step wizard where step N depends on step N-1 state |
-| `test.describe.parallel` | Override parallel on a file that would otherwise be serial |
-
-## Pattern
+## Pattern: Grouping and Concurrency
 
 ```ts
-// Grouping
-test.describe('checkout flow', () => { /* sequential within file by default */ });
-test.describe.serial('multi-step wizard', () => { /* first failure skips rest; retries whole group */ });
-test.describe.parallel('independent CRUD', () => { /* force parallel within file */ });
+test.describe('checkout flow', () => {
+  // tests share a describe scope; default = sequential within file
+});
+
+test.describe.serial('multi-step wizard', () => {
+  // First failure skips the rest; retries the whole group as a unit
+  // Use only when steps genuinely depend on each other
+});
+
+test.describe.parallel('independent CRUD', () => {
+  // Tests run in parallel even within the same file
+});
+
 test.describe.skip('flaky vendor area, ticket #1234', () => { /* ... */ });
+test.describe.fixme('todo, after launch', () => { /* ... */ });
+test.describe.only('focus', () => { /* ... */ }); // dev-only; CI fails if .only leaks
 ```
 
-### Hooks
+Prefer `fullyParallel: true` in `playwright.config.ts` and `test.describe.serial` only for the genuine wizard case. Most "serial" usage is hidden test coupling — refactor to fixtures.
+
+## Pattern: Hooks
 
 ```ts
 test.beforeAll(async ({ browser }) => { /* once per worker */ });
@@ -36,30 +41,45 @@ test.beforeEach(async ({ page }) => { /* before every test */ });
 test.afterEach(async ({ page }, testInfo) => { /* after every test */ });
 ```
 
-### Skipping and conditional execution
+Prefer **fixtures over hooks** for anything that produces state a test consumes. Hooks are good for cross-cutting setup that doesn't return a value (seed time, register a global error listener).
+
+## Pattern: Skipping and Conditional Execution
 
 ```ts
 test('only on chromium', async ({ browserName }) => {
   test.skip(browserName !== 'chromium', 'WebKit lacks feature X');
 });
+
 test.fixme('broken, see #4567', async () => { /* not executed, marked failing-known */ });
+test.fail('expected failure', async () => { /* fails if it passes */ });
 test.slow(); // multiplies timeouts by 3 for this test
 ```
 
-### Tags and annotations
+## Pattern: Tags
 
 ```ts
-// Tags — for grep-based filtering
-test('homepage smoke', { tag: ['@smoke', '@critical'] }, async ({ page }) => { /* ... */ });
-// npx playwright test --grep @smoke
+test('homepage smoke', { tag: ['@smoke', '@critical'] }, async ({ page }) => {
+  /* ... */
+});
+```
 
-// Annotations — surface in HTML report
+```bash
+npx playwright test --grep @smoke
+npx playwright test --grep-invert @slow
+```
+
+## Pattern: Annotations (Richer Than Tags — Surface in HTML Report)
+
+```ts
 test('checkout', {
-  annotation: [{ type: 'issue', description: 'https://jira/PROJ-123' }],
+  annotation: [
+    { type: 'issue', description: 'https://jira/PROJ-123' },
+    { type: 'severity', description: 'critical' },
+  ],
 }, async ({ page }) => { /* ... */ });
 ```
 
-### Parameterization
+## Pattern: Parameterization
 
 ```ts
 const roles = ['admin', 'editor', 'anonymous'];
@@ -71,7 +91,7 @@ for (const role of roles) {
 }
 ```
 
-### `test.step` — nesting actions in the trace
+## Pattern: `test.step` — Nesting Actions in the Trace
 
 ```ts
 test('purchase', async ({ page }) => {
@@ -84,11 +104,13 @@ test('purchase', async ({ page }) => {
 });
 ```
 
+Steps appear collapsibly in the HTML report and Trace Viewer. Use them aggressively in long tests; makes triage 10× faster.
+
 ## Common Mistakes
 
-- **Wrong**: `test.describe.serial` for "convenience" — hides test coupling. **Right**: Refactor to fixtures
-- **Wrong**: `test.only` committed — CI doesn't catch it without `forbidOnly: true`
-- **Wrong**: Test files >500 lines. **Right**: Split per user journey
+- **`test.describe.serial` for "convenience"** — hides test coupling; refactor to fixtures
+- **`test.only` committed** — CI doesn't catch it without `forbidOnly: true`
+- **Test files >500 lines** — split per user journey
 
 ## See Also
 

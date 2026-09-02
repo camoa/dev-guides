@@ -1,6 +1,6 @@
 ---
-description: Add interactive behavior to Single Directory Components with automatic library discovery
-tldr: "Use when adding interactive behavior to Single Directory Components."
+description: "Add interactive behavior to Single Directory Components with automatic library discovery"
+tldr: "Place a JavaScript file in the component directory following naming convention, and Drupal creates the library and attaches it automatically when the component renders. Gotcha: the auto-generated library name is core/components.THEME_OR_MODULE--COMPONENT, not sdc/..."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when adding interactive behavior to Single Directory Components.
+> Adding interactive behavior to Single Directory Components.
 
 ## Decision
 
@@ -17,7 +17,6 @@ Place JavaScript file in component directory following naming convention. Drupal
 ## Pattern
 
 **File structure**:
-
 ```
 components/button/
 ├── button.component.yml
@@ -27,7 +26,6 @@ components/button/
 ```
 
 **Component JavaScript** (button.js):
-
 ```javascript
 (function (Drupal, once) {
   'use strict';
@@ -53,29 +51,26 @@ components/button/
 ```
 
 **Accessing component via data attribute** (button.twig):
-
 ```twig
 <button{{ attributes.addClass('button').setAttribute('data-component', 'button') }}>
   {{ label }}
 </button>
 ```
 
-**Library auto-generated**: Drupal creates library as `sdc/THEME_OR_MODULE--COMPONENT` and attaches automatically.
+**Library auto-generated**: Drupal creates library as `core/components.THEME_OR_MODULE--COMPONENT` and attaches automatically (`Component::getLibraryName()`).
+
+**Reference**:
+- https://www.drupal.org/docs/develop/theming-drupal/using-single-directory-components - Official SDC docs
+- https://drupalize.me/tutorial/anatomy-drupal-single-directory-component-sdc - Component anatomy
 
 ## Common Mistakes
 
-- **Wrong**: Manually creating library for SDC JS → **Right**: Let Drupal auto-discover
-  - **Why**: Drupal does this automatically, creates duplication
-- **Wrong**: Class-based selectors for targeting → **Right**: Use data attributes
-  - **Why**: Class-based selectors conflict with styling, break encapsulation
-- **Wrong**: Global selectors in component JS → **Right**: Target specific component instances
-  - **Why**: Breaks component reusability, affects other instances
-- **Wrong**: Forgetting context parameter → **Right**: Always use context
-  - **Why**: Breaks when multiple component instances on page
+- **Manually creating library for SDC JS** - WHY: Drupal does this automatically, creates duplication
+- **Not using data attributes for targeting** - WHY: Class-based selectors conflict with styling, break encapsulation
+- **Global selectors in component JS** - WHY: Breaks component reusability, affects other instances
+- **Forgetting context parameter** - WHY: Breaks when multiple component instances on page
 
 ## See Also
 
 - [Drupal.behaviors Pattern](drupal-behaviors-pattern.md) - Component initialization
-- Reference: [Using Single Directory Components](https://www.drupal.org/docs/develop/theming-drupal/using-single-directory-components)
 - Reference: [SDC in Core](https://www.lullabot.com/articles/getting-single-directory-components-drupal-core)
-- Reference: [Anatomy of SDC](https://drupalize.me/tutorial/anatomy-drupal-single-directory-component-sdc)

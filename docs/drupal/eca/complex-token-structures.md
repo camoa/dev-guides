@@ -1,5 +1,5 @@
 ---
-description: Store structured data in tokens with success/error indicators for downstream actions
+description: "Store structured data in tokens with success/error indicators for downstream actions"
 tldr: "Store complex data structures in tokens when actions need to pass multiple related values, structured results, or collections to downstream actions and conditions. Tokens can hold arrays, objects, and nested data."
 drupal_version: "11.x"
 ---
@@ -79,11 +79,11 @@ public function execute(): void {
 
 ## Common Mistakes
 
-- **Wrong**: Storing objects without serialization → **Right**: Can't be saved to database
-- **Wrong**: No success/error indicator → **Right**: Downstream actions can't detect failures
-- **Wrong**: Flat structure for related data → **Right**: Hard to organize and access
-- **Wrong**: Missing NULL checks on nested access → **Right**: Fatal errors when structure differs
-- **Wrong**: Not documenting token structure → **Right**: Other developers don't know what fields exist
+- Storing objects without serialization → Can't be saved to database
+- No success/error indicator → Downstream actions can't detect failures
+- Flat structure for related data → Hard to organize and access
+- Missing NULL checks on nested access → Fatal errors when structure differs
+- Not documenting token structure → Other developers don't know what fields exist
 
 ## See Also
 
@@ -92,5 +92,5 @@ public function execute(): void {
 - [Debugging Workflows](debugging-workflows.md) for inspecting token data
 
 **References:**
-- Core: `/modules/contrib/eca/src/Service/Tokens.php`
+- Core: `/modules/contrib/eca/src/Token/TokenServices.php`
 - Data type: `/modules/contrib/eca/src/Plugin/DataType/DataTransferObject.php`

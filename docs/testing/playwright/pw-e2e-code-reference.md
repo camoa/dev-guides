@@ -1,17 +1,11 @@
 ---
-description: Quick reference for Playwright E2E APIs, config keys, and CLI commands.
-tldr: Quick lookup for getByRole/getByLabel/getByTestId locators, expect() assertions, test.extend fixtures, page.route mocking, request fixture, and the sharding/debugging CLI commands.
+description: "Quick reference for Playwright E2E APIs, config keys, and CLI commands."
+tldr: "Quick lookup for getByRole/getByLabel/getByTestId locators, expect() assertions, test.extend fixtures, page.route mocking, request fixture, and the sharding/debugging CLI commands."
 ---
 
 # Code Reference
 
-## When to Use
-
-> Use this as a quick lookup when you know what you need but want the exact API name or CLI flag.
-
-## Decision
-
-### Key APIs
+## Key APIs
 
 | API | Use |
 |---|---|
@@ -26,11 +20,11 @@ tldr: Quick lookup for getByRole/getByLabel/getByTestId locators, expect() asser
 | `test.extend({...})` | Custom fixtures |
 | `test.use({ storageState })` | Auth replay |
 | `page.route(url, handler)` | Network mocking |
-| `request.get/post/put/delete/...` | API testing |
+| `request.get/post/...` | API testing |
 | `page.pause()` | Inline debugger |
-| `test.step('label', async () => ...)` | Action grouping in trace |
+| `test.step('label', async () => ...)` | Action grouping |
 
-### Config Keys (E2E-specific)
+## Config Keys (E2E-Specific)
 
 | Key | Default | Purpose |
 |---|---|---|
@@ -40,9 +34,9 @@ tldr: Quick lookup for getByRole/getByLabel/getByTestId locators, expect() asser
 | `testIdAttribute` | `data-testid` | What `getByTestId` reads |
 | `retries` | 0 | Retries per test (use 2 in CI) |
 | `fullyParallel` | false | Parallelize across all tests, not just files |
-| `forbidOnly` | false | Fail CI if `test.only` is committed |
+| `forbidOnly` | false | Error out if any `test.only` / `describe.only` reached the run — set `!!process.env.CI` |
 
-## Pattern
+## CLI
 
 ```bash
 # Sharding
@@ -63,8 +57,8 @@ npx playwright show-trace trace.zip
 
 - [Playwright for Visual Regression](../visual-regression/playwright/index.md) — setup, browser projects, viewport matrix, screenshot APIs, baseline files, stability controls, determinism, config walkthrough, CLI cheatsheet, programmatic API, Drupal/DDEV plumbing
 - [Visual Regression Workflow](../visual-regression/workflow/index.md) — VR procedure
-- [Pixelmatch](../visual-regression/pixelmatch/index.md) — diff engine internals
-- [HTML Report](../visual-regression/html-report/index.md) — triage UI for both VR and E2E failures
+- [Pixelmatch Image Diff](../visual-regression/pixelmatch/index.md) — diff engine internals
+- [Playwright HTML Report](../visual-regression/html-report/index.md) — triage UI for both VR and E2E failures
 - [Automated Testing Kit (ATK)](../atk/index.md) — Drupal-specific test catalog using Playwright
 - Reference: [Playwright Locators](https://playwright.dev/docs/locators)
 - Reference: [Playwright Best Practices](https://playwright.dev/docs/best-practices)

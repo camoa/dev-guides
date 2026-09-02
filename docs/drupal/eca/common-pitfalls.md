@@ -1,5 +1,5 @@
 ---
-description: Avoid critical ECA plugin mistakes — parent::create pattern, token attributes, negationCheck
+description: "Avoid critical ECA plugin mistakes — parent::create pattern, token attributes, negationCheck"
 tldr: "Review this section before completing any ECA plugin to avoid the most common mistakes that break plugins or cause maintenance problems."
 drupal_version: "11.x"
 ---
@@ -18,7 +18,7 @@ All pitfalls listed here are MANDATORY to avoid. They are not suggestions.
 
 **Constructor and Service Injection:**
 
-**DON'T:**
+❌ **DON'T:**
 ```php
 // Using new static() - breaks when parent changes
 public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
@@ -33,7 +33,7 @@ public static function create(ContainerInterface $container, array $configuratio
 }
 ```
 
-**DO:**
+✅ **DO:**
 ```php
 // Use parent::create() - resilient to parent changes
 public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
@@ -45,7 +45,7 @@ public static function create(ContainerInterface $container, array $configuratio
 
 **Configuration Methods:**
 
-**DON'T:**
+❌ **DON'T:**
 ```php
 // Missing parent call
 public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
@@ -54,7 +54,7 @@ public function buildConfigurationForm(array $form, FormStateInterface $form_sta
 }
 ```
 
-**DO:**
+✅ **DO:**
 ```php
 // Call parent LAST
 public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
@@ -65,7 +65,7 @@ public function buildConfigurationForm(array $form, FormStateInterface $form_sta
 
 **Token Integration:**
 
-**DON'T:**
+❌ **DON'T:**
 ```php
 // Missing token attributes
 $form['field'] = [
@@ -77,7 +77,7 @@ $form['field'] = [
 $value = $this->configuration['field_name'];
 ```
 
-**DO:**
+✅ **DO:**
 ```php
 // Proper token attributes
 $form['field'] = [
@@ -93,7 +93,7 @@ $value = $this->tokenService->getOrReplace($this->configuration['field_name']);
 
 **Condition Evaluation:**
 
-**DON'T:**
+❌ **DON'T:**
 ```php
 // Missing negationCheck()
 public function evaluate(): bool {
@@ -101,7 +101,7 @@ public function evaluate(): bool {
 }
 ```
 
-**DO:**
+✅ **DO:**
 ```php
 // Always wrap with negationCheck()
 public function evaluate(): bool {
@@ -112,7 +112,7 @@ public function evaluate(): bool {
 
 **StringComparisonBase:**
 
-**DON'T:**
+❌ **DON'T:**
 ```php
 // Overriding final method
 public function evaluate(): bool {
@@ -120,7 +120,7 @@ public function evaluate(): bool {
 }
 ```
 
-**DO:**
+✅ **DO:**
 ```php
 // Override these instead
 protected function getLeftValue(): string {
@@ -134,7 +134,7 @@ protected function getRightValue(): string {
 
 **Attributes:**
 
-**DON'T:**
+❌ **DON'T:**
 ```php
 // Missing EcaAction attribute
 #[Action(
@@ -146,7 +146,7 @@ class MyAction extends ConfigurableActionBase {
 }
 ```
 
-**DO:**
+✅ **DO:**
 ```php
 // Both attributes required
 #[Action(

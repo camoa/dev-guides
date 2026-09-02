@@ -1,6 +1,6 @@
 ---
-description: Debug ECA workflows with logging, token inspection, drush watchdog, and the ECA 3.1 built-in Process Debugger
-tldr: "Debug ECA workflows when actions don't execute as expected, tokens have unexpected values, or conditions evaluate incorrectly. In ECA 3.1 reach for the built-in Process Debugger first; use logger statements for custom plugin observability and production."
+description: "Debug ECA workflows with logging, token inspection, drush watchdog, and the ECA 3.1 built-in Process Debugger"
+tldr: "Debug ECA workflows when actions don't execute as expected, tokens have unexpected values, or conditions evaluate incorrectly. Use logging, watchdog, and token inspection."
 drupal_version: "11.x"
 ---
 
@@ -116,12 +116,12 @@ drush watchdog:delete all
 
 ## Common Mistakes
 
-- **Wrong**: Not logging at all → **Right**: Impossible to debug production issues
-- **Wrong**: Logging sensitive data → **Right**: API keys, passwords in logs
-- **Wrong**: Too much logging → **Right**: Performance impact, log bloat
-- **Wrong**: Wrong log level → **Right**: Info should be debug, or debug should be error
-- **Wrong**: Not checking logs → **Right**: Logging without reading them
-- **Wrong**: Missing context in log messages → **Right**: Can't understand what failed
+- Not logging at all → Impossible to debug production issues
+- Logging sensitive data → API keys, passwords in logs
+- Too much logging → Performance impact, log bloat
+- Wrong log level → Info should be debug, or debug should be error
+- Not checking logs → Logging without reading them
+- Missing context in log messages → Can't understand what failed
 
 ## See Also
 
@@ -130,5 +130,5 @@ drush watchdog:delete all
 - [Complex Token Structures](complex-token-structures.md) for token inspection
 
 **References:**
-- Drupal Logging: https://api.drupal.org/api/drupal/core!core.api.php/group/logging
-- Drush: https://www.drush.org/latest/commands/watchdog_show/
+- Drupal Logging: `https://api.drupal.org/api/drupal/core!core.api.php/group/logging`
+- Drush: `https://www.drush.org/latest/commands/watchdog_show/`

@@ -1,5 +1,5 @@
 ---
-description: Write kernel tests for ECA plugins to verify configuration, execution, and token handling
+description: "Write kernel tests for ECA plugins to verify configuration, execution, and token handling"
 tldr: "Write kernel tests for all ECA plugins to verify configuration, execution logic, token handling, and integration with Drupal services. Kernel tests run faster than browser tests and provide sufficient coverage for most plugin logic."
 drupal_version: "11.x"
 ---
@@ -122,12 +122,12 @@ class MyActionTest extends KernelTestBase {
 
 ## Common Mistakes
 
-- **Wrong**: Not installing required schemas → **Right**: Database errors during tests
-- **Wrong**: Missing module dependencies → **Right**: Services not available
-- **Wrong**: Not cleaning up token service between tests → **Right**: Test pollution
-- **Wrong**: Testing UI instead of logic → **Right**: Use functional tests for UI
-- **Wrong**: No error case tests → **Right**: Only testing happy path
-- **Wrong**: Not testing token replacement → **Right**: Core plugin functionality untested
+- Not installing required schemas → Database errors during tests
+- Missing module dependencies → Services not available
+- Not cleaning up token service between tests → Test pollution
+- Testing UI instead of logic → Use functional tests for UI
+- No error case tests → Only testing happy path
+- Not testing token replacement → Core plugin functionality untested
 
 ## See Also
 
@@ -136,5 +136,5 @@ class MyActionTest extends KernelTestBase {
 - [Complex Token Structures](complex-token-structures.md) for token testing
 
 **References:**
-- Drupal Testing: https://www.drupal.org/docs/automated-testing/phpunit-in-drupal
+- Drupal Testing: `https://www.drupal.org/docs/automated-testing/phpunit-in-drupal`
 - ECA Tests: `/modules/contrib/eca/tests/src/Kernel/`

@@ -1,5 +1,5 @@
 ---
-description: Use YAML config fields for complex structured settings with YamlParser validation
+description: "Use YAML config fields for complex structured settings with YamlParser validation"
 tldr: "Use YAML configuration fields when plugins need complex, structured configuration that's too cumbersome for multiple form fields, such as API client options, nested settings, or dynamic key-value pairs."
 drupal_version: "11.x"
 ---
@@ -82,11 +82,11 @@ class MyAction extends ConfigurableActionBase {
 
 ## Common Mistakes
 
-- **Wrong**: Not validating YAML in `access()` → **Right**: Workflow crashes during execution
-- **Wrong**: Missing example in form description → **Right**: Users don't know the format
-- **Wrong**: Not handling ParseException → **Right**: Uncaught exceptions crash workflows
-- **Wrong**: No default value for missing keys → **Right**: Fatal errors on undefined array keys
-- **Wrong**: Requiring YAML when simple fields work → **Right**: Unnecessary complexity for users
+- Not validating YAML in `access()` → Workflow crashes during execution
+- Missing example in form description → Users don't know the format
+- Not handling ParseException → Uncaught exceptions crash workflows
+- No default value for missing keys → Fatal errors on undefined array keys
+- Requiring YAML when simple fields work → Unnecessary complexity for users
 
 ## See Also
 
@@ -97,4 +97,4 @@ class MyAction extends ConfigurableActionBase {
 **References:**
 - Core: `/modules/contrib/eca/src/Service/YamlParser.php`
 - Trait: `/modules/contrib/eca/src/Plugin/FormFieldYamlTrait.php`
-- Example: `/modules/contrib/eca_base/src/Plugin/Action/EcaStateWrite.php`
+- Example: `/modules/contrib/eca/modules/base/src/Plugin/Action/EcaStateWrite.php`

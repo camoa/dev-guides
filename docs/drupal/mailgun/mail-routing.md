@@ -1,30 +1,31 @@
 ---
-description: Route Drupal emails through Mailgun globally or selectively per module using system.mail.yml and the Mailsystem module.
-tldr: Set system.mail.yml interface.default to mailgun_mail to route all Drupal mail through Mailgun, or use the Mailsystem module to route specific modules while keeping others on php_mail; never edit system.mail.yml without running drush cim or cex.
-drupal_version: "11.x"
+description: "Route Drupal emails through Mailgun globally or selectively per module using system.mail.yml and the Mailsystem module."
+tldr: "Set system.mail.yml interface.default to mailgun_mail to route all Drupal mail through Mailgun, or use the Mailsystem module to route specific modules while keeping others on php_mail; never edit system.mail.yml without running drush cim or cex."
+drupal_version: "10.3+/11/12"
 ---
 
 # Mail Routing
 
 ## When to Use
 
-> Use this after installing the module — to tell Drupal which mail interface to use. Two layers exist: `system.mail.yml` for global routing, and the Mailsystem UI for per-module/per-key overrides.
+> After installing the module — to tell Drupal which mail interface to use. Two layers exist: `system.mail.yml` for global routing, and the Mailsystem UI for per-module/per-key overrides.
 
 ## Decision
 
 | Goal | Approach |
-|------|----------|
+|---|---|
 | Route ALL Drupal emails through Mailgun | `system.mail.yml` → `default: mailgun_mail` |
 | Keep core mail for some, Mailgun for specific modules | `mailsystem` module + Custom entries in UI |
 | Test in dev with PHP mail, prod with Mailgun | Per-environment `system.mail.yml` via config-split |
-| Different Mailgun keys per email type | Two domains in Mailgun, two interfaces, custom plugins |
+| Different Mailgun keys per email type (transactional vs bulk) | Two domains in Mailgun, two interfaces, custom plugins |
 
 ## Pattern
 
 #### Global route — all mail goes through Mailgun
 
+`config/sync/system.mail.yml`:
+
 ```yaml
-# config/sync/system.mail.yml
 interface:
   default: mailgun_mail
 ```
@@ -39,7 +40,11 @@ interface:
   mailgun: mailgun_mail
 ```
 
-In `/admin/config/system/mailsystem`: Add a "Custom" entry → Module: `user`, Mail key: (leave blank for all) → Formatter: `MailgunMail`, Sender: `MailgunMail`. Writes per-module overrides:
+Then in `/admin/config/system/mailsystem`:
+- Add a "Custom" entry → Module: `user`, Mail key: (leave blank for all) → Formatter: `MailgunMail`, Sender: `MailgunMail`
+- Repeat for `webform`, `commerce_order`, etc.
+
+This writes per-module overrides like:
 
 ```yaml
 modules:
@@ -51,6 +56,8 @@ modules:
 
 #### Per-environment routing via config-split
 
+When dev should use `php_mail` (or stage's mail trap) but prod uses Mailgun:
+
 ```yaml
 # config/sync/system.mail.yml — committed default
 interface:
@@ -61,7 +68,9 @@ interface:
   default: mailgun_mail
 ```
 
-#### Symfony Mailer (Mailer Plus)
+#### Symfony Mailer (Mailer Plus override mode)
+
+If using Mailer Plus instead of classic Mailgun, the `system.mail.yml` becomes:
 
 ```yaml
 interface:
@@ -76,13 +85,11 @@ mailer_dsn:
 ```
 
 ## Common Mistakes
-
 - **Wrong**: Editing `system.mail.yml` directly and forgetting to `drush cim` → **Right**: Either edit via UI then `drush cex`, or edit the file then `drush cim` to load it into active config.
 - **Wrong**: Setting `default: mailgun_mail` AND adding per-module Custom entries that also use mailgun_mail → **Right**: Redundant; pick one strategy.
 - **Wrong**: Routing user-related mail through Mailgun without testing password reset emails → **Right**: User module's password reset is the most-used transactional path; verify it explicitly.
 
 ## See Also
-
 - [UI Configuration](ui-configuration.md)
 - [Programmatic Sending](programmatic-sending.md)
 - Reference: [drupal/mailsystem](https://www.drupal.org/project/mailsystem)

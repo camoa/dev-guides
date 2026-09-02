@@ -1,20 +1,20 @@
 ---
-description: Eliminate render-blocking CSS and JS from the critical path using inline styles, defer/async, and media attributes.
-tldr: Inline only above-fold CSS (~14KB target), use `<script defer>` for app JS and `<script async>` for independent scripts; CSS `@import` inside stylesheets creates sequential request chains that block CSSOM — replace with parallel `<link>` tags.
+description: "Eliminate render-blocking CSS and JS from the critical path using inline styles, defer/async, and media attributes."
+tldr: "Inline only above-fold CSS (~14KB target), use `<script defer>` for app JS and `<script async>` for independent scripts; CSS `@import` inside stylesheets creates sequential request chains that block CSSOM — replace with parallel `<link>` tags."
 ---
 
 # Critical Rendering Path
 
 ## When to Use
 
-> Apply these patterns to every page. The critical rendering path (CRP) is the sequence of steps the browser takes from receiving HTML to painting pixels. Any render-blocking resource in the `<head>` delays the first paint — often by hundreds of milliseconds before a single pixel appears.
+> Apply these patterns to every page. The critical rendering path (CRP) is the sequence of steps the browser takes from receiving the HTML to painting pixels. Any render-blocking resource in the `<head>` delays the first paint — often by hundreds of milliseconds before a single pixel appears.
 
 ## Decision
 
 | Resource | Default behavior | Recommended |
 |----------|-----------------|-------------|
-| Critical above-fold CSS | Blocks render if in `<link>` | Inline in `<style>` in `<head>` |
-| Non-critical CSS (below-fold, print) | Blocks render if in `<link>` | `rel=preload` + `onload` swap, or `media` attribute |
+| Critical above-fold CSS | Normally linked → blocks render | Inline in `<style>` in `<head>` |
+| Non-critical CSS (e.g., below-fold, print) | Blocks render if in `<link>` | `rel=preload` + `onload` swap, or `media` attribute |
 | App JS with DOM dependency | Parser-blocking if in `<head>` | `<script defer>` — executes after DOM, in order |
 | Independent utility JS | Parser-blocking if in `<head>` | `<script async>` — no guaranteed order |
 | Modern ES modules | Parser-blocking if in `<head>` | `<script type="module">` — deferred by default; add `async` for independent modules |
@@ -49,14 +49,14 @@ tldr: Inline only above-fold CSS (~14KB target), use `<script defer>` for app JS
 
 ## Common Mistakes
 
-- **Wrong**: `@import url('other.css')` inside CSS files → **Right**: Replace with parallel `<link>` tags; `@import` creates sequential request chains that block CSSOM
-- **Wrong**: Large framework bundle in `<head>` without `defer` or `async` → **Right**: Always add `defer`; halting DOM construction costs hundreds of ms
-- **Wrong**: Inlining all CSS → **Right**: Inline only the minimum above-fold styles (~14KB uncompressed); inlining all CSS defeats HTTP caching
-- **Wrong**: `defer` on scripts that use `document.write()` → **Right**: Deferred scripts cannot use `document.write()`
-- **Wrong**: Omitting `<noscript>` fallback on the preload-to-stylesheet pattern → **Right**: Users with JS disabled never receive the stylesheet without it
+- `@import url('other.css')` inside CSS files — creates sequential request chains that block CSSOM; replace with parallel `<link>` tags
+- Large framework bundle in `<head>` without `defer` or `async` — halts DOM construction until download + parse + execute completes
+- Inlining all CSS — defeats HTTP caching; inline only the minimum above-fold styles (~14KB uncompressed is a useful target)
+- Using `defer` on scripts that use `document.write()` — deferred scripts cannot use `document.write()`
+- Forgetting `<noscript>` fallback on the preload-to-stylesheet pattern — users with JS disabled never receive the stylesheet
 
 ## See Also
 
 - [Resource Hints](resource-hints.md) — preconnect/preload to accelerate third-party and asset fetches
 - [Code Splitting](code-splitting.md) — reduce JS bundle size before deferring it
-- Reference: [web.dev: Render-blocking resources](https://web.dev/articles/render-blocking-resources)
+- Reference: [web.dev: Render-blocking resources](https://web.dev/learn/performance/understanding-the-critical-path)

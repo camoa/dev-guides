@@ -110,12 +110,12 @@ Reference: `/core/lib/Drupal/Core/Theme/Icon/Plugin/IconPackManager.php`
 
 ## Common Mistakes
 
-- **Wrong**: Not clearing cache after YAML changes → **Right**: Run `drush cr` after every `*.icons.yml` modification; nothing invalidates on file change
-- **Wrong**: Adding `$schema:` to `*.icons.yml` → **Right**: Breaks discovery for the whole site
-- **Wrong**: Case-sensitive icon IDs → **Right**: `home` ≠ `Home`; IDs come straight from filenames with no normalisation
-- **Wrong**: Assuming validation ran → **Right**: Without `justinrainbow/json-schema`, `validateDefinition()` returns TRUE unconditionally
-- **Wrong**: Missing file extensions in patterns → **Right**: Pattern `icons/{icon_id}` matches `{svg,png,gif}`; a wrong explicit extension matches nothing
-- **Wrong**: Debugging in production → **Right**: Enable Twig debug only in development, impacts performance
+- Not clearing cache after YAML changes → Run `drush cr` after every `*.icons.yml` modification; nothing invalidates on file change
+- Adding `$schema:` to `*.icons.yml` → Breaks discovery for the whole site
+- Case-sensitive icon IDs → `home` ≠ `Home`; IDs come straight from filenames with no normalisation
+- Assuming validation ran → Without `justinrainbow/json-schema`, `validateDefinition()` returns TRUE unconditionally
+- Missing file extensions in patterns → Pattern `icons/{icon_id}` matches `{svg,png,gif}`; a wrong explicit extension matches nothing
+- Debugging in production → Enable Twig debug only in development, impacts performance
 
 ## See Also
 

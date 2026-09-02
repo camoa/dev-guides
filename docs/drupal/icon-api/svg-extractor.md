@@ -58,11 +58,11 @@ Reference: `/core/lib/Drupal/Core/Theme/Plugin/IconExtractor/SvgExtractor.php`
 
 ## Common Mistakes
 
-- **Wrong**: Stripping the `<svg>` wrapper from source files → **Right**: The opposite of what is needed. A file containing only `<path/><circle/>` has two root nodes, is not well-formed XML, `simplexml_load_string()` fails, `loadIcon()` returns NULL, and the icon renders nothing. Core's own fixtures (`core/modules/system/tests/modules/icon_test/icons/flat/foo.svg`) are full `<svg>` documents
-- **Wrong**: Hardcoding `viewBox` in the template → **Right**: Print `{{ attributes }}` instead and let the source file's own viewBox through
-- **Wrong**: Missing `xmlns` in template → **Right**: Include `xmlns="http://www.w3.org/2000/svg"` for proper rendering
-- **Wrong**: Trusting the extractor to sanitize → **Right**: It does not. Never point an `svg` pack at user-uploaded files
-- **Wrong**: Expecting recursive discovery → **Right**: `Finder::depth(0)`; use `{group}` or one source entry per directory
+- Stripping the `<svg>` wrapper from source files → The opposite of what is needed. A file containing only `<path/><circle/>` has two root nodes, is not well-formed XML, `simplexml_load_string()` fails, `loadIcon()` returns NULL, and the icon renders nothing. Core's own fixtures (`core/modules/system/tests/modules/icon_test/icons/flat/foo.svg`) are full `<svg>` documents
+- Hardcoding `viewBox` in the template → Print `{{ attributes }}` instead and let the source file's own viewBox through
+- Missing `xmlns` in template → Include `xmlns="http://www.w3.org/2000/svg"` for proper rendering
+- Trusting the extractor to sanitize → It does not. Never point an `svg` pack at user-uploaded files
+- Expecting recursive discovery → `Finder::depth(0)`; use `{group}` or one source entry per directory
 
 ## See Also
 

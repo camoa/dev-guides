@@ -1,5 +1,5 @@
 ---
-description: Filter ECA event triggers by entity type, bundle, or field with wildcard patterns
+description: "Filter ECA event triggers by entity type, bundle, or field with wildcard patterns"
 tldr: "Use entity-aware events when you need to filter event triggers by entity type, bundle, or field name. This enables precise workflow targeting without evaluating every entity operation."
 drupal_version: "11.x"
 ---
@@ -48,6 +48,8 @@ public function buildConfigurationForm(array $form, FormStateInterface $form_sta
   return parent::buildConfigurationForm($form, $form_state);
 }
 
+// ECA aliases the type in its own BaseEvent:
+// use Drupal\eca\Entity\Objects\EcaEvent as EcaEventObject;
 public function generateWildcard(string $eca_config_id, EcaEventObject $ecaEvent): string {
   $config = $ecaEvent->getConfiguration();
   $type = $config['type'] ?? ContentEntityTypes::ALL;
@@ -95,11 +97,11 @@ public static function appliesForWildcard(Event $event, string $event_name, stri
 
 ## Common Mistakes
 
-- **Wrong**: Missing wildcard generation → **Right**: All events trigger regardless of config
-- **Wrong**: Wrong wildcard format → **Right**: Use `entity_type::bundle::field` format
-- **Wrong**: Not checking all candidate patterns in `appliesForWildcard()` → **Right**: Some valid matches fail
-- **Wrong**: Forgetting ContentEntityTypes::ALL constant → **Right**: Can't select "all entities"
-- **Wrong**: Missing field name validation → **Right**: Invalid field names cause silent failures
+- Missing wildcard generation → All events trigger regardless of config
+- Wrong wildcard format → Events never match (use `entity_type::bundle::field` format)
+- Not checking all candidate patterns in `appliesForWildcard()` → Some valid matches fail
+- Forgetting ContentEntityTypes::ALL constant → Can't select "all entities"
+- Missing field name validation → Invalid field names cause silent failures
 
 ## See Also
 
@@ -109,4 +111,4 @@ public static function appliesForWildcard(Event $event, string $event_name, stri
 
 **References:**
 - Core: `/modules/contrib/eca/modules/content/src/Plugin/ECA/Event/ContentEntityEvent.php`
-- Service: `/modules/contrib/eca/modules/content/src/Service/ContentEntityTypes.php`
+- Service: `/modules/contrib/eca/src/Service/ContentEntityTypes.php`

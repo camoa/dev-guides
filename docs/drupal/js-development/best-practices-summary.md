@@ -1,49 +1,40 @@
 ---
-description: JavaScript development standards checklist for Drupal projects
-tldr: "Use as a code review checklist and development standards reference."
+description: "JavaScript development standards checklist for Drupal projects"
+tldr: "Senior-developer review questions and a development standards checklist covering architecture, performance, security, and modern-pattern requirements for Drupal JavaScript."
 drupal_version: "11.x"
 ---
 
 # Best Practices Summary
 
-## When to Use
+## Senior Developer Perspective
 
-> Use as a code review checklist and development standards reference.
-
-## Decision
-
-Senior developers ask these questions when reviewing Drupal JavaScript:
+When reviewing JavaScript in Drupal, ask these questions:
 
 **Architecture**:
-
 - "Why is this not in a behavior?" - Most JS should use Drupal.behaviors
 - "Where's your context parameter?" - Missing context = performance penalty
 - "Where's your once() wrapper?" - Missing once() = memory leaks
 - "Where's your detach()?" - Missing cleanup = memory leaks
 
 **Performance**:
-
 - "Why is this library loaded globally?" - Conditional loading saves bandwidth
 - "Why not use defer?" - Non-blocking load improves page speed
 - "Is this debounced?" - High-frequency events need debounce/throttle
 - "Are you forcing reflows?" - Batch DOM reads/writes
 
 **Security**:
-
 - "Where's the sanitization?" - User input in DOM needs escaping
 - "Why is this in drupalSettings?" - Sensitive data doesn't belong in settings
 - "Is this CSP-compatible?" - No inline handlers, no eval()
 
 **Modern Patterns**:
-
 - "Why jQuery for this?" - Vanilla JS preferred for simple operations
 - "Why not vanilla addEventListener?" - Modern event handling pattern
 - "Is this tested with AJAX?" - Most Drupal JS bugs are AJAX-related
 
-## Pattern
+## Development Standards Checklist
 
 **Every JavaScript file must**:
-
 - [ ] Use IIFE wrapper: `(function (Drupal, once) { })(Drupal, once);`
 - [ ] Declare 'use strict';
 - [ ] Use Drupal.behaviors pattern
@@ -53,7 +44,6 @@ Senior developers ask these questions when reviewing Drupal JavaScript:
 - [ ] Namespace behavior: `Drupal.behaviors.moduleName`
 
 **Every library definition must**:
-
 - [ ] Include version number for cache busting
 - [ ] Declare core/drupal dependency
 - [ ] Declare core/once dependency if using once()
@@ -62,7 +52,6 @@ Senior developers ask these questions when reviewing Drupal JavaScript:
 - [ ] Namespace under module/theme name
 
 **Security requirements**:
-
 - [ ] Sanitize all user input before DOM insertion
 - [ ] Use textContent or Drupal.checkPlain() for user data
 - [ ] Never pass sensitive data in drupalSettings
@@ -71,21 +60,11 @@ Senior developers ask these questions when reviewing Drupal JavaScript:
 - [ ] CSP-compatible patterns only
 
 **Performance requirements**:
-
 - [ ] Conditional loading where possible
 - [ ] Debounce high-frequency events
 - [ ] Batch DOM reads/writes
 - [ ] Test with aggregation enabled
 - [ ] Minimize jQuery dependency
-
-## Common Mistakes
-
-- **Wrong**: Skipping checklist items → **Right**: Verify all requirements
-  - **Why**: Missing patterns create bugs, performance issues, security vulnerabilities
-- **Wrong**: Not reviewing with AJAX enabled → **Right**: Test all functionality with AJAX
-  - **Why**: Most Drupal JS bugs surface with AJAX/BigPipe
-- **Wrong**: Not testing with aggregation → **Right**: Test production configuration
-  - **Why**: Works in dev, breaks in production
 
 ## See Also
 

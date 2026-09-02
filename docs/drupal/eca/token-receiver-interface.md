@@ -1,5 +1,5 @@
 ---
-description: Implement TokenReceiverInterface to preserve event tokens across workflow execution
+description: "Implement TokenReceiverInterface to preserve event tokens across workflow execution"
 tldr: "Implement `TokenReceiverInterface` when your event plugin needs to preserve specific tokens across the entire workflow execution, ensuring token data survives even after actions complete."
 drupal_version: "11.x"
 ---
@@ -67,11 +67,11 @@ class MyEvent extends EventBase implements DataProviderInterface {
 
 ## Common Mistakes
 
-- **Wrong**: Not using TokenReceiverTrait → **Right**: Must implement all methods manually
-- **Wrong**: Implementing interface without preserving tokens → **Right**: Interface has no effect
-- **Wrong**: Preserving all tokens → **Right**: Memory overhead for unused data
-- **Wrong**: Not documenting which tokens survive → **Right**: Other developers don't know what's available
-- **Wrong**: Missing `getData()` implementation → **Right**: Tokens can't be accessed
+- Not using TokenReceiverTrait → Must implement all methods manually
+- Implementing interface without preserving tokens → Interface has no effect
+- Preserving all tokens → Memory overhead for unused data
+- Not documenting which tokens survive → Other developers don't know what's available
+- Missing `getData()` implementation → Tokens can't be accessed
 
 ## See Also
 
@@ -80,5 +80,5 @@ class MyEvent extends EventBase implements DataProviderInterface {
 - [Event Plugin Basics](event-plugin-basics.md) for event structure
 
 **References:**
-- Core: `/modules/contrib/eca/src/Token/TokenReceiverInterface.php`
-- Trait: `/modules/contrib/eca/src/Token/TokenReceiverTrait.php`
+- Core: `/modules/contrib/eca/src/Event/TokenReceiverInterface.php`
+- Trait: `/modules/contrib/eca/src/Event/TokenReceiverTrait.php`

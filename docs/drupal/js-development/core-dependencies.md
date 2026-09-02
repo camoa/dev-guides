@@ -1,6 +1,6 @@
 ---
-description: Essential Drupal core JavaScript library dependencies and when to use them
-tldr: "Use when defining any JavaScript library. Dependencies ensure required code loads first."
+description: "Essential Drupal core JavaScript library dependencies and when to use them"
+tldr: "When defining any JavaScript library, declare exactly what your code needs so Drupal loads dependencies automatically. Gotcha: including jQuery when not needed adds ~30KB unnecessarily."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when defining any JavaScript library. Dependencies ensure required code loads first.
+> When defining any JavaScript library - dependencies ensure required code loads first.
 
 ## Decision
 
@@ -17,7 +17,6 @@ Core provides essential JavaScript libraries. Always declare exactly what your c
 ## Pattern
 
 **Common core dependencies**:
-
 ```yaml
 dependencies:
   - core/drupal          # Required for Drupal.behaviors, Drupal.t()
@@ -30,29 +29,25 @@ dependencies:
 ```
 
 **Specialized dependencies**:
-
 ```yaml
 dependencies:
   - core/drupal.dialog        # Modal dialogs
   - core/drupal.dialog.ajax   # AJAX-loaded dialogs
-  - core/dropbutton           # Admin interface dropbuttons
+  - core/drupal.dropbutton    # Admin interface dropbuttons
   - core/drupal.progress      # Progress indicators
   - core/drupal.states        # Form state management
 ```
 
+**Reference**: View all core libraries at `/core/core.libraries.yml`
+
 ## Common Mistakes
 
-- **Wrong**: Including jQuery when not needed → **Right**: Use vanilla JS instead
-  - **Why**: Adds ~30KB weight unnecessarily
-- **Wrong**: Missing drupal.ajax dependency → **Right**: Declare when using AJAX
-  - **Why**: Drupal.ajax undefined, AJAX features break
-- **Wrong**: Circular dependencies → **Right**: Review dependency chain
-  - **Why**: Unpredictable load order, potential failures
-- **Wrong**: Loading entire jQuery UI → **Right**: Only load specific components needed
-  - **Why**: Massive weight, impacts performance
+- **Including jQuery when not needed** - WHY: Adds ~30KB weight, use vanilla JS instead
+- **Missing drupal.ajax dependency** - WHY: Drupal.ajax undefined, AJAX features break
+- **Circular dependencies** - WHY: Unpredictable load order, potential failures
+- **Loading entire jQuery UI** - WHY: Massive weight, only load specific components needed
 
 ## See Also
 
 - [DOM Manipulation](dom-manipulation.md) - When jQuery is actually needed
 - [AJAX Integration](ajax-integration.md) - AJAX dependency patterns
-- Reference: `/core/core.libraries.yml` - View all core libraries

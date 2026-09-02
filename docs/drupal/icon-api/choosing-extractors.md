@@ -65,12 +65,12 @@ Reference: `/core/lib/Drupal/Core/Theme/Plugin/IconExtractor/` for the three cor
 
 ## Common Mistakes
 
-- **Wrong**: Using `path` for local SVGs → **Right**: `svg` inlines the markup so it can be styled with `currentColor` and needs no extra request
-- **Wrong**: Using `svg` for sprites → **Right**: `svg` reads and inlines each file separately; `svg_sprite` emits one `<use>` reference
-- **Wrong**: Pointing `svg_sprite` at a CDN URL → **Right**: Discovers zero icons, silently. Copy the sprite into the extension instead
-- **Wrong**: Naming a local source `.webp`/`.jpg` → **Right**: Not in `ALLOWED_EXTENSION`; the pack is empty and only a logger warning marks it
-- **Wrong**: Missing `library` for font extractors → **Right**: Font CSS won't load, icons appear as missing glyphs
-- **Wrong**: Custom extractors without caching → **Right**: Cache expensive discovery yourself; nothing in the base class does it for you
+- Using `path` for local SVGs → `svg` inlines the markup so it can be styled with `currentColor` and needs no extra request
+- Using `svg` for sprites → `svg` reads and inlines each file separately; `svg_sprite` emits one `<use>` reference
+- Pointing `svg_sprite` at a CDN URL → Discovers zero icons, silently. Copy the sprite into the extension instead
+- Naming a local source `.webp`/`.jpg` → Not in `ALLOWED_EXTENSION`; the pack is empty and only a logger warning marks it
+- Missing `library` for font extractors → Font CSS won't load, icons appear as missing glyphs
+- Custom extractors without caching → Cache expensive discovery yourself; nothing in the base class does it for you
 
 ## See Also
 

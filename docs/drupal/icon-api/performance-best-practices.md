@@ -105,12 +105,12 @@ Reference: Performance profiling with Webprofiler or Blackfire.
 
 ## Common Mistakes
 
-- **Wrong**: "Sprites cut HTTP requests" → **Right**: Only versus `path`. Versus `svg` a sprite *adds* one request, because `svg` inlines the markup server-side
-- **Wrong**: Duplicate icon IDs across consolidated sources → **Right**: Last source wins, silently
-- **Wrong**: Passing `loading: 'lazy'` to a pack whose template renders `<svg>` → **Right**: The setting is ignored; there is no lazy loading for inline SVG
-- **Wrong**: Not preloading a critical sprite → **Right**: `<link rel="preload" as="image" href="sprite.svg">` for above-fold `svg_sprite` icons
-- **Wrong**: Not minifying SVG sources → **Right**: Run svgo on icon sources before deployment, but keep `viewBox`
-- **Wrong**: Complex extractor logic without caching → **Right**: Cache expensive operations yourself; the base class does nothing
+- "Sprites cut HTTP requests" → Only versus `path`. Versus `svg` a sprite *adds* one request, because `svg` inlines the markup server-side
+- Duplicate icon IDs across consolidated sources → Last source wins, silently
+- Passing `loading: 'lazy'` to a pack whose template renders `<svg>` → The setting is ignored; there is no lazy loading for inline SVG
+- Not preloading a critical sprite → `<link rel="preload" as="image" href="sprite.svg">` for above-fold `svg_sprite` icons
+- Not minifying SVG sources → Run svgo on icon sources before deployment, but keep `viewBox` (see below)
+- Complex extractor logic without caching → Cache expensive operations yourself; the base class does nothing
 
 ## See Also
 

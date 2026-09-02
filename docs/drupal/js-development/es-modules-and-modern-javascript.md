@@ -1,6 +1,6 @@
 ---
-description: Modern ES6+ JavaScript features available in Drupal 10/11 without build process
-tldr: "Use when understanding modern JavaScript features available in Drupal 10/11 and how to use ES6+ syntax."
+description: "Modern ES6+ JavaScript features available in Drupal 10/11 without build process"
+tldr: "Understand modern JavaScript features available in Drupal 10/11: ES6+ syntax works directly in .js files with no build process, since Drupal 10 dropped IE11 support. Gotcha: import/export statements are not fully supported in Drupal's library system yet."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use when understanding modern JavaScript features available in Drupal 10/11 and how to use ES6+ syntax.
+> Understanding modern JavaScript features available in Drupal 10/11 and how to use ES6+ syntax.
 
 ## Decision
 
@@ -19,7 +19,6 @@ drupal_version: "11.x"
 ## Pattern
 
 **Modern JavaScript features available**:
-
 ```javascript
 // Arrow functions
 once('modern', '.element', context).forEach((element) => {
@@ -48,7 +47,6 @@ async function fetchData() {
 ```
 
 **ES Modules** (limited support currently):
-
 ```javascript
 // Import/export not fully supported in Drupal library system yet
 // Use traditional IIFE pattern for now
@@ -58,19 +56,18 @@ async function fetchData() {
 })(Drupal, once);
 ```
 
+**Reference**:
+- https://www.drupal.org/node/3305487 - ES6 directly in .js files
+- https://preston.so/writing/es6-for-drupal-developers-es6-modules-classes-and-promises/ - ES6 patterns
+
 ## Common Mistakes
 
-- **Wrong**: Using import/export statements → **Right**: Use IIFE pattern for now
-  - **Why**: Not fully supported in Drupal library system yet, breaks loading
-- **Wrong**: Arrow functions in IIFE parameters → **Right**: Use standard function syntax
-  - **Why**: Unnecessary, standard function works fine
-- **Wrong**: Assuming all ES2020+ features work → **Right**: Check browser support
-  - **Why**: Browser support varies, test compatibility
-- **Wrong**: Using *.es6.js extension → **Right**: Use .js extension directly
-  - **Why**: Transpilation system removed in Drupal 10
+- **Using import/export statements** - WHY: Not fully supported in Drupal library system yet, breaks loading
+- **Arrow functions in IIFE parameters** - WHY: Unnecessary, standard function works fine
+- **Assuming all ES2020+ features work** - WHY: Browser support varies, check compatibility
+- **Using *.es6.js extension** - WHY: Removed in Drupal 10, use .js directly
 
 ## See Also
 
-- Reference: [ES6 directly in .js files](https://www.drupal.org/node/3305487)
+- Reference: [Drupal 10 JavaScript Dependency Plan](https://www.drupal.org/project/drupal/issues/3238507)
 - Reference: [ES6 for Drupal Developers](https://preston.so/writing/es6-for-drupal-developers-es6-modules-classes-and-promises/)
-- Reference: [JavaScript Dependency Plan](https://www.drupal.org/project/drupal/issues/3238507)

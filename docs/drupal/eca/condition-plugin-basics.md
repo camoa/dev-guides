@@ -1,5 +1,5 @@
 ---
-description: Create custom ECA Condition plugins with ConditionBase for business logic evaluation
+description: "Create custom ECA Condition plugins with ConditionBase for business logic evaluation"
 tldr: "Create custom Condition plugins when you need to evaluate business logic that existing conditions don't support, such as checking external API state, validating complex data structures, or implementing domain-specific rules."
 drupal_version: "11.x"
 ---
@@ -16,7 +16,7 @@ drupal_version: "11.x"
 |----------------|------------|-----|
 | General condition logic | `ConditionBase` | Full control over evaluation logic |
 | Compare two values | `StringComparisonBase` | Built-in comparison operators (equals, contains, regex, etc.) |
-| Check list contents | `ListContainsTrait` + `ConditionBase` | Reusable list checking logic |
+| Check list contents | ECA's own `ListContains` condition, or `ConditionBase` | ECA ships list checking as a condition plugin, not a trait |
 | Negate condition | Any base (use `negationCheck()`) | All conditions support negation |
 
 ## Pattern
@@ -70,11 +70,11 @@ class TokenCheckCondition extends ConditionBase {
 
 ## Common Mistakes
 
-- **Wrong**: Missing `negationCheck()` wrapper in `evaluate()` → **Right**: Negation toggle won't work
-- **Wrong**: Not calling `parent::buildConfigurationForm()` → **Right**: Missing negation checkbox
-- **Wrong**: Returning NULL instead of bool → **Right**: Type errors in strict mode
-- **Wrong**: Complex logic in `evaluate()` → **Right**: Should be in separate methods for testability
-- **Wrong**: Not handling empty/null token values → **Right**: Unexpected failures
+- Missing `negationCheck()` wrapper in `evaluate()` → Negation toggle won't work
+- Not calling `parent::buildConfigurationForm()` → Missing negation checkbox
+- Returning NULL instead of bool → Type errors in strict mode
+- Complex logic in `evaluate()` → Should be in separate methods for testability
+- Not handling empty/null token values → Unexpected failures
 
 ## See Also
 
