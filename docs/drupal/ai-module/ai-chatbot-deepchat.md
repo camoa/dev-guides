@@ -10,6 +10,8 @@ drupal_version: "11.x"
 
 > Use this guide when integrating the DeepChat chatbot frontend with Drupal. Use [AI Assistant API](ai-assistant-api.md) when building the backend assistant logic or custom actions.
 
+The `ai_chatbot` module provides the frontend for AI assistants: blocks, a REST API, and toolbar integration. It uses the [DeepChat](https://deepchat.dev/) web component.
+
 ## Decision
 
 | Situation | Choose | Why |
@@ -20,38 +22,19 @@ drupal_version: "11.x"
 | Reset conversation | `/ajax/chatbot/reset-session/{id}/{thread}` | Flood-protected: 3 resets per session |
 | Custom chat front-end (Slack bot, etc.) | Implement `ChatProcessorInterface` | Stable API contract for any UI to back-end |
 
-## Pattern
+## Dependencies
 
-```javascript
-// 1. Get CSRF token.
-const sessionRes = await fetch('/api/deepchat/session', {
-  method: 'POST',
-  credentials: 'include',
-});
-const csrfToken = await sessionRes.text();
-
-// 2. Send message with token.
-const chatRes = await fetch(`/api/deepchat?token=${csrfToken}`, {
-  method: 'POST',
-  credentials: 'include',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    assistant_id: 'my_assistant',
-    stream: 0,
-    messages: [{ role: 'user', text: 'Hello' }],
-  }),
-});
-const data = await chatRes.json();
-// data.html contains sanitized response.
-```
+- `ai_assistant_api` (required)
+- `league/commonmark` (optional, for Markdown rendering)
 
 ## REST API Endpoints
 
-| Endpoint | Method | Permission |
-|----------|--------|------------|
-| `/api/deepchat/session` | POST | `access deepchat api` |
-| `/api/deepchat` | POST | `access deepchat api` + CSRF |
-| `/ajax/chatbot/reset-session/{id}/{thread}` | POST | `access deepchat api` |
+| Endpoint | Method | Purpose | Permission |
+|----------|--------|---------|------------|
+| `/api/deepchat/session` | POST | Get CSRF token (plain text) | `access deepchat api` |
+| `/api/deepchat` | POST | Send/receive messages | `access deepchat api` + CSRF |
+| `/ajax/chatbot/reset-session/{assistant_id}/{thread_id}` | POST | Reset conversation (flood-protected: 3/session) | `access deepchat api` |
+| `/ajax/chatbot/message-skeleton/{assistant_id}/{thread_id}/{user}` | GET | Get message HTML skeleton | `access deepchat api` |
 
 ## API Request Format
 
@@ -68,43 +51,108 @@ const data = await chatRes.json();
 }
 ```
 
-**Streamed response (SSE):** Each chunk is `data: {"html": "...", "overwrite": true}`. Final chunk includes `"should_continue"`. When `should_continue: true`, the agent called a tool and the frontend automatically re-requests.
+## API Response Format
 
-## Block Settings
+**Non-streamed:**
+
+```json
+{"html": "<p>Response</p>", "should_continue": false}
+```
+
+**Streamed (SSE):**
+
+```
+data: {"html": "<p>partial</p>", "overwrite": true}\n\n
+```
+
+Each SSE chunk is a `data:` line with JSON containing `html` (the accumulated HTML so far) and `overwrite: true` (the client replaces the previous content rather than appending). The final chunk includes `should_continue`.
+
+`should_continue: true` means the assistant called a tool and needs another round-trip — the frontend automatically re-requests.
+
+## Authentication Flow (for decoupled frontends)
+
+```javascript
+// 1. Get CSRF token
+const sessionRes = await fetch('/api/deepchat/session', {
+  method: 'POST',
+  credentials: 'include',
+});
+const csrfToken = await sessionRes.text();
+
+// 2. Send message with token
+const chatRes = await fetch(`/api/deepchat?token=${csrfToken}`, {
+  method: 'POST',
+  credentials: 'include',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    assistant_id: 'my_assistant',
+    stream: 0,
+    messages: [{ role: 'user', text: 'Hello' }],
+  }),
+});
+const data = await chatRes.json();
+// data.html contains sanitized response
+```
+
+## Block Configuration (`ai_deepchat_block`)
 
 | Setting | Type | Description |
 |---------|------|-------------|
 | `ai_assistant` | string | Assistant entity ID |
+| `bot_name` | string | Display name |
+| `bot_image` | text | Avatar URL |
+| `first_message` | text | Initial bot greeting |
 | `stream` | integer | Enable SSE streaming |
 | `placement` | string | `sticky`, `toolbar`, or inline |
 | `toggle_state` | string | `remember`, `open`, `close` |
-| `verbose_mode` | boolean | Show intermediate agent steps |
-| `show_structured_results` | boolean | Show action results under messages |
+| `width` / `height` | string | CSS dimensions |
 | `style_file` | string | Custom DeepChat YAML theme path |
+| `show_structured_results` | boolean | Show action results under messages |
+| `show_copy_icon` | boolean | Copy button per message |
+| `verbose_mode` | boolean | Show intermediate agent steps |
 
 ## XSS Sanitization
 
-All LLM output is sanitized with `Xss::filter()`. Allowed tags: `<a>`, `<b>`, `<br>`, `<code>`, `<em>`, headings, `<li>`, `<ol>`, `<p>`, `<pre>`, `<span>`, `<strong>`, `<table>` elements, `<ul>`, `<img>`, `<details>`, `<summary>`.
+The `DeepChatApi` controller sanitizes all LLM output with `Xss::filter()`, allowing only safe HTML tags: `<a>`, `<b>`, `<br>`, `<code>`, `<em>`, `<h1>`-`<h6>`, `<hr>`, `<i>`, `<li>`, `<ol>`, `<p>`, `<pre>`, `<span>`, `<strong>`, `<table>`, `<td>`, `<th>`, `<tr>`, `<ul>`, `<img>`, `<details>`, `<summary>`. All other HTML is stripped.
 
-## ChatProcessor Plugins (New in 1.4)
+## Toolbar Integration
 
-`ChatProcessorInterface` (`#[ChatProcessor]` attribute, manager `plugin.manager.ai.chat_processor`) is the stable contract between any chat UI and the Drupal-side generation logic. It lets contrib ship alternative chat frontends (e.g., Slack bot, CLI) against a consistent API without coupling to the DeepChat block.
+When a DeepChat block is placed with `placement: toolbar`, the module implements `hook_toolbar()` to add a toolbar tray. The `ChatbotHooks` service handles toolbar, topbar, and theme suggestions. The toolbar variant uses the `ai-deepchat--toolbar.html.twig` template and the `toolbar.yml` style file.
 
-Key methods: `setInput(ChatInput)` / `getInput()`, `setOutput(ChatOutput)` / `getOutput()`, `doExecute(): ChatOutput` (custom processing logic), `execute(): ChatOutput` (validates input, calls `doExecute()`, stores output). Extend `ChatProcessorBase` (`Drupal\ai\Base\ChatProcessorBase`) rather than implementing the interface directly.
+## DeepChat Theme Files
+
+Place `.yml` files in `{theme}/deepchat_styles/` or `{module}/deepchat_styles/`. Bundled: `bard.yml`, `bing.yaml`, `chatgpt.yml`, `toolbar.yml`.
 
 ## Hooks
 
 ```php
 hook_deepchat_settings(array &$deepchat_settings)  // Alter DeepChat component attributes
 hook_deepchat_buttons_alter(array &$buttons)        // Add/alter per-message buttons
-hook_deepchat_prepend_message($message, $type, $assistant_id, $thread_id)
+hook_deepchat_prepend_message($message, $type, $assistant_id, $thread_id) // Prepend to responses
 ```
+
+## Setup Steps
+
+1. Enable `ai_chatbot` (enables `ai_assistant_api` automatically)
+2. Install `league/commonmark` for Markdown rendering
+3. Create an assistant at `/admin/config/ai/ai-assistant`
+4. Place the "AI DeepChat Chatbot" block; select assistant, configure placement
+5. Grant `access deepchat api` to relevant roles
+6. Toolbar button appears automatically when block is placed
+
+## ChatProcessor Plugins (New in 1.4)
+
+`ChatProcessorInterface` (`#[ChatProcessor]` plugin type, manager `plugin.manager.ai.chat_processor`) is the contract between a conversational UI and whatever generates the reply — usually an AI assistant/agent, but it can be any custom logic (naive RAG, an ECA flow, a remote command). It lets contrib ship alternative chat front-ends (e.g. a Slack bot) against a stable Drupal-side API.
+
+Key methods: `setInput(ChatInput)` / `getInput()`, `setOutput(ChatOutput)` / `getOutput()`, `doExecute(): ChatOutput` (the processing logic), `execute(): ChatOutput` (validates input, calls `doExecute()`, stores the output), plus thread-ID management. Extend `ChatProcessorBase` (`Drupal\ai\Base\ChatProcessorBase`) rather than implementing the interface directly.
 
 ## Common Mistakes
 
-- **Wrong**: Calling API without `credentials: 'include'` → **Right**: Session-based history requires cookies
-- **Wrong**: Missing CSRF token in request → **Right**: Fetch token from `/api/deepchat/session` first
-- **Wrong**: Building infinite retry on reset → **Right**: Flood protection allows only 3 resets per session
+| Mistake | Why it's wrong |
+|---------|---------------|
+| Using WebFetch from frontend | Must use proper REST API with CSRF token |
+| Not including `credentials: 'include'` | Session-based history requires cookies |
+| Forgetting flood protection on reset | 3 attempts per session — design UI accordingly |
 
 ## See Also
 

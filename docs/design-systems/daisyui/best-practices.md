@@ -9,90 +9,91 @@ tldr: "Code review, architecture decisions, and onboarding guidance for DaisyUI 
 
 > Code review, architecture decisions, and onboarding guidance for DaisyUI projects.
 
-## Decision
+## When DaisyUI Classes Beat Raw Utilities
 
-| Situation | Use DaisyUI class | Use Tailwind utility |
-|-----------|-------------------|----------------------|
-| Multi-theme color | Always | Never for semantic colors |
-| Interactive states (hover, focus, disabled) | `.btn` handles all | Too many utilities to replicate |
-| Layout and spacing | No DaisyUI equivalent | `mt-4 px-6 grid grid-cols-2` |
-| One-off customization | DaisyUI sets the base | Utilities add adjustments |
+Use DaisyUI component classes when:
 
-## Pattern
+- **You want multi-theme support** — one `btn btn-primary` automatically adapts to all 35 themes; raw Tailwind `bg-blue-600` does not
+- **Interactive states are complex** — `.btn` handles hover, focus-visible, active, disabled, and even print styles. Recreating this in utilities is dozens of lines
+- **Consistency matters more than control** — DaisyUI's visual language is deliberately consistent. Teams spend less time debating border-radius, padding, and typography
 
-**Prefer DaisyUI when multi-theme matters:**
+Use raw Tailwind utilities when:
+
+- **Layout and spacing** — `mt-4 px-6 grid grid-cols-2` — DaisyUI has no layout utilities
+- **One-off customization** — DaisyUI classes define the component; utilities add project-specific adjustments
+- **Override a DaisyUI default** — `card w-full` where `w-full` is the override
 
 ```html
 <!-- RIGHT — adapts to all 35 themes automatically -->
 <button class="btn btn-primary">Submit</button>
 <div class="bg-base-100 text-base-content">Content</div>
-```
 
-**Use Tailwind for layout, DaisyUI for semantics:**
-
-```html
+<!-- Tailwind for layout, DaisyUI for semantics -->
 <button class="btn btn-primary mt-4 w-full max-w-xs">Submit</button>
 ```
 
-## Anti-Patterns
-
-**`@apply` with DaisyUI component classes:**
+## Anti-Pattern: Using `@apply` for DaisyUI Component Classes
 
 ```css
-/* WRONG — inlines CSS at build time; btn-ghost/btn-outline modifiers stop working */
+/* WRONG — this inlines the CSS at build time */
 .my-button { @apply btn btn-primary; }
 
-/* RIGHT — use the class directly in HTML/JSX */
+/* Why it's wrong: .my-button can't be combined with btn-ghost, btn-outline etc.
+   The component modifiers no longer work because the CSS has been extracted */
 ```
+
 ```html
+<!-- RIGHT — use the class directly in HTML/JSX -->
 <button class="btn btn-primary">Click</button>
 ```
 
-**Overriding with `!important`:**
+## Anti-Pattern: Overriding DaisyUI with `!important`
 
 ```css
 /* WRONG */
 .btn { background-color: red !important; }
 
-/* RIGHT — match the DaisyUI layer */
+/* RIGHT — match the layer */
 @layer daisyui.l1.l2 { .btn { --btn-color: var(--color-error); } }
 ```
 
-**Hardcoding theme-specific colors:**
+## Anti-Pattern: Hardcoding Theme-Specific Colors in Utilities
 
 ```html
-<!-- WRONG — breaks on dark theme or any theme switch -->
+<!-- WRONG — breaks on dark theme, breaks on theme switch -->
 <div class="bg-white text-gray-900">
 
-<!-- RIGHT — semantic colors change with theme -->
+<!-- RIGHT — uses DaisyUI semantic colors that change with theme -->
 <div class="bg-base-100 text-base-content">
 ```
 
-**Checkbox tricks in React:**
+## Anti-Pattern: Using DaisyUI Interactive Patterns (Checkbox Tricks) in React State-Managed Components
 
 ```tsx
-// WRONG — hidden checkbox is hard to control in React's virtual DOM
-<input type="checkbox" id="modal-toggle" className="modal-toggle" />
+// WRONG — hidden checkbox inside React is hard to control
+<input type="checkbox" id="modal-toggle" class="modal-toggle" />
 
-// RIGHT — use state and class toggling
+// RIGHT — use JS state and class toggling
 const [open, setOpen] = useState(false);
 <div className={cn("modal", open && "modal-open")}>
 ```
 
 ## Performance
 
-- **CSS output size:** DaisyUI adds ~50KB minified CSS. Fixed cost regardless of components used. Use `exclude:` to trim unused components
-- **Theme count:** Each theme adds ~25 CSS variable declarations. 35 themes = negligible CSS but adds build time noise — only include themes you use
-- **Animation:** DaisyUI uses CSS transitions, not JS. All animations respect `prefers-reduced-motion` via `@media (prefers-reduced-motion: no-preference)`
+- **CSS output size:** DaisyUI adds ~50KB minified CSS. For CSS-only usage, this is fixed cost regardless of how many components you use. With `exclude:` option, trim unused components
+- **Theme count:** Each additional theme adds ~25 CSS variable declarations. 35 themes adds negligible CSS but increases build time. Only include themes you use
+- **Animation:** DaisyUI uses CSS transitions (not JS). All animations respect `prefers-reduced-motion` via `@media (prefers-reduced-motion: no-preference)`
 
-## Team Conventions
+## Consistency Rules
 
-1. **Color discipline:** Only use DaisyUI semantic colors for semantic meaning — never `text-red-500` when you mean "error state"
-2. **Size discipline:** Use component size modifiers (`btn-sm`, `input-lg`) rather than overriding font-size or height with utilities
-3. **Multi-library prefix:** If using DaisyUI alongside Flowbite or Material UI, enable `prefix: "d-"` option
+Establish these team conventions to prevent visual inconsistency:
+
+1. **Color discipline:** Only use DaisyUI semantic colors (`text-primary`, `bg-error`) for semantic meaning. Never apply `text-red-500` when you mean "error state"
+2. **Size scale discipline:** Use component size modifiers (`btn-sm`, `input-lg`) rather than overriding font-size or height with utilities
+3. **Don't mix component libraries** without prefixes — if using both DaisyUI and Flowbite/Material UI, enable DaisyUI's `prefix` option
 
 ## See Also
 
 - [Customization Patterns](customization-patterns.md)
 - [DaisyUI and React](daisyui-react.md)
-- Reference: `design-system-tailwind.md` Section 13 — Tailwind best practices
+- Reference: `design-system-tailwind.md` Section 13 — Tailwind best practices and anti-patterns

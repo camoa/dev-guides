@@ -3,12 +3,10 @@ description: "Source references and maintenance manifest for the views guides â€
 ---
 
 # Sources & Maintenance
-## 33. Sources & Maintenance Manifest
 
-### Drupal Research Install
-Path: /home/camoa/workspace/contrib/web
-
-### Web Sources
+## Drupal Research Install
+Claims here were checked against a local Drupal install of core and the modules named below, rather than quoted from documentation.
+## Web Sources
 | Source | URL | Guide Sections | Last Verified |
 |--------|-----|----------------|---------------|
 | Configuration Schema/Metadata | https://www.drupal.org/docs/drupal-apis/configuration-api/configuration-schemametadata | 2, 17 | 2026-02-14 |
@@ -32,7 +30,7 @@ Path: /home/camoa/workspace/contrib/web
 | Views Sort Handler Plugins API | https://api.drupal.org/api/drupal/core!modules!views!src!Plugin!views!sort!SortPluginBase.php/group/views_sort_handlers/8.9.x | 22 | 2026-02-14 |
 | Views Argument Handler Plugins API | https://api.drupal.org/api/drupal/core!modules!views!src!Plugin!views!argument!ArgumentPluginBase.php/group/views_argument_handlers/8.9.x | 23 | 2026-02-14 |
 
-### Code Sources
+## Code Sources
 | Module | Relative Path | Guide Sections | Drupal Version |
 |--------|---------------|----------------|----------------|
 | Views | core/modules/views/ | 1-5, 7-32 | 11.x |
@@ -42,3 +40,11 @@ Path: /home/camoa/workspace/contrib/web
 | User | core/modules/user/ | 23, 32 | 11.x |
 | Taxonomy | core/modules/taxonomy/ | 21, 28, 32 | 11.x |
 
+<!-- END PARTITION: sources-maintenance -->
+
+---
+
+**End of Guide**
+**Last Updated:** 2026-02-14
+**Drupal Version:** 11.x
+**Guide Focus:** Views configuration via YAML, programmatic modification, custom plugin development (handlers, displays, styles, caching), and best practices

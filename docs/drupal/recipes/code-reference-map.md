@@ -9,7 +9,9 @@ drupal_version: "11.x"
 
 > Use this reference when you need to locate core recipe classes for debugging, extending, or understanding recipe internals.
 
-## Decision
+Quick reference to key recipe system classes and their locations.
+
+## Items: Core Classes by Subsystem
 
 ### Recipe Core
 
@@ -59,13 +61,13 @@ drupal_version: "11.x"
 
 ## Common Mistakes
 
-- **Wrong**: Looking for recipe classes in modules → **Right**: All recipe code is in core `lib/Drupal/Core/`
-- **Wrong**: Extending Recipe class → **Right**: Recipe is final; compose via `recipes:` key instead
-- **Wrong**: Implementing config actions outside plugin system → **Right**: Use ConfigActionPluginInterface and attributes
-- **Wrong**: Not understanding default content is core → **Right**: Default content API is not contrib; shipped in core 10.3+
-- **Wrong**: Assuming recipe classes are services → **Right**: Most are static or value objects; RecipeRunner uses static methods
+- Looking for recipe classes in modules → All recipe code is in core `lib/Drupal/Core/`
+- Extending Recipe class → Recipe is final; compose via `recipes:` key instead
+- Implementing config actions outside plugin system → Use ConfigActionPluginInterface and attributes
+- Not understanding default content is core → Default content API is not contrib; shipped in core 10.3+
+- Assuming recipe classes are services → Most are static or value objects; RecipeRunner uses static methods
 
 ## See Also
 
-- [Security & Performance](security-performance.md)
-- Reference: `core/recipes/` directory in Drupal core
+- Previous: ← [Security & Performance](security-performance.md)
+- Next: [Sources & Maintenance Manifest](sources-maintenance.md) →

@@ -1,5 +1,5 @@
 ---
-description: Salesforce performance — caching strategy, queue processing for high volume, API call optimization for push and pull
+description: "Salesforce performance — caching strategy, queue processing for high volume, API call optimization for push and pull"
 tldr: "Optimize Salesforce sync performance when experiencing high API usage, slow entity saves, or large queue backlogs. The primary levers are: caching object metadata, async queue processing, and selective field/record queries."
 drupal_version: "11.x"
 ---
@@ -20,39 +20,48 @@ drupal_version: "11.x"
 | Repeated schema inspection | Metadata is cached — do not disable caching |
 | High pull frequency | Increase `pull_frequency` to rate-limit API calls |
 
-## Pattern
+## Caching
 
-**Cache keys and lifetimes:**
-```
-salesforce:objects          — object list (short_term_cache_lifetime, default 300s)
-salesforce:object:[name]    — single object metadata (300s)
-salesforce:versions         — API versions (long_term_cache_lifetime, default 86400s)
-salesforce:record_types     — record types (300s)
+**Object Metadata:**
+- Cache: `salesforce:objects`, `salesforce:object:[name]`
+- Lifetime: `short_term_cache_lifetime` (default: 300s)
+- Clear: `drush cache:rebuild` or Salesforce admin UI
 
-Clear: drush cache:rebuild  OR via /admin/config/salesforce
-```
+**API Versions:**
+- Cache: `salesforce:versions`
+- Lifetime: `long_term_cache_lifetime` (default: 86400s)
 
-**High-volume push configuration:**
-```
-async = TRUE on all mappings
-standalone endpoints with custom scheduling (higher frequency than cron)
-global_push_limit and push_limit tuned to API limits
-Monitor: drush queue:list → salesforce_push
-```
+**Record Types:**
+- Cache: `salesforce:record_types`
+- Lifetime: `short_term_cache_lifetime`
 
-**Pull query optimization:**
-```
-Use specific field lists (never use wildcard)
-Implement pull_trigger_date for incremental sync
-Set pull_where_clause to limit records
-Avoid subqueries in PULL_QUERY event unless necessary
-```
+## Queue Processing Strategy
 
-**API call efficiency:**
-- Batch queue processing vs real-time (`async = TRUE`)
-- Use upsert when appropriate (one call vs two for create+update)
-- Minimize field mappings — only map fields you actually need
-- Use `pull_record_type_filter` to reduce pull volume for multi-RecordType objects
+**High Volume Sites:**
+- Enable `async = TRUE` on all mappings
+- Use standalone endpoints with custom scheduling
+- Increase `global_push_limit` and `push_limit`
+- Monitor queue size and API limits
+
+**Low Latency Requirements:**
+- Use `async = FALSE` for critical mappings
+- Accept blocking during entity save
+- Implement retry logic via `PUSH_FAIL` event
+
+## API Call Optimization
+
+**Pull Queries:**
+- Use specific field lists (not SELECT *)
+- Implement WHERE clauses to limit records
+- Use pull_trigger_date for incremental sync
+- Avoid unnecessary subqueries
+
+**Push Operations:**
+- Batch queue processing vs real-time
+- Use upsert when appropriate
+- Minimize field mappings to required fields
+
+Also worth applying: use `pull_record_type_filter` to reduce pull volume for multi-RecordType objects.
 
 ## Common Mistakes
 

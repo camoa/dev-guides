@@ -10,7 +10,9 @@ drupal_version: "11.x"
 
 > Apply these practices when creating recipes to ensure maintainability, reusability, and testability.
 
-## Decision
+Follow these patterns to create maintainable, reusable, testable recipes.
+
+## Decision: Practices and When to Apply Them
 
 | Practice | When to Apply | Why |
 |----------|---------------|-----|
@@ -22,10 +24,9 @@ drupal_version: "11.x"
 | Testing on clean installs | Validating recipes | Catches missing dependencies and strict mode issues |
 | Semantic naming | Organizing recipes | `{feature}_{entity_type}_recipe` pattern (article_content_type, not article_recipe) |
 
-## Pattern
+## Pattern: Layered Composition and Action-vs-Import
 
-Layered composition (base → feature → site):
-
+**Layered composition** — Base → feature → site pattern:
 ```yaml
 # base_role recipe
 name: 'Base Role'
@@ -51,8 +52,7 @@ recipes:
   - content_permissions
 ```
 
-Config action vs import decision:
-
+**Config action vs import decision**:
 ```yaml
 # Use import for static config
 config:
@@ -70,15 +70,15 @@ config:
 
 ## Common Mistakes
 
-- **Wrong**: Creating monolithic recipes → **Right**: Hard to test, hard to reuse, hard to maintain
-- **Wrong**: Hardcoding environment-specific values → **Right**: Site names, API keys, theme names should be inputs
-- **Wrong**: Using `strict: true` everywhere → **Right**: Prevents applying to existing sites; use selectively for schema (fields)
-- **Wrong**: Not documenting recipe dependencies → **Right**: README should explain what recipe does and what it depends on
-- **Wrong**: Skipping clean install testing → **Right**: Recipe may work on dev site but fail on production clean install
-- **Wrong**: Over-using config imports → **Right**: Config actions are more flexible; import only truly static config
-- **Wrong**: Not versioning recipes → **Right**: Use Git tags and semantic versioning; communicate breaking changes
+- Creating monolithic recipes → Hard to test, hard to reuse, hard to maintain
+- Hardcoding environment-specific values → Site names, API keys, theme names should be inputs
+- Using `strict: true` everywhere → Prevents applying to existing sites; use selectively for schema (fields)
+- Not documenting recipe dependencies → README should explain what recipe does and what it depends on
+- Skipping clean install testing → Recipe may work on dev site but fail on production clean install
+- Over-using config imports → Config actions are more flexible; import only truly static config
+- Not versioning recipes → Use Git tags and semantic versioning; communicate breaking changes
 
 ## See Also
 
-- [Core Recipes Catalog](core-recipes-catalog.md)
-- [Anti-Patterns & Common Mistakes](anti-patterns-mistakes.md)
+- Previous: ← [Core Recipes Catalog](core-recipes-catalog.md)
+- Next: [Anti-Patterns & Common Mistakes](anti-patterns-mistakes.md) →

@@ -10,6 +10,8 @@ drupal_version: "11.x"
 
 > Use this guide when handling errors from AI provider calls. Always catch specific exceptions before the generic `AiExceptionInterface`.
 
+All AI exceptions implement `AiExceptionInterface` (extends `\Throwable`). Catch this interface to handle any AI-specific error generically.
+
 ## Decision
 
 | Situation | Choose | Why |
@@ -49,24 +51,21 @@ try {
 | `AiBadRequestException` | Malformed request, missing model ID, client invocation error, or unclassified provider error |
 | `AiRateLimitException` | Provider reports rate limiting |
 | `AiQuotaException` | Provider reports exhausted credits/quota |
-| `AiAccessDeniedException` | Provider denies access (e.g., model-level restriction) |
+| `AiAccessDeniedException` | Provider denies access even though setup is correct (e.g., model-level restriction) |
 | `AiRequestErrorException` | Request structure error or generic request failure |
 | `AiResponseErrorException` | Unexpected or malformed provider response |
-| `AiSetupFailureException` | Bad API key, misconfigured endpoint |
-| `AiMissingFeatureException` | Feature not supported by provider |
+| `AiSetupFailureException` | Known provider setup is broken (bad API key, misconfigured endpoint) |
+| `AiMissingFeatureException` | Requested feature not supported by provider (e.g., streaming on non-streaming provider) |
 | `AiUnsafePromptException` | Content moderation or guardrail blocked the prompt |
-| `AiBrokenOutputException` | Input or output corrupted (e.g., guardrail rewrite produced invalid data) |
+| `AiBrokenOutputException` | Input or output corrupted by manipulation (e.g., guardrail rewrite produced invalid data) |
 | `AiOperationTypeMissingException` | Called an operation type the provider doesn't implement |
 | `AiToolsValidationException` | Tool/function call validation failed |
 | `AiFunctionCallingExecutionError` | Error during tool/function execution |
 | `ChunkingTooSmallException` | Text chunk smaller than minimum constraints (embedding strategy) |
 
-## ProviderProxy Re-throw Behavior
+## ProviderProxy Exception Handling
 
-`ProviderProxy` catches provider exceptions and re-throws with logging:
-- `AiResponseErrorException`, `AiMissingFeatureException`, `AiQuotaException`, `AiRateLimitException`, `AiUnsafePromptException`, `AiRequestErrorException` — re-thrown as-is
-- `ClientExceptionInterface` (PSR HTTP) — wrapped in `AiBadRequestException`
-- Any other `\Exception` — wrapped in `AiRequestErrorException`
+The `ProviderProxy` catches exceptions from provider calls and re-throws them with logging. Specific types (`AiResponseErrorException`, `AiMissingFeatureException`, `AiQuotaException`, `AiRateLimitException`, `AiUnsafePromptException`, `AiRequestErrorException`) are re-thrown as-is. `ClientExceptionInterface` (PSR HTTP) is wrapped in `AiBadRequestException`. Any other `\Exception` is wrapped in `AiRequestErrorException`.
 
 **Changed in 1.4:** Before re-throwing, the proxy dispatches `AiExceptionEvent`. Subscribers can inject a forced recovery output via `setForcedOutputObject()` — the proxy uses this instead of re-throwing. See [Events System](events-system.md).
 

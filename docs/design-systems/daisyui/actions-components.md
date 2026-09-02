@@ -7,9 +7,9 @@ tldr: "Interactive elements that trigger actions: buttons, dropdowns, modals, an
 
 ## When to Use
 
-> Interactive elements that trigger actions: buttons, dropdowns, modals, and content swap toggles.
+> Interactive elements that trigger actions: buttons, dropdowns, modals, and swap.
 
-## Decision
+## Decision: Which Action Component
 
 | Component | Class | Use for |
 |-----------|-------|---------|
@@ -18,9 +18,29 @@ tldr: "Interactive elements that trigger actions: buttons, dropdowns, modals, an
 | Modal | `.modal` | Overlay dialogs |
 | Swap | `.swap` | Toggle between two visual states |
 
-## Pattern
+## .btn — Button
 
-### .btn — Button
+**Description:** Primary interactive element. Highly configurable via modifier classes.
+
+**Modifiers:**
+
+| Class | Effect |
+|-------|--------|
+| `btn-primary` `btn-secondary` `btn-accent` `btn-neutral` `btn-info` `btn-success` `btn-warning` `btn-error` | Semantic color |
+| `btn-ghost` | Transparent, no background until hover |
+| `btn-link` | Styled as hyperlink with underline |
+| `btn-outline` | Border + text color only, fills on hover |
+| `btn-dash` | Dashed border variant |
+| `btn-soft` | Muted/tinted background, less emphasis than solid |
+| `btn-xs` `btn-sm` `btn-md` `btn-lg` `btn-xl` | Size scale |
+| `btn-square` | Equal width/height (icon buttons) |
+| `btn-circle` | Circular icon button |
+| `btn-wide` | Max 16rem width |
+| `btn-block` | Full width |
+| `btn-active` | Force active state appearance |
+| `btn-disabled` | Disabled styling (use `:disabled` attr for real disable) |
+
+**Usage Example:**
 
 ```html
 <button class="btn btn-primary btn-lg">Save Changes</button>
@@ -32,12 +52,26 @@ tldr: "Interactive elements that trigger actions: buttons, dropdowns, modals, an
 </button>
 ```
 
-**Color modifiers:** `btn-primary` `btn-secondary` `btn-accent` `btn-neutral` `btn-info` `btn-success` `btn-warning` `btn-error`
-**Style modifiers:** `btn-ghost` `btn-link` `btn-outline` `btn-dash` `btn-soft`
-**Size modifiers:** `btn-xs` `btn-sm` `btn-md` `btn-lg` `btn-xl`
-**Shape modifiers:** `btn-square` `btn-circle` `btn-wide` `btn-block`
+**Gotchas:**
 
-### .dropdown — Dropdown
+- `btn-disabled` only adds visual styles — it does NOT set `disabled` attribute. Always add both `class="btn btn-disabled"` AND `disabled` attribute for real form buttons
+- `btn-link` text color is `--color-primary` by default — pair with color modifiers for other colors: `btn-link btn-error`
+- `btn` works on `<a>`, `<button>`, `<input type="submit">` equally
+
+## .dropdown — Dropdown
+
+**Description:** Positional container for dropdown menus. CSS-only by default; no JavaScript required.
+
+**Modifiers:**
+
+| Class | Effect |
+|-------|--------|
+| `dropdown-top` `dropdown-bottom` `dropdown-left` `dropdown-right` | Position direction |
+| `dropdown-start` `dropdown-center` `dropdown-end` | Alignment within direction |
+| `dropdown-hover` | Open on hover instead of focus/click |
+| `dropdown-open` | Force open state |
+
+**Required structure:**
 
 ```html
 <div class="dropdown">
@@ -49,9 +83,17 @@ tldr: "Interactive elements that trigger actions: buttons, dropdowns, modals, an
 </div>
 ```
 
-Position modifiers: `dropdown-top` `dropdown-bottom` `dropdown-left` `dropdown-right` + `dropdown-hover` `dropdown-open`
+**Gotchas:**
 
-### .modal — Modal Dialog
+- `tabindex="0"` on the trigger is required for CSS-only focus-based opening
+- The `.menu` class inside `.dropdown-content` gives the list styling
+- For React/JS-controlled dropdowns, use `dropdown-open` class toggled programmatically instead of relying on focus state
+
+## .modal — Modal Dialog
+
+**Description:** Full-screen overlay dialog. Supports CSS-only (checkbox), anchor (`#id`), and JS (`.modal-open`) activation methods.
+
+**Required structure:**
 
 ```html
 <!-- CSS-only checkbox method -->
@@ -70,7 +112,17 @@ Position modifiers: `dropdown-top` `dropdown-bottom` `dropdown-left` `dropdown-r
 </div>
 ```
 
-### .swap — Toggle Between Two States
+**Position modifiers:** `modal-top` `modal-middle` `modal-bottom` `modal-start` `modal-end`
+
+**Gotchas:**
+
+- The `.modal-backdrop` click-outside-to-close requires the backdrop element with `for` attribute matching the toggle
+- For `<dialog>` element usage: `<dialog class="modal">` opened via `dialog.showModal()` — the `[open]` attribute triggers DaisyUI's open state styles
+- `z-index: 999` — stacks above most content, but below browser UI
+
+## .swap — Swap Toggle
+
+**Description:** Toggles between two elements using a hidden checkbox. Common use: sun/moon dark mode toggle icons.
 
 ```html
 <label class="swap swap-rotate">
@@ -80,17 +132,19 @@ Position modifiers: `dropdown-top` `dropdown-bottom` `dropdown-left` `dropdown-r
 </label>
 ```
 
+`swap-rotate` `swap-flip` control the animation style.
+
 ## Common Mistakes
 
-- **Wrong**: Using `btn-disabled` without the `disabled` attribute — **Right**: Add both `class="btn btn-disabled"` AND `disabled` attribute; the class only adds visual styles
-- **Wrong**: Dropdown without `tabindex="0"` on trigger — **Right**: `tabindex="0"` is required for CSS-only focus-based opening
-- **Wrong**: Modal without `role="dialog"` — **Right**: DaisyUI applies visual styles but NOT ARIA roles; add `role="dialog"` manually
-- **Wrong**: CSS-only modal for focus-critical flows — **Right**: CSS-only modal does not trap focus; use `<dialog>` element with `showModal()` or Radix UI Dialog
+- Modals with `pointer-events: none` on closed state — if modal is not closing, check for missing `modal-toggle` id/for pair
+- Dropdown not closing on mobile — add `tabindex="-1"` focus trap or use JS-controlled version
+- Missing `role="dialog"` on modal — DaisyUI applies visual styles but NOT ARIA roles automatically
 
 ## See Also
 
+- [Data Input Components](data-input-components.md) — form inputs
 - [Security and Accessibility](security-accessibility.md)
-- [Data Input Components](data-input-components.md)
+- Reference: `react-design-system.md` Section 7 — dialog/modal patterns in React
 - Reference: `node_modules/daisyui/components/button/object.js`
 - Reference: `node_modules/daisyui/components/modal/object.js`
 - Reference: `node_modules/daisyui/components/dropdown/object.js`

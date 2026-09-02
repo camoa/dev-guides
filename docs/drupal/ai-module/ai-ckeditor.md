@@ -10,6 +10,8 @@ drupal_version: "11.x"
 
 > Use this guide when adding AI text-generation capabilities to CKEditor 5. Use [AI Automators](ai-automators.md) for field-level automation outside the editor.
 
+The `ai_ckeditor` module adds AI text-generation capabilities to CKEditor 5 via a sparkle toolbar button. Each operation is a PHP plugin — no JavaScript authoring needed.
+
 ## Decision
 
 | Situation | Choose | Why |
@@ -34,7 +36,10 @@ use Drupal\ai_ckeditor\AiCKEditorPluginBase;
 final class MyPlugin extends AiCKEditorPluginBase {
 
   public function buildCkEditorModalForm(array $form, FormStateInterface $form_state, Editor $editor): array {
-    $form['prompt'] = ['#type' => 'textarea', '#title' => $this->t('Instructions')];
+    $form['prompt'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Instructions'),
+    ];
     return $form;
   }
 
@@ -63,20 +68,34 @@ final class MyPlugin extends AiCKEditorPluginBase {
 | `ai_ckeditor_translate` | Translate selected text |
 | `ai_ckeditor_reformat_html` | Reformat HTML structure |
 | `ai_ckeditor_modify_prompt` | Modify with custom prompt |
-| `ai_automators_ckeditor` | Run AutomatorChain workflows |
+| `ai_ckeditor_help` | Help/documentation |
+| `ai_automators_ckeditor` | Run AutomatorChain workflows (from `ai_automators`) |
+
+The `ai_automators_ckeditor` plugin (provided by `ai_automators`, not `ai_ckeditor`) exposes AutomatorChains as CKEditor operations. It supports configurable inputs, write modes (append/prepend/replace), and require-selection options.
+
+## Plugin Attribute: `module_dependencies`
+
+The `#[AiCKEditor]` attribute has an optional `module_dependencies` array. If specified, the plugin only appears when those modules are installed. For example, `ai_ckeditor_tone` declares `module_dependencies: ['taxonomy']`.
+
+## AJAX Command: AiRequestCommand
+
+The `AiRequestCommand` is a custom AJAX command that triggers the streamed AI request from the dialog form's "Generate" button. It passes the prompt, editor ID, plugin ID, and target wrapper to the JS handler, which initiates the streaming request to `/api/ai-ckeditor/request/{editor}/{plugin}` and renders the response progressively.
+
+## Global Config: `ai_ckeditor.settings`
+
+Customizable prompts per operation type are stored in `ai_ckeditor.settings.prompts`. Each prompt supports Twig-like placeholders (e.g., `{{ modify_prompt }}`, `{{ tone }}`, `{{ lang }}`). Override via config import or settings.php.
 
 ## Configuration Steps
 
-1. Configure text format at `/admin/config/content/formats`
+1. Configure a text format at `/admin/config/content/formats`
 2. Drag the AI Stars widget to the active toolbar
-3. Enable desired plugins; choose provider/model
+3. In CKEditor plugin settings: enable desired plugins, choose provider/model
 4. For **Tone**: create a "Tone of voice" taxonomy vocabulary
 5. For **Translate**: create a "Languages" vocabulary or use site languages
-6. Permission: `use ai ckeditor` — required for all CKEditor AI features
 
-## Module Dependencies (Silencing)
+## Permission
 
-The `#[AiCKEditor]` attribute supports `module_dependencies: ['taxonomy']` — the plugin only appears when listed modules are installed. Use this to conditionally hide plugins that require contrib modules.
+- `use ai ckeditor` — required for all CKEditor AI features
 
 ## Common Mistakes
 

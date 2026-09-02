@@ -8,7 +8,12 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> **Status: DEPRECATED** — use [AI Observability](ai-observability.md) for production monitoring. `ai_logging` is development/debugging only and stores AI requests as `ai_log` entities in the database.
+> Use [AI Observability](ai-observability.md) for production monitoring — `ai_logging` is development/debugging only.
+
+**Status:** DEPRECATED
+**Dependencies:** `ai`, `views`
+
+Stores AI requests as `ai_log` content entities in the database. Development/debugging only.
 
 ## Decision
 
@@ -27,6 +32,10 @@ drupal_version: "11.x"
 | `prompt_logging_excluded_tags` | -- | Exclude tags |
 | `prompt_logging_max_messages` | `1000` | Max stored logs |
 | `prompt_logging_max_age` | `30` | Max age in days |
+
+## Use ai_observability instead
+
+For production monitoring, use `ai_observability`. For development debugging, `ai_logging` works but is deprecated and stores entities in the DB (performance impact).
 
 ## Permission
 

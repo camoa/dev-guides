@@ -1,5 +1,5 @@
 ---
-description: Salesforce REST client programmatic API — objectCreate, objectUpdate, objectUpsert, query, direct API calls, binary fetch
+description: "Salesforce REST client programmatic API — objectCreate, objectUpdate, objectUpsert, query, direct API calls, binary fetch"
 tldr: "Use `salesforce.client` (`RestClient`) when you need programmatic, non-mapping-driven access to Salesforce objects — direct CRUD, raw SOQL queries, custom Apex REST calls, or fetching binary attachments."
 drupal_version: "11.x"
 ---
@@ -23,6 +23,12 @@ drupal_version: "11.x"
 | Describe object | `$client->objectDescribe($type)` | Returns field metadata |
 | Custom endpoint | `$client->apiCall($path, $params, $method)` | Relative or absolute path |
 | Fetch binary | `$client->httpRequestRaw($url)` | Raw file content |
+
+## Accessing REST Client
+
+**Service:** `salesforce.client`
+
+**Interface:** `/web/modules/contrib/salesforce/src/Rest/RestClientInterface.php`
 
 ## Pattern
 
@@ -55,6 +61,42 @@ $response = $client->apiCall('/services/apexrest/MyEndpoint', [
 if (!$client->isInit()) {
   throw new \Exception('Salesforce client not authorized');
 }
+```
+
+## Direct API Calls
+
+For custom Salesforce endpoints or Apex REST services:
+
+```php
+$client = \Drupal::service('salesforce.client');
+
+// Check if client is initialized
+if (!$client->isInit()) {
+  throw new \Exception('Salesforce client not authorized');
+}
+
+// Relative path (prepends REST API endpoint)
+$response = $client->apiCall('sobjects/Contact/describe');
+
+// Absolute path for Apex REST (prepends only instance URL)
+$response = $client->apiCall('/services/apexrest/MyCustomEndpoint', [
+  'recordId' => '003000000000001AAA',
+], 'POST');
+
+// With custom headers
+$response = $client->apiCall('sobjects/Contact', $params, 'POST', FALSE, [
+  'Sforce-Auto-Assign' => 'FALSE',
+]);
+```
+
+## Fetching Binary Data (Attachments)
+
+```php
+// Fetch attachment content
+$sobject = $client->objectRead('Attachment', $attachmentId);
+$bodyUrl = $sobject->field('Body');
+$fileContent = $client->httpRequestRaw($bodyUrl);
+file_put_contents('/tmp/attachment.pdf', $fileContent);
 ```
 
 ## Common Mistakes

@@ -190,5 +190,5 @@ class DrupalChatClient {
 
 - [Next.js API Routes](nextjs-api-routes.md)
 - [Authentication & Sessions](authentication-sessions.md)
-- Reference: `/home/camoa/workspace/claude_memory/skills/drupal-ai/references/deepchat-backend.md`
+- Reference: `claude_memory/skills/drupal-ai/references/deepchat-backend.md`
 - Reference: Drupal AI module at `~/workspace/contrib/web/modules/contrib/ai/`

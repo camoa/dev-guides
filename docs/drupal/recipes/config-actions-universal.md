@@ -10,20 +10,19 @@ drupal_version: "11.x"
 
 > Use universal config actions when you need to update simple config or config entities without entity-type-specific methods.
 
-## Decision
+Config actions that work on ANY config entity or simple config. Use these for generic config updates.
 
-| Action | Use For | Parameters |
-|--------|---------|------------|
-| simpleConfigUpdate | Simple (non-entity) configuration | `value`: associative array of config keys → values |
-| setProperties | Config entity properties | `value`: associative array of entity properties → values |
-| createIfNotExists | Create config entity if missing | `value`: entity property values; ID from config name |
-| setThirdPartySetting(s) | Third-party settings on config entities | `module`, `key`, `value` for single; object for multiple |
-| entity_clone | Clone existing config entity | `id`: entity ID to clone |
+## Items: Universal Config Actions
 
-## Pattern
+### simpleConfigUpdate
 
-Update simple config:
+**Description:** Updates simple (non-entity) configuration
+**Parameters:**
+| Param | Type | Notes |
+|-------|------|-------|
+| value | associative array | Keys are config keys, values are new values |
 
+**Usage Example:**
 ```yaml
 config:
   actions:
@@ -32,9 +31,17 @@ config:
         page.front: /node
         name: 'My Site'
 ```
+**Gotchas:** Deprecated for config entities (use setProperties instead); config must exist before update
 
-Set config entity properties:
+### setProperties
 
+**Description:** Sets properties on config entities
+**Parameters:**
+| Param | Type | Notes |
+|-------|------|-------|
+| value | associative array | Keys are entity properties, values are new values |
+
+**Usage Example:**
 ```yaml
 config:
   actions:
@@ -43,9 +50,17 @@ config:
         name: 'Article'
         description: 'Use articles for news.'
 ```
+**Gotchas:** Only works on config entities; for simple config use simpleConfigUpdate
 
-Create if not exists (idempotent):
+### entity_create:createIfNotExists
 
+**Description:** Creates config entity if it doesn't exist
+**Parameters:**
+| Param | Type | Notes |
+|-------|------|-------|
+| value | associative array | Entity property values; ID derived from config name |
+
+**Usage Example:**
 ```yaml
 config:
   actions:
@@ -54,9 +69,19 @@ config:
         label: 'Editor'
         weight: 5
 ```
+**Gotchas:** Shorthand is `createIfNotExists`; full ID is `entity_create:createIfNotExists`
 
-Third-party settings:
+### setThirdPartySetting / setThirdPartySettings
 
+**Description:** Sets third-party settings on config entities (used by contrib modules)
+**Parameters:**
+| Param | Type | Notes |
+|-------|------|-------|
+| module | string | Module providing the third-party setting |
+| key | string | Setting key |
+| value | mixed | Setting value |
+
+**Usage Example:**
 ```yaml
 config:
   actions:
@@ -69,9 +94,17 @@ config:
           tags:
             title: '[node:title] | [site:name]'
 ```
+**Gotchas:** Module providing the third-party setting must be installed; `setThirdPartySetting` for single setting, `setThirdPartySettings` for multiple
 
-Clone entity:
+### entity_clone
 
+**Description:** Clones an existing config entity to new ID
+**Parameters:**
+| Param | Type | Notes |
+|-------|------|-------|
+| id | string | ID of entity to clone |
+
+**Usage Example:**
 ```yaml
 config:
   actions:
@@ -79,18 +112,19 @@ config:
       entity_clone:
         id: content_editor
 ```
+**Gotchas:** Target entity must exist; new entity ID from config name
 
 ## Common Mistakes
 
-- **Wrong**: Using simpleConfigUpdate on config entities → **Right**: Deprecated; use setProperties or entity-specific actions
-- **Wrong**: Forgetting createIfNotExists is idempotent → **Right**: Safe to run multiple times; only creates if missing
-- **Wrong**: Not understanding action order → **Right**: Actions apply in YAML order; later actions override earlier ones
-- **Wrong**: Applying actions to non-existent config → **Right**: Prefix with `?` to make optional: `?user.role.maybe_exists:`
-- **Wrong**: Hardcoding values that should be inputs → **Right**: Use `${input_name}` syntax to reference input values
+- Using simpleConfigUpdate on config entities → Deprecated; use setProperties or entity-specific actions
+- Forgetting createIfNotExists is idempotent → Safe to run multiple times; only creates if missing
+- Not understanding action order → Actions apply in YAML order; later actions override earlier ones
+- Applying actions to non-existent config → Prefix with `?` to make optional: `?user.role.maybe_exists:`
+- Hardcoding values that should be inputs → Use `${input_name}` syntax to reference input values
 
 ## See Also
 
-- [Config Import & Strict Mode](config-import-strict.md)
-- [Config Actions - Entity-Specific](config-actions-entity-specific.md)
+- Previous: ← [Config Import & Strict Mode](config-import-strict.md)
+- Next: [Config Actions - Entity-Specific](config-actions-entity-specific.md) →
 - Reference: `core/lib/Drupal/Core/Config/Action/Plugin/ConfigAction/`
 - Reference: https://project.pages.drupalcode.org/distributions_recipes/config_action_list.html

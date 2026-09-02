@@ -7,9 +7,9 @@ tldr: "Decorative device and UI frames for documentation, marketing, and onboard
 
 ## When to Use
 
-> Use mockup components when presenting code snippets, browser previews, phone UI demonstrations, or application window mockups — typically in documentation, marketing, and onboarding screens where the UI itself is the content being shown.
+> Presenting code snippets, browser previews, phone UI demonstrations, and application window mockups — typically in documentation, marketing, and onboarding screens where the UI itself is the content being shown.
 
-## Decision
+## Decision: Which Mockup Frame
 
 | Component | Class | Use for |
 |-----------|-------|---------|
@@ -18,9 +18,11 @@ tldr: "Decorative device and UI frames for documentation, marketing, and onboard
 | Phone frame | `.mockup-phone` | Mobile UI previews inside a device silhouette |
 | App window frame | `.mockup-window` | Desktop application screenshots without an address bar |
 
-## Pattern
+## .mockup-browser — Browser Window Frame
 
-### .mockup-browser — Browser Window Frame
+**Description:** A decorative browser chrome frame (address bar, window controls) for wrapping content. Used for product screenshots and UI demos.
+
+**Required structure:**
 
 ```html
 <div class="mockup-browser border border-base-300 bg-base-100">
@@ -33,9 +35,17 @@ tldr: "Decorative device and UI frames for documentation, marketing, and onboard
 </div>
 ```
 
-`.mockup-browser-toolbar` contains the address bar — the `.input` child is a visual-only display (use a `<div>`, not an `<input>` element).
+**Gotchas:**
 
-### .mockup-code — Code Block Terminal Frame
+- `.mockup-browser-toolbar` contains the address bar — the `.input` child inside it renders as the URL bar (no need for `<input>` element; it's a visual-only display)
+- The toolbar has fixed styling — do not add padding/margin utilities directly to `.mockup-browser-toolbar`; it will break the dot controls layout
+- Background color on the wrapper (`bg-base-100`) does NOT apply inside the content area automatically — set background on the content `<div>` separately
+
+## .mockup-code — Code Block Terminal Frame
+
+**Description:** Renders content as a styled terminal/code block with a dark background and colored line numbers. Used in documentation and tutorials.
+
+**Required structure:**
 
 ```html
 <div class="mockup-code">
@@ -45,24 +55,42 @@ tldr: "Decorative device and UI frames for documentation, marketing, and onboard
 </div>
 ```
 
-`data-prefix` sets the text shown before each line via `::before { content: attr(data-prefix) }`. Color modifiers (`text-success`, `text-error`) apply to the line text. DaisyUI does not provide syntax highlighting — integrate Prism.js or Shiki separately. Add `overflow-x-auto` to the wrapper for long lines.
+**Gotchas:**
 
-### .mockup-phone — Mobile Phone Frame
+- `data-prefix` sets the text shown before each line (e.g., `$`, `>`, line numbers). It is rendered via CSS `::before { content: attr(data-prefix) }`
+- Color modifiers (`text-success`, `text-error`) apply to the line text — useful for simulating terminal output
+- Content inside `<code>` is not syntax-highlighted by DaisyUI — integrate a syntax highlighting library (Prism.js, Shiki) separately
+- Long lines do not wrap by default — add `overflow-x-auto` to the `.mockup-code` wrapper for horizontal scroll
+
+## .mockup-phone — Mobile Phone Frame
+
+**Description:** A decorative phone device frame for wrapping mobile UI previews.
+
+**Required structure:**
 
 ```html
 <div class="mockup-phone">
   <div class="mockup-phone-camera"></div>
   <div class="mockup-phone-display">
     <div class="artboard artboard-demo phone-1">
+      <!-- Mobile content goes here -->
       <p>App content</p>
     </div>
   </div>
 </div>
 ```
 
-`.mockup-phone-camera` is the notch element — required for visual completeness. Use `.artboard` with size classes (`phone-1` through `phone-6`) to set standard phone screen dimensions. The phone frame is a fixed SVG-based shape — do not resize with Tailwind `w-*`/`h-*` utilities.
+**Gotchas:**
 
-### .mockup-window — Application Window Frame
+- `.mockup-phone-camera` is the notch element — required for visual completeness; omitting it breaks the phone silhouette
+- Use `.artboard` with size classes (`phone-1` through `phone-6`) to set standard phone screen dimensions inside `.mockup-phone-display`
+- The phone frame is a fixed SVG-based shape — it cannot be resized via Tailwind width/height utilities without breaking the frame
+
+## .mockup-window — Application Window Frame
+
+**Description:** A decorative macOS/desktop application window frame with traffic-light window controls. Lighter than `.mockup-browser` — no address bar.
+
+**Required structure:**
 
 ```html
 <div class="mockup-window border border-base-300 bg-base-100">
@@ -72,18 +100,21 @@ tldr: "Decorative device and UI frames for documentation, marketing, and onboard
 </div>
 ```
 
-The window title bar (with colored dot controls) is rendered purely via CSS — no extra markup needed. Unlike `.mockup-browser`, there is no toolbar slot for custom content. The content area needs its own background.
+**Gotchas:**
+
+- The window title bar (with colored dots) is rendered purely via CSS — no extra markup needed beyond the wrapper
+- Content area needs its own background — `bg-base-100` on the wrapper sets the title bar background, not the content area
+- Unlike `.mockup-browser`, there is no toolbar slot — if you need a custom title, add it inside the content area
 
 ## Common Mistakes
 
-- **Wrong**: Using `<input>` element inside `.mockup-browser-toolbar` — **Right**: Use `<div class="input">` for the address bar; an `<input>` element triggers focus styles and keyboard interaction
-- **Wrong**: Omitting `border border-base-300` on the wrapper — **Right**: Without it, the frame has no visible edge against the page background
-- **Wrong**: Nesting mockups inside each other — **Right**: Each mockup is a standalone presentational element; nesting breaks visual proportions
-- **Wrong**: Resizing `.mockup-phone` with Tailwind utilities — **Right**: The phone frame is SVG-based and cannot be freely resized without breaking the silhouette
+- Using `<input>` element inside `.mockup-browser-toolbar` — the `.input` class on a `<div>` is sufficient; an actual `<input>` element triggers focus styles and keyboard interaction
+- Forgetting `border border-base-300` on the mockup wrappers — without it, the frame has no visible border against the page background
+- Nesting mockups inside each other — each mockup is a standalone presentational element; nesting breaks the visual proportions
 
 ## See Also
 
 - [Data Display Components](data-display-components.md) — `.kbd` for inline keyboard key display in documentation
-- [Feedback Components](feedback-components.md) — loading states inside mockup content
+- [Feedback Components](feedback-components.md) — feedback components for loading states inside mockup content
 - Reference: https://daisyui.com/components/mockup-browser/
 - Reference: https://daisyui.com/components/mockup-phone/

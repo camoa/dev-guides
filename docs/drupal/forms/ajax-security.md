@@ -1,5 +1,5 @@
 ---
-description: AJAX security, XSS prevention, and advanced patterns like modals
+description: "AJAX security, XSS prevention, and advanced patterns like modals"
 tldr: "Always use render arrays in AJAX callbacks (auto-escaped). Use AJAX commands for multiple element updates."
 drupal_version: "11.x"
 ---
@@ -10,37 +10,70 @@ drupal_version: "11.x"
 
 > Always use render arrays in AJAX callbacks (auto-escaped). Use AJAX commands for multiple element updates.
 
-## Security
+## Reference: AJAX Security
 
 **Built-in Protections:**
-- AJAX requests validate form_build_id (cache key)
-- AJAX requests validate form_token (CSRF protection)
-- Same security as regular form submission
 
-**Value Callback Security:**
-- FormBuilder whitelist controls pre-token execution
-- File uploads, dates blocked until token validated
-- Prevents state changes from invalid requests
-
-## Safe AJAX Patterns
-
-```php
-// SAFE - render array (auto-escaped)
-public function ajaxCallback(array &$form, FormStateInterface $form_state) {
-  return $form['container'];
-}
-
-// SAFE - escaped markup with t()
-return ['#markup' => $this->t('Text: @text', ['@text' => $value])];
-
-// SAFE - plain text
-return ['#plain_text' => $user_input];
-
-// UNSAFE - raw HTML concatenation
-return ['#markup' => '<div>' . $value . '</div>']; // XSS vulnerability
+```
+AJAX requests validate:
+- form_build_id (cache key)
+- form_token (CSRF protection)
+Same security as regular form submission
 ```
 
-## Advanced Pattern: Dependent Fields
+**Value Callback Security:**
+
+```
+FormBuilder whitelist (lines 133-156)
+Only safe callbacks execute before token validation
+File uploads, dates blocked until token validated
+Prevents state changes from invalid requests
+```
+
+**Reference:** `/web/core/lib/Drupal/Core/Form/FormBuilder.php` lines 133-156
+
+## Pattern: Safe AJAX Patterns
+
+**DO:**
+
+- Return render arrays (automatically escaped)
+- Use t() for translated strings (auto-escaped)
+- Validate input in callback before processing
+- Use AJAX commands from core library
+
+**DON'T:**
+
+- Return raw HTML strings without sanitization
+- Use $_POST directly in callbacks (use $form_state)
+- Skip form validation in AJAX rebuilds
+- Trust client-provided data
+
+**XSS Prevention:**
+
+```php
+// SAFE - render array
+return $form['container'];
+
+// SAFE - escaped markup
+return ['#markup' => $this->t('Text: @text', ['@text' => $value])];
+
+// UNSAFE - raw HTML
+return ['#markup' => '<div>' . $value . '</div>'];
+```
+
+## Pattern: Advanced AJAX Patterns
+
+**Dependent Field Updates:**
+
+```
+Pattern: One field changes, others update
+Implementation:
+1. Primary field has #ajax callback
+2. Callback returns container with dependent fields
+3. Container has wrapper ID matching #ajax wrapper
+```
+
+**Example Structure:**
 
 ```php
 $form['trigger'] = [
@@ -63,7 +96,15 @@ public function updateDependents(array &$form, FormStateInterface $form_state) {
 }
 ```
 
-## Modal Dialog Pattern
+**AJAX with Form States (#states):**
+
+```
+Combine for best UX:
+#states for client-side show/hide
+AJAX for dynamic options/content
+```
+
+**Modal Dialog Pattern:**
 
 ```php
 use Drupal\Core\Ajax\AjaxResponse;
@@ -77,14 +118,14 @@ public function openModal(array &$form, FormStateInterface $form_state) {
   $response->addCommand(new OpenModalDialogCommand(
     'Modal Title',
     $modal_form,
-    ['width' => '50%']
+    ['width' => '50%', 'dialogClass' => 'custom-class']
   ));
 
   return $response;
 }
 ```
 
-## Progress Indicators
+**Progress Indicator Types:**
 
 ```php
 // Throbber (default)
@@ -103,22 +144,16 @@ public function openModal(array &$form, FormStateInterface $form_state) {
 'progress' => ['type' => 'none']
 ```
 
-## AJAX with #states
-
-Combine for best UX:
-- #states for instant client-side show/hide
-- AJAX for dynamic options/content loading
-
 ## Common Mistakes
 
-- **Wrong**: Not rebuilding form in AJAX callback → **Right**: Return updated element
-- **Wrong**: Returning HTML instead of render array → **Right**: Use render arrays (XSS safe)
-- **Wrong**: Missing AJAX library attachment → **Right**: Auto-attached by Form API
-- **Wrong**: Using AJAX when #states sufficient → **Right**: #states is faster
+- Not rebuilding form in AJAX callback (stale state)
+- Returning HTML instead of render array (XSS risk)
+- Missing AJAX library attachment
+- Using AJAX when #states would suffice (overcomplicated)
 
 ## See Also
 
-- [Form States System](form-states-system.md)
-- [AJAX Architecture](ajax-architecture.md)
-- [Modal Dialog Guide](https://www.drupal.org/docs/drupal-apis/ajax-api/basic-concepts)
-- Reference: `/web/core/modules/system/tests/modules/ajax_forms_test/`
+- Modal Dialog Guide
+- [Form States System](form-states-system.md) (dedicated section)
+- [JavaScript API Guide](../js-development/index.md)
+- Official: [AJAX API Basic Concepts](https://www.drupal.org/docs/drupal-apis/ajax-api/basic-concepts)

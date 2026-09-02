@@ -6,8 +6,7 @@ description: "Source references and maintenance manifest for the htmx guides —
 
 ## Drupal Research Install
 
-Path: `/home/camoa/workspace/contrib/web/`
-
+Claims here were checked against a local Drupal install of core and the modules named below, rather than quoted from documentation.
 ## Web Sources
 
 | Source | URL | Guide Sections | Last Verified |

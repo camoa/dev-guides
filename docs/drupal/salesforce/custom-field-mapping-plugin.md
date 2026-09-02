@@ -1,5 +1,5 @@
 ---
-description: Custom Salesforce field mapping plugin — extend PropertiesBase, implement value() and pullValue(), @SalesforceMappingField annotation
+description: "Custom Salesforce field mapping plugin — extend PropertiesBase, implement value() and pullValue(), @SalesforceMappingField annotation"
 tldr: "Create a custom field mapping plugin when built-in plugins (`Properties`, `Token`, `Constant`, etc.) cannot express the mapping logic needed — calculated values, custom field types, or complex transformations reusable across multiple…"
 drupal_version: "11.x"
 ---

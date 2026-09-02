@@ -10,6 +10,8 @@ drupal_version: "11.x"
 
 > Use `ai_api_explorer` for interactive testing of AI operations during development. **Do not enable on production.** Use [Operation Types](operation-types.md) for the actual PHP API.
 
+Developer-only UI for testing AI operations interactively. **Do not enable on production.**
+
 ## Decision
 
 | Situation | Choose | Why |
@@ -21,23 +23,34 @@ drupal_version: "11.x"
 
 ## Features
 
-- 16 interactive explorers (chat, T2I, TTS, STT, embeddings, moderation, etc.)
-- Provider/model selection per request
-- Streaming support (Chat Explorer)
-- File uploads (images, audio, documents)
-- Copy-paste PHP code example generation
-- Guardrail set selection (Chat Explorer)
-- Structured output / JSON schema testing
+- Interactive form per operation type (16 explorers)
+- Provider/model selection
+- Response display with streaming support
+- Copy-paste PHP code examples
+- Supports file uploads (images, audio, documents)
+
+## Available Explorers (16 total)
+
+Chat, Text-to-Image, Text-to-Speech, Speech-to-Text, Speech-to-Speech, Audio-to-Audio, Embeddings, Moderation, Image-to-Image, Image Classification, Object Detection, Rerank, Summarize, Translate, Image-and-Audio-to-Video, Tools
 
 ## Explorer Feature Matrix
 
-| Feature | Chat | Text-to-Image | Speech-to-Text | Tools |
-|---------|------|---------------|---------------|-------|
-| Streaming (SSE) | Yes | No | No | No |
-| File uploads | Yes (images, docs) | No | Yes (audio) | No |
-| Tool/function calling | Yes | No | No | Yes (primary) |
-| Structured output | Yes | No | No | No |
-| Code example generation | Yes | Yes | Yes | No |
+| Feature | Chat | Text-to-Image | Speech-to-Text | Tools | Others |
+|---------|------|---------------|---------------|-------|--------|
+| Streaming (SSE) | Yes | No | No | No | No |
+| File uploads | Yes (images, docs) | No | Yes (audio) | No | Varies |
+| Tool/function calling | Yes | No | No | Yes (primary) | No |
+| Guardrail set selection | Yes | No | No | No | No |
+| Structured output (JSON schema) | Yes | No | No | No | No |
+| Code example generation | Yes | Yes | Yes | No | All |
+
+The **Chat Explorer** is the most feature-rich: 3-column layout (input, response, code), streaming support, vision model image upload, document upload, tool calling, guardrail selection, and structured output.
+
+The **Tools Explorer** tests function calling tools directly: lists all registered `FunctionCall` plugins grouped by `FunctionGroup`, dynamically generates form fields from tool context definitions, and supports property constraints (allow all, only certain values, force value).
+
+## Code Example Generation
+
+Every explorer generates a copy-paste PHP code example showing how to call the AI provider programmatically with the same settings used in the form. The `addProviderCodeExample($provider)` method on the base class generates this snippet.
 
 ## Custom Explorer Plugin
 
@@ -63,8 +76,10 @@ Route auto-registered at `/admin/config/ai/explorers/{plugin_id}`.
 
 ## Common Mistakes
 
-- **Wrong**: Enabling on production → **Right**: Developer tool only; exposes all providers and models to anyone with the permission
-- **Wrong**: Using explorer responses in production code → **Right**: Use the generated PHP code snippet as a starting point
+| Mistake | Why it's wrong |
+|---------|---------------|
+| Enabling `ai_api_explorer` on production | Developer tool only — it exposes every configured provider and model to anyone holding `access ai prompt` |
+| Using explorer responses directly in production code | Use the generated PHP snippet as a starting point, not the rendered response |
 
 ## See Also
 

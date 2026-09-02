@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use MessageCommand for all user-facing messages. Use AnnounceCommand to notify screen readers of content changes. Reserve AlertCommand for debugging only — never in production.
+You need to show messages, alerts, or screen reader announcements after AJAX operations.
 
 ## Decision
 
@@ -18,20 +18,21 @@ drupal_version: "11.x"
 | AnnounceCommand | Screen readers only, no visual needed | WCAG compliance for AJAX updates |
 | AlertCommand | Debugging only | Never in production |
 
-## Pattern
+## Command: MessageCommand
+
+**Description:** Displays Drupal status messages with proper theming and screen reader support.
+
+**Pattern:**
 
 ```php
 use Drupal\Core\Ajax\MessageCommand;
-use Drupal\Core\Ajax\AnnounceCommand;
-
-$response = new AjaxResponse();
 
 // Default: clears previous messages, announces via aria-live (polite).
 $response->addCommand(new MessageCommand(
   'Operation successful',
-  NULL,                      // NULL = default message region
-  ['type' => 'status'],      // status, warning, error
-  TRUE                       // $clear_previous: clear prior messages first (default TRUE)
+  NULL,                   // NULL = default message region
+  ['type' => 'status'],   // type: status | warning | error
+  TRUE                    // $clear_previous: clear prior messages first
 ));
 
 // Suppress screen reader announcement:
@@ -42,28 +43,82 @@ $response->addCommand(new MessageCommand('Upload failed.', NULL, [
   'type' => 'error',
   'priority' => 'assertive',
 ]));
+```
 
-// Screen reader only announcement (no visual output)
+**Parameters:**
+
+| Param | Type | Description |
+|-------|------|-------------|
+| message | string\|Markup | Message text; plain strings are Xss::filterAdmin-sanitized |
+| wrapper_query_selector | string\|NULL | CSS selector for container; NULL uses default region |
+| options | array | `type` (status/warning/error), `announce` ('' to suppress), `priority` (assertive) |
+| clear_previous | bool | If TRUE (default), existing messages in the region are cleared first |
+
+**Gotchas:**
+
+- The 4th parameter is `$clear_previous`, NOT an "announce" flag — announcement is controlled via `$options['announce']`
+- By default MessageCommand also announces via `Drupal.announce()` — pass `['announce' => '']` in options to suppress
+- Combining MessageCommand and AnnounceCommand in the same response can cause double-announcements; test with a screen reader
+- Source: `core/lib/Drupal/Core/Ajax/MessageCommand.php`
+
+## Command: AlertCommand
+
+**Description:** Shows a JavaScript alert dialog (blocking).
+
+**Pattern:**
+
+```php
+use Drupal\Core\Ajax\AlertCommand;
+
+$response->addCommand(new AlertCommand('Alert message'));
+```
+
+**Gotchas:**
+
+- Blocks all page interaction until dismissed
+- Cannot be styled (native browser dialog)
+- Avoid in production (poor UX); use MessageCommand instead
+- Useful only for critical errors or debugging
+
+## Command: AnnounceCommand
+
+**Description:** Announces content to screen readers without visual display.
+
+**Pattern:**
+
+```php
+use Drupal\Core\Ajax\AnnounceCommand;
+
 $response->addCommand(new AnnounceCommand(
   'Content updated',
-  'polite'  // 'polite' (wait) or 'assertive' (interrupt)
+  'polite'  // assertive or polite
 ));
 ```
 
-Reference: `core/lib/Drupal/Core/Ajax/MessageCommand.php`, `core/lib/Drupal/Core/Ajax/AnnounceCommand.php`
+**Parameters:**
+
+| Param | Type | Description |
+|-------|------|-------------|
+| text | string | Message for screen readers |
+| priority | string | 'polite' (wait) or 'assertive' (interrupt) |
+
+**Gotchas:**
+
+- No visual indication (screen readers only)
+- 'assertive' interrupts current screen reader speech
+- 'polite' waits for current speech to finish
+- Critical for AJAX accessibility
 
 ## Common Mistakes
 
-- **Wrong**: Treating the 4th param as an announce flag → **Right**: The 4th param is `$clear_previous`; control announcements via `$options['announce']`
-- **Wrong**: Using AlertCommand in production → **Right**: Blocks all page interaction; use MessageCommand for all user-facing messages
-- **Wrong**: Not announcing AJAX updates to screen readers → **Right**: WCAG violation; always use AnnounceCommand or MessageCommand with announce option
-- **Wrong**: Using 'assertive' priority unnecessarily → **Right**: Interrupts current screen reader speech; reserve for critical errors only
-- **Wrong**: Combining MessageCommand and AnnounceCommand in the same response → **Right**: Can cause double-announcements; test with a screen reader
-- **Wrong**: Not clearing old messages → **Right**: Messages accumulate; pass `TRUE` as 4th param to clear, or use RemoveCommand
+- Using AlertCommand in production → Terrible UX; use MessageCommand for all user-facing messages
+- Not announcing AJAX updates to screen readers → WCAG violation; always use AnnounceCommand or MessageCommand with announce option
+- Using 'assertive' priority unnecessarily → Interrupts screen reader users; reserve for critical errors
+- Forgetting to escape user input in messages → XSS vulnerability; MessageCommand auto-escapes but verify custom implementations
+- Not clearing old messages → Messages accumulate; use RemoveCommand to clear message container when needed
 
 ## See Also
 
-- [Dialog Commands](dialog-commands.md)
-- [Custom AJAX Commands](custom-ajax-commands.md)
+- ← Previous: [Dialog Commands](dialog-commands.md) | Next: [Custom AJAX Commands](custom-ajax-commands.md)
 - [Screen Reader Support](screen-reader-support.md)
-- Reference: `core/lib/Drupal/Core/Ajax/AnnounceCommand.php`
+- Reference: `core/lib/Drupal/Core/Ajax/MessageCommand.php`, `core/lib/Drupal/Core/Ajax/AnnounceCommand.php`

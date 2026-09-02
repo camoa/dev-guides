@@ -1,5 +1,5 @@
 ---
-description: Salesforce configuration management — mapping export paths, auth secrets handling, global settings, environment deployment workflow
+description: "Salesforce configuration management — mapping export paths, auth secrets handling, global settings, environment deployment workflow"
 tldr: "Use Drupal's standard config management (drush config:export/import) for mappings. Never commit auth credentials to version control — consumer secrets are not exported and must be configured per environment."
 drupal_version: "11.x"
 ---
@@ -19,7 +19,33 @@ drupal_version: "11.x"
 | Consumer secrets | Not exported | Must be configured per environment |
 | Global settings | `config/sync/salesforce.settings.yml` | Safe to commit |
 
-**Global settings reference (`salesforce.settings.yml`):**
+### Mapping Configuration Export
+
+Mappings export to: `config/sync/salesforce_mapping.salesforce_mapping.[mapping_id].yml`
+
+**Standard Workflow:**
+1. Create mapping via UI
+2. Export: `drush config:export`
+3. Commit to version control
+4. Deploy to other environments
+5. Import: `drush config:import`
+
+### Auth Configuration
+
+Auth configs export to: `config/sync/salesforce.salesforce_auth.[auth_id].yml`
+
+**Security Note:** Consumer secrets NOT exported to config. Must be configured per-environment.
+
+**Environment-Specific Setup:**
+1. Import config: `drush config:import`
+2. Configure credentials: `/admin/config/salesforce/authorize/{auth_id}`
+3. Authorize connection
+
+### Global Settings
+
+Config: `config/sync/salesforce.settings.yml`
+
+**Key Settings (`salesforce.settings.yml`):**
 - `global_push_limit` — Max push items per cron run
 - `pull_max_queue_size` — Max pull queue size
 - `standalone` — Enable standalone queue endpoints

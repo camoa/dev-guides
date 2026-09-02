@@ -8,15 +8,49 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Apply these standards to every AJAX implementation. Slow AJAX destroys UX. Set performance expectations before building, not after.
+AJAX requests are slow, database queries are inefficient, or large operations cause timeouts.
 
-## Decision
+## Performance Optimization Strategies
+
+**Performance Optimization Strategies:**
+
+1. **Minimize DOM Updates**
+   - Return smallest possible element, not entire form
+   - Use HtmlCommand instead of ReplaceCommand when wrapper unchanged
+   - Batch multiple updates into single AJAX response
+
+2. **Database Optimization**
+   - Always use `range(0, N)` to limit query results
+   - Load only needed fields with `loadMultiple()` instead of full entities
+   - Use `accessCheck(TRUE)` to leverage query access caching
+   - Index custom fields used in AJAX queries
+
+3. **Batch Processing**
+   - Use Batch API for operations processing >100 items
+   - Set progress indicators for operations >2 seconds
+   - Break large operations into chunks to prevent timeouts
+
+4. **Caching**
+   - Use CacheableAjaxResponse for cacheable content
+   - Configure proper cache contexts (user.permissions, languages, etc.)
+   - Add cache tags for automatic invalidation
+   - Set realistic max-age (match content update frequency)
+
+5. **Asset Optimization**
+   - Aggregate JavaScript/CSS in production
+   - Use `#attached` libraries instead of AddJsCommand/AddCssCommand
+   - Lazy load libraries only when needed
+   - Minimize third-party dependencies
+
+## Performance Thresholds
+
+**Performance Thresholds:**
 
 | Operation Type | Target Time | Action if Exceeded |
-|----------------|-------------|--------------------|
-| Simple field update | <200ms | Optimize query, reduce DOM update size |
+|---|---|---|
+| Simple form field update | <200ms | Optimize query, reduce DOM update size |
 | Autocomplete query | <500ms | Add result limit, index search fields |
-| File upload (2MB) | <5s | Use progress bar, increase PHP limits if needed |
+| File upload | <5s for 2MB | Use progress bar, increase PHP limits |
 | Batch operation | <30s total | Use Batch API with progress tracking |
 
 ## Pattern
@@ -55,16 +89,9 @@ $form['trigger']['#ajax']['progress'] = [
 ];
 ```
 
-## Common Mistakes
-
-- **Wrong**: Returning entire form when one element changed → **Right**: Return only the specific element that changed
-- **Wrong**: No result limits on database queries → **Right**: Memory exhaustion; always use `range(0, N)`
-- **Wrong**: Not using Batch API for large operations → **Right**: PHP timeouts; use batch for >100 items or >30s operations
-- **Wrong**: Loading unused entity fields → **Right**: Use targeted entity queries; avoid loading full entity graphs
-- **Wrong**: No progress indicator for long operations → **Right**: Users assume the request failed; show progress for >2s operations
-
 ## See Also
 
+- ← Previous: [Best Practices: Security](best-practices-security.md) | Next: [Best Practices: Development Standards](best-practices-development.md)
 - [Performance Optimization](performance-optimization.md)
 - [Response Caching](response-caching.md)
 - Reference: [Database performance best practices](https://www.drupal.org/docs/develop/using-the-entity-api/database-abstraction-layer)

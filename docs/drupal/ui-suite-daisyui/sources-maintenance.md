@@ -1,5 +1,5 @@
 ---
-description: Source code paths, web documentation, version info, and maintenance manifest
+description: "Source references and maintenance manifest for the ui suite daisyui guides — web sources, code sources, and version history"
 ---
 
 # Sources & Maintenance

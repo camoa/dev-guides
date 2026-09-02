@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Every AJAX callback and route is an HTTP endpoint and requires access control. AJAX callbacks are not protected by the UI alone — attackers can call them directly.
+You need to restrict AJAX callbacks or routes based on permissions, roles, or custom logic.
 
 ## Decision
 
@@ -22,24 +22,23 @@ drupal_version: "11.x"
 ## Pattern
 
 ```php
-// Route with single permission
+// Route-level access control
 my_module.ajax_content:
   path: '/my-module/ajax/content'
   defaults:
     _controller: '\Drupal\my_module\Controller\AjaxController::getContent'
   requirements:
-    _permission: 'access content'
+    _permission: 'access content'  # Single permission
 
-// Route with custom access callback
+// Custom access callback (complex logic)
 my_module.ajax_restricted:
   path: '/my-module/ajax/restricted/{node}'
   defaults:
     _controller: '\Drupal\my_module\Controller\AjaxController::restrictedContent'
   requirements:
     _custom_access: '\Drupal\my_module\Controller\AjaxController::access'
-```
 
-```php
+// In controller
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
@@ -52,12 +51,15 @@ public function access(NodeInterface $node, AccountInterface $account) {
   );
 }
 
-// Form callback: verify triggering element
+// Form callback validation
 public function ajaxCallback(array &$form, FormStateInterface $form_state) {
   $triggering_element = $form_state->getTriggeringElement();
+
+  // Verify element exists and is accessible
   if (!$triggering_element || !isset($form[$triggering_element['#parents'][0]])) {
     throw new \Exception('Unauthorized AJAX request');
   }
+
   return $form['target'];
 }
 ```
@@ -66,14 +68,14 @@ Reference: `core/lib/Drupal/Core/Access/AccessResult.php`
 
 ## Common Mistakes
 
-- **Wrong**: Skipping access checks entirely → **Right**: AJAX callbacks are HTTP endpoints; always add protection
-- **Wrong**: Using `_access: 'TRUE'` in routes → **Right**: Grants unrestricted access; always use proper access control
-- **Wrong**: Not checking triggering element → **Right**: Users can manipulate requests to trigger callbacks on inaccessible elements
-- **Wrong**: Trusting client-side data → **Right**: Validate all input server-side; JavaScript validation can be bypassed
-- **Wrong**: `\Drupal::currentUser()` in wrong context → **Right**: Inject AccountInterface to avoid access bypass
+- Skipping access checks entirely → Security vulnerability; AJAX callbacks are HTTP endpoints, need protection
+- Using `_access: 'TRUE'` in routes → Grants unrestricted access; always use proper access control
+- Not checking triggering element → Users can manipulate requests to trigger callbacks on inaccessible elements
+- Trusting client-side data → Validate all input; attackers can bypass JavaScript validation
+- Using current user in static contexts → `\Drupal::currentUser()` in wrong place causes access bypass; inject AccountInterface
 
 ## See Also
 
-- [CSRF Protection](csrf-protection.md)
+- ← Previous: [Autocomplete Implementation](autocomplete-implementation.md) | Next: [CSRF Protection](csrf-protection.md)
 - [Best Practices: Security](best-practices-security.md)
 - Reference: [Access control API](https://www.drupal.org/docs/drupal-apis/routing-system/access-checking-on-routes)

@@ -8,14 +8,13 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Every AJAX content update must be announced to screen reader users. Silence after a dynamic update is a WCAG failure. Use 'polite' for non-critical updates and 'assertive' only for critical errors.
+You need to ensure dynamic content updates are announced to screen reader users.
 
 ## Pattern
 
 ```php
 use Drupal\Core\Ajax\AnnounceCommand;
 use Drupal\Core\Ajax\MessageCommand;
-use Drupal\Core\Ajax\HtmlCommand;
 
 public function ajaxCallback(array &$form, FormStateInterface $form_state) {
   $response = new AjaxResponse();
@@ -23,7 +22,7 @@ public function ajaxCallback(array &$form, FormStateInterface $form_state) {
   // Method 1: AnnounceCommand (no visual indication)
   $response->addCommand(new AnnounceCommand(
     'Search results updated. 12 results found.',
-    'polite'
+    'polite'  // 'polite' or 'assertive'
   ));
 
   // Method 2: MessageCommand (visual + audio — announces by default)
@@ -35,17 +34,22 @@ public function ajaxCallback(array &$form, FormStateInterface $form_state) {
     // Pass ['announce' => ''] in options to suppress announcement.
   ));
 
-  // Method 3: Visually-hidden ARIA live region (in form build)
-  // $form['live_region'] = [
-  //   '#type' => 'container',
-  //   '#attributes' => [
-  //     'id' => 'live-announcements',
-  //     'aria-live' => 'polite',
-  //     'aria-atomic' => 'true',
-  //     'class' => ['visually-hidden'],
-  //   ],
-  // ];
-  $response->addCommand(new HtmlCommand('#live-announcements', 'Content loaded.'));
+  // Method 3: ARIA live region (in form build)
+  $form['live_region'] = [
+    '#type' => 'container',
+    '#attributes' => [
+      'id' => 'live-announcements',
+      'aria-live' => 'polite',
+      'aria-atomic' => 'true',
+      'class' => ['visually-hidden'],  // Hidden visually, read by SR
+    ],
+  ];
+
+  // Update live region content via AJAX
+  $response->addCommand(new HtmlCommand(
+    '#live-announcements',
+    'Content loaded successfully.'
+  ));
 
   return $response;
 }
@@ -55,14 +59,13 @@ Reference: `core/lib/Drupal/Core/Ajax/AnnounceCommand.php`
 
 ## Common Mistakes
 
-- **Wrong**: Using 'assertive' for non-critical updates → **Right**: Interrupts current speech; use 'polite' for most cases
-- **Wrong**: Announcing technical details → **Right**: Say "Form saved" not "AJAX callback executed successfully"
-- **Wrong**: Vague announcement text → **Right**: "Updated" is not enough; say "Search results updated with 5 items"
-- **Wrong**: Announcing too frequently → **Right**: Overlapping announcements confuse users; debounce or combine messages
-- **Wrong**: No visual alternative → **Right**: Some users have both vision and hearing impairments; combine with visual indicators
+- Using 'assertive' priority for non-critical updates → Interrupts current speech; use 'polite' for most cases
+- Announcing technical details → Say "Form saved" not "AJAX callback executed successfully"
+- Not providing context in announcements → "Updated" is vague; say "Search results updated with 5 items"
+- Announcing too frequently → Overlapping announcements confuse users; debounce or combine messages
+- Forgetting visual alternatives → Some users have both vision and hearing impairments; combine AnnounceCommand with visual indicators
 
 ## See Also
 
-- [WCAG Compliance Patterns](wcag-compliance-patterns.md)
-- [Debugging Techniques](debugging-techniques.md)
+- ← Previous: [WCAG Compliance Patterns](wcag-compliance-patterns.md) | Next: [Debugging Techniques](debugging-techniques.md)
 - Reference: [ARIA live regions specification](https://www.w3.org/TR/wai-aria-1.2/#live_region_roles)

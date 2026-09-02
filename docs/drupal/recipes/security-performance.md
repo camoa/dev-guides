@@ -10,7 +10,9 @@ drupal_version: "11.x"
 
 > Apply security and performance best practices when creating recipes to ensure safe and efficient recipe application.
 
-## Decision
+Security and performance considerations specific to recipes.
+
+## Decision: Security and Performance Risks
 
 ### Security Concerns
 
@@ -22,19 +24,7 @@ drupal_version: "11.x"
 | Secrets in recipes | Never commit secrets | Use inputs with env source for API keys, passwords |
 | XSS in default content | Sanitize imported content | Text format filters apply on render, not import; validate HTML |
 
-### Performance Concerns
-
-| Issue | Solution | Why |
-|-------|----------|-----|
-| Large default content | Use migration instead | Default content loads all at once; memory intensive |
-| Recursive recipe dependencies | Keep dependency depth shallow | Each level adds processing time |
-| Config action wildcards | Target specific entities when possible | `user.role.*` processes all roles; slow with many entities |
-| Batch vs direct application | Use batches for large recipes | Prevents timeouts on web-based application |
-
-## Pattern
-
-Safe permission granting:
-
+**Pattern** — Safe permission granting:
 ```yaml
 # DANGEROUS: Grants admin permission to authenticated users
 user.role.authenticated:
@@ -52,25 +42,32 @@ user.role.site_admin:
     - 'administer site configuration'
 ```
 
-Input validation:
-
+**Pattern** — Input validation:
 ```yaml
 input:
   admin_email:
     data_type: string
     constraints:
-      Email: ~
+      Email: ~  # Validates email format
       NotBlank: ~
     default: { source: env, env: ADMIN_EMAIL }
   site_url:
     data_type: string
     constraints:
-      Url: ~
+      Url: ~  # Validates URL format
     default: { source: value, value: 'https://example.com' }
 ```
 
-Batch application for large recipes:
+### Performance Concerns
 
+| Issue | Solution | Why |
+|-------|----------|-----|
+| Large default content | Use migration instead | Default content loads all at once; memory intensive |
+| Recursive recipe dependencies | Keep dependency depth shallow | Each level adds processing time |
+| Config action wildcards | Target specific entities when possible | `user.role.*` processes all roles; slow with many entities |
+| Batch vs direct application | Use batches for large recipes | Prevents timeouts on web-based application |
+
+**Pattern** — Batch application for large recipes:
 ```php
 // Direct application (fast but can timeout)
 RecipeRunner::processRecipe($recipe);
@@ -83,8 +80,7 @@ $batch = [
 batch_set($batch);
 ```
 
-Targeted config actions:
-
+**Pattern** — Targeted config actions:
 ```yaml
 # SLOW: Processes every role
 config:
@@ -103,15 +99,16 @@ config:
 
 ## Common Mistakes
 
-- **Wrong**: Granting broad permissions to authenticated role → **Right**: Security risk; create dedicated roles
-- **Wrong**: Not validating inputs → **Right**: Allows injection of malicious values into config
-- **Wrong**: Committing API keys → **Right**: Use environment variables via input system
-- **Wrong**: Importing large content datasets → **Right**: Use migration for datasets >100 entities
-- **Wrong**: Assuming recipes run as admin → **Right**: They do (AdminAccountSwitcher) but validate permissions anyway
-- **Wrong**: Not testing recipe performance → **Right**: Large recipes can timeout on web application; test with realistic data
+- Granting broad permissions to authenticated role → Security risk; create dedicated roles
+- Not validating inputs → Allows injection of malicious values into config
+- Committing API keys → Use environment variables via input system
+- Importing large content datasets → Use migration for datasets >100 entities
+- Not considering OWASP top 10 → SQL injection (no risk in recipes), XSS (validate text formats), CSRF (no user-triggered actions in recipes)
+- Assuming recipes run as admin → They do (AdminAccountSwitcher) but validate permissions anyway
+- Not testing recipe performance → Large recipes can timeout on web application; test with realistic data
 
 ## See Also
 
-- [Anti-Patterns & Common Mistakes](anti-patterns-mistakes.md)
-- [Code Reference Map](code-reference-map.md)
+- Previous: ← [Anti-Patterns & Common Mistakes](anti-patterns-mistakes.md)
+- Next: [Code Reference Map](code-reference-map.md) →
 - Reference: https://owasp.org/www-project-top-ten/

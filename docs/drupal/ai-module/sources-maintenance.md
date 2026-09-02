@@ -6,7 +6,7 @@ description: "Source references and maintenance manifest for the ai module guide
 
 ## Drupal Research Install
 
-Path: `/home/camoa/workspace/contrib` (1.3.x dev checkout — services.yml and plugin files verified against this)
+Path: local Drupal research install with `web/modules/contrib/ai` (1.3.x dev checkout — services.yml and plugin files verified against this)
 
 ## Web Sources
 

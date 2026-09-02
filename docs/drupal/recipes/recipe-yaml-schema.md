@@ -10,9 +10,10 @@ drupal_version: "11.x"
 
 > Every recipe requires a `recipe.yml` file defining metadata, dependencies, extensions, configuration, inputs, and content.
 
-## Items
+## Items: recipe.yml Keys
 
-## name
+### name
+
 **Type:** `string` (required)
 **Description:** Human-readable recipe name
 **Validation:** Cannot span multiple lines or contain control characters
@@ -21,7 +22,8 @@ drupal_version: "11.x"
 name: 'Standard'
 ```
 
-## description
+### description
+
 **Type:** `string` (optional)
 **Description:** Short description of the recipe
 **Validation:** Cannot contain control characters except tabs, newlines, carriage returns
@@ -30,7 +32,8 @@ name: 'Standard'
 description: 'Provides a standard site with commonly used features pre-configured.'
 ```
 
-## type
+### type
+
 **Type:** `string` (optional)
 **Description:** Recipe category for organizational purposes
 **Validation:** Cannot span multiple lines or contain control characters
@@ -39,7 +42,8 @@ description: 'Provides a standard site with commonly used features pre-configure
 type: 'Site'
 ```
 
-## recipes
+### recipes
+
 **Type:** `array` (optional)
 **Description:** List of recipe machine names to apply before this recipe
 **Validation:** Each recipe must exist and cannot depend on itself
@@ -51,7 +55,8 @@ recipes:
 ```
 **Gotchas:** Dependencies are applied recursively; circular dependencies are prevented by validation
 
-## install
+### install
+
 **Type:** `array` (optional)
 **Description:** List of module/theme machine names to install
 **Validation:** Each extension must be available (discovered by extension discovery)
@@ -64,7 +69,8 @@ install:
 ```
 **Gotchas:** Themes install after modules; already-installed extensions are skipped
 
-## config
+### config
+
 **Type:** `associative_array` (optional)
 **Description:** Configuration to import and config actions to apply
 **Sub-keys:** `import`, `strict`, `actions`
@@ -81,7 +87,8 @@ config:
 ```
 **Gotchas:** Import happens before actions; strict mode validates config before application
 
-## input
+### input
+
 **Type:** `associative_array` (optional)
 **Description:** Defines user-provided values for the recipe
 **Keys:** Input name → input definition
@@ -97,7 +104,8 @@ input:
 ```
 **Gotchas:** Only primitive data types supported; inputs replaced in config actions using `${input_name}` syntax
 
-## content
+### content
+
 **Type:** `array` (optional, reserved for future use)
 **Description:** Reserved for default content configuration
 **Usage Example:**
@@ -106,7 +114,8 @@ content: []
 ```
 **Gotchas:** Currently handled by `content/` directory; this key is validated but not actively used
 
-## extra
+### extra
+
 **Type:** `associative_array` (optional)
 **Description:** Extension-specific data keyed by extension name
 **Validation:** Keys must be valid extension names
@@ -118,60 +127,16 @@ extra:
 ```
 **Gotchas:** Only the specified extension can access its extra data via `Recipe::getExtra()`
 
-## Decision
-
-| Field | Type | Required | Purpose |
-|-------|------|----------|---------|
-| name | string | Yes | Human-readable recipe name |
-| description | string | No | Short description of the recipe |
-| type | string | No | Recipe category for organizational purposes |
-| recipes | array | No | List of recipe machine names to apply before this recipe |
-| install | array | No | List of module/theme machine names to install |
-| config | associative_array | No | Configuration to import and config actions to apply |
-| input | associative_array | No | Defines user-provided values for the recipe |
-| content | array | No | Reserved for default content configuration |
-| extra | associative_array | No | Extension-specific data keyed by extension name |
-
-## Pattern
-
-Minimal recipe.yml structure:
-
-```yaml
-name: 'My Recipe'
-description: 'Example recipe.'
-type: 'Feature'
-install:
-  - node
-config:
-  strict: false
-  import:
-    node:
-      - views.view.content
-  actions:
-    user.role.authenticated:
-      grantPermission: 'access content'
-input:
-  site_name:
-    description: 'The name of the site'
-    data_type: string
-    default:
-      source: config
-      config: [system.site, name]
-extra:
-  my_module:
-    custom_setting: value
-```
-
 ## Common Mistakes
 
-- **Wrong**: Omitting `name` → **Right**: Required field, validation fails without it
-- **Wrong**: Using relative paths in recipes list → **Right**: Recipe names are machine names, not paths
-- **Wrong**: Listing themes before modules in install → **Right**: Themes depend on modules; runner handles order automatically
-- **Wrong**: Misspelling config action keys → **Right**: Actions silently fail if plugin ID doesn't exist
-- **Wrong**: Forgetting to install extensions that provide config being imported → **Right**: Validation catches this for config actions, not always for imports
+- Omitting `name` → Required field, validation fails without it
+- Using relative paths in recipes list → Recipe names are machine names, not paths
+- Listing themes before modules in install → Themes depend on modules; runner handles order automatically but explicit theme-before-module breaks
+- Misspelling config action keys → Actions silently fail if plugin ID doesn't exist
+- Forgetting to install extensions that provide config being imported → Validation catches this for config actions, not always for imports
 
 ## See Also
 
-- [Recipe System Overview](recipe-system-overview.md)
-- [Creating Your First Recipe](creating-first-recipe.md)
+- Previous: ← [Recipe System Overview](recipe-system-overview.md)
+- Next: [Creating Your First Recipe](creating-first-recipe.md) →
 - Reference: `core/lib/Drupal/Core/Recipe/Recipe.php` (parse method, validation constraints)

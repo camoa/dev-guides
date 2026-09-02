@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use live validation when user experience benefits from immediate field-level feedback (email availability checks, username format, real-time constraints). Avoid for simple required-field checks.
+You need to validate form fields as users type or when they leave a field, providing immediate feedback without form submission.
 
 ## Pattern
 
@@ -62,14 +62,13 @@ Reference: `core/lib/Drupal/Core/Ajax/HtmlCommand.php`
 
 ## Common Mistakes
 
-- **Wrong**: Using `keyup` event → **Right**: Causes excessive server requests; use `focusout` or debounced `keyup`
-- **Wrong**: Not handling empty values → **Right**: Returns errors for unfilled fields before user finishes; guard with `empty()` check
-- **Wrong**: Validating before minimum input length → **Right**: Check availability only after >=3 characters typed
-- **Wrong**: Not clearing previous validation messages → **Right**: Old errors persist when field becomes valid; always replace the container
-- **Wrong**: Using throbber progress → **Right**: Distracting for fast validation; use `'type' => 'none'`
+- Using `keyup` event → Excessive server requests; use `focusout` or debounced `keyup`
+- Not handling empty values → Returns errors for unfilled required fields before user finishes
+- Validating before minimum input length → Check username availability only after >=3 characters typed
+- Not clearing previous validation messages → Old errors persist when field becomes valid
+- Using throbber progress indicator → Distracting for fast validation; use `'type' => 'none'`
 
 ## See Also
 
-- [Multi-Step Form Workflows](multi-step-form-workflows.md)
-- [Content Manipulation Commands](content-manipulation-commands.md)
+- ← Previous: [Multi-Step Form Workflows](multi-step-form-workflows.md) | Next: [Content Manipulation Commands](content-manipulation-commands.md)
 - Reference: [AJAX API Basic Concepts](https://www.drupal.org/docs/drupal-apis/ajax-api/basic-concepts)

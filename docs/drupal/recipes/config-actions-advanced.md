@@ -10,107 +10,103 @@ drupal_version: "11.x"
 
 > Use advanced config action patterns when you need wildcards for bulk operations, optional config handling, chaining multiple actions, or input substitution.
 
-## Decision
+Complex config action scenarios: wildcards, optional config, chaining, input substitution.
 
-| Pattern | Use For | Syntax |
-|---------|---------|--------|
-| Wildcards | Bulk operations on multiple entities | `user.role.*:` or `core.entity_view_display.node.*.default:` |
-| Optional config | Actions that should skip if config doesn't exist | `?block.block.legacy_block:` |
-| Input substitution | Environment-specific values in config | `${input_name}` in config names or values |
-| Chaining | Multiple actions on same entity | Multiple action keys under same config name |
-| Drupal tokens | Runtime token replacement in config values | `[node:title]`, `[site:url]` (config must support tokens) |
+## Steps: Wildcards, Optional Config, Substitution and Chaining
 
-## Pattern
+1. **Wildcards for bulk operations** — Target multiple entities with patterns
+   ```yaml
+   config:
+     actions:
+       user.role.*:
+         grantPermission: 'access content'
+       core.entity_view_display.node.*.default:
+         setComponent:
+           name: created
+           options: { type: timestamp, weight: 10 }
+   ```
 
-Wildcards for bulk operations:
+2. **Optional config actions** — Prefix with `?` to skip if config doesn't exist
+   ```yaml
+   config:
+     actions:
+       ?block.block.legacy_block:
+         setProperties:
+           status: false
+   ```
 
-```yaml
-config:
-  actions:
-    user.role.*:
-      grantPermission: 'access content'
-    core.entity_view_display.node.*.default:
-      setComponent:
-        name: created
-        options: { type: timestamp, weight: 10 }
-```
+3. **Input substitution** — Use `${input_name}` in config names or values
+   ```yaml
+   input:
+     theme_name:
+       data_type: string
+       default: { source: value, value: olivero }
+   config:
+     actions:
+       block.block.${theme_name}_search:
+         placeBlockInRegion:
+           region: header
+           theme: ${theme_name}
+   ```
 
-Optional config actions:
+4. **Chaining actions** — Multiple actions on same config entity
+   ```yaml
+   config:
+     actions:
+       user.role.editor:
+         createIfNotExists:
+           label: 'Editor'
+         grantPermissions:
+           - 'access content'
+           - 'access toolbar'
+         setProperties:
+           weight: 5
+   ```
 
-```yaml
-config:
-  actions:
-    ?block.block.legacy_block:
-      setProperties:
-        status: false
-```
+5. **Drupal token substitution** — Use Drupal tokens in config values (separate from `${input}` syntax)
+   ```yaml
+   config:
+     actions:
+       metatag.metatag_defaults.node:
+         simpleConfigUpdate:
+           tags.og_title: '[node:title]'
+           tags.og_url: '[site:url]/node/[node:nid]'
+   ```
+   Token syntax `[entity:field]` is processed by Drupal's token system at runtime, not at recipe apply time. Only useful for config values that support tokens (metatag, pathauto, etc.).
 
-Input substitution:
+6. **Create entities then configure** — Use createIfNotExists before entity-specific actions
+   ```yaml
+   config:
+     actions:
+       core.entity_form_display.node.article.default:
+         createIfNotExists:
+           targetEntityType: node
+           bundle: article
+           mode: default
+         setComponents:
+           - name: body
+             options: { type: text_textarea_with_summary }
+   ```
 
-```yaml
-input:
-  theme_name:
-    data_type: string
-    default: { source: value, value: olivero }
-config:
-  actions:
-    block.block.${theme_name}_search:
-      placeBlockInRegion:
-        region: header
-        theme: ${theme_name}
-```
+## Decision Points: Choosing an Advanced Pattern
 
-Chaining actions:
-
-```yaml
-config:
-  actions:
-    user.role.editor:
-      createIfNotExists:
-        label: 'Editor'
-      grantPermissions:
-        - 'access content'
-        - 'access toolbar'
-      setProperties:
-        weight: 5
-```
-
-Drupal token substitution (for config that supports tokens):
-
-```yaml
-config:
-  actions:
-    metatag.metatag_defaults.node:
-      simpleConfigUpdate:
-        tags.og_title: '[node:title]'
-        tags.og_url: '[site:url]/node/[node:nid]'
-```
-
-Create entities then configure:
-
-```yaml
-config:
-  actions:
-    core.entity_form_display.node.article.default:
-      createIfNotExists:
-        targetEntityType: node
-        bundle: article
-        mode: default
-      setComponents:
-        - name: body
-          options: { type: text_textarea_with_summary }
-```
+| At this step... | If... | Then... |
+|---|---|---|
+| Config may not exist | Action should be optional | Prefix config name with `?` |
+| Multiple entities need same action | Entities share config prefix pattern | Use wildcards like `user.role.*` |
+| Action values vary by input | Recipe needs environment flexibility | Use `${input_name}` substitution |
+| Actions must run in sequence | Later action depends on earlier | YAML order matters; earlier actions run first |
 
 ## Common Mistakes
 
-- **Wrong**: Using wildcards with optional prefix → **Right**: `?user.role.*` is invalid; wildcards and optional are mutually exclusive
-- **Wrong**: Forgetting input values are strings → **Right**: `${site_name}` is always string; no type coercion for integers/booleans
-- **Wrong**: Not testing wildcard patterns → **Right**: Wildcards only match existing config; create first, then wildcard-modify
-- **Wrong**: Assuming action order doesn't matter → **Right**: YAML dict order is preserved; actions run in declaration order
-- **Wrong**: Missing createIfNotExists before entity-specific actions → **Right**: Entity must exist or be created in same recipe
+- Using wildcards with optional prefix → `?user.role.*` is invalid; wildcards and optional are mutually exclusive
+- Forgetting input values are strings → `${site_name}` is always string; no type coercion for integers/booleans
+- Not testing wildcard patterns → Wildcards only match existing config; create first, then wildcard-modify
+- Assuming action order doesn't matter → YAML dict order is preserved; actions run in declaration order
+- Missing createIfNotExists before entity-specific actions → Entity must exist or be created in same recipe
 
 ## See Also
 
-- [Config Actions - Entity-Specific](config-actions-entity-specific.md)
-- [Input System - Defining Inputs](input-defining.md)
+- Previous: ← [Config Actions - Entity-Specific](config-actions-entity-specific.md)
+- Next: [Input System - Defining Inputs](input-defining.md) →
 - Reference: `core/lib/Drupal/Core/Config/Action/ConfigActionManager.php` (applyAction method)

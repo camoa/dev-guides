@@ -201,4 +201,4 @@ const sendMessage = async (text: string) => {
 
 - [Drupal Backend Integration](drupal-backend.md)
 - [Custom Handlers](custom-handlers.md)
-- Reference: `/home/camoa/workspace/claude_memory/skills/drupal-ai/references/deepchat-frontend-integration.md`
+- Reference: `claude_memory/skills/drupal-ai/references/deepchat-frontend-integration.md`

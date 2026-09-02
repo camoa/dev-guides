@@ -1,11 +1,10 @@
 ---
-description: TipTap Editor guide
+description: "Source references and maintenance manifest for the tiptap editor guides — web sources, code sources, and version history"
 ---
 
 # Sources & Maintenance
-## Sources & Maintenance Manifest
 
-### Web Sources
+## Web Sources
 | Source | URL | Guide Sections | Last Verified |
 |--------|-----|----------------|---------------|
 | Tiptap Official Docs | https://tiptap.dev/docs/editor/getting-started/overview | 1.1, 2.1, 4.1, 9.1 | 2026-02-14 |
@@ -32,17 +31,17 @@ description: TipTap Editor guide
 | Drupal JSON API Docs | https://www.drupal.org/docs/core-modules-and-themes/core-modules/jsonapi-module | 14.1 | 2026-02-14 |
 | OWASP XSS Guide | https://owasp.org/www-community/attacks/xss/ | 18.1 | 2026-02-14 |
 
-### Code Sources
-**Note:** No Drupal research install needed for this guide. All code references are from Tiptap's npm packages and local documentation at `/home/camoa/workspace/claude_memory/future_skills/tiptap-docs/`.
+## Code Sources
+**Note:** No Drupal research install needed for this guide. All code references are from Tiptap's npm packages and local documentation at `claude_memory/future_skills/tiptap-docs/`.
 
 | Source | Path | Guide Sections | Version |
 |--------|------|----------------|---------|
-| Tiptap Local Docs | `/home/camoa/workspace/claude_memory/future_skills/tiptap-docs/src/content/editor/` | All sections | 2.5+ |
+| Tiptap Local Docs | `claude_memory/future_skills/tiptap-docs/src/content/editor/` | All sections | 2.5+ |
 | Tiptap Core Package | `node_modules/@tiptap/core` | 3.1, 8.1, 9.1 | 3.11.1 |
 | Tiptap React Package | `node_modules/@tiptap/react` | 2.2, 17.1 | 3.11.1 |
 | Tiptap StarterKit | `node_modules/@tiptap/starter-kit` | 7.1 | 3.11.1 |
 
-### Maintenance Notes
+## Maintenance Notes
 - Tiptap version 3.x (as of 2026-02-14) is current; verify compatibility when updating
 - Security vulnerabilities actively monitored; check Snyk for new CVEs
 - ProseMirror is Tiptap's foundation; breaking changes in ProseMirror affect Tiptap
@@ -50,4 +49,4 @@ description: TipTap Editor guide
 
 **Last Updated:** 2026-02-14
 **Guide Version:** 1.0
-
+<!-- END PARTITION: sources-maintenance -->

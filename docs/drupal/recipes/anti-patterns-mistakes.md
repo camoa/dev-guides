@@ -10,7 +10,9 @@ drupal_version: "11.x"
 
 > Avoid these anti-patterns when creating recipes to prevent brittle, untestable, or unmaintainable code.
 
-## Decision
+Avoid these patterns that lead to brittle, untestable, or unmaintainable recipes.
+
+## Decision: Anti-Patterns and What to Do Instead
 
 | Anti-Pattern | Why It's Wrong | Do This Instead |
 |--------------|----------------|-----------------|
@@ -26,23 +28,27 @@ drupal_version: "11.x"
 | Expecting upgrade paths | Recipes have no update mechanism; no way to track or reapply changes | Version recipes semantically; document breaking changes; use config management for ongoing updates |
 | Dynamic/conditional logic | No if/else, no loops, no runtime decisions in recipe.yml | Use modules for dynamic behavior; recipes are static declarations |
 
-## Pattern
+## Pattern: Worked Examples of Each Anti-Pattern
 
-What NOT to do (monolithic recipe):
-
+**What NOT to do** — Monolithic recipe:
 ```yaml
 name: 'Everything Recipe'
 install:
   - node
   - media
+  - taxonomy
+  - comment
+  - workflows
   # ... 30 more modules
 config:
   strict: true  # BAD: Prevents applying to existing sites
-  # ... 100 config imports and 50 mixed actions
+  import:
+    # ... 100 config imports
+  actions:
+    # ... 50 config actions mixed together
 ```
 
-What to do (composed recipes):
-
+**What to do** — Composed recipes:
 ```yaml
 # article_content_type recipe
 name: 'Article Content Type'
@@ -52,6 +58,7 @@ install:
 config:
   strict:
     - field.storage.node.field_image  # Only critical schema
+  # ... focused on article setup
 
 # site recipe
 name: 'My Site'
@@ -61,10 +68,9 @@ recipes:
   - administrator_role
 ```
 
-Why strict mode is dangerous:
-
+**Why strict mode is dangerous** — Existing config prevents application:
 ```yaml
-# BAD: Fails if role already exists with different permissions
+# BAD: Fails if user.role.authenticated already exists with different permissions
 config:
   strict: true
   actions:
@@ -79,8 +85,7 @@ config:
       grantPermission: 'access content'
 ```
 
-Why hardcoded values break:
-
+**Why hardcoded values break** — Not reusable:
 ```yaml
 # BAD: Only works for this specific site
 config:
@@ -88,28 +93,55 @@ config:
     system.site:
       simpleConfigUpdate:
         name: 'Acme Corp Website'
+        mail: 'admin@acmecorp.com'
 
 # GOOD: Uses inputs
 input:
   site_name:
     data_type: string
     default: { source: config, config: [system.site, name] }
+  site_mail:
+    data_type: string
+    default: { source: config, config: [system.site, mail] }
 config:
   actions:
     system.site:
       simpleConfigUpdate:
         name: ${site_name}
+        mail: ${site_mail}
+```
+
+**Why missing createIfNotExists fails**:
+```yaml
+# BAD: Fails if display doesn't exist
+config:
+  actions:
+    core.entity_form_display.node.article.default:
+      setComponents:  # ERROR: Display doesn't exist yet
+        - name: body
+
+# GOOD: Creates display first
+config:
+  actions:
+    core.entity_form_display.node.article.default:
+      createIfNotExists:
+        targetEntityType: node
+        bundle: article
+        mode: default
+      setComponents:
+        - name: body
 ```
 
 ## Common Mistakes
 
-- **Wrong**: Treating recipes as update mechanisms → **Right**: Recipes are apply-once; config is permanent; use config management for updates
-- **Wrong**: Not handling existing config → **Right**: Test on both clean installs AND existing sites with similar config
-- **Wrong**: Forgetting recipes are public once published → **Right**: Don't commit secrets, API keys, or sensitive data
-- **Wrong**: Assuming action order doesn't matter → **Right**: YAML preserves order; actions run sequentially
-- **Wrong**: Not documenting breaking changes → **Right**: Version bumps with new required inputs or changed config structure need migration path
+- Treating recipes as update mechanisms → Recipes are apply-once; config is permanent; use config management for updates
+- Not handling existing config → Test on both clean installs AND existing sites with similar config
+- Forgetting recipes are public once published → Don't commit secrets, API keys, or sensitive data
+- Assuming action order doesn't matter → YAML preserves order; actions run sequentially
+- Using `@extend` pattern from Sass → No recipe inheritance; use composition via `recipes:` key
+- Not documenting breaking changes → Version bumps with new required inputs or changed config structure need migration path
 
 ## See Also
 
-- [Best Practices & Patterns](best-practices-patterns.md)
-- [Security & Performance](security-performance.md)
+- Previous: ← [Best Practices & Patterns](best-practices-patterns.md)
+- Next: [Security & Performance](security-performance.md) →

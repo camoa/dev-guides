@@ -1,5 +1,5 @@
 ---
-description: Drupal to Salesforce push sync — queue architecture, event flow, async vs sync, upsert vs create/update
+description: "Drupal to Salesforce push sync — queue architecture, event flow, async vs sync, upsert vs create/update"
 tldr: "Use `salesforce_push` when you need to send Drupal entity changes to Salesforce. Use `async = TRUE` for production (queue-based, non-blocking)."
 drupal_version: "11.x"
 ---
@@ -10,7 +10,9 @@ drupal_version: "11.x"
 
 > Use `salesforce_push` when you need to send Drupal entity changes to Salesforce. Use `async = TRUE` for production (queue-based, non-blocking). Use `async = FALSE` only for low-traffic, real-time requirements.
 
-## Decision
+**Purpose:** Push Drupal entity changes to Salesforce
+
+## Decision: Sync vs Async, Upsert vs Create/Update
 
 | Situation | Choose | Why |
 |---|---|---|
@@ -19,9 +21,38 @@ drupal_version: "11.x"
 | Salesforce has external ID field | `always_upsert = TRUE` | Handles create/update in one operation |
 | No external ID on SF object | `always_upsert = FALSE` | Uses create for new, update for existing |
 
-## Pattern
+**Decision Point - Sync vs Async:**
+- `async = FALSE`: Real-time push during entity save (blocking)
+- `async = TRUE`: Queue-based push during cron (non-blocking, recommended)
 
-**Push event flow:**
+**Decision Point - Upsert vs Create/Update:**
+- `always_upsert = TRUE`: Always use upsert operation (requires external ID field)
+- `always_upsert = FALSE`: Use create for new, update for existing
+- Upsert key: Mapping entity → `key` field
+
+## Architecture
+
+**Queue System:**
+- Service: `queue.salesforce_push`
+- Class: `/web/modules/contrib/salesforce/modules/salesforce_push/src/PushQueue.php`
+- Table: `salesforce_push_queue`
+- Default limit: 10,000 items per cron run
+
+**Queue Processor Plugin System:**
+- Manager: `/web/modules/contrib/salesforce/modules/salesforce_push/src/PushQueueProcessorPluginManager.php`
+- Default processor: `rest` plugin
+- Custom processors: Extend `PushQueueProcessorInterface`
+
+## Event Flow
+
+1. Entity saved → `salesforce_push_entity_crud()` → Queue item created
+2. Cron/standalone → Queue processor runs
+3. `SalesforceEvents::PUSH_ALLOWED` → Veto opportunity
+4. `SalesforceEvents::PUSH_MAPPING_OBJECT` → Modify mapped object
+5. `SalesforceEvents::PUSH_PARAMS` → Modify push parameters
+6. API call (create/update/upsert/delete)
+7. `SalesforceEvents::PUSH_SUCCESS` or `SalesforceEvents::PUSH_FAIL`
+
 ```
 Entity saved
   → salesforce_push_entity_crud()
@@ -34,16 +65,17 @@ Entity saved
   → SalesforceEvents::PUSH_SUCCESS or PUSH_FAIL
 ```
 
-**Configuration:**
-- Global push limit: `salesforce.settings:global_push_limit` (default: 10,000/cron run)
-- Per-mapping limit: mapping entity `push_limit`
-- Retry attempts: mapping entity `push_retries`
-- Push frequency: mapping entity `push_frequency`
+## Configuration
 
-**Services:**
-- Queue service: `queue.salesforce_push`
-- Queue class: `/web/modules/contrib/salesforce/modules/salesforce_push/src/PushQueue.php`
-- Queue table: `salesforce_push_queue`
+- Global push limit: `/admin/config/salesforce` → `global_push_limit`
+- Per-mapping limits: Mapping entity → `push_limit`
+- Retry attempts: Mapping entity → `push_retries`
+- Push frequency: Mapping entity → `push_frequency`
+
+## Drush Commands
+
+- Location: `/web/modules/contrib/salesforce/modules/salesforce_push/src/Commands/SalesforcePushCommands.php`
+- `drush sfpush` - Process push queue
 
 ## Common Mistakes
 

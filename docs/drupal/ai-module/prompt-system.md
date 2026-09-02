@@ -10,6 +10,8 @@ drupal_version: "11.x"
 
 > Use the prompt system when you need reusable, deployable prompts with variable substitution. For one-off prompts in code, string interpolation is simpler.
 
+The AI module provides a config entity system for managing reusable prompts with variable substitution.
+
 ## Decision
 
 | Situation | Choose | Why |
@@ -18,25 +20,27 @@ drupal_version: "11.x"
 | Define prompt variables/schema | `ai.ai_prompt_type.*` config entities | Named variables for substitution |
 | Modify prompts without code | `ai.prompt_manager` service | Loads and renders prompts with variable values |
 
-## Config Entities
+## Prompt Config Entities
 
 - `ai.ai_prompt_type.*` — defines prompt types with named variables
 - `ai.ai_prompt.*` — individual prompt instances with text content
 
-## Pattern
+## Service: `ai.prompt_manager`
 
 ```php
 $promptManager = \Drupal::service('ai.prompt_manager');
-// Load and render a prompt with variables.
+// Load and render a prompt with variables
 ```
 
 ## Variables
 
-Prompts support Twig-style syntax:
+Prompts support Twig-style conditionals and placeholder variables:
+
 - `{variableName}` — simple substitution
 - `{% if variableName %}...{% endif %}` — conditional blocks
 
-**Example (AI Translate default prompt):**
+## Example (AI Translate Default Prompt)
+
 ```
 You are a helpful translator.
 {% if sourceLangName %}Translate from {sourceLangName} {% endif %}to {destLangName}.

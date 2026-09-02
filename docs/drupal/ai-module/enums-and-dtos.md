@@ -19,7 +19,11 @@ drupal_version: "11.x"
 | Track token costs | `TokenUsageDto` | Extracted from provider response |
 | Check rate limit headers | `ChatProviderLimitsDto` | Parsed from provider response headers |
 
-## AiModelCapability — Chat
+## AiModelCapability Enum
+
+Typed capabilities that models can declare. Used to filter `getConfiguredModels()` results.
+
+**Chat capabilities:**
 
 | Case | Value | Description |
 |------|-------|-------------|
@@ -43,11 +47,13 @@ $models = $provider->getConfiguredModels('chat', [AiModelCapability::ChatWithPdf
 
 ## AiModelCapability — Image-to-Image
 
-`ImageToImageUpscale`, `ImageToImageOutpaint`, `ImageToImageInpaint`, `ImageToImageErase`, `ImageToImageSearchReplace`, `ImageToImageSearchRecolor`, `ImageToImageRemoveBackground`, `ImageToImageSketch`, `ImageToImageStyleGuide`, `ImageToImageStyleTransfer`
+**Image-to-Image capabilities:** `ImageToImageUpscale`, `ImageToImageOutpaint`, `ImageToImageInpaint`, `ImageToImageErase`, `ImageToImageSearchReplace`, `ImageToImageSearchRecolor`, `ImageToImageRemoveBackground`, `ImageToImageSketch`, `ImageToImageStyleGuide`, `ImageToImageStyleTransfer`
 
-Each case has `getBaseOperationType()`, `getTitle()`, and `getDescription()`.
+Each case has `getBaseOperationType()` (returns `chat` or `image_to_image`), `getTitle()`, and `getDescription()`.
 
-## AiProviderCapability (Provider-level)
+## AiProviderCapability Enum
+
+Provider-level (not model-level) capabilities:
 
 | Case | Value | Description |
 |------|-------|-------------|
@@ -56,13 +62,15 @@ Each case has `getBaseOperationType()`, `getTitle()`, and `getDescription()`.
 
 ## StructuredOutputSchema DTO
 
+Defines how the AI provider should structure its response. Pass to `ChatInput::setChatStructuredJsonSchema()`.
+
 ```php
 use Drupal\ai\Dto\StructuredOutputSchema;
 
 $schema = new StructuredOutputSchema(
-  name: 'weather_response',   // Lowercase, hyphens, underscores only
+  name: 'weather_response',       // lowercase, hyphens, underscores only
   description: 'Weather data',
-  strict: TRUE,
+  strict: TRUE,                    // provider must follow schema exactly
   json_schema: [
     'properties' => [
       'temperature' => ['type' => 'number'],
@@ -71,15 +79,23 @@ $schema = new StructuredOutputSchema(
   ],
 );
 
+// Or from array (e.g., from config):
+$schema = StructuredOutputSchema::fromArray([
+  'name' => 'my_schema',
+  'schema' => ['properties' => ['answer' => ['type' => 'string']]],
+]);
+
 $input = new ChatInput([new ChatMessage('user', 'What is the weather?')]);
 $input->setChatStructuredJsonSchema($schema);
 ```
 
-Validation: `name` must match `/^[a-z0-9_-]+$/`; `json_schema` must have a `properties` key. `fromArray()` throws `\InvalidArgumentException` on failure.
+Validation: `name` must match `/^[a-z0-9_-]+$/`; `json_schema` must have a `properties` key. `fromArray()` validates on creation and throws `\InvalidArgumentException` on failure.
 
-**Deprecated in 1.4:** `ChatInput::setChatStrictSchema(bool $strict)` and `getChatStrictSchema()` — set `strict: TRUE` on the `StructuredOutputSchema` DTO instead. `setChatStructuredJsonSchema()` accepts both array and `StructuredOutputSchema` instances.
+**Deprecated in 1.4:** `ChatInput::setChatStrictSchema(bool $strict)` and `getChatStrictSchema()` are deprecated and will be removed in 2.0.0. Set `strict: TRUE` on the `StructuredOutputSchema` DTO instead. `setChatStructuredJsonSchema()` now accepts both array and `StructuredOutputSchema` instances.
 
 ## TokenUsageDto
+
+Tracks token consumption from provider responses:
 
 | Property | Type | Description |
 |----------|------|-------------|
@@ -90,6 +106,8 @@ Validation: `name` must match `/^[a-z0-9_-]+$/`; `json_schema` must have a `prop
 | `cached` | `?int` | Cached tokens |
 
 ## ChatProviderLimitsDto
+
+Rate limit information from provider response headers:
 
 | Property | Type | Description |
 |----------|------|-------------|
@@ -107,9 +125,9 @@ Both DTOs use `DtoBaseMethodsTrait` providing `create(array $values)` (factory) 
 | Enum | Values |
 |------|--------|
 | `VdbSimilarityMetrics` | `CosineSimilarity`, `EuclideanDistance`, `InnerProduct` |
-| `VdbCapability` | `GroupBy` |
+| `VdbCapability` | `GroupBy` (grouping matches to avoid duplicates) |
 | `EmbeddingStrategyCapability` | `MultipleMainContent` |
-| `EmbeddingStrategyIndexingOptions` | `MainContent`, `ContextualContent`, `Attributes`, `Ignore` — each with `getKey()`, `getLabel()`, `getDescription()` |
+| `EmbeddingStrategyIndexingOptions` | `MainContent`, `ContextualContent`, `Attributes`, `Ignore` -- with `getKey()`, `getLabel()`, `getDescription()` |
 
 ## Common Mistakes
 

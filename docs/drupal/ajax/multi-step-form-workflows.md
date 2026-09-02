@@ -8,9 +8,72 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use multi-step AJAX forms for wizard-style workflows where users navigate sequential steps without page reloads. Use standard forms for simple one-page submissions.
+You need wizard-style forms with sequential steps, where users navigate forward/backward without page reloads.
 
-## Decision
+## Steps
+
+1. **Initialize step tracking**
+
+   ```php
+   public function buildForm(array $form, FormStateInterface $form_state) {
+     $step = $form_state->get('step') ?: 1;
+     $form_state->set('step', $step);
+   }
+   ```
+
+2. **Build step-specific form elements**
+
+   ```php
+   switch ($step) {
+     case 1:
+       $form['step1'] = $this->buildStep1($form_state);
+       break;
+     case 2:
+       $form['step2'] = $this->buildStep2($form_state);
+       break;
+   }
+   ```
+
+3. **Add navigation buttons with AJAX**
+
+   ```php
+   $form['actions']['next'] = [
+     '#type' => 'submit',
+     '#value' => t('Next'),
+     '#submit' => ['::nextStep'],
+     '#ajax' => [
+       'callback' => '::stepCallback',
+       'wrapper' => 'form-wrapper',
+     ],
+   ];
+   ```
+
+4. **Implement step transitions**
+
+   ```php
+   public function nextStep(array &$form, FormStateInterface $form_state) {
+     $step = $form_state->get('step');
+     $form_state->set('step', $step + 1);
+     $form_state->setRebuild();  // CRITICAL: rebuilds form
+   }
+   ```
+
+5. **Return entire form from callback**
+
+   ```php
+   public function stepCallback(array &$form, FormStateInterface $form_state) {
+     return $form;  // Return whole form to update all content
+   }
+   ```
+
+The form itself must carry the wrapper the navigation buttons target:
+
+```php
+$form['#prefix'] = '<div id="form-wrapper">';
+$form['#suffix'] = '</div>';
+```
+
+## Decision Points
 
 | At this step... | If... | Then... |
 |-----------------|-------|---------|
@@ -20,54 +83,15 @@ drupal_version: "11.x"
 | Validation | Step requires validation | Use separate submit handler with validation |
 | Progress indication | Multiple steps | Add progress bar showing current step |
 
-## Pattern
-
-```php
-public function buildForm(array $form, FormStateInterface $form_state) {
-  $step = $form_state->get('step') ?: 1;
-  $form_state->set('step', $step);
-
-  $form['#prefix'] = '<div id="form-wrapper">';
-  $form['#suffix'] = '</div>';
-
-  switch ($step) {
-    case 1: $form['step1'] = $this->buildStep1($form_state); break;
-    case 2: $form['step2'] = $this->buildStep2($form_state); break;
-  }
-
-  $form['actions']['next'] = [
-    '#type' => 'submit',
-    '#value' => t('Next'),
-    '#submit' => ['::nextStep'],
-    '#limit_validation_errors' => [],
-    '#ajax' => ['callback' => '::stepCallback', 'wrapper' => 'form-wrapper'],
-  ];
-  return $form;
-}
-
-public function nextStep(array &$form, FormStateInterface $form_state) {
-  $step = $form_state->get('step');
-  $form_state->set('step', $step + 1);
-  $form_state->setRebuild();  // CRITICAL: rebuilds form
-}
-
-public function stepCallback(array &$form, FormStateInterface $form_state) {
-  return $form;  // Return whole form to update all content
-}
-```
-
-Reference: `core/modules/system/tests/modules/ajax_forms_test/src/Form/AjaxFormsTestLazyLoadForm.php`
-
 ## Common Mistakes
 
-- **Wrong**: Forgetting `$form_state->setRebuild()` → **Right**: Without it, form submits instead of rebuilding
-- **Wrong**: Not wrapping entire form → **Right**: Without a wrapper around the whole form, navigation buttons don't update
-- **Wrong**: Validating on navigation buttons → **Right**: Add `#limit_validation_errors => []` to Previous/Next buttons
-- **Wrong**: Storing data in private properties → **Right**: Store in `$form_state` — properties are lost on rebuild
-- **Wrong**: Not conditionally showing Previous/Submit buttons → **Right**: No Previous on step 1, show Submit only on final step
+- Forgetting `$form_state->setRebuild()` → Form submits instead of rebuilding, workflow breaks
+- Not wrapping entire form → Update misses navigation buttons; wrap form with `#prefix`/`#suffix` containing wrapper ID
+- Validating on navigation buttons → Add `#limit_validation_errors => []` to Previous/Next buttons
+- Losing form data between steps → Store in `$form_state`, not private properties (form rebuilds from scratch)
+- Not conditionally showing buttons → Previous button on step 1, Next button on final step creates poor UX
 
 ## See Also
 
-- [Dependent Field Patterns](dependent-field-patterns.md)
-- [Live Field Validation](live-field-validation.md)
-- Reference: [Drupal AJAX API documentation](https://www.drupal.org/docs/drupal-apis/ajax-api)
+- ← Previous: [Dependent Field Patterns](dependent-field-patterns.md) | Next: [Live Field Validation](live-field-validation.md)
+- Reference: `core/modules/system/tests/modules/ajax_forms_test/src/Form/AjaxFormsTestLazyLoadForm.php`

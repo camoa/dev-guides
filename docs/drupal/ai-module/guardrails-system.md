@@ -10,6 +10,8 @@ drupal_version: "11.x"
 
 > Use guardrails when you need to intercept AI requests before they reach the provider (pre-processing) or after receiving a response (post-processing). Required for user-facing AI features.
 
+Guardrails are plugins that process AI requests before and/or after they reach the provider. Use them for content moderation, PII filtering, prompt injection detection, etc.
+
 ## Decision
 
 | Situation | Choose | Why |
@@ -22,26 +24,63 @@ drupal_version: "11.x"
 | Redact content mid-stream | `StreamableGuardrailInterface` (1.4) | Buffer streamed output and redact before client sees it |
 | Site-wide enforcement | Global guardrail sets (1.4) | Applied to every request before caller-attached sets |
 
-## Pattern
+## Plugin Attribute
 
 ```php
 use Drupal\ai\Attribute\AiGuardrail;
 
 #[AiGuardrail(
-  id: 'safety:pii_filter',  // ID must match or be prefixed by group ("safety")
-  label: new TranslatableMarkup('PII Filter'),
-  description: new TranslatableMarkup('Removes PII before sending to AI'),
+  id: 'my_guardrail',
+  label: new TranslatableMarkup('My Guardrail'),
+  description: new TranslatableMarkup('Blocks unsafe content'),
 )]
-class PiiFilter extends AiGuardrailPluginBase {
+class MyGuardrail extends AiGuardrailPluginBase {
+  // Implement pre/post processing methods
+}
+```
 
-  public function processInput(InputInterface $input): GuardrailResultInterface {
-    // Return PassResult, StopResult, or RewriteInputResult.
-    return new RewriteInputResult('Input scrubbed', $this, []);
-  }
+**ID convention:** Must match or be prefixed by group. E.g., group "safety" -> ID must be "safety" or "safety:pii_filter".
 
-  public function processOutput(OutputInterface $output): GuardrailResultInterface {
-    return new PassResult('Output passed', $this, []);
-  }
+## Services
+
+| Service | Purpose |
+|---------|---------|
+| `plugin.manager.ai_guardrail` | Plugin manager |
+| `Drupal\ai\Guardrail\AiGuardrailRepository` | Loads configured guardrails |
+| `ai.guardrail_helper` | Helper for guardrail operations |
+| `Drupal\ai\EventSubscriber\GuardrailsEventSubscriber` | Applies guardrails on pre/post events |
+
+## How Guardrails Work
+
+1. `PreGenerateResponseEvent` fires
+2. **Changed in 1.4:** `GlobalGuardrailsEventSubscriber` (priority 100) prepends site-wide guardrail sets from `ai.settings` config before any caller-attached sets — global sets always run first
+3. `GuardrailsEventSubscriber` loads the full merged guardrail set list from the input
+4. Each guardrail's pre-processing runs (can modify input or block request)
+5. Provider processes the request
+6. `PostGenerateResponseEvent` fires
+7. Each guardrail's post-processing runs (can modify or reject output)
+
+## Config Entities
+
+| Entity Type | Interface | Purpose |
+|-------------|-----------|---------|
+| `ai_guardrail` | `AiGuardrailEntityInterface` | Individual guardrail config entity |
+| `ai_guardrail_set` | `AiGuardrailSetInterface` | Groups guardrails with pre/post lists and a stop threshold |
+
+`AiGuardrailSetInterface` key methods:
+
+- `getPreGenerateGuardrails()` — guardrails that run before AI generation
+- `getPostGenerateGuardrails()` — guardrails that run after AI generation
+- `getStopThreshold()` — float threshold for `StopResult` scores
+
+## AiGuardrailInterface Methods
+
+```php
+interface AiGuardrailInterface {
+  public function label(): string;
+  public function isAvailable(): bool;
+  public function processInput(InputInterface $input): GuardrailResultInterface;
+  public function processOutput(OutputInterface $output): GuardrailResultInterface;
 }
 ```
 
@@ -50,76 +89,30 @@ class PiiFilter extends AiGuardrailPluginBase {
 | Result Class | `stop()` | Purpose |
 |-------------|---------|---------|
 | `PassResult` | `false` | Input/output passes without changes |
-| `StopResult` | `true` | Block the request; includes a `$score` compared against set threshold |
-| `RewriteInputResult` | `false` | Rewrite the input before sending |
-| `RewriteOutputResult` | `false` | Rewrite the output before returning |
+| `StopResult` | `true` | Block the request; includes a `$score` (float) compared against set threshold |
+| `RewriteInputResult` | `false` | Rewrite the input before sending to provider |
+| `RewriteOutputResult` | `false` | Rewrite the output before returning to caller |
 
-## Request Lifecycle
+All result types extend `AbstractResult(string $message, AiGuardrailInterface $guardrail, array $context)`.
 
-1. `PreGenerateResponseEvent` fires
-2. **Changed in 1.4:** `GlobalGuardrailsEventSubscriber` (priority 100) prepends site-wide guardrail sets from `ai.settings` — global sets always run first and cannot be bypassed by callers
-3. `GuardrailsEventSubscriber` loads the merged guardrail set list from the input
-4. Each guardrail's `processInput()` runs (can modify input or block request)
-5. Provider processes the request
-6. `PostGenerateResponseEvent` fires
-7. Each guardrail's `processOutput()` runs
-
-## Global Guardrails (Changed in 1.4)
-
-Configure site-wide guardrail sets that apply to **every** AI request regardless of caller. Configure at `/admin/config/ai/settings`.
-
-```yaml
-# ai.settings
-global_guardrails:
-  - my_pii_guardrail_set
-  - my_content_moderation_set
-```
-
-## Multiple Guardrail Sets per Input (Changed in 1.4)
-
-In 1.3.x, each input held a single guardrail set. In 1.4.x, inputs hold multiple sets.
-
-| 1.3.x (deprecated in 1.4) | 1.4.x replacement |
-|---------------------------|-------------------|
-| `setGuardrailSet($set)` | `addGuardrailSet($set)` or `setGuardrailSets([$set])` |
-| `getGuardrailSet()` | `getGuardrailSets()` — returns array keyed by set ID |
-
-```php
-// 1.4.x (recommended)
-$input->addGuardrailSet($guardrailSet);      // Add one set; replaces if same ID
-$input->setGuardrailSets([$set1, $set2]);   // Replace all sets
-$sets = $input->getGuardrailSets();          // Returns array keyed by set ID
-```
-
-## Config Entities
-
-| Entity Type | Purpose |
-|-------------|---------|
-| `ai_guardrail` | Individual guardrail config entity |
-| `ai_guardrail_set` | Groups guardrails with pre/post lists and a stop threshold |
-
-`AiGuardrailSetInterface` key methods:
-- `getPreGenerateGuardrails()` — guardrails that run before AI generation
-- `getPostGenerateGuardrails()` — guardrails that run after AI generation
-- `getStopThreshold()` — float threshold for `StopResult` scores
-
-## Built-in Guardrail Plugins
-
-| Plugin | Purpose |
-|--------|---------|
-| `regexp_guardrail` | Block inputs/outputs matching a configurable regex (fixed in 1.3.5 — `processOutput()` now executes the pattern) |
-| `input_length_limit` | **Changed in 1.4:** Built-in DoS protection — blocks requests exceeding a configurable character limit |
-| `restrict_to_topic` | **New in 1.4:** Non-deterministic (LLM-based) guardrail blocking inputs/outputs outside a configured topic. 1.4.2 added a re-entrancy guard (its internal LLM call can't recurse into global guardrails) and parses the classifier response via `ai.prompt_json_decode` |
-
-## Specialized Interfaces
+## Specialized Guardrail Interfaces
 
 | Interface | Purpose |
 |-----------|---------|
-| `NonDeterministicGuardrailInterface` | Guardrail that uses AI itself; receives `AiProviderPluginManager` via `setAiPluginManager()` |
-| `NonStreamableGuardrailInterface` | Marker — guardrail cannot process streamed responses; skipped for streaming calls |
-| `StreamableGuardrailInterface` | **New in 1.4:** Evaluate streamed output mid-stream. `getStartRegex()` begins buffering, `getStopRegex()` ends it, and `processStreamedBuffer(string $buffered): GuardrailResultInterface` decides — used to redact sensitive content before it reaches the client |
+| `NonDeterministicGuardrailInterface` | Guardrail that uses AI itself (e.g., LLM-based moderation). Receives `AiProviderPluginManager` via `setAiPluginManager()` |
+| `NonStreamableGuardrailInterface` | Marker interface — guardrail cannot process streamed responses (skipped for streaming calls) |
+| `StreamableGuardrailInterface` | **New in 1.4:** Evaluate streamed output mid-stream. `getStartRegex()` begins buffering, `getStopRegex()` ends it, and `processStreamedBuffer(string $buffered): GuardrailResultInterface` decides — used to redact sensitive content (e.g. an unreleased product name) before it reaches the client |
 
-## AiGuardrailRepository
+## Repository: `AiGuardrailRepository`
+
+Autowired service for loading guardrail entities:
+
+| Method | Returns |
+|--------|---------|
+| `getGuardrailById($id)` | `AiGuardrailInterface` or `null` |
+| `getAllGuardrails()` | `AiGuardrailInterface[]` |
+| `getGuardrailSetById($id)` | `AiGuardrailSetInterface` or `null` |
+| `getAllGuardrailSets()` | `AiGuardrailSetInterface[]` |
 
 ```php
 $repo = \Drupal::service('Drupal\ai\Guardrail\AiGuardrailRepository');
@@ -128,12 +121,58 @@ $set = $repo->getGuardrailSetById('my_guardrail_set');
 $all = $repo->getAllGuardrailSets();
 ```
 
+## Built-in Guardrail Plugins
+
+| Plugin | Purpose |
+|--------|---------|
+| `regexp_guardrail` | Block inputs/outputs matching a configurable regex pattern (fixed in 1.3.5 — `processOutput()` now executes the pattern) |
+| `input_length_limit` | **Changed in 1.4:** Built-in DoS protection — blocks requests whose input text exceeds a configurable character limit |
+| `restrict_to_topic` | **New in 1.4:** Non-deterministic (LLM-based) guardrail that blocks inputs/outputs outside a configured topic. 1.4.2 added a re-entrancy guard so its internal LLM call can't recurse into global guardrails, and it now parses the classifier response via the `ai.prompt_json_decode` service |
+
+## Global Guardrails (Changed in 1.4)
+
+Configure site-wide guardrail sets that apply to **every** AI request regardless of caller:
+
+```yaml
+# ai.settings
+global_guardrails:
+  - my_pii_guardrail_set
+  - my_content_moderation_set
+```
+
+These sets are prepended to any caller-attached guardrail sets. Global sets cannot be bypassed by callers. Configure at `/admin/config/ai/settings`.
+
+## InputInterface: Multiple Guardrail Sets (Changed in 1.4)
+
+In 1.3.x, each input held a single guardrail set. In 1.4.x, inputs hold multiple sets. The old methods are deprecated:
+
+| 1.3.x (deprecated in 1.4) | 1.4.x replacement |
+|---------------------------|-------------------|
+| `setGuardrailSet($set)` | `addGuardrailSet($set)` or `setGuardrailSets([$set])` |
+| `getGuardrailSet()` | `getGuardrailSets()` — returns array keyed by set ID |
+
+```php
+// 1.3.x (still works, deprecated)
+$input->setGuardrailSet($guardrailSet);
+
+// 1.4.x (recommended)
+$input->addGuardrailSet($guardrailSet);      // Add one set; replaces if same ID
+$input->setGuardrailSets([$set1, $set2]);   // Replace all sets
+$sets = $input->getGuardrailSets();          // Returns array keyed by set ID
+```
+
+## Built-in Moderation
+
+The `ModeratePreRequestEventSubscriber` intercepts chat calls and routes them through a separate moderation provider if configured (migrated from the deprecated `ai_external_moderation` module).
+
 ## Common Mistakes
 
-- **Wrong**: ID doesn't match its group prefix → **Right**: ID must match or be prefixed by group (e.g., group "safety" → ID `safety` or `safety:pii_filter`)
-- **Wrong**: Applying streaming-incompatible guardrails without `NonStreamableGuardrailInterface` → **Right**: Mark as `NonStreamableGuardrailInterface` and it will be skipped for streaming calls
-- **Wrong**: Not enabling guardrails on user-facing features → **Right**: Prompt injection can bypass agent instructions without guardrails
-- **Wrong**: Using `setGuardrailSet()` in 1.4.x → **Right**: Deprecated; use `addGuardrailSet()` or `setGuardrailSets()`
+| Mistake | Why it's wrong |
+|---------|---------------|
+| Plugin ID that does not match its group prefix | ID must match or be prefixed by group — group "safety" means ID `safety` or `safety:pii_filter` |
+| Applying a streaming-incompatible guardrail without `NonStreamableGuardrailInterface` | It will run against streamed calls; mark it and it is skipped instead |
+| Not enabling guardrails on user-facing features | Prompt injection can bypass agent instructions |
+| Using `setGuardrailSet()` on 1.4.x | Deprecated — use `addGuardrailSet()` or `setGuardrailSets()` |
 
 ## See Also
 

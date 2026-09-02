@@ -8,18 +8,20 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when planning migrations away from deprecated sub-modules. As of AI Core 1.4.7 (current stable, verified 2026-08-20) all deprecations are still in place — none have been removed yet. Removal is planned for AI 2.0.0, which is not yet released (currently dev-only on the `2.0.x-dev` branch).
+> Use this guide when planning migrations away from deprecated sub-modules.
+
+These modules carry a `lifecycle: deprecated` designation in AI Core. As of AI Core **1.4.7** (current stable, verified 2026-08-20) every deprecation is still in place — none have been removed yet. Removal is planned for **AI 2.0.0, which is not yet released** (currently dev-only on the `2.0.x-dev` branch). The replacements have moved to standalone projects at very different maturity levels, so verify each before migrating.
 
 ## Deprecation Status
 
 | Module | Status | Replacement (verified Jun 2026) |
-|--------|--------|---------------------------------|
+|--------|--------|-------------|
 | `ai_eca` | Migration shim (removal planned in 2.0.0) | standalone `drupal/ai_integration_eca` — **1.0.0-rc3** (RC; not yet security-covered) |
-| `ai_external_moderation` | Migration shim | Guardrails **in AI Core** since 1.3.0 (`ai.external_moderation` config). `drupal/ai_guardrails` is an experimental extension, not the replacement |
-| `ai_logging` | Deprecated | in-core `ai_observability` (recommended). Standalone `drupal/ai_logging` 2.0.0-alpha1 is maintenance-only |
-| `ai_translate` | Split to standalone | `drupal/ai_translate` — **1.3.1 stable** (security-covered) |
-| `ai_validations` | Deprecated | `drupal/ai_validations` — **1.0.0-alpha1** only (pre-stable; wait for stable tag); issue #3552888 |
-| `ai_content_suggestions` | Deprecated | `drupal/ai_content_suggestions` — **1.4.0 stable**, but targets AI Core **2.0.x** branch; verify `drupal/ai` constraint. Issue #3552885 |
+| `ai_external_moderation` | Migration shim | Guardrails **in AI Core** since 1.3.0 (`ai.external_moderation` config). Experimental extension `drupal/ai_guardrails` exists (dev-only, needs core patches) — not the core replacement |
+| `ai_logging` | Deprecated | in-core `ai_observability` (recommended). A legacy standalone `drupal/ai_logging` (2.0.0-alpha1) exists but is **maintenance-only** — not for new sites |
+| `ai_translate` | Split to standalone | standalone `drupal/ai_translate` — **1.3.1 stable** (security-covered). See [AI Translate](ai-translate.md) |
+| `ai_validations` | Deprecated | standalone `drupal/ai_validations` — **1.0.0-alpha1** only (pre-stable; wait for a stable tag); issue #3552888 |
+| `ai_content_suggestions` | Deprecated | standalone `drupal/ai_content_suggestions` — **1.4.0 stable** (security-covered), but the project targets the **AI Core 2.0.x** branch; verify the `drupal/ai` constraint for your AI Core version. Issue #3552885 |
 
 ## Migration: ai_eca
 
@@ -34,7 +36,7 @@ drush updb  # runs ai_eca_update_11001 — migrates config, installs replacement
 drush updb  # runs ai_external_moderation_update_10001 — copies config to ai.external_moderation, uninstalls self
 ```
 
-Guardrails are part of AI Core since 1.3.0; no separate install is needed. `drupal/ai_guardrails` is an experimental extension, not the replacement.
+Guardrails are part of AI Core (since 1.3.0); no separate install is needed. `drupal/ai_guardrails` is an experimental extension, not the replacement.
 
 ## Migration: ai_logging → ai_observability
 
@@ -46,7 +48,7 @@ Do not install the standalone `drupal/ai_logging` for new sites — it is mainte
 
 ## Migration: ai_translate
 
-Already a published standalone:
+Already a published standalone. See the [AI Translate](ai-translate.md) section for the full path:
 
 ```bash
 composer require 'drupal/ai_translate:^1.3'
@@ -65,7 +67,7 @@ drush updb
 
 ## Migration: ai_content_suggestions
 
-A stable standalone (`drupal/ai_content_suggestions` 1.4.0) exists, but it targets the **AI Core 2.0.x** branch — still dev-only. Before adopting on AI Core 1.4.x, verify the constraint:
+A stable standalone (`drupal/ai_content_suggestions` 1.4.0) exists, but its project page states it is designed for the **AI Core 2.0.x** branch — which is still dev-only. Before adopting it on AI Core 1.4.x, confirm the release's `drupal/ai` constraint (`composer show drupal/ai_content_suggestions 1.4.0`) actually permits your AI Core version.
 
 ```bash
 composer show drupal/ai_content_suggestions 1.4.0  # check drupal/ai version constraint

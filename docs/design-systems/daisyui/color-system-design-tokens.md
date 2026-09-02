@@ -7,9 +7,9 @@ tldr: "Use this guide when you need to understand which CSS variables control wh
 
 ## When to Use
 
-> Use this guide when you need to understand which CSS variables control which visual properties, and how to use DaisyUI semantic colors as Tailwind utility classes.
+> Understanding which CSS variables control which visual properties, and how to use DaisyUI colors as Tailwind utility classes.
 
-## Decision
+## Decision: Which Token for Which Job
 
 | Situation | Use | Why |
 |-----------|-----|-----|
@@ -20,16 +20,20 @@ tldr: "Use this guide when you need to understand which CSS variables control wh
 | Status/state indication | `bg-error` / `bg-success` / `bg-warning` | Semantic state colors |
 | Shade suffixes like `bg-primary-500` | Never | DaisyUI colors have no shade suffixes |
 
-## Surface Colors
+## CSS Variables Reference
+
+DaisyUI registers these variables per theme (source: `node_modules/daisyui/functions/variables.js`).
+
+### Surface Colors (backgrounds, text, borders)
 
 | Variable | Role | Light default |
 |----------|------|---------------|
-| `--color-base-100` | Primary background (page, cards) | `oklch(100% 0 0)` |
+| `--color-base-100` | Primary background (page, cards) | `oklch(100% 0 0)` (white) |
 | `--color-base-200` | Secondary background (table rows, sidebar) | `oklch(98% 0 0)` |
 | `--color-base-300` | Tertiary background (borders, dividers) | `oklch(95% 0 0)` |
-| `--color-base-content` | Default text on base backgrounds | `oklch(21% 0.006 285)` |
+| `--color-base-content` | Default text color on base backgrounds | `oklch(21% 0.006 285)` |
 
-## Semantic Colors
+### Semantic Colors
 
 | Variable | Role |
 |----------|------|
@@ -42,10 +46,10 @@ tldr: "Use this guide when you need to understand which CSS variables control wh
 | `--color-warning` / `--color-warning-content` | Warning states (amber) |
 | `--color-error` / `--color-error-content` | Error/danger states (red) |
 
-## Shape and Depth Tokens
+### Shape and Depth Tokens
 
-| Variable | Role | Default |
-|----------|------|---------|
+| Variable | Role | Light default |
+|----------|------|---------------|
 | `--radius-box` | Border radius for cards, modals | `0.5rem` |
 | `--radius-field` | Border radius for inputs, buttons | `0.25rem` |
 | `--radius-selector` | Border radius for checkboxes, badges | `0.5rem` |
@@ -53,27 +57,41 @@ tldr: "Use this guide when you need to understand which CSS variables control wh
 | `--depth` | Shadow/3D depth intensity (0=flat) | `1` |
 | `--noise` | Texture noise intensity (0=none) | `0` |
 
-## Pattern
+## Using DaisyUI Colors as Tailwind Classes
 
-All semantic colors work as standard Tailwind utilities:
+DaisyUI extends Tailwind's color palette so all semantic colors work as utility classes:
 
 ```html
+<!-- These all work as standard Tailwind utilities -->
 <div class="bg-base-200 text-base-content border-base-300">
   <p class="text-primary">Primary colored text</p>
   <span class="bg-error text-error-content">Error state</span>
 </div>
 ```
 
-Source: `node_modules/daisyui/functions/variables.js` — registers all 22 color tokens and radius tokens in Tailwind's color/borderRadius config.
+The Tailwind extension is defined in `node_modules/daisyui/functions/variables.js`:
+
+```js
+colors: {
+  "base-100": "var(--color-base-100)",
+  "primary": "var(--color-primary)",
+  // ... all 22 color tokens
+},
+borderRadius: {
+  "selector": "var(--radius-selector)",
+  "field": "var(--radius-field)",
+  "box": "var(--radius-box)",
+}
+```
 
 ## Common Mistakes
 
-- **Wrong**: `bg-primary-500` — **Right**: `bg-primary` — DaisyUI colors have no shade suffixes
-- **Wrong**: Hardcoding `oklch(...)` in Tailwind utilities — **Right**: Use semantic tokens; hardcoded values defeat theming
-- **Wrong**: Using `-content` color on wrong background — **Right**: `primary-content` is only readable on `primary` backgrounds, not on `base-100`
+- Using `bg-primary-500` style suffixes — DaisyUI colors have no shade suffixes. It's `bg-primary`, not `bg-primary-500`
+- Hardcoding `oklch(...)` values in Tailwind utilities instead of using the semantic tokens — defeats theming
+- Using the `-content` color on the wrong background — `primary-content` is readable on `primary` backgrounds only, not on `base-100`
 
 ## See Also
 
-- [Theming System](theming-system.md)
+- [Theming System](theming-system.md) — how to define custom theme values
 - [Customization Patterns](customization-patterns.md)
 - Reference: `design-system-tailwind.md` Section 5 — Tailwind design token mapping

@@ -1,16 +1,12 @@
 ---
-description: "Reference sources and maintenance manifest for keeping the JSON:API guide current."
-drupal_version: "11.x"
-topic: "drupal/jsonapi"
+description: "Source references and maintenance manifest for the jsonapi guides — web sources, code sources, and version history"
 ---
 
 # Sources & Maintenance
-## Sources & Maintenance Manifest
 
-### Drupal Research Install
-Path: `/home/camoa/workspace/contrib/web/`
-
-### Web Sources
+## Drupal Research Install
+Claims here were checked against a local Drupal install of core and the modules named below, rather than quoted from documentation.
+## Web Sources
 
 | Source | URL | Guide Sections | Last Verified |
 |--------|-----|----------------|---------------|
@@ -25,9 +21,11 @@ Path: `/home/camoa/workspace/contrib/web/`
 | Drupal Cache API | https://www.drupal.org/docs/drupal-apis/cache-api | 17 | 2026-02-13 |
 | Drupal Security Docs | https://www.drupal.org/docs/security-in-drupal | 14 | 2026-02-13 |
 
-### Code Sources
+## Code Sources
 
 | Module | Relative Path | Guide Sections | Drupal Version |
 |--------|---------------|----------------|----------------|
 | JSON:API Core | `core/modules/jsonapi/` | 1, 3-12, 18-20 | Drupal 10.x/11.x |
 | JSON:API Extras | `modules/contrib/jsonapi_extras/` | 15, 16, 19 | 8.x-3.28 |
+
+<!-- END PARTITION: sources-maintenance -->

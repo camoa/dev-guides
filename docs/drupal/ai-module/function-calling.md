@@ -10,6 +10,8 @@ drupal_version: "11.x"
 
 > Use this guide when building custom tools that agents or assistants can invoke. Use [AI Agents](ai-agents.md) for configuring which tools an agent uses.
 
+Function calls are tools that agents and assistants can invoke. They're plugins discovered in `src/Plugin/AiFunctionCall/`.
+
 ## Decision
 
 | Situation | Choose | Why |
@@ -19,7 +21,7 @@ drupal_version: "11.x"
 | Organizing tools | `FunctionGroup` plugin | Organizational only — no logic |
 | Allow per-agent parameter overrides | `OverridableFunctionCallInterface` | Opt-in; tools that must not be customized don't implement this |
 
-## Pattern
+## Creating a Custom Tool
 
 ```php
 use Drupal\ai\Attribute\FunctionCall;
@@ -49,7 +51,7 @@ class WeatherLookup extends FunctionCallBase {
 }
 ```
 
-## Tool Group Registration
+## Tool Groups
 
 ```php
 use Drupal\ai\Attribute\FunctionGroup;
@@ -66,7 +68,7 @@ class ContentTools extends FunctionGroupBase {
 
 ## OverridableFunctionCallInterface (added 1.3.3)
 
-Implement this interface to support per-instance context definition overrides. When an agent or assistant configures this tool, it can restrict allowed values or pre-fill a parameter. Tools that must never be customized per-instance do not implement this.
+Implement this interface on your `FunctionCallBase` plugin to support per-instance context definition overrides. When an agent or assistant configures this tool, it can override the default context definitions (parameter definitions) declared in the `#[FunctionCall]` attribute — for example, to restrict allowed values or pre-fill a parameter. Tools that should never be customized per-instance do not need this interface.
 
 ```php
 use Drupal\ai\Interface\OverridableFunctionCallInterface;
@@ -77,7 +79,7 @@ class MyTool extends FunctionCallBase implements OverridableFunctionCallInterfac
 }
 ```
 
-## FunctionCallBase Key Methods
+## Key Methods (FunctionCallBase)
 
 | Method | Purpose |
 |--------|---------|
@@ -86,11 +88,11 @@ class MyTool extends FunctionCallBase implements OverridableFunctionCallInterfac
 | `setOutput($data)` | Set the tool's return value |
 | `getOutput()` | Retrieve output |
 
-## Groups Reference
+## Tool Groups Reference
 
 | Group | Purpose |
 |-------|---------|
-| `information_tools` | Read-only (search, lookup) |
+| `information_tools` | Read-only operations (search, lookup) |
 | `modification_tools` | Write operations (create, update, delete) |
 
 ## Common Mistakes

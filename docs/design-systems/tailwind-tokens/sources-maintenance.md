@@ -1,5 +1,5 @@
 ---
-description: Sources and maintenance manifest for Tailwind Tokens guides
+description: "Source references and maintenance manifest for the tailwind tokens guides — web sources, code sources, and version history"
 ---
 
 # Sources & Maintenance
@@ -24,15 +24,17 @@ description: Sources and maintenance manifest for Tailwind Tokens guides
 
 | Path | What It Contains |
 |---|---|
-| ~/workspace/contrib/web/themes/contrib/ui_suite_daisyui/ | UI Suite DaisyUI base theme: CSS vars config, theme skins, component templates |
-| ~/workspace/contrib/web/themes/contrib/ui_suite_daisyui/starterkits/ui_suite_daisyui_starterkit/css/ | Starterkit token definitions: @theme, @plugin, @utility patterns |
-| ~/workspace/contrib/web/themes/contrib/ui_suite_daisyui/starterkits/ui_suite_daisyui_starterkit/css/utilities/ | Semantic utility classes: typography, grid, spacing, containers |
-| ~/workspace/contrib-nextjs/nextjs-app/ | Tailwind v4 reference project (Next.js app with PostCSS) |
+| `~/workspace/contrib/web/themes/contrib/ui_suite_daisyui/` | UI Suite DaisyUI base theme: CSS vars config, theme skins, component templates |
+| `~/workspace/contrib/web/themes/contrib/ui_suite_daisyui/starterkits/ui_suite_daisyui_starterkit/css/` | Starterkit token definitions: `@theme`, `@plugin`, `@utility` patterns |
+| `~/workspace/contrib/web/themes/contrib/ui_suite_daisyui/starterkits/ui_suite_daisyui_starterkit/css/utilities/` | Semantic utility classes: typography, grid, spacing, containers |
+| `~/workspace/contrib-nextjs/nextjs-app/` | Tailwind v4 reference project (Next.js app with PostCSS) |
 
 ## Maintenance Notes
 
 - **Tailwind CSS**: v4 is current stable. Monitor for namespace additions in minor releases (v4.1 added text-shadow, mask utilities).
 - **DaisyUI**: v5 is current stable. The 28-variable set is comprehensive; monitor for new variables in future releases.
 - **W3C Design Tokens**: Spec reached first stable (2025.10). Composite types and alias syntax are finalized.
-- **UI Suite DaisyUI**: Check ui_suite_daisyui.ui_skins.css_variables.yml when upgrading the Drupal module for new/changed variables.
-- **Re-verify**: When Tailwind v5 or DaisyUI v6 releases, review namespace changes and update namespace reference and CSS variable reference guides.
+- **UI Suite DaisyUI**: Check `ui_suite_daisyui.ui_skins.css_variables.yml` when upgrading the Drupal module for new/changed variables.
+- **Re-verify**: When Tailwind v5 or DaisyUI v6 releases, review namespace changes and update sections 3, 7.
+
+<!-- END PARTITION: sources-maintenance-manifest -->

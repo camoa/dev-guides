@@ -1,8 +1,8 @@
 ---
-description: Source references and maintenance manifest for the Figma MCP Server guide series
+description: "Source references and maintenance manifest for the figma mcp guides — web sources, code sources, and version history"
 ---
 
-# Sources & Maintenance Manifest
+# Sources & Maintenance
 
 ## Drupal Research Install
 Path: N/A — this is a tool-agnostic guide; no Drupal code sources

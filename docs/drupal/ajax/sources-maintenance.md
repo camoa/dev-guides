@@ -5,7 +5,7 @@ description: "Source references and maintenance manifest for the ajax guides —
 # Sources & Maintenance
 
 ## Drupal Research Install
-Path: /home/camoa/workspace/contrib/web (Drupal 11.3.11)
+Path: contrib/web (Drupal 11.3.11)
 
 ## Web Sources
 

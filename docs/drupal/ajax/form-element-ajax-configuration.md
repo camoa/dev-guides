@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use the `#ajax` property on any form element when you need server-driven content updates triggered by user interaction without a full page reload.
+You need to add AJAX behavior to any form element (select, textfield, checkbox, button, etc.).
 
 ## Decision
 
@@ -17,12 +17,13 @@ drupal_version: "11.x"
 | Simple content replacement | Return render array from callback | Drupal handles wrapping/replacement automatically |
 | Multiple DOM updates | Return AjaxResponse with commands | Commands provide precise control over updates |
 | Modal/dialog display | Return AjaxResponse with OpenModalDialogCommand | Built-in dialog system with proper focus management |
-| Custom animations/effects | `effect` and `speed` in `#ajax` | Provides fade/slide effects without custom JavaScript |
+| Custom animations/effects | `effect` and `speed` settings in `#ajax` | Provides fade/slide effects without custom JavaScript |
 | Disable validation on trigger | `#limit_validation_errors => []` | Allows AJAX without requiring valid form state |
 
 ## Pattern
 
 ```php
+// Complete #ajax configuration
 $form['element'] = [
   '#type' => 'select',
   '#title' => t('AJAX Trigger'),
@@ -37,7 +38,7 @@ $form['element'] = [
       'type' => 'throbber',                // throbber, bar, fullscreen
       'message' => t('Loading...'),
     ],
-    'disable-refocus' => FALSE,
+    'disable-refocus' => FALSE,            // Prevent refocus after update
   ],
 ];
 ```
@@ -46,14 +47,13 @@ Reference: `core/lib/Drupal/Core/Render/Element/RenderElement.php`
 
 ## Common Mistakes
 
-- **Wrong**: Omitting `wrapper` property → **Right**: Without wrapper, AJAX fires but nothing updates (check browser console)
-- **Wrong**: Using `#` in wrapper value → **Right**: Wrapper is the ID without the hash (`'wrapper' => 'my-id'` not `'#my-id'`)
-- **Wrong**: Wrong event for element type → **Right**: `change` for select/checkbox; `focusout` for text inputs to avoid excessive requests
-- **Wrong**: No `#limit_validation_errors` on non-submit buttons → **Right**: Add `'#limit_validation_errors' => []` to prevent validation on navigation buttons
-- **Wrong**: No progress indicator for slow operations → **Right**: Always configure `progress` for operations >1 second
+- Omitting `wrapper` property → AJAX fires but nothing updates (check browser console for errors)
+- Using `#` in wrapper value → Wrapper is the ID without the hash (`'wrapper' => 'my-id'` not `'#my-id'`)
+- Wrong event for element type → `change` works for select/checkbox, use `focusout` for text inputs to avoid excessive requests
+- Not disabling validation for non-submit buttons → Add `#limit_validation_errors => []` to buttons that shouldn't trigger validation
+- Missing progress indicator for slow operations → Users don't know request is processing; always configure `progress` for operations >1 second
 
 ## See Also
 
-- [Core Concepts](core-concepts.md)
-- [Dependent Field Patterns](dependent-field-patterns.md)
+- ← Previous: [Core Concepts](core-concepts.md) | Next: [Dependent Field Patterns](dependent-field-patterns.md)
 - Reference: `core/modules/system/tests/modules/ajax_forms_test/src/Form/AjaxFormsTestSimpleForm.php`

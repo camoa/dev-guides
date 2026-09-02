@@ -20,7 +20,7 @@ Path: (not yet set — ask user on first use of code sources)
 
 ## Code Sources
 
-Research install path: `/home/camoa/workspace/dev-guides/eca-src-research/`
+Research install path: `dev-guides/eca-src-research/`
 (Commit reference: `modeler_api` 1.1.x at `63ec949`)
 
 | Module | Relative path (from research dir) | Guide Sections | Version |
