@@ -1,6 +1,6 @@
 ---
-description: Build HTMX-enabled Drupal controllers — conditional responses, route options, and render array patterns
-tldr: "Use this when building controller routes that return dynamic content for HTMX requests."
+description: "Build HTMX-enabled Drupal controllers — conditional responses, route options, and render array patterns"
+tldr: "Use this when building controller routes that return dynamic content for HTMX requests. Return standard render arrays and either set `_htmx_route: TRUE` or check `isHtmxRequest()` to serve minimal responses."
 drupal_version: "11.x"
 ---
 
@@ -8,19 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when building controller routes that return dynamic content for HTMX requests.
+> You're building controller routes that return dynamic content for HTMX requests.
 
-## Decision
-
-| Situation | Approach | Why |
-|-----------|----------|-----|
-| Route always serves minimal response | `_htmx_route: TRUE` in routing.yml | HtmxRenderer invoked automatically |
-| Route serves both HTMX and full pages | Conditional logic with `isHtmxRequest()` | Same route handles both cases |
-| Need HTMX attributes on elements | `Htmx` class + `applyTo()` | Applies attributes to render array |
-
-## Pattern
-
-**Basic HTMX controller:**
+## Pattern: Basic HTMX Controller
 
 ```php
 use Drupal\Core\Controller\ControllerBase;
@@ -29,11 +19,19 @@ use Drupal\Core\Url;
 
 class MyController extends ControllerBase {
   public function htmxContent() {
+    // Build content render array
+    $build['content'] = [
+      '#type' => 'markup',
+      '#markup' => '<div>Dynamic content</div>',
+    ];
+
+    // Configure HTMX for a button
     $build['button'] = [
       '#type' => 'html_tag',
       '#tag' => 'button',
       '#value' => 'Load More',
     ];
+
     (new Htmx())
       ->get(Url::fromRoute('my.route'))
       ->target('#content-wrapper')
@@ -45,9 +43,11 @@ class MyController extends ControllerBase {
 }
 ```
 
-Reference: `/core/modules/system/tests/modules/test_htmx/src/Controller/HtmxTestAttachmentsController.php` lines 94–132
+Reference: `/core/modules/system/tests/modules/test_htmx/src/Controller/HtmxTestAttachmentsController.php` lines 94-132
 
-**Conditional response** (same route for HTMX and full page):
+## Pattern: Conditional Responses
+
+Return different content based on HTMX request:
 
 ```php
 use Drupal\Core\Htmx\HtmxRequestInfoTrait;
@@ -61,8 +61,11 @@ class MyController extends ControllerBase {
 
   public function content() {
     if ($this->isHtmxRequest()) {
+      // Minimal response for HTMX
       return ['#markup' => '<div>Just the content</div>'];
     }
+
+    // Full page for initial request
     $build['#theme'] = 'my_template';
     $build['content'] = ['#markup' => '<div>Just the content</div>'];
     return $build;
@@ -70,7 +73,9 @@ class MyController extends ControllerBase {
 }
 ```
 
-**Route-level option** (always minimal response):
+## Pattern: Using Route Option
+
+Define route with `_htmx_route: TRUE` to automatically invoke HtmxRenderer:
 
 ```yaml
 my_module.htmx_only:
@@ -81,20 +86,20 @@ my_module.htmx_only:
     _htmx_route: TRUE
 ```
 
-Reference: `/core/lib/Drupal/Core/EventSubscriber/HtmxContentViewSubscriber.php` — handles `_htmx_route` routes
+Controller returns standard render array — HtmxRenderer handles minimal response automatically.
+
+Reference: `/core/lib/Drupal/Core/EventSubscriber/HtmxContentViewSubscriber.php` — Handles `_htmx_route` routes
 
 ## Common Mistakes
 
-- **Wrong**: Returning full render arrays without `_htmx_route` or `onlyMainContent()` → **Right**: Results in full page HTML in HTMX response
-- **Wrong**: Forgetting `getRequest()` when using HtmxRequestInfoTrait → **Right**: Methods will fail without it
-- **Wrong**: Not testing both HTMX and non-HTMX requests → **Right**: Initial page load is never HTMX
-- **Wrong**: Using `_htmx_route` for routes that serve both HTMX and full pages → **Right**: Use conditional logic instead
+- Returning full render arrays without `_htmx_route` or `onlyMainContent()` — Results in full page HTML
+- Forgetting to implement `getRequest()` when using HtmxRequestInfoTrait — Methods will fail
+- Not testing both HTMX and non-HTMX requests — Initial page load isn't HTMX
+- Using `_htmx_route` for routes that serve both HTMX and full pages — Use conditional logic instead
 
 ## See Also
 
-- [Dynamic Forms](dynamic-forms.md)
-- [HTMX Attributes Reference](htmx-attributes.md)
-- [Request Detection](request-detection.md)
-- [Response Headers](response-headers.md)
-- Reference: `/core/modules/system/tests/modules/test_htmx/src/Controller/HtmxTestAttachmentsController.php`
-- Reference: `/core/lib/Drupal/Core/EventSubscriber/HtmxContentViewSubscriber.php`
+- Previous: [Dynamic Forms](dynamic-forms.md)
+- Next: [HTMX Attributes Reference](htmx-attributes.md)
+- Reference: [Request Detection](request-detection.md)
+- Reference: [Response Headers](response-headers.md)

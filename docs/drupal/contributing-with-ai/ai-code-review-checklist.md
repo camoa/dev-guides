@@ -1,6 +1,6 @@
 ---
-description: Pre-submission checklist for AI-assisted Drupal contributions — understanding, API correctness, coding standards, security, testing, and disclosure verification
-tldr: "Use this before submitting any AI-assisted code to drupal.org or any Drupal project. Run through every item every time."
+description: "Pre-submission checklist for AI-assisted Drupal contributions — understanding, API correctness, coding standards, security, testing, and disclosure verification"
+tldr: "Use this before submitting any AI-assisted code to drupal.org or any Drupal project. Run through this checklist every time."
 drupal_version: "11.x"
 ---
 
@@ -8,16 +8,14 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this before submitting any AI-assisted code to drupal.org or any Drupal project. Run through every item every time.
+> Before submitting any AI-assisted code to drupal.org or any Drupal project. Run through this checklist every time.
 
-## Decision
-
-Run through all six categories before submitting:
+## Decision: Pre-Submission Checklist
 
 **Understanding:**
 - [ ] I can explain what this code does and why it's needed
 - [ ] I can explain why this approach was chosen over alternatives
-- [ ] I understand every line — no code accepted without understanding
+- [ ] I understand every line — no code I accepted without understanding
 - [ ] I could defend every technical choice in a code review
 
 **API Correctness:**
@@ -50,20 +48,20 @@ Run through all six categories before submitting:
 - [ ] MR description includes AI usage section
 - [ ] Disclosure level matches actual AI involvement
 
-## Pattern
+## Pattern: The Single Most Important Test
 
 > Can I explain every line of this code to a reviewer who asks "why?"
 
-If the answer is no for any line, understand it before submitting. This is the difference between "AI Assisted Code" and "Vibe Coded."
+If the answer is no for any line, you need to understand it before submitting. This is the difference between "AI Assisted Code" and "Vibe Coded."
 
 ## Common Mistakes
 
-- **Wrong**: Skipping the checklist because "it's a small change" → **Right**: Small AI-generated changes can still contain hallucinated APIs or security issues
-- **Wrong**: Checking boxes without actually verifying → **Right**: Running phpcs is required, not optional; "I think it passes" is not verification
-- **Wrong**: Delegating the checklist to AI → **Right**: The checklist is for YOU to verify; asking AI "does this pass the checklist?" defeats the purpose
+- **Skipping the checklist because "it's a small change"** — Small AI-generated changes can still contain hallucinated APIs or security issues
+- **Checking boxes without actually verifying** — Running phpcs is required, not optional. "I think it passes" is not the same as running it.
+- **Delegating the checklist to AI** — The checklist is for YOU to verify. Asking AI "does this pass the checklist?" defeats the purpose.
 
 ## See Also
 
-- [Coding Standards](coding-standards.md)
-- [Human Review Requirements](human-review-requirements.md)
-- [Security Considerations](security-considerations.md)
+- [Coding Standards](coding-standards.md) — common AI violations in detail
+- [Human Review Requirements](human-review-requirements.md) — what reviewers expect
+- [Security Considerations](security-considerations.md) — security-specific checks

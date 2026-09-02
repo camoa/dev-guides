@@ -1,5 +1,5 @@
 ---
-description: Evidence over assertion — gates in AI-assisted contribution pass only on captured artifacts (command output, test results, live pipeline status), never on AI claims
+description: "Evidence over assertion — gates in AI-assisted contribution pass only on captured artifacts (command output, test results, live pipeline status), never on AI claims"
 tldr: "Every contribution gate must be satisfied by a produced artifact — captured phpcs/phpunit output, verified API docs, actual pipeline status. AI saying 'this passes' or 'this is secure' is never sufficient. Any code change after a gate passed requires that gate to be re-run."
 drupal_version: "11.x"
 ---
@@ -8,14 +8,14 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when deciding whether a gate has been satisfied — whether your AI-assisted contribution is ready to advance to the next step. Gates pass only on captured artifacts, never on AI claiming "done," "passes," or "should work."
+> When deciding whether a gate has been satisfied — whether your AI-assisted contribution is ready to advance to the next step. This section describes the principle that gates pass only on captured artifacts (command output, test results, a live pipeline result), never on AI claiming "done," "passes," or "should work."
 
-## Decision
+## Decision: Artifacts vs. Claims
 
-Every check in the AI-assisted contribution workflow must be satisfied by a **produced artifact** — not by AI asserting that the check passes.
+Every check in the AI-assisted contribution workflow must be satisfied by a **produced artifact** — not by AI asserting that the check passes. The recurring failure this prevents: AI confidently stating correctness it has never actually verified.
 
 | Gate | Required Artifact | NOT Sufficient |
-|------|------------------|----------------|
+|---|---|---|
 | Coding standards pass | Captured `phpcs` output showing zero errors | AI saying "this follows Drupal coding standards" |
 | Tests pass | Captured `phpunit` output showing zero failures/warnings | AI saying "the tests should pass" |
 | API exists | Verified against drupal.org API docs or core source | AI saying "this function exists in Drupal 11" |
@@ -41,7 +41,7 @@ If the AI cannot verify a fact through a tool call or file read, the fact is **u
 
 ## Pattern: Re-Verification After Post-Gate Changes
 
-Any code edited after a gate was satisfied re-requires that gate to pass again:
+Any code edited after a gate was satisfied re-requires that gate to pass again. This is the most common escape hatch for unverified code:
 
 1. Tests pass (gate satisfied)
 2. You add a new function at a reviewer's request
@@ -52,10 +52,10 @@ Any code edited after a gate was satisfied re-requires that gate to pass again:
 
 ## Common Mistakes
 
-- **Wrong**: "AI verified it" → **Right**: AI cannot run commands. The output of an actual tool call is the artifact; AI's description of what the output "should be" is not.
-- **Wrong**: Interpreting a green pipeline as "linting passes" → **Right**: Linting jobs in drupalci are non-blocking by default. A green overall pipeline does not mean phpcs or phpstan passed. Check individual job status.
-- **Wrong**: Skipping re-verification after changes → **Right**: A post-feedback code change that introduces a new function, new dependency, or new route resets the gate for that area.
-- **Wrong**: Treating model memory as documentation → **Right**: AI may have accurate recall of a Drupal 9 API that was removed in Drupal 11. Verify against the target version's docs.
+- **"AI verified it"** — AI cannot run commands. It can describe what a command would do. The output of an actual tool call is the artifact; AI's description of what the output "should be" is not.
+- **Interpreting a green pipeline as "linting passes"** — Linting jobs in drupalci are non-blocking by default. A green overall pipeline does not mean phpcs or phpstan passed. Check the individual job status.
+- **Skipping re-verification after changes** — A post-feedback code change that introduces a new function, new dependency, or new route resets the gate for that area.
+- **Treating model memory as documentation** — AI may have accurate recall of a Drupal 9 API that was removed in Drupal 11. Verify against the target version's docs.
 
 ## See Also
 

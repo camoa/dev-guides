@@ -1,5 +1,5 @@
 ---
-description: Drupal AI policy — the adopted drupal.org AI contribution rules, enforcement escalation, what remains open, and what the policy does NOT cover
+description: "Drupal AI policy — the adopted drupal.org AI contribution rules, enforcement escalation, what remains open, and what the policy does NOT cover"
 tldr: "The adopted Policy on the use of AI when contributing to Drupal (last updated 2026-04-23) is live and enforced. Core rules: full contributor responsibility, disclose significant AI use, verify all output, fix problems before submitting. Copyright/licensing is the one unresolved area."
 drupal_version: "11.x"
 ---
@@ -8,17 +8,19 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you need to understand the rules in Drupal's adopted AI contribution policy, how enforcement works, and what areas remain open. This policy applies uniformly to core and contrib.
+> When you need to understand the rules in Drupal's adopted AI contribution policy, how enforcement works, and what areas remain open. This policy applies uniformly to core and contrib — there is no distinction.
 
-## Decision
+## Decision: What the Policy Requires
+
+The *Policy on the use of AI when contributing to Drupal* (adopted; last updated 2026-04-23) at `drupal.org/docs/develop/issues/issue-procedures-and-etiquette/policy-on-the-use-of-ai-when-contributing-to-drupal` contains these concrete rules:
 
 | Rule | Detail |
-|------|--------|
-| **Full responsibility** | "You are fully responsible for the integrity of your submission." "The AI wrote it" is not a defense. |
-| **Understand before submitting** | Read and understand prior issue discussion before adding AI-generated code or comments. |
-| **Disclose significant AI use** | Required when AI generated a *significant* portion — whole functions, classes, architectural scaffolding, or extensive documentation blocks. |
+|---|---|
+| **Full responsibility** | "You are fully responsible for the integrity of your submission." "The AI wrote it" is not a defense to a reviewer. |
+| **Understand before submitting** | Read and understand the prior discussion on the issue before adding AI-generated code or comments. |
+| **Disclose significant AI use** | Required when AI generated a *significant* portion — whole functions, classes, architectural scaffolding, or extensive documentation blocks. See [Disclosure Checkboxes](disclosure-checkboxes.md) for the threshold and format. |
 | **Review and verify all AI output** | Thoroughly verify all dependencies, logic, and security implications. Submitting failing checks for others to fix is unacceptable. |
-| **Fix problems before submitting** | Do not post code without reading prior discussion; do not abandon an issue after requesting feedback. |
+| **Fix problems before submitting** | Do not post code without reading prior discussion; do not abandon an issue after requesting feedback; do not ignore architectural conclusions already reached. |
 | **Engage collaboratively** | Do not propose rewrites without engaging existing contributors; do not add AI-generated code to others' work without permission and disclosure. |
 | **Copyright/GPL** | The contributor alone bears responsibility that AI-generated code violates no third-party copyright and is GPL-compatible. |
 
@@ -44,19 +46,19 @@ No automated detection tools exist. Enforcement is community-driven and reputati
 ## Pattern: What Remains Open
 
 | Area | Status |
-|------|--------|
-| **Copyright / licensing** | **Unresolved** — GPL + AI training-data is an industry-wide open question; Drupal defers it. The contributor bears responsibility, but no court precedent exists. |
+|---|---|
+| **Copyright / licensing** | **Unresolved** — GPL + AI training-data is an industry-wide open question; Drupal defers it. The contributor bears responsibility, but no court precedent exists. This is the one area #3565917 was Postponed over. |
 | Maintainer review checklist (#3569240) | **In progress** — reviewer guidance from the AI module project |
 | `ai_best_practices` Drupal project | **Pre-MVP** — will become the canonical Drupal AI guidance; watch it, don't depend on it yet |
 
-**Historical note:** Governance issue #3565917 is "Postponed (maintainer needs more info)" — stalled specifically over copyright/licensing. The *adopted policy* at the URL below is the live rule; #3565917 is not it.
+**Historical note:** Governance issue #3565917 ("Proposed guidelines for AI contribution") is now "Postponed (maintainer needs more info)" — the stall is specifically over copyright/licensing. The *adopted policy* referenced above is the live rule; #3565917 is not it.
 
 ## Common Mistakes
 
-- **Wrong**: Treating #3565917 as the live policy → **Right**: That issue is Postponed. The adopted policy is a separate published document.
-- **Wrong**: Calling the policy "in progress" or "evolving" → **Right**: It is adopted. Copyright/licensing is the one open area, not the policy as a whole.
-- **Wrong**: Thinking "no automated detection" means no consequences → **Right**: Maintainers notice patterns; credit can be revoked; repeated violations escalate to bans.
-- **Wrong**: Ignoring the "understand before submitting" rule → **Right**: AI-generated code added without reading the prior issue discussion is an explicit violation, even if disclosed.
+- **Treating #3565917 as the live policy** — That issue is Postponed. The adopted policy is a separate published document at the URL above.
+- **Calling the policy "in progress" or "evolving"** — It is adopted. Copyright/licensing is the one open area, not the policy as a whole.
+- **Thinking "no automated detection" means no consequences** — Maintainers notice patterns; credit can be revoked; repeated violations escalate to bans.
+- **Ignoring the "understand before submitting" rule** — AI-generated code added without reading the prior issue discussion is an explicit violation, even if disclosed.
 
 ## See Also
 

@@ -1,16 +1,18 @@
 ---
-description: HTMX response headers in Drupal — redirect, trigger events, retarget, reswap, and history management
-tldr: "Use this when you need to control client-side behavior after a response — redirect, trigger events, change swap strategy, or update browser history."
+description: "HTMX response headers in Drupal — redirect, trigger events, retarget, reswap, and history management"
+tldr: "Use this when you need to control client-side behavior after response — redirect, trigger events, change swap strategy, or update browser history — via the Htmx class's 11 response header methods."
 drupal_version: "11.x"
 ---
 
-# Response Headers
+# HTMX Response Headers
 
 ## When to Use
 
-> Use this when you need to control client-side behavior after a response — redirect, trigger events, change swap strategy, or update browser history.
+> You need to control client-side behavior after response (redirect, trigger events, change swap strategy, etc.).
 
-## Decision
+Reference: `/core/lib/Drupal/Core/Htmx/Htmx.php` — 11 response header methods (lines 335-522)
+
+## Header Methods
 
 | Method | Header | Purpose |
 |--------|--------|---------|
@@ -26,32 +28,21 @@ drupal_version: "11.x"
 | `triggerAfterSettleHeader(string\|array)` | `HX-Trigger-After-Settle` | Trigger events after settle |
 | `triggerAfterSwapHeader(string\|array)` | `HX-Trigger-After-Swap` | Trigger events after swap |
 
-Reference: `/core/lib/Drupal/Core/Htmx/Htmx.php` — 11 response header methods (lines 335–522)
-
-## Pattern
-
-**Push URL to history:**
+## Pattern: Push URL to History
 
 ```php
+$push_url = Url::fromRoute('my.route', ['type' => $type, 'name' => $name]);
+
 (new Htmx())
-  ->pushUrlHeader(Url::fromRoute('my.route', ['type' => $type, 'name' => $name]))
+  ->pushUrlHeader($push_url)
   ->applyTo($form);
 ```
 
-Reference: `/core/modules/config/src/Form/ConfigSingleExportForm.php` lines 157–161
+Reference: `/core/modules/config/src/Form/ConfigSingleExportForm.php` lines 157-161
 
-**Trigger client-side events:**
+## Pattern: Complex Location Redirect
 
-```php
-(new Htmx())
-  ->triggerHeader([
-    'showMessage' => ['text' => 'Saved successfully'],
-    'updateCount' => ['count' => 5],
-  ])
-  ->applyTo($build);
-```
-
-**Complex location redirect:**
+For redirects with additional context:
 
 ```php
 use Drupal\Core\Htmx\HtmxLocationResponseData;
@@ -63,30 +54,71 @@ $location_data = new HtmxLocationResponseData(
   values: ['key' => 'value'],
   headers: ['X-Custom' => 'header']
 );
-(new Htmx())->locationHeader($location_data)->applyTo($build);
+
+(new Htmx())
+  ->locationHeader($location_data)
+  ->applyTo($build);
 ```
 
-Reference: `/core/lib/Drupal/Core/Htmx/HtmxLocationResponseData.php` — constructor at lines 42–52
+Reference: `/core/lib/Drupal/Core/Htmx/HtmxLocationResponseData.php` — Constructor parameters at lines 42-52
 
-**Dynamic retarget/reswap:**
+**Constructor Parameters:**
+- `path` (Url) — URL for GET request
+- `source` (string) — Source element of request
+- `event` (string) — Event that triggered request
+- `handler` (string) — JavaScript callback for response
+- `target` (string) — Swap target
+- `swap` (string) — Swap strategy
+- `values` (array) — Additional values to submit
+- `headers` (array) — Additional headers
+- `select` (string) — Content selector
+
+## Pattern: Trigger Client Events
 
 ```php
-(new Htmx())->retargetHeader('#different-target')->applyTo($build);
-(new Htmx())->reswapHeader('beforeend')->applyTo($build);
+// Trigger single event
+(new Htmx())
+  ->triggerHeader('myEvent')
+  ->applyTo($build);
+
+// Trigger multiple events with data
+(new Htmx())
+  ->triggerHeader([
+    'showMessage' => ['text' => 'Saved successfully'],
+    'updateCount' => ['count' => 5],
+  ])
+  ->applyTo($build);
 ```
+
+Reference: Lines 480-522 of Htmx.php
+
+## Pattern: Dynamic Retarget/Reswap
+
+Override target or swap strategy in response:
+
+```php
+// Change where content goes
+(new Htmx())
+  ->retargetHeader('#different-target')
+  ->applyTo($build);
+
+// Change how content swaps
+(new Htmx())
+  ->reswapHeader('beforeend')
+  ->applyTo($build);
+```
+
+Reference: Lines 430-462 of Htmx.php
 
 ## Common Mistakes
 
-- **Wrong**: Using `locationHeader()` for simple URL push → **Right**: Use `pushUrlHeader()` instead
-- **Wrong**: Not calling `applyTo()` → **Right**: Headers won't be added to `#attached['http_header']`
-- **Wrong**: Triggering events before swap with `triggerHeader()` when timing matters → **Right**: Use `triggerAfterSwapHeader()` or `triggerAfterSettleHeader()`
-- **Wrong**: Expecting headers to affect non-HTMX requests → **Right**: Headers only affect HTMX client behavior
+- Using `locationHeader()` for simple URL push — Use `pushUrlHeader()` instead
+- Not applying headers to render array — Call `applyTo()` to add headers to `#attached['http_header']`
+- Triggering events before swap completes — Use `triggerAfterSwapHeader()` or `triggerAfterSettleHeader()` for timing control
+- Expecting headers to work on non-HTMX requests — Headers only affect HTMX client behavior
 
 ## See Also
 
-- [HTMX Attributes Reference](htmx-attributes.md)
-- [Drupal Behaviors Integration](drupal-behaviors.md)
-- [Production Example: ConfigSingleExportForm](production-example-config-export.md)
+- Previous: [HTMX Attributes Reference](htmx-attributes.md)
+- Next: [Drupal Behaviors Integration](drupal-behaviors.md)
 - Reference: [HTMX Official Response Headers](https://htmx.org/reference/#response_headers)
-- Reference: `/core/lib/Drupal/Core/Htmx/Htmx.php` lines 335–522
-- Reference: `/core/lib/Drupal/Core/Htmx/HtmxLocationResponseData.php`

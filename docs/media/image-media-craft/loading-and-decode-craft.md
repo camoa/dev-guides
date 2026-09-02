@@ -7,7 +7,7 @@ tldr: "Use `fetchpriority=\"high\"` on the one LCP image. Use `loading=\"lazy\"`
 
 ## When to Use
 
-> Use `fetchpriority="high"` on the one LCP image. Use `loading="lazy"` + `decoding="async"` on all below-fold images. Never combine `loading="lazy"` and `fetchpriority="high"` on the same element.
+> Every `<img>` element needs deliberate loading attributes. The wrong combination kills LCP scores. This section defines exactly which attributes to apply and when, from above-fold hero images through below-fold content.
 
 ## Decision
 
@@ -15,16 +15,33 @@ tldr: "Use `fetchpriority=\"high\"` on the one LCP image. Use `loading=\"lazy\"`
 |---|---|---|---|---|
 | LCP image (hero, first visible) | omit (default eager) | `async` | `high` | Never lazy-load LCP |
 | Above fold, not LCP | omit (default eager) | `async` | omit | Let browser schedule normally |
-| Below fold, non-critical | `lazy` | `async` | omit | Defers until ~1250px away |
+| Below fold, non-critical | `lazy` | `async` | omit | Defers until 1250px away (4G) |
 | Background/decorative image | `lazy` | `async` | omit | Or use CSS `background-image` instead |
 
-## `decoding="async"` — Always Use It
+**The rule**: `loading="lazy"` and `fetchpriority="high"` are mutually exclusive in intent — never use them together on the same element.
 
-`decoding="async"` tells the browser to decode the image off the main thread, allowing other rendering work to continue. There is no downside for below-fold images. For above-fold images, it may delay the image appearing slightly but improves overall page responsiveness. Use it universally unless profiling shows a specific problem.
+## LCP Optimization Strategy
 
-## Pattern
+The LCP target is 2.5 seconds or less for 75% of page visits. For image-based LCP elements:
 
-**Above-fold LCP image checklist**:
+1. **Make the image discoverable in initial HTML** — not injected by JavaScript after page load. Preloaders cannot find dynamically-injected LCP images.
+
+2. **Add `fetchpriority="high"`** to the LCP `<img>`. This moves the image from low-priority discovery to high-priority fetch, improving LCP by 0.5–2 seconds in real-world tests.
+
+3. **Preload the LCP image** in `<head>` for critical hero images that are in CSS or lazy-loaded by frameworks:
+```html
+<link rel="preload" as="image"
+  href="hero-1280.webp"
+  imagesrcset="hero-640.webp 640w, hero-1280.webp 1280w, hero-1920.webp 1920w"
+  imagesizes="(max-width: 640px) 100vw, (max-width: 1280px) 80vw, 1200px"
+>
+```
+
+4. **Serve from the same origin or fast CDN** — cross-origin image requests block LCP.
+
+## Above-Fold Image Checklist
+
+For any image visible without scrolling:
 ```html
 <img
   src="hero-1280.jpg"
@@ -39,41 +56,31 @@ tldr: "Use `fetchpriority=\"high\"` on the one LCP image. Use `loading=\"lazy\"`
 <!-- No loading attribute — defaults to eager -->
 ```
 
-**Preload for LCP images in CSS or injected by JS**:
-```html
-<link rel="preload" as="image"
-  href="hero-1280.webp"
-  imagesrcset="hero-640.webp 640w, hero-1280.webp 1280w, hero-1920.webp 1920w"
-  imagesizes="(max-width: 640px) 100vw, (max-width: 1280px) 80vw, 1200px"
->
-```
-
-**LCP optimization steps**:
-1. Make the image discoverable in initial HTML — not JS-injected
-2. Add `fetchpriority="high"` to the one LCP `<img>` (0.5–2s improvement in real-world tests)
-3. Preload via `<link rel="preload">` if image is in CSS or lazy-loaded by frameworks
-4. Serve from same origin or fast CDN — cross-origin requests block LCP
-
-**Native lazy loading vs IntersectionObserver**:
+## Native Lazy Loading vs IntersectionObserver
 
 | Approach | When to Use | Trade-off |
 |---|---|---|
-| `loading="lazy"` (native) | All new projects | No JS; threshold not configurable |
-| IntersectionObserver | Custom threshold or placeholder transitions needed | JS required; more control |
+| `loading="lazy"` (native) | All new projects | No JS; threshold not configurable (1250px on 4G) |
+| IntersectionObserver (JS) | Custom threshold control needed; legacy browser support | JS required; more control over load trigger distance |
+| JavaScript lazy library | Complex lazy loading with placeholders and effects | Most overhead; only when native is insufficient |
 
-Native `loading="lazy"` covers all modern browsers (Chrome 77+, Safari 15.4+, Firefox 75+). Use by default.
+In 2025, native `loading="lazy"` covers all modern browsers (Chrome 77+, Safari 15.4+, Firefox 75+). Use it by default. Only reach for JS-based solutions when you need custom behavior like blur-up transitions.
+
+## `decoding="async"` — Always Use It
+
+`decoding="async"` tells the browser to decode the image off the main thread, allowing other rendering work to continue. There is no downside for below-fold images. For above-fold images, it may delay the image appearing slightly but improves overall page responsiveness. Use it universally unless profiling shows a specific problem.
 
 ## Common Mistakes
 
-- **Wrong**: lazy-loading the LCP image → **Right**: this is the most common LCP killer; Lighthouse 2024 flags it explicitly
-- **Wrong**: `fetchpriority="high"` on multiple images → **Right**: only apply to the one true LCP image; it loses meaning when overused
-- **Wrong**: `loading="lazy"` on the first carousel slide → **Right**: first slide is above fold; only lazy-load non-visible slides
-- **Wrong**: omitting `width` and `height` on lazy-loaded images → **Right**: browser cannot reserve space; causes CLS when images load
-- **Wrong**: JS lazy loading when native is available → **Right**: native adds zero JS weight
+- Lazy-loading the LCP image — this is the most common LCP killer; Lighthouse 2024 flags it explicitly
+- Adding `fetchpriority="high"` to multiple images — it loses meaning; only apply to the one true LCP image
+- Using `loading="lazy"` on images inside carousels where the first slide is visible — the first slide is above-fold
+- Omitting `width` and `height` attributes — lazy-loaded images without dimensions cause CLS when they load
+- Relying on JavaScript lazy loading when native is available — adds unnecessary JS weight
 
 ## See Also
 
-- [Placeholder Strategies](placeholder-strategies.md) — what to show while the image loads
+- [Placeholder Strategies](placeholder-strategies.md) — how to show something while the image loads
 - [Responsive Images Craft](responsive-images-craft.md) — `srcset`/`sizes` to go with these attributes
 - Reference: [web.dev browser-level image lazy loading](https://web.dev/articles/browser-level-image-lazy-loading)
 - Reference: [web.dev Optimize LCP](https://web.dev/articles/optimize-lcp)

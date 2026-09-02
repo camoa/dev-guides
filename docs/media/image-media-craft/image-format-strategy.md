@@ -7,7 +7,7 @@ tldr: "Use this when deciding what format to produce and serve. Choosing the wro
 
 ## When to Use
 
-> Use this when deciding what format to produce and serve. Choosing the wrong format is the single biggest avoidable image performance mistake. For 2025 projects: AVIF first, WebP fallback, JPEG as ultimate fallback.
+> Choosing the wrong format is the single biggest avoidable image performance mistake. Use this section when deciding what format to produce and serve, including animated content.
 
 ## Decision
 
@@ -17,17 +17,15 @@ tldr: "Use this when deciding what format to produce and serve. Choosing the wro
 | **WebP** | Photos, broad compatibility, fastest decode | IE (dead); use as primary + AVIF as upgrade | 25–34% smaller |
 | **AVIF** | Maximum compression, high-fidelity photos, HDR | Encode time is a concern; use as `<picture>` first source | 45–55% smaller |
 | **PNG** | Logos, screenshots, illustrations with transparency; lossless | Photos (huge files) | Often 2–5x larger than JPEG |
-| **SVG** | Icons, logos, diagrams, anything that scales | Photography; complex raster art | N/A (vector) |
+| **SVG** | Icons, logos, diagrams, illustrations, anything that scales | Photography; complex raster art | N/A (vector) |
 | **GIF** | Legacy animated content only | All new animated content — use `<video>` instead | Always replace with video |
 
-**2025 delivery strategy**: AVIF (93%+ browser support) → WebP (95%+ support) → JPEG fallback
+**Format delivery strategy** (2025 baseline):
+```
+AVIF (preferred, 93%+ browser support) → WebP (95%+ support) → JPEG fallback
+```
 
-## Content Negotiation (CDN Auto-Format)
-
-Cloudinary, imgix, and Cloudflare Images support automatic format selection via `Accept` header: the CDN detects what the browser supports and serves the best format without `<picture>` elements. Trade-off: simpler markup, but you lose fine-grained control and are locked to the CDN.
-
-## Pattern
-
+Use `<picture>` with `type` sources to implement the fallback chain — browser picks first supported format:
 ```html
 <picture>
   <source srcset="photo.avif" type="image/avif">
@@ -36,7 +34,7 @@ Cloudinary, imgix, and Cloudflare Images support automatic format selection via 
 </picture>
 ```
 
-**Quality settings by use case**:
+## Quality Settings by Use Case
 
 | Context | Format | Quality | Target File Size |
 |---|---|---|---|
@@ -49,21 +47,30 @@ Cloudinary, imgix, and Cloudflare Images support automatic format selection via 
 | Illustration / UI | PNG (lossless) | — | < 50KB |
 | SVG icon | SVG (SVGO-optimized) | — | < 5KB |
 
-**Animated images**:
+**AVIF encode time**: AVIF encoding is 5–10x slower than WebP at equivalent quality. For build-time pipelines, use parallel encoding with Sharp or libvips. For CMS/on-demand, consider CDN-side conversion (Cloudinary, imgix, Cloudflare Images auto-format).
+
+## Animated Images
 
 | If you need... | Use... | Why |
 |---|---|---|
 | Looping background animation | `<video autoplay muted loop playsinline>` | 5–20x smaller than GIF; hardware decoded |
-| User-controlled animated content | `<video controls>` with poster | Accessibility-compliant |
-| Animated illustration from `<img>` | WebP animated | 64%+ browser support; 70% smaller than GIF |
+| User-controlled animated content | `<video controls>` with poster | Respects reduced motion, accessibility |
+| Animated illustration served from `<img>` | WebP animated | 64%+ browser support; 70% smaller than GIF |
+| Maximum compatibility animated | GIF | Last resort; massive files, no audio |
+
+**Never** use GIF for new content. A 3-second animation that is 3MB as GIF is typically 150–300KB as WebP or `<video>`.
+
+## Content Negotiation (CDN Auto-Format)
+
+Cloudinary, imgix, and Cloudflare Images support automatic format selection via `Accept` header: the CDN detects what the browser supports and serves the best format without `<picture>` elements. Trade-off: simpler markup, but you lose fine-grained control and are locked to the CDN.
 
 ## Common Mistakes
 
-- **Wrong**: serving PNG for photographs → **Right**: JPEG/WebP at quality 80 produces smaller files with negligible visible difference
-- **Wrong**: skipping AVIF because encoding is slow → **Right**: pre-encode at build time or use CDN auto-format; decoding is fast
-- **Wrong**: WebP at quality 90+ → **Right**: quality 75–85 is the sweet spot; above 90, WebP files can exceed equivalent JPEG
-- **Wrong**: no `<img src>` in `<picture>` fallback chains → **Right**: always include `<img src>` as the ultimate fallback
-- **Wrong**: animated GIF in new projects → **Right**: always use `<video>` or animated WebP
+- Serving PNG for photographs — JPEG/WebP at quality 80 produces smaller files with negligible visible difference
+- Skipping AVIF because "it's slow to encode" — pre-encode at build time or use CDN auto-format; decoding is fast
+- Using WebP at quality 90+ — at high quality settings WebP files can exceed equivalent JPEG; quality 75–85 is the sweet spot
+- Serving `image/jpeg` to `<picture>` fallback chains without the `src` on `<img>` — always include `<img src>` as the ultimate fallback
+- Animated GIF in new projects — always use `<video>` or animated WebP
 
 ## See Also
 

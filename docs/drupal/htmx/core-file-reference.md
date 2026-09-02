@@ -1,6 +1,6 @@
 ---
-description: Drupal core HTMX implementation file index — PHP classes, JavaScript files, configuration, production examples, and test files
-tldr: "Use this to locate Drupal core HTMX implementation files for deeper understanding or debugging."
+description: "Drupal core HTMX implementation file index — PHP classes, JavaScript files, configuration, production examples, and test files"
+tldr: "Use this to locate Drupal core HTMX implementation files for deeper understanding or debugging. Documentation may lag behind code, so check the actual core implementation rather than relying on the test module as a best-practices reference."
 drupal_version: "11.x"
 ---
 
@@ -8,48 +8,46 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this to locate Drupal core HTMX implementation files for deeper understanding or debugging.
+> You need to locate Drupal core HTMX implementation files for deeper understanding or debugging.
 
-## Decision
+## Core PHP Classes
 
-**Core PHP classes:**
+| File | Purpose | Key Contents |
+|------|---------|--------------|
+| `/core/lib/Drupal/Core/Htmx/Htmx.php` | Main API class | 30+ attribute methods, 11 header methods, `applyTo()`, `createFromRenderArray()` |
+| `/core/lib/Drupal/Core/Htmx/HtmxRequestInfoTrait.php` | Request detection | 8 methods: `isHtmxRequest()`, `getHtmxTriggerName()`, etc. |
+| `/core/lib/Drupal/Core/Htmx/HtmxLocationResponseData.php` | Location header data | Constructor with 9 parameters for complex redirects |
+| `/core/lib/Drupal/Core/Render/MainContent/HtmxRenderer.php` | Minimal response renderer | Creates minimal HTML structure with noindex meta tag |
+| `/core/lib/Drupal/Core/EventSubscriber/HtmxContentViewSubscriber.php` | Route option handler | Processes `_htmx_route: TRUE` option |
+| `/core/lib/Drupal/Core/Form/FormBase.php` | Form base class | Includes HtmxRequestInfoTrait (line 48) |
+| `/core/lib/Drupal/Core/Form/FormBuilder.php` | Form builder | Automatic form_build_id OOB swap (lines 782-790) |
 
-| File | Purpose |
-|------|---------|
-| `/core/lib/Drupal/Core/Htmx/Htmx.php` | Main API — 30+ attribute methods, 11 header methods, `applyTo()`, `createFromRenderArray()` |
-| `/core/lib/Drupal/Core/Htmx/HtmxRequestInfoTrait.php` | Request detection — 8 methods |
-| `/core/lib/Drupal/Core/Htmx/HtmxLocationResponseData.php` | Location header data — 9-parameter constructor |
-| `/core/lib/Drupal/Core/Render/MainContent/HtmxRenderer.php` | Minimal response renderer |
-| `/core/lib/Drupal/Core/EventSubscriber/HtmxContentViewSubscriber.php` | Handles `_htmx_route: TRUE` option |
-| `/core/lib/Drupal/Core/Form/FormBase.php` | Includes HtmxRequestInfoTrait (line 48) |
-| `/core/lib/Drupal/Core/Form/FormBuilder.php` | Automatic form_build_id OOB swap (lines 782–790) |
+## JavaScript Files
 
-**JavaScript files:**
+| File | Purpose | Key Contents |
+|------|---------|--------------|
+| `/core/assets/vendor/htmx/htmx.min.js` | HTMX library | Version 2.0.4 vendor library |
+| `/core/misc/htmx/htmx-utils.js` | Utilities | `Drupal.htmx.mergeSettings()`, `Drupal.htmx.addAssets()` |
+| `/core/misc/htmx/htmx-assets.js` | Asset loading | `ajax_page_state` integration, differential loading, history cleanup |
+| `/core/misc/htmx/htmx-behaviors.js` | Behaviors integration | Custom events `htmx:drupal:load`, `htmx:drupal:unload` |
 
-| File | Purpose |
-|------|---------|
-| `/core/assets/vendor/htmx/htmx.min.js` | HTMX v2.0.4 vendor library |
-| `/core/misc/htmx/htmx-utils.js` | `mergeSettings()`, `addAssets()` |
-| `/core/misc/htmx/htmx-assets.js` | Differential loading, settings merge, history cleanup |
-| `/core/misc/htmx/htmx-behaviors.js` | `htmx:drupal:load`, `htmx:drupal:unload` events |
+## Configuration
 
-**Configuration:**
+| File | Purpose | Key Contents |
+|------|---------|--------------|
+| `/core/core.libraries.yml` | Library definitions | `htmx` (vendor), `drupal.htmx` (integration) at lines 617-634, 833-841 |
+| `/core/core.services.yml` | Service definitions | `htmx_content_view_subscriber`, `main_content_renderer.htmx` |
 
-| File | Purpose |
-|------|---------|
-| `/core/core.libraries.yml` | `htmx` (vendor) and `drupal.htmx` (integration) at lines 617–634, 833–841 |
-| `/core/core.services.yml` | `htmx_content_view_subscriber`, `main_content_renderer.htmx` |
+## Production Examples
 
-**Production examples:**
+| File | Purpose | Key Patterns |
+|------|---------|--------------|
+| `/core/modules/config/src/Form/ConfigSingleExportForm.php` | Config export form | Cascading selects, OOB updates, history push |
+| `/core/modules/system/tests/modules/test_htmx/src/Form/HtmxTestForm.php` | Test form | Dependent fields, `swapOob('true')`, trigger detection |
+| `/core/modules/system/tests/modules/test_htmx/src/Controller/HtmxTestAttachmentsController.php` | Test controller | Asset attachment, basic HTMX patterns |
+| `/core/modules/system/tests/modules/test_htmx/src/Form/HtmxTestAjaxForm.php` | Coexistence example | AJAX inserting HTMX content |
 
-| File | Patterns demonstrated |
-|------|----------------------|
-| `/core/modules/config/src/Form/ConfigSingleExportForm.php` | Cascading selects, OOB updates, history push |
-| `/core/modules/system/tests/modules/test_htmx/src/Form/HtmxTestForm.php` | Dependent fields, trigger detection |
-| `/core/modules/system/tests/modules/test_htmx/src/Controller/HtmxTestAttachmentsController.php` | Asset attachment, basic patterns |
-| `/core/modules/system/tests/modules/test_htmx/src/Form/HtmxTestAjaxForm.php` | AJAX/HTMX coexistence |
-
-**Test files:**
+## Test Files
 
 | File | Purpose |
 |------|---------|
@@ -62,22 +60,28 @@ drupal_version: "11.x"
 | `/core/tests/Drupal/FunctionalJavascriptTests/Core/Htmx/HtmxDynamicFormTest.php` | Dynamic form tests |
 | `/core/tests/Drupal/Nightwatch/Tests/htmx/htmxTest.js` | Asset loading tests |
 
-**Test module structure** (`/core/modules/system/tests/modules/test_htmx/`):
+## Test Module Structure
 
-- `test_htmx.info.yml` — module definition
-- `test_htmx.routing.yml` — routes with `_htmx_route` examples
-- `src/Controller/HtmxTestAttachmentsController.php` — controller patterns
-- `src/Form/HtmxTestForm.php` — dynamic form patterns
+Complete working example at `/core/modules/system/tests/modules/test_htmx/`:
+
+- `test_htmx.info.yml` — Module definition
+- `test_htmx.routing.yml` — Routes with `_htmx_route` examples
+- `test_htmx.libraries.yml` — Custom library definition
+- `src/Controller/HtmxTestAttachmentsController.php` — Controller patterns
+- `src/Form/HtmxTestForm.php` — Dynamic form patterns
 - `src/Form/HtmxTestAjaxForm.php` — AJAX/HTMX coexistence
+- `js/behavior.js` — Custom behavior example
+- `css/style.css` — Custom styles
 
 ## Common Mistakes
 
-- **Wrong**: Not checking actual core implementation → **Right**: Documentation may lag behind code; read the source
-- **Wrong**: Assuming test module is production-ready → **Right**: It's for testing, not a best practices reference
-- **Wrong**: Not reading inline documentation → **Right**: `Htmx.php` has extensive PHPDoc
+- Not checking actual core implementation — Documentation may lag behind code
+- Assuming test module is production-ready — It's for testing, not best practices reference
+- Using deprecated patterns from older versions — Always check current Drupal version
+- Not reading inline documentation — `Htmx.php` has extensive PHPDoc
 
 ## See Also
 
-- [AJAX Migration](ajax-migration.md)
-- Reference: [Drupal API Documentation — Htmx class](https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Htmx!Htmx.php/class/Htmx/11.x)
+- Previous: [AJAX Migration](ajax-migration.md)
+- Reference: [Drupal API Documentation](https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Htmx!Htmx.php/class/Htmx/11.x)
 - Reference: [HTMX Official Documentation](https://htmx.org/reference/)
