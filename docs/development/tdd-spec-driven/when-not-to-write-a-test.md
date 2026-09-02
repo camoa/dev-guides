@@ -29,7 +29,7 @@ That is the whole requirement. Anything else the change adds is one of two thing
 Before a test goes into a change, it should answer both:
 
 1. **Which behavior does this test specify?** A test that cannot name one is measuring, searching or ratifying — all legitimate elsewhere, none of them this.
-2. **Was it seen to fail before the code existed?** If not, the test has never demonstrated that it can fail, and nothing yet distinguishes it from an assertion that is always true.
+2. **Was it seen to fail because the behavior was absent?** If it never failed, the test has never demonstrated that it can fail at all, and nothing distinguishes it from an assertion that is always true. If it failed only because working code was broken or reverted, it proves the test is sensitive and not that it came first — see [What a Failing Test Proves](what-a-failing-test-proves.md).
 
 A test that fails either question does not belong in this change. That is the brake, and it needs no threshold because it is derived from the loop's own definition.
 
@@ -58,9 +58,10 @@ The brake removes tests that specify nothing. It never removes the one test a ne
 - Using a coverage drop as the instruction to write tests in the change that caused it → A coverage floor is a signal to look, not an instruction to write here
 
 ## See Also
-- Previous: [What TDD Covers](what-tdd-covers.md) | Next: [Unit Testing Fundamentals](unit-testing-fundamentals.md)
+- Previous: [What TDD Covers](what-tdd-covers.md) | Next: [What a Failing Test Proves](what-a-failing-test-proves.md)
 - Related: [Changing Existing Tests](changing-existing-tests.md) — who may change or delete a test once it exists
 - Related: [Fixing Bugs with TDD](fixing-bugs-with-tdd.md) — the same stopping rule, applied to a defect
+- Related: [What a Failing Test Proves](what-a-failing-test-proves.md) — the evidence test behind "seen to fail"
 - Related: [Test Coverage Strategy](test-coverage.md) — why coverage is a gap-finding tool and not a goal
 - Related: [Testing Strategy — What a Test May Couple To](https://camoa.github.io/dev-guides/development/testing-strategy/what-a-test-may-couple-to/) — the promised-contract line in full
 - Reference: Kent Beck, in [TDD, AI agents and coding with Kent Beck](https://newsletter.pragmaticengineer.com/p/tdd-ai-agents-and-coding-with-kent) (The Pragmatic Engineer, June 2025) — "The genie doesn't want to do TDD. It wants to write the code and then write tests that pass"

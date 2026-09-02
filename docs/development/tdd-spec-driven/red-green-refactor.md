@@ -15,6 +15,7 @@ Every time you implement a new feature or fix a bug using TDD. This is the core 
    - Write a test that describes that behavior
    - Run the test and verify it fails for the right reason
    - A test that passes without any implementation means your test is broken
+   - The right reason is that the behavior is absent. A failure you produced by breaking or reverting working code is a different signal (see [What a Failing Test Proves](what-a-failing-test-proves.md))
 
 ```javascript
 // RED: Test for parsing a user's full name
@@ -81,6 +82,7 @@ class UserNameParser {
 |---|---|---|
 | RED | Test passes without implementation | Your test doesn't actually test new behavior - rewrite it |
 | RED | Test fails to compile | That's fine - compilation failures are failures; move to GREEN |
+| RED | The test only fails once you break or revert working code | That is mutation verification, not RED. The assertion was authored from the implementation, so it cannot constrain the design (see [What a Failing Test Proves](what-a-failing-test-proves.md)) |
 | GREEN | Implementation seems too simple/dumb | That's fine - refactor will improve it, or next test will force better design |
 | GREEN | You're tempted to add extra features | Stop - add only enough to pass this test; write another test for new features |
 | REFACTOR | A test fails | Default: you broke something - revert and refactor more carefully. Only judge the test brittle if you can name the implementation detail it asserts on (see [Refactoring with Confidence](refactoring-confidence.md)) |
@@ -89,6 +91,7 @@ class UserNameParser {
 ## Common Mistakes
 
 - Skipping RED phase by writing code first - You lose the design benefit of thinking through behavior first
+- Producing RED by breaking working code, or by running a code-first test against an old tree - The test does fail, and the run order does look correct, but the assertion came from the implementation and can only ratify it (see [What a Failing Test Proves](what-a-failing-test-proves.md))
 - Writing complex tests that test multiple behaviors - Each test should verify one thing; break into multiple tests
 - Editing a test in GREEN to make it pass - GREEN is for production code only. If the test itself is wrong, stop, return to RED, and change it there deliberately (see [Changing Existing Tests](changing-existing-tests.md))
 - Spending too long on GREEN trying to write perfect code - Green phase is about speed; refactor is about quality
@@ -98,5 +101,6 @@ class UserNameParser {
 
 ## See Also
 - Previous: [The Three Laws of TDD](three-laws-tdd.md) | Next: [Changing Existing Tests](changing-existing-tests.md)
+- Related: [What a Failing Test Proves](what-a-failing-test-proves.md) - how to tell a real RED from a manufactured one
 - Reference: [Test-Driven Development Wikipedia](https://en.wikipedia.org/wiki/Test-driven_development)
 - Reference: [Martin Fowler on TDD](https://martinfowler.com/bliki/TestDrivenDevelopment.html)

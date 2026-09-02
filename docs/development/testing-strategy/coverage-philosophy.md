@@ -1,6 +1,6 @@
 ---
 description: "Coverage as a diagnostic signal, not a goal — line vs. branch coverage, mutation testing, and practical thresholds."
-tldr: "Coverage tells you which lines were NOT executed, not whether tests verify correct behavior. 100% line coverage with vacuous assertions catches nothing. Use branch coverage over line coverage. Prefer mutation testing for quality signals on critical modules. Goodhart's Law applies — coverage mandates without quality enforcement produce hollow test suites."
+tldr: "Coverage tells you which lines were NOT executed, not whether tests verify correct behavior. 100% line coverage with vacuous assertions catches nothing. Use branch coverage over line coverage. Use mutation testing on critical modules to find checks that cannot fail at all, not as proof that the tests specify the right behavior. Goodhart's Law applies — coverage mandates without quality enforcement produce hollow test suites."
 ---
 
 # Coverage Philosophy
@@ -51,11 +51,13 @@ test_categorize_score(75)  # hits line 1, 2, 3; only False branches of first two
 
 Mutation testing verifies that tests actually catch bugs. A mutation testing tool introduces small deliberate faults (mutants) into the code — changing `>=` to `>`, `+` to `-`, removing a conditional — and checks whether at least one test fails for each mutation.
 
-If a mutation survives (no test fails), your test suite has a gap at that point. High mutation score (most mutants killed) indicates that your tests genuinely verify behavior.
+If a mutation survives (no test fails), your test suite has a gap at that point: nothing you have asserts on the behavior that mutant changed.
+
+A high mutation score means the suite is **sensitive to the code as written**, and that is narrower than it sounds. Killing a mutant proves a test is coupled to the implementation — which is exactly what a test written from finished code already is. It does not prove the test states a promise anyone made, and it is never evidence that a test was written before the code. Mutation testing answers "can this check fail at all?". Whether the code does what was promised is a different question, and only a test authored from the contract answers it.
 
 Tools: Stryker (JS/TS), PITest (Java), Infection (PHP), mutmut (Python).
 
-Mutation testing is slow (runs the full suite per mutation) but is the most reliable quality signal for test suites. Use it on critical modules, not the full codebase.
+Mutation testing is slow (runs the full suite per mutation) but it is the most reliable way to find checks that cannot fire at all. Use it on critical modules, not the full codebase.
 
 ## Practical Coverage Thresholds
 
@@ -79,9 +81,12 @@ Set the threshold that reflects your risk profile, not the highest number you ca
 - Gaming coverage with meaningless tests → `assert True` passes; coverage ticks up; value is zero
 - Using coverage on generated/trivial code → DTOs, getters, config classes inflate coverage measurements without value; exclude them
 - Treating a coverage drop as an instruction to write tests here and now → It is a signal to look. Adding tests inside an unrelated bug fix makes that change harder to review and to revert
+- Reading a high mutation score as proof the suite specifies the right behavior → It proves the tests are coupled to the code, which a test written from the finished code always is
+- Breaking working code to watch a test fail and recording that as test-first → That is mutation verification; it proves sensitivity, never authoring order
 
 ## See Also
 
 - ← Previous: [Determinism and Flakiness](determinism-and-flakiness.md) | Next: [What to Test and What Not To](what-to-test-and-what-not.md) →
 - Related: [development/tdd-spec-driven](https://camoa.github.io/dev-guides/development/tdd-spec-driven/) — Test Coverage Strategy section
+- Related: [What a Failing Test Proves](https://camoa.github.io/dev-guides/development/tdd-spec-driven/what-a-failing-test-proves/) — why a red run does not establish that a test came first
 - Reference: Martin Fowler, [TestCoverage](https://martinfowler.com/bliki/TestCoverage.html)

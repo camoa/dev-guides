@@ -34,7 +34,7 @@ The plugin owns the generic mechanism — when the implement phase runs, the tes
 
 ## Opinion
 
-**The test is written first, and it is seen to fail.** No production code is written until a test for the behaviour exists and has been run to confirm it fails (RED) for the right reason — a missing implementation, not a typo in the test. Then the minimum code to pass (GREEN), then refactoring under a green bar (REFACTOR). A test that passes on its first run is suspect: it is probably asserting nothing. "Too simple to test" is not a reason to skip; a CLI flag or an exit code is exactly the kind of one-liner that silently regresses.
+**The test is written first, and it is seen to fail.** No production code is written until a test for the behaviour exists and has been run to confirm it fails (RED) for the right reason — the behaviour is absent. Not a typo in the test, and not working code you broke or reverted to produce the failure; that proves the test is sensitive, never that it came first (see `development/tdd-spec-driven/what-a-failing-test-proves`). Then the minimum code to pass (GREEN), then refactoring under a green bar (REFACTOR). A test that passes on its first run is suspect: it is probably asserting nothing. "Too simple to test" is not a reason to skip; a CLI flag or an exit code is exactly the kind of one-liner that silently regresses.
 
 **PSR-12, strict types everywhere, readonly value objects across seams.** Every file carries `declare(strict_types=1)` and conforms to PSR-12 layout, PascalCase classes / camelCase methods, docblocks on classes and public methods, and type hints on every parameter and return. Data carried between layers — from the thin binary into the library, from one collaborator to the next — travels as a `readonly` value object, not a loose array, so the shape is explicit and cannot be mutated behind a caller's back. No deprecated APIs reach the diff.
 
@@ -138,7 +138,7 @@ Idempotent at the discipline level: re-running on a component whose tests alread
 
 After the recipe runs, verify:
 
-1. Every implemented behaviour has a PHPUnit test at a deliberately chosen tier (plain unit / unit-with-collaborators / integration / CLI end-to-end), and each test was seen to fail before the code existed — no test passed on its first run unexamined.
+1. Every implemented behaviour has a PHPUnit test at a deliberately chosen tier (plain unit / unit-with-collaborators / integration / CLI end-to-end), and each test was seen to fail before the code existed *because the behaviour was absent* — not because working code was broken or reverted, and no test passed on its first run unexamined.
 2. Every check-style unit carries a negative case — an assertion that correct input produces no output and no finding — so the check can be tuned, not just fired.
 3. Every CLI flag and every exit code the component touches is covered, and fixture-based CLI end-to-end coverage exists that drives the built binary against a fixture tree and asserts on stdout / stderr / exit code.
 4. Each test names the behaviour it specifies, and no test in the change was written after the code it covers — a test that cannot name a behaviour is measuring or ratifying, and does not count toward item 1.

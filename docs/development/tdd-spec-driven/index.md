@@ -17,6 +17,11 @@ guide-meta:
     - outer verification
     - when not to write a test
     - test excess
+    - what a failing test proves
+    - absence-RED
+    - mutation-RED
+    - green on arrival
+    - manufactured RED
   not:
     - Drupal PHPUnit testing
     - framework-specific test runners
@@ -41,6 +46,7 @@ guide-meta:
 | Fix a bug without growing the suite | [Fixing Bugs with TDD](fixing-bugs-with-tdd.md) | Fixing a bug: write one failing test that reproduces it, fix only until that test passes, then stop - don't add tests for untouched behavior or strengthen neighboring assertions in the same change. |
 | Know whether a test belongs to TDD or to another discipline | [What TDD Covers](what-tdd-covers.md) | A test belongs to the TDD loop only if it can be written before the code and watched to fail; E2E, visual regression, performance, and security scans are outer verification, not TDD coverage - driving a browser is not the discriminator. |
 | Decide whether an added test should exist at all | [When Not to Write a Test](when-not-to-write-a-test.md) | TDD requires one specification per behavior a change creates, seen failing before the code existed; anything else is excess unless it's a different discipline's test, but excess is never an excuse to skip the one required test. |
+| Know whether the RED I saw proves the test came first | [What a Failing Test Proves](what-a-failing-test-proves.md) | A red run proves the order the commands ran in, not that the test came first: absence-RED constrains the design, mutation-RED only proves the test can fail, and a test green on arrival ratifies code that already works. |
 | Write effective unit tests | [Unit Testing Fundamentals](unit-testing-fundamentals.md) | Writing any unit test: follow FIRST, and assert only on a promised contract - a return value, a state change, a documented error - never on a log line or call order nobody promised to keep stable. |
 | Use mocks, stubs, fakes, and spies correctly | [Test Doubles](test-doubles.md) | You need to test code that depends on external systems (databases, APIs, file systems) or collaborating objects that are slow, unavailable, or difficult to set up in tests. |
 | Structure my tests properly | [Testing Patterns](testing-patterns.md) | Structuring any test - unit, integration, or end-to-end. These patterns create readable, maintainable tests. |

@@ -44,7 +44,7 @@ The tempting discriminator is "drives a browser," and it is wrong. Drupal's `Fun
 ## Why the distinction pays
 When a rule says every behavior needs a test, and the suite in front of you contains a benchmark, an axe sweep and three snapshot files regenerated from output, the count looks healthy while the behavior itself has nothing specifying it. Reporting the two groups separately is what makes that visible.
 
-The same split explains why mutation testing cannot settle whether a suite is good. Mutation proves a test is coupled to the code — which is exactly what a test written from finished code already is.
+The same split explains why mutation testing cannot settle whether a suite is good. Mutation proves a test is coupled to the code — which is exactly what a test written from finished code already is. It also explains why a red run, on its own, does not prove a test was written first: see [What a Failing Test Proves](what-a-failing-test-proves.md).
 
 ## Common Mistakes
 - Counting E2E, VR and scan results as TDD coverage → The number rises while the behaviors stay unspecified
@@ -56,6 +56,7 @@ The same split explains why mutation testing cannot settle whether a suite is go
 ## See Also
 - Previous: [Fixing Bugs with TDD](fixing-bugs-with-tdd.md) | Next: [When Not to Write a Test](when-not-to-write-a-test.md)
 - Related: [Red-Green-Refactor Workflow](red-green-refactor.md) — the loop this defines the boundary of
+- Related: [What a Failing Test Proves](what-a-failing-test-proves.md) — whether a test that *could* be written first actually was
 - Related: [Testing Strategy — Choosing a Test Type](https://camoa.github.io/dev-guides/development/testing-strategy/choosing-a-test-type/) — picking the type once you know which loop you are in
 - Related: [Testing Strategy — E2E Testing Concepts](https://camoa.github.io/dev-guides/development/testing-strategy/e2e-testing-concepts/) and [Visual Regression Concepts](https://camoa.github.io/dev-guides/development/testing-strategy/visual-regression-concepts/)
 - Reference: Trail of Bits, [Mutation testing for the agentic era](https://blog.trailofbits.com/2026/04/01/mutation-testing-for-the-agentic-era/) (April 2026) — why killing a mutant proves a test is coupled to the implementation rather than conformant to a specification
