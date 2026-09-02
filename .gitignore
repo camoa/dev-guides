@@ -1,0 +1,42 @@
+# ==============================================================================
+# Composer & Vendor Dependencies
+# ==============================================================================
+/vendor/
+
+# ==============================================================================
+# Drupal Web Root (Assumes /web setup, adapt if your webroot is /docroot or /)
+# ==============================================================================
+/web/core/
+/web/modules/contrib/
+/web/themes/contrib/
+/web/profiles/contrib/
+
+# Ignore automatically scaffolded core files
+/web/index.php
+/web/update.php
+
+# ==============================================================================
+# Site-Specific Uploads and Configurations
+# ==============================================================================
+# Never commit user-uploaded files or local settings
+/web/sites/*/files/
+/web/sites/*/settings.local.php
+/web/sites/*/services.local.yml
+
+# Ignore environment configuration files
+.env
+.env.local
+
+# ==============================================================================
+# Development and IDE Artifacts
+# ==============================================================================
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+.DS_Store
+Thumbs.db
+
