@@ -1,5 +1,5 @@
 ---
-description: Control specificity ordering with @layer — tame third-party CSS conflicts
+description: "Control specificity ordering with @layer — tame third-party CSS conflicts"
 tldr: "Use `@layer` when managing specificity conflicts between resets, base styles, third-party CSS (Bootstrap, Drupal base themes), components, and utilities. Use unlayered styles when you need to guarantee an override without `!important`."
 ---
 
@@ -7,7 +7,7 @@ tldr: "Use `@layer` when managing specificity conflicts between resets, base sty
 
 ## When to Use
 
-> Use `@layer` when managing specificity conflicts between resets, base styles, third-party CSS (Bootstrap, Drupal base themes), components, and utilities. Use unlayered styles when you need to guarantee an override without `!important`.
+> When managing specificity conflicts between resets, base styles, third-party CSS (Bootstrap, Drupal base themes), components, and utilities — layers give you deterministic ordering without specificity wars.
 
 ## Decision
 
@@ -53,13 +53,12 @@ tldr: "Use `@layer` when managing specificity conflicts between resets, base sty
 
 ## Common Mistakes
 
-- **Wrong**: Declaring layers in the wrong order → **Right**: The `@layer name1, name2` declaration at the top sets precedence; `name2` wins over `name1`
-- **Wrong**: Putting your own site styles in layers when third-party CSS is unlayered → **Right**: Unlayered third-party CSS beats your layered styles; always layer third-party first
-- **Wrong**: Using `!important` inside layers without understanding the reversal → **Right**: `!important` in layers reverses precedence — earlier layers beat later ones; avoid it
-- **Wrong**: Mixing layered and unlayered imports inconsistently → **Right**: Be consistent about what goes into layers across your project
+- Declaring layers in the wrong order — the `@layer name1, name2` declaration at the top sets precedence; `name2` wins over `name1`
+- Putting your own site styles in layers then wondering why third-party unlayered styles win — if third-party CSS is not in a layer, it beats your layered styles; always layer third-party
+- Using `!important` inside layers without understanding the reversal — it becomes a footgun that's hard to debug
+- Mixing layered and unlayered imports — be consistent about what goes into layers
 
 ## See Also
 
-- [Subgrid](subgrid.md)
-- [@scope — Scoped Styles](css-scope.md)
+- ← [Subgrid](subgrid.md) | [@scope Scoped Styles](css-scope.md) →
 - Reference: [MDN @layer](https://developer.mozilla.org/en-US/docs/Web/CSS/@layer)

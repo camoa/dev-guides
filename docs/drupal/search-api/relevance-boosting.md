@@ -8,9 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when tuning search result relevance — making the most relevant results appear first.
+> When tuning search result relevance — making the most relevant results appear first.
 
-## Decision
+## Decision: Boost Mechanisms
 
 | Mechanism | Where | Effect |
 |---|---|---|
@@ -20,36 +20,43 @@ drupal_version: "11.x"
 | **Number field boost** | Number Field Boost processor | Boost by a numeric field value |
 | **Views sort** | Views sort criteria | Sort by "Search: Relevance" |
 
-## Pattern
+## Pattern: Field Boost Configuration
 
-**Field boost values:**
+Set in the index Fields tab — each fulltext field has a "Boost" value:
+- 1.0 = normal weight (default)
+- 2.0 = double weight
+- 0.5 = half weight
+- 21.0 = maximum (for title fields)
 
-| Content | Recommended Boost |
-|---|---|
-| Title | 13-21x |
-| H1 elements (via HTML filter) | 5x |
-| H2 elements | 3x |
-| H3 elements | 2x |
-| Strong / bold text | 2x |
-| Body / rendered HTML | 1x (base) |
+## Pattern: HTML Filter Element Boosts
 
-**HTML Filter element boosts** (set in HTML Filter processor settings):
-- H1: 5, H2: 3, H3: 2, Strong/B: 2, Em/I: 1.5
+In the HTML Filter processor settings:
+| Element | Recommended Boost | Rationale |
+|---|---|---|
+| H1 | 5 | Page title (if in rendered HTML) |
+| H2 | 3 | Section headings |
+| H3 | 2 | Sub-headings |
+| Strong / B | 2 | Emphasized text |
+| Em / I | 1.5 | Italicized text |
 
-**If using Rendered HTML Output alongside individual fields:**
-- Set Title boost to **13-21x**
+## Pattern: Rendered HTML vs Individual Fields
+
+If using both a Rendered HTML Output field AND individual fields (title, body):
 - Set Rendered HTML boost to **0.5 or lower**
-- This prevents rendered output from diluting the title boost
+- Set Title boost to **13-21x**
+- This prevents the rendered output from diluting the title boost
 
-**Views sort:** Always add "Search: Relevance" sort descending. Views does NOT default to relevance sort — you must add it explicitly.
+## Decision: Views Sort
+
+**Always sort by "Search: Relevance" descending** for search results. Views does NOT default to relevance sort — you must add it explicitly.
 
 ## Common Mistakes
 
-- **Wrong**: Not sorting by relevance in Views → **Right**: Default Views sort is not relevance. Without it, results appear in arbitrary order.
-- **Wrong**: Over-boosting one field → **Right**: A title at 21x with body at 1x means a partial title match outweighs a perfect body match. Balance boosts.
-- **Wrong**: Ignoring HTML filter → **Right**: The HTML filter processor can boost by element tags inside rendered HTML, giving heading text more weight without separate fields.
+- **Not sorting by relevance** — Default Views sort is not relevance. Without it, results appear in arbitrary order.
+- **Over-boosting one field** — A title at 21x with body at 1x means a partial title match outweighs a perfect body match. Balance boosts.
+- **Ignoring HTML filter** — The HTML filter processor can boost by element tags inside the rendered HTML, giving heading text more weight without separate fields.
 
 ## See Also
 
-- [Fields & Data Types](fields-data-types.md)
-- [Processor Recommendations](processor-recommendations.md)
+- [Fields & Data Types](fields-data-types.md) — field configuration
+- [Processor Recommendations](processor-recommendations.md) — processor setup

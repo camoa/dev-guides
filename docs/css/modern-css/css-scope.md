@@ -1,5 +1,5 @@
 ---
-description: Scope styles to a subtree with @scope — replace BEM naming conventions
+description: "Scope styles to a subtree with @scope — replace BEM naming conventions"
 tldr: "Use `@scope` when you need styles that only apply within a specific DOM subtree — replacing BEM naming conventions or CSS Modules for visual scoping. Use Shadow DOM when you need behavioral encapsulation and JS isolation."
 ---
 
@@ -7,7 +7,7 @@ tldr: "Use `@scope` when you need styles that only apply within a specific DOM s
 
 ## When to Use
 
-> Use `@scope` when you need styles that only apply within a specific DOM subtree — replacing BEM naming conventions or CSS Modules for visual scoping. Use Shadow DOM when you need behavioral encapsulation and JS isolation.
+> When you need styles that only apply within a specific DOM subtree — replacing BEM double-underscore naming conventions, CSS Modules, or Shadow DOM for visual scoping (not behavioral encapsulation).
 
 ## Decision
 
@@ -51,12 +51,11 @@ tldr: "Use `@scope` when you need styles that only apply within a specific DOM s
 
 ## Common Mistakes
 
-- **Wrong**: Treating `@scope (.card) { :scope { } }` as identical to `.card { }` → **Right**: `:scope` inside `@scope` targets the root but behaves differently in cascade weight; they are not equivalent
-- **Wrong**: Expecting `@scope` to prevent JavaScript from reading or modifying styles → **Right**: `@scope` is purely a CSS selector scoping mechanism; JS still has full access
-- **Wrong**: Expecting the donut hole limit element itself to be styled → **Right**: The limit selector in `@scope (A) to (B)` excludes `B` from the scope entirely
+- Confusing `@scope (.card) { :scope { } }` with `.card { }` — `:scope` inside `@scope` targets the root, but only when styles are in the scope block; they behave differently in cascade weight
+- Expecting `@scope` to prevent JavaScript from reading or modifying styles — it is purely a CSS selector scoping mechanism
+- Using the donut hole syntax `@scope (A) to (B)` and expecting it to affect the limit element itself — the limit selector (B) is excluded from the scope
 
 ## See Also
 
-- [@layer — Cascade Layers](cascade-layers.md)
-- [Native CSS Nesting](native-nesting.md)
+- ← [@layer Cascade Layers](cascade-layers.md) | [Native CSS Nesting](native-nesting.md) →
 - Reference: [MDN @scope](https://developer.mozilla.org/en-US/docs/Web/CSS/@scope)

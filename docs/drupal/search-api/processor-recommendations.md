@@ -8,48 +8,92 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when deciding which processors to enable for your Search API index.
+> When deciding which processors to enable for your Search API index.
 
-## Decision
+## Decision: Built-In Processors (22 Total)
 
-**By backend:**
-
-| Processor | Database | Solr | Why |
+**Content Transformation:**
+| ID | Title | Stages | Purpose |
 |---|---|---|---|
-| Entity status | Enable | Enable | Always — skip unpublished |
-| Content access | Enable if restricted | Enable if restricted | Access control — NOT default |
-| HTML filter | Enable | Enable | Strip tags, element boosts |
-| Ignore case | Enable | **Disable** | Solr handles natively |
-| Tokenizer | Enable | **Disable** | Solr handles natively, better |
-| Stemmer | Enable | **Disable** | Solr has language-specific stemmers |
-| Stopwords | Enable | **Disable** | Solr has language-specific lists |
-| Transliteration | Enable | Optional | Accent normalization |
-| Highlight | Enable | Enable | Show search excerpts |
-| Rendered item | Optional | Optional | Render entity for indexing |
-| Aggregated fields | Optional | Optional | Combine multiple fields |
-| Type boost | Optional | Optional | Boost by entity/bundle type |
+| `html_filter` | HTML filter | preprocess_index | Strip HTML, boost by element (H1-H3, strong) |
+| `ignorecase` | Ignore case | preprocess_index, preprocess_query | Case-insensitive matching |
+| `tokenizer` | Tokenizer | preprocess_index, preprocess_query | Split text into words |
+| `stemmer` | Stemmer | preprocess_index, preprocess_query | Reduce to root form (running → run) |
+| `stopwords` | Stopwords | preprocess_index, preprocess_query | Remove common words (the, a, is) |
+| `transliteration` | Transliteration | preprocess_index, preprocess_query | Normalize accents (ü → u) |
+| `ignore_character` | Ignore characters | preprocess_index, preprocess_query | Remove/replace specific characters |
 
-## Pattern
+**Field Generation:**
+| ID | Title | Stage | Purpose |
+|---|---|---|---|
+| `rendered_item` | Rendered item | add_properties | Render entity for indexing |
+| `aggregated_field` | Aggregated fields | add_properties | Combine multiple fields |
+| `custom_value` | Custom value | add_properties | Computed field values |
+| `add_url` | URL field | add_properties | Add entity URL |
+| `add_hierarchy` | Hierarchy | add_properties | Add hierarchical structure |
+| `reverse_entity_references` | Reverse references | add_properties | Add reverse entity references |
 
-**22 built-in processors grouped by category:**
+**Access & Filtering:**
+| ID | Title | Stages | Purpose |
+|---|---|---|---|
+| `content_access` | Content access | pre_index_save, preprocess_query | Node access permissions |
+| `role_access` | Role-based access | preprocess_query | Role-based access control |
+| `entity_status` | Entity status | alter_items | Skip unpublished entities |
+| `role_filter` | Role filter | alter_items | Filter by user role |
 
-| Category | Processors |
+**Relevance:**
+| ID | Title | Stage | Purpose |
+|---|---|---|---|
+| `type_boost` | Type boost | preprocess_index | Boost by entity/bundle type |
+| `number_field_boost` | Number field boost | preprocess_index | Boost by numeric field value |
+| `highlight` | Highlight | postprocess_query | Excerpt with highlighted terms |
+
+**Utility:**
+| ID | Title | Stage | Purpose |
+|---|---|---|---|
+| `entity_type` | Entity type | add_properties | Add entity type field |
+| `language_with_fallback` | Language (with fallback) | preprocess_index | Language handling with fallback |
+
+## Decision: Processors by Backend
+
+**Database Backend — Enable These:**
+| Processor | Why |
 |---|---|
-| Content transformation | html_filter, ignorecase, tokenizer, stemmer, stopwords, transliteration, ignore_character |
-| Field generation | rendered_item, aggregated_field, custom_value, add_url, add_hierarchy, reverse_entity_references |
-| Access & filtering | content_access, role_access, entity_status, role_filter |
-| Relevance | type_boost, number_field_boost, highlight |
-| Utility | entity_type, language_with_fallback |
+| Entity status | Always — skip unpublished |
+| Content access | If any restricted content |
+| HTML filter | Strip tags, element boosts |
+| Ignore case | Case-insensitive search |
+| Tokenizer | Required for DB fulltext |
+| Stemmer | Better recall |
+| Stopwords | Remove noise words |
+| Transliteration | Accent normalization |
+| Highlight | Show search excerpts |
+
+**Solr Backend — DISABLE These:**
+| Processor | Why Disable |
+|---|---|
+| Tokenizer | Solr handles natively, better |
+| Ignore case | Solr handles natively |
+| Stemmer | Solr has language-specific stemmers |
+| Stopwords | Solr has language-specific stopword lists |
+
+**Solr Backend — KEEP These:**
+| Processor | Why Keep |
+|---|---|
+| Entity status | Still needed |
+| Content access | Still needed |
+| HTML filter | Still useful for element boosts |
+| Rendered item | Still useful |
+| Aggregated fields | Still useful |
+| Type boost | Still useful |
 
 ## Common Mistakes
 
-- **Wrong**: Enabling Tokenizer, Stemmer, Stopwords, Ignore case on Solr → **Right**: Causes redundant processing and can conflict with Solr's analyzer chain. Disable them.
-- **Wrong**: Not enabling Content access → **Right**: Search API does NOT restrict access by default. Without this processor, restricted content appears in results for all users.
-- **Wrong**: Enabling Highlight on high-traffic pages → **Right**: Can add 10x latency. Use query tag `search_api_skip_processor_highlight` to skip selectively.
+- **Enabling Solr-duplicate processors** — Tokenizer, Stemmer, Stopwords, Ignore case on Solr causes redundant processing and can conflict with Solr's analyzer chain.
+- **Not enabling Content access** — Search API does NOT restrict access by default. Without this processor, restricted content appears in results.
+- **Highlight on high-traffic pages** — Can add 10x latency. Use query tag `search_api_skip_processor_highlight` to skip selectively.
 
 ## See Also
 
-- [Processor Architecture](processor-architecture.md)
-- [Relevance & Boosting](relevance-boosting.md)
-- [Content Access & Security](content-access-security.md)
-- Reference: https://www.drupal.org/docs/8/modules/search-api/getting-started/processors
+- [Processor Architecture](processor-architecture.md) — how processors execute
+- [Relevance & Boosting](relevance-boosting.md) — boost strategies

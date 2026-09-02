@@ -1,5 +1,5 @@
 ---
-description: Declare light and dark values in one line with light-dark() — no media query duplication
+description: "Declare light and dark values in one line with light-dark() — no media query duplication"
 tldr: "Use `light-dark()` to declare both light and dark color values in a single declaration — eliminating duplicated `@media (prefers-color-scheme: dark)` blocks. Use `@media` for non-color properties that change in dark mode."
 ---
 
@@ -7,7 +7,7 @@ tldr: "Use `light-dark()` to declare both light and dark color values in a singl
 
 ## When to Use
 
-> Use `light-dark()` to declare both light and dark color values in a single declaration — eliminating duplicated `@media (prefers-color-scheme: dark)` blocks. Use `@media` for non-color properties that change in dark mode.
+> To declare both light and dark color values in a single declaration — eliminating the need to duplicate all property values inside `@media (prefers-color-scheme: dark)` blocks.
 
 ## Decision
 
@@ -46,22 +46,22 @@ tldr: "Use `light-dark()` to declare both light and dark color values in a singl
 }
 ```
 
-**JS toggle pattern:**
+**JS toggle pattern:** To support a manual dark mode toggle:
 ```js
 document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
 ```
-`light-dark()` reads the computed `color-scheme` value, so this changes which value is applied.
+`light-dark()` reads the computed `color-scheme` value, so this changes which value is used.
 
 **Browser support:** Chrome 123, Firefox 120, Safari 17.5. Baseline newly available since May 2024. Safe to use.
 
 ## Common Mistakes
 
-- **Wrong**: Omitting `color-scheme: light dark` on `:root` → **Right**: Without it, the function uses the default scheme (usually light) and the dark value is never applied
-- **Wrong**: Using `light-dark()` for non-color properties like `font-size` → **Right**: It only works for color values
-- **Wrong**: Expecting `light-dark()` to respond to a `.dark` class → **Right**: It reads `color-scheme`; set `color-scheme: dark` on the element or ancestor for class-based toggling
+- Omitting `color-scheme: light dark` on `:root` — without it, the function uses the default scheme (usually light) and the dark value is never applied
+- Using `light-dark()` for non-color properties like `font-size` — it only works for color values
+- Expecting `light-dark()` to respond to a `.dark` class — it only reads `color-scheme`; you must set `color-scheme: dark` on the element or an ancestor for class-based toggling
 
 ## See Also
 
-- [Relative Color Syntax](relative-color.md)
-- [oklch() / oklab() — Modern Color Spaces](oklch-color.md)
+- ← [Relative Color Syntax](relative-color.md) | [oklch() Color Space](oklch-color.md) →
+- [color-scheme & Dark Mode Mechanics](color-scheme-dark-mode.md) → for FOUC prevention, scrollbars, accent-color, component overrides, and toggle UX
 - Reference: [MDN light-dark()](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/light-dark)

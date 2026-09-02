@@ -1,5 +1,5 @@
 ---
-description: Smooth transitions between UI states with View Transitions API
+description: "Smooth transitions between UI states with View Transitions API"
 tldr: "Use View Transitions for smooth animated transitions between UI states — page navigations, tab switches, content updates — without JS animation libraries. Use a JS library when you need complex choreographed sequencing."
 ---
 
@@ -7,7 +7,7 @@ tldr: "Use View Transitions for smooth animated transitions between UI states �
 
 ## When to Use
 
-> Use View Transitions for smooth animated transitions between UI states — page navigations, tab switches, content updates — without JS animation libraries. Use a JS library when you need complex choreographed sequencing.
+> For smooth animated transitions between UI states — page navigations, tab switches, content updates — without JavaScript animation libraries. The browser automatically cross-fades between old and new states, with the option to morph specific shared elements.
 
 ## Decision
 
@@ -22,7 +22,6 @@ tldr: "Use View Transitions for smooth animated transitions between UI states �
 ## Pattern
 
 Same-document (SPA-style) — any DOM update wrapped in the callback gets a cross-fade:
-
 ```js
 document.startViewTransition(() => {
   updateDOM(); // synchronous DOM change
@@ -43,28 +42,25 @@ document.startViewTransition(() => {
 ```
 
 Cross-document (MPA) — add to both the outgoing and incoming page:
-
 ```css
 @view-transition {
   navigation: auto;
 }
 ```
-
-This single CSS rule on both pages gives a default cross-fade navigation. No JavaScript.
+That single CSS rule on both pages gives a default cross-fade navigation. No JavaScript.
 
 **Browser support:**
 - Same-document: Chrome 111, Firefox 144 (October 2025), Safari 18. Now baseline newly available (all major browsers).
-- Cross-document: Chrome 126, Safari 18.2. **Firefox does not yet support cross-document view transitions.** Use `@supports` for cross-document.
+- Cross-document: Chrome 126, Safari 18.2. **Firefox does not yet support cross-document view transitions.** Use with `@supports` for cross-document.
 
 ## Common Mistakes
 
-- **Wrong**: Using non-unique `view-transition-name` values → **Right**: Each name must be unique in the document at any given time; duplicate names cause the transition to skip that element
-- **Wrong**: Assigning `view-transition-name` to elements not visible in both states → **Right**: The browser skips the morph if one snapshot is missing; animation falls back to default cross-fade
-- **Wrong**: Long-running async operations inside `startViewTransition` callback → **Right**: The old state is frozen while it runs; keep the callback fast or return a resolved promise quickly
-- **Wrong**: Using cross-document view transitions without checking Firefox support → **Right**: They silently fall back to instant navigation in Firefox
+- Using non-unique `view-transition-name` values — each name must be unique in the document at any given time; duplicate names cause the transition to skip that element
+- Assigning `view-transition-name` to elements not visible in both states — the browser skips the morph if one snapshot is missing; animation falls back to default cross-fade
+- Long-running async operations inside `startViewTransition` callback — the callback should return a promise, but the old state is frozen while it runs; keep it fast
+- Using cross-document view transitions without checking Firefox support — they silently fall back to instant navigation in Firefox
 
 ## See Also
 
-- [@starting-style & Discrete Transitions](starting-style-transitions.md)
-- [Scroll-Driven Animations](scroll-driven-animations.md)
+- ← [@starting-style Transitions](starting-style-transitions.md) | [Scroll-Driven Animations](scroll-driven-animations.md) →
 - Reference: [MDN View Transitions API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API)

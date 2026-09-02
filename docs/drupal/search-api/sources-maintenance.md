@@ -13,6 +13,7 @@ description: "Source references and maintenance manifest for the search api guid
 | Index entity | `src/Entity/Index.php` |
 | Backend interface | `src/Backend/BackendInterface.php` |
 | Processor interface | `src/Processor/ProcessorInterface.php` |
+| Processor base class | `src/Processor/ProcessorPluginBase.php` |
 | Query class | `src/Query/Query.php` |
 | ResultSet class | `src/Query/ResultSet.php` |
 | Datasource interface | `src/Datasource/DatasourceInterface.php` |
@@ -40,6 +41,7 @@ description: "Source references and maintenance manifest for the search api guid
 | JSON:API Search API | https://www.drupal.org/project/jsonapi_search_api | 2026-08-16 |
 | Common pitfalls | https://www.drupal.org/docs/8/modules/search-api/getting-started/common-pitfalls | 2026-03-31 |
 | Processors docs | https://www.drupal.org/docs/8/modules/search-api/getting-started/processors | 2026-03-31 |
+| Hooks-to-events change record | https://www.drupal.org/node/3059866 | 2026-09-02 |
 | Perfecting Search (Morpht) | https://www.morpht.com/blog/perfecting-search-search-api | 2026-03-31 |
 | Common Mistakes (Zivtech) | https://www.zivtech.com/blog/top-13-common-mistakes-when-building-sitewide-search-drupal | 2026-03-31 |
 | Next.js Search API | https://next-drupal.org/guides/search-api | 2026-03-31 |

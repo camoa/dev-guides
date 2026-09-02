@@ -8,18 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when optimizing search query speed and reducing server load.
+> When optimizing search query speed and reducing server load.
 
-## Pattern: Cache Warming
-
-For high-traffic search pages:
-1. Identify popular search terms from analytics
-2. Create a cron job that pre-executes popular queries
-3. This warms Drupal's render cache and the backend's query cache
-
-For Solr: configure autowarming in `solrconfig.xml` for filter cache, query result cache, and document cache.
-
-## Decision
+## Decision: Performance Strategies
 
 | Strategy | Impact | Applies To |
 |---|---|---|
@@ -30,32 +21,37 @@ For Solr: configure autowarming in `solrconfig.xml` for filter cache, query resu
 | Highlight processor skip | 10x latency reduction | All backends |
 | Cache warming | Faster repeated queries | All backends |
 
-## Pattern
+## Pattern: MySQL InnoDB COUNT Problem
 
-**MySQL InnoDB COUNT problem** — InnoDB COUNT queries are extremely slow on large tables:
-1. Use **Mini pager** in Views instead of Full pager — Mini pager doesn't need total count
-2. Enable **"Skip result count query"** in Views query settings
+MySQL InnoDB COUNT queries are extremely slow on large tables. Two mitigations:
 
-**Highlight processor latency** — can add 10x latency on complex queries:
+1. **Use Mini pager** in Views instead of Full pager — Mini pager doesn't need total count
+2. **Enable "Skip result count query"** in Views query settings
+
+## Pattern: Highlight Performance
+
+The Highlight processor can add 10x latency on complex queries. Options:
+- Disable globally if excerpts aren't needed
+- Skip for specific pages via query tag:
 ```php
-// Skip highlighting for specific queries
 $query->addTag('search_api_skip_processor_highlight');
 ```
 
-**Solr index-only mode** — for maximum query performance:
-1. Server config → Enable "Retrieve result data from Solr"
-2. Views query settings → Enable "Skip item access checks" (only for fully public content)
-3. Ensure all displayed fields are in the Search API index
-4. Result: Solr returns field data directly — no database queries for entity loading
+## Pattern: Cache Warming
+
+For high-traffic search pages:
+1. Identify popular search terms from analytics
+2. Create a cron job that pre-executes popular queries
+3. This warms Drupal's render cache and the backend's query cache
+
+For Solr: configure autowarming in `solrconfig.xml` for filter cache, query result cache, and document cache.
 
 ## Common Mistakes
 
-- **Wrong**: Using AJAX on search results Views → **Right**: Breaks unique URLs, harms UX and analytics. Does not improve performance.
-- **Wrong**: "Partial matching" on DB backend → **Right**: Much slower than "Whole words only." Only use partial if required.
-- **Wrong**: Using "Skip item access checks" on restricted sites → **Right**: This bypasses all access control. Restricted content becomes visible.
+- **Using AJAX on search results Views** — Breaks unique URLs, harms UX and analytics. Does not improve performance.
+- **Partial matching on DB backend** — "Partial matching" is much slower than "Whole words only." Only use partial if required.
 
 ## See Also
 
-- [Indexing Performance](indexing-performance.md)
-- [Solr Best Practices](solr-best-practices.md)
-- [Content Access & Security](content-access-security.md)
+- [Indexing Performance](indexing-performance.md) — indexing-side optimization
+- [Solr Best Practices](solr-best-practices.md) — Solr-specific performance

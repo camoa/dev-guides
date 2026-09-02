@@ -1,14 +1,13 @@
 ---
-description: Native CSS @function, if(), and @mixin — reusable logic without a preprocessor (Chromium-first)
+description: "Native CSS @function, if(), and @mixin — reusable logic without a preprocessor (Chromium-first)"
 tldr: "Use `@function` (Chrome 141+) for reusable computed values, `if()` (Chrome 137+) for inline conditionals. Both are Chromium-only."
-drupal_version: "11.x"
 ---
 
 # CSS @function, if(), and Upcoming Mixins
 
 ## When to Use
 
-> Use `@function` (Chrome 141+) for reusable computed values, `if()` (Chrome 137+) for inline conditionals. Both are Chromium-only. Use custom properties + `calc()` for cross-browser equivalents today. `@mixin`/`@apply` is experimental (Chrome Canary only).
+> When you need reusable CSS logic — custom functions for computed values, conditional values based on context, or shared style blocks — without a preprocessor.
 
 ## Decision
 
@@ -48,7 +47,7 @@ h2 { font-size: --fluid-size(1.25rem, 2rem); }
   );
 }
 
-/* @mixin / @apply — Chrome Canary only */
+/* @mixin / @apply — experimental (Chrome Canary only) */
 @mixin --flex-center {
   display: flex;
   align-items: center;
@@ -59,25 +58,29 @@ h2 { font-size: --fluid-size(1.25rem, 2rem); }
 .modal { @apply --flex-center; }
 ```
 
-`if()` condition types: `media(...)`, `style(...)` (custom property check), `supports(...)`, and `else` as fallback.
+**`if()` condition types:**
+- `media(...)` — media query condition
+- `style(...)` — style query (custom property check)
+- `supports(...)` — feature query
+- `else` — fallback
 
 **Browser support:**
-- `@function`: Chrome 141+. No Firefox/Safari.
-- `if()`: Chrome 137+. No Firefox/Safari.
-- `@mixin`/`@apply`: Chrome Canary only (behind flag).
+- `@function`: Chrome 141+. No Firefox/Safari yet.
+- `if()`: Chrome 137+. No Firefox/Safari yet.
+- `@mixin`/`@apply`: Chrome Canary only (behind flag). Very early.
 
-Use custom properties + `calc()` for cross-browser until support widens.
+All three are Chromium-first. Use custom properties + `calc()` for cross-browser until support widens.
 
 ## Common Mistakes
 
-- **Wrong**: Using `@function` to return multiple declarations → **Right**: Functions return a single value via `result:`; use `@mixin` for blocks of properties
-- **Wrong**: Nesting `if()` inside `if()` → **Right**: Not supported; use multiple conditions separated by semicolons
-- **Wrong**: Assuming these replace Sass today → **Right**: Chromium-only means you still need Sass/PostCSS for production cross-browser code
+- Using `@function` to return multiple declarations — functions return a single value via `result:`, not a block of properties (that's what `@mixin` is for)
+- Nesting `if()` inside `if()` — not supported; use multiple conditions with semicolons
+- Assuming these replace Sass today — Chromium-only means you still need Sass/PostCSS for production cross-browser code
 
 ## See Also
 
-- [@property — Registered Custom Properties](at-property.md) — for typed custom properties used with functions
-- [Native CSS Nesting](native-nesting.md) — another Sass-replacement feature that IS cross-browser
+- [@property](at-property.md) → for typed custom properties used with functions
+- [Native Nesting](native-nesting.md) → another Sass-replacement feature that IS cross-browser
 - Reference: [Chrome: CSS Functions](https://developer.chrome.com/blog/css-functions)
 - Reference: [Chrome: CSS if()](https://developer.chrome.com/blog/if-article)
 - Reference: [MDN: @function](https://developer.mozilla.org/en-US/docs/Web/CSS/@function)

@@ -1,14 +1,13 @@
 ---
-description: Style elements based on scroll container state — stuck, snapped, or scrollable — without JavaScript
+description: "Style elements based on scroll container state — stuck, snapped, or scrollable — without JavaScript"
 tldr: "Use `@container scroll-state()` when you need to style elements based on whether their scroll container is stuck, snapped, or scrollable. Use `IntersectionObserver` when cross-browser support is required — scroll-state queries are Chrome…"
-drupal_version: "11.x"
 ---
 
 # Container Scroll-State Queries
 
 ## When to Use
 
-> Use `@container scroll-state()` when you need to style elements based on whether their scroll container is stuck, snapped, or scrollable. Use `IntersectionObserver` when cross-browser support is required — scroll-state queries are Chrome 133+ only.
+> When you need to style elements based on their scroll container's state — whether an element is stuck (via `position: sticky`), snapped (via `scroll-snap`), or scrollable.
 
 ## Decision
 
@@ -42,17 +41,18 @@ drupal_version: "11.x"
   scroll-snap-type: x mandatory;
 }
 
-.slide {
-  opacity: 0.6;
-  transform: scale(0.95);
-  transition: opacity 0.3s, transform 0.3s;
-}
-
 @container scroll-state(snapped: x) {
   .slide {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+/* Non-snapped slides dimmed */
+.slide {
+  opacity: 0.6;
+  transform: scale(0.95);
+  transition: opacity 0.3s, transform 0.3s;
 }
 
 /* Scroll shadow indicators */
@@ -69,16 +69,16 @@ drupal_version: "11.x"
 }
 ```
 
-**Browser support:** Chrome 133+, Edge 133+. Not supported in Firefox or Safari. Use as progressive enhancement with sensible defaults.
+**Browser support:** Chrome 133+, Edge 133+. **Not supported** in Firefox or Safari. Very new — use as progressive enhancement with sensible defaults.
 
 ## Common Mistakes
 
-- **Wrong**: Omitting `container-type: scroll-state` → **Right**: Without declaring the container type, queries won't match
-- **Wrong**: Confusing with size container queries → **Right**: `container-type: scroll-state` is separate from `container-type: inline-size`; you can combine: `container-type: inline-size scroll-state`
-- **Wrong**: Expecting scroll position percentage detection → **Right**: Scroll-state only detects binary states (stuck/not stuck, snapped/not snapped, scrollable/not scrollable)
+- Forgetting `container-type: scroll-state` — without declaring the container type, queries won't match
+- Confusing with regular container size queries — `container-type: scroll-state` is separate from `container-type: inline-size`; you can combine them: `container-type: inline-size scroll-state`
+- Expecting it to detect scroll position (percentage) — scroll-state only detects binary states (stuck/not stuck, snapped/not snapped, scrollable/not scrollable)
 
 ## See Also
 
-- [Container Queries (@container)](container-queries.md) — for size-based container queries
-- [CSS Scroll Snap](scroll-snap.md) — works with `snapped` state queries
+- [Container Queries](container-queries.md) → for size-based container queries
+- [CSS Scroll Snap](scroll-snap.md) → works with `snapped` state queries
 - Reference: [Chrome: Scroll-State Container Queries](https://developer.chrome.com/docs/css-ui/scroll-state-queries)

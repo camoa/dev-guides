@@ -1,7 +1,7 @@
 {
   "drupal/contributing": {
-    "source_hash": "0433809479656de1b3e1a5495ace21987dbf4d66f5af7766d7bb69cc99df43f8",
-    "partitioned": "2026-05-21",
+    "source_hash": "595df87cf9993bb12b554dd2d2aeb6304ebb9b03465f02e36e93f59211b1d7ed",
+    "partitioned": "2026-09-02",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 10
   },
@@ -354,8 +354,8 @@
     "guides_extracted": 6
   },
   "css/modern-css": {
-    "source_hash": "9ede502ff779e4ac2394e8817c95189e58f055a17ebdad691f1982ddd8ddbe1d",
-    "partitioned": "2026-06-09",
+    "source_hash": "efafdb4576daf9bc3e3426cd491a1081206282044d165994b95f0e9ff3bee57c",
+    "partitioned": "2026-09-02",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 27
   },
@@ -426,8 +426,8 @@
     "guides_extracted": 25
   },
   "drupal/search-api": {
-    "source_hash": "6e5ecbb30a5fc3dbcb16b1e67b84404c204732bfbbe6e2838b19db868e3a80cc",
-    "partitioned": "2026-08-16",
+    "source_hash": "4614a81715a23a8675bd39914edd09e359b5ed8e6f4a0992afb83d9b7a805a0e",
+    "partitioned": "2026-09-02",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 25
   },

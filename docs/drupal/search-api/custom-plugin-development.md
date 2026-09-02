@@ -1,6 +1,6 @@
 ---
 description: Custom Search API plugins — processor development with PHP 8.1 attribute syntax, stage selection, and plugin namespace
-tldr: "Use this when you need a custom processor, backend, datasource, or other Search API plugin."
+tldr: "Use this when you need a custom processor, backend, datasource, or other Search API plugin. Extend ProcessorPluginBase, which supplies default implementations for every ProcessorInterface method."
 drupal_version: "11.x"
 ---
 
@@ -8,9 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you need a custom processor, backend, datasource, or other Search API plugin.
+> When you need a custom processor, backend, datasource, or other Search API plugin.
 
-## Decision
+## Decision: Plugin Type Selection
 
 | I Need To... | Create A... | Namespace |
 |---|---|---|
@@ -22,12 +22,13 @@ drupal_version: "11.x"
 | Connect a new search engine | Backend | `Plugin/search_api/backend/` |
 | Index non-entity data | Datasource | `Plugin/search_api/datasource/` |
 
-## Pattern
+## Pattern: Custom Processor
 
 ```php
 namespace Drupal\my_module\Plugin\search_api\processor;
 
 use Drupal\search_api\Attribute\SearchApiProcessor;
+use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Processor\ProcessorPluginBase;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 
@@ -50,17 +51,24 @@ class MyCustomProcessor extends ProcessorPluginBase {
     }
   }
 
+  public function preprocessSearchQuery(QueryInterface $query): void {
+    // Modify query before execution.
+  }
+
 }
 ```
 
 ## Common Mistakes
 
-- **Wrong**: Wrong stage for the task → **Right**: Use `alter_items` to filter items, `preprocess_index` to transform values, `preprocess_query` to modify queries.
-- **Wrong**: Missing stage declaration in attribute → **Right**: Processors must declare supported stages in the `#[SearchApiProcessor]` attribute.
-- **Wrong**: Not overriding `supportsIndex()` → **Right**: Override to restrict your processor to specific index types if needed.
+- **Wrong stage for the task** — Use `alter_items` to filter items, `preprocess_index` to transform values, `preprocess_query` to modify queries.
+- **Missing stage declaration** — Processors must declare supported stages in the attribute/annotation.
+- **Not checking `supportsIndex()`** — Override this to restrict your processor to specific index types.
+
+## Pattern: Base Class Reference
+
+`ProcessorPluginBase` (`search_api/src/Processor/ProcessorPluginBase.php`) supplies the default implementations for every `ProcessorInterface` method, so a custom processor only overrides the stages it declares.
 
 ## See Also
 
-- [Processor Architecture](processor-architecture.md)
-- [Events System](events-system.md)
-- Reference: `web/modules/contrib/search_api/src/Processor/ProcessorPluginBase.php`
+- [Processor Architecture](processor-architecture.md) — stage details
+- [Events System](events-system.md) — lighter-weight alternative to processors

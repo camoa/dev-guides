@@ -8,21 +8,20 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when creating or configuring a Search API server entity.
+> When creating or configuring a Search API server entity.
 
-## Decision
+## Decision: Server Entity Properties
 
 | Property | Config Key | Purpose |
 |---|---|---|
 | Machine name | `id` | Unique identifier |
 | Name | `name` | Human-readable label |
-| Backend | `backend` | Backend plugin ID (`search_api_db`, `search_api_solr`, etc.) |
+| Description | `description` | Purpose documentation |
+| Backend | `backend` | Backend plugin ID ('search_api_db_defaults', 'search_api_solr', etc.) |
 | Backend config | `backend_config` | Backend-specific settings |
 | Status | `status` | Enabled/disabled |
 
-## Pattern
-
-**Key server methods:**
+## Pattern: Server Key Methods
 
 | Method | Purpose |
 |---|---|
@@ -31,15 +30,17 @@ drupal_version: "11.x"
 | `getIndexes()` | Get all indexes using this server |
 | `isAvailable()` | Is the backend reachable? |
 | `supportsFeature($feature)` | Check backend capabilities |
+| `getSupportedFeatures()` | List all supported features |
 
-**Database backend settings:**
+## Pattern: Database Backend Settings
 
 | Setting | Purpose |
 |---|---|
 | Matching mode | "Whole words only" (faster) or "Partial matching" |
+| Database | Which database connection to use |
 | Min chars for search | Minimum characters for fulltext search |
 
-**Solr backend settings:**
+## Pattern: Solr Backend Settings
 
 | Setting | Purpose |
 |---|---|
@@ -49,13 +50,8 @@ drupal_version: "11.x"
 | Retrieve data from Solr | Skip entity loads (index-only mode) |
 | Highlighting | Enable Solr-native highlighting |
 
-## Common Mistakes
-
-- **Wrong**: Editing Solr config files directly → **Right**: Use `search_api_solr_admin` sub-module. Direct edits are overwritten on module updates.
-- **Wrong**: Partial matching on DB backend for large sites → **Right**: "Whole words only" is significantly faster. Only use partial if required.
-
 ## See Also
 
-- [Solr Best Practices](solr-best-practices.md)
-- [Backend Comparison](backend-comparison.md)
+- [Solr Best Practices](solr-best-practices.md) — detailed Solr configuration
+- [Backend Comparison](backend-comparison.md) — choosing a backend
 - Reference: `web/modules/contrib/search_api/src/Entity/Server.php`

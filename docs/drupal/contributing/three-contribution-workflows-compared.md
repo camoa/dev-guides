@@ -12,6 +12,8 @@ drupal_version: "11.x"
 
 ## Decision
 
+The three workflows differ across authority, CI ownership, gates, and who merges.
+
 | Dimension | **A. Core** | **B. Your own contrib** | **C. Someone else's contrib** |
 |---|---|---|---|
 | Repository target | `drupal/drupal` `main` branch | Your project's branches | The project's branches (from a fork) |
@@ -24,7 +26,7 @@ drupal_version: "11.x"
 | Your authority | Propose only | Full | Propose only |
 | Pace | Slow; release-phase limits apply | You control | Maintainer's pace — be patient |
 
-## Branch Strategy (2025–2026)
+## Branch Strategy (2025–2026 update)
 
 Core's branching changed. For **core contributions:**
 
@@ -34,9 +36,13 @@ Core's branching changed. For **core contributions:**
 | `11.x` | Deprecated interim branch | 11.x-specific bugs only; do not target for new features |
 | `10.x` | Critical fixes only | EOL Dec 2026 after Drupal 12 (targeted Aug 2026) |
 
-For **contrib modules:** follow each project's own branch conventions. Always make the MR against the most recent development branch first. Backports to older branches are a later maintainer decision, not a contributor decision.
+For **contrib modules:** follow each project's own branch conventions. The core branch shift matters when you are contributing to core — always target `main` for new work.
+
+**Feature vs. backport rule:** always make the MR against the most recent development branch first. Backports to older branches are a later maintainer decision, not a contributor decision.
 
 ## Core Gates (Workflow A only)
+
+Core patches must pass all six gates before a committer will review an RTBC:
 
 | Gate | Owned by |
 |---|---|
@@ -47,14 +53,18 @@ For **contrib modules:** follow each project's own branch conventions. Always ma
 | Testing | Testing (test coverage required) |
 | Usability | UX team |
 
-Not every core change triggers a cross-team review — scope determines which gates apply.
+In practice, not every core change triggers a cross-team review — scope determines which gates apply. A maintainer or initiative lead will tell you when a gate review is needed.
+
+## Boundary: General Mechanics vs. AI Overlay
+
+This guide covers the **general contribution mechanics**. Where a section has an AI-specific counterpart — coding standards verification, issue/MR workflow, credit discipline — a See Also link points to `drupal/contributing-with-ai/`.
 
 ## Common Mistakes
 
-- **Wrong**: Targeting `11.x` for new core features → **Right**: Target `main` for all new work
-- **Wrong**: Self-assigning a core issue without commenting → **Right**: Post a comment stating what part you are taking
-- **Wrong**: Opening a backport MR without first merging into the development branch → **Right**: Target the development branch; maintainers backport
-- **Wrong**: Treating contrib CI strictness as equal to core CI → **Right**: Contrib CI is configured per-maintainer; read the `.gitlab-ci.yml`
+- Targeting `11.x` for new core features — target `main` instead.
+- Self-assigning a core issue without posting a comment first — comment saying what part you're working on.
+- Opening a backport MR to an older branch without first getting the patch merged into the development branch.
+- Treating contrib CI strictness as equal to core CI — it is configured per-maintainer; read the `.gitlab-ci.yml`.
 
 ## See Also
 

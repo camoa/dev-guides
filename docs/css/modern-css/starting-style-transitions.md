@@ -1,5 +1,5 @@
 ---
-description: Animate elements entering from display:none with @starting-style
+description: "Animate elements entering from display:none with @starting-style"
 tldr: "Use `@starting-style` with `transition-behavior: allow-discrete` to animate elements entering from `display: none` — dialogs, drawers, popovers. Use a JS animation library when you need complex multi-step choreography."
 ---
 
@@ -7,21 +7,20 @@ tldr: "Use `@starting-style` with `transition-behavior: allow-discrete` to anima
 
 ## When to Use
 
-> Use `@starting-style` with `transition-behavior: allow-discrete` to animate elements entering from `display: none` — dialogs, drawers, popovers. Use a JS animation library when you need complex multi-step choreography.
+> To animate elements transitioning from `display: none` to visible — previously impossible in CSS alone. Also enables transitions on `<dialog>` and `[popover]` elements entering and exiting the page.
 
 ## Decision
 
 | If you need... | Use... | Why |
 |---|---|---|
 | Animate a dialog or drawer opening | `@starting-style` + `transition-behavior: allow-discrete` | Browser reads start values from `@starting-style` |
-| `display: none` → `display: block` with transition | Both `allow-discrete` AND `@starting-style` | Two parts required — display change needs `allow-discrete`, start values need `@starting-style` |
+| `display: none` → `display: block` with transition | Both `allow-discrete` AND `@starting-style` | Two parts required — the discrete display change needs `allow-discrete`, the start values need `@starting-style` |
 | Animate a popover appearing | Same pattern as dialog | Popovers use top-layer entry same as `<dialog>` |
 | Complex orchestrated multi-step animation | JS animation library | CSS discrete transitions are linear; choreography needs JS |
 
 ## Pattern
 
 Animating a `<dialog>` open and close:
-
 ```css
 dialog {
   opacity: 1;
@@ -55,14 +54,13 @@ dialog:not([open]) {
 
 ## Common Mistakes
 
-- **Wrong**: Omitting the `overlay` transition → **Right**: The dialog disappears abruptly during exit because it leaves the top layer before the transition completes
-- **Wrong**: Forgetting `@starting-style` → **Right**: Without it, the browser has no starting values and the enter transition does not play
-- **Wrong**: Putting animation logic in `@starting-style` → **Right**: `@starting-style` defines start state only; transitions are declared on the element normally
-- **Wrong**: Using `@keyframes` animation instead of `transition` → **Right**: `@starting-style` only works with CSS transitions, not `@keyframes`
+- Omitting the `overlay` transition — the dialog disappears abruptly during exit because it leaves the top layer before the transition completes
+- Forgetting `@starting-style` — without it, the browser has no starting values and the enter transition does not play
+- Putting animation logic in `@starting-style` instead of `transition` — `@starting-style` defines start state only; transitions are still declared on the element normally
+- Using `animation` instead of `transition` — `@starting-style` only works with CSS transitions, not `@keyframes` animations
 
 ## See Also
 
-- [Scroll-Driven Animations](scroll-driven-animations.md)
-- [View Transitions](view-transitions.md)
-- [Popover API](popover-api.md)
+- ← [Scroll-Driven Animations](scroll-driven-animations.md) | [View Transitions](view-transitions.md) →
+- [Popover API](popover-api.md) → uses the same pattern for popover entry/exit
 - Reference: [MDN @starting-style](https://developer.mozilla.org/en-US/docs/Web/CSS/@starting-style)

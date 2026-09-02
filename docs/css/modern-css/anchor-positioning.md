@@ -1,5 +1,5 @@
 ---
-description: Position tooltips relative to anchors natively — replace Popper.js
+description: "Position tooltips relative to anchors natively — replace Popper.js"
 tldr: "Use anchor positioning for tooltips, dropdowns, and overlays that need to follow their trigger across scroll container boundaries. Use `position: relative` + `position: absolute` on a parent when there is no scroll container concern and…"
 ---
 
@@ -7,7 +7,7 @@ tldr: "Use anchor positioning for tooltips, dropdowns, and overlays that need to
 
 ## When to Use
 
-> Use anchor positioning for tooltips, dropdowns, and overlays that need to follow their trigger across scroll container boundaries. Use `position: relative` + `position: absolute` on a parent when there is no scroll container concern and you need maximum compatibility.
+> To position tooltips, dropdowns, and overlays relative to a trigger element — replacing Popper.js, Floating UI, and manual `position: relative` + `position: absolute` patterns, especially when the popover crosses scroll container boundaries.
 
 ## Decision
 
@@ -41,7 +41,6 @@ tldr: "Use anchor positioning for tooltips, dropdowns, and overlays that need to
 ```
 
 With Popover API for light dismiss:
-
 ```css
 .trigger { anchor-name: --dropdown-anchor; }
 
@@ -56,14 +55,14 @@ With Popover API for light dismiss:
 
 **`anchor()` function:** references the anchor's edge. Values: `top`, `right`, `bottom`, `left`, `center`, `start`, `end`.
 
-**`anchor-size()`:** reads the anchor's dimensions. Use `min-width: anchor-size(width)` to match dropdown to button width.
+**`anchor-size()`:** reads the anchor's dimensions. Use for `min-width: anchor-size(width)` to match dropdown to button width.
 
-**`position-try-fallbacks`:**
+**`position-try-fallbacks`:** space-separated list of alternative positions to try if the element overflows the viewport.
 - `flip-block` — try flipping on the block axis (above/below)
 - `flip-inline` — try flipping on the inline axis (left/right)
 - `--custom-try` — reference a named `@position-try` rule
 
-Always wrap in `@supports`:
+**Browser support:** Chrome 125+, Firefox 145 (behind flag; 149+ production). Safari 26. **Significant Safari and Firefox gaps until very recently.** Use `@supports` progressive enhancement:
 
 ```css
 @supports (anchor-name: --test) {
@@ -71,17 +70,14 @@ Always wrap in `@supports`:
 }
 ```
 
-**Browser support:** Chrome 125+, Firefox 145 (behind flag; 149+ production). Safari 26. Significant Safari and Firefox gaps until recently. Use `@supports` progressive enhancement.
-
 ## Common Mistakes
 
-- **Wrong**: Using anchor positioning without `@supports` → **Right**: Safari and Firefox support only arrived in 2025; older versions need a fallback
-- **Wrong**: Setting `position: fixed` assuming it works the same → **Right**: Anchor positioning requires `position: absolute` in most cases; check spec behavior for `fixed`
-- **Wrong**: Anchoring to an element in a surprising DOM position → **Right**: Anchor positioning works across the DOM but stacking contexts can cause unexpected behavior
-- **Wrong**: Assuming the anchor auto-follows on scroll across all parents → **Right**: It does within the same scroll container; test with overflowing parents
+- Using anchor positioning without `@supports` — Safari and Firefox support only arrived in 2025; older versions need a fallback
+- Setting `position: fixed` instead of `position: absolute` — anchor positioning requires `position: absolute` (or `fixed` in limited cases); check spec behavior for your use case
+- Anchoring to an element that is not a sibling or ancestor in DOM order — anchor positioning works across the DOM but behavior with stacking contexts can be surprising
+- Expecting the anchor to auto-follow on scroll — it does, but only within the same scroll container; test with overflowing parents
 
 ## See Also
 
-- [Popover API](popover-api.md)
-- [View Transitions](view-transitions.md)
+- ← [Popover API](popover-api.md) | [View Transitions](view-transitions.md) →
 - Reference: [MDN CSS Anchor Positioning](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning)

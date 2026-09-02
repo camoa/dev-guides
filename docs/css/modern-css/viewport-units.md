@@ -1,5 +1,5 @@
 ---
-description: Fix 100vh on mobile with dvh, svh, lvh dynamic viewport units
+description: "Fix 100vh on mobile with dvh, svh, lvh dynamic viewport units"
 tldr: "Use `dvh` for hero sections that should fill the visible screen on mobile. Use `svh` for the app shell root container."
 ---
 
@@ -7,7 +7,7 @@ tldr: "Use `dvh` for hero sections that should fill the visible screen on mobile
 
 ## When to Use
 
-> Use `dvh` for hero sections that should fill the visible screen on mobile. Use `svh` for the app shell root container. Use `vh` only for desktop-specific full-height elements where mobile chrome is not a concern.
+> For layouts that need to fill the screen on mobile devices where the browser chrome (address bar) collapses and expands, causing classic `100vh` to overflow or shift the layout.
 
 ## Decision
 
@@ -39,7 +39,6 @@ tldr: "Use `dvh` for hero sections that should fill the visible screen on mobile
 ```
 
 **Unit reference:**
-
 | Unit | Meaning | Use case |
 |---|---|---|
 | `dvh` / `dvw` | Dynamic — updates as chrome shows/hides | Hero sections, fullscreen layouts |
@@ -52,11 +51,10 @@ tldr: "Use `dvh` for hero sections that should fill the visible screen on mobile
 
 ## Common Mistakes
 
-- **Wrong**: Using `dvh` for the app shell root → **Right**: The dynamic resizing causes layout shifts when the address bar moves; use `svh` for the root container
-- **Wrong**: Mixing `vh` and `dvh` in the same layout → **Right**: Creates inconsistent sizing between elements; choose one system per layout
-- **Wrong**: Relying on emulators for testing → **Right**: Emulators often do not simulate address bar behavior accurately; test on real mobile devices
+- Using `dvh` for the app shell root — the dynamic resizing causes layout shifts when the address bar moves; use `svh` for the root container
+- Mixing `vh` and `dvh` in the same layout — creates inconsistent sizing between elements; choose one system per layout
+- Not testing on real mobile devices — emulators often do not simulate address bar behavior accurately
 
 ## See Also
 
-- [text-wrap: balance / pretty](text-wrap.md)
 - Reference: [web.dev: Large, small, and dynamic viewport units](https://web.dev/blog/viewport-units)

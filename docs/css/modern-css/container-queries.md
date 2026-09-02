@@ -1,5 +1,5 @@
 ---
-description: Respond to container size with @container — component-level responsive design
+description: "Respond to container size with @container — component-level responsive design"
 tldr: "Use `@container` when a component needs to adapt to the space available from its container, not the viewport. Use `@media` when you need page-level breakpoints based on viewport size."
 ---
 
@@ -7,14 +7,14 @@ tldr: "Use `@container` when a component needs to adapt to the space available f
 
 ## When to Use
 
-> Use `@container` when a component needs to adapt to the space available from its container, not the viewport. Use `@media` when you need page-level breakpoints based on viewport size.
+> When a component needs to adapt to the space available from its container, not the viewport. This is the solution to component-level responsive design — the same component in a sidebar and in a main column behaves differently because their containers have different widths.
 
 ## Decision
 
 | If you need... | Use... | Why |
 |---|---|---|
 | Component layout based on available width | `@container` size query | Reacts to container, not viewport |
-| Same component in sidebar AND main content | `@container` | Media query would be identical for both contexts |
+| Same component used in sidebar AND main content | `@container` | Media query would be identical for both contexts |
 | Page-level breakpoints | `@media` | Still the right tool for viewport-based layout |
 | Query a custom property value on an ancestor | Container style query `@container style(--variant: card)` | Lets parent communicate intent to children |
 | Fluid sizing inside a component | Container query units (`cqi`, `cqw`) | See [Container Units](container-units.md) |
@@ -44,7 +44,7 @@ tldr: "Use `@container` when a component needs to adapt to the space available f
 }
 ```
 
-Style queries — pass intent from parent to child via custom properties:
+**Style queries** — pass intent from parent to child via custom properties:
 
 ```css
 .card { --layout: portrait; }
@@ -65,12 +65,12 @@ Style queries — pass intent from parent to child via custom properties:
 
 ## Common Mistakes
 
-- **Wrong**: Writing `@container` rules without `container-type` → **Right**: `@container` rules are silently ignored without `container-type` set on an ancestor
-- **Wrong**: `container-type: size` without an explicit height → **Right**: The container collapses to zero block-size and the query never matches; always set an explicit height with `size`
-- **Wrong**: Querying the same element you are styling → **Right**: A container cannot query itself; you need a wrapper element
-- **Wrong**: Using style queries without a Firefox fallback → **Right**: Style queries are silently ignored in Firefox; base styles remain so ensure they work standalone
+- Forgetting `container-type` — `@container` rules silently have no effect without it
+- Setting `container-type: size` without giving the container an explicit height — the container collapses to zero block-size and the query never matches
+- Querying an ancestor that is also the element you are styling — a container cannot query itself; you need a wrapper
+- Using style queries in Firefox without a fallback — they are silently ignored but the base styles remain
 
 ## See Also
 
-- [Container Query Units](container-units.md)
+- [Container Query Units](container-units.md) → sizing elements relative to their container
 - Reference: [MDN Container Queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries)

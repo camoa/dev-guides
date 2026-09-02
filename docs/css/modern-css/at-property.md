@@ -1,5 +1,5 @@
 ---
-description: Register custom properties with @property — animate CSS variables, enforce types
+description: "Register custom properties with @property — animate CSS variables, enforce types"
 tldr: "Use `@property` when you need to animate a custom property, enforce a type, prevent inheritance, or guarantee an initial value. Use a regular `--var: value` for non-animated custom properties."
 ---
 
@@ -7,7 +7,7 @@ tldr: "Use `@property` when you need to animate a custom property, enforce a typ
 
 ## When to Use
 
-> Use `@property` when you need to animate a custom property, enforce a type, prevent inheritance, or guarantee an initial value. Use a regular `--var: value` for non-animated custom properties.
+> When you need to animate a custom property, enforce a type on a CSS variable, prevent inheritance, or guarantee an initial value. Unregistered custom properties are opaque strings to the browser — `@property` makes them first-class typed values.
 
 ## Decision
 
@@ -15,7 +15,7 @@ tldr: "Use `@property` when you need to animate a custom property, enforce a typ
 |---|---|---|
 | Animate a gradient via a custom property | `@property` with `syntax: '<angle>'` or `'<number>'` | Browser can interpolate typed values, not strings |
 | Prevent a custom property from inheriting | `inherits: false` | Each element gets its own initial value |
-| Type-check a custom property | `syntax: '<color>'` / `'<length>'` / `'<percentage>'` | Invalid values fall back to `initial-value` |
+| Type-check a custom property | `syntax: '<color>'` / `'<length>'` / `'<percentage>'` | Invalid values fall back to initial-value |
 | Animated counter or progress indicator | `@property --progress { syntax: '<number>'; }` | Smooth interpolation between numeric values |
 | Standard non-animated custom property | Regular `--var: value` | `@property` adds overhead for no benefit |
 
@@ -65,13 +65,12 @@ Animated progress bar width:
 
 ## Common Mistakes
 
-- **Wrong**: Omitting `initial-value` when `syntax` is not `'*'` → **Right**: The entire `@property` rule is silently ignored without it
-- **Wrong**: Using `em` or context-dependent values as `initial-value` → **Right**: Only absolute values allowed (`px`, `deg`, `0`, etc.)
-- **Wrong**: Trying to register standard CSS properties like `color` → **Right**: Only register custom properties (prefixed with `--`)
-- **Wrong**: Expecting `CSS.registerProperty()` and `@property` to merge → **Right**: If both exist for the same property, the JS call takes precedence
+- Omitting `initial-value` when `syntax` is not `'*'` — the entire `@property` rule is silently ignored
+- Using `em` or context-dependent values as `initial-value` — invalid; only absolute values allowed (`px`, `deg`, `0`, etc.)
+- Registering a property the browser already knows — `@property --color` is fine, but don't try to register standard properties like `color`
+- Expecting `CSS.registerProperty()` (JS) and `@property` (CSS) to merge — if both exist, the JS call takes precedence
 
 ## See Also
 
-- [Native CSS Nesting](native-nesting.md)
-- [oklch() / oklab() — Modern Color Spaces](oklch-color.md)
+- ← [Native CSS Nesting](native-nesting.md) | [oklch() Color Space](oklch-color.md) →
 - Reference: [MDN @property](https://developer.mozilla.org/en-US/docs/Web/CSS/@property)

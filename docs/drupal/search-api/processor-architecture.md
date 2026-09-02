@@ -8,9 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you need to understand how Search API processors work — the stages, weights, and execution order.
+> When you need to understand how Search API processors work — the stages, weights, and execution order.
 
-## Decision
+## Decision: Processing Stages
 
 | Stage | Constant | When | Purpose | Example Processors |
 |---|---|---|---|---|
@@ -21,44 +21,54 @@ drupal_version: "11.x"
 | **PREPROCESS_QUERY** | `STAGE_PREPROCESS_QUERY` | Before search executes | Modify search query | ContentAccess (add access conditions) |
 | **POSTPROCESS_QUERY** | `STAGE_POSTPROCESS_QUERY` | After search returns | Modify results | Highlight (add excerpts) |
 
-## Pattern
+## Pattern: Execution Flow
 
-**Execution flow:**
 ```
 INDEXING:
   Entity saved → Tracker marks for indexing
-  → ALTER_ITEMS (filter out unpublished, etc.)
-  → PREPROCESS_INDEX (transform values: lowercase, strip HTML, tokenize, stem)
+  → STAGE_ALTER_ITEMS (filter out unpublished, etc.)
+  → STAGE_PREPROCESS_INDEX (transform values: lowercase, strip HTML, tokenize, stem)
   → Backend.indexItems() (store in search engine)
 
 SEARCHING:
-  Query built → PREPROCESS_QUERY (add access checks, modify keywords)
+  Query built → STAGE_PREPROCESS_QUERY (add access checks, modify keywords)
   → QueryPreExecuteEvent dispatched
   → Backend.search() (execute search)
   → ProcessingResultsEvent dispatched
-  → POSTPROCESS_QUERY (add highlights, modify results)
+  → STAGE_POSTPROCESS_QUERY (add highlights, modify results)
   → Results returned
 ```
 
-**ProcessorInterface** — key methods:
+## Pattern: Processor Weight System
+
+Processors execute in weight order per stage. Lower weights run first. Negative weights = earlier. Processor weights are configurable per stage in the Processors admin UI.
+
+**Critical ordering examples:**
+- ContentAccess (preprocess_query: -30) runs early to add access conditions before other processors
+- Highlight (postprocess_query: 0) runs after results are returned
+
+## Pattern: Processor Interface
+
 ```php
-public function supportsIndex(IndexInterface $index): bool;
-public function supportsStage(string $stage): bool;
-public function getWeight(string $stage): int;
-public function preprocessIndexItems(array $items): void;   // PREPROCESS_INDEX
-public function preprocessSearchQuery(QueryInterface $query): void; // PREPROCESS_QUERY
-public function postprocessSearchResults(ResultSetInterface $results): void; // POSTPROCESS_QUERY
+interface ProcessorInterface {
+  public function supportsIndex(IndexInterface $index): bool;
+  public function supportsStage(string $stage): bool;
+  public function getWeight(string $stage): int;
+  public function setWeight(string $stage, int $weight): void;
+  public function isLocked(): bool;  // Can't be disabled
+  public function isHidden(): bool;  // Hidden from UI
+
+  // Stage-specific methods:
+  public function getPropertyDefinitions(): array;     // ADD_PROPERTIES
+  public function preIndexSave(): void;                // PRE_INDEX_SAVE
+  public function alterIndexedItems(array &$items): void; // ALTER_ITEMS
+  public function preprocessIndexItems(array $items): void; // PREPROCESS_INDEX
+  public function preprocessSearchQuery(QueryInterface $query): void; // PREPROCESS_QUERY
+  public function postprocessSearchResults(ResultSetInterface $results): void; // POSTPROCESS_QUERY
+}
 ```
-
-Processors execute in weight order per stage. Lower weights run first. ContentAccess runs at weight -30 in preprocess_query to add access conditions before other processors.
-
-## Common Mistakes
-
-- **Wrong**: Expecting processor changes to affect existing indexed data → **Right**: Must reindex after changing processors.
-- **Wrong**: Wrong stage for the task → **Right**: `alter_items` to filter items, `preprocess_index` to transform values, `preprocess_query` to modify queries.
 
 ## See Also
 
-- [Processor Recommendations](processor-recommendations.md)
-- [Custom Plugin Development](custom-plugin-development.md)
-- Reference: `web/modules/contrib/search_api/src/Processor/ProcessorInterface.php`
+- [Processor Recommendations](processor-recommendations.md) — which processors to enable
+- [Custom Plugin Development](custom-plugin-development.md) — creating custom processors

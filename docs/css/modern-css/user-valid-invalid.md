@@ -1,5 +1,5 @@
 ---
-description: Form validation styling only after user interaction with :user-valid/:user-invalid
+description: "Form validation styling only after user interaction with :user-valid/:user-invalid"
 tldr: "Use `:user-invalid` and `:user-valid` for form validation styling that only appears after the user has interacted with a field. Use `:invalid` / `:valid` only when immediate page-load validation is intentional."
 ---
 
@@ -7,7 +7,7 @@ tldr: "Use `:user-invalid` and `:user-valid` for form validation styling that on
 
 ## When to Use
 
-> Use `:user-invalid` and `:user-valid` for form validation styling that only appears after the user has interacted with a field. Use `:invalid` / `:valid` only when immediate page-load validation is intentional.
+> For form validation styling that only appears after the user has interacted with a field — as opposed to `:valid` and `:invalid` which fire immediately on page load, showing error states before the user has done anything.
 
 ## Decision
 
@@ -46,17 +46,17 @@ input:user-valid {
 }
 ```
 
-**What counts as "significant interaction":** the user must have focused the field AND left it (blur), or the containing form must have been submitted. Typing alone does not trigger `:user-invalid` / `:user-valid`.
+**What counts as "significant interaction":** the user must have focused the field AND left it (blur), or the containing form must have been submitted. Typing alone does not trigger `:user-invalid`/`:user-valid`.
 
 **Browser support:** Chrome 119, Firefox 88 (had it first, in 2021), Safari 16.5. Baseline 2023. Safe to use.
 
 ## Common Mistakes
 
-- **Wrong**: Expecting `:user-invalid` to fire on form submit → **Right**: It does not in most implementations; add a class via JS submit handler to trigger `:invalid` styles on submit
-- **Wrong**: Using `:user-valid` on optional fields → **Right**: An empty optional field matches `:user-valid` because empty is valid for optional inputs; consider only using success styling on required fields
-- **Wrong**: Worrying that `:user-invalid` won't clear when corrected → **Right**: It resets to `:user-valid` when the field becomes valid — this is the desired behavior
+- Expecting `:user-invalid` to fire on form submit — it does not in most implementations; add a class via JS submit handler to trigger `:invalid` styles on submit
+- Using `:user-valid` on optional fields — an empty optional field matches `:user-valid` because empty is valid for optional inputs; consider only using green success styling on required fields
+- Forgetting that `:user-invalid` is reset when the user corrects their input — styles return to `:user-valid` when the field becomes valid, which is the desired behavior
 
 ## See Also
 
-- [:has() — Parent & Sibling Selection](has-selector.md)
+- [:has() Parent Selector](has-selector.md) → for showing/hiding error messages based on field state
 - Reference: [MDN :user-invalid](https://developer.mozilla.org/en-US/docs/Web/CSS/:user-invalid)

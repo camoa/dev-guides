@@ -10,53 +10,92 @@ drupal_version: "11.x"
 
 > Use this when navigating the issue queue — whether finding an issue to work on, updating its status, or understanding what label/status to set on a GitLab-migrated project.
 
-## Decision
+## Detecting Which System a Project Uses
 
-**Detecting which system a project uses:**
-- Issues link → `drupal.org/project/<name>/issues` → **classic queue** (status field workflow)
-- Issues link → `git.drupalcode.org/project/<name>/-/issues` → **GitLab** (scoped label workflow)
+On the project page (`drupal.org/project/<name>`), follow the **"Issues"** link:
 
-GitLab migration is opt-in as of May 2026 — both systems run in parallel.
+- Target `drupal.org/project/<name>/issues` → **classic queue** (status field workflow)
+- Target `git.drupalcode.org/project/<name>/-/issues` → **GitLab** (scoped label workflow)
 
-**Classic issue status workflow:**
+As of May 2026, GitLab migration is an **opt-in pilot**. Both systems run in parallel with no mandatory migration deadline. Old drupal.org issue URLs redirect server-side on migrated projects.
+
+## Classic Issue Status Workflow
 
 | Status | Meaning |
 |---|---|
-| **Active** | New issue; no MR attached |
-| **Needs work** | MR exists but needs changes |
-| **Needs review** | MR exists and ready for review |
-| **RTBC** | Community reviewers consider it ready to commit |
-| **Patch (to be ported)** | Committed on one branch; needs porting |
-| **Fixed** | Resolved by committing the MR |
-| **Postponed** | Valid but blocked or deferred |
-| **Closed (*)** | Terminal states |
+| **Active** | New issue; no MR attached. Default state. |
+| **Needs work** | An MR exists but needs changes per review feedback. |
+| **Needs review** | An MR exists and is ready for peer review and testing. |
+| **Reviewed & tested by the community (RTBC)** | Community reviewers consider it ready to commit. |
+| **Patch (to be ported)** | Committed on one branch; needs porting to another. |
+| **Fixed** | Resolved by committing the MR. |
+| **Postponed** | Valid but blocked or temporarily deferred. |
+| **Postponed (maintainer needs more info)** | Insufficient information to proceed. |
+| **Closed (Duplicate / Won't fix / Works as designed / Cannot reproduce / Outdated / Fixed)** | Terminal states. Closed (Fixed) is auto-set ~2 weeks after Fixed. |
 
-**GitLab scoped label taxonomy:**
+## GitLab Scoped Label Taxonomy
+
+GitLab-migrated projects replace the Status field with **scoped labels** (`state::`, `priority::`, `category::`, `why::`):
 
 | Classic status | GitLab equivalent |
 |---|---|
-| Active | `state::accepted` |
+| Active | `state::accepted` (or in-progress; no specific label) |
 | Needs work | `state::needsWork` + MR marked **draft** |
 | Needs review | `state::needsReview` + MR marked **ready** |
-| RTBC | `state::rtbc` + MR approvals (not standardized) |
-| Fixed | `state::fixed` |
+| RTBC | `state::rtbc` + MR approvals — *not yet standardized; see below* |
+| Fixed | `state::fixed` (auto → `state::closed` after ~2 weeks) |
+| Closed (duplicate/won't fix/…) | `state::closed` + matching `why::*` label |
 
-Other labels: `priority::critical|major|normal|minor`, `category::bug|feature|plan|support|task`, `why::duplicate|wontFix|workAsDesigned|needsInfo|outdated|cannotReproduce`
+**Label taxonomy:**
 
-**Triage access gap:** applying labels on GitLab requires Planner role or higher — a regression from the classic queue. A contributor-facing label UI is in development.
+- `priority::critical|major|normal|minor`
+- `category::bug|feature|plan|support|task`
+- `why::duplicate|wontFix|workAsDesigned|needsInfo|outdated|cannotReproduce`
+- `component::*` (per-project, non-scoped)
+- `version::*` (per-project scoped; naming only, no link to Git tags)
 
-**RTBC on GitLab** has no single standardized equivalent — ask the maintainer how they configure MR approvals.
+**Triage access gap:** applying or editing labels on GitLab requires the **Planner role or higher** — a regression from the classic queue where any logged-in user could triage. A contributor-facing label UI is in development (no launch date). Until it ships, non-Planner contributors may need maintainer help to change labels.
+
+## The RTBC Gap on GitLab
+
+RTBC has **no single standardized GitLab equivalent** — the migration docs call it "the biggest missing piece." In practice it is approximated by a combination:
+
+- `state::rtbc` label
+- GitLab **MR approvals** (count configurable per project)
+- Optionally an issue-board RTBC column
+
+The exact workflow varies per project. For a GitLab-migrated project, ask the maintainer what their RTBC signal is.
 
 ## Finding and Claiming Issues
 
-- Search the **"Novice"** tag — Drupal's equivalent of "good first issue"
-- Filter by "Needs review / Needs tests / Needs documentation / Needs screenshots"
-- Join mentored contribution days at DrupalCons and local camps
+**Finding:**
+
+- Search the **"Novice"** tag — Drupal's equivalent of "good first issue."
+- Filter by "Needs review / Needs tests / Needs documentation / Needs screenshots."
+- Use Contributor Guide task pages for curated entry points.
+- Join **mentored contribution days** at DrupalCons and local camps.
+- Join initiatives (e.g., Bug Smash Initiative) for coordinated triage.
 
 **Claiming:**
-- **Core:** self-assignment is discouraged — post a comment stating what part you are taking
-- **Contrib:** follow the project's policy; self-assignment is fine if the maintainer allows
-- **Never** self-assign security advisories
+
+- **Core:** self-assignment is discouraged — post a comment stating what part you are taking and update it periodically; people forget to un-assign, blocking others.
+- **Contrib:** follow the project's policy; self-assignment is fine for a single large task if the maintainer allows it.
+- **Never** self-assign security advisories.
+
+## Issue Summary — The Standard Template
+
+The bare issue summary template sections (these carry over to GitLab markdown templates):
+
+1. Problem/Motivation
+2. Steps to reproduce
+3. Proposed resolution
+4. Remaining tasks
+5. User interface changes
+6. API changes
+7. Data model changes
+8. Release notes snippet
+
+Keep the summary **current** — when it drifts from consensus, maintainers set *Needs work* and tag "Needs issue summary update." Updating the summary is a shared responsibility: author, reviewers, and committers all own it.
 
 ## GitLab-Specific Differences
 
@@ -73,26 +112,12 @@ Other labels: `priority::critical|major|normal|minor`, `category::bug|feature|pl
 
 **Notification setup on GitLab:** set a deliverable email at `git.drupalcode.org/profile/notifications` — the default `<username>@<uid>.no-reply.drupal.org` address discards mail.
 
-## Issue Summary Template
-
-Standard sections:
-1. Problem/Motivation
-2. Steps to reproduce
-3. Proposed resolution
-4. Remaining tasks
-5. User interface changes
-6. API changes
-7. Data model changes
-8. Release notes snippet
-
-Keep the summary current — when it drifts, maintainers set "Needs work" and tag "Needs issue summary update."
-
 ## Common Mistakes
 
-- **Wrong**: Setting RTBC on a GitLab-migrated project without checking MR approvals config → **Right**: Ask the maintainer what their RTBC signal is
-- **Wrong**: Editing a GitLab issue description when not the author or maintainer → **Right**: GitLab will deny the edit
-- **Wrong**: Not updating issue notifications email on GitLab → **Right**: Set a deliverable email at `git.drupalcode.org/profile/notifications`
-- **Wrong**: Commenting in closed issues to add a +1 → **Right**: Open a new related issue
+- Setting RTBC on a GitLab-migrated project without checking how the maintainer configures MR approvals — the signal is per-project.
+- Editing a GitLab issue description when you are not the author or a maintainer — GitLab will deny the edit.
+- Not updating issue notifications email on GitLab — the no-reply default means you miss all notifications.
+- Commenting in closed issues — the etiquette is to open a new related issue instead.
 
 ## See Also
 
