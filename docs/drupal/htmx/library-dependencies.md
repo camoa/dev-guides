@@ -1,6 +1,6 @@
 ---
-description: What core/drupal.htmx loads — JavaScript files, dependencies, and differential asset loading
-tldr: Reference this when diagnosing asset loading issues or understanding what attaches when you add `core/drupal.htmx`. The library loads three integration JS files and depends on the HTMX 2.0.4 vendor library, Drupal core JS, drupalSettings, and loadjs.
+description: "What core/drupal.htmx loads — JavaScript files, dependencies, and differential asset loading"
+tldr: "Reference this when diagnosing asset loading issues or understanding what attaches when you add `core/drupal.htmx`. The library loads three integration JS files and depends on the HTMX 2.0.4 vendor library, Drupal core JS, drupalSettings, and loadjs."
 drupal_version: "11.x"
 ---
 
@@ -8,19 +8,11 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Reference this when diagnosing asset loading issues or understanding what attaches when you add `core/drupal.htmx`.
+> You need to understand what gets loaded when you attach `core/drupal.htmx`, or you're experiencing asset loading issues.
 
-## Decision
+## Reference: core/drupal.htmx Library
 
-| File | Purpose |
-|------|---------|
-| `htmx-utils.js` | `Drupal.htmx.mergeSettings()`, `Drupal.htmx.addAssets()` |
-| `htmx-assets.js` | Asset loading, settings merge, history cleanup, `ajax_page_state` integration |
-| `htmx-behaviors.js` | Drupal behaviors integration, custom events `htmx:drupal:load`, `htmx:drupal:unload` |
-
-## Pattern
-
-Library definition in `/core/core.libraries.yml` lines 617–634:
+**Definition** in `/core/core.libraries.yml` lines 617-634:
 
 ```yaml
 drupal.htmx:
@@ -30,12 +22,12 @@ drupal.htmx:
     misc/htmx/htmx-assets.js: {}
     misc/htmx/htmx-behaviors.js: {}
   dependencies:
-    - core/htmx          # HTMX vendor library v2.0.4
-    - core/drupal        # Drupal core JS (behaviors, etc.)
+    - core/htmx
+    - core/drupal
     - core/drupalSettings
-    - core/loadjs        # Asset loading utility for differential CSS/JS
+    - core/loadjs
   drupalSettings:
-    # Placeholder values set by system_js_settings_alter().
+    # These placeholder values will be set by system_js_settings_alter().
     ajaxPageState:
       libraries: null
       theme: null
@@ -49,17 +41,25 @@ drupal.htmx:
 - `core/drupalSettings` — Settings system for drupalSettings object
 - `core/loadjs` — Asset loading utility for differential CSS/JS loading
 
+## JavaScript Files
+
+| File | Purpose |
+|------|---------|
+| `htmx-utils.js` | `Drupal.htmx.mergeSettings()`, `Drupal.htmx.addAssets()` |
+| `htmx-assets.js` | Asset loading, settings merge, history cleanup, `ajax_page_state` integration |
+| `htmx-behaviors.js` | Drupal behaviors integration, custom events (`htmx:drupal:load`, `htmx:drupal:unload`) |
+
+Reference: `/core/misc/htmx/` directory
+
 ## Common Mistakes
 
-- **Wrong**: Manually loading HTMX vendor library → **Right**: Already included via `core/htmx` dependency
-- **Wrong**: Expecting immediate behavior attach after swap → **Right**: Behaviors run AFTER `htmx:drupal:load` fires (after asset loading completes)
-- **Wrong**: Not accounting for differential loading → **Right**: `ajax_page_state` means only new assets load, not all page assets
-- **Wrong**: Loading deprecated HTMX versions → **Right**: Drupal 11.3 uses HTMX 2.0.4
+- Manually loading HTMX vendor library — Already included via `core/htmx` dependency
+- Expecting immediate behavior attach after swap — Behaviors run AFTER `htmx:drupal:load` fires (after asset loading)
+- Not accounting for differential loading — `ajax_page_state` means only new assets load, not all page assets
+- Loading deprecated HTMX versions — Drupal 11.3 uses HTMX 2.0.4
 
 ## See Also
 
-- [Basic Setup](basic-setup.md)
-- [Asset Loading](asset-loading.md)
-- [Drupal Behaviors Integration](drupal-behaviors.md)
-- Reference: `/core/core.libraries.yml` — complete library definitions
-- Reference: `/core/misc/htmx/` — directory with all integration JS files
+- Previous: [Basic Setup](basic-setup.md)
+- Next: [Request Detection](request-detection.md)
+- Reference: `/core/core.libraries.yml` — Complete library definitions

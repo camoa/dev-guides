@@ -1,16 +1,18 @@
 ---
-description: Migrate Drupal AJAX implementations to HTMX — patterns for buttons, forms, multiple updates, and migration checklist
-tldr: "Use this when converting existing AJAX implementations to HTMX, or running both systems in parallel during gradual migration."
+description: "Migrate Drupal AJAX implementations to HTMX — patterns for buttons, forms, multiple updates, and migration checklist"
+tldr: "Use this when converting existing AJAX implementations to HTMX, or running both systems in parallel during gradual migration. Simple content replacement and dependent fields migrate well; complex command sequences and heavy JS processing should stay AJAX."
 drupal_version: "11.x"
 ---
 
-# AJAX to HTMX Migration
+# Migrating from Traditional AJAX
 
 ## When to Use
 
-> Use this when converting existing AJAX implementations to HTMX, or running both systems in parallel during gradual migration.
+> You're converting existing AJAX implementations to HTMX or running both systems in parallel.
 
-## Decision
+## Migration Strategy
+
+**When to Migrate:**
 
 | AJAX Pattern | Migrate to HTMX? | Reason |
 |---|---|---|
@@ -22,46 +24,99 @@ drupal_version: "11.x"
 | Heavy JavaScript processing | No | HTMX is server-driven |
 | Contrib module integration | No | Maintain compatibility |
 
-## Pattern
+**Gradual Migration:**
+Both systems coexist. Migrate new features to HTMX while maintaining existing AJAX functionality.
 
-**AJAX button → HTMX button:**
+Reference: `/core/modules/system/tests/modules/test_htmx/src/Form/HtmxTestAjaxForm.php` demonstrates AJAX inserting HTMX content
 
-Before (AJAX):
+## Pattern: AJAX Button → HTMX Button
 
+**Before (AJAX):**
 ```php
 $form['load_button'] = [
   '#type' => 'button',
   '#value' => 'Load Content',
-  '#ajax' => ['callback' => '::ajaxCallback', 'wrapper' => 'content-wrapper'],
+  '#ajax' => [
+    'callback' => '::ajaxCallback',
+    'wrapper' => 'content-wrapper',
+    'method' => 'replace',
+  ],
 ];
+
+$form['content'] = [
+  '#type' => 'container',
+  '#attributes' => ['id' => 'content-wrapper'],
+];
+
 public function ajaxCallback(array &$form, FormStateInterface $form_state) {
   $response = new AjaxResponse();
+  $content = ['#markup' => '<div>New content</div>'];
   $response->addCommand(new ReplaceCommand('#content-wrapper', $content));
   return $response;
 }
 ```
 
-After (HTMX):
-
+**After (HTMX):**
 ```php
-$form['load_button'] = ['#type' => 'button', '#value' => 'Load Content'];
+$form['load_button'] = [
+  '#type' => 'button',
+  '#value' => 'Load Content',
+];
+
 (new Htmx())
   ->get(Url::fromRoute('my.route'))
   ->target('#content-wrapper')
   ->swap('innerHTML')
   ->onlyMainContent()
   ->applyTo($form['load_button']);
-// Controller returns render array directly — no callback needed
+
+$form['content'] = [
+  '#type' => 'container',
+  '#attributes' => ['id' => 'content-wrapper'],
+];
+
+// Route controller returns render array directly
+public function htmxContent() {
+  return ['#markup' => '<div>New content</div>'];
+}
 ```
 
-**AJAX form → HTMX form:**
+## Pattern: AJAX Form → HTMX Form
 
-Before (AJAX): `#ajax` array with callback returning `$form['name_wrapper']`
-
-After (HTMX):
-
+**Before (AJAX):**
 ```php
-$form['type'] = ['#type' => 'select', '#options' => $types, '#default_value' => $type];
+$form['type'] = [
+  '#type' => 'select',
+  '#options' => $types,
+  '#ajax' => [
+    'callback' => '::updateName',
+    'wrapper' => 'name-wrapper',
+  ],
+];
+
+$form['name_wrapper'] = [
+  '#type' => 'container',
+  '#attributes' => ['id' => 'name-wrapper'],
+];
+
+$form['name_wrapper']['name'] = [
+  '#type' => 'select',
+  '#options' => $this->getNames($type),
+];
+
+public function updateName(array &$form, FormStateInterface $form_state) {
+  return $form['name_wrapper'];
+}
+```
+
+**After (HTMX):**
+```php
+$form['type'] = [
+  '#type' => 'select',
+  '#options' => $types,
+  '#default_value' => $type,
+];
+
 (new Htmx())
   ->post(Url::fromRoute('<current>'))
   ->onlyMainContent()
@@ -69,29 +124,53 @@ $form['type'] = ['#type' => 'select', '#options' => $types, '#default_value' => 
   ->target('*:has(>select[name="name"])')
   ->swap('outerHTML')
   ->applyTo($form['type']);
-// No callback needed — buildForm() handles everything via getHtmxTriggerName()
+
+$default_type = $form_state->getValue('type', $type);
+$form['name'] = [
+  '#type' => 'select',
+  '#options' => $this->getNames($default_type),
+  '#default_value' => $name,
+];
+
+// No callback needed - buildForm() handles everything
+// Detect trigger via $this->getHtmxTriggerName()
 ```
 
-**Multiple AJAX commands → OOB swaps:**
+## Pattern: Multiple AJAX Commands → OOB Swaps
 
-Before (AJAX):
-
+**Before (AJAX):**
 ```php
-$response->addCommand(new ReplaceCommand('#region-1', $content1));
-$response->addCommand(new ReplaceCommand('#region-2', $content2));
-$response->addCommand(new InvokeCommand('.alert', 'show'));
+public function ajaxCallback(array &$form, FormStateInterface $form_state) {
+  $response = new AjaxResponse();
+  $response->addCommand(new ReplaceCommand('#region-1', $content1));
+  $response->addCommand(new ReplaceCommand('#region-2', $content2));
+  $response->addCommand(new InvokeCommand('.alert', 'show'));
+  return $response;
+}
 ```
 
-After (HTMX):
-
+**After (HTMX):**
 ```php
-// Primary target handles region-1 automatically
-(new Htmx())->swapOob('outerHTML:#region-2')->applyTo($form['region2'], '#wrapper_attributes');
-(new Htmx())->triggerHeader(['showAlert' => []])->applyTo($form);
-// JS: htmx.on('showAlert', () => document.querySelector('.alert').show());
+// Primary target
+$form['region1']['#markup'] = '<div>Content 1</div>';
+
+// Out-of-band updates
+(new Htmx())
+  ->swapOob('outerHTML:#region-2')
+  ->applyTo($form['region2'], '#wrapper_attributes');
+
+// For JavaScript invoke commands, use trigger header
+(new Htmx())
+  ->triggerHeader(['showAlert' => []])
+  ->applyTo($form);
+
+// JavaScript behavior handles custom event
+htmx.on('showAlert', () => {
+  document.querySelector('.alert').show();
+});
 ```
 
-**Comparison:**
+## Comparison: AJAX vs HTMX
 
 | Aspect | AJAX | HTMX |
 |---|---|---|
@@ -99,31 +178,32 @@ After (HTMX):
 | Configuration | `#ajax` array | `Htmx` class methods |
 | Callbacks | Required | Optional (use routes) |
 | Multiple updates | Command array | Out-of-band swaps |
+| JavaScript | Heavy use | Minimal, declarative |
 | Progressive enhancement | Harder | Built-in |
 | form_build_id | Manual handling | Automatic OOB swap |
 
-**Migration checklist:**
+## Migration Checklist
 
-- [ ] Identify AJAX callbacks — simple content returns migrate well
-- [ ] Check for command complexity — multiple commands may stay AJAX
-- [ ] Replace `#ajax` arrays with `Htmx` class attributes
-- [ ] Update JavaScript behaviors — listen for `htmx:drupal:load` instead of AJAX events
-- [ ] Test progressive enhancement — form should work without JavaScript
-- [ ] Update tests — change AJAX test expectations to HTMX
-- [ ] Document decisions — why some stayed AJAX, why some moved
-
-Reference: `/core/modules/system/tests/modules/test_htmx/src/Form/HtmxTestAjaxForm.php` demonstrates AJAX inserting HTMX content (both systems coexisting)
+- [ ] Identify AJAX callbacks — Simple content returns migrate well
+- [ ] Check for command complexity — Multiple commands may stay AJAX
+- [ ] Convert callbacks to routes — Or use buildForm() for forms
+- [ ] Replace `#ajax` with `Htmx` attributes
+- [ ] Update JavaScript behaviors — Listen for `htmx:drupal:load`
+- [ ] Test progressive enhancement — Form should work without JavaScript
+- [ ] Update tests — Change AJAX test expectations to HTMX
+- [ ] Document migration decisions — Why some stayed AJAX, why some moved to HTMX
 
 ## Common Mistakes
 
-- **Wrong**: Trying to use AJAX commands with HTMX → **Right**: Return HTML render arrays, not JSON
-- **Wrong**: Not updating behaviors for HTMX events → **Right**: Use `htmx:drupal:load` instead of AJAX events
-- **Wrong**: Migrating everything blindly → **Right**: Some use cases genuinely need AJAX
-- **Wrong**: Not removing old AJAX callbacks → **Right**: Dead code accumulates
+- Trying to use AJAX commands with HTMX — Return HTML, not JSON
+- Not updating behaviors for HTMX events — Use `htmx:drupal:load` instead of AJAX events
+- Migrating everything blindly — Some use cases genuinely need AJAX
+- Forgetting to test both systems — During gradual migration, both must work
+- Not removing old AJAX callbacks — Dead code accumulates
 
 ## See Also
 
-- [Troubleshooting](troubleshooting.md)
-- [Core File Reference](core-file-reference.md)
-- [HTMX vs AJAX Decision](htmx-vs-ajax.md)
-- Reference: `/core/modules/system/tests/modules/test_htmx/src/Form/HtmxTestAjaxForm.php`
+- Previous: [Troubleshooting](troubleshooting.md)
+- Next: [Core File Reference](core-file-reference.md)
+- Reference: [HTMX vs AJAX Decision](htmx-vs-ajax.md)
+- Reference: `/core/modules/system/tests/modules/test_htmx/`

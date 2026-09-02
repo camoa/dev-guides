@@ -1,6 +1,6 @@
 ---
-description: HTMX best practices in Drupal — security, performance, accessibility, progressive enhancement, and coding standards
-tldr: "Reference this when implementing HTMX features and wanting to follow security, performance, accessibility, and development standards."
+description: "HTMX best practices in Drupal — security, performance, accessibility, progressive enhancement, and coding standards"
+tldr: "Reference this when implementing HTMX features and wanting to follow security, performance, accessibility, and development standards. Validate server-side, cache aggressively, use aria-live for dynamic regions, and never build HTML strings by hand."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,45 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Reference this when implementing HTMX features and wanting to follow security, performance, accessibility, and development standards.
+> You're implementing HTMX features and want to follow security, performance, accessibility, and development standards.
+
+## Security
+
+**Always validate and sanitize on server:**
+- HTMX requests are HTTP requests — all standard security rules apply
+- Never trust client data — validate form inputs and URL parameters
+- Use CSRF tokens — Drupal forms include automatic token validation
+- Check permissions — Use `#access` on form elements and `_permission` on routes
+- Sanitize output — Use render arrays, not raw HTML strings
+- Avoid XSS — Return render arrays through FormBuilder/Controller, not manual HTML
+
+**Example: Proper Validation**
+```php
+public function buildForm(array $form, FormStateInterface $form_state, string $type = '') {
+  // Validate URL parameter
+  $allowed_types = ['a', 'b', 'c'];
+  if (!in_array($type, $allowed_types)) {
+    throw new AccessDeniedHttpException();
+  }
+
+  // Use form API for automatic sanitization
+  $form['display'] = [
+    '#markup' => $this->renderer->render($safe_render_array),
+  ];
+}
+```
+
+**Anti-pattern:**
+```php
+// NEVER do this - XSS vulnerability
+$form['display']['#markup'] = '<div>' . $_GET['user_input'] . '</div>';
+```
+
+Reference: [OWASP XSS Prevention](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)
+
+**Content Security Policy (CSP) limitation:**
+
+Strict CSP policies that exclude `style-src 'unsafe-inline'` are not yet fully supported in Drupal core. A `style-src 'self'` policy (without `unsafe-inline`) causes CSP violations in multiple places across core. This is an open feature request tracked as [#3582309](https://www.drupal.org/node/3582309) (`main` branch, Active). Do not deploy a restrictive CSP in production without testing all HTMX interactions under that policy.
 
 ## Performance
 
@@ -100,118 +138,106 @@ foreach ($ids as $id) {
     ->applyTo($form['submit']);
   ```
 
-## Decision
+## Development Standards
 
-| Area | Rule | Anti-pattern |
-|------|------|-------------|
-| Security | Validate all inputs server-side | Trusting client data |
-| Security | Return render arrays, not HTML strings | Manual HTML strings = XSS risk |
-| Security | Test all HTMX interactions under your CSP | Assuming strict CSP works out of the box |
-| Performance | Use `onlyMainContent()` or `_htmx_route` | Full page responses for HTMX endpoints |
-| Performance | Cache render arrays with contexts/tags | Uncached HTMX responses |
-| Performance | Debounce live search (500ms) | Request on every keystroke |
-| Accessibility | Use `aria-live` on dynamic regions | No screen reader announcements |
-| Accessibility | Use semantic HTML elements | `<div>` with HTMX attributes |
-| Code | Use dependency injection | Static `\Drupal::` service calls |
-| Code | Use `Url` objects | Hardcoded path strings |
-| Progressive enhancement | Form works without JavaScript | JavaScript-only form behavior |
-
-## Pattern
-
-**Security — proper validation:**
-
+**Use dependency injection:**
 ```php
-public function buildForm(array $form, FormStateInterface $form_state, string $type = '') {
-  if (!in_array($type, $this->getAllowedTypes())) {
-    throw new AccessDeniedHttpException();
+// GOOD: Inject services
+class MyForm extends FormBase {
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected ConfigFactoryInterface $configFactory,
+  ) {}
+
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('entity_type.manager'),
+      $container->get('config.factory'),
+    );
   }
-  // Use render arrays, not raw HTML
-  $form['display'] = ['#markup' => $this->renderer->render($safe_build)];
 }
+
+// BAD: Static service calls
+$entity = \Drupal::entityTypeManager()->getStorage('node')->load($id);
 ```
 
-**CSP limitation:** Strict CSP policies that exclude `style-src 'unsafe-inline'` are not yet fully supported in Drupal core. A `style-src 'self'` policy (without `unsafe-inline`) causes CSP violations in multiple places across core. Tracked as [#3582309](https://www.drupal.org/node/3582309) (`main` branch, Active). Do not deploy a restrictive CSP in production without testing all HTMX interactions under that policy.
-
-**Performance — caching:**
-
+**Return render arrays, not HTML:**
 ```php
-$build['#cache'] = [
-  'keys' => ['my_module', 'content', $entity_id],
-  'contexts' => ['url.query_args:page'],
-  'tags' => ['node:' . $entity_id],
-  'max-age' => 3600,
-];
+// GOOD: Render arrays
+return ['#markup' => $this->renderer->render($build)];
+
+// BAD: Manual HTML
+return ['#markup' => '<div class="content">' . $content . '</div>'];
 ```
 
-**Performance — avoid N+1 queries:**
-
+**Use Url objects:**
 ```php
-// GOOD: Load all at once
-$entities = $this->entityTypeManager->getStorage('node')->loadMultiple($ids);
+// GOOD: Url objects
+(new Htmx())->get(Url::fromRoute('my.route', ['id' => $id]));
 
-// BAD: Loop loading
-foreach ($ids as $id) {
-  $entity = $this->entityTypeManager->getStorage('node')->load($id);
-}
+// BAD: Hardcoded paths
+(new Htmx())->get('/my-module/content/' . $id);
 ```
 
-**Accessibility — ARIA live region:**
+**Follow coding standards:**
+- Use type hints on all methods
+- Document complex logic with inline comments
+- Follow Drupal coding standards (phpcs, phpstan)
 
-```php
-$build['results'] = [
-  '#type' => 'container',
-  '#attributes' => ['id' => 'search-results', 'aria-live' => 'polite', 'aria-atomic' => 'true'],
-];
-```
+**Test both HTMX and non-HTMX requests:**
+- Initial page load is never HTMX
+- Progressive enhancement means non-JavaScript fallback required
+- Test form submissions with JavaScript disabled
 
-**Accessibility — focus management for major swaps:**
+## Progressive Enhancement
 
-```php
-(new Htmx())
-  ->on('::afterSwap', 'document.querySelector("#modal-content").focus()')
-  ->applyTo($build['trigger']);
-```
-
-**Progressive enhancement:**
-
+**Always provide fallback:**
 ```php
 // Form works as normal POST without JavaScript
 $form['#action'] = Url::fromRoute('my.form')->toString();
 $form['#method'] = 'post';
+
 // HTMX enhances the experience
-(new Htmx())->post(Url::fromRoute('my.form'))->onlyMainContent()->applyTo($form['submit']);
+(new Htmx())
+  ->post(Url::fromRoute('my.form'))
+  ->onlyMainContent()
+  ->applyTo($form['submit']);
 ```
 
-**Dependency injection:**
+**Graceful degradation:**
+- Links work as regular links without JavaScript
+- Forms submit normally without JavaScript
+- Content is accessible without HTMX enhancements
 
+**Use semantic HTML:**
 ```php
-// GOOD
-class MyForm extends FormBase {
-  public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager,
-  ) {}
-  public static function create(ContainerInterface $container) {
-    return new static($container->get('entity_type.manager'));
-  }
-}
-// BAD: Static service call
-$entity = \Drupal::entityTypeManager()->getStorage('node')->load($id);
+// GOOD: Semantic button
+$build['submit'] = ['#type' => 'button', '#value' => 'Submit'];
+(new Htmx())->post($url)->applyTo($build['submit']);
+
+// BAD: Non-semantic element
+$build['submit'] = [
+  '#type' => 'html_tag',
+  '#tag' => 'div',
+  '#value' => 'Submit',
+  '#attributes' => ['role' => 'button'],
+];
 ```
 
 ## Common Mistakes
 
-- **Wrong**: Trusting client input → **Right**: Always validate server-side
-- **Wrong**: Not caching HTMX responses → **Right**: Performance degrades with traffic
-- **Wrong**: Using static service calls → **Right**: Breaks testability; use dependency injection
-- **Wrong**: Building HTML strings → **Right**: XSS vulnerabilities; use render arrays
-- **Wrong**: Not testing without JavaScript → **Right**: Progressive enhancement fails
-- **Wrong**: Using `<div>` with HTMX attributes → **Right**: Use semantic `<button>`, `<a>` elements
-- **Wrong**: Deploying strict CSP without testing → **Right**: Core has known CSP issues (#3582309); test thoroughly
+- Trusting client input — Always validate server-side
+- Not caching HTMX responses — Performance degrades with traffic
+- Forgetting keyboard accessibility — Not all users use mouse
+- Using static service calls — Breaks testability and best practices
+- Not testing without JavaScript — Progressive enhancement fails
+- Hardcoding URLs — Breaks multilingual sites and aliases
+- Building HTML strings — XSS vulnerabilities and bypasses render system
+- Not using semantic HTML — Accessibility and SEO suffer
 
 ## See Also
 
-- [Production Example: ConfigSingleExportForm](production-example-config-export.md)
-- [Troubleshooting](troubleshooting.md)
+- Previous: [Complete Production Example](production-example-config-export.md)
+- Next: [Troubleshooting](troubleshooting.md)
 - Reference: [Drupal Security Best Practices](https://www.drupal.org/docs/security-in-drupal)
-- Reference: [WCAG Quick Reference](https://www.w3.org/WAI/WCAG21/quickref/)
-- Reference: [Drupal Core Issue #3582309 — CSP support](https://www.drupal.org/node/3582309)
+- Reference: [Web Content Accessibility Guidelines (WCAG)](https://www.w3.org/WAI/WCAG21/quickref/)

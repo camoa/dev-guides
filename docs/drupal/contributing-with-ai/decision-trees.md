@@ -1,5 +1,5 @@
 ---
-description: Decision trees for AI contribution — quick flowcharts for disclosure checkbox selection, whether to disclose, git attribution context, and submission readiness
+description: "Decision trees for AI contribution — quick flowcharts for disclosure checkbox selection, whether to disclose, git attribution context, and submission readiness"
 tldr: "Use this when you need quick answers to common AI contribution questions without reading the full guides."
 drupal_version: "11.x"
 ---
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you need quick answers to common AI contribution questions without reading the full guides.
+> When you need quick answers to common AI contribution questions without reading the full guides.
 
 ## Decision: Which Disclosure Checkbox?
 
@@ -53,30 +53,30 @@ Where is this contribution going?
 ## Decision: Is My Code Ready to Submit?
 
 ```
-Can I explain every line?
-├── No → Don't submit. Understand first.
-└── Yes
-    └── Do coding standards pass (phpcs)?
-        ├── No → Fix first.
-        └── Yes
-            └── Do tests cover the change?
-                ├── No → Add tests.
-                └── Yes
-                    └── Is there a simpler approach?
-                        ├── Yes → Simplify.
-                        └── No
-                            └── Are disclosure boxes checked?
-                                ├── No → Update issue.
-                                └── Yes → Ready to submit
+Can I explain every line? ─── No → Don't submit. Understand first.
+│
+├── Yes
+│   └── Do coding standards pass (phpcs)? ─── No → Fix first.
+│       │
+│       ├── Yes
+│       │   └── Do tests cover the change? ─── No → Add tests.
+│       │       │
+│       │       ├── Yes
+│       │       │   └── Is there a simpler approach? ─── Yes → Simplify.
+│       │       │       │
+│       │       │       ├── No
+│       │       │       │   └── Are disclosure boxes checked? ─── No → Update issue.
+│       │       │       │       │
+│       │       │       │       └── Yes → Ready to submit ✓
 ```
 
 ## Common Mistakes
 
-- **Wrong**: Using decision trees as a substitute for judgment → **Right**: These are starting points, not complete guides; read the full guide for nuanced situations
-- **Wrong**: Stopping at the first "yes" → **Right**: Walk through the entire tree; multiple conditions must be satisfied
+- **Using decision trees as a substitute for judgment** — These are starting points, not complete guides. Read the full guide for nuanced situations.
+- **Stopping at the first "yes"** — Walk through the entire tree. Multiple conditions must be satisfied.
 
 ## See Also
 
-- [Disclosure Checkboxes](disclosure-checkboxes.md)
-- [AI Code Review Checklist](ai-code-review-checklist.md)
-- [Resources](resources.md)
+- [Disclosure Checkboxes](disclosure-checkboxes.md) — detailed checkbox definitions
+- [AI Code Review Checklist](ai-code-review-checklist.md) — full pre-submission checklist
+- [Resources](resources.md) — links to all referenced documents

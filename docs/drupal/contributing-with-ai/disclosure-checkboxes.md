@@ -1,5 +1,5 @@
 ---
-description: AI disclosure checkboxes — which drupal.org issue checkboxes to select, the significant-portion threshold, and the required disclosure comment format
+description: "AI disclosure checkboxes — which drupal.org issue checkboxes to select, the significant-portion threshold, and the required disclosure comment format"
 tldr: "Check the box matching your actual AI involvement level: AI Assisted Issue (text/research), AI Assisted Code (suggestions reviewed line-by-line), AI Generated Code (substantial generation you reviewed), or Vibe Coded. Multiple boxes can apply. When significant code was generated, also add an AI-Generated: Yes (...) comment."
 drupal_version: "11.x"
 ---
@@ -8,11 +8,11 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when creating or updating a drupal.org issue and you need to determine which AI disclosure checkboxes to select and what to include in the disclosure comment.
+> When creating or updating a drupal.org issue and you need to determine which AI disclosure checkboxes to select and what to include in the disclosure comment.
 
 ## Decision: The "Significant Portion" Threshold
 
-The adopted policy sets a clear threshold — disclosure is **required** when AI generated a **significant portion** of the work:
+The adopted policy sets a clear threshold — disclosure is **required** when AI generated a **significant portion** of the work. Disclosure is **not** required for trivial use:
 
 | Requires Disclosure | Does NOT Require Disclosure |
 |---|---|
@@ -28,13 +28,13 @@ The adopted policy sets a clear threshold — disclosure is **required** when AI
 | Checkbox | Definition | Example | Review Impact |
 |---|---|---|---|
 | **AI Assisted Issue** | AI helped research, write the issue summary, or analyze the problem | Used Claude to research a core API, draft steps to reproduce, or analyze a backtrace | Minimal — issue quality still evaluated normally |
-| **AI Assisted Code** | Human wrote code with AI suggestions; human reviewed every line | Used Copilot for completion hints, then wrote and reviewed the code yourself | Normal review — reviewer trusts the human understands the code |
+| **AI Assisted Code** | Human wrote code with AI suggestions; human reviewed every line; AI contribution did not cross the "significant portion" threshold | Used Copilot for completion hints, asked Claude to suggest an approach, then wrote and reviewed the code yourself | Normal review — reviewer trusts the human understands the code |
 | **AI Generated Code** | AI generated substantial portions (functions, classes, scaffolding) that you reviewed and tested | Asked AI to write a patch, then carefully reviewed every line, tested edge cases, verified APIs exist | Enhanced review — reviewer may probe understanding, test more thoroughly |
 | **Vibe Coded** | AI generated most/all code with minimal human review | Gave AI a prompt, submitted the output with little to no modification or understanding | Maximum scrutiny — expect questions about every line, likely rejection if contributor can't explain |
 
 ## Pattern: Disclosure Comment Format
 
-When AI generated significant portions, append a disclosure statement to your issue comment or MR description:
+When AI generated significant portions, append a disclosure statement to your issue comment or MR description using the policy's format:
 
 ```
 AI-Generated: Yes (Used Claude Code to generate the cache invalidation logic
@@ -42,7 +42,7 @@ and entity query boilerplate; I reviewed all generated code, verified API calls
 against Drupal 11 docs, and added the access control checks manually.)
 ```
 
-Format: `AI-Generated: Yes (Used <tool> to help generate <component>.)` — be specific about which tool, which component, and what human review was done.
+The format: `AI-Generated: Yes (Used <tool> to help generate <component>.)` — be specific about which tool, which component, and what human review was done.
 
 ## Pattern: Decision Flow
 
@@ -80,10 +80,10 @@ This is how experienced developers use AI tools — as an assistant, not a repla
 
 ## Common Mistakes
 
-- **Wrong**: Checking "AI Assisted Code" when AI wrote entire functions → **Right**: Be honest about the level and scale; use the significant-portion test
-- **Wrong**: "It's just autocomplete" for whole-function generation → **Right**: The tool type doesn't matter; the portion threshold does
-- **Wrong**: Skipping the disclosure comment when significant portions were generated → **Right**: Checking the box is not enough; add the `AI-Generated: Yes (...)` comment with specifics
-- **Wrong**: Thinking "AI Assisted Issue" covers code too → **Right**: Issue assistance and code assistance are separate disclosures; check both if both apply
+- **Underdisclosing** — Checking "AI Assisted Code" when AI wrote entire functions or classes. Be honest about the level and scale of AI involvement.
+- **Overclaiming the exemption** — "It's just autocomplete" doesn't apply to whole-function generation. Use the significant-portion test, not the tool-type test.
+- **Skipping the disclosure comment** — Checking the box is not enough when significant portions were AI-generated. Add the `AI-Generated: Yes (...)` comment with specifics.
+- **Thinking "AI Assisted Issue" covers code too** — Issue assistance and code assistance are separate disclosures. Check both if both apply.
 
 ## See Also
 

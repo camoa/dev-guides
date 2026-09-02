@@ -1,5 +1,5 @@
 ---
-description: Resources for AI contribution — drupal.org governance issues, contribution workflow documentation, coding standards links, industry AI policies, and related dev-guides
+description: "Resources for AI contribution — drupal.org governance issues, contribution workflow documentation, coding standards links, industry AI policies, and related dev-guides"
 tldr: "Use this when you need links to drupal.org governance issues, contribution workflow documentation, coding standards, or industry AI policies."
 drupal_version: "11.x"
 ---
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you need links to drupal.org governance issues, contribution workflow documentation, coding standards, or industry AI policies.
+> When you need links to drupal.org governance issues, contribution workflow documentation, coding standards, or industry AI policies.
 
 ## Drupal AI Policy & Related Issues
 
@@ -17,29 +17,24 @@ drupal_version: "11.x"
 | [Adopted AI policy](https://www.drupal.org/docs/develop/issues/issue-procedures-and-etiquette/policy-on-the-use-of-ai-when-contributing-to-drupal) | The live policy (disclosure, responsibility, enforcement) | **Adopted** — last updated 2026-04-23 |
 | [#3565917](https://www.drupal.org/project/governance/issues/3565917) | Proposed guidelines — older governance issue | Postponed (maintainer needs more info) — stalled on copyright/licensing; historical context only |
 | [#3569240](https://www.drupal.org/project/ai/issues/3569240) | AI issue review guidelines | In progress — reviewer checklist from AI module project |
+| [#3574093](https://www.drupal.org/project/drupal/issues/3574093) | Drupal **core** issue "Ban slop issue summaries and comments" — scoped to AI-generated issue text, not code | Postponed — the code half was refiled as #3580761 |
+| [#3580761](https://www.drupal.org/project/drupal/issues/3580761) | Drupal **core** issue "Ban LLM code contributions from Drupal core" — proposes an `AGENTS.md` in the core directory refusing LLM-written code | Active — a proposal under discussion, not policy |
 | [ai_best_practices](https://www.drupal.org/project/ai_best_practices) | Canonical Drupal AI guidance (webchick, Dries) | Pre-MVP — watch, don't depend yet |
-
-## Drupal.org Governance Issues
-
-| Issue | Topic | Status |
-|-------|-------|--------|
-| [#3565917](https://www.drupal.org/project/governance/issues/3565917) | AI policy proposal | Active — community discussion |
-| [#3574093](https://www.drupal.org/project/governance/issues/3574093) | AI contribution guidelines | Active — specific rules discussion |
-| [#3569240](https://www.drupal.org/project/ai/issues/3569240) | AI issue review guidelines | Active — reviewer guidance |
 
 ## Drupal Contribution Workflow
 
 | Resource | URL |
-|----------|-----|
+|---|---|
 | Issue workflow | https://www.drupal.org/docs/develop/issues |
 | Git workflow | https://www.drupal.org/docs/develop/git |
 | Coding standards | https://www.drupal.org/docs/develop/standards |
 | Fair credit policy | https://www.drupal.org/drupalorg/blog/ensuring-a-fair-drupal-contribution-credit-system |
+| drupalorg-cli | https://github.com/mglaman/drupalorg-cli |
 
 ## Industry AI Policies
 
 | Project | Reference |
-|---------|-----------|
+|---|---|
 | Apache AI guidance | https://www.apache.org/legal/generative-tooling.html |
 | Linux kernel patches | https://www.kernel.org/doc/html/latest/process/submitting-patches.html |
 | QEMU AI ban | Commit 3d40db0efc — DCO rationale |
@@ -48,7 +43,7 @@ drupal_version: "11.x"
 ## Tools
 
 | Tool | Purpose |
-|------|---------|
+|---|---|
 | phpcs + Drupal standard | Coding standards enforcement |
 | phpstan | Static type analysis |
 | drupal-check | Deprecated API detection |
@@ -57,7 +52,7 @@ drupal_version: "11.x"
 ## Related Dev-Guides
 
 | Guide | Covers |
-|-------|--------|
+|---|---|
 | drupal/security | Drupal security architecture and access control |
 | drupal/tdd | Test-driven development for Drupal |
 | drupal/forms | Form API (commonly AI-assisted) |
@@ -66,5 +61,5 @@ drupal_version: "11.x"
 
 ## See Also
 
-- [Overview](overview.md)
-- [Decision Trees](decision-trees.md)
+- [Overview](overview.md) — starting point for this guide set
+- [Decision Trees](decision-trees.md) — quick-reference flowcharts

@@ -1,6 +1,6 @@
 ---
-description: Build Drupal forms with HTMX — cascading selects, OOB updates, and browser history management
-tldr: "Use this when building forms with cascading selects, conditional fields, or form elements that update based on user input without full page reload."
+description: "Build Drupal forms with HTMX — cascading selects, OOB updates, and browser history management"
+tldr: "Use this when building forms with cascading selects, conditional fields, or any form that updates based on user input without full page reload. FormBuilder handles form_build_id automatically via OOB swap."
 drupal_version: "11.x"
 ---
 
@@ -8,97 +8,119 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when building forms with cascading selects, conditional fields, or form elements that update based on user input without full page reload.
+> You're building forms with cascading selects, conditional fields, or any form that updates based on user input without full page reload.
 
-## Decision
+## Pattern: Cascading Selects
 
-| Need | Pattern | Key method |
-|------|---------|------------|
-| First select updates second select | Cascading with `select()` + `target()` | `onlyMainContent()` |
-| Update multiple regions simultaneously | Out-of-band (OOB) swap | `swapOob()` |
-| Push URL as selections change | History management | `pushUrlHeader()` |
-| Detect which field triggered update | Trigger detection | `getHtmxTriggerName()` |
+Reference: `/core/modules/config/src/Form/ConfigSingleExportForm.php` — Production example with type/name cascading selects
 
-## Pattern
-
-**Cascading selects** (type → name):
+**Step 1: First Select Updates Second Select**
 
 ```php
 use Drupal\Core\Htmx\Htmx;
 use Drupal\Core\Url;
 
-$form_url = Url::fromRoute('<current>');
+public function buildForm(array $form, FormStateInterface $form_state, string $type = '', string $name = '') {
+  $form_url = Url::fromRoute('<current>');
 
-$form['type'] = [
-  '#type' => 'select',
-  '#title' => 'Type',
-  '#options' => $this->getTypes(),
-  '#default_value' => $type,
-];
+  // First select (type)
+  $form['type'] = [
+    '#type' => 'select',
+    '#title' => 'Type',
+    '#options' => $this->getTypes(),
+    '#default_value' => $type,
+  ];
 
-(new Htmx())
-  ->post($form_url)
-  ->onlyMainContent()
-  ->select('*:has(>select[name="name"])')
-  ->target('*:has(>select[name="name"])')
-  ->swap('outerHTML')
-  ->applyTo($form['type']);
+  // Configure HTMX to update name select when type changes
+  (new Htmx())
+    ->post($form_url)
+    ->onlyMainContent()
+    ->select('*:has(>select[name="name"])')  // What to extract from response
+    ->target('*:has(>select[name="name"])')  // Where to put it
+    ->swap('outerHTML')                       // Replace entire wrapper
+    ->applyTo($form['type']);
 
-$form['name'] = [
-  '#type' => 'select',
-  '#options' => $this->getDependentOptions($form_state->getValue('type', $type)),
-];
-```
+  // Second select (name) - options depend on type
+  $default_type = $form_state->getValue('type', $type);
+  $form['name'] = [
+    '#type' => 'select',
+    '#title' => 'Name',
+    '#options' => $this->getDependentOptions($default_type),
+    '#default_value' => $name,
+  ];
 
-Reference: `/core/modules/config/src/Form/ConfigSingleExportForm.php` lines 92–125
-
-**Trigger detection:**
-
-```php
-$trigger = $this->getHtmxTriggerName();
-if ($trigger === 'type') {
-  $form['name']['#options'] = $this->getDependentOptions($default_type);
+  return $form;
 }
 ```
 
-**OOB update** (clear a display region when type changes):
+Reference: Lines 92-125 of ConfigSingleExportForm
+
+**Step 2: Handle Trigger Detection**
 
 ```php
+$trigger = $this->getHtmxTriggerName();
+
+if ($trigger === 'type') {
+  // Type changed - update name options
+  $form['name']['#options'] = $this->getDependentOptions($default_type);
+}
+elseif ($trigger === 'name') {
+  // Name selected - maybe update another region
+}
+```
+
+Reference: Lines 136-138 of ConfigSingleExportForm
+
+## Pattern: Out-of-Band (OOB) Updates
+
+Update multiple form regions independently:
+
+```php
+// When type changes, also clear a display region
 (new Htmx())
   ->swapOob('outerHTML:[data-display-wrapper]')
   ->applyTo($form['display'], '#wrapper_attributes');
 ```
 
-Reference: `/core/modules/config/src/Form/ConfigSingleExportForm.php` lines 141–143
+Reference: `/core/modules/config/src/Form/ConfigSingleExportForm.php` lines 141-143
 
-**Browser history push:**
+## Pattern: Browser History Updates
+
+Push URL when form selections change:
 
 ```php
 if ($this->getHtmxTriggerName() === 'name') {
+  $selected_name = $form_state->getValue('name');
+  $push_url = Url::fromRoute('my.route', [
+    'type' => $default_type,
+    'name' => $selected_name,
+  ]);
+
   (new Htmx())
-    ->pushUrlHeader(Url::fromRoute('my.route', ['type' => $type, 'name' => $name]))
+    ->pushUrlHeader($push_url)
     ->applyTo($form);
 }
 ```
 
-Reference: `/core/modules/config/src/Form/ConfigSingleExportForm.php` lines 157–161
+Reference: Lines 157-161 of ConfigSingleExportForm
 
-`FormBuilder` automatically handles `form_build_id` for HTMX requests via OOB swap — no action needed.
+## Pattern: Automatic form_build_id Updates
 
-Reference: `/core/lib/Drupal/Core/Form/FormBuilder.php` lines 782–790
+FormBuilder automatically handles form_build_id for HTMX requests via OOB swap. No action needed.
+
+Reference: `/core/lib/Drupal/Core/Form/FormBuilder.php` lines 782-790
 
 ## Common Mistakes
 
-- **Wrong**: Hardcoding form URLs → **Right**: Use `Url::fromRoute('<current>')` or route name
-- **Wrong**: Not using `onlyMainContent()` → **Right**: Without it, responses are full pages
-- **Wrong**: Forgetting to check trigger element → **Right**: Can't determine which field changed
-- **Wrong**: Not providing non-HTMX fallback → **Right**: Form should POST normally without JavaScript
-- **Wrong**: Using `swap('none')` without OOB → **Right**: Nothing updates
+- Hardcoding form URLs — Use `Url::fromRoute('<current>')` or route name
+- Not using `onlyMainContent()` — Results in full page responses
+- Forgetting to check trigger element — Can't determine which field changed
+- Not providing non-HTMX fallback — Form should POST normally without JavaScript
+- Using `swap('none')` without OOB — Nothing updates (see test_htmx example using `swapOob('true')`)
 
 ## See Also
 
-- [Request Detection](request-detection.md)
-- [HTMX Controllers](htmx-controllers.md)
-- [Production Example: ConfigSingleExportForm](production-example-config-export.md)
-- Reference: `/core/modules/config/src/Form/ConfigSingleExportForm.php`
+- Previous: [Request Detection](request-detection.md)
+- Next: [HTMX Controllers](htmx-controllers.md)
+- Reference: [Complete Production Example](production-example-config-export.md)
 - Reference: `/core/modules/system/tests/modules/test_htmx/src/Form/HtmxTestForm.php`
