@@ -1,6 +1,7 @@
 ---
-description: Validation checklists and success metrics for Bootstrap mapping decisions
+description: "Validation checklists and success metrics for Bootstrap mapping decisions"
 tldr: "Use this to validate Bootstrap accommodation decisions, review code for SCSS compliance, and ensure quality standards before deployment."
+drupal_version: "11.x"
 ---
 
 # Quality Assurance Framework
@@ -9,47 +10,50 @@ tldr: "Use this to validate Bootstrap accommodation decisions, review code for S
 
 > Use this to validate Bootstrap accommodation decisions, review code for SCSS compliance, and ensure quality standards before deployment.
 
+- You need to validate your Bootstrap accommodation decisions
+- You're reviewing code for SCSS best practices compliance
+- You want to ensure quality standards before deployment
+- You're establishing team QA processes
+
 ## Decision Validation Checklist
 
 ### 1. Bootstrap Capabilities Verification
 
-- [ ] Bootstrap documentation researched - confirmed no existing solution
-- [ ] Bootstrap mixins investigated - confirmed no applicable mixin
-- [ ] Bootstrap maps examined - confirmed extension not possible
-- [ ] Bootstrap utilities reviewed - confirmed no similar utility
+- [ ] **Bootstrap documentation researched** - confirmed no existing solution
+- [ ] **Bootstrap mixins investigated** - confirmed no applicable mixin available
+- [ ] **Bootstrap maps examined** - confirmed extension not possible
+- [ ] **Bootstrap utilities reviewed** - confirmed no similar utility exists
 
 ### 2. SCSS Anti-Patterns Prevention
 
-- [ ] NO @extend usage with Bootstrap classes
-- [ ] NO hardcoded Bootstrap values - all use variables
-- [ ] NO selector pollution - clean CSS output
-- [ ] NO Bootstrap core modifications - only overrides/extensions
+- [ ] **NO @extend usage** with Bootstrap classes anywhere in codebase
+- [ ] **NO hardcoded Bootstrap values** - all references use variables
+- [ ] **NO selector pollution** - clean, maintainable CSS output
+- [ ] **NO Bootstrap core modifications** - only variable overrides and extensions
 
 ### 3. Variable Consistency Verification
 
-- [ ] ALL font families use `$font-family-*` variables
-- [ ] ALL font weights use `$font-weight-*` variables
-- [ ] ALL colors use established variables when available
-- [ ] ALL spacing uses Bootstrap spacing variables when available
-- [ ] ALL line heights use established variables when available
+- [ ] **ALL font families** use established variables (`$font-family-base`) - NO hardcoded strings
+- [ ] **ALL font weights** use established variables (`$font-weight-*`) - NO numeric values
+- [ ] **ALL colors** use established variables when available - NO hex codes in components
+- [ ] **ALL spacing values** use Bootstrap spacing variables when available - NO hardcoded rem/px
+- [ ] **ALL line heights** use established variables when available - NO hardcoded decimals
 
 ### 4. Integration Compatibility
 
-- [ ] Bootstrap class compatibility maintained
-- [ ] Component isolation - custom styles don't interfere
-- [ ] Upgrade path preserved - won't break with Bootstrap updates
-- [ ] Documentation complete - all decisions and rationale documented
+- [ ] **Bootstrap class compatibility** maintained - works with existing Bootstrap classes
+- [ ] **Component isolation** - custom styles don't interfere with Bootstrap components
+- [ ] **Upgrade path preserved** - implementation won't break with Bootstrap updates
+- [ ] **Documentation complete** - all decisions and rationale documented
 
 ## Success Metrics
 
-| Metric | Target | Why |
-|--------|--------|-----|
-| Bootstrap accommodation rate | ≥70% | Maximize ecosystem compatibility |
-| Traditional custom implementation | <20% | Minimize maintenance for core features |
-| CREATE category justified | All documented | Advanced features acceptable when justified |
-| Design system compliance | 100% | Maintain brand integrity |
-| @extend anti-patterns | Zero | Proper SCSS practices |
-| Progressive enhancement | All advanced features | Graceful degradation |
+- **≥70% Bootstrap accommodation rate** - Maximize ecosystem compatibility
+- **<20% traditional custom implementation** - Minimize maintenance for core features
+- **CREATE category justified** - Advanced features outside Bootstrap scope acceptable
+- **100% design system compliance** - Maintain brand integrity
+- **Zero @extend anti-patterns** - Proper SCSS practices maintained
+- **Progressive enhancement** - Advanced features degrade gracefully
 
 ## Common Mistakes
 
@@ -60,6 +64,5 @@ tldr: "Use this to validate Bootstrap accommodation decisions, review code for S
 
 ## See Also
 
-- [Bootstrap Accommodation Decision Framework](bootstrap-accommodation-decision-framework.md)
-- [SCSS Best Practices](scss-best-practices.md)
-- [Progressive Enhancement Guidelines](progressive-enhancement-guidelines.md)
+- ← Previous: [Advanced SCSS Best Practices](advanced-scss-best-practices.md)
+- Next: [Progressive Enhancement Guidelines](progressive-enhancement-guidelines.md)

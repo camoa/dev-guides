@@ -1,6 +1,7 @@
 ---
-description: Guidelines for resuming Bootstrap mapping projects in new sessions
+description: "Guidelines for resuming Bootstrap mapping projects in new sessions"
 tldr: "Use this when resuming a Bootstrap mapping project in a new session to ensure framework consistency and proper context loading."
+drupal_version: "11.x"
 ---
 
 # Project Continuation Guidelines
@@ -9,9 +10,16 @@ tldr: "Use this when resuming a Bootstrap mapping project in a new session to en
 
 > Use this when resuming a Bootstrap mapping project in a new session to ensure framework consistency and proper context loading.
 
+- You're resuming a Bootstrap mapping project in a new chat session
+- You need to load project context for an AI assistant
+- You want to ensure framework consistency across work sessions
+- You're onboarding team members to an in-progress project
+
 ## How to Continue in New Chat Session
 
 ### Step 1: Load Project Context
+
+**Pattern: Context Loading Message (8 lines)**
 
 ```markdown
 I'm continuing the [Project Name] Bootstrap accommodation project using the 6px threshold framework.
@@ -30,44 +38,48 @@ The project follows the Bootstrap Accommodation Decision Framework with:
 
 ### Step 2: Confirm Framework Application
 
-Verification checklist:
+**Verification Checklist:**
 
-- ✅ Bootstrap capabilities researched first for each component
-- ✅ 6px threshold applied systematically
-- ✅ Proper decision category selected with rationale
-- ✅ SCSS best practices followed (no @extend anti-patterns)
-- ✅ Progressive enhancement considered for advanced features
+- ✅ **Bootstrap capabilities researched first** for each component
+- ✅ **6px threshold applied systematically** for quantitative decisions
+- ✅ **Proper decision category selected** with documented rationale
+- ✅ **SCSS best practices followed** (no @extend anti-patterns)
+- ✅ **Progressive enhancement** considered for advanced features
 
 ### Step 3: Resume Systematic Analysis
 
-| Step | Action |
-|------|--------|
-| 1 | Review completed analysis - check which phases are complete |
-| 2 | Identify next phase - determine next design system aspect |
-| 3 | Apply Bootstrap research methodology - research before categorization |
-| 4 | Use 6px threshold framework - apply decision criteria |
-| 5 | Select decision category - ACCOMMODATE/EXTEND/CUSTOMIZE/CREATE with rationale |
-| 6 | Document implementation strategy - follow framework guidelines |
-| 7 | Validate against QA checklist - ensure framework compliance |
+**Resumption Process:**
+
+1. **Review completed analysis** - Read project notes and check which phases are complete
+2. **Identify next phase** - Determine which design system aspect to analyze next
+3. **Apply Bootstrap research methodology** - Research capabilities before categorization
+4. **Use 6px threshold framework** - Apply decision criteria systematically
+5. **Select appropriate decision category** - ACCOMMODATE, EXTEND, CUSTOMIZE, or CREATE with rationale
+6. **Document implementation strategy** - Follow framework guidelines and templates
+7. **Validate against quality assurance checklist** - Ensure framework compliance
 
 ## Critical Principles to Maintain
 
-### Framework Adherence (Non-Negotiable)
+### Framework Adherence
 
-- **Research Bootstrap capabilities FIRST** - Never categorize before investigating variables, maps, mixins, utilities
+**Non-Negotiable Standards:**
+
+- **Research Bootstrap capabilities FIRST** - Never categorize before investigating Bootstrap variables, maps, mixins, utilities
 - **Apply 6px threshold consistently** - All quantitative decisions must reference threshold
-- **Follow SCSS best practices** - NO @extend with Bootstrap classes, NO reactive !important, NO hardcoded values
-- **Document all decisions** - Every mapping choice needs framework-based rationale
+- **Follow SCSS best practices** - NO @extend with Bootstrap classes, NO !important reactively, NO hardcoded values
+- **Document all decisions** - Every mapping choice must have framework-based rationale
 - **Progressive documentation** - Complete analysis before implementation phase
 
 ### Quality Standards
 
-- **Complete analysis before implementation** - No SCSS code until analysis complete
+**Consistency Requirements:**
+
+- **Complete analysis before implementation** - No SCSS code until analysis phase complete
 - **Bootstrap integration priority** - Prefer ACCOMMODATE/EXTEND over CUSTOMIZE when < 6px difference
 - **Progressive enhancement** - All CREATE category features must have fallbacks
 - **Performance considerations** - Test advanced features on low-end devices
 
-## Session Resumption Actions
+## Decision Table: Session Resumption Actions
 
 | If previous session... | Next action... | Why |
 |-----------------------|---------------|-----|
@@ -78,14 +90,21 @@ Verification checklist:
 
 ## Common Mistakes
 
-- **Wrong**: Starting new analysis without reviewing notes → **Right**: Read project notes first to understand status
-- **Wrong**: Changing decision framework mid-project → **Right**: Maintain consistent 6px threshold and categories
-- **Wrong**: Implementing code without completing analysis → **Right**: Follow progressive documentation approach
-- **Wrong**: Not confirming framework application → **Right**: Verify previous decisions follow framework
+**Mistake:** Starting new analysis without reviewing project notes and completed work
+**Correction:** Always read project notes first to understand current status and avoid duplicate work
+
+**Mistake:** Changing decision framework mid-project
+**Correction:** Maintain consistent 6px threshold and decision categories across all sessions
+
+**Mistake:** Implementing code without completing analysis phases
+**Correction:** Follow progressive documentation approach - analysis → mapping → impact → implementation
+
+**Mistake:** Not confirming framework application before resuming work
+**Correction:** Verify previous decisions follow framework before continuing
 
 ## See Also
 
-- [Documentation Templates](documentation-templates.md)
-- [Project Organization Principles](project-organization-principles.md)
-- [Quality Assurance Framework](quality-assurance-framework.md)
-- [Design Tokens → Bootstrap Variables](design-tokens-bootstrap-variables.md)
+- ← Previous: [Documentation Templates](documentation-templates.md)
+- Next: [Design Tokens → Bootstrap Variables](design-tokens-bootstrap-variables.md)
+- Related: [Project Organization Principles](project-organization-principles.md)
+- Related: [Quality Assurance Framework](quality-assurance-framework.md)

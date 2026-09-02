@@ -1,6 +1,7 @@
 ---
-description: Systematic folder structure for design system to Bootstrap mapping projects
+description: "Systematic folder structure for design system to Bootstrap mapping projects"
 tldr: "Use this when starting a design system → Bootstrap mapping project to organize analysis, documentation, and implementation files systematically."
+drupal_version: "11.x"
 ---
 
 # Project Organization Principles
@@ -9,79 +10,89 @@ tldr: "Use this when starting a design system → Bootstrap mapping project to o
 
 > Use this when starting a design system → Bootstrap mapping project to organize analysis, documentation, and implementation files systematically.
 
+- You're starting a design system → Bootstrap mapping project
+- You need to organize analysis, mapping documentation, and implementation files
+- You want a systematic folder structure for multi-phase projects
+- You're establishing documentation standards for team projects
+
 ## Universal Project Structure
 
+Based on proven methodology for systematic design system → Bootstrap conversion. This folder structure supports progressive documentation, incremental analysis, and clear handoff to implementation.
+
+### Pattern: Complete Project Folder Structure
+
 ```
-[project_name]/
-├── project-notes.md                         # Project overview and status
-├── design-system-analysis/                  # Complete design system documentation
-│   ├── design-system-inventory.md           # Complete inventory
-│   ├── color-system-analysis.md             # Color system
-│   ├── typography-system-analysis.md        # Typography
-│   ├── spacing-system-analysis.md           # Spacing
-│   ├── border-radius-analysis.md            # Border and radius
-│   ├── shadow-elevation-analysis.md         # Shadow and elevation
-│   └── advanced-features-analysis.md        # CREATE category features
-├── bootstrap-mapping/                       # Bootstrap mapping documentation
-│   ├── bootstrap-variable-inventory.md      # What Bootstrap provides
-│   ├── direct-mapping-plan.md               # Direct design→Bootstrap mappings
-│   ├── custom-variables-plan.md             # Justified custom variables
-│   ├── extension-plan.md                    # EXTEND category
-│   └── implementation-strategy.md           # Implementation approach
-├── component-impact-analysis/               # How personalization affects components
-│   ├── button-components-impact.md          # Button system
-│   ├── form-components-impact.md            # Form system
-│   ├── navigation-components-impact.md      # Navigation
-│   └── layout-components-impact.md          # Layout
-└── final-implementation/                    # Ready-for-implementation files
-    ├── variable-overrides.scss              # Bootstrap variable overrides
-    ├── bootstrap-extensions.scss            # EXTEND category additions
-    ├── custom-variables.scss                # CUSTOMIZE category variables
-    ├── advanced-features/                   # CREATE category (if needed)
-    │   ├── _advanced-mixins.scss
-    │   └── _advanced-utilities.scss
-    ├── implementation-guide.md              # Step-by-step implementation
-    └── validation-checklist.md              # Testing and validation
+/home/agent/Documents/memory_files/
+└── [project_name]/                              # e.g., company_bootstrap_personalization/
+    ├── project-notes.md                         # Project overview and status
+    ├── design-system-analysis/                  # Complete design system documentation
+    │   ├── design-system-inventory.md           # Complete design system inventory
+    │   ├── color-system-analysis.md             # Detailed color system analysis
+    │   ├── typography-system-analysis.md        # Typography system analysis
+    │   ├── spacing-system-analysis.md            # Spacing system analysis
+    │   ├── border-radius-analysis.md             # Border and radius analysis
+    │   ├── shadow-elevation-analysis.md          # Shadow and elevation analysis
+    │   └── advanced-features-analysis.md         # CREATE category features (if applicable)
+    ├── bootstrap-mapping/                       # Bootstrap mapping documentation
+    │   ├── bootstrap-variable-inventory.md      # What Bootstrap provides
+    │   ├── direct-mapping-plan.md               # Direct design→Bootstrap mappings
+    │   ├── custom-variables-plan.md              # Justified custom variables
+    │   ├── extension-plan.md                     # EXTEND category implementations
+    │   └── implementation-strategy.md             # Implementation approach
+    ├── component-impact-analysis/               # How personalization affects components
+    │   ├── button-components-impact.md          # Button system impact analysis
+    │   ├── form-components-impact.md             # Form system impact analysis
+    │   ├── navigation-components-impact.md       # Navigation impact analysis
+    │   └── layout-components-impact.md            # Layout impact analysis
+    └── final-implementation/                    # Ready-for-implementation files
+        ├── variable-overrides.scss              # Final Bootstrap variable overrides
+        ├── bootstrap-extensions.scss             # EXTEND category additions
+        ├── custom-variables.scss                 # CUSTOMIZE category variables
+        ├── advanced-features/                    # CREATE category implementations (if needed)
+        │   ├── _advanced-mixins.scss            # Custom mixins for advanced features
+        │   └── _advanced-utilities.scss          # Custom utilities for advanced features
+        ├── implementation-guide.md               # Step-by-step implementation
+        └── validation-checklist.md               # Testing and validation steps
 ```
 
 ## Progressive Documentation Approach
 
-| Step | Action | Goal |
-|------|--------|------|
-| 1 | Process each design system aspect incrementally | One category at a time |
-| 2 | Update consolidated documentation progressively | Build complete picture |
-| 3 | Build complete mapping strategy before implementation | No code until analysis complete |
-| 4 | Present final implementation plan for approval | Stakeholder review before execution |
+**Systematic Methodology:**
+
+1. **Process each design system aspect incrementally** - Colors, typography, spacing, etc. one at a time
+2. **Update consolidated documentation progressively** - Build complete picture as analysis progresses
+3. **Build complete mapping strategy before implementation** - No code until analysis complete
+4. **Present final implementation plan for approval** - Stakeholder review before execution
 
 ## Phase-Based Implementation Process
 
 ### Phase 1: System Inventory (Document-First)
 
-1. Create project folder structure
-2. Process each design system aspect incrementally
-3. Update consolidated analysis progressively
-4. Build complete inventory before mapping
+1. **Create project folder structure** - Set up all directories and placeholder files
+2. **Process each design system aspect incrementally** - One category at a time
+3. **Update consolidated analysis progressively** - Keep central inventory current
+4. **Build complete inventory before mapping** - Don't start mapping until inventory complete
 
 ### Phase 2: Bootstrap Assessment
 
-1. Document Bootstrap capabilities systematically
-2. Identify direct mapping opportunities (ACCOMMODATE)
-3. Justify custom variable needs (CUSTOMIZE/CREATE)
-4. Plan implementation strategy
+1. **Document Bootstrap capabilities systematically** - Variables, maps, mixins, utilities
+2. **Identify direct mapping opportunities** - ACCOMMODATE decisions first
+3. **Justify custom variable needs** - CUSTOMIZE/CREATE decisions with rationale
+4. **Plan implementation strategy** - Determine integration approach
 
 ### Phase 3: Component Impact Planning
 
-1. Analyze how personalization affects components
-2. Plan component-specific customizations
-3. Prioritize implementation order
-4. Validate approach with stakeholders
+1. **Analyze how personalization affects components** - Buttons, forms, navigation, etc.
+2. **Plan component-specific customizations** - Beyond variable overrides
+3. **Prioritize implementation order** - High-impact components first
+4. **Validate approach with stakeholders** - Review before implementation
 
 ### Phase 4: Implementation Preparation
 
-1. Generate final SCSS files
-2. Create implementation guide
-3. Prepare validation checklist
-4. Present complete plan for approval
+1. **Generate final SCSS files** - Create ready-to-use variable files
+2. **Create implementation guide** - Step-by-step integration instructions
+3. **Prepare validation checklist** - Testing and QA procedures
+4. **Present complete plan for approval** - Final stakeholder review
 
 ## Decision Table: When to Use Each Folder
 
@@ -94,13 +105,20 @@ tldr: "Use this when starting a design system → Bootstrap mapping project to o
 
 ## Common Mistakes
 
-- **Wrong**: Starting implementation before completing analysis → **Right**: Complete all analysis phases first
-- **Wrong**: Mixing analysis and implementation files → **Right**: Separate analysis from code
-- **Wrong**: Skipping component impact analysis → **Right**: Always analyze downstream effects
-- **Wrong**: Creating SCSS files without approval → **Right**: Present strategy for review first
+**Mistake:** Starting implementation before completing analysis
+**Correction:** Complete all analysis phases before writing any SCSS code
+
+**Mistake:** Mixing analysis and implementation files in same directory
+**Correction:** Separate analysis documentation from implementation code
+
+**Mistake:** Skipping component impact analysis phase
+**Correction:** Always analyze how variable changes affect downstream components
+
+**Mistake:** Creating final SCSS files without approval process
+**Correction:** Present mapping strategy for review before generating implementation files
 
 ## See Also
 
-- [Progressive Enhancement Guidelines](progressive-enhancement-guidelines.md)
-- [Documentation Templates](documentation-templates.md)
-- [Bootstrap Accommodation Decision Framework](bootstrap-accommodation-decision-framework.md)
+- ← Previous: [Progressive Enhancement Guidelines](progressive-enhancement-guidelines.md)
+- Next: [Documentation Templates](documentation-templates.md)
+- Related: [Bootstrap Research Methodology](bootstrap-accommodation-decision-framework.md)

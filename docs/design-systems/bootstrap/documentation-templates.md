@@ -1,6 +1,7 @@
 ---
-description: Standardized templates for Bootstrap mapping documentation
+description: "Standardized templates for Bootstrap mapping documentation"
 tldr: "Use these templates for consistent documentation across Bootstrap mapping projects, ensuring framework compliance and systematic analysis."
+drupal_version: "11.x"
 ---
 
 # Documentation Templates
@@ -9,9 +10,16 @@ tldr: "Use these templates for consistent documentation across Bootstrap mapping
 
 > Use these templates for consistent documentation across Bootstrap mapping projects, ensuring framework compliance and systematic analysis.
 
+- You need standardized templates for Bootstrap mapping projects
+- You're documenting design system analysis and mapping decisions
+- You want consistent format for team projects
+- You're establishing documentation standards
+
 ## Template 1: Project Notes
 
-Track overall project status and key decisions.
+Use this template to track overall project status and key decisions.
+
+### Pattern: Project Notes Template
 
 ```markdown
 # [Project Name] Bootstrap Accommodation Project
@@ -44,7 +52,9 @@ Track overall project status and key decisions.
 
 ## Template 2: Design System Analysis
 
-Analyze each design system aspect (colors, typography, spacing, etc.).
+Use this template for analyzing each design system aspect (colors, typography, spacing, etc.).
+
+### Pattern: Design System Analysis Template
 
 ```markdown
 # [System Name] [Component] Analysis
@@ -72,9 +82,9 @@ Analyze each design system aspect (colors, typography, spacing, etc.).
 
 ## Framework Decision Application
 
-| Design Value | Bootstrap Value | Difference | Decision | Rationale |
-|--------------|-----------------|-----------|----------|-----------|
-| [value] | [bootstrap] | [diff] | [✅🔶🔴🆕] | [reasoning] |
+| Design Value | Bootstrap Value | Difference | **Decision** | **Rationale** |
+|--------------|-----------------|-----------|---------------|----------------|
+| [value] | [bootstrap] | [diff] | [✅🔶🔴🆕] | [reasoning based on framework] |
 
 ## Implementation Strategy
 [Specific SCSS implementation approach following framework guidelines]
@@ -82,75 +92,84 @@ Analyze each design system aspect (colors, typography, spacing, etc.).
 
 ## Template 3: Bootstrap Mapping Plan
 
-Document Bootstrap accommodation strategy.
+Use this template to document Bootstrap accommodation strategy.
+
+### Pattern: Bootstrap Mapping Template
 
 ```markdown
 # Bootstrap [System] Mapping Plan
 
 ## Bootstrap Capabilities Research
-[What Bootstrap provides by default]
+[What Bootstrap provides by default - variables, mixins, maps, utilities]
 
 ## Accommodation Strategy
 
 ✅ **ACCOMMODATE** (Direct Bootstrap Usage):
 - [Design value] → [Bootstrap variable]
+- [Rationale for direct mapping]
 
 🔶 **EXTEND** (Add to Bootstrap Maps):
 ```scss
 $theme-colors: map-merge($theme-colors, (
-  'brand': #hex,
+  'brand': #[hex], // [Brand color] added to Bootstrap system
 ));
 ```
 
 🔴 **CUSTOMIZE** (Override Bootstrap Values):
 ```scss
 $spacers: (
-  "sm": 24px, // Justification for ≥6px difference
+  "sm": 24px, // [Justification for ≥6px difference]
 );
 ```
 
 🆕 **CREATE** (Advanced Features):
 ```scss
 @mixin advanced-feature() {
-  // Implementation for features outside Bootstrap scope
+  // [Implementation for features outside Bootstrap scope]
 }
 ```
 
 ## Implementation Impact
-[How these changes affect Bootstrap components]
+[How these changes affect Bootstrap components and ecosystem]
 ```
 
 ## Template 4: Component Impact Analysis
 
-Analyze how variable changes affect Bootstrap components.
+Use this template to analyze how variable changes affect Bootstrap components.
+
+### Pattern: Component Impact Template
 
 ```markdown
 # [Component Type] Impact Analysis
 
 ## Affected Bootstrap Components
-[List of Bootstrap components that will change]
+[List of Bootstrap components that will change with personalization]
 
 ## Accommodation Benefits
 ✅ **AUTOMATIC IMPROVEMENTS**:
-- [Component] will automatically use personalized [aspect]
+- [Component] will automatically use personalized [design system aspect]
+- [Specific benefit and visual improvement]
 
 ## Additional Customization Needs
 ❌ **REQUIRES ADDITIONAL WORK**:
-- [Component] needs [customization beyond variables]
+- [Component] needs [specific customization beyond variables]
+- [Justification and implementation approach]
 
 ## Framework Category Application
 - **ACCOMMODATE**: [Components that work with Bootstrap variables]
-- **EXTEND**: [Components that benefit from map extensions]
-- **CUSTOMIZE**: [Components requiring custom overrides]
+- **EXTEND**: [Components that benefit from Bootstrap map extensions]
+- **CUSTOMIZE**: [Components requiring custom variable overrides]
 - **CREATE**: [Components needing advanced features]
 
 ## Implementation Priority
-[High/Medium/Low with rationale]
+[High/Medium/Low priority with framework-based rationale]
 ```
 
 ## Template 5: Implementation Validation
 
-Validate implementations against framework standards.
+Use this template to validate implementations against framework standards.
+
+### Pattern: Implementation Validation Template
 
 ```markdown
 # [Feature] Implementation Validation
@@ -158,44 +177,51 @@ Validate implementations against framework standards.
 ## Framework Compliance Checklist
 - [ ] 6px threshold analysis completed and documented
 - [ ] Bootstrap capabilities researched systematically
-- [ ] Appropriate decision category selected with rationale
+- [ ] Appropriate decision category selected with clear rationale
 - [ ] SCSS best practices followed (no @extend anti-patterns)
 - [ ] Progressive enhancement considered for advanced features
 
 ## Quality Assurance Validation
-- [ ] Browser compatibility tested
-- [ ] Performance impact assessed
+- [ ] Browser compatibility tested across target browsers
+- [ ] Performance impact assessed for advanced features
 - [ ] Bootstrap component integration verified
-- [ ] Documentation complete
-- [ ] Team review completed
+- [ ] Documentation complete and framework-compliant
+- [ ] Team review completed against framework guidelines
 
 ## Success Metrics Verification
-- [ ] Bootstrap accommodation rate maximized
-- [ ] Custom implementation minimized
-- [ ] CREATE category properly justified
+- [ ] Bootstrap accommodation rate maximized where appropriate
+- [ ] Custom implementation minimized for traditional features
+- [ ] CREATE category properly justified for advanced features
 - [ ] Design system compliance maintained
 - [ ] Upgrade compatibility preserved
 ```
 
-## Template Selection
+## Decision Table: Template Selection
 
-| If you need to... | Use template... |
-|-------------------|----------------|
-| Track project status | Template 1: Project Notes |
-| Analyze design system | Template 2: Design System Analysis |
-| Plan Bootstrap mapping | Template 3: Bootstrap Mapping Plan |
-| Analyze component impact | Template 4: Component Impact Analysis |
-| Validate implementation | Template 5: Implementation Validation |
+| If you need to... | Use template... | Why |
+|-------------------|----------------|-----|
+| Track project status | Template 1: Project Notes | Central overview and checklist |
+| Analyze design system | Template 2: Design System Analysis | Systematic feature evaluation |
+| Plan Bootstrap mapping | Template 3: Bootstrap Mapping Plan | Document accommodation strategy |
+| Analyze component impact | Template 4: Component Impact Analysis | Understand downstream effects |
+| Validate implementation | Template 5: Implementation Validation | QA and framework compliance |
 
 ## Common Mistakes
 
-- **Wrong**: Ad-hoc documentation without structure → **Right**: Use standardized templates
-- **Wrong**: Skipping framework compliance sections → **Right**: Always include decision category and rationale
-- **Wrong**: Not tracking analysis progress → **Right**: Use checkbox lists to track completion
-- **Wrong**: Documenting "what" without "why" → **Right**: Always include rationale
+**Mistake:** Using ad-hoc documentation format without structure
+**Correction:** Use standardized templates for consistency and completeness
+
+**Mistake:** Skipping framework compliance sections in templates
+**Correction:** Always include decision category, rationale, and validation sections
+
+**Mistake:** Not tracking analysis progress in project notes
+**Correction:** Use checkbox lists to track completion and identify gaps
+
+**Mistake:** Documenting implementation without rationale
+**Correction:** Always include "Why" alongside "What" in all templates
 
 ## See Also
 
-- [Project Organization Principles](project-organization-principles.md)
-- [Project Continuation Guidelines](project-continuation-guidelines.md)
-- [Quality Assurance Framework](quality-assurance-framework.md)
+- ← Previous: [Project Organization Principles](project-organization-principles.md)
+- Next: [Project Continuation Guidelines](project-continuation-guidelines.md)
+- Related: [Quality Assurance Framework](quality-assurance-framework.md)
