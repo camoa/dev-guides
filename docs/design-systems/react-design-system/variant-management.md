@@ -7,7 +7,7 @@ tldr: "Use when a component has multiple dimensions of variation (size, color/in
 
 ## When to Use
 
-> Use when a component has multiple dimensions of variation (size, color/intent, state) that combine in predictable ways. CVA makes these combinations type-safe and conflict-free.
+> When a component has multiple dimensions of variation (size, color/intent, state) that combine in predictable ways. CVA makes these combinations type-safe and conflict-free.
 
 ## Decision
 
@@ -23,7 +23,7 @@ tldr: "Use when a component has multiple dimensions of variation (size, color/in
 Full CVA with compound variants:
 ```tsx
 const alertVariants = cva(
-  'relative w-full rounded-lg border p-4',
+  'relative w-full rounded-lg border p-4 [&>svg+div]:translate-y-[-3px]',
   {
     variants: {
       variant: {
@@ -63,15 +63,17 @@ const card = tv({
 
 ## Common Mistakes
 
-- **Wrong**: Nesting variant logic in JSX with ternaries → **Right**: Put all variant logic in `cva()`; ternaries in JSX are hard to read and untyped
-- **Wrong**: Forgetting `VariantProps<typeof variantFn>` on the interface → **Right**: Always extract types from CVA; without it variant props become untyped `string`
-- **Wrong**: Overusing `compoundVariants` → **Right**: If every variant combo needs one, the variant design is wrong; reconsider the structure
-- **Wrong**: Using tailwind-variants for simple single-element components → **Right**: CVA is simpler when there are no slots
-- **Wrong**: Defining `cva()` calls inside the component function → **Right**: Extract to module scope so they're created once, not on every render
+- Nesting variant logic in JSX with ternaries → hard to read; moves variant logic out of CVA where it belongs; put all variant logic in `cva()`
+- Forgetting `VariantProps<typeof variantFn>` on the interface → variant props become untyped `string`; always extract types from CVA
+- Overusing `compoundVariants` → if every variant combo needs a `compoundVariant`, the variant design is wrong; reconsider the variant structure
+- Using tailwind-variants for simple single-element components → adds overhead; CVA is simpler when there's no slot management needed
+- Defining variants inline in the component → extract `cva()` calls to module scope so they're created once, not on every render
 
 ## See Also
 
 - [Tailwind Integration](tailwind-integration.md)
 - [Design Token Consumption](design-token-consumption.md)
-- Reference: [CVA — Variants](https://cva.style/docs/getting-started/variants)
+- Reference: [CVA — Variants](https://cva.style/getting-started/variants/)
 - Reference: [tailwind-variants — Slots](https://www.tailwind-variants.org/docs/slots)
+- Reference: [CVA docs](https://cva.style/)
+- Reference: [tailwind-variants vs CVA comparison](https://www.tailwind-variants.org/docs/comparison)

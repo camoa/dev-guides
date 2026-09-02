@@ -7,7 +7,7 @@ tldr: "Use before shipping a component to design system consumers, and during co
 
 ## When to Use
 
-> Use before shipping a component to design system consumers, and during code review.
+> Before shipping a component to design system consumers, and during code review.
 
 ## The Experienced Developer Checklist
 
@@ -26,28 +26,19 @@ Every prop you add is a commitment to support forever. Start with fewer props th
 **Documentation-driven development**
 Write the Storybook story before the component implementation. If you can't write a clear story, the component API isn't clear. The story is also the first consumer — it will immediately reveal prop naming problems.
 
-## Decision
-
-| Principle | Rule |
-|---|---|
-| Composition over configuration | Ask: could this prop instead be a slot or composed child? If yes, use a slot. |
-| Minimal API surface | Start with fewer props than you think; you can add, you can't remove without a breaking change |
-| Consistent naming | `on{Event}`, `is{State}`, `has{Thing}`, variant names match design vocabulary |
-| Documentation-driven | Write the Storybook story before the component; if you can't write a clear story, the API isn't clear |
-
 ## Security Patterns
 
-| Risk | Avoid | Use instead |
+| Risk | Pattern to Avoid | Safe Pattern |
 |---|---|---|
-| XSS via `dangerouslySetInnerHTML` | `<div dangerouslySetInnerHTML={{ __html: userContent }} />` | Sanitize with DOMPurify first |
-| XSS via URL props | `<a href={userHref}>` with no validation | Validate `href` starts with `https://` or `/`; block `javascript:` |
-| Sensitive data in props | Logging component props | Never log props; treat form values as sensitive |
+| XSS via `dangerouslySetInnerHTML` | `<div dangerouslySetInnerHTML={{ __html: userContent }} />` | Sanitize with DOMPurify first; prefer React's JSX rendering |
+| XSS via URL props | `<a href={userHref}>` with no validation | Validate `href` starts with `https://` or `/`; block `javascript:` schemes |
+| Sensitive data in props/state | Logging props with PII | Never log component props; treat form values as sensitive |
 
 ```tsx
 // WRONG: direct user HTML
 <div dangerouslySetInnerHTML={{ __html: post.content }} />
 
-// CORRECT: sanitize before rendering
+// CORRECT: sanitize before rendering (install dompurify)
 import DOMPurify from 'dompurify';
 <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }} />
 
@@ -59,7 +50,7 @@ function isSafeUrl(url: string) {
 
 ## Performance Anti-Patterns
 
-| Anti-pattern | Problem | Fix |
+| Anti-pattern | Why it's a problem | Fix |
 |---|---|---|
 | Inline object props to memoized components | New reference every render, defeats memo | Extract to a variable or `useMemo` |
 | `useState` per form field in a large form | N re-renders per keystroke | Use react-hook-form |
@@ -73,20 +64,21 @@ function isSafeUrl(url: string) {
 |---|---|
 | `!important` in component styles | Impossible to override; breaks the style cascade |
 | Inline styles for design token values | Bypasses Tailwind; no dark mode; no responsive; no JIT optimization |
-| `@extend` in SCSS | Selector explosion; non-obvious output; impossible to debug |
+| `@extend` in SCSS (if using SCSS) | Selector explosion; non-obvious output; impossible to debug |
 | Components that import from feature code | Creates circular dependencies; design system must be dependency-free |
 | Global CSS side effects in component files | Leaks into other components; impossible to isolate |
-| `console.log` left in component code | Performance cost; exposes internal state |
+| `console.log` left in component code | Performance cost; exposes internal state; unprofessional in production |
 
-## Senior Dev Code Review Checklist
+## The "Senior Dev Code Review" List
+These are things a senior developer will flag immediately:
 
-1. No `forwardRef` on leaf components — "This component can't be used with Radix primitives or focus management"
-2. `className` prop not accepted — "Callers can't customize this at all; design system components always accept `className`"
-3. Prop named `style` that's a string — "This shadows the HTML `style` attribute; pick a different name"
-4. No `displayName` on `forwardRef` components — "React DevTools shows `ForwardRef` everywhere; always set `displayName`"
-5. Event handler that doesn't call the prop version — "If I pass `onClick`, it gets ignored; always merge internal + prop handlers"
-6. Hard-coded colors that aren't tokens — "This breaks theming; use CSS variables"
-7. Missing error/disabled/loading states — "This component isn't production-ready; every interactive component needs all states"
+1. **No `forwardRef` on leaf components** → "This component can't be used with Radix primitives or focus management"
+2. **`className` prop not accepted** → "Callers can't customize this at all; design system components always accept `className`"
+3. **Prop named `style` that's a string** → "This shadows the HTML `style` attribute; pick a different name"
+4. **No `displayName` on `forwardRef` components** → "React DevTools shows `ForwardRef` everywhere; always set `displayName`"
+5. **Event handler that doesn't call the prop version** → "If I pass `onClick`, it gets ignored; always merge internal + prop handlers"
+6. **Hard-coded colors that aren't tokens** → "This breaks theming; use CSS variables"
+7. **Missing error/disabled/loading states** → "This component isn't production-ready; every interactive component needs all states"
 
 ## See Also
 

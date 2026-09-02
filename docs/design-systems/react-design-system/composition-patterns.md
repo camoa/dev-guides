@@ -7,7 +7,7 @@ tldr: "Use when building multi-part components (select, tabs, accordion, dialog)
 
 ## When to Use
 
-> Use when building multi-part components (select, tabs, accordion, dialog) where sub-components need to share state without prop drilling.
+> When building multi-part components (select, tabs, accordion, dialog) where sub-components need to share state without prop drilling.
 
 ## Decision
 
@@ -22,7 +22,7 @@ tldr: "Use when building multi-part components (select, tabs, accordion, dialog)
 
 ## Pattern
 
-Compound component with Context:
+Compound component with Context (simplified — your own component):
 ```tsx
 const TabsContext = React.createContext<{ active: string; setActive: (v: string) => void } | null>(null);
 
@@ -39,46 +39,86 @@ Tabs.Trigger = function TabsTrigger({ value, children }: { value: string; childr
 };
 ```
 
+How Radix actually implements compound components (from Dialog/Tabs source):
+```tsx
+// Radix uses createContextScope() for composable, scoped contexts that survive
+// component library merging (avoids context collision when two Radix components nest)
+// In your own components, React.createContext is sufficient — createContextScope
+// is only needed for library authors building composable primitives
+//
+// Radix Tabs (verified from react-tabs 1.1.13 source) uses:
+// - useControllableState({ prop: valueProp, defaultProp, onChange: onValueChange })
+//   → handles controlled (value prop) AND uncontrolled (defaultValue) in one hook
+// - Primitive.div/button as the root element (extends Radix's Primitive wrapper)
+// - React.forwardRef on every sub-component for ref forwarding
+// - 'use client' directive on all components (required for Next.js App Router)
+```
+
 Ref forwarding — React 18 vs React 19:
 ```tsx
-// React 18: forwardRef wrapper required
+// React 18 and earlier: forwardRef wrapper required
 export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ className, ...props }, ref) => (
     <input ref={ref} className={cn('border rounded px-3 py-2', className)} {...props} />
   )
 );
-Input.displayName = 'Input';
+Input.displayName = 'Input'; // Required for React DevTools
 
 // React 19: ref is a regular prop — no forwardRef needed
 export function Input({ className, ref, ...props }: React.InputHTMLAttributes<HTMLInputElement> & { ref?: React.Ref<HTMLInputElement> }) {
   return <input ref={ref} className={cn('border rounded px-3 py-2', className)} {...props} />;
 }
+// Note: forwardRef still works in React 19 for backward compat; just deprecated
 ```
 
-### Server vs Client Components (Next.js App Router)
+## Server Components vs Client Components (Next.js App Router)
+
+In Next.js App Router, components are Server Components by default. Design system components split into two categories:
 
 | Component type | Directive | Examples |
 |---|---|---|
-| Pure display (no interactivity, no state, no hooks) | None (Server Component) | `Badge`, `Container`, `Stack`, `Text` |
+| Pure display (no interactivity, no state, no hooks) | None (Server Component) | `Badge`, `Container`, `Stack`, `Text`, `Separator` |
 | Interactive (state, effects, event handlers, Context, Radix) | `"use client"` | `Button`, `Dialog`, `Tabs`, `Accordion`, `FormField` |
-| Uses browser APIs (`window`, `localStorage`) | `"use client"` | `ThemeProvider`, `ToastProvider` |
+| Uses browser APIs (`window`, `localStorage`, `IntersectionObserver`) | `"use client"` | `ThemeProvider`, `ToastProvider` |
 
-**Rule**: If a component uses `useState`, `useEffect`, `useContext`, `onClick`, or any Radix primitive → add `"use client"`. If it only renders props and children with `cn()` → it can stay a Server Component.
+```tsx
+// Button.tsx — needs "use client" because of onClick handling + CVA
+"use client";
+import { cn } from '@/lib/utils';
+import { cva, type VariantProps } from 'class-variance-authority';
+// ...
+```
+
+```tsx
+// Badge.tsx — pure display, NO "use client" needed
+import { cn } from '@/lib/utils';
+// cn() is a pure function — no hooks — works in Server Components
+export function Badge({ children, className }: BadgeProps) {
+  return <span className={cn('rounded-full px-2 text-xs', className)}>{children}</span>;
+}
+```
+
+**Rule of thumb**: If a component uses `useState`, `useEffect`, `useContext`, `onClick`, or any Radix primitive → it needs `"use client"`. If it only renders props and children with `cn()` → it can stay a Server Component.
 
 ## Common Mistakes
 
-- **Wrong**: Forgetting `"use client"` on components using Radix primitives → **Right**: All Radix components require this in Next.js App Router
-- **Wrong**: Adding `"use client"` to every component "just in case" → **Right**: Only add it when genuinely needed; Server Components have zero JS bundle cost
-- **Wrong**: Creating a Context for every compound component → **Right**: Only create Context when sub-components genuinely need shared state
-- **Wrong**: Forgetting `displayName` on `forwardRef` components → **Right**: Always set `displayName`; React DevTools shows `ForwardRef` without it
-- **Wrong**: Using Context for global design token access → **Right**: CSS custom properties are better for tokens; Context is for behavioral state
-- **Wrong**: Mixing controlled and uncontrolled behavior without the `defaultValue`/`value` distinction → **Right**: Use the `useControllableState` pattern
+- Forgetting `"use client"` on components using Radix primitives → all Radix components require this in Next.js App Router; missing it causes Server Component errors
+- Adding `"use client"` to every component "just in case" → defeats Server Component benefits (zero JS bundle, streaming, direct data access); only add it when genuinely needed
+- Creating a Context for every compound component → Context has render cost; only create one when sub-components genuinely need shared state
+- Forgetting `displayName` on `forwardRef` components → React DevTools shows `ForwardRef` instead of component name; always set it
+- Using Context for global design token access → CSS custom properties are better for tokens; Context is for behavioral state
+- Mixing controlled and uncontrolled behavior in one component without the `defaultValue`/`value` distinction → breaks react-hook-form integration and causes stale state bugs; use the `useControllableState` pattern
+- Deep component factory patterns → component factories (functions returning components) obscure the component tree; prefer explicit compound components
+- Importing a Client Component into a Server Component layout and expecting it to stay server-side → the `"use client"` boundary propagates; structure your imports to minimize client boundaries
 
 ## See Also
 
 - [Children and Slot Patterns](children-and-slot-patterns.md)
 - [Tailwind Integration](tailwind-integration.md)
+- Reference: `@radix-ui/react-dialog` 1.1.15 — `node_modules/@radix-ui/react-dialog/dist/index.js`
+- Reference: `@radix-ui/react-tabs` 1.1.13 — `node_modules/@radix-ui/react-tabs/dist/index.js`
 - Reference: [Kent C. Dodds — Compound Components](https://kentcdodds.com/blog/compound-components-with-react-hooks)
 - Reference: [React 19 ref as prop](https://react.dev/blog/2024/12/05/react-19#ref-as-a-prop)
-- Reference: [Next.js — Client Components](https://nextjs.org/docs/app/building-your-application/rendering/client-components)
-- Reference: `@radix-ui/react-dialog` 1.1.15 — `node_modules/@radix-ui/react-dialog/dist/index.js`
+- Reference: [Compound Pattern — patterns.dev](https://www.patterns.dev/react/compound-pattern/)
+- Reference: [React 19 release blog](https://react.dev/blog/2024/12/05/react-19)
+- Reference: [Next.js — Server and Client Components](https://nextjs.org/docs/app/getting-started/server-and-client-components)

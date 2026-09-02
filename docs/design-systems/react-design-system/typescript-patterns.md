@@ -7,7 +7,7 @@ tldr: "Use in every design system component. TypeScript is how the system commun
 
 ## When to Use
 
-> Use in every design system component. TypeScript is how the system communicates its API to consumers — it's not optional.
+> Any design system component. TypeScript is non-negotiable in a design system — it's how the system communicates its API to consumers.
 
 ## Decision
 
@@ -19,17 +19,18 @@ tldr: "Use in every design system component. TypeScript is how the system commun
 | Variant props from CVA | `VariantProps<typeof variantFn>` | Type is derived from CVA definition; stays in sync automatically |
 | Exclusive prop combinations | Discriminated union with literal discriminator | TypeScript enforces valid combos at compile time |
 | Generic component (wraps any element) | Generic function with `T extends React.ElementType` | Caller gets correct element props inferred |
-| Component variant as a type | `type ButtonVariant = VariantProps<typeof buttonVariants>['variant']` | Extract single variant dimension for docs or other components |
+| Component variant as a type | `type ButtonVariant = VariantProps<typeof buttonVariants>['variant']` | Extract single variant dimension for documentation or other components |
 | Get component ref type | `React.ComponentRef<typeof Button>` | Extracts ref type from component; replaces deprecated `React.ElementRef` |
 
 ## Pattern
 
 Extending native props (standard pattern):
 ```tsx
+// Extend HTMLButtonElement props, add your own, export the type
 export interface ButtonProps
   extends React.ComponentPropsWithoutRef<'button'>,
     VariantProps<typeof buttonVariants> {
-  isLoading?: boolean;
+  isLoading?: boolean;    // your additions
 }
 
 // Omit conflicts explicitly when needed
@@ -49,11 +50,11 @@ type ActionProps = (WithHref | WithOnClick) & { children: React.ReactNode };
 
 ## Common Mistakes
 
-- **Wrong**: Using `React.FC<Props>` → **Right**: Use function declarations with explicit return types; `React.FC` adds implicit `children` (pre-React 18) and hides `displayName` issues
-- **Wrong**: Typing children as `JSX.Element` → **Right**: Use `React.ReactNode` for maximum flexibility; `JSX.Element` excludes strings, arrays, and null
-- **Wrong**: `as any` to solve prop conflicts → **Right**: Use `Omit<>` or discriminated unions to resolve properly
-- **Wrong**: Forgetting to export prop interfaces → **Right**: Always export; consumers need to extend or document component APIs
-- **Wrong**: Mixing `interface` and `type` inconsistently → **Right**: Pick one convention (interfaces for component props, types for unions/aliases is common)
+- Using `React.FC<Props>` → `React.FC` implicitly adds `children` (pre-React 18), hides displayName issues; use function declarations with explicit return types instead
+- Typing children as `JSX.Element` → excludes strings, arrays, null; use `React.ReactNode` for maximum flexibility
+- `as any` to solve prop conflicts → masks real type errors; use `Omit<>` or discriminated unions to resolve properly
+- Forgetting to export prop interfaces → consumers can't extend or document component APIs
+- Mixing interface and type inconsistently → pick one per project (interfaces for component props, types for unions/aliases is a common convention)
 
 ## See Also
 
@@ -61,3 +62,4 @@ type ActionProps = (WithHref | WithOnClick) & { children: React.ReactNode };
 - [Accessibility Patterns](accessibility-patterns.md)
 - Reference: [React TypeScript Cheatsheet](https://react-typescript-cheatsheet.netlify.app/)
 - Reference: [FreeCodeCamp — Polymorphic Components](https://www.freecodecamp.org/news/build-strongly-typed-polymorphic-components-with-react-and-typescript/)
+- Reference: [React TypeScript — Patterns by Use Case](https://react-typescript-cheatsheet.netlify.app/docs/advanced/patterns_by_usecase/)

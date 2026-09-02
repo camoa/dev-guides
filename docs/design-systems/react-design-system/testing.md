@@ -7,7 +7,7 @@ tldr: "Use for every design system component. Tests protect the API contract —
 
 ## When to Use
 
-> Use for every design system component. Tests protect the API contract — they catch regressions before consumers notice.
+> Every design system component. Tests in a design system protect the API contract — they catch regressions before consumers notice.
 
 ## Decision
 
@@ -56,12 +56,12 @@ describe('Button', () => {
 
 ## Common Mistakes
 
-- **Wrong**: Testing implementation details (class names, internal state) → **Right**: Test behavior via `getByRole`; implementation tests break on refactoring
-- **Wrong**: Skipping axe tests → **Right**: Automated axe catches ~35% of WCAG violations; worth running on every component
-- **Wrong**: Testing only the happy path → **Right**: Design system components must handle disabled, loading, and error states; test all behavioral variants
-- **Wrong**: Using `getByTestId` as default selector → **Right**: Prefer semantic queries (`getByRole`, `getByLabelText`) that reflect how users interact
-- **Wrong**: No visual regression baseline → **Right**: Style changes are invisible in unit tests; set up Storybook + Chromatic or Playwright screenshots
-- **Wrong**: Mocking child components in integration tests → **Right**: Only mock network/external dependencies; mocking children defeats composition testing
+- Testing implementation details (class names, internal state) → brittle; breaks on refactoring; test behavior via `getByRole`, not `querySelector('.btn-primary')`
+- Skipping axe tests → accessibility regressions are silent; automated axe catches ~35% of WCAG violations; worth running on every component
+- Testing only the happy path → design system components must handle disabled, loading, error states; test all variant combinations that have different behavior
+- Using `getByTestId` as default selector → couples tests to `data-testid` attributes; prefer semantic queries (`getByRole`, `getByLabelText`) that reflect how users interact
+- No visual regression baseline → style changes are invisible in unit tests; set up Storybook + Chromatic or Playwright screenshots for CSS-impacting changes
+- Mocking child components in integration tests → defeats the purpose of testing composition; only mock network/external dependencies
 
 ## See Also
 
@@ -69,4 +69,4 @@ describe('Button', () => {
 - [Best Practices and Anti-Patterns](best-practices-and-anti-patterns.md)
 - Reference: [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
 - Reference: [jest-axe](https://github.com/nickcolley/jest-axe)
-- Reference: [Storybook — Accessibility Testing](https://storybook.js.org/docs/writing-tests/accessibility-testing)
+- Reference: [Storybook accessibility testing](https://storybook.js.org/docs/8/writing-tests/accessibility-testing)

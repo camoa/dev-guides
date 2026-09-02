@@ -7,7 +7,7 @@ tldr: "Use when a component needs to render content it doesn't control — layou
 
 ## When to Use
 
-> Use when a component needs to render content it doesn't control — layouts, wrappers, trigger+panel pairs.
+> When a component needs to render content it doesn't control — layouts, wrappers, trigger+panel pairs.
 
 ## Decision
 
@@ -39,7 +39,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 // Renders a styled <a> — not a <button> wrapping an <a>
 ```
 
-How `Slot` merges props — from `mergeProps()` in the source:
+How `Slot` merges props — from `mergeProps()` in the source (important nuances):
 ```tsx
 // Slot merges slotProps + childProps with these rules:
 // 1. Event handlers: BOTH are called (slot handler runs after child handler)
@@ -63,17 +63,17 @@ interface DialogProps {
 
 ## Common Mistakes
 
-- **Wrong**: `React.Children.map()` to iterate children for slot identification → **Right**: Use compound components or named slot props; `Children.map` breaks on type changes
-- **Wrong**: Wrapping `asChild` content in an extra div → **Right**: `asChild` must merge directly onto the child element; the extra div negates it
-- **Wrong**: Expecting Slot to resolve Tailwind class conflicts → **Right**: Slot joins classNames with a space; resolve conflicts with `cn()` before passing to Slot
-- **Wrong**: Deeply nested render props → **Right**: Compound components with Context solve the same problem more readably
-- **Wrong**: Forgetting ref forwarding when using `asChild` → **Right**: Radix primitives need refs for positioning; use `React.forwardRef` (or pass `ref` directly in React 19)
-- **Wrong**: Expecting a second event handler to override the Slot's → **Right**: Both fire; this is intentional composition behavior
+- Using `React.Children.map()` to iterate children for slot identification → fragile; children type changes break it; use compound components or named slot props instead
+- Wrapping `asChild` content in an extra div → negates the entire point; `asChild` should merge directly onto the child element
+- Expecting Slot to resolve Tailwind class conflicts → Slot joins classNames with a space, not `cn()`; conflicting Tailwind classes (e.g., `p-2` from slot and `p-4` from child) both survive; resolve before passing to Slot
+- Deeply nested render props → impossible to read; compound components with Context solve the same problem more declarably
+- Forgetting to forward refs when using `asChild` → Radix primitives need refs for positioning; always use `React.forwardRef` (or pass `ref` directly in React 19)
+- Adding a second event handler and expecting it to override the Slot's → both fire; this is intentional composition behavior, not a bug
 
 ## See Also
 
 - [Props Patterns](props-patterns.md)
 - [Composition Patterns](composition-patterns.md)
-- Reference: [Radix UI — Composition (asChild)](https://www.radix-ui.com/primitives/docs/guides/composition)
 - Reference: `@radix-ui/react-slot` 1.2.4 — `node_modules/@radix-ui/react-slot/dist/index.js`
-- Reference: [shadcn/ui Button with asChild](https://ui.shadcn.com/docs/components/button)
+- Reference: [Radix UI — Composition (asChild)](https://www.radix-ui.com/primitives/docs/guides/composition)
+- Reference: [shadcn/ui Button with asChild](https://ui.shadcn.com/docs/components/base/button)

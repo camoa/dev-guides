@@ -7,7 +7,7 @@ tldr: "Use when building Input, Select, Checkbox, Textarea, or any form field co
 
 ## When to Use
 
-> Use when building Input, Select, Checkbox, Textarea, or any form field component. Form components have unique requirements: validation state, error display, accessibility linking, and library integration.
+> When building Input, Select, Checkbox, Textarea, or any form field component. Form components have unique requirements: validation state, error display, accessibility linking, and library integration.
 
 ## Decision
 
@@ -26,7 +26,7 @@ Accessible FormField compound component:
 const FormFieldContext = React.createContext<{ id: string } | null>(null);
 
 export function FormField({ children }: { children: React.ReactNode }) {
-  const id = React.useId();
+  const id = React.useId(); // React 18+ stable unique ID
   return <FormFieldContext.Provider value={{ id }}>{children}</FormFieldContext.Provider>;
 }
 FormField.Label = function FormLabel({ children }: { children: React.ReactNode }) {
@@ -48,7 +48,8 @@ FormField.Input = React.forwardRef<HTMLInputElement, InputProps & { errorId?: st
     );
   }
 );
-// role="alert" for submit-time errors; role="status" for live validation
+// role="alert" for submit-time errors (assertive — interrupts screen reader)
+// role="status" for live validation (polite — waits for pause in reading)
 FormField.Error = function FormError({ children, id, live = 'polite' }: { children?: React.ReactNode; id: string; live?: 'polite' | 'assertive' }) {
   if (!children) return null;
   return <p id={id} role={live === 'assertive' ? 'alert' : 'status'} className="text-sm text-destructive mt-1">{children}</p>;
@@ -57,6 +58,7 @@ FormField.Error = function FormError({ children, id, live = 'polite' }: { childr
 
 react-hook-form integration:
 ```tsx
+// Design system Input works with RHF Controller for controlled usage
 const { control, handleSubmit } = useForm<FormValues>({ resolver: zodResolver(schema) });
 <Controller name="email" control={control} render={({ field, fieldState }) => (
   <FormField>
@@ -69,11 +71,11 @@ const { control, handleSubmit } = useForm<FormValues>({ resolver: zodResolver(sc
 
 ## Common Mistakes
 
-- **Wrong**: Controlled inputs without `forwardRef` → **Right**: react-hook-form's `register` uses ref internally; inputs without refs fall back to uncontrolled behavior
-- **Wrong**: Managing form state with `useState` per field → **Right**: One re-render per keystroke across the whole form; use react-hook-form
-- **Wrong**: Displaying errors without `aria-describedby` → **Right**: Screen reader users see the visual error but don't know it's associated with the field
-- **Wrong**: Using `required` HTML attribute instead of schema validation → **Right**: Doesn't integrate with react-hook-form's error system; validation displays inconsistently
-- **Wrong**: Manually crafted IDs for label/input linking → **Right**: Use `React.useId()`; manually crafted IDs collide in pages with multiple forms
+- Controlled inputs without `forwardRef` → react-hook-form's `register` uses ref internally; inputs without refs fall back to uncontrolled behavior
+- Managing form state with `useState` per field → causes one re-render per keystroke across the whole form; use react-hook-form
+- Displaying errors without `aria-describedby` → screen reader users see the visual error but don't know it's associated with the field
+- Using `required` HTML attribute instead of schema validation → doesn't integrate with react-hook-form's error system; validation displays inconsistently
+- Forgetting `React.useId()` for label/input linking → manually crafted IDs collide in pages with multiple forms; `useId()` guarantees uniqueness
 
 ## See Also
 
@@ -81,4 +83,5 @@ const { control, handleSubmit } = useForm<FormValues>({ resolver: zodResolver(sc
 - [Layout Components](layout-components.md)
 - Reference: [react-hook-form — Advanced Usage](https://react-hook-form.com/advanced-usage)
 - Reference: [react-hook-form — Controller](https://react-hook-form.com/docs/usecontroller/controller)
+- Reference: [react-hook-form](https://react-hook-form.com/)
 - Reference: [Zod](https://zod.dev/)

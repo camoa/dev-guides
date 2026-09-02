@@ -7,7 +7,7 @@ tldr: "Use as a quick lookup for utility categories and patterns. Tailwind gener
 
 ## When to Use
 
-> Use as a quick lookup for utility categories and patterns. Tailwind generates utilities for every theme token; this covers key classes and patterns.
+> Quick-reference for the most commonly used Tailwind utility categories. Tailwind generates utilities for every theme token; this section covers the patterns and key classes, not an exhaustive list.
 
 ## Layout Utilities
 
@@ -20,7 +20,7 @@ tldr: "Use as a quick lookup for utility categories and patterns. Tailwind gener
 | `flex-wrap` | `flex-wrap: wrap` |
 | `items-center` | `align-items: center` |
 | `justify-between` | `justify-content: space-between` |
-| `gap-4` | `gap: 1rem` (at 4px base) |
+| `gap-4` | `gap: var(--spacing-4)` (1rem at 4px base) |
 | `grow` / `shrink` / `shrink-0` | `flex-grow` / `flex-shrink` |
 
 ### Grid
@@ -29,14 +29,14 @@ tldr: "Use as a quick lookup for utility categories and patterns. Tailwind gener
 |---------|-----|
 | `grid` | `display: grid` |
 | `grid-cols-3` | `grid-template-columns: repeat(3, minmax(0, 1fr))` |
-| `grid-cols-[200px_1fr]` | Arbitrary template |
+| `grid-cols-[200px_1fr]` | Arbitrary template (v4: also `grid-cols-15` works) |
 | `col-span-2` | `grid-column: span 2 / span 2` |
 | `gap-x-4 gap-y-2` | Column/row gap separately |
 
 ### Container
 
 ```html
-<!-- v4: container is a utility -->
+<!-- v4: container is a utility, not a component -->
 <div class="container mx-auto px-4">
 
 <!-- Named container for container queries -->
@@ -45,6 +45,8 @@ tldr: "Use as a quick lookup for utility categories and patterns. Tailwind gener
 ```
 
 ## Spacing Utilities
+
+All spacing uses a single scale based on `--spacing` (4px base by default). Pattern: `{property}-{size}`.
 
 | Prefix | Property | Example | Output |
 |--------|----------|---------|--------|
@@ -73,7 +75,7 @@ tldr: "Use as a quick lookup for utility categories and patterns. Tailwind gener
 
 ## Color Utilities
 
-Every color token generates all of these:
+Color utilities follow the pattern `{property}-{color}-{shade}`. Every color token generates all of these:
 
 | Utility pattern | Property |
 |-----------------|----------|
@@ -83,6 +85,8 @@ Every color token generates all of these:
 | `ring-brand-500` | Box shadow ring color |
 | `fill-brand-500` | SVG fill |
 | `stroke-brand-500` | SVG stroke |
+
+**Opacity modifier** (works on any color utility):
 
 ```html
 <div class="bg-brand-500/50">    <!-- 50% opacity background -->
@@ -102,22 +106,30 @@ Every color token generates all of these:
 
 ## Effects Utilities
 
-Shadow names changed from v3 to v4:
+**Shadow tokens in v4.2.0** (verified from source — names changed from v3):
 
-| Utility | Effect | v4 Token | v3 equivalent |
-|---------|--------|----------|---------------|
-| `shadow-2xs` | Barely visible 1px shadow | `--shadow-2xs` | new in v4 |
-| `shadow-xs` | 1px blur shadow | `--shadow-xs` | was `shadow-sm` |
-| `shadow-sm` | Standard small shadow | `--shadow-sm` | was `shadow` (bare) |
-| `shadow-md` | Medium shadow | `--shadow-md` | same |
-| `shadow-lg` | Large shadow | `--shadow-lg` | same |
-| `inset-shadow-sm` | Inset shadow | `--inset-shadow-sm` | new in v4 |
-| `drop-shadow-md` | Filter drop-shadow (SVG/PNG) | `--drop-shadow-md` | same |
-| `text-shadow-sm` | Text shadow | `--text-shadow-sm` | new in v4 |
-| `backdrop-blur-sm` | Backdrop filter | `--blur-sm: 8px` | same |
-| `perspective-normal` | 3D perspective | `--perspective-normal: 500px` | new in v4 |
+| Utility | Effect | v4 Token |
+|---------|--------|----------|
+| `shadow-2xs` | Barely visible 1px shadow | `--shadow-2xs` |
+| `shadow-xs` | 1px blur shadow | `--shadow-xs` |
+| `shadow-sm` | Standard small shadow | `--shadow-sm` (was `shadow` in v3) |
+| `shadow-md` | Medium shadow | `--shadow-md` (was `shadow-md` in v3) |
+| `shadow-lg` | Large shadow | `--shadow-lg` |
+| `inset-shadow-sm` | Inset shadow (inner depth) | `--inset-shadow-sm` |
+| `drop-shadow-md` | Filter drop-shadow (works on SVG/PNG) | `--drop-shadow-md` |
+| `text-shadow-sm` | Text shadow | `--text-shadow-sm` (new in v4) |
+| `opacity-50` | Element opacity | — |
+| `rounded-md` | Border radius | `--radius-md: 0.375rem` |
+| `ring-2 ring-brand-500` | Outline ring (inset box-shadow) | — |
+| `backdrop-blur-sm` | Backdrop filter | `--blur-sm: 8px` |
+| `blur-md` | Element blur filter | `--blur-md: 12px` |
+| `transition` / `duration-300` / `ease-in-out` | Transitions | `--default-transition-duration: 150ms` |
+| `animate-spin` / `animate-bounce` | Keyframe animations | `--animate-spin`, `--animate-bounce` |
+| `perspective-normal` | 3D perspective | `--perspective-normal: 500px` (new in v4) |
 
-## State Variants
+**v3 shadow rename**: v3's `shadow-sm` is now `shadow-xs` in v4. v3's `shadow` (bare) is now `shadow-sm`. Run `npx @tailwindcss/upgrade` to catch these.
+
+## State Variants (Applied as Prefixes)
 
 ```html
 <button class="
@@ -134,7 +146,7 @@ Shadow names changed from v3 to v4:
 |---------|-------------|
 | `hover:` | Mouse hover |
 | `focus:` | Any focus |
-| `focus-visible:` | Keyboard focus only (preferred) |
+| `focus-visible:` | Keyboard focus only (preferred for accessibility) |
 | `active:` | Mouse/touch press |
 | `disabled:` | Disabled state |
 | `checked:` | Checkbox/radio checked |
@@ -144,9 +156,9 @@ Shadow names changed from v3 to v4:
 
 ## Common Mistakes
 
-- **Wrong**: Using `focus:` for focus rings. **Right**: Use `focus-visible:` — `focus:` shows rings on mouse clicks, degrading UX.
-- **Wrong**: Using `text-opacity-*` (v3 deprecated). **Right**: Use `text-gray-900/80` slash opacity syntax.
-- **Wrong**: Hardcoding arbitrary values for repeated values. **Right**: Add values used more than 2-3 times to `@theme`.
+- **Using `focus:` for focus rings instead of `focus-visible:`** — causes visible focus on mouse clicks, poor UX
+- **Using `text-opacity-*` (v3 deprecated)** — use `text-gray-900/80` slash syntax
+- **Hardcoding arbitrary values (`w-[340px]`) for values that should be design tokens** — add them to `@theme` instead
 
 ## See Also
 

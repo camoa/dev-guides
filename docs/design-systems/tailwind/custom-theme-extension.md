@@ -7,7 +7,7 @@ tldr: "Use when adding project-specific utilities, custom variants, animations, 
 
 ## When to Use
 
-> Use when adding project-specific utilities, custom variants, animations, or sharing a theme across a monorepo.
+> Adding project-specific utilities, variants, animations, or extending beyond what design tokens alone provide.
 
 ## Decision
 
@@ -18,8 +18,9 @@ tldr: "Use when adding project-specific utilities, custom variants, animations, 
 | Multi-theme (admin vs. public) | `@custom-variant` | Creates scoped variants without duplicating utility classes |
 | One-off value | Arbitrary syntax `w-[340px]` | Zero config cost; fine for one-off values |
 | Repeated one-off value (>3 times) | Add to `@theme` | Converts arbitrary to token; enforces consistency |
+| Plugin (v3) | `plugins: [require('@tailwindcss/forms')]` | Third-party style integration |
 
-## Pattern
+## Pattern — Custom Utilities and Variants
 
 ```css
 @import "tailwindcss";
@@ -52,7 +53,7 @@ tldr: "Use when adding project-specific utilities, custom variants, animations, 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 ```
 
-## Sharing Theme Across a Monorepo
+## Pattern — Sharing Theme Across Projects (Monorepo)
 
 ```css
 /* packages/brand/theme.css */
@@ -61,7 +62,6 @@ tldr: "Use when adding project-specific utilities, custom variants, animations, 
   --font-display: "Inter", sans-serif;
 }
 ```
-
 ```css
 /* apps/website/styles.css */
 @import "tailwindcss";
@@ -73,7 +73,7 @@ tldr: "Use when adding project-specific utilities, custom variants, animations, 
 }
 ```
 
-## @layer for Non-Utility Custom CSS
+## @layer in v4 (for non-utility custom CSS)
 
 ```css
 /* Base styles — unscoped element styles */
@@ -93,12 +93,11 @@ tldr: "Use when adding project-specific utilities, custom variants, animations, 
 
 ## Common Mistakes
 
-- **Wrong**: Writing `@layer utilities` for custom utilities in v4. **Right**: Use `@utility` directive — it integrates properly with variants. `@layer utilities` still works but is the v3 pattern.
-- **Wrong**: Putting animation `@keyframes` outside `@theme`. **Right**: Keyframes inside `@theme` are co-located with the token that uses them and generate `animate-` utilities.
-- **Wrong**: Sharing themes via JavaScript object spreading. **Right**: CSS `@import` works across any stack; JS sharing requires a JS build chain.
+- **Writing `@layer utilities` for custom utilities in v4** — use `@utility` directive; `@layer utilities` still works but `@utility` integrates properly with variants
+- **Putting animation `@keyframes` outside `@theme` and expecting `animate-` utilities** — keyframes inside `@theme` are co-located with the token that uses them
+- **Creating shared themes via JavaScript object spreading instead of CSS `@import`** — the CSS approach works across any stack; JS sharing requires a JS build chain
 
 ## See Also
 
-- [v4 Configuration](v4-configuration.md)
 - [Component Patterns](component-patterns.md)
 - Reference: https://tailwindcss.com/docs/adding-custom-styles

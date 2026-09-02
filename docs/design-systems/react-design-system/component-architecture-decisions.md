@@ -7,7 +7,7 @@ tldr: "Use flat props for simple single-purpose UI. Use compound components when
 
 ## When to Use
 
-> Use flat props for simple single-purpose UI. Use compound components when the caller needs to place named slots (header/body/footer) in their markup. Use headless (Radix primitive) when full styling freedom across themes is required.
+> When starting a new component or evaluating how to split an existing one. These decisions affect composability, API surface, and long-term maintainability.
 
 ## Decision
 
@@ -51,16 +51,16 @@ Card.Body = function CardBody({ children }: { children: React.ReactNode }) {
 
 ## Common Mistakes
 
-- **Wrong**: Building a compound component when flat props would suffice → **Right**: Add compound pattern only when the caller's layout genuinely needs named slots
-- **Wrong**: Making everything controlled → **Right**: Use uncontrolled with `defaultValue` for trivial toggle/open state
-- **Wrong**: Mixing headless + styled concerns in one component → **Right**: Separate them so the component is reusable across themes
-- **Wrong**: Using render props where compound components now suffice → **Right**: Compound components with Context are the modern equivalent
-- **Wrong**: Choosing composition depth by internal complexity → **Right**: The complexity of the caller's layout needs drives compound vs flat
+- Building a compound component when flat props would suffice → adds boilerplate with no flexibility gain
+- Making everything controlled → forces callers to manage trivial state (open/closed toggles)
+- Mixing headless + styled concerns in one component → limits reuse across themes; separate them
+- Using render props where compound components now suffice → render props are a React 2018 pattern; compound components with Context are the modern equivalent
+- Choosing composition depth by component complexity alone → complexity of the *caller's* layout needs drives compound vs flat, not internal complexity
 
 ## See Also
 
 - [Props Patterns](props-patterns.md)
+- Reference: [shadcn/ui Button](https://ui.shadcn.com/docs/components/base/button)
+- Reference: [shadcn/ui Card](https://ui.shadcn.com/docs/components/base/card)
 - Reference: [Radix UI Primitives](https://www.radix-ui.com/primitives/docs/overview/introduction)
 - Reference: [Compound Pattern — patterns.dev](https://www.patterns.dev/react/compound-pattern/)
-- Reference: [shadcn/ui Button](https://ui.shadcn.com/docs/components/button)
-- Reference: [shadcn/ui Card](https://ui.shadcn.com/docs/components/card)

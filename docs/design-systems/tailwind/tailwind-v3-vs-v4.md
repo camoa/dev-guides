@@ -7,7 +7,7 @@ tldr: "Use v4 for new projects targeting modern browsers. Use v3 when you need l
 
 ## When to Use
 
-> Use v4 for new projects targeting modern browsers. Use v3 when you need legacy browser support or have an existing stable v3 project.
+> Every new project decision about which Tailwind version to target. Existing v3 projects considering upgrade.
 
 ## Decision
 
@@ -45,7 +45,7 @@ module.exports = {
 };
 ```
 
-## v3 → v4 Key Changes
+## v3 → v4 Key Changes at a Glance
 
 | Aspect | v3 | v4 |
 |--------|----|----|
@@ -63,9 +63,9 @@ module.exports = {
 
 ## Common Mistakes
 
-- **Wrong**: Starting v4 without checking browser requirements — Safari 16.4+ rules out some enterprise environments. **Right**: Verify target browser matrix before choosing v4.
-- **Wrong**: Running the v4 upgrade tool and committing without reviewing the diff — utilities are renamed (shadow-sm → shadow-xs, etc.). **Right**: Audit each renamed utility after `npx @tailwindcss/upgrade`.
-- **Wrong**: Mixing v3 `@tailwind` directives with v4's `@import "tailwindcss"`. **Right**: Pick one; they are not interchangeable.
+- **Starting v4 without checking browser requirements** — Safari 16.4+ requirement rules out some enterprise environments
+- **Running the v4 upgrade tool on v3 code and committing without reviewing the diff** — automated, but audit each renamed utility (shadow-sm → shadow-xs, etc.)
+- **Mixing v3 `@tailwind` directives with v4's `@import "tailwindcss"`** — pick one; they are not interchangeable
 
 ## See Also
 

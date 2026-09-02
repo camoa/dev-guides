@@ -9,39 +9,41 @@ tldr: "Reference before code review, architecture decisions, or when evaluating 
 
 > Reference before code review, architecture decisions, or when evaluating whether a Tailwind implementation is idiomatic.
 
-## Core Philosophy
+## Core Philosophy: Utility-First Means Utilities First
 
-Utility-first means utilities are the default, and abstractions are earned through genuine reuse. Write utilities in markup until a real pattern emerges across multiple files.
+Utility-first doesn't mean "utilities only" — it means utilities are the default, and abstractions are earned through genuine reuse. The wrong instinct is to immediately reach for `@apply` or component classes. The right instinct is to write utilities in markup until a real pattern emerges across multiple files.
 
 ## Development Standards
 
 | Practice | Do | Don't |
-|----------|----|----|
-| Class organization | Layout → sizing → spacing → typography → color → effects → state | Random order |
-| Token usage | All colors/sizes from `@theme` tokens | Raw hex values in reusable components |
+|----------|----|-------|
+| Class organization | Follow order: layout → sizing → spacing → typography → color → effects → state | Random order (maintenance nightmare) |
+| Token usage | All colors/sizes from `@theme` tokens | Raw hex values (`bg-[#4f46e5]`) in reusable components |
 | Responsive | Mobile-first with `sm:`, `md:` prefixes | Desktop-first with `max-*` as primary |
-| Focus styles | `focus-visible:` for keyboard rings | `focus:` or bare `outline-none` |
+| Focus styles | `focus-visible:` for keyboard rings | `focus:` (shows on mouse clicks) or `outline-none` alone |
 | Dynamic values | Static class lookup maps | String interpolation (`bg-${color}-500`) |
 
-## Anti-Patterns
+## Anti-Patterns with WHY
 
-1. **Recreating Bootstrap with @apply** — `@apply` compiles utilities back into CSS. When a color changes, you update the token AND hunt down every `@apply` reference. Use framework components instead.
+1. **Recreating Bootstrap with @apply** — `@apply` compiles utilities back into CSS, destroying the single-source-of-truth benefit. You now maintain class names AND utilities. When a color changes, you change the token AND hunt down every `@apply` reference.
 
-2. **Fighting the spacing scale** — Using `p-[13px]` consistently signals a mismatch between design and the token system. Fix the token, not the utility.
+2. **Fighting the spacing scale** — Tailwind's 4px scale (`p-1`=4px, `p-4`=16px, `p-8`=32px) is intentional. Using arbitrary values (`p-[13px]`) constantly signals a mismatch between design and the token system. Fix the token system, not the utilities.
 
-3. **Inconsistent color references** — Mixing `bg-blue-500`, `bg-[#3b82f6]`, and `bg-primary` for the same color. Pick the token and use it everywhere.
+3. **Inconsistent color references** — mixing `bg-blue-500`, `bg-[#3b82f6]`, and `bg-primary` for the same color across a project. Pick one: use the token everywhere. Inconsistency means three places to update when the brand color changes.
 
-4. **Ignoring the extraction signal** — Copy-pasting 8+ utility classes across files more than twice = create a framework component. The markup IS the component contract.
+4. **Ignoring the component extraction signal** — if you copy-paste the same 8 utility classes more than twice across different files, that's your signal to create a framework component. The markup IS the component contract; don't extract to CSS.
 
-5. **Arbitrary values for design system values** — `w-[340px]` used consistently means `340px` belongs in `@theme`. Arbitrary values are for truly one-off cases.
+5. **Arbitrary values for design system values** — `w-[340px]` used consistently means `340px` belongs in `@theme`. Arbitrary values are for truly one-off values that will never repeat.
 
-6. **Overloading @layer components** — 20+ classes in `@layer components` means you've rebuilt Bootstrap. Step back; these should be framework components or inline utilities.
+6. **Overloading @layer components** — if you find yourself with 20+ classes in `@layer components`, you've rebuilt Bootstrap. Step back: these should be framework components (React/Vue/Twig/etc.) or they should be inline utilities.
 
 ## Security Standards
 
-- **Never build Tailwind class names from user input** — `bg-${userColorPreference}-500` creates a surface where users can influence what CSS is generated or cached.
-- **Sanitize class attributes** — if user-provided data renders as CSS class attributes in HTML, sanitize it; non-existent class names can be used for CSS injection.
-- **Validate token values from APIs or CMS** — malformed oklch values won't cause XSS but may break rendering.
+Tailwind itself has no server-side rendering or XSS vectors, but the surrounding implementation does:
+
+- **Never build Tailwind class names from user input** — `bg-${userColorPreference}-500` used with Tailwind's safelist creates an attack surface where users can influence what CSS is generated or cached
+- **Be careful with class injection** — if user-provided data is rendered as CSS class attributes in HTML, sanitize it; even non-existent class names can be used for CSS injection in frameworks that evaluate arbitrary selectors
+- **Token values from untrusted sources** — if design tokens are loaded from an API or CMS, validate color values before injecting into `@theme`; malformed oklch values won't cause XSS but may break rendering
 
 ## Accessibility Standards
 
@@ -55,20 +57,19 @@ These are non-negotiable minimums — not optional:
 
 ## Performance Standards
 
-- Avoid safelisting entire color scales when you only need 3 shades — `@source inline` generates CSS at build time.
-- Tailwind's output is already tree-shaken; the developer cost is class-name verbosity, not runtime performance.
-- `@container` adds no JavaScript; it's pure CSS.
-- Prefer `transition-colors duration-200` over JS-driven class toggling for simple state changes.
+- **Avoid N+1 class generation** — safelisting (`@source inline`) generates CSS at build time; don't safelist entire color scales when you only need 3 shades
+- **The real performance cost is CSS size** — Tailwind's output is already tree-shaken; the developer cost is class-name verbosity, not runtime performance
+- **Container queries are lightweight** — `@container` adds no JavaScript; it's pure CSS. Use freely.
+- **Prefer CSS transitions over JavaScript animations** — `transition-colors duration-200` is faster than JS-driven class toggling for simple state changes
 
 ## Common Mistakes
 
-- **Wrong**: Using Tailwind like a utility-class version of Bootstrap — the mental model is wrong; utilities are composable primitives. **Right**: Write markup-first, extract only when duplication is proven.
-- **Wrong**: Starting with component extraction before seeing real duplication — YAGNI applies.
-- **Wrong**: Defining `--color-brand-150` in `@theme` but never using `bg-brand-150`. **Right**: Over-configured tokens add dead weight.
+- **Using Tailwind like a utility-class version of Bootstrap** — the mental model is wrong; utilities are composable primitives, not a component library
+- **Starting with component extraction before seeing real duplication** — YAGNI applies; inline utilities until duplication is proven
+- **Over-configuring `@theme` with values that never generate utilities** — if you define `--color-brand-150` but never use `bg-brand-150`, you've added dead tokens
 
 ## See Also
 
 - [Accessibility](accessibility.md)
-- [Performance Optimization](performance-optimization.md)
-- [@apply Guidance](apply-guidance.md)
-- Reference: https://www.faraazcodes.com/blog/tailwind-2025-best-practices
+- [Performance & Optimization](performance-optimization.md)
+- Reference: https://www.wisp.blog/blog/best-practices-for-using-tailwind-css-in-large-projects

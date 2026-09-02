@@ -7,7 +7,7 @@ tldr: "Use when connecting a design tool (Figma) or token management system to T
 
 ## When to Use
 
-> Use when connecting a design tool (Figma) or token management system to Tailwind configuration — keeping design and implementation in sync.
+> Connecting a design tool (Figma) or token management system to Tailwind configuration — maintaining consistency between design and implementation.
 
 ## Decision
 
@@ -22,7 +22,7 @@ tldr: "Use when connecting a design tool (Figma) or token management system to T
 ## Pattern — Style Dictionary Integration
 
 ```json
-// tokens/colors.json
+// tokens/colors.json (Figma export or hand-authored)
 {
   "color": {
     "brand": {
@@ -32,7 +32,6 @@ tldr: "Use when connecting a design tool (Figma) or token management system to T
   }
 }
 ```
-
 ```js
 // style-dictionary.config.js
 module.exports = {
@@ -47,13 +46,20 @@ module.exports = {
   },
 };
 ```
-
+```css
+/* Generated _tokens.css — import into your Tailwind CSS file */
+:root {
+  --color-brand-500: oklch(0.65 0.18 260);
+  --color-brand-600: oklch(0.55 0.20 260);
+}
+```
 ```css
 /* styles.css — reference generated tokens inside @theme */
 @import "tailwindcss";
 @import "./_tokens.css";
 
 @theme inline {
+  /* Alias CSS vars as Tailwind theme tokens */
   --color-brand-500: var(--color-brand-500);
 }
 ```
@@ -61,25 +67,25 @@ module.exports = {
 ## Naming Conventions for Cross-Tool Consistency
 
 | Design tool naming | Tailwind token naming | Generated utility |
-|--------------------|-----------------------|-------------------|
+|---------------------|-------------------------|---------------------|
 | `color/brand/500` | `--color-brand-500` | `bg-brand-500` |
-| `spacing/4` | `--spacing-4` | `p-4`, `m-4`, `gap-4` |
+| `spacing/4` | `--spacing-4` (or default scale) | `p-4`, `m-4`, `gap-4` |
 | `radius/md` | `--radius-md` | `rounded-md` |
 | `shadow/card` | `--shadow-card` | `shadow-card` |
 | `font/display` | `--font-display` | `font-display` |
 
-Use Tailwind's namespace pattern in your design tool. Tokens named with `/` separators in Figma map cleanly to `--namespace-*` patterns with forward slashes converted to hyphens.
+**Rule:** Use Tailwind's namespace pattern in your design tool. Tokens named with `/` separators in Figma map cleanly to `--namespace-*` patterns with forward slashes converted to hyphens.
 
 ## Common Mistakes
 
-- **Wrong**: Naming tokens by component (`--button-background`) instead of role (`--color-primary`). **Right**: Component-named tokens don't reuse across components; semantic/role tokens do.
-- **Wrong**: Hand-translating hex values without an automated pipeline. **Right**: Drift starts immediately; automate the sync.
-- **Wrong**: Not locking token names to a versioned contract. **Right**: A designer renaming `brand-blue` to `cobalt` in Figma breaks all downstream consumers without a versioning strategy.
+- **Naming tokens by component (`--button-background`) instead of role (`--color-primary`)** — component-named tokens don't reuse across components; semantic/role tokens do
+- **Skipping a token management pipeline and hand-translating hex values** — drift starts immediately; automate the sync
+- **Not locking token names to a versioned contract** — a designer renaming `brand-blue` to `cobalt` in Figma breaks all downstream consumers without a versioning strategy
 
 ## See Also
 
-- [Design Token Mapping](design-token-mapping.md)
-- [Performance Optimization](performance-optimization.md)
+- [Performance & Optimization](performance-optimization.md)
+- [Component Patterns](component-patterns.md)
 - Design System Recognition Guide (separate guide — identify tokens first)
 - Reference: https://styledictionary.com/
 - Reference: https://www.figma.com/community/plugin/1513618945140968492
