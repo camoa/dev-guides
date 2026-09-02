@@ -8,34 +8,23 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Apply this permission matrix when setting up roles for content editors and site builders.
+> When configuring roles and permissions for Plus Suite.
 
-## Decision
-
-| Role | Permissions |
-|------|------------|
-| Anonymous | None |
-| Authenticated | None (or `use toolbar plus edit mode` for public editing) |
-| Content Editor | Edit mode + inline editing + content permissions |
-| Site Builder | All editor permissions + promote blocks + configure LB+ |
-| Administrator | All permissions |
-
-## Pattern
-
-**Permission matrix:**
+## Permission Matrix
 
 | Permission | Module | Purpose | Typical Role |
-|------------|--------|---------|--------------|
+|---|---|---|---|
 | `use toolbar plus edit mode` | navigation_plus | Access Edit Mode toggle | Content editor |
 | `configure toolbar plus modes` | navigation_plus | Enable/disable modes per bundle | Site admin |
 | `administer Navigation + configuration` | navigation_plus | Global Plus Suite settings | Site admin |
-| `access inline editing` | edit_plus | Use the Change tool | Content editor |
-| `administer layout builder + configuration` | lb_plus | LB+ settings (promoted blocks) | Site admin |
+| `access inline editing` | edit_plus | Use the Change tool for inline editing | Content editor |
+| `administer layout builder + configuration` | lb_plus | LB+ settings (promoted blocks, etc.) | Site admin |
 | `promote layout builder + blocks` | lb_plus | Configure promoted blocks | Site builder |
 | Standard Layout Builder permissions | core | Create and administer LB | Content editor |
 | Standard media permissions | core | Upload and manage media | Content editor |
 
-**Minimum permissions for content editors:**
+## Minimum Permissions for Content Editors
+
 ```
 - use toolbar plus edit mode
 - access inline editing
@@ -44,10 +33,20 @@ drupal_version: "11.x"
 - use media library
 ```
 
+## Decision: Permission Assignment
+
+| Role | Permissions |
+|---|---|
+| Anonymous | None |
+| Authenticated | None (or `use toolbar plus edit mode` for public editing) |
+| Content Editor | Edit mode + inline editing + content permissions |
+| Site Builder | All editor permissions + promote blocks + configure LB+ |
+| Administrator | All permissions |
+
 ## Common Mistakes
 
-- **Wrong**: Granting `administer Navigation + configuration` to content editors → **Right**: This allows changing global UI colors and settings; reserve for site admin
-- **Wrong**: Granting `use toolbar plus edit mode` without `access inline editing` → **Right**: Users can enter Edit Mode but can't change anything; grant both together
+- **Do not grant `administer Navigation + configuration` to content editors** — they can change global UI colors and settings.
+- **Do not forget `access inline editing` when granting Edit Mode** — users can enter Edit Mode but can't change anything.
 
 ## See Also
 

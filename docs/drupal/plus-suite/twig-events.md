@@ -1,6 +1,6 @@
 ---
 description: Twig Events system — TwigRenderTemplateEvent, entity wrapping with editing attributes, and creating custom template subscribers
-tldr: "Use Twig Events to intercept template rendering without overriding templates. Be aware it fires on every template render — use sparingly."
+tldr: "Subscribe to TwigRenderTemplateEvent to intercept and modify template output during Twig rendering without overriding templates; it fires on every template render so keep subscribers fast."
 drupal_version: "11.x"
 ---
 
@@ -8,21 +8,24 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use Twig Events to intercept template rendering without overriding templates. Be aware it fires on every template render — use sparingly.
+> When you need to understand how Plus Suite wraps entities for editing during template rendering, or when you need to intercept template rendering.
+
+## How Twig Events Works
+
+The `twig_events` module provides a single event: `TwigRenderTemplateEvent`, dispatched during Twig template rendering. This allows modules to intercept and modify template output without overriding templates.
 
 ## Decision
 
-| Use Case | Approach |
-|----------|----------|
-| Wrap entities with editing attributes | Subscribe to `TwigRenderTemplateEvent` (navigation_plus does this) |
-| Modify template output without override | Subscribe to `TwigRenderTemplateEvent` |
-| Template-specific changes | Override the template directly |
+| Situation | Choose | Why |
+|-----------|--------|-----|
+| Need to intercept or modify template output without overriding the template | Subscribe to `TwigRenderTemplateEvent` | The event is dispatched during Twig template rendering, so modules can act without template overrides |
 
-## Pattern
+## Pattern: Entity Wrapping
 
-**Entity wrapping** — Navigation+ uses `TwigRenderTemplateEvent` via `EntityUiWrapper` to add:
+Navigation+ uses `TwigRenderTemplateEvent` via the `EntityUiWrapper` event subscriber to wrap entities with editing attributes:
 
 ```html
+<!-- Wrapper added by EntityUiWrapper -->
 <div data-navigation-plus-entity-wrapper
      data-navigation-plus-view-mode="full"
      data-main-entity="true"
@@ -31,9 +34,14 @@ drupal_version: "11.x"
 </div>
 ```
 
-Purpose: JS targeting for inline editing, view mode tracking, main entity detection, Layout Builder drop zone integration.
+## Purpose of Wrapping
 
-**Custom template subscriber:**
+1. **JS targeting**: JavaScript can find the entity container for inline editing
+2. **View mode tracking**: `data-navigation-plus-view-mode` tells Edit+ which view mode to load forms for
+3. **Main entity detection**: `data-main-entity` distinguishes the primary entity from embedded ones
+4. **Layout Builder integration**: `layout-builder-entity-wrapper` class used by LB+ for drop zones
+
+## Pattern: Creating Custom Template Subscribers
 
 ```php
 namespace Drupal\my_module\EventSubscriber;
@@ -48,16 +56,17 @@ class MyTemplateSubscriber implements EventSubscriberInterface {
   }
 
   public function onTwigRenderTemplate(TwigRenderTemplateEvent $event): void {
-    $template = $event->getTemplate();
-    // Modify template variables or output
+    $template_file = $event->getTemplateFile();
+    // Read or replace with setTemplateFile(), getVariables()/setVariables(),
+    // getOutput()/setOutput()
   }
 }
 ```
 
 ## Common Mistakes
 
-- **Wrong**: Using Twig Events for heavy processing → **Right**: It fires on every template render including cached renders; keep subscribers fast
-- **Wrong**: Assuming template rendering order → **Right**: Events fire as templates are encountered; do not depend on order
+- **Do not use Twig Events for heavy processing** — it fires on every template render.
+- **Do not assume template rendering order** — events fire as templates are encountered.
 
 ## See Also
 

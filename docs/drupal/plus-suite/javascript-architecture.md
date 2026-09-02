@@ -8,27 +8,14 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Reference this when extending Plus Suite with custom JS, debugging client-side issues, or understanding AJAX command flow.
+> When you need to understand Plus Suite's JavaScript modules, extend them, or debug client-side issues.
 
-## Decision
+## Pattern: Module System
 
-| Component | Module | Purpose |
-|-----------|--------|---------|
-| Edit Mode App | navigation_plus | Core editing orchestration |
-| Drop Zones | navigation_plus | Region and section drop zones |
-| Hotkeys | navigation_plus | Keyboard shortcut handling |
-| Sidebar Manager | navigation_plus | Sidebar panel management |
-| Place Block | lb_plus | Drag blocks from sidebar |
-| Move Block | lb_plus | Drag existing blocks |
-| Nested Layout | lb_plus | Enter/exit nested editing |
-| Inline Editor | edit_plus | CKEditor 5 text field inline editing |
-| File Drag | navigation_plus | Desktop file drag-and-drop |
-
-## Pattern
-
-**Module system** — ES module patterns with Drupal behaviors:
+Plus Suite uses ES module patterns with Drupal behaviors:
 
 ```javascript
+// Example: tool-plugin.js (module type in libraries.yml)
 ((Drupal) => {
   Drupal.behaviors.myToolPlugin = {
     attach(context, settings) {
@@ -38,15 +25,44 @@ drupal_version: "11.x"
 })(Drupal);
 ```
 
-**AJAX commands:**
+## Key JavaScript Components
 
-| Command | Module | Purpose |
-|---------|--------|---------|
-| `UpdateMarkup` | edit_plus | Replace rendered field after inline edit |
-| `ShowFieldWithErrors` | edit_plus | Highlight validation errors |
-| `ReplaceCommand` (modified) | core | Section replacement in nested contexts |
+| Component | Module | File | Purpose |
+|---|---|---|---|
+| Edit Mode App | navigation_plus | `edit-mode-app.bundle.js` | Core editing orchestration |
+| Drop Zones | navigation_plus | `dropzones/` | Region and section drop zones |
+| Context Menu | navigation_plus | `context-menu/` | Right-click actions |
+| Tool Indicators | navigation_plus | `tool-indicators/` | Hover action buttons |
+| Hotkeys | navigation_plus | `hotkeys.js` | Keyboard shortcut handling |
+| Sidebar Manager | navigation_plus | `sidebar/sidebar-manager.js` | Sidebar panel management |
+| Place Block | lb_plus | `draggable-new-blocks.js` | Drag blocks from sidebar |
+| Move Block | lb_plus | `draggable-existing-blocks.js` | Drag existing blocks |
+| Nested Layout | lb_plus | `edit-layout-block.js` | Enter/exit nested editing |
+| Content Preview | lb_plus | `block-preview.js` | Toggle block content preview |
+| Layout Outlines | lb_plus | `layout-outlines.js` | Toggle layout grid outlines |
+| Duplicate Block | lb_plus | `duplicate-tool-plugin.js` | Block cloning |
+| Inline Editor | edit_plus | CKEditor 5 integration | Text field inline editing |
+| File Drag | navigation_plus | `file-drag.js` | Desktop file drag-and-drop |
 
-**`drupalSettings` from LB+:**
+## Decision
+
+| Situation | Choose | Why |
+|-----------|--------|-----|
+| Need core client-side editing orchestration | Edit Mode App (`edit-mode-app.bundle.js`, navigation_plus) | It is the module that drives editing behavior |
+| Need to replace a rendered element after a change | Dispatch `UpdateElement` | It calls `updateElement()`, wired through `EditPlusFormTrait::updatePage()` |
+
+## Pattern: AJAX Commands
+
+| Command | Module | JS Method | Purpose |
+|---|---|---|---|
+| `UpdateElement` | navigation_plus | `updateElement()` | Replace a rendered element, used by edit_plus via `EditPlusFormTrait::updatePage()` |
+| `ShowFieldWithErrors` | edit_plus | `ShowFieldWithErrors()` | Highlight validation errors |
+| Core `ReplaceCommand` | core | Modified by NestedLayoutResponseSubscriber | Section replacement |
+| Core `CloseDialogCommand` | core | Modified for nested contexts | Dialog handling |
+
+## Pattern: drupalSettings
+
+LB+ passes configuration via `drupalSettings`:
 
 ```javascript
 drupalSettings['LB+'] = {
@@ -58,8 +74,8 @@ drupalSettings['LB+'] = {
 
 ## Common Mistakes
 
-- **Wrong**: Using jQuery for new Plus Suite JS → **Right**: Use vanilla JS with Drupal behaviors
-- **Wrong**: Modifying `drupalSettings['LB+']` directly in JS → **Right**: Pass settings via PHP render arrays with `#attached`
+- **Do not use jQuery for new Plus Suite JS** — use vanilla JS with Drupal behaviors.
+- **Do not modify `drupalSettings['LB+']` directly** — use PHP render arrays with `#attached`.
 
 ## See Also
 
