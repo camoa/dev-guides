@@ -55,9 +55,9 @@ The plugin owns the generic mechanism — when the implement phase runs, the tes
 
 **Every tier above is inside the TDD loop, including the subprocess one; browser E2E and visual regression are not.** The line is not whether a process is spawned, it is whether the test was written before the code and run red. The entry-point and subprocess tiers are both written from the contract the design fixed, so they constrain it. A Playwright suite or a snapshot baseline, where a project has one, runs against something already built, cannot drive a design decision, and does not count toward the test-first requirement here.
 
-**A golden file is a specification only if it was written first.** Author the expected file from the contract and watch the test fail against it, and the golden constrains the code. Generate it with `-update` from the program's own output and it can never contradict the code — it ratifies whatever was produced, including a bug. This is why the oracle table halts on a golden modification rather than flagging it: the halt is not about carelessness, it is that a regenerated golden has stopped being a test.
+**A golden file is a specification only if it was written first** (see `development/tdd-spec-driven/what-a-failing-test-proves`)**.** Author the expected file from the contract and watch the test fail against it, and the golden constrains the code. Generate it with `-update` from the program's own output and it can never contradict the code — it ratifies whatever was produced, including a bug. This is why the oracle table halts on a golden modification rather than flagging it: the halt is not about carelessness, it is that a regenerated golden has stopped being a test.
 
-**Adding a test is not automatically progress.** The loop's requirement for a change is one specification per behaviour it creates, at the smallest tier that answers the question, each seen to fail first. Past that, more tests make the change harder to review without specifying anything new. The full set of excess cases belongs to `development/tdd-spec-driven` and is cited, not restated. The local form worth naming: a table that grows rows which differ only in input formatting, all exercising the same branch, reads as thoroughness and is duplication — a case earns its row by reaching a branch or a boundary no other row reaches.
+**Adding a test is not automatically progress.** The loop's requirement for a change is one specification per behaviour it creates, at the smallest tier that answers the question, each seen to fail first *because the behaviour it names did not exist yet*. Past that, more tests make the change harder to review without specifying anything new. The full set of excess cases belongs to `development/tdd-spec-driven` and is cited, not restated. The local form worth naming: a table that grows rows which differ only in input formatting, all exercising the same branch, reads as thoroughness and is duplication — a case earns its row by reaching a branch or a boundary no other row reaches.
 
 **The toolchain runs the standards; there is no plugin to defer to here.** Unlike the PHP CLI recipe, this one does not hand linting to the `code-quality-tools` plugin — that plugin detects Drupal and Next.js projects and lints PHP and JavaScript extensions, and has no Go arm. It does not need one: `gofmt`, `go vet`, `go test -race`, and `go mod tidy -diff` ship with the toolchain and run from the module root with no configuration, and the optional layer (`golangci-lint`, which as of v2 embeds the full staticcheck rule set) is a single binary with a committed config. Run them here as you write, and again as gates in review.
 
@@ -143,7 +143,8 @@ references origin (never duplicated):
        the architecture recipe — the boundary, the entry point, the error surface
 
 emits (to the caller; the recipe writes no task record):
-       tests:      the test(s) at the chosen tier, seen to fail then pass, table-shaped
+       tests:      the test(s) at the chosen tier, seen to fail on an absent behaviour
+                   then pass, table-shaped
                    by default, parallel where the state allows
        code:       the minimum production code that turns them green, design boundary held
        ordering:   the map-range and unstable-sort sweep result + the tests that pin order
