@@ -82,7 +82,7 @@ guide-meta:
 | I need to... | Guide | Summary |
 |-------------|-------|---------|
 | Understand what Search API does and its architecture | [Overview](overview.md) | Use Search API when you need flexible, backend-agnostic search for Drupal. Always use Search API over core Search — uninstall the core `search` module, it performs redundant indexing. |
-| Choose a search backend (DB, Solr, Elasticsearch, Typesense, Meilisearch) | [Backend Comparison](backend-comparison.md) | Use this when choosing which search engine to use with Search API. Default to Solr for production. |
+| Choose a search backend (DB, Solr, Elasticsearch, Typesense, Meilisearch) | [Backend Comparison](backend-comparison.md) | Use this when choosing which search engine to use with Search API. Default to Solr for production; DB backend for dev/small sites; Elasticsearch has no stable release. |
 | Install Search API and create a server + index | [Installation & Setup](installation-setup.md) | Use this when installing Search API and creating your first server and index. |
 | Configure a Search API server | [Server Configuration](server-configuration.md) | Use this when creating or configuring a Search API server entity. |
 | Configure a Search API index | [Index Configuration](index-configuration.md) | Use this when creating or configuring a Search API index — the central entity defining what gets indexed, how it's processed, and where it's stored. |
@@ -100,9 +100,9 @@ guide-meta:
 | Configure Solr (configsets, Solr Cloud, hosting) | [Solr Best Practices](solr-best-practices.md) | Use this when configuring Apache Solr as your Search API backend. |
 | Build decoupled/headless search (JSON:API, Next.js) | [Decoupled Search](decoupled-search.md) | Use this when building headless/decoupled frontends (Next.js, React, etc.) that need search functionality. jsonapi_search_api is the most-used option but has never had a stable release. |
 | Secure search results (content access, permissions) | [Content Access & Security](content-access-security.md) | Use this when you need to ensure search results respect content access permissions. Search API does NOT restrict access by default. |
-| Use Search API with Facets | [Facets Integration](facets-integration.md) | Use this when adding faceted search navigation to your Search API-powered search page. |
-| Subscribe to Search API events | [Events System](events-system.md) | Use this when hooking into Search API's query or indexing pipeline without creating full custom processors. |
-| Create custom processors, backends, or datasources | [Custom Plugin Development](custom-plugin-development.md) | Use this when you need a custom processor, backend, datasource, or other Search API plugin. |
+| Use Search API with Facets | [Facets Integration](facets-integration.md) | Use this when adding faceted search navigation to your Search API-powered search page. Facets 3.x only works with Search API, not core Views. |
+| Subscribe to Search API events | [Events System](events-system.md) | Use this when hooking into Search API's query or indexing pipeline. Search API 1.x uses Symfony events, not hooks — all 18 alter hooks in search_api.api.php are deprecated and removed in 2.0.0. |
+| Create custom processors, backends, or datasources | [Custom Plugin Development](custom-plugin-development.md) | Use this when you need a custom processor, backend, datasource, or other Search API plugin. Extend ProcessorPluginBase, which supplies default implementations for every ProcessorInterface method. |
 | Override search templates in my theme | [Theming & Templates](theming-templates.md) | Use this when customizing the display of search results or search-related elements. |
 | Pick the right module stack for my site size | [Recommended Module Stacks](recommended-module-stacks.md) | Use this when planning which modules to install for your site's search functionality. |
 | Debug common search problems | [Common Mistakes](common-mistakes.md) | Use this when debugging search issues or reviewing a Search API implementation. |

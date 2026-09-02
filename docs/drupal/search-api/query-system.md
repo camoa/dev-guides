@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when building Search API queries programmatically or understanding how the query system works.
+> When building Search API queries programmatically or understanding how the query system works.
 
 ## Decision: Query Architecture
 
@@ -19,25 +19,19 @@ drupal_version: "11.x"
 | `ResultSet` | Query results — items, count, warnings |
 | `Result/Item` | Individual result item with fields and values |
 
-## Decision
-
-| Parse Mode | ID | Behavior |
-|---|---|---|
-| **Terms** | `terms` | Multiple words, supports quotes and negation: `drupal "search api" -views` |
-| **Phrase** | `phrase` | Entire input as exact phrase |
-| **Direct** | `direct` | Pass directly to backend (backend-specific syntax) |
-| **Complex** | `complex` | AND/OR/NOT operators: `drupal AND (search OR find)` |
-
-## Pattern
+## Pattern: Building Queries Programmatically
 
 ```php
 $index = Index::load('my_index');
 $query = $index->query();
 
-// Keywords and parse mode
+// Set search keywords
 $query->keys('drupal search api');
 
-// Conditions
+// Set parse mode
+$query->setParseMode(\Drupal::service('plugin.manager.search_api.parse_mode')->createInstance('terms'));
+
+// Add conditions
 $query->addCondition('status', TRUE);
 $query->addCondition('type', 'article');
 
@@ -47,8 +41,11 @@ $or_group->addCondition('field_category', 'tutorials');
 $or_group->addCondition('field_category', 'guides');
 $query->addConditionGroup($or_group);
 
-// Sort and paginate
+// Sorting
 $query->sort('search_api_relevance', 'DESC');
+$query->sort('created', 'DESC');
+
+// Pagination
 $query->range(0, 10); // offset, limit
 
 // Execute
@@ -59,12 +56,16 @@ foreach ($results->getResultItems() as $item) {
 }
 ```
 
-**Query tags** — add for conditional processing:
-```php
-$query->addTag('search_api_skip_processor_highlight');
-```
+## Decision: Parse Modes
 
-**Processing levels:**
+| Mode | ID | Behavior | Example Input → Query |
+|---|---|---|---|
+| **Terms** | `terms` | Multiple words, supports quotes and negation | `drupal "search api" -views` |
+| **Phrase** | `phrase` | Entire input as exact phrase | `search api` → "search api" |
+| **Direct** | `direct` | Pass directly to backend | Backend-specific syntax |
+| **Complex** | `complex` | Keywords with AND/OR/NOT operators | `drupal AND (search OR find)` |
+
+## Pattern: Processing Levels
 
 | Level | Constant | Effect |
 |---|---|---|
@@ -72,13 +73,19 @@ $query->addTag('search_api_skip_processor_highlight');
 | Basic | `PROCESSING_BASIC` | Basic processing (no facets, highlighting) |
 | Full | `PROCESSING_FULL` | All processors execute (default) |
 
-## Common Mistakes
+## Pattern: Query Tags
 
-- **Wrong**: Building conditions on Fulltext fields for faceting → **Right**: Use String fields for conditions/facets. Fulltext fields are tokenized.
-- **Wrong**: Forgetting to set relevance sort → **Right**: `$query->sort('search_api_relevance', 'DESC')` must be explicit.
+Add tags to queries for conditional processing:
+```php
+$query->addTag('my_custom_tag');
+
+// In a processor or event subscriber:
+if ($query->hasTag('search_api_skip_processor_highlight')) {
+  // Skip highlighting for this query
+}
+```
 
 ## See Also
 
-- [Views Integration](views-integration.md)
-- [Events System](events-system.md)
-- Reference: `web/modules/contrib/search_api/src/Query/Query.php`
+- [Views Integration](views-integration.md) — Views builds queries automatically
+- [Events System](events-system.md) — hooking into query execution

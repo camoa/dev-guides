@@ -1,5 +1,5 @@
 ---
-description: Scroll-linked animations without JS — progress bars, reveal on scroll, parallax
+description: "Scroll-linked animations without JS — progress bars, reveal on scroll, parallax"
 tldr: "Use scroll-driven animations for scroll-linked effects — progress bars, reveal-on-scroll, parallax — without JavaScript. Use `@supports` for progressive enhancement and always treat effects as decorative."
 ---
 
@@ -7,7 +7,7 @@ tldr: "Use scroll-driven animations for scroll-linked effects — progress bars,
 
 ## When to Use
 
-> Use scroll-driven animations for scroll-linked effects — progress bars, reveal-on-scroll, parallax — without JavaScript. Use `@supports` for progressive enhancement and always treat effects as decorative.
+> For scroll-linked effects — progress bars, reveal-on-scroll, parallax — without JavaScript IntersectionObserver or scroll event listeners. Runs on the compositor thread; no main thread JS cost.
 
 ## Decision
 
@@ -22,7 +22,6 @@ tldr: "Use scroll-driven animations for scroll-linked effects — progress bars,
 ## Pattern
 
 Reading progress bar:
-
 ```css
 @keyframes grow { from { width: 0% } to { width: 100% } }
 
@@ -34,7 +33,6 @@ Reading progress bar:
 ```
 
 Reveal on scroll — element fades in as it enters the viewport:
-
 ```css
 @keyframes reveal {
   from { opacity: 0; translate: 0 2rem; }
@@ -48,16 +46,20 @@ Reveal on scroll — element fades in as it enters the viewport:
 }
 ```
 
-Always wrap in `@supports` — Firefox does not have production support as of early 2026:
-
+Named scroll container (for non-root scrollers):
 ```css
-@supports (animation-timeline: scroll()) {
-  .progress-bar { animation: grow linear; animation-timeline: scroll(root); }
+.scroll-container {
+  overflow-y: auto;
+  scroll-timeline: --my-scroll block;
+}
+
+.sticky-header {
+  animation: shrink linear;
+  animation-timeline: --my-timeline;
 }
 ```
 
 **`animation-timeline` values:**
-
 | Value | Tracks |
 |---|---|
 | `scroll()` | Nearest scrollable ancestor |
@@ -67,17 +69,23 @@ Always wrap in `@supports` — Firefox does not have production support as of ea
 
 **`animation-range` with `view()`:** `entry` = entering scroller edge, `exit` = leaving, `contain` = fully inside, `cover` = any overlap.
 
-**Browser support:** Chrome 115. Firefox behind flag (not production-ready as of early 2026). Safari 26 (2025). Use `@supports` progressive enhancement.
+**Browser support:** Chrome 115. Firefox behind flag (not production-ready as of early 2026). Safari 26 (2025). **Use with `@supports` progressive enhancement** — the effect should be decorative, not essential.
+
+```css
+@supports (animation-timeline: scroll()) {
+  .progress-bar { animation: grow linear; animation-timeline: scroll(root); }
+}
+```
 
 ## Common Mistakes
 
-- **Wrong**: Relying on scroll-driven animations in Firefox without a flag → **Right**: The feature is not enabled by default; always provide a non-animated fallback
-- **Wrong**: Setting `animation-duration` → **Right**: Duration is ignored when `animation-timeline` is a scroll or view timeline; remove it or set it to `auto`
-- **Wrong**: Using scroll animation for content that must be read → **Right**: Always respect `prefers-reduced-motion`; the effect should be decorative, not essential
-- **Wrong**: Treating `animation-range` percentages as scroll-position-relative → **Right**: They are container-relative, not viewport-scroll-position-relative
+- Relying on scroll-driven animations in Firefox without a flag — the feature is not enabled by default; always provide a non-animated fallback
+- Setting `animation-duration` — it is ignored when `animation-timeline` is set to a scroll or view timeline; remove it or set it to `auto`
+- Overusing scroll animation for content that must be read — assistive technologies and users with `prefers-reduced-motion` need accessible fallbacks; always respect this preference
+- Using `animation-range` percentages without understanding they are container-relative, not scroll-position-relative
 
 ## See Also
 
-- [@starting-style & Discrete Transitions](starting-style-transitions.md)
-- [View Transitions](view-transitions.md)
+- [@starting-style Transitions](starting-style-transitions.md) → for animating elements entering the DOM
+- [View Transitions](view-transitions.md) → for animating between page states
 - Reference: [MDN Scroll-driven animations](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scroll-driven_animations)

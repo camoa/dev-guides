@@ -1,5 +1,5 @@
 ---
-description: Mix colors natively with color-mix() — replace Sass lighten(), darken(), mix()
+description: "Mix colors natively with color-mix() — replace Sass lighten(), darken(), mix()"
 tldr: "Use `color-mix()` to mix two colors natively — the direct replacement for Sass `lighten()`, `darken()`, and `mix()`. Always specify `in oklch` for perceptually uniform results; use `in srgb` only when mixing with `transparent`."
 ---
 
@@ -7,14 +7,14 @@ tldr: "Use `color-mix()` to mix two colors natively — the direct replacement f
 
 ## When to Use
 
-> Use `color-mix()` to mix two colors natively — the direct replacement for Sass `lighten()`, `darken()`, and `mix()`. Always specify `in oklch` for perceptually uniform results; use `in srgb` only when mixing with `transparent`.
+> To mix two colors natively — the direct replacement for Sass `lighten()`, `darken()`, and `mix()`. Works with any two colors in any color space.
 
 ## Decision
 
 | If you need... | Use... | Example |
 |---|---|---|
 | Lighter tint of a brand color | Mix with white in `oklch` | `color-mix(in oklch, var(--brand) 70%, white)` |
-| Semi-transparent overlay | Mix with transparent in `srgb` | `color-mix(in srgb, var(--brand) 20%, transparent)` |
+| Semi-transparent overlay | Mix with transparent | `color-mix(in srgb, var(--brand) 20%, transparent)` |
 | Mid-point between two colors | 50% mix | `color-mix(in oklch, red 50%, blue)` |
 | Darkened shade | Mix with black | `color-mix(in oklch, var(--brand) 70%, black)` |
 
@@ -38,20 +38,19 @@ tldr: "Use `color-mix()` to mix two colors natively — the direct replacement f
 }
 ```
 
-The percentage is the proportion of the first color. Omitting it defaults to 50%.
+**Color space matters:** Always use `in oklch` for perceptually uniform mixing. `in srgb` produces muddy mid-tones because it interpolates through grays. `in hsl` has similar perceptual uniformity problems as HSL generally.
 
-**Color space matters:** `in oklch` produces perceptually uniform mixing. `in srgb` produces muddy mid-tones. `in hsl` has similar perceptual uniformity problems as HSL generally.
+The percentage in `color-mix(in oklch, colorA X%, colorB)` is the proportion of color A. Omitting it defaults to 50%.
 
 **Browser support:** Chrome 111, Firefox 113, Safari 16.2. Widely available since May 2023. Safe to use.
 
 ## Common Mistakes
 
-- **Wrong**: Using `in srgb` for tints and shades → **Right**: `in srgb` produces visually muddy results; use `in oklch`
-- **Wrong**: Expecting `color-mix` as a fallback for older browsers → **Right**: There is no graceful degradation; older browsers get no color; test your fallbacks
-- **Wrong**: Mixing with `transparent` using `in oklch` → **Right**: OKLCH transparent has hue artifacts; use `in srgb` specifically for transparent mixing
+- Using `in srgb` for tints/shades — produces visually muddy results; use `in oklch`
+- Expecting `color-mix` to work as a fallback for older browsers — it's not supported in any version before the ones listed; test your fallback
+- Mixing with `transparent` using `in oklch` for overlays — oklch transparent has hue artifacts; use `in srgb` specifically for transparent mixing
 
 ## See Also
 
-- [oklch() / oklab() — Modern Color Spaces](oklch-color.md)
-- [Relative Color Syntax](relative-color.md)
+- ← [oklch() Color Space](oklch-color.md) | [Relative Color Syntax](relative-color.md) →
 - Reference: [MDN color-mix()](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color-mix)

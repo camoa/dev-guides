@@ -8,20 +8,18 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when customizing the display of search results or search-related elements.
+> When customizing the display of search results or search-related elements.
 
-## Decision
-
-Most search result theming is done through Views templates, not Search API templates directly.
+## Decision: Templates
 
 | Template | Purpose |
 |---|---|
 | `search-api-server.html.twig` | Server admin page |
 | `search-api-index.html.twig` | Index admin page |
 
-## Pattern
+Most search result theming is done through Views templates, not Search API templates directly.
 
-**Views templates for search results:**
+## Pattern: Views Templates for Search
 
 | Template | Purpose |
 |---|---|
@@ -30,16 +28,13 @@ Most search result theming is done through Views templates, not Search API templ
 | `views-view-fields--VIEWNAME.html.twig` | Individual result |
 | `views-exposed-form--VIEWNAME.html.twig` | Search form |
 
-**Highlighted excerpts** — when the Highlight processor is enabled:
-- Add "Search: Excerpt" field to the View in Views UI
+## Pattern: Highlighted Excerpts
+
+When the Highlight processor is enabled, access the excerpt in Views:
+- Add "Search: Excerpt" field to the View
 - Or access via `{{ row.search_api_excerpt }}` in row template
-
-## Common Mistakes
-
-- **Wrong**: Looking for Search API-specific result templates → **Right**: Search results render through Views. Override the Views templates for your search view.
 
 ## See Also
 
-- [Views Integration](views-integration.md)
+- [Views Integration](views-integration.md) — Views setup for search
 - [Relevance & Boosting](relevance-boosting.md) — HTML element processing
-- Reference: `web/modules/contrib/search_api/templates/`

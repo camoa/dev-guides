@@ -1,5 +1,5 @@
 ---
-description: Style parents and siblings based on child state — replacing JS class toggling
+description: "Style parents and siblings based on child state — replacing JS class toggling"
 tldr: "Use `:has()` when you need to style a parent based on its children or descendants, or a preceding sibling based on what follows — logic that previously required JavaScript class toggling."
 ---
 
@@ -7,7 +7,7 @@ tldr: "Use `:has()` when you need to style a parent based on its children or des
 
 ## When to Use
 
-> Use `:has()` when you need to style a parent based on its children or descendants, or a preceding sibling based on what follows — logic that previously required JavaScript class toggling.
+> When you need to style a parent based on its children or descendants, or a preceding sibling based on what follows — logic that previously required JavaScript class toggling.
 
 ## Decision
 
@@ -50,13 +50,13 @@ h2:has(+ .callout) {
 
 ## Common Mistakes
 
-- **Wrong**: `body:has(*)` as a broad selector → **Right**: Scope `:has()` tightly — the universal selector inside `:has()` triggers expensive full-tree traversal on every DOM mutation
-- **Wrong**: Nesting `:has()` inside another `:has()` → **Right**: The spec forbids nested `:has()`; restructure the selector
-- **Wrong**: Using `:has()` inside `@supports` for feature detection → **Right**: Use `CSS.supports()` in JavaScript — browser support for `:has()` in `@supports` is unreliable
-- **Wrong**: Assuming `:has(a, b)` requires both → **Right**: Comma-separated arguments are OR logic — matches if either exists
+- Using `:has(*)` with a broad anchor like `body:has(*)` — the universal selector inside `:has()` triggers expensive full-tree traversal on every DOM mutation; scope it tightly
+- Nesting `:has()` inside another `:has()` — invalid, the spec forbids it
+- Expecting `:has()` to work inside `@supports` for feature detection — browser support for `:has()` in `@supports` is unreliable; use JS `CSS.supports()` instead
+- Forgetting comma-separated arguments are OR logic: `:has(a, b)` matches if either exists
 
 ## See Also
 
-- [@scope — Scoped Styles](css-scope.md)
-- [:user-valid / :user-invalid](user-valid-invalid.md)
+- [@scope](css-scope.md) → for scoping styles without affecting specificity broadly
+- [:user-valid / :user-invalid](user-valid-invalid.md) → for form state styling
 - Reference: [MDN :has()](https://developer.mozilla.org/en-US/docs/Web/CSS/:has)

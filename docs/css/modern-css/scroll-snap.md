@@ -1,14 +1,13 @@
 ---
-description: Paged scrolling and carousels with CSS Scroll Snap — mandatory vs proximity, native controls in Chrome 135+
+description: "Paged scrolling and carousels with CSS Scroll Snap — mandatory vs proximity, native controls in Chrome 135+"
 tldr: "Use CSS Scroll Snap when you need paged scrolling, carousel behavior, or snap-to-item navigation without JavaScript. Use `scroll-snap-type: mandatory` for full-slide carousels; use `proximity` for galleries where stopping between items is…"
-drupal_version: "11.x"
 ---
 
 # CSS Scroll Snap
 
 ## When to Use
 
-> Use CSS Scroll Snap when you need paged scrolling, carousel behavior, or snap-to-item navigation without JavaScript. Use `scroll-snap-type: mandatory` for full-slide carousels; use `proximity` for galleries where stopping between items is acceptable. Use JavaScript buttons for prev/next controls — `::scroll-button` is Chromium 135+ only.
+> When you need paged scrolling, carousel-like behavior, or snap-to-item navigation — without JavaScript. CSS Scroll Snap provides the scroll physics; Chrome 135+ adds native carousel controls with `::scroll-button` and `::scroll-marker`.
 
 ## Decision
 
@@ -32,6 +31,7 @@ drupal_version: "11.x"
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   gap: 1rem;
+  /* Hide scrollbar but keep functionality */
   scrollbar-width: none;
 }
 .carousel::-webkit-scrollbar { display: none; }
@@ -58,59 +58,70 @@ drupal_version: "11.x"
   scroll-snap-align: start;
 }
 
-/* Prevent skipping slides on fast swipe */
+/* scroll-snap-stop: always — prevent skipping slides */
 .carousel > .slide {
-  scroll-snap-stop: always;
+  scroll-snap-stop: always; /* User cannot fast-scroll past */
 }
 ```
 
 #### Native Carousel Controls (Chrome 135+)
-
 ```css
+/* Prev/next buttons */
 .carousel {
+  /* Enable marker group positioning */
   scroll-marker-group: after;
 }
 
-.carousel::scroll-button(left) { content: "‹" / "Previous slide"; }
-.carousel::scroll-button(right) { content: "›" / "Next slide"; }
+.carousel::scroll-button(left) {
+  content: "‹" / "Previous slide";
+}
+.carousel::scroll-button(right) {
+  content: "›" / "Next slide";
+}
 
+/* Dot indicators */
 .carousel > .slide::scroll-marker {
   content: '';
   width: 12px;
   height: 12px;
   border-radius: 50%;
   background: oklch(70% 0 0);
+  border: 2px solid transparent;
 }
 
+/* Active dot */
 .carousel > .slide::scroll-marker:target-current {
   background: oklch(50% 0.2 260);
+  border-color: oklch(50% 0.2 260);
 }
 ```
 
 #### Scroll Padding (for fixed headers)
-
 ```css
+/* Account for sticky header height */
 .scroll-container {
-  scroll-padding-top: 80px;
-  scroll-padding-inline: 1rem;
+  scroll-padding-top: 80px;   /* Height of sticky header */
+  scroll-padding-inline: 1rem; /* Horizontal padding */
 }
 ```
 
-`mandatory` always snaps to the nearest snap point. `proximity` only snaps when close to one — use for galleries where stopping between items is OK.
+**`mandatory` vs `proximity`:**
+- `mandatory` — always snaps to nearest snap point, even mid-scroll. Use for carousels, full-page sections.
+- `proximity` — only snaps when close to a snap point. Use for galleries where stopping between items is OK.
 
-**Browser support:** Core scroll-snap: all browsers (Baseline 2021). `::scroll-button`, `::scroll-marker`, `scroll-marker-group`: Chrome 135+ only.
+**Browser support:** Core scroll-snap: all browsers (Baseline 2021). `::scroll-button`, `::scroll-marker`, `scroll-marker-group`: Chrome 135+ only. Use scroll-snap for the snapping behavior (universal) and progressive-enhance with native controls on Chromium.
 
 ## Common Mistakes
 
-- **Wrong**: No `scroll-behavior: smooth` → **Right**: Without it, snapping is instantaneous and jarring
-- **Wrong**: `scroll-snap-type: both mandatory` without care → **Right**: Locks scroll in both axes, can trap users
-- **Wrong**: No `scroll-snap-stop: always` on single-item carousels → **Right**: Fast swipes can skip multiple slides
-- **Wrong**: Using `::scroll-button` expecting Firefox/Safari support → **Right**: Chromium-only; provide fallback JS buttons
-- **Wrong**: No `scroll-padding` with sticky headers → **Right**: Snap position hides content under the header
+- Forgetting `scroll-behavior: smooth` — without it, snapping is instantaneous (jarring)
+- Using `scroll-snap-type: both mandatory` without careful planning — locks scroll in both axes, can trap users
+- Not setting `scroll-snap-stop: always` on single-item carousels — fast swipes can skip multiple slides
+- Expecting `::scroll-button` to work in Firefox/Safari — Chromium-only; provide fallback JS buttons
+- Missing `scroll-padding` when page has sticky headers — snap position hides content under the header
 
 ## See Also
 
-- [Scroll-Driven Animations](scroll-driven-animations.md) — animate elements based on scroll position
-- [Container Scroll-State Queries](container-scroll-state.md) — style active slide via `snapped` state
+- [Scroll-Driven Animations](scroll-driven-animations.md) → for animating elements based on scroll position
+- [Container Scroll-State Queries](container-scroll-state.md) → style the active slide via the `snapped` state
 - Reference: [MDN: CSS Scroll Snap](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scroll_snap)
 - Reference: [Chrome: Carousels with CSS](https://developer.chrome.com/blog/carousels-with-css)

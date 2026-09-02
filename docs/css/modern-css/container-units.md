@@ -1,5 +1,5 @@
 ---
-description: Size elements relative to their container with cqi, cqw, cqb units
+description: "Size elements relative to their container with cqi, cqw, cqb units"
 tldr: "Use container query units when you need to size elements relative to their container, not the viewport — fluid typography or scaling elements inside components without any breakpoints."
 ---
 
@@ -7,7 +7,7 @@ tldr: "Use container query units when you need to size elements relative to thei
 
 ## When to Use
 
-> Use container query units when you need to size elements relative to their container, not the viewport — fluid typography or scaling elements inside components without any breakpoints.
+> When you need to size elements relative to their container, not the viewport — fluid typography or scaling elements inside components without any breakpoints.
 
 ## Decision
 
@@ -53,11 +53,10 @@ Fluid typography inside a card component — scales smoothly between container s
 
 ## Common Mistakes
 
-- **Wrong**: Using `cqi` when no ancestor has `container-type` → **Right**: Without containment, `cqi` falls back to viewport units; always verify an ancestor has `container-type` set
-- **Wrong**: Preferring `cqw` over `cqi` → **Right**: `cqi` is direction-aware and the more correct choice in most cases
+- Using `cqi` when there is no ancestor with `container-type` — falls back to viewport units, which may or may not be what you want; always verify containment is set
+- Preferring `cqw` over `cqi` — `cqi` is direction-aware and the more correct choice in most cases
 
 ## See Also
 
-- [Container Queries (@container)](container-queries.md)
-- [Subgrid](subgrid.md)
+- ← [Container Queries](container-queries.md) | [Subgrid](subgrid.md) →
 - Reference: [MDN Container query length units](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries#container_query_length_units)

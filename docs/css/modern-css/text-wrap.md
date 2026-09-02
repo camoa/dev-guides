@@ -7,7 +7,7 @@ tldr: "Use `text-wrap: balance` on headings (up to ~6 lines) for even line break
 
 ## When to Use
 
-> Use `text-wrap: balance` on headings (up to ~6 lines) for even line breaks. Use `text-wrap: pretty` on body copy to prevent orphaned last words. Never use `balance` on long paragraphs.
+> For typographic polish — preventing awkward single-word orphans on headings and avoiding ragged last lines in body copy, without manual `<br>` tags or JavaScript.
 
 ## Decision
 
@@ -42,11 +42,10 @@ p, blockquote, li {
 
 ## Common Mistakes
 
-- **Wrong**: Applying `text-wrap: balance` to long paragraphs → **Right**: Performance cost is real; the browser recalculates the entire block on resize; limit to headings and short display text
-- **Wrong**: Expecting `pretty` to affect the whole paragraph → **Right**: It intentionally adjusts only the last few lines; it does not rebalance the entire text block
-- **Wrong**: Using `text-wrap: balance` to prevent orphans in body copy → **Right**: `balance` rebalances lines equally which may or may not prevent a short last word; `pretty` is the right tool for orphan control
+- Applying `text-wrap: balance` to long paragraphs — performance cost is real; the browser recalculates the entire block on resize; limit to headings and short display text
+- Expecting `pretty` to affect the whole paragraph — it intentionally adjusts only the last few lines; it does not rebalance the entire text block
+- Using `text-wrap: balance` expecting it to prevent orphans on body copy — it rebalances lines equally which may or may not prevent a short last word; `pretty` is the right tool for that
 
 ## See Also
 
-- [Dynamic Viewport Units (dvh, svh, lvh)](viewport-units.md)
 - Reference: [MDN text-wrap](https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap)

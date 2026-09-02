@@ -10,67 +10,84 @@ drupal_version: "11.x"
 
 > Use this when you own or co-own a contrib module or theme on drupal.org. The maintainer role has different responsibilities from being a contributor — you own the CI config, the triage queue, the credit decisions, and the release process.
 
-## Decision
+## When to Use This Role
 
-| Dimension | Maintainer responsibility |
-|---|---|
-| CI config | You define which jobs are blocking — make phpcs blocking at minimum |
-| Triage | Respond to new issues promptly; fix incorrect field values; encourage contribution |
-| Credit | Your call — grant proactively; never wait to be asked |
-| AI-assisted MRs | Apply the same quality bar regardless of how code was produced |
-| Succession | Add a co-maintainer before stepping down; mark unsupported if orphaning |
+You are a maintainer when: you created the project, were added as a co-maintainer, or have been given the "maintainer" role on `drupal.org/project/<name>`. The maintainer role carries full authority and full accountability for the project's health.
 
-## Pattern
+## Queue Management
 
-**CI config best practice for a healthy module:**
+Triage promptly and politely. The etiquette:
+
+- Respond to new issues within a reasonable time — even "confirmed, added to the queue" keeps contributors engaged.
+- Fix incorrect issue field values (status, priority, category, component).
+- Encourage contribution — acknowledge effort even when feedback is needed.
+- Offer co-maintainership to skilled regulars who contribute repeatedly.
+- Mentor newcomers on your subsystem's patterns.
+
+A stale queue (unresponded issues, unreviewed MRs) deters contribution and signals abandonment, which can trigger Drupal.org to mark the project as unsupported.
+
+## Owning and Maintaining the CI Config
+
+As maintainer you own the `.gitlab-ci.yml` — you decide which jobs are blocking. Best practice for a healthy module:
 
 ```yaml
 # Make phpcs blocking (recommended for all modules)
 phpcs:
   allow_failure: false
 
-# Make phpstan blocking when configured
+# Make phpstan blocking when you have it configured
 phpstan:
   allow_failure: false
 
-# Opt into previous-major testing when supporting two Drupal majors
+# Opt into previous-major testing when you support two Drupal major versions
 variables:
   OPT_IN_TEST_PREVIOUS_MAJOR: "1"
   _TARGET_CORE: "^10 || ^11"
 ```
 
-Keep `gitlab_templates` auto-updating by not pinning `_GITLAB_TEMPLATES_REF` to a fixed tag unless you have a specific reason to freeze.
+Keep `gitlab_templates` auto-updating by not pinning `_GITLAB_TEMPLATES_REF` to a fixed tag unless you have a specific reason to freeze. The DA updates the tag regularly (v1.15.4 as of May 2026).
 
-## Queue Management
+## Credit Decisions
 
-- Respond to new issues promptly — even "confirmed, added to the queue" keeps contributors engaged
-- Fix incorrect issue field values (status, priority, category, component)
-- Offer co-maintainership to skilled regulars
-- A stale queue can trigger drupal.org to mark the project as unsupported
+Credit is your call as maintainer. Recommended practice:
+
+- Credit all contributors who made substantive contributions to the issue (code, tests, documentation, review).
+- Credit organizations for contributors who mark employer sponsorship on their profile.
+- Do not wait to be asked — proactively apply credit when closing an issue.
+- You can add credit after the issue is closed.
+
+See [Contribution Records](https://www.drupal.org/drupalorg/blog/the-new-contribution-records-system) for the API endpoints if you need to bulk-query credit data.
 
 ## Reviewing AI-Assisted MRs
 
-Signs of an insufficiently reviewed AI contribution:
+AI-assisted contributions require extra review discipline from maintainers. Signs of an insufficiently reviewed AI contribution:
+
 - Code that passes phpcs but contains no tests
 - Logic that looks plausible but doesn't match the stated issue
 - Dependencies on APIs or behaviors that are guessed rather than verified
 - Docblocks that describe a function differently from its implementation
 
-The [Drupal AI contribution policy](https://www.drupal.org/docs/develop/development-tools/ai-tools/ai-policy-for-drupal-contributors) (adopted 2026-04-23) places full responsibility on the contributor, not the AI tool. As maintainer, apply the same quality bar regardless of how code was produced.
+The [Drupal AI contribution policy](https://www.drupal.org/docs/develop/development-tools/ai-tools/ai-policy-for-drupal-contributors) (adopted 2026-04-23) places full responsibility on the contributor, not the AI tool. As maintainer you are not responsible for verifying AI use — but you are responsible for ensuring the code is correct. Apply the same quality bar regardless of how the code was produced.
 
-## Credit Decisions
+For the complete AI overlay — disclosure requirements, the "significant portion" threshold, acceptable vs. unacceptable AI use — see `drupal/contributing-with-ai/`.
 
-- Credit all contributors who made substantive contributions (code, tests, docs, review)
-- Credit organizations for contributors who mark employer sponsorship
-- Apply credit proactively when closing an issue — you can add it after closing too
+## Co-maintainer Succession
+
+If you can no longer maintain a project:
+
+- Add a co-maintainer before stepping down so the project is not orphaned.
+- Use the drupal.org project page to transfer maintainership.
+- If the project is unmaintained, mark it as such on drupal.org so users are warned.
+
+Abandoning a project without marking it unsupported or transferring it harms the users who depend on it and reflects on the Drupal ecosystem.
 
 ## Common Mistakes
 
-- **Wrong**: Leaving phpcs as `allow_failure: true` → **Right**: Set it to blocking; it is a basic quality signal
-- **Wrong**: Not updating CI config when Drupal releases a new minor/major → **Right**: Run `OPT_IN_TEST_NEXT_MINOR` to validate before release
-- **Wrong**: Merging MRs without running their tests locally → **Right**: CI passes do not substitute for understanding the change
-- **Wrong**: Forgetting to grant credit when closing an issue → **Right**: Go back and add it; contributors notice
-- **Wrong**: Abandoning a module without marking it unsupported → **Right**: Orphaned modules cause security and compatibility problems
+- Leaving phpcs as `allow_failure: true` on a module you maintain — set it to blocking; it is a basic quality signal.
+- Not updating the CI config when Drupal releases a new minor or major — run `OPT_IN_TEST_NEXT_MINOR` to validate before the release.
+- Merging MRs without running their tests locally — CI passes are not a substitute for understanding the change.
+- Forgetting to grant credit when closing an issue — go back and add it; contributors notice.
+- Abandoning a module without marking it unsupported — orphaned modules cause security and compatibility problems for users.
 
 ## See Also
 

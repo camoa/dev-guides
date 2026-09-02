@@ -1,5 +1,5 @@
 ---
-description: Derive color variations with relative color syntax — generate palettes from one base
+description: "Derive color variations with relative color syntax — generate palettes from one base"
 tldr: "Use relative color syntax to derive color variations from a base color variable — the native replacement for Sass color manipulation libraries. Use a literal color value when no derivation is needed."
 ---
 
@@ -7,7 +7,7 @@ tldr: "Use relative color syntax to derive color variations from a base color va
 
 ## When to Use
 
-> Use relative color syntax to derive color variations from a base color variable — the native replacement for Sass color manipulation libraries. Use a literal color value when no derivation is needed.
+> To derive color variations from a base color variable — the native replacement for entire Sass color manipulation libraries. Any color channel can be read from an origin color and mathematically modified.
 
 ## Decision
 
@@ -58,12 +58,11 @@ tldr: "Use relative color syntax to derive color variations from a base color va
 
 ## Common Mistakes
 
-- **Wrong**: Using percentage units in `calc()` on channels → **Right**: Channel values in relative syntax are unitless numbers (`l` in OKLCH is 0–1, not 0%–100%); write `calc(l - 0.1)` not `calc(l - 10%)`
-- **Wrong**: Mixing color spaces in relative syntax → **Right**: The origin color must match the function; you cannot extract oklch channels inside `rgb()`
-- **Wrong**: Relying on older Safari behavior with typed channel units → **Right**: The current spec resolves channels to unitless numbers; `calc()` without units is correct
+- Using percentage units in `calc()` on channels — channel values resolve to unitless numbers (e.g., `l` in OKLCH is 0–1, not 0%–100% inside relative syntax); `calc(l - 0.1)` not `calc(l - 10%)`
+- Mixing color spaces — the origin color must be in the same function as the relative syntax; you cannot extract oklch channels inside `rgb()`
+- Safari's older behavior — Safari initially resolved channels to type-specific units rather than unitless numbers; `calc()` without units is the current spec behavior
 
 ## See Also
 
-- [color-mix()](color-mix.md)
-- [light-dark() — One-Line Dark Mode](light-dark.md)
+- ← [color-mix()](color-mix.md) | [light-dark() Function](light-dark.md) →
 - Reference: [MDN Relative colors](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_colors/Relative_colors)

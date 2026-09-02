@@ -1,5 +1,5 @@
 ---
-description: Native dropdowns and overlays with Popover API — built-in light dismiss
+description: "Native dropdowns and overlays with Popover API — built-in light dismiss"
 tldr: "Use `popover` for tooltips, dropdowns, and non-modal overlays that need light dismiss (closes on outside click or Escape key). Use `<dialog>` when you need a modal with focus trap."
 ---
 
@@ -7,7 +7,7 @@ tldr: "Use `popover` for tooltips, dropdowns, and non-modal overlays that need l
 
 ## When to Use
 
-> Use `popover` for tooltips, dropdowns, and non-modal overlays that need light dismiss (closes on outside click or Escape key). Use `<dialog>` when you need a modal with focus trap.
+> For tooltips, dropdowns, and non-modal overlays that need light dismiss (closes on outside click or Escape key) — replacing custom JS show/hide toggle logic for simple overlay UI.
 
 ## Decision
 
@@ -76,13 +76,13 @@ el.addEventListener('toggle', (e) => {
 
 ## Common Mistakes
 
-- **Wrong**: Using `popover` for modal dialogs that need focus trap → **Right**: Popover does not trap focus; use `<dialog>` with `showModal()`
-- **Wrong**: Nesting a popover inside `overflow: hidden` expecting clipping → **Right**: Popovers render in the top layer; they are not clipped, but positioning can break without Anchor Positioning
-- **Wrong**: Expecting `popover="auto"` to stack multiple open popovers → **Right**: It closes other auto popovers; use `popover="manual"` for nested or stacked menus
-- **Wrong**: Forgetting animation requires `@starting-style` and `allow-discrete` → **Right**: The entry animation pattern is the same as `@starting-style` transitions
+- Using `popover` for modal dialogs that need focus trap — popover does not trap focus; use `<dialog>` with `showModal()`
+- Nesting a popover inside a container with `overflow: hidden` — popovers render in the top layer, so this does not clip them; but positioning can break without Anchor Positioning
+- Expecting `popover="auto"` to stack multiple open popovers — it closes other auto popovers; use `popover="manual"` for nested/stacked menus
+- Forgetting animation requires `@starting-style` and `allow-discrete` — the entry animation pattern is the same as `@starting-style` transitions
 
 ## See Also
 
-- [@starting-style & Discrete Transitions](starting-style-transitions.md)
-- [Anchor Positioning](anchor-positioning.md)
+- [@starting-style Transitions](starting-style-transitions.md) → required for animating popover entry/exit
+- [Anchor Positioning](anchor-positioning.md) → position popovers next to their trigger
 - Reference: [MDN Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)

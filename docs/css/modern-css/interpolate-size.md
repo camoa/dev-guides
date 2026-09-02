@@ -1,14 +1,13 @@
 ---
-description: Animate height/width to auto and intrinsic sizing keywords — replacing JavaScript scrollHeight measurement
+description: "Animate height/width to auto and intrinsic sizing keywords — replacing JavaScript scrollHeight measurement"
 tldr: "Use `interpolate-size: allow-keywords` when you need to animate height or width to/from `auto`, `min-content`, `max-content`, or `fit-content`. Use JavaScript `scrollHeight` measurement when cross-browser support is required (Firefox and…"
-drupal_version: "11.x"
 ---
 
 # interpolate-size — Animate to `height: auto`
 
 ## When to Use
 
-> Use `interpolate-size: allow-keywords` when you need to animate height or width to/from `auto`, `min-content`, `max-content`, or `fit-content`. Use JavaScript `scrollHeight` measurement when cross-browser support is required (Firefox and Safari do not support `interpolate-size` yet).
+> When you need to animate an element's height (or width) to/from `auto`, `min-content`, `max-content`, or `fit-content` — the classic "accordion" problem that previously required JavaScript to measure `scrollHeight`.
 
 ## Decision
 
@@ -58,21 +57,21 @@ details[open] {
 }
 ```
 
-`interpolate-size: allow-keywords` tells the browser to resolve `auto` (and other sizing keywords) to their computed pixel value for interpolation. The property inherits, so setting it on `:root` enables it everywhere.
+**How it works:** The `interpolate-size: allow-keywords` declaration tells the browser to resolve `auto` (and other sizing keywords) to their computed pixel value for interpolation purposes. The property inherits, so setting it on `:root` enables it everywhere.
 
-`calc-size()` allows arithmetic on sizing keywords. `calc-size(auto, size - 20px)` means "the computed auto value minus 20px." The `size` keyword inside refers to the resolved intrinsic size.
+**`calc-size()` function:** Allows arithmetic on sizing keywords. `calc-size(auto, size - 20px)` means "the computed auto value minus 20px." The `size` keyword inside refers to the resolved intrinsic size.
 
-**Browser support:** Chrome 129+, Edge 129+. Not supported in Firefox or Safari. Use as progressive enhancement — without support, the element snaps to the final state (still functional, not animated).
+**Browser support:** Chrome 129+, Edge 129+. **Not supported** in Firefox or Safari as of April 2026. Use as progressive enhancement — without support, the element snaps to the final state (still functional, not animated).
 
 ## Common Mistakes
 
-- **Wrong**: Omitting `overflow: hidden` on the animated element → **Right**: Without it, content is visible outside the collapsing container
-- **Wrong**: Using `interpolate-size` without `transition` or `animation` → **Right**: The property enables interpolation but you still need to declare the transition
-- **Wrong**: Using `calc()` for intrinsic size math → **Right**: Use `calc-size()` specifically; it is a separate function
-- **Wrong**: Setting `height: 0` without `min-height` fallback → **Right**: Consider `min-height: 0` to prevent negative height issues
+- Forgetting `overflow: hidden` on the animated element — content will be visible outside the collapsing container
+- Using `interpolate-size` without `transition` or `animation` — the property enables interpolation but you still need to declare the transition
+- Expecting `calc-size()` to work with `calc()` — they are separate functions; use `calc-size()` specifically for intrinsic keyword math
+- Setting `height: 0` without a `min-height` fallback — consider `min-height: 0` to prevent negative height issues
 
 ## See Also
 
-- [@starting-style & Discrete Transitions](starting-style-transitions.md) — for elements entering from `display: none`
-- [Discrete Property Animations](discrete-animations.md) — for transitioning the `display` property itself
+- [@starting-style](starting-style-transitions.md) → for elements entering from `display: none`
+- [Discrete Animations](discrete-animations.md) → for transitioning the `display` property itself
 - Reference: [Chrome: Animate to height: auto](https://developer.chrome.com/docs/css-ui/animate-to-height-auto)

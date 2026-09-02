@@ -1,14 +1,13 @@
 ---
-description: Animate display, overlay, and other discrete properties — entry/exit animations for dialogs and popovers
+description: "Animate display, overlay, and other discrete properties — entry/exit animations for dialogs and popovers"
 tldr: "Use `transition-behavior: allow-discrete` when you need to animate properties that were previously impossible to transition — `display`, `overlay`, `content-visibility`. Pair with `@starting-style` for entry animations."
-drupal_version: "11.x"
 ---
 
 # Discrete Property Animations
 
 ## When to Use
 
-> Use `transition-behavior: allow-discrete` when you need to animate properties that were previously impossible to transition — `display`, `overlay`, `content-visibility`. Pair with `@starting-style` for entry animations. Use `overlay` transition to keep top-layer elements (dialogs, popovers) visible during exit.
+> When you need to transition properties that were previously impossible to animate — `display`, `overlay`, `content-visibility`, or `mix-blend-mode`. This works with `@starting-style` to create entry/exit animations for elements toggling `display: none`.
 
 ## Decision
 
@@ -37,6 +36,7 @@ dialog[open] {
   transform: translateY(0);
 }
 
+/* Entry state */
 @starting-style {
   dialog[open] {
     opacity: 0;
@@ -66,22 +66,25 @@ dialog[open] {
 }
 ```
 
-For a discrete property like `display`, the browser swaps the value at 50% of the transition duration. On entry, `display` swaps to `block` at time 0 so opacity/transform can animate from `@starting-style` values. On exit, opacity/transform animate to exit values, then `display` swaps to `none` at 50%.
+**How `allow-discrete` works:** For a discrete property like `display`, the browser swaps the value at 50% of the transition duration. Combined with `@starting-style`, this means:
+1. Element enters with `display: none` → `display: block` swap happens at time 0 (start)
+2. Opacity/transform animate from `@starting-style` values to final values
+3. On exit, opacity/transform animate to exit values, then `display` swaps to `none` at 50%
 
-The `overlay` property keeps elements in the top layer (above all other content) during exit transitions. Without transitioning `overlay`, a dialog snaps behind content immediately when closing.
+**The `overlay` property:** Keeps elements in the top layer (above all other content) during exit transitions. Without transitioning `overlay`, a dialog would snap behind content immediately when closing.
 
-**Browser support:** Chrome 117+, Edge 117+, Safari 17.5+, Firefox 129+. Firefox handles `@starting-style` but does not animate `display` itself. Baseline Newly Available.
+**Browser support:** Chrome 117+, Edge 117+, Safari 17.5+, Firefox 129+ (Firefox does not animate `display` itself but handles `@starting-style` opacity/transform). Baseline Newly Available.
 
 ## Common Mistakes
 
-- **Wrong**: Transitioning `display` but not `overlay` → **Right**: Without `overlay`, top-layer elements (dialogs, popovers) snap behind content during exit
-- **Wrong**: `allow-discrete` as a standalone property → **Right**: It is a value for `transition-behavior`, or used inline: `display 0.3s allow-discrete`
-- **Wrong**: No `@starting-style` → **Right**: Without it, there is no entry animation (element starts in its final state)
-- **Wrong**: Expecting to animate `display: flex` → `display: grid` → **Right**: Discrete transitions only handle show/hide, not value swaps
+- Forgetting to transition both `display` AND `overlay` — without `overlay`, top-layer elements (dialogs, popovers) snap behind content during exit
+- Using `allow-discrete` as a standalone property — it's a value for `transition-behavior`, not a property: `transition-behavior: allow-discrete` or inline as `display 0.3s allow-discrete`
+- Not providing `@starting-style` — without it, the entry state is the same as the final state (no animation on entry)
+- Expecting discrete transitions on non-show/hide changes — `display: flex` → `display: grid` cannot be animated
 
 ## See Also
 
-- [@starting-style & Discrete Transitions](starting-style-transitions.md) — the entry-state companion for discrete animations
-- [Popover API](popover-api.md) — primary use case for discrete transitions
-- [interpolate-size](interpolate-size.md) — for animating height to auto
+- [@starting-style](starting-style-transitions.md) → the entry-state companion for discrete animations
+- [Popover API](popover-api.md) → the primary use case for discrete transitions
+- [interpolate-size](interpolate-size.md) → for animating height to `auto`, the other half of an accordion transition
 - Reference: [Chrome: Entry/exit animations](https://developer.chrome.com/blog/entry-exit-animations)

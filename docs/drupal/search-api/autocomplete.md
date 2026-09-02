@@ -8,9 +8,22 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when adding search-as-you-type suggestions to search forms.
+> When adding search-as-you-type suggestions to search forms.
 
-## Decision
+## Decision: Module Setup
+
+```bash
+composer require drupal/search_api_autocomplete
+drush en search_api_autocomplete
+```
+
+## Pattern: Configuration
+
+1. Navigate to your Search API index → "Autocomplete" tab
+2. Enable autocomplete for specific search views/pages
+3. Configure: max suggestions, minimum characters, suggester plugins
+
+## Decision: Configuration Options
 
 | Setting | Recommendation | Why |
 |---|---|---|
@@ -18,32 +31,23 @@ drupal_version: "11.x"
 | Max suggestions | 5-10 | UX best practice |
 | Suggester | Backend-specific | Solr Terms for Solr, default for DB |
 
-## Pattern
+## Pattern: Solr Autocomplete
 
-```bash
-composer require drupal/search_api_autocomplete
-drush en search_api_autocomplete
-```
+Use the Solr Terms component for blazing-fast autocompletion — queries the Solr terms component directly instead of running full searches.
 
-**Configuration:**
-1. Navigate to your Search API index → "Autocomplete" tab
-2. Enable autocomplete for specific search views/pages
-3. Configure: max suggestions, minimum characters, suggester plugins
+## Pattern: Enhanced Module
 
-**Solr autocomplete** — use the Solr Terms component for blazing-fast autocompletion. Queries the Solr terms component directly instead of running full searches.
-
-**Enhanced module** — `search_api_autocomplete_improved` provides:
+`search_api_autocomplete_improved` provides:
 - Optimized caching
 - Accurate result counting
 - Auto-discovers views config from autocomplete entities
 
 ## Common Mistakes
 
-- **Wrong**: Autocomplete on String fields → **Right**: Use Fulltext fields for autocomplete. String fields require exact match.
-- **Wrong**: `min_characters = 1` → **Right**: Causes excessive backend load on large indexes. Set to 3+.
+- **Autocomplete on String fields** — Use Fulltext fields for autocomplete. String fields require exact match.
+- **Min characters = 1** — Causes excessive backend load on large indexes. Set to 3+.
 
 ## See Also
 
-- [Views Integration](views-integration.md)
-- [Solr Best Practices](solr-best-practices.md)
-- Reference: https://www.drupal.org/project/search_api_autocomplete
+- [Views Integration](views-integration.md) — search page setup
+- [Solr Best Practices](solr-best-practices.md) — Solr Terms suggester

@@ -8,19 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when optimizing how fast content gets indexed, especially for large sites or initial indexing.
+> When optimizing how fast content gets indexed, especially for large sites or initial indexing.
 
-## Pattern: Solr Index-Only Mode
-
-For maximum query performance on Solr, skip entity loads entirely:
-
-1. Server config → Enable "Retrieve result data from Solr"
-2. Views query settings → Enable "Skip item access checks" (only for fully public content)
-3. Ensure all displayed fields are in the Search API index
-
-Result: Solr returns field data directly — no database queries for entity loading.
-
-## Decision
+## Decision: Batch Size Tuning
 
 | Scenario | Recommended Batch Size | Why |
 |---|---|---|
@@ -29,37 +19,47 @@ Result: Solr returns field data directly — no database queries for entity load
 | Initial full index | Use drush, not cron | More control over duration |
 | Ongoing incremental | 50-100 via cron | Balance freshness vs load |
 
-**Cron vs Drush vs parallel:**
+Set in Index → Edit → "Cron batch size" or via drush `--batch-size`.
+
+## Decision: Cron vs Drush
 
 | Method | Use Case | Command |
 |---|---|---|
-| Cron | Incremental indexing | Automatic (set cron_limit on index) |
-| Drush | Initial indexing, reindexing, bulk | `drush sapi-i --batch-size=50 --time-limit=300` |
-| Solr parallel indexing | Large sites (10K+ items) on Solr | `drush search-api-solr:index-parallel` — ships with `search_api_solr`, no extra module |
-| search_api_fast | Large sites (10K+ items) on a **non-Solr** backend | Spawns parallel Drush workers |
+| **Cron** | Incremental indexing of content changes | Automatic (set cron_limit on index) |
+| **Drush** | Initial indexing, reindexing, bulk operations | `drush sapi-i --batch-size=50 --time-limit=300` |
+| **Solr parallel indexing** | Large sites (10K+ items) on Solr | `drush search-api-solr:index-parallel --threads=8 --batch-size=100` |
+| **search_api_fast** | Large sites (10K+ items) on a non-Solr backend | Spawns parallel workers across CPU cores |
 
-## Pattern
+## Pattern: Drush Indexing Commands
 
 ```bash
 # Index all pending items
 drush sapi-i
 
+# Index specific index only
+drush sapi-i my_index
+
 # With batch size and time limit
 drush sapi-i --batch-size=25 --time-limit=600
 
-# Mark everything for reindex
+# Mark everything for reindex (doesn't delete from backend)
 drush sapi-r my_index
 
-# Clear index completely
+# Clear index completely (deletes from backend)
 drush sapi-c my_index
+
+# Rebuild tracking info
+drush sapi-rt my_index
 ```
 
-**Solr parallel indexing** — no extra module needed on Solr:
+## Pattern: Parallel Indexing
+
+On Solr, use the parallel indexing command that ships with `search_api_solr` — no extra module:
 ```bash
 drush search-api-solr:index-parallel my_index --threads=8 --batch-size=100
 ```
 
-**search_api_fast** — only when the backend is *not* Solr:
+On a non-Solr backend, `search_api_fast` spawns parallel Drush workers:
 ```bash
 composer require drupal/search_api_fast
 drush search-api-fast:index my_index
@@ -72,7 +72,17 @@ Worker count is **configuration, not a command option** — there is no `--worke
 drush config:set search_api_fast.performance index_workers 4
 ```
 
-**Cron frequency by site size:**
+## Pattern: Solr Index-Only Mode
+
+For maximum query performance on Solr, skip entity loads entirely:
+
+1. Server config → Enable "Retrieve result data from Solr"
+2. Views query settings → Enable "Skip item access checks" (only for fully public content)
+3. Ensure all displayed fields are in the Search API index
+
+Result: Solr returns field data directly — no database queries for entity loading.
+
+## Pattern: Cron Frequency
 
 | Site Size | Cron Interval | Batch Size |
 |---|---|---|
@@ -82,14 +92,11 @@ drush config:set search_api_fast.performance index_workers 4
 
 ## Common Mistakes
 
-- **Wrong**: `cron_limit = -1` on large indexes → **Right**: Indexes all items at once. Causes memory exhaustion on complex entities.
-- **Wrong**: `cron_limit = 0` → **Right**: Disables cron indexing entirely. Items never get indexed via cron.
-- **Wrong**: Using cron for initial indexing → **Right**: Use drush with `--time-limit` for controlled batch indexing of large datasets.
-- **Wrong**: Passing `--workers=N` to `search-api-fast:index` → **Right**: There is no such flag. Set `index_workers` via `drush config:set search_api_fast.performance index_workers N`.
-- **Wrong**: Reaching for `search_api_fast` on a Solr site → **Right**: Solr ships its own parallel indexing command (`search-api-solr:index-parallel`). Reserve `search_api_fast` for non-Solr backends.
+- **cron_limit = -1 on large indexes** — Indexes all items at once. Causes memory exhaustion on complex entities.
+- **cron_limit = 0** — Disables cron indexing entirely. Items never get indexed via cron.
+- **Not using drush for initial indexing** — Cron indexing large datasets takes days. Use drush with --time-limit for controlled batch indexing.
 
 ## See Also
 
-- [Indexing Lifecycle](indexing-lifecycle.md)
-- [Query Performance](query-performance.md)
-- Reference: https://www.drupal.org/project/search_api_fast
+- [Indexing Lifecycle](indexing-lifecycle.md) — how indexing works
+- [Query Performance](query-performance.md) — query-side optimization

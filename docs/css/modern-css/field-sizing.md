@@ -1,14 +1,13 @@
 ---
-description: Auto-resize textarea, input, and select to fit content with field-sizing — replacing JavaScript scrollHeight scripts
+description: "Auto-resize textarea, input, and select to fit content with field-sizing — replacing JavaScript scrollHeight scripts"
 tldr: "Use `field-sizing: content` when you need a `<textarea>`, `<input>`, or `<select>` to automatically resize to fit its content. Use JavaScript `scrollHeight` or `ResizeObserver` when cross-browser support is required (Safari does not…"
-drupal_version: "11.x"
 ---
 
 # field-sizing: content — Auto-Sizing Form Controls
 
 ## When to Use
 
-> Use `field-sizing: content` when you need a `<textarea>`, `<input>`, or `<select>` to automatically resize to fit its content. Use JavaScript `scrollHeight` or `ResizeObserver` when cross-browser support is required (Safari does not support `field-sizing` yet).
+> When you need a `<textarea>`, `<input>`, or `<select>` to automatically resize to fit its content, replacing JavaScript auto-resize scripts.
 
 ## Decision
 
@@ -42,18 +41,18 @@ select {
 }
 ```
 
-The `lh` unit represents one line-height of the element. `3lh` = 3 lines of text. Useful for min/max constraints on auto-sizing textareas.
+**The `lh` unit:** Represents one line-height of the element. `3lh` = 3 lines of text. Useful for min/max constraints on auto-sizing textareas.
 
-**Browser support:** Chrome 123+, Edge 123+, Firefox 136+. Not supported in Safari. Use as progressive enhancement — without support, the element uses its default fixed size.
+**Browser support:** Chrome 123+, Edge 123+, Firefox 136+. **Not supported** in Safari. Use as progressive enhancement — without support, the element uses its default fixed size.
 
 ## Common Mistakes
 
-- **Wrong**: No `min-height` / `min-width` → **Right**: Without constraints, the element collapses to zero when empty
-- **Wrong**: No `max-height` on textareas → **Right**: Content-sized textareas can push the page layout significantly without a cap
-- **Wrong**: Using on password fields → **Right**: `field-sizing: content` on `type="password"` reveals password length
-- **Wrong**: Expecting it to work on `<input type="number">` with spinners → **Right**: Spinner buttons add width that doesn't shrink
+- Forgetting `min-height` / `min-width` — without constraints, the element collapses to zero when empty
+- Not setting `max-height` on textareas — content-sized textareas can push the page layout significantly
+- Using on password fields — `field-sizing: content` on `type="password"` reveals password length
+- Expecting it to work on `<input type="number">` with spinners — spinner buttons add width that doesn't shrink
 
 ## See Also
 
-- [:user-valid / :user-invalid](user-valid-invalid.md) — for validation styling on auto-sized fields
+- [:user-valid / :user-invalid](user-valid-invalid.md) → for validation styling on auto-sized fields
 - Reference: [MDN: field-sizing](https://developer.mozilla.org/en-US/docs/Web/CSS/field-sizing)

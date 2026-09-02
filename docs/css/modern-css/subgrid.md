@@ -1,5 +1,5 @@
 ---
-description: Align nested grid items to parent tracks — card footer alignment without JS
+description: "Align nested grid items to parent tracks — card footer alignment without JS"
 tldr: "Use `subgrid` when children of a grid item need to align to the parent grid's tracks. Use regular grid when layout is single-level with no nested alignment requirements."
 ---
 
@@ -7,7 +7,7 @@ tldr: "Use `subgrid` when children of a grid item need to align to the parent gr
 
 ## When to Use
 
-> Use `subgrid` when children of a grid item need to align to the parent grid's tracks. Use regular grid when layout is single-level with no nested alignment requirements.
+> When children of a grid item need to align to the parent grid's tracks — the classic example is card components in a grid where each card's header, body, and footer should align across all cards in a row regardless of content length.
 
 ## Decision
 
@@ -49,12 +49,11 @@ This replaces `display: flex; margin-top: auto` on footers, JavaScript height eq
 
 ## Common Mistakes
 
-- **Wrong**: Forgetting `grid-row: span N` on the grid item → **Right**: The card must span the same number of rows as the parent defines, otherwise `subgrid` has nothing to inherit
-- **Wrong**: Keeping `gap` on the subgrid element → **Right**: The subgrid element inherits parent gaps by default; set `gap: 0` to prevent double-gapping
-- **Wrong**: Using subgrid for column alignment when columns are on a different containing block → **Right**: Subgrid only inherits tracks from the direct grid parent
+- Forgetting `grid-row: span N` on the grid item — the card must span the same number of rows as the parent defines, otherwise `subgrid` has nothing to inherit
+- Applying `gap` on the subgrid element — it inherits parent gaps by default; adding `gap: 0` prevents double-gapping
+- Using subgrid for column alignment when columns are on a different containing block — subgrid only inherits tracks from the direct grid parent
 
 ## See Also
 
-- [Container Queries (@container)](container-queries.md)
-- [@layer — Cascade Layers](cascade-layers.md)
+- ← [Container Queries](container-queries.md) | [@layer Cascade Layers](cascade-layers.md) →
 - Reference: [MDN Subgrid](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout/Subgrid)

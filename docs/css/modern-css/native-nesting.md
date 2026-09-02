@@ -1,5 +1,5 @@
 ---
-description: Native CSS nesting without Sass — & selector, nested @media, differences from Sass
+description: "Native CSS nesting without Sass — & selector, nested @media, differences from Sass"
 tldr: "Use native CSS nesting when you want Sass-style nesting without a build step. Keep Sass when you need `@extend`, `@mixin`, or functions — native CSS does not cover these."
 ---
 
@@ -7,7 +7,7 @@ tldr: "Use native CSS nesting when you want Sass-style nesting without a build s
 
 ## When to Use
 
-> Use native CSS nesting when you want Sass-style nesting without a build step. Keep Sass when you need `@extend`, `@mixin`, or functions — native CSS does not cover these.
+> When you want Sass-style nesting without a build step or preprocessor. Nesting is now the primary Sass feature covered natively, and the primary reason many projects added Sass.
 
 ## Decision
 
@@ -53,10 +53,10 @@ Component with nested states and a scoped media query:
 ```
 
 **`&` placement matters:**
-- `& .child` — descendant (space required)
+- `& .child` — descendant (space required in original spec)
 - `&:hover` — pseudo-class (no space)
-- `&__element` — string concatenation (BEM)
-- `.parent &` — ancestor context (reverses nesting)
+- `&__element` — string concatenation (works for BEM)
+- `.parent &` — ancestor context (valid, reverses nesting)
 
 **Relaxed parsing (Chrome 120+, Firefox 117+, Safari 17.2+):** Type selectors work without `&`:
 ```css
@@ -70,13 +70,13 @@ For maximum compatibility, always use `&` prefix.
 
 ## Common Mistakes
 
-- **Wrong**: Dropping `&` on type selectors → **Right**: Type selectors without `&` break in Chrome 112–119 and older Safari; always use `&` for compatibility
-- **Wrong**: Nesting `@keyframes` inside a rule → **Right**: Keyframes must remain at the top level; nesting them is not supported
-- **Wrong**: Expecting nesting to merge selectors like `@extend` → **Right**: Native nesting generates its own selector per rule; selector merging is not part of native nesting
-- **Wrong**: Deep nesting beyond 3 levels → **Right**: Deep nesting generates highly specific selectors that are hard to override; keep nesting shallow
+- Dropping `&` on type selectors expecting them to work — they do in Chrome 120+ but break in Chrome 112–119 and older Safari; always use `&`
+- Nesting `@keyframes` inside a rule — this is not supported; keyframes must remain at the top level
+- Using `@extend` patterns and expecting similar output — native nesting does not merge selectors like `@extend` does; each nested rule generates its own selector
+- Deep nesting (more than 3 levels) — generates deeply specific selectors that are hard to override; keep nesting shallow
 
 ## See Also
 
-- [@scope — Scoped Styles](css-scope.md)
-- [@layer — Cascade Layers](cascade-layers.md)
+- ← [@scope Scoped Styles](css-scope.md) | [CSS Subgrid](subgrid.md) →
+- [@layer Cascade Layers](cascade-layers.md) → for managing specificity from generated selectors
 - Reference: [MDN CSS Nesting](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_nesting)

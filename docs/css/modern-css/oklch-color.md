@@ -1,5 +1,5 @@
 ---
-description: Perceptually uniform color with oklch() and oklab() — better than HSL for design tokens
+description: "Perceptually uniform color with oklch() and oklab() — better than HSL for design tokens"
 tldr: "Use `oklch` for design token systems and color palettes — its perceptually uniform lightness means adjusting `L` gives predictable brightness changes across all hues. Use `hex` or `rgb` for exact brand color matching."
 ---
 
@@ -7,7 +7,7 @@ tldr: "Use `oklch` for design token systems and color palettes — its perceptua
 
 ## When to Use
 
-> Use `oklch` for design token systems and color palettes — its perceptually uniform lightness means adjusting `L` gives predictable brightness changes across all hues. Use `hex` or `rgb` for exact brand color matching.
+> When defining design tokens, building color palettes, or generating accessible color variations. OKLCH produces perceptually uniform lightness across hues — adjusting `L` gives predictable brightness changes regardless of hue. HSL does not.
 
 ## Decision
 
@@ -35,7 +35,7 @@ Token system using OKLCH — one base color generates a full scale:
 }
 ```
 
-The same `c` (chroma) and `h` (hue) values held constant while adjusting `L` guarantees a perceptually uniform scale. In HSL, this produces wildly inconsistent apparent brightness.
+The same `c` (chroma) and `h` (hue) values held constant while adjusting `L` guarantees the scale is perceptually uniform. In HSL, doing this produces wildly inconsistent apparent brightness.
 
 **Parameter reference:**
 
@@ -45,18 +45,18 @@ The same `c` (chroma) and `h` (hue) values held constant while adjusting `L` gua
 | `C` | 0–0.4 (practical max) | Chroma / color intensity — 0=gray |
 | `H` | 0–360deg | Hue angle (0°≈pink/red, 120°≈green, 250°≈blue) |
 
-**`oklab` vs `oklch`:** `oklab` uses Cartesian coordinates (`a`, `b` axes); `oklch` uses polar coordinates (`C`, `H`). Prefer `oklch` for token definition. Prefer `oklab` for gradient interpolation.
+**`oklab` vs `oklch`:** `oklab` uses Cartesian coordinates (`a`, `b` axes); `oklch` uses polar coordinates (`C`, `H`). Prefer `oklch` for token definition — hue as a degree angle is more intuitive. Prefer `oklab` for gradient interpolation.
 
 **Browser support:** Chrome 111, Firefox 113, Safari 15.4. Widely available since May 2023. Safe to use.
 
 ## Common Mistakes
 
-- **Wrong**: Assuming OKLCH hue 0° is red → **Right**: OKLCH hue 0° is closer to magenta/pink; ~41° is red, ~250° is blue (different from HSL where 0°=red, 240°=blue)
-- **Wrong**: Setting `C` above ~0.37 expecting full color → **Right**: Values above ~0.37 may be clamped on sRGB screens; wide gamut is only fully visible on P3 displays
-- **Wrong**: Using `oklch` for exact brand color matching → **Right**: If a brand color is `#1d6efa`, convert it once; the resulting decimal values are fragile to hand-edit
+- Assuming OKLCH hue 0° is red — it is closer to magenta/pink; hue ~41° is red, ~250° is blue (different from HSL where 0°=red, 240°=blue)
+- Setting `C` above the display gamut — values above ~0.37 may be clamped on sRGB screens; wide gamut is only fully visible on P3 displays
+- Using `oklch` for color matching — if a brand color is `#1d6efa`, converting it to OKLCH is fine, but the resulting decimal values are fragile to hand-edit
 
 ## See Also
 
-- [color-mix()](color-mix.md)
-- [Relative Color Syntax](relative-color.md)
+- [color-mix()](color-mix.md) → for mixing two colors
+- [Relative Color Syntax](relative-color.md) → for deriving variants from a base color
 - Reference: [MDN oklch()](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklch)
