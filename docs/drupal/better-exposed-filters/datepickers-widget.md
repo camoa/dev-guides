@@ -1,6 +1,6 @@
 ---
-description: BEF date picker widget — HTML5 date input conversion, between operators, date offset handling
-tldr: "Use this widget when you have a date filter and want HTML5 `<input type=\"date\">` instead of a text field. Use the hidden widget for date filters you want to set programmatically without user input."
+description: "BEF date picker widget — HTML5 date input conversion, between operators, date offset handling"
+tldr: "Use this widget when you have a date filter and want HTML5 <input type=\"date\"> instead of a text field. The date input always uses YYYY-MM-DD; grouped date filters cannot use this widget."
 drupal_version: "11.x"
 ---
 
@@ -8,49 +8,48 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this widget when you have a date filter and want HTML5 `<input type="date">` instead of a text field. Use the hidden widget for date filters you want to set programmatically without user input.
+> When you have a date filter and want HTML5 `<input type="date">` instead of a text field.
 
-## Decision
+## Decision: Plugin Details
 
 | Property | Value |
 |---|---|
 | Plugin ID | `bef_datepicker` |
 | Class | `Drupal\better_exposed_filters\Plugin\better_exposed_filters\filter\DatePickers` |
+| Attribute | `#[FiltersWidget(id: 'bef_datepicker', title: 'Date Picker')]` |
 | Library | `better_exposed_filters/datepickers` |
 
-**Applicable filter types:**
+## Decision: Applicability
 
-| Filter | Supported |
-|---|---|
-| `Date` filter | Yes |
-| Filters with `$filter->date_handler` | Yes |
-| Grouped filters | No |
+- `Date` filter — Yes
+- Filters with `$filter->date_handler` — Yes
+- Grouped filters — No
 
-## Pattern
+## Pattern: How It Works
+
+The widget converts date text fields to HTML5 `<input type="date">` elements:
 
 ```php
-// Single date filter
 $element['value']['#type'] = 'date';
 $element['value']['#attributes']['class'][] = 'bef-datepicker';
 $element['value']['#attributes']['autocomplete'] = 'off';
+```
 
-// "Between" operators — both min and max are converted
+For "between" operators, both min and max fields are converted:
+```php
 $element['min']['#type'] = 'date';
 $element['max']['#type'] = 'date';
-
-// Date offset handling:
-// When filter uses relative date offsets (e.g., "+7 days"),
-// BEF converts them to actual dates for picker defaults via convertOffsets()
 ```
+
+**Date offset handling:** When the filter uses relative date offsets (e.g., "+7 days"), BEF converts them to actual dates for the date picker default values via `convertOffsets()`.
 
 ## Common Mistakes
 
-- **Wrong**: Expecting the date picker to accept non-ISO formats → **Right**: HTML5 date input always uses `YYYY-MM-DD`. Configure the date filter to match or accept ISO format.
-- **Wrong**: Using the date picker widget for grouped date filters → **Right**: Grouped date filters cannot use the date picker widget. Use the default widget instead.
-- **Wrong**: Expecting consistent visual appearance across browsers → **Right**: HTML5 date inputs render as the native browser implementation. This is not a custom widget; appearance varies.
+- **Date format mismatch** — The HTML5 date input always uses `YYYY-MM-DD` format. If your filter expects a different format, the values may not match. BEF stores the original `#date_format` in drupalSettings.
+- **No grouped filter support** — Grouped date filters cannot use the date picker widget. Use the default widget instead.
+- **Browser differences** — HTML5 date inputs render differently across browsers. The date picker is the native browser implementation, not a custom widget.
 
 ## See Also
 
-- [Hidden & Special Widgets](hidden-special-widgets.md)
-- [Auto-Submit](auto-submit.md)
-- Reference: `web/modules/contrib/better_exposed_filters/src/Plugin/better_exposed_filters/filter/DatePickers.php`
+- [Hidden & Special Widgets](hidden-special-widgets.md) — hiding date filters
+- [Auto-Submit](auto-submit.md) — auto-submit with date inputs (debounced)

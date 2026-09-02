@@ -30,4 +30,5 @@ description: "Source references and maintenance manifest for the better exposed 
 |---|---|---|
 | Project page | https://www.drupal.org/project/better_exposed_filters | 2026-03-30 |
 | Issue queue | https://www.drupal.org/project/issues/better_exposed_filters | 2026-03-30 |
+| Release history (branch and core compatibility per release) | https://updates.drupal.org/release-history/better_exposed_filters/current | 2026-09-02 |
 | noUiSlider JS | https://www.drupal.org/project/nouislider_js | 2026-03-30 |

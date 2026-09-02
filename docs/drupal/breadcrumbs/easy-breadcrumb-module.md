@@ -10,7 +10,7 @@ These guides document **Easy Breadcrumb 2.0.10** (2026-08-28), the current stabl
 
 ## When to Use
 
-> Use Easy Breadcrumb when core produces ugly URL-slug titles (e.g., "my-blog-post" instead of "My Blog Post"), when you need the current page title as the last crumb, or when you need built-in JSON-LD SEO output. It is the de facto standard for production Drupal breadcrumbs without custom code.
+> Install Easy Breadcrumb when core's path-based builder produces ugly URL-slug titles (e.g., "my-blog-post" instead of "My Blog Post"), when you want the current page title as the last crumb, or when you need built-in JSON-LD SEO output. It is the de facto standard for Drupal sites that need production-ready breadcrumbs without custom code.
 
 ## Decision
 
@@ -41,7 +41,6 @@ services:
 Priority 1003 means it wins for every route where `applies()` returns `TRUE`. The only exception is admin routes when `applies_admin_routes` is set to `FALSE` — in that case `PathBasedBreadcrumbBuilder` or another builder handles admin pages.
 
 **Title resolution chain** (in priority order, stops at first match):
-
 1. `alternative_title_field` value on the entity (e.g., `field_breadcrumb_title`) if configured
 2. Page title from `TitleResolverInterface` (requires `_title` or `_title_callback` on route)
 3. Entity label via `entity->getTitle()` or `entity->label()` for entity form routes
@@ -52,10 +51,10 @@ Priority 1003 means it wins for every route where `applies()` returns `TRUE`. Th
 
 ## Common Mistakes
 
-- **Wrong**: Not enabling "Use the real page title when available" → **Right**: Enable it; without it, Easy Breadcrumb defaults to URL slug guessing even when routes have proper titles.
-- **Wrong**: Expecting `term_hierarchy` to work without enabling "Use the real page title when available" → **Right**: Enable the real-page-title option first, or the term titles will not resolve.
-- **Wrong**: Enabling Easy Breadcrumb on admin routes but forgetting to configure excluded paths → **Right**: Exclude the paths that should not show breadcrumbs.
-- **Wrong**: Using Easy Breadcrumb's JSON-LD while another SEO module also outputs breadcrumb structured data → **Right**: Use one source of `BreadcrumbList`; duplicate entries in `<head>` confuse Google.
+- Not enabling "Use the real page title when available" — without it, Easy Breadcrumb defaults to URL slug guessing even when routes have proper titles
+- Expecting `term_hierarchy` to work without enabling "Use the real page title when available" for the term titles
+- Enabling Easy Breadcrumb on admin routes but forgetting to configure excluded paths for paths that should not show breadcrumbs
+- Using Easy Breadcrumb's JSON-LD while also having another SEO module output breadcrumb structured data — duplicate `BreadcrumbList` in `<head>` confuses Google
 
 ## See Also
 

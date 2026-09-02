@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Read this before writing any custom builder or alter hook. The `BreadcrumbManager` is the chain dispatcher; every breadcrumb request routes through it.
+> Understanding this section is required before writing any custom builder or alter hook. The `BreadcrumbManager` is the chain dispatcher; every breadcrumb request routes through it.
 
 ## Decision
 
@@ -21,6 +21,8 @@ drupal_version: "11.x"
 | `hook_system_breadcrumb_alter` | Post-build hook | Fires after winning builder; receives `Breadcrumb`, `RouteMatchInterface`, `$context` |
 
 ## Pattern
+
+How `BreadcrumbManager::build()` resolves the winning builder:
 
 ```php
 // BreadcrumbManager::build() — simplified
@@ -39,20 +41,21 @@ $this->moduleHandler->alter('system_breadcrumb', $breadcrumb, $route_match, $con
 return $breadcrumb;
 ```
 
-Key behaviors:
-- `Breadcrumb` uses `RefinableCacheableDependencyTrait` — cacheability added in `applies()` is automatically merged into the returned breadcrumb
-- Builders are tagged with `breadcrumb_builder` in `*.services.yml`; the `RegisterBreadcrumbBuilderPass` compiler pass collects them by priority
-- Higher priority number = checked first; only the first `applies() === TRUE` builder's `build()` is called
+The `Breadcrumb` class uses `RefinableCacheableDependencyTrait`, implementing `RefinableCacheableDependencyInterface`. Any cacheability added in `applies()` is automatically merged into the returned breadcrumb — so do not duplicate it in `build()`.
+
+Service registration: builders are tagged with `breadcrumb_builder` in `*.services.yml`. The `RegisterBreadcrumbBuilderPass` compiler pass collects them by priority and calls `BreadcrumbManager::addBuilder()`.
+
+Priority order: higher number = higher priority = checked first. The first builder where `applies()` returns `TRUE` wins; subsequent builders are never called.
 
 ## Common Mistakes
 
-- **Wrong**: Adding cache metadata in both `applies()` and `build()` → **Right**: `applies()` metadata is merged automatically; double-adding is redundant but harmless
-- **Wrong**: Returning `NULL` from `build()` → **Right**: Always return a `Breadcrumb` instance; the manager throws `UnexpectedValueException` on `NULL`
-- **Wrong**: Assuming all builders run → **Right**: Only the winning builder's `build()` is called; all other builders only have `applies()` checked
+- Adding cache metadata in both `applies()` and `build()` — it is merged automatically; double-adding causes no error but is redundant
+- Returning `NULL` from `build()` — the manager throws `UnexpectedValueException`; always return a `Breadcrumb` instance
+- Assuming all builders run — only the winning builder's `build()` is called; losers only have `applies()` called
 
 ## See Also
 
-- [Core Breadcrumb Builders](core-breadcrumb-builders.md)
-- [Custom Breadcrumb Builder](custom-breadcrumb-builder.md)
+- Builder priorities → [Core Breadcrumb Builders](core-breadcrumb-builders.md)
+- Writing your own builder → [Custom Breadcrumb Builder](custom-breadcrumb-builder.md)
 - Reference: `core/lib/Drupal/Core/Breadcrumb/BreadcrumbManager.php`
 - Reference: `core/lib/Drupal/Core/Breadcrumb/Breadcrumb.php`

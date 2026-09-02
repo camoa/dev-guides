@@ -1,6 +1,6 @@
 ---
-description: Migrate field-level validation on blur — email availability checks and format verification without form submission
-tldr: "Use this when migrating field-level validation that runs on blur (focusout) without submitting the form — email availability checks, username validation, format verification."
+description: "Real-Time Validation Migration — migrate field-level validation that runs on blur without submitting the form"
+tldr: "Migrate on-blur field validation (email availability, format checks). HTMX has no ->throttle() method — throttling and debouncing are trigger modifiers: trigger('focusout throttle:1s') or trigger('focusout delay:500ms')."
 drupal_version: "11.x"
 ---
 
@@ -8,45 +8,60 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when migrating field-level validation that runs on blur (focusout) without submitting the form — email availability checks, username validation, format verification.
+> Migrate field-level validation that runs on blur (focusout) without submitting the form. Common for email availability checks, username validation, or format verification.
 
-## Decision
+## Steps
 
-| Step | Action |
-|---|---|
-| 1 | Replace `#ajax` with `Htmx` on the field, configure `trigger('focusout')` |
-| 2 | Add a validation result container as HTMX target |
-| 3 | In `buildForm()`, check `getHtmxTriggerName()` to detect the triggering field |
-| 4 | Set validation message markup on the container element |
+1. **Replace `#ajax` with HTMX on field** — Configure `trigger('focusout')`
+2. **Add validation result container** — Target for validation messages
+3. **Check trigger in buildForm()** — Run validation when specific field triggered
+4. **Return validation message** — Update the result container
 
-## Pattern
+## BEFORE: AJAX
 
-**BEFORE:**
 ```php
 $form['email'] = [
   '#type' => 'email',
+  '#title' => t('Email'),
   '#ajax' => [
     'callback' => '::validateEmailCallback',
     'wrapper' => 'email-validation',
     'event' => 'focusout',
+    'progress' => ['type' => 'none'],
   ],
 ];
-$form['email_validation'] = ['#type' => 'container', '#attributes' => ['id' => 'email-validation']];
+
+$form['email_validation'] = [
+  '#type' => 'container',
+  '#attributes' => ['id' => 'email-validation'],
+];
 
 public function validateEmailCallback(array &$form, FormStateInterface $form_state) {
   $email = $form_state->getValue('email');
-  $form['email_validation']['#markup'] = $this->emailExists($email) ? '<span class="error">Email already taken</span>' : '<span class="success">Available</span>';
+
+  if ($this->emailExists($email)) {
+    $form['email_validation']['#markup'] = '<span class="error">Email already taken</span>';
+  }
+  else {
+    $form['email_validation']['#markup'] = '<span class="success">Available</span>';
+  }
+
   return $form['email_validation'];
 }
 ```
 
-**AFTER:**
+## AFTER: HTMX
+
 ```php
 use Drupal\Core\Htmx\Htmx;
 use Drupal\Core\Url;
 
-$form['email'] = ['#type' => 'email', '#title' => t('Email')];
+$form['email'] = [
+  '#type' => 'email',
+  '#title' => t('Email'),
+];
 
+// Configure HTMX to trigger on blur
 (new Htmx())
   ->post(Url::fromRoute('<current>'))
   ->onlyMainContent()
@@ -56,11 +71,16 @@ $form['email'] = ['#type' => 'email', '#title' => t('Email')];
   ->swap('outerHTML')
   ->applyTo($form['email']);
 
-$form['email_validation'] = ['#type' => 'container', '#attributes' => ['id' => 'email-validation']];
+$form['email_validation'] = [
+  '#type' => 'container',
+  '#attributes' => ['id' => 'email-validation'],
+];
 
+// In buildForm, check if this is validation request
 $trigger = $this->getHtmxTriggerName();
 if ($trigger === 'email') {
   $email = $form_state->getValue('email');
+
   if ($email && $this->emailExists($email)) {
     $form['email_validation']['#markup'] = '<span class="error">Email already taken</span>';
   }
@@ -70,17 +90,18 @@ if ($trigger === 'email') {
 }
 ```
 
+Reference: HTMX trigger patterns in `/core/lib/Drupal/Core/Htmx/Htmx.php`
+
 ## Common Mistakes
 
-- **Using `'event' => 'focusout'`** → HTMX uses the `trigger('focusout')` method, not an array key
-- **Not handling empty values** → Check if the field has a value before validating — empty blur should not show an error
-- **Creating a separate callback** → Put validation logic in `buildForm()` checking `getHtmxTriggerName()`. No callback needed
-- **Including a progress indicator** → HTMX is fast enough without progress indicators. Omit unless validation is slow
+- **Using `'event' => 'focusout'`** → HTMX uses `trigger('focusout')` method, not an array key
+- **Not handling empty values** → Check if field has value before validating. Empty blur shouldn't show error
+- **Creating separate callback** → Put validation logic in `buildForm()` checking `getHtmxTriggerName()`. No callback needed
+- **Including progress indicator** → HTMX is fast enough without progress indicators. Omit unless validation is slow
 - **Not throttling requests** → There is no `->throttle()` method. Throttle is a trigger modifier: use `->trigger('focusout throttle:1s')`. Debounce (delay) works similarly: `->trigger('focusout delay:500ms')`
 
 ## See Also
 
 - Previous: [Multi-Step Wizard Migration](multi-step-wizard-migration.md)
 - Next: [Infinite Scroll Migration](infinite-scroll-migration.md)
-- Reference: HTMX trigger modifiers (`changed`, `delay`, `throttle`) in HTMX documentation
-- Source: `/core/lib/Drupal/Core/Htmx/Htmx.php`
+- Reference: HTMX trigger modifiers like `changed`, `delay`, `throttle` in HTMX documentation

@@ -1,5 +1,5 @@
 ---
-description: BEF common mistakes, anti-patterns, and debugging checklist — quick-reference issue/cause/solution table
+description: "BEF common mistakes, anti-patterns, and debugging checklist — quick-reference issue/cause/solution table"
 tldr: "Use this guide when debugging BEF issues or reviewing BEF configuration for problems."
 drupal_version: "11.x"
 ---
@@ -8,9 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when debugging BEF issues or reviewing BEF configuration for problems.
+> When debugging BEF issues or reviewing BEF configuration for problems.
 
-## Decision
+## Decision: Common Issues and Solutions
 
 | Issue | Cause | Solution |
 |---|---|---|
@@ -29,23 +29,23 @@ drupal_version: "11.x"
 | JS errors after AJAX | Custom JS not using Drupal.behaviors | Wrap custom JS in `Drupal.behaviors` for proper re-attachment |
 | Date picker format mismatch | HTML5 date always uses YYYY-MM-DD | Accept ISO format or configure the date filter to match |
 
-## Pattern
+## Pattern: Debugging BEF
 
-**Debugging BEF:**
-1. Enable Twig debug — see template suggestions: `{{ dump(_context) }}`
-2. Check drupalSettings — in browser console: `drupalSettings.better_exposed_filters`
-3. Inspect form element for `data-bef-*` attributes
-4. Check `isApplicable()` — if a widget doesn't appear, the filter type may not be supported
-5. Run `drush cex` and inspect the View YAML for BEF settings structure
+1. **Enable Twig debug** — See template suggestions: `{{ dump(_context) }}`
+2. **Check drupalSettings** — In browser console: `drupalSettings.better_exposed_filters`
+3. **Check data attributes** — Inspect form element for `data-bef-*` attributes
+4. **Check isApplicable** — If a widget doesn't appear, the filter type may not be supported
+5. **Config export** — `drush cex` and inspect the View YAML for BEF settings structure
 
 ## Common Mistakes
 
-- **Wrong**: Using BEF to replace Facets for faceted search with counts → **Right**: BEF is for Views exposed forms. For search faceted navigation with counts, use Facets module.
-- **Wrong**: Enabling auto-submit, collapsible, secondary, and soft limit all at once → **Right**: Each adds complexity. Start simple and add features incrementally.
-- **Wrong**: Testing only without Views AJAX → **Right**: BEF behavior differs with and without AJAX. Test both paths.
+- **Using BEF to replace Facets** — BEF is for Views exposed forms. For search faceted navigation with counts, use Facets module.
+- **Over-configuring** — Don't enable auto-submit, collapsible, secondary, and soft limit all at once. Each adds complexity. Start simple.
+- **Not testing with AJAX** — BEF behavior differs with and without Views AJAX. Test both paths.
+- **Forgetting mobile** — Use the breakpoint option for auto-submit. Checkboxes and radio buttons may need different layout on mobile vs desktop.
 
 ## See Also
 
-- [Overview](overview.md)
-- [Integration Patterns](integration-patterns.md)
-- [Theming & Templates](theming-templates.md)
+- [Overview](overview.md) — BEF architecture understanding
+- [Integration Patterns](integration-patterns.md) — module compatibility
+- [Theming & Templates](theming-templates.md) — debugging template output

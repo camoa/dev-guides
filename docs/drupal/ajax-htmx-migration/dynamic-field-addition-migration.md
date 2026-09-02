@@ -1,6 +1,6 @@
 ---
-description: Migrate Add Another button patterns — use vals() to pass incremented count instead of form state storage
-tldr: "Use this when migrating \"Add Another\" patterns where clicking a button adds a new form field to the form — multi-value fields and repeating field groups."
+description: "Dynamic Field Addition Migration — migrate Add Another patterns that add a new form field on click"
+tldr: "Migrate Add Another patterns for repeating fields. HTMX submissions don't preserve form state like AJAX callbacks — track the count in a hidden field and send the incremented value with vals()."
 drupal_version: "11.x"
 ---
 
@@ -8,51 +8,91 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when migrating "Add Another" patterns where clicking a button adds a new form field to the form — multi-value fields and repeating field groups.
+> Migrate "Add Another" patterns where clicking a button adds a new form field (textfield, fieldset, etc.) to the form. Common in multi-value fields and repeating field groups.
 
-## Decision
+## Steps
 
-| Step | Action |
-|---|---|
-| 1 | Replace form state count storage with a hidden field |
-| 2 | Replace `#ajax` button with `html_tag` button + `Htmx` |
-| 3 | Use `vals()` to send the incremented count with the HTMX request |
-| 4 | Target the items container wrapper |
-| 5 | Delete the submit handler — increment is in `vals()` |
+1. **Track count in hidden field** — Replace form state storage with hidden field
+2. **Replace `#ajax` button with HTMX button** — Configure to reload field container
+3. **Use `vals()` to send incremented count** — Pass new count with HTMX request
+4. **Update container wrapper** — Target the container holding all fields
+5. **Remove submit handler** — Logic moves to buildForm()
 
-## Pattern
+## BEFORE: AJAX
 
-**BEFORE:**
 ```php
+$form['items'] = [
+  '#type' => 'container',
+  '#tree' => TRUE,
+  '#prefix' => '<div id="items-wrapper">',
+  '#suffix' => '</div>',
+];
+
 $item_count = $form_state->get('item_count') ?: 1;
+
+for ($i = 0; $i < $item_count; $i++) {
+  $form['items'][$i] = [
+    '#type' => 'textfield',
+    '#title' => t('Item @num', ['@num' => $i + 1]),
+  ];
+}
+
 $form['add_item'] = [
   '#type' => 'submit',
   '#value' => t('Add Item'),
   '#submit' => ['::addItem'],
-  '#ajax' => ['callback' => '::itemsCallback', 'wrapper' => 'items-wrapper'],
+  '#ajax' => [
+    'callback' => '::itemsCallback',
+    'wrapper' => 'items-wrapper',
+  ],
 ];
-public function addItem(&$form, $form_state) {
-  $form_state->set('item_count', $form_state->get('item_count') + 1);
+
+public function addItem(array &$form, FormStateInterface $form_state) {
+  $count = $form_state->get('item_count') ?: 1;
+  $form_state->set('item_count', $count + 1);
   $form_state->setRebuild();
+}
+
+public function itemsCallback(array &$form, FormStateInterface $form_state) {
+  return $form['items'];
 }
 ```
 
-**AFTER:**
+## AFTER: HTMX
+
 ```php
 use Drupal\Core\Htmx\Htmx;
 use Drupal\Core\Url;
 
+$form['items'] = [
+  '#type' => 'container',
+  '#tree' => TRUE,
+  '#attributes' => ['id' => 'items-wrapper'],
+];
+
+// Get item count from form state or input
 $item_count = $form_state->getValue('item_count', 1);
 
-$form['item_count'] = ['#type' => 'hidden', '#value' => $item_count];
-$form['items'] = ['#type' => 'container', '#tree' => TRUE, '#attributes' => ['id' => 'items-wrapper']];
+$form['item_count'] = [
+  '#type' => 'hidden',
+  '#value' => $item_count,
+];
 
 for ($i = 0; $i < $item_count; $i++) {
-  $form['items'][$i] = ['#type' => 'textfield', '#title' => t('Item @num', ['@num' => $i + 1])];
+  $form['items'][$i] = [
+    '#type' => 'textfield',
+    '#title' => t('Item @num', ['@num' => $i + 1]),
+  ];
 }
 
-$form['add_item'] = ['#type' => 'html_tag', '#tag' => 'button', '#value' => t('Add Item'), '#attributes' => ['type' => 'button']];
+$form['add_item'] = [
+  '#type' => 'html_tag',
+  '#tag' => 'button',
+  '#value' => t('Add Item'),
+  '#attributes' => ['type' => 'button'],
+];
 
+// Send incremented count with request
 (new Htmx())
   ->post(Url::fromRoute('<current>'))
   ->onlyMainContent()
@@ -63,16 +103,18 @@ $form['add_item'] = ['#type' => 'html_tag', '#tag' => 'button', '#value' => t('A
   ->applyTo($form['add_item']);
 ```
 
+Reference: `Htmx::vals()` method for sending additional values
+
 ## Common Mistakes
 
-- **Storing count in form state** → Use hidden field instead. HTMX submissions do not preserve form state like AJAX callbacks do
-- **Not using `vals()`** → You must send the incremented count with the HTMX request using `vals(['field' => 'value'])`
-- **Adding `setRebuild()`** → Not needed with HTMX. The form rebuilds automatically when it processes the new hidden field value
-- **Using submit handler** → Delete it. The increment logic is in the `vals()` call and `buildForm()` reads the hidden field
-- **Not handling removal** → For "Remove" buttons, use the same `vals()` pattern passing the item index to remove
+- **Storing count in form state** → Use hidden field instead. HTMX submissions don't preserve form state like AJAX callbacks do
+- **Not using `vals()`** → You need to send the incremented count with the HTMX request using `vals(['field' => 'value'])`
+- **Forgetting to rebuild** → Actually not needed with HTMX. The form rebuilds automatically when it processes the new hidden field value
+- **Using submit handler** → Delete it. The increment logic is in the `vals()` call, and buildForm() uses that value
+- **Not handling removal** → For "Remove" buttons, use similar pattern with `vals()` passing which item index to remove
 
 ## See Also
 
 - Previous: [Infinite Scroll Migration](infinite-scroll-migration.md)
 - Next: [JavaScript Event Migration](javascript-event-migration.md)
-- Reference: `Htmx::vals()` for sending additional request data at `/core/lib/Drupal/Core/Htmx/Htmx.php`
+- Reference: `Htmx::vals()` for sending additional request data

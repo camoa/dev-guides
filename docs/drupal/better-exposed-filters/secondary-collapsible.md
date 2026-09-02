@@ -1,6 +1,6 @@
 ---
-description: BEF secondary options panel and per-filter collapsible details — configuration, nesting, and auto-open behavior
-tldr: "Use secondary options when you have many exposed filters and want to group less-used ones into a collapsible \"Advanced options\" panel. Use per-filter collapsible when you want individual filters wrapped in their own toggleable details…"
+description: "BEF secondary options panel and per-filter collapsible details — configuration, nesting, and auto-open behavior"
+tldr: "Use secondary options when you have many exposed filters and want to group less-used ones into a collapsible Advanced options panel, or wrap individual filters in collapsible details elements."
 drupal_version: "11.x"
 ---
 
@@ -8,21 +8,26 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use secondary options when you have many exposed filters and want to group less-used ones into a collapsible "Advanced options" panel. Use per-filter collapsible when you want individual filters wrapped in their own toggleable details element.
+> When you have many exposed filters and want to group less-used ones into a collapsible "Advanced options" panel, or wrap individual filters in collapsible details elements.
 
-## Decision
+## Decision: Secondary Options Panel
 
-**Secondary options panel:**
+**Enable:** General Settings → "Allow secondary options" (`allow_secondary: TRUE`)
 
+Then per filter/sort/pager, check "This is a secondary option" (`is_secondary: TRUE`) to move it into the secondary panel.
+
+**Configuration:**
 | Option | Config Key | Default |
 |---|---|---|
 | Enable | `general.allow_secondary` | FALSE |
 | Label | `general.secondary_label` | 'Advanced options' |
 | Open by default | `general.secondary_open` | FALSE |
 
-Enable with "Allow secondary options" in general settings, then per filter/sort/pager check "This is a secondary option" (`is_secondary: TRUE`). The secondary panel renders as a `<details>` element.
+The secondary panel renders as a `<details>` element with the configured label.
 
-**Per-filter collapsible:**
+## Decision: Per-Filter Collapsible
+
+Any filter can be wrapped in its own collapsible `<details>` element:
 
 | Option | Config Key | Default |
 |---|---|---|
@@ -30,30 +35,28 @@ Enable with "Allow secondary options" in general settings, then per filter/sort/
 | Disable auto-open | `advanced.collapsible_disable_automatic_open` | FALSE |
 | Open by default | `advanced.open_by_default` | FALSE |
 
-**Auto-open behavior:** By default, a collapsible filter with a selected value opens automatically. Set `collapsible_disable_automatic_open` to TRUE to prevent this.
+**Auto-open behavior:** By default, if a collapsible filter has a selected value, it opens automatically. Set `collapsible_disable_automatic_open` to TRUE to prevent this.
 
-## Pattern
+## Pattern: Nesting
+
+A filter can be both collapsible AND secondary — it will be a `<details>` element inside the secondary `<details>` panel:
 
 ```
-# Nesting: collapsible filter inside secondary panel
-[Advanced options] ← secondary panel <details>
-  [Category ▶] ← collapsible filter <details>
+[Advanced options] ← secondary panel
+  [Category ▶] ← collapsible filter
     □ Option 1
     □ Option 2
-  [Tags ▶] ← collapsible filter <details>
+  [Tags ▶] ← collapsible filter
     □ Tag A
     □ Tag B
 ```
 
-A filter can be both `is_secondary: TRUE` and `collapsible: TRUE`.
-
 ## Common Mistakes
 
-- **Wrong**: Enabling "is_secondary" on a filter when "Allow secondary" is not enabled in general settings → **Right**: The per-filter "is secondary" checkbox is hidden via `#states` until "Allow secondary" is enabled.
-- **Wrong**: Expecting a collapsible filter with an active value to open automatically when `collapsible_disable_automatic_open` is TRUE → **Right**: With that setting, the user must click to see their active selection.
+- **"Is secondary" checkbox not visible** — Enable "Allow secondary" in the general settings first. The per-filter option is hidden via `#states` until then.
+- **Collapsible filter with active value not opening** — This is the default behavior (auto-open). If you disabled it with `collapsible_disable_automatic_open`, the user must click to see their selection.
 
 ## See Also
 
-- [General Settings](general-settings.md)
-- [Checkboxes & Radio Buttons](checkboxes-radio-buttons.md)
-- Reference: `web/modules/contrib/better_exposed_filters/src/Plugin/views/exposed_form/BetterExposedFilters.php`
+- [General Settings](general-settings.md) — enabling secondary options
+- [Checkboxes & Radio Buttons](checkboxes-radio-buttons.md) — combining with collapsible

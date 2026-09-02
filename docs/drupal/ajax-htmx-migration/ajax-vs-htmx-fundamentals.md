@@ -1,6 +1,6 @@
 ---
-description: Core architectural differences between Drupal AJAX API and HTMX — choose the right approach before migrating
-tldr: "Use AJAX when you need command sequences, modal dialogs, or contrib integration. Use HTMX when you want declarative form interactions, CSS selector targeting, or built-in browser history support."
+description: "AJAX vs HTMX Fundamentals — core architectural differences between Drupal AJAX and HTMX before starting a migration"
+tldr: "Read this before starting a migration to understand the architectural differences between #ajax callbacks and the declarative Htmx class. Never mix #ajax and Htmx attributes on the same element — they conflict and HTMX is ignored."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use AJAX when you need command sequences, modal dialogs, or contrib integration. Use HTMX when you want declarative form interactions, CSS selector targeting, or built-in browser history support.
+> When you need to understand the core architectural differences between Drupal AJAX and HTMX before starting a migration. This is essential background for choosing the right approach.
 
 ## Decision
 
@@ -58,17 +58,18 @@ $form['field'] = [
 // No callback method — logic goes in buildForm()
 ```
 
+Reference: `/core/lib/Drupal/Core/Htmx/Htmx.php` (class documentation)
+
 ## Common Mistakes
 
 - **Using `#ajax` and `Htmx` together** → Choose one approach per element. They conflict and HTMX will be ignored if `#ajax` exists
 - **Creating callback methods for HTMX** → HTMX rebuilds the form directly in `buildForm()`. Check `$this->getHtmxTriggerName()` instead of creating callbacks
-- **Using wrapper IDs instead of CSS selectors** → HTMX targets via CSS selectors like `'#id'`, `'.class'`, `'[data-attr]'`. More flexible than AJAX wrapper IDs
+- **Using wrapper IDs instead of CSS selectors** → HTMX targets via CSS selectors like `'#id'`, `'.class'`, `'[data-attr]'`. This is more flexible than AJAX wrapper IDs
 - **Returning AjaxResponse objects** → HTMX controllers return render arrays. The `HtmxRenderer` converts them to HTML automatically
 - **Forgetting to add wrapper attributes** → HTMX needs CSS-selectable targets. Use `'#wrapper_attributes'` on form elements or `'#attributes'` on containers
 
 ## See Also
 
-- Next: [AJAX Command to HTMX Equivalents](ajax-command-to-htmx-equivalents.md)
+- Next: [AJAX Command to HTMX Equivalents](ajax-command-to-htmx-equivalents.md) — Quick reference for converting commands
 - Reference: [Drupal HTMX Change Record](https://www.drupal.org/node/3539472)
-- Source: `/core/lib/Drupal/Core/Htmx/Htmx.php`
-- Related: [Drupal HTMX guides](../htmx/index.md)
+- Related: `drupal-htmx-implementation-guide.md` — Full HTMX implementation guide

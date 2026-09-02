@@ -1,6 +1,6 @@
 ---
-description: Create custom BEF filter, sort, or pager widget plugins — PHP 8.1 attribute syntax, key methods, and plugin discovery alter
-tldr: "Use this guide when the built-in BEF widgets don't meet your needs and you want to create a custom filter, sort, or pager widget. Use `hook_better_exposed_filters_options_alter()` for simpler runtime changes that don't require a new plugin."
+description: "Create custom BEF filter, sort, or pager widget plugins — PHP 8.1 attribute syntax, key methods, and plugin discovery alter"
+tldr: "Use this guide when the built-in BEF widgets don't meet your needs and you want to create a custom filter, sort, or pager widget."
 drupal_version: "11.x"
 ---
 
@@ -8,9 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when the built-in BEF widgets don't meet your needs and you want to create a custom filter, sort, or pager widget. Use `hook_better_exposed_filters_options_alter()` for simpler runtime changes that don't require a new plugin.
+> When the built-in BEF widgets don't meet your needs and you want to create a custom filter, sort, or pager widget.
 
-## Decision
+## Decision: Plugin Type
 
 | Type | Attribute | Base Class | Namespace |
 |---|---|---|---|
@@ -18,10 +18,11 @@ drupal_version: "11.x"
 | Sort | `#[SortWidget]` | `SortWidgetBase` | `Plugin\better_exposed_filters\sort` |
 | Pager | `#[PagerWidget]` | `PagerWidgetBase` | `Plugin\better_exposed_filters\pager` |
 
-## Pattern
+## Pattern: Creating a Custom Filter Widget
 
 ```php
 <?php
+
 namespace Drupal\my_module\Plugin\better_exposed_filters\filter;
 
 use Drupal\better_exposed_filters\Attribute\FiltersWidget;
@@ -35,49 +36,75 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 )]
 class MyCustomWidget extends FilterWidgetBase {
 
+  public function defaultConfiguration(): array {
+    return parent::defaultConfiguration() + [
+      'my_option' => 'default_value',
+    ];
+  }
+
   public static function isApplicable(mixed $filter = NULL, array $filter_options = []): bool {
+    // Return TRUE for filter types this widget supports.
     return is_a($filter, 'Drupal\views\Plugin\views\filter\InOperator');
+  }
+
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
+    $form = parent::buildConfigurationForm($form, $form_state);
+
+    $form['my_option'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('My option'),
+      '#default_value' => $this->configuration['my_option'],
+    ];
+
+    return $form;
   }
 
   public function exposedFormAlter(array &$form, FormStateInterface $form_state): void {
     $field_id = $this->getExposedFilterFieldId();
-    parent::exposedFormAlter($form, $form_state); // ALWAYS call parent first
+    parent::exposedFormAlter($form, $form_state);
 
+    // Transform the form element.
     if (!empty($form[$field_id])) {
       $form[$field_id]['#type'] = 'my_custom_element';
+      // Attach custom library.
       $form['#attached']['library'][] = 'my_module/my_widget';
     }
   }
+
 }
 ```
 
-**Key methods to override:**
+## Pattern: Key Methods to Override
 
 | Method | Purpose |
 |---|---|
-| `defaultConfiguration()` | Define config keys and defaults |
-| `isApplicable()` | Control which filter types this works with |
-| `buildConfigurationForm()` | Build Views UI config form |
-| `exposedFormAlter()` | Transform exposed form element at runtime |
+| `defaultConfiguration()` | Define configuration keys and defaults |
+| `isApplicable()` | Control which filter types this widget works with |
+| `buildConfigurationForm()` | Build the Views UI configuration form |
+| `validateConfigurationForm()` | Validate configuration values |
+| `submitConfigurationForm()` | Process submitted configuration |
+| `exposedFormAlter()` | Transform the exposed form element at runtime |
 
-**Plugin discovery alter:**
+## Pattern: Plugin Discovery Alter
+
+To modify existing widget plugins, use the alter hook:
 ```php
 function my_module_better_exposed_filters_better_exposed_filters_filter_widget_info_alter(&$definitions) {
-  unset($definitions['bef_sliders']); // Remove a widget
-  $definitions['bef']['label'] = t('Enhanced Checkboxes'); // Modify a widget
+  // Remove a widget.
+  unset($definitions['bef_sliders']);
+
+  // Modify a widget.
+  $definitions['bef']['label'] = t('Enhanced Checkboxes');
 }
 ```
 
-Replace `filter` with `sort` or `pager` for those types.
-
 ## Common Mistakes
 
-- **Wrong**: Plugin in wrong namespace → **Right**: Must be in `Plugin\better_exposed_filters\{filter|sort|pager}\`.
-- **Wrong**: Not calling `parent::exposedFormAlter()` → **Right**: The parent handles collapsible, secondary, rewriting, sorting, and context. Always call parent first.
-- **Wrong**: Missing config schema for custom widget → **Right**: Custom widgets need a schema entry in `config/schema/` for proper config export/import.
+- **Wrong namespace** — Plugins must be in `Plugin\better_exposed_filters\{type}\` (e.g., `filter`, `sort`, or `pager`).
+- **Not calling parent::exposedFormAlter()** — The parent handles collapsible, secondary, rewriting, sorting, and context. Always call parent first.
+- **Missing config schema** — Custom widgets need a config schema entry in `config/schema/` for proper config export/import.
 
 ## See Also
 
-- [Configuration Schema](configuration-schema.md)
-- [Hooks & Alter Functions](hooks-alter.md)
-- Reference: `web/modules/contrib/better_exposed_filters/src/Plugin/BetterExposedFiltersWidgetBase.php`
+- [Configuration Schema](configuration-schema.md) — schema requirements for custom widgets
+- [Hooks & Alter Functions](hooks-alter.md) — alter hook for plugins

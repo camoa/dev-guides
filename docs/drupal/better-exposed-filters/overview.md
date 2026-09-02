@@ -1,6 +1,6 @@
 ---
-description: BEF vs core exposed filters — capabilities, architecture, and when to use Better Exposed Filters
-tldr: "Use Better Exposed Filters when you need more control over how Views exposed filters are rendered — replacing default select dropdowns with checkboxes, radio buttons, links, sliders, date pickers, or other widgets. Use core exposed filters…"
+description: "BEF vs core exposed filters — capabilities, architecture, and when to use Better Exposed Filters"
+tldr: "Use Better Exposed Filters when you need more control over how Views exposed filters are rendered — replacing default select dropdowns with checkboxes, radio buttons, links, sliders, date pickers, or other widgets."
 drupal_version: "11.x"
 ---
 
@@ -8,9 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use Better Exposed Filters when you need more control over how Views exposed filters are rendered — replacing default select dropdowns with checkboxes, radio buttons, links, sliders, date pickers, or other widgets. Use core exposed filters when default select dropdowns are sufficient.
+> When you need more control over how Views exposed filters are rendered — replacing default select dropdowns with checkboxes, radio buttons, links, sliders, date pickers, or other widgets.
 
-## Decision
+## Decision: BEF vs Core Exposed Filters
 
 | Feature | Core Exposed Filters | Better Exposed Filters |
 |---|---|---|
@@ -31,13 +31,15 @@ drupal_version: "11.x"
 | Hierarchical/nested display | Flat only | Yes — nested `<ul>` for taxonomy |
 | Sort combine | No | Yes — merge sort_by + sort_order |
 
-## Pattern
+## Pattern: Architecture
 
-BEF replaces the Views exposed form handler with its own plugin (`bef`), which extends `InputRequired`. Three plugin types:
+BEF replaces the Views exposed form handler with its own plugin (`bef`), which extends `InputRequired`. It uses a **three-type plugin system**:
 
 1. **Filter widgets** — Alter how individual exposed filters render
 2. **Sort widgets** — Alter how exposed sort controls render
 3. **Pager widgets** — Alter how exposed pager controls render
+
+Each type has its own plugin manager service and widget base class. Widgets are discovered via PHP 8.1 Attributes (Drupal 11) with legacy Annotation fallback.
 
 **Services:**
 - `better_exposed_filters.bef_helper` — Static utility methods
@@ -45,17 +47,17 @@ BEF replaces the Views exposed form handler with its own plugin (`bef`), which e
 - `plugin.manager.better_exposed_filters_sort_widget` — Sort widget manager
 - `plugin.manager.better_exposed_filters_pager_widget` — Pager widget manager
 
-**Main plugin:** `BetterExposedFilters` (ID: `bef`) at `src/Plugin/views/exposed_form/BetterExposedFilters.php`
+**Main plugin:** `BetterExposedFilters` (ID: `bef`) at `src/Plugin/views/exposed_form/BetterExposedFilters.php` — extends `InputRequired`, orchestrates all widget plugins.
 
 ## Common Mistakes
 
-- **Wrong**: Using BEF without first exposing filters in the View → **Right**: BEF only enhances filters already exposed in the View. Expose the filter in Views UI first.
-- **Wrong**: Using BEF for sliders without the noUiSlider library → **Right**: Sliders require `drupal/nouislider_js`; verify files exist at `/libraries/nouislider/`.
-- **Wrong**: Confusing BEF with Facets → **Right**: BEF enhances Views exposed forms. Facets is a separate system for Search API. They can work together but serve different purposes.
+- **Expecting BEF to work without exposed filters** — BEF only enhances filters that are already exposed in the View. You must first expose the filter in Views UI.
+- **Forgetting the noUiSlider library** — Sliders require the `drupal/nouislider_js` library. Composer installs it, but the JS library files must be in `/libraries/nouislider/`.
+- **Confusing BEF with Facets** — BEF enhances Views exposed forms. Facets is a separate system for Search API. They can work together but serve different purposes.
 
 ## See Also
 
-- [Installation & Setup](installation-setup.md)
-- [General Settings](general-settings.md)
-- [Integration Patterns](integration-patterns.md)
+- [Installation & Setup](installation-setup.md) — getting BEF running
+- [General Settings](general-settings.md) — global BEF configuration
+- [Integration Patterns](integration-patterns.md) — BEF with AJAX, Facets, Search API
 - Reference: `web/modules/contrib/better_exposed_filters/src/Plugin/views/exposed_form/BetterExposedFilters.php`

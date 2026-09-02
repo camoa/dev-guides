@@ -1,5 +1,5 @@
 ---
-description: BEF JavaScript libraries — auto_submit, sliders, select_all_none, soft_limit, links_use_ajax, and drupalSettings structure
+description: "BEF JavaScript libraries — auto_submit, sliders, select_all_none, soft_limit, links_use_ajax, and drupalSettings structure"
 tldr: "Use this guide when you need to understand or customize BEF's client-side behavior — auto-submit, sliders, select all/none, soft limit, or link AJAX."
 drupal_version: "11.x"
 ---
@@ -8,26 +8,39 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when you need to understand or customize BEF's client-side behavior — auto-submit, sliders, select all/none, soft limit, or link AJAX.
+> When you need to understand or customize BEF's client-side behavior — auto-submit, sliders, select all/none, soft limit, or link AJAX.
 
-## Decision
+## Decision: Library Reference
 
-| Library | File | Behavior | Key Dependencies |
+| Library | File | Behavior | Dependencies |
 |---|---|---|---|
-| `general` | `better_exposed_filters.js` | Checkbox highlighting, autosubmit exclusion, single checkbox fix | jQuery, once |
-| `auto_submit` | `auto_submit.js` | Debounced form auto-submission | once, drupal.debounce |
-| `sliders` | `bef_sliders.js` | noUiSlider initialization and sync | drupalSettings, jQuery, once, nouislider |
-| `datepickers` | `bef_datepickers.js` | HTML5 date input conversion | drupalSettings, jQuery |
-| `select_all_none` | `bef_select_all_none.js` | Select all/none checkbox behavior | jQuery, once |
-| `links_use_ajax` | `bef_links_use_ajax.js` | AJAX form submission for link filters | once |
-| `soft_limit` | `bef_soft_limit.js` | Show more/less toggle | once, drupalSettings, jQuery |
+| `general` | `better_exposed_filters.js` | Checkbox highlighting, autosubmit exclusion, single checkbox fix | core/drupal, core/jquery, core/once |
+| `auto_submit` | `auto_submit.js` | Debounced form auto-submission | core/drupal, core/once, core/drupal.debounce |
+| `sliders` | `bef_sliders.js` | noUiSlider initialization and sync | core/drupal, core/drupalSettings, core/jquery, core/once, better_exposed_filters/nouislider |
+| `datepickers` | `bef_datepickers.js` | HTML5 date input conversion | core/drupal, core/drupalSettings, core/jquery |
+| `select_all_none` | `bef_select_all_none.js` | Select all/none checkbox behavior | core/drupal, core/jquery, core/once |
+| `links_use_ajax` | `bef_links_use_ajax.js` | AJAX form submission for link filters | core/drupal, core/once |
+| `soft_limit` | `bef_soft_limit.js` | Show more/less toggle | core/drupal, core/once, core/drupalSettings, core/jquery |
 | `nouislider` | `/libraries/nouislider/nouislider.min.js` | External slider library | — |
 
-## Pattern
+## Pattern: auto_submit.js Key Behaviors
+
+**`Drupal.behaviors.betterExposedFiltersAutoSubmit`:**
+
+- Binds to `change` and `keyup` events on form elements
+- `change` on non-date elements: submits immediately
+- `change` on date inputs: debounced (prevents premature submit while typing)
+- `keyup` on text/textarea: debounced by configurable delay
+- Ignores navigation keys (arrows, tab, enter, esc, shift, ctrl, alt, etc.)
+- Respects media query breakpoints
+- Excludes `.select2-search__field` and `.chosen-search-input`
+- Refocuses the last-triggered element after AJAX refresh
+
+## Pattern: drupalSettings Structure
 
 ```javascript
-// drupalSettings structure
 drupalSettings.better_exposed_filters = {
+  // Auto-submit
   auto_submit_sort_only: false,
 
   // Sliders
@@ -36,9 +49,7 @@ drupalSettings.better_exposed_filters = {
     field_price_value: {
       min: 0, max: 1000, step: 10,
       animate: 0, orientation: 'horizontal',
-      tooltips: false,
-      tooltips_value_prefix: '$',
-      tooltips_value_suffix: ' USD'
+      // ...
     }
   },
 
@@ -59,23 +70,13 @@ drupalSettings.better_exposed_filters = {
 };
 ```
 
-**auto_submit.js key behaviors:**
-- `change` on non-date elements: submits immediately
-- `change` on date inputs: debounced
-- `keyup` on text/textarea: debounced by configurable delay
-- Ignores navigation keys (arrows, tab, enter, esc, shift, ctrl, alt, etc.)
-- Respects `matchMedia()` for breakpoint guards
-- Excludes `.select2-search__field` and `.chosen-search-input`
-- Refocuses last-triggered element after AJAX refresh
-
 ## Common Mistakes
 
-- **Wrong**: Assuming jQuery is always available in Drupal 11 → **Right**: Drupal 11 does not load jQuery by default on all pages. BEF still uses jQuery; it's loaded as a dependency via its libraries, but custom code must declare it explicitly.
-- **Wrong**: Custom JS not re-attaching after AJAX refresh → **Right**: Wrap custom JS in `Drupal.behaviors` so it re-attaches after every AJAX response.
-- **Wrong**: Double event binding on BEF elements → **Right**: BEF uses `once()` to prevent duplicate binding. Custom code interacting with BEF elements should also use `once()`.
+- **jQuery dependency** — BEF still uses jQuery for several behaviors. Ensure `core/jquery` is available. In Drupal 11, jQuery is not loaded by default on all pages.
+- **AJAX refresh breaks behaviors** — BEF uses `Drupal.behaviors` pattern, so behaviors re-attach after AJAX. If custom JS doesn't use behaviors, it will break.
+- **Once library** — BEF uses `once()` to prevent duplicate event binding. Custom code interacting with BEF elements should also use `once()`.
 
 ## See Also
 
-- [Auto-Submit](auto-submit.md)
-- [Sliders Widget](sliders-widget.md)
-- Reference: `web/modules/contrib/better_exposed_filters/js/`
+- [Auto-Submit](auto-submit.md) — auto-submit configuration
+- [Sliders Widget](sliders-widget.md) — slider configuration
