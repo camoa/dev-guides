@@ -1,5 +1,5 @@
 ---
-description: AJAX form architecture - core system, element properties, callbacks, and commands
+description: "AJAX form architecture - core system, element properties, callbacks, and commands"
 tldr: "Use AJAX when you need server-side logic or dynamic options. Use #states for simple show/hide (faster, client-side only)."
 drupal_version: "11.x"
 ---
@@ -10,75 +10,60 @@ drupal_version: "11.x"
 
 > Use AJAX when you need server-side logic or dynamic options. Use #states for simple show/hide (faster, client-side only).
 
-## Decision
+## Reference: Core AJAX System
 
-| Situation | Choose | Why |
-|-----------|--------|-----|
-| Dynamic options based on input | AJAX | Need server data |
-| Dependent dropdowns | AJAX | Options must change |
-| Load entities/data | AJAX | Server-side processing |
-| Simple show/hide fields | #states | Faster, no server call |
-| Field enable/disable | #states | Client-side only |
+**System Components:**
 
-## Pattern
+| Component | File | Purpose |
+|-----------|------|---------|
+| Response Builder | `/web/core/lib/Drupal/Core/Form/FormAjaxResponseBuilder.php` | Builds AJAX responses |
+| Event Subscriber | `/web/core/lib/Drupal/Core/Form/EventSubscriber/FormAjaxSubscriber.php` | Handles AJAX events |
+| Command Library | `/web/core/lib/Drupal/Core/Ajax/` | AJAX commands |
 
-```php
-// Trigger element with AJAX
-$form['country'] = [
-  '#type' => 'select',
-  '#title' => $this->t('Country'),
-  '#options' => $countries,
-  '#ajax' => [
-    'callback' => '::updateStates',
-    'wrapper' => 'states-wrapper',
-    'event' => 'change', // Default for select
-  ],
-];
+**Reference Examples:**
 
-// Target container
-$form['states_wrapper'] = [
-  '#type' => 'container',
-  '#attributes' => ['id' => 'states-wrapper'],
-];
+- Simple AJAX: `/web/core/modules/system/tests/modules/ajax_forms_test/src/Form/AjaxFormsTestSimpleForm.php`
+- Shows: Select, checkbox, grouped elements with AJAX callbacks
 
-$form['states_wrapper']['state'] = [
-  '#type' => 'select',
-  '#title' => $this->t('State'),
-  '#options' => $this->getStates($form_state),
-];
+## Reference: Element AJAX Property
 
-// Callback returns element
-public function updateStates(array &$form, FormStateInterface $form_state) {
-  return $form['states_wrapper'];
-}
-```
-
-## AJAX Property Configuration
+**Configuration Array:**
 
 ```php
 '#ajax' => [
-  'callback' => '::ajaxCallback',    // Required
-  'wrapper' => 'element-id',         // Target container ID
-  'event' => 'change',               // Trigger event
-  'method' => 'replace',             // Command method
-  'effect' => 'fade',                // Visual effect
-  'progress' => [
-    'type' => 'throbber',            // or 'fullscreen'
+  'callback' => '::ajaxCallback',           // Required
+  'wrapper' => 'element-wrapper-id',        // Target container ID
+  'event' => 'change',                      // Trigger event (default varies)
+  'method' => 'replace',                    // Command method
+  'effect' => 'fade',                       // Visual effect
+  'progress' => [                           // Loading indicator
+    'type' => 'throbber',                   // or 'fullscreen'
     'message' => $this->t('Loading...'),
   ],
 ],
 ```
 
-## Common Events
+**Common Events:**
 
-| Element Type | Default Event | Alternative |
-|--------------|---------------|-------------|
-| Select, radio, checkbox | change | - |
-| Button, link | click | - |
-| Textfield | change | keyup (use debounce) |
-| Any | blur | custom |
+```
+change - Select, checkbox, radio (default)
+click - Buttons, links
+keyup - Textfields (use with debouncing)
+blur - On field exit
+custom - Custom JavaScript event
+```
 
-## Advanced Pattern: AjaxResponse
+## Pattern: AJAX Callback Patterns
+
+**Pattern 1: Return Element (Simple):**
+
+```php
+public function ajaxCallback(array &$form, FormStateInterface $form_state) {
+  return $form['container']; // Replaces #ajax wrapper
+}
+```
+
+**Pattern 2: Return AjaxResponse (Advanced):**
 
 ```php
 use Drupal\Core\Ajax\AjaxResponse;
@@ -93,7 +78,17 @@ public function ajaxCallback(array &$form, FormStateInterface $form_state) {
 }
 ```
 
-## Core AJAX Commands
+**Static Callbacks for Anonymous Users:**
+
+```
+Issue: Non-static methods fail with anonymous users + Symfony
+Solution: Make callback methods static
+Reference: Drupal at your Fingertips - AJAX section
+```
+
+## Reference: Core AJAX Commands
+
+**Common Commands:**
 
 | Command | Purpose | Parameters |
 |---------|---------|------------|
@@ -101,34 +96,26 @@ public function ajaxCallback(array &$form, FormStateInterface $form_state) {
 | AppendCommand | Add after | selector, content |
 | PrependCommand | Add before | selector, content |
 | RemoveCommand | Delete element | selector |
-| MessageCommand | Show status | message, type |
+| MessageCommand | Show status | message, type (status/warning/error) |
 | RedirectCommand | Navigate | url |
-| InvokeCommand | Call JS method | selector, method, args |
+| InvokeCommand | Call JS method | selector, method, arguments |
 | OpenModalDialogCommand | Open modal | title, content, options |
 
-## Core AJAX System
+**Command Files:**
 
-**System Components:**
-| Component | File | Purpose |
-|-----------|------|---------|
-| Response Builder | `/web/core/lib/Drupal/Core/Form/FormAjaxResponseBuilder.php` | Builds AJAX responses |
-| Event Subscriber | `/web/core/lib/Drupal/Core/Form/EventSubscriber/FormAjaxSubscriber.php` | Handles AJAX events |
-| Command Library | `/web/core/lib/Drupal/Core/Ajax/` | AJAX commands |
-
-**Reference Examples:**
-- Simple AJAX: `/web/core/modules/system/tests/modules/ajax_forms_test/src/Form/AjaxFormsTestSimpleForm.php`
-- Shows: Select, checkbox, grouped elements with AJAX callbacks
+- Location: `/web/core/lib/Drupal/Core/Ajax/`
+- Study: Individual command classes for usage patterns
 
 ## Common Mistakes
 
-- **Wrong**: Missing wrapper ID in #ajax → **Right**: Always specify wrapper
-- **Wrong**: Wrapper ID doesn't exist → **Right**: Check HTML output
-- **Wrong**: Not returning render array or AjaxResponse → **Right**: Return one or the other
-- **Wrong**: Using non-unique wrapper IDs → **Right**: Unique IDs prevent wrong replacements
+- Forgetting wrapper ID in #ajax (nothing to replace)
+- Wrapper ID doesn't exist in form (AJAX fails silently)
+- Not returning render array or AjaxResponse (AJAX error)
+- Using non-unique wrapper IDs (replaces wrong element)
 
 ## See Also
 
-- [AJAX Security](ajax-security.md)
-- [Form States System](form-states-system.md)
-- [JavaScript API Guide](https://www.drupal.org/docs/develop/drupal-apis/javascript-api)
-- Reference: `/web/core/lib/Drupal/Core/Form/FormAjaxResponseBuilder.php`
+- [AJAX Security](ajax-security.md) (next section)
+- [AJAX Commands Reference](ajax-security.md) (dedicated section)
+- [JavaScript API Guide](../js-development/index.md)
+- Official: [AJAX Forms](https://www.drupal.org/docs/develop/drupal-apis/javascript-api/ajax-forms)

@@ -7,7 +7,7 @@ description: "Source references and maintenance manifest for the SEO & GEO guide
 ## Sources & Maintenance Manifest
 
 ### Research Install
-Path: /home/camoa/workspace/contrib/web
+Path: contrib/web
 
 ### Web Sources
 | Source | URL | Guide Sections | Last Verified |

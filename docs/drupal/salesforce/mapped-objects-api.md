@@ -1,5 +1,5 @@
 ---
-description: MappedObject programmatic API — load by SFID, by entity, by mapping, create records
+description: "MappedObject programmatic API — load by SFID, by entity, by mapping, create records"
 tldr: "Use the `MappedObjectStorage` service when you need to programmatically query or manage the link between Drupal entities and Salesforce records — checking sync status, loading by SFID, or creating links manually."
 drupal_version: "11.x"
 ---
@@ -22,6 +22,10 @@ drupal_version: "11.x"
 | Force re-pull all entities for a mapping | `$storage->setForcePull($mapping)` |
 
 ## Pattern
+
+**Storage Service:** `entity_type.manager->getStorage('salesforce_mapped_object')`
+
+**Interface:** `/web/modules/contrib/salesforce/modules/salesforce_mapping/src/MappedObjectStorageInterface.php`
 
 ```php
 $storage = \Drupal::entityTypeManager()->getStorage('salesforce_mapped_object');
@@ -47,10 +51,10 @@ $mapped_object = \Drupal\salesforce_mapping\Entity\MappedObject::create([
 $mapped_object->save();
 ```
 
-## Common Mistakes
+## Common Pitfalls
 
-- **Wrong**: Loading mapped objects with `entity_type.manager->getStorage('salesforce_mapped_object')->load($id)` by Drupal entity ID — that's the mapped_object entity ID, not the Drupal entity ID → **Right**: Use `loadByEntity($entity)` or `loadByDrupal($entity_type, $entity_id)`
-- **Wrong**: Creating a `MappedObject` without first checking if one already exists → **Right**: Call `loadByEntityAndMapping()` first; creating duplicates causes sync errors
+- `$storage->load($id)` (the generic entity-storage `load()`) loads by the `MappedObject` entity's own ID — not by the linked Drupal entity's ID. Use `loadByEntity($entity)` or `loadByDrupal($entity_type_id, $entity_id)` to look up by the Drupal entity instead.
+- Creating a `MappedObject` without first checking for an existing one can fail validation: the entity's `MappingEntity` constraint enforces uniqueness on the combination of Drupal entity type, Drupal entity ID, and mapping. Call `loadByEntityAndMapping($entity, $mapping)` first to avoid the error.
 
 ## See Also
 

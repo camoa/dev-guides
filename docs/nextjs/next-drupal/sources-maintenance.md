@@ -1,24 +1,20 @@
 ---
-description: "Reference sources and maintenance manifest for the Next.js for Drupal guide, including web sources, code modules, and version compatibility."
-drupal_version: "11.x"
-topic: "drupal/next-drupal"
+description: "Source references and maintenance manifest for the next drupal guides — web sources, code sources, and version history"
 ---
 
 # Sources & Maintenance
-## Sources & Maintenance Manifest
 
-### Drupal Research Install
+## Drupal Research Install
 
-Path: /home/camoa/workspace/contrib/web/
-
+Claims here were checked against a local Drupal install of core and the modules named below, rather than quoted from documentation.
 **Note:** The `next` and `decoupled_router` modules were not found in the current research install. To install for code reference:
 
 ```bash
-cd /home/camoa/workspace/contrib/web
+cd contrib/web
 composer require drupal/next drupal/simple_oauth drupal/jsonapi_menu_items drupal/jsonapi_views drupal/jsonapi_search_api
 ```
 
-### Web Sources
+## Web Sources
 
 | Source | URL | Guide Sections | Last Verified |
 |--------|-----|----------------|---------------|
@@ -35,7 +31,7 @@ composer require drupal/next drupal/simple_oauth drupal/jsonapi_menu_items drupa
 | Chapter Three: Next-Drupal 2.0 Release | https://www.chapterthree.com/blog/next-drupal-20-making-a-good-thing-even-better | Version 2.0 Features, App Router Support | 2026-02-13 |
 | Drupal.org: Decoupled Router Issue #3111456 | https://www.drupal.org/project/decoupled_router/issues/3111456 | Multilingual Support Patch | 2026-02-13 |
 
-### Code Sources
+## Code Sources
 
 | Module | Relative Path | Guide Sections | Drupal Version |
 |--------|---------------|----------------|----------------|
@@ -57,3 +53,5 @@ composer require drupal/next drupal/simple_oauth drupal/jsonapi_menu_items drupa
 
 **Related Guides:**
 - drupal-jsonapi.md (for JSON:API parameter syntax, filtering, relationships)
+
+<!-- END PARTITION: sources-maintenance -->

@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use dependent fields when form options must change based on the value of another field (category/subcategory, country/state, product type/options).
+You need form fields that update based on the value of other fields (category/subcategory, country/state, product type/options).
 
 ## Pattern
 
@@ -53,14 +53,13 @@ Reference: `core/modules/system/tests/modules/ajax_forms_test/src/Form/AjaxForms
 
 ## Common Mistakes
 
-- **Wrong**: Not setting `#validated => TRUE` → **Right**: Required to prevent validation errors when parent value changes
-- **Wrong**: Populating options in callback instead of buildForm → **Right**: Populate options during rebuild in buildForm; callback only returns the element
-- **Wrong**: Not checking for NULL values → **Right**: Triggers errors when parent field is cleared; always guard with `if ($selected)`
-- **Wrong**: Returning wrong array key → **Right**: Return the exact element that needs updating, not a parent container
-- **Wrong**: Missing `#empty_option` on parent → **Right**: Without it, user can't deselect, leaving dependent field with stale options
+- Not setting `#validated => TRUE` → Causes validation errors when parent value changes
+- Populating options in callback instead of buildForm() → Options populate on rebuild, callback only returns element
+- Not checking for NULL values → Triggers errors when parent field is cleared
+- Returning wrong array key → Return the exact element that needs updating, not parent container
+- Missing `#empty_option` on parent field → User can't deselect, dependent field stays populated with stale options
 
 ## See Also
 
-- [Form Element AJAX Configuration](form-element-ajax-configuration.md)
-- [Multi-Step Form Workflows](multi-step-form-workflows.md)
+- ← Previous: [Form Element AJAX Configuration](form-element-ajax-configuration.md) | Next: [Multi-Step Form Workflows](multi-step-form-workflows.md)
 - Reference: [Use AJAX with Forms tutorial](https://drupalize.me/tutorial/use-ajax-forms)

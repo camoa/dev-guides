@@ -1,5 +1,5 @@
 ---
-description: Multi-step form pattern with state persistence and navigation
+description: "Multi-step form pattern with state persistence and navigation"
 tldr: "Use multi-step forms for complex workflows requiring user input across multiple pages. Always enable caching with setCached(TRUE)."
 drupal_version: "11.x"
 ---
@@ -10,144 +10,159 @@ drupal_version: "11.x"
 
 > Use multi-step forms for complex workflows requiring user input across multiple pages. Always enable caching with setCached(TRUE).
 
-## Decision
+## Reference: Architecture Overview
 
-| Requirement | Implementation | Why |
-|-------------|----------------|-----|
-| Multi-step wizard | FormBase + setCached(TRUE) | State persistence required |
-| Progressive data collection | Multi-step pattern | Better UX than long single form |
-| Conditional step branching | Custom step logic | Skip irrelevant steps |
-| Simple single form | Standard FormBase | No caching needed |
+**Multi-Step Requirements:**
 
-## Pattern
+```
+1. Enable caching: $form_state->setCached(TRUE) [REQUIRED]
+2. Store current step: $form_state->set('step', $step_number)
+3. Conditional buildForm() based on step
+4. Navigation buttons: Next, Previous, Submit
+5. Final step processes all collected data
+```
+
+**Why Caching Required:**
+
+```
+Form must persist across page requests
+form_build_id links requests to cached form
+Without cache: FormState storage lost between steps
+Cache location: database cache_form table
+```
+
+## Pattern: Implementation
+
+**buildForm() Structure:**
 
 ```php
-use Drupal\Core\Form\FormBase;
-use Drupal\Core\Form\FormStateInterface;
+public function buildForm(array $form, FormStateInterface $form_state) {
+  // Enable caching (REQUIRED for multi-step)
+  $form_state->setCached(TRUE);
 
-class MultiStepForm extends FormBase {
-  public function getFormId() {
-    return 'multistep_form';
-  }
+  // Get or initialize step
+  $step = $form_state->get('step') ?? 1;
+  $form_state->set('step', $step);
 
-  public function buildForm(array $form, FormStateInterface $form_state) {
-    // REQUIRED: Enable caching
-    $form_state->setCached(TRUE);
-
-    // Get or initialize step
-    $step = $form_state->get('step') ?? 1;
-    $form_state->set('step', $step);
-
-    // Build step-specific form
-    switch ($step) {
-      case 1:
-        return $this->buildStep1($form, $form_state);
-      case 2:
-        return $this->buildStep2($form, $form_state);
-      case 3:
-        return $this->buildStep3($form, $form_state);
-    }
-  }
-
-  protected function buildStep1(array $form, FormStateInterface $form_state) {
-    $form['step1'] = [
-      '#type' => 'container',
-      '#tree' => TRUE,
-    ];
-
-    $form['step1']['name'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Name'),
-      '#required' => TRUE,
-    ];
-
-    $form['actions']['next'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Next'),
-      '#submit' => ['::nextSubmit'],
-      '#limit_validation_errors' => [['step1']], // Validate step1 only
-    ];
-
-    return $form;
-  }
-
-  public function nextSubmit(array &$form, FormStateInterface $form_state) {
-    // Save current step data
-    $step = $form_state->get('step');
-    $step_data = $form_state->getValue('step' . $step);
-    $form_state->set('step' . $step . '_data', $step_data);
-
-    // Advance step
-    $form_state->set('step', $step + 1);
-
-    // Rebuild form
-    $form_state->setRebuild(TRUE);
-  }
-
-  public function previousSubmit(array &$form, FormStateInterface $form_state) {
-    // Go back one step
-    $step = $form_state->get('step');
-    $form_state->set('step', $step - 1);
-
-    // Rebuild form
-    $form_state->setRebuild(TRUE);
-  }
-
-  public function submitForm(array &$form, FormStateInterface $form_state) {
-    // Collect all step data
-    $step1_data = $form_state->get('step1_data');
-    $step2_data = $form_state->get('step2_data');
-    $step3_data = $form_state->getValue('step3');
-
-    // Process complete submission
-    $this->processData($step1_data, $step2_data, $step3_data);
-
-    // Redirect
-    $form_state->setRedirect('route.success');
+  // Build step-specific form
+  switch ($step) {
+    case 1:
+      return $this->buildStep1($form, $form_state);
+    case 2:
+      return $this->buildStep2($form, $form_state);
+    case 3:
+      return $this->buildStep3($form, $form_state);
   }
 }
 ```
 
-## Navigation Patterns
-
-**Next Button:**
-- Save current step data via `set()`
-- Increment step counter
-- Call `setRebuild(TRUE)`
-- Use `#limit_validation_errors` to validate current step only
-
-**Previous Button:**
-- Decrement step counter
-- Call `setRebuild(TRUE)`
-- Use `#limit_validation_errors => []` (no validation)
-
-**Final Submit:**
-- Collect data from all steps
-- Process complete submission
-- Redirect to success page
-
-## Data Persistence
+**Step Builder Methods:**
 
 ```php
-// Store step data (persists across rebuilds)
-$form_state->set('step1_data', $data);
-$form_state->set('current_step', 2);
+protected function buildStep1(array $form, FormStateInterface $form_state) {
+  $form['step1'] = [
+    '#type' => 'container',
+    '#tree' => TRUE,
+  ];
 
-// Retrieve later
-$previous_data = $form_state->get('step1_data');
-$step = $form_state->get('current_step');
+  $form['step1']['name'] = [
+    '#type' => 'textfield',
+    '#title' => $this->t('Name'),
+    '#required' => TRUE,
+  ];
 
-// Pre-populate from previous steps
+  $form['actions']['next'] = [
+    '#type' => 'submit',
+    '#value' => $this->t('Next'),
+    '#submit' => ['::nextSubmit'],
+    '#limit_validation_errors' => [['step1']], // Only validate step1
+  ];
+
+  return $form;
+}
+```
+
+## Pattern: Navigation Handlers
+
+**Next Button:**
+
+```php
+public function nextSubmit(array &$form, FormStateInterface $form_state) {
+  // Save step data
+  $step = $form_state->get('step');
+  $step_data = $form_state->getValue('step' . $step);
+  $form_state->set('step' . $step . '_data', $step_data);
+
+  // Advance step
+  $form_state->set('step', $step + 1);
+
+  // Rebuild form for next step
+  $form_state->setRebuild(TRUE);
+}
+```
+
+**Previous Button:**
+
+```php
+public function previousSubmit(array &$form, FormStateInterface $form_state) {
+  // Go back one step
+  $step = $form_state->get('step');
+  $form_state->set('step', $step - 1);
+
+  // Rebuild form
+  $form_state->setRebuild(TRUE);
+}
+
+// In buildForm, add previous button:
+$form['actions']['previous'] = [
+  '#type' => 'submit',
+  '#value' => $this->t('Previous'),
+  '#submit' => ['::previousSubmit'],
+  '#limit_validation_errors' => [], // No validation for going back
+];
+```
+
+**Final Submit:**
+
+```php
+public function submitForm(array &$form, FormStateInterface $form_state) {
+  // Collect all step data
+  $step1_data = $form_state->get('step1_data');
+  $step2_data = $form_state->get('step2_data');
+  $step3_data = $form_state->getValue('step3');
+
+  // Process complete submission
+  // ... save to database, create entities, etc.
+
+  // Redirect
+  $form_state->setRedirect('route.success');
+}
+```
+
+## Pattern: Data Persistence
+
+**Store Step Data:**
+
+```php
+$form_state->set('step1_data', $data);      // Persist across steps
+$form_state->set('total_steps', 3);         // Configuration
+$form_state->set('entity', $entity);        // Working entity
+```
+
+**Pre-populate from Previous Steps:**
+
+```php
 $previous_data = $form_state->get('step1_data');
 $form['field']['#default_value'] = $previous_data['field'] ?? '';
 ```
 
-## Progress Indicator
+## Pattern: Progress Indicators
+
+**Simple Counter:**
 
 ```php
-// Simple counter
 $step = $form_state->get('step');
-$total = 3;
+$total = $form_state->get('total_steps') ?? 3;
 
 $form['progress'] = [
   '#markup' => $this->t('Step @current of @total', [
@@ -157,17 +172,62 @@ $form['progress'] = [
 ];
 ```
 
+**Progress Bar (Render Array):**
+
+```php
+$form['progress'] = [
+  '#theme' => 'progress_bar',
+  '#percent' => ($step / $total) * 100,
+  '#message' => $this->t('Step @current of @total', [
+    '@current' => $step,
+    '@total' => $total,
+  ]),
+];
+```
+
+## Pattern: Common Patterns
+
+**Conditional Steps:**
+
+```php
+// In nextSubmit:
+if ($form_state->getValue(['step1', 'skip_step2'])) {
+  $form_state->set('step', 3); // Skip to step 3
+}
+else {
+  $form_state->set('step', 2);
+}
+```
+
+**Step Validation:**
+
+```php
+public function validateForm(array &$form, FormStateInterface $form_state) {
+  $step = $form_state->get('step');
+
+  // Step-specific validation
+  switch ($step) {
+    case 1:
+      $this->validateStep1($form, $form_state);
+      break;
+    case 2:
+      $this->validateStep2($form, $form_state);
+      break;
+  }
+}
+```
+
 ## Common Mistakes
 
-- **Wrong**: No setCached(TRUE) → **Right**: REQUIRED for multi-step (data lost otherwise)
-- **Wrong**: No #limit_validation_errors on Next/Previous → **Right**: Validate only current step
-- **Wrong**: No setRebuild(TRUE) in navigation → **Right**: Required to rebuild form
-- **Wrong**: Local variables for step data → **Right**: Use FormState storage
-- **Wrong**: No pre-population on back → **Right**: Restore previous values
+- Forgetting `setCached(TRUE)` (data loss between steps)
+- Not using `#limit_validation_errors` on Next/Previous
+- Not calling `setRebuild(TRUE)` in navigation handlers
+- Storing data in local variables instead of FormState
+- Not pre-populating fields when returning to previous step
 
 ## See Also
 
-- [Form State Methods](form-state-methods.md)
-- [Partial Validation](validation-partial.md)
-- [Form Lifecycle](architecture-lifecycle.md)
+- [Form State Methods](form-state-methods.md) (dedicated section)
+- [Partial Validation](validation-partial.md) (dedicated section)
+- [Form Caching Strategy](performance-optimization.md)
 - Tutorial: [SitePoint: Multi-step Forms](https://www.sitepoint.com/how-to-build-multi-step-forms-in-drupal-8/)

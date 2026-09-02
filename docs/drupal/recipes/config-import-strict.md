@@ -10,63 +10,61 @@ drupal_version: "11.x"
 
 > Use `config.import` to specify config files to copy from extensions. Use `config.strict` to control validation of existing config.
 
-## Decision
+The `config.import` section specifies config to copy from extensions. The `config.strict` setting controls validation of existing config.
 
-| Situation | Choose | Why |
-|-----------|--------|-----|
-| Config may already exist, adding to existing site | Use `strict: false` | Skips existing config, flexible application |
-| Config must be exact, enforcing schema (fields) | Use `strict: true` or array | Validates critical config matches expectations |
-| Import conflicts with actions | Actions run after import | Last action wins |
+## Steps: Import Config and Choose a Strict Mode
 
-## Pattern
+1. **Import all extension config** — Use wildcard to import everything
+   ```yaml
+   config:
+     import:
+       node: '*'
+   ```
 
-Import all extension config with wildcard:
+2. **Import specific config** — List config names explicitly
+   ```yaml
+   config:
+     import:
+       node:
+         - views.view.content
+         - core.entity_view_mode.node.teaser
+       image:
+         - image.style.medium
+   ```
 
-```yaml
-config:
-  import:
-    node: '*'
-```
+3. **Strict mode - boolean** — Validate all recipe config matches active
+   ```yaml
+   config:
+     strict: true  # All config must match exactly
+     strict: false # Only import config that doesn't exist
+   ```
 
-Import specific config:
+4. **Strict mode - array** — Validate only listed config
+   ```yaml
+   config:
+     strict:
+       - field.storage.node.field_image  # Database schema must match
+       - node.type.article
+   ```
 
-```yaml
-config:
-  import:
-    node:
-      - views.view.content
-      - core.entity_view_mode.node.teaser
-    image:
-      - image.style.medium
-```
+## Decision Points: Choosing Strict Mode
 
-Strict mode - boolean:
-
-```yaml
-config:
-  strict: true  # All config must match exactly
-  strict: false # Only import config that doesn't exist
-```
-
-Strict mode - array (validate only listed config):
-
-```yaml
-config:
-  strict:
-    - field.storage.node.field_image  # Database schema must match
-    - node.type.article
-```
+| At this step... | If... | Then... |
+|---|---|---|
+| Config may already exist | Recipe adds to existing site | Use `strict: false` to skip existing config |
+| Config must be exact | Recipe enforces schema (fields) | Use `strict: true` or list critical config in array |
+| Import conflicts with actions | Action modifies imported config | Actions run after import; last action wins |
 
 ## Common Mistakes
 
-- **Wrong**: Using `strict: true` on sites with existing config → **Right**: Recipe fails if any config doesn't match; use array or false
-- **Wrong**: Forgetting strict mode defaults to true → **Right**: Implicit `strict: true` causes failures on existing sites
-- **Wrong**: Importing config then modifying via actions without strict awareness → **Right**: Strict validates imported config, not action results
-- **Wrong**: Listing config that doesn't exist in extension → **Right**: Runtime error; validate extension provides config being imported
-- **Wrong**: Not understanding UUID/dependencies are stripped in comparison → **Right**: UUIDs and empty dependencies ignored; only real differences trigger strict failures
+- Using `strict: true` on sites with existing config → Recipe fails if any config doesn't match exactly; use array or false
+- Forgetting strict mode defaults to true → Implicit `strict: true` causes failures on existing sites
+- Importing config then modifying via actions without strict awareness → Strict validates imported config, not action results
+- Listing config that doesn't exist in extension → Runtime error; validate extension provides config being imported
+- Not understanding UUID/dependencies are stripped in comparison → UUIDs and empty dependencies ignored; only real differences trigger strict failures
 
 ## See Also
 
-- [Extension Installation](extension-installation.md)
-- [Config Actions - Universal](config-actions-universal.md)
+- Previous: ← [Extension Installation](extension-installation.md)
+- Next: [Config Actions - Universal](config-actions-universal.md) →
 - Reference: `core/lib/Drupal/Core/Recipe/ConfigConfigurator.php`

@@ -8,17 +8,54 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Every AJAX implementation must meet WCAG 2.1 Level AA. This is not optional — it's a legal and ethical requirement. Use this guide as a pre-deployment checklist.
+Every AJAX implementation must meet WCAG 2.1 Level AA standards.
 
-## Decision
+## Accessibility Requirements
 
-| Requirement | Implementation | WCAG Criterion |
-|-------------|----------------|----------------|
-| Announce all content updates | AnnounceCommand or MessageCommand | 4.1.3 |
-| Keyboard access to AJAX triggers | `'keypress' => TRUE` in `#ajax` | 2.1.1 |
-| Manage focus after updates | FocusFirstCommand | 2.4.3 |
-| Loading state announcements | Progress message in `#ajax` | 2.2.1 |
-| Dynamic region markup | `aria-live`, `aria-atomic` | 1.3.1 |
+**Accessibility Requirements:**
+
+1. **Screen Reader Announcements**
+   - Announce all content updates using AnnounceCommand or MessageCommand
+   - Use 'polite' priority for non-critical updates
+   - Use 'assertive' only for errors requiring immediate attention
+   - Provide meaningful context ("Search results updated with 5 items" not "Updated")
+
+2. **Keyboard Navigation**
+   - Add `'keypress' => TRUE` to all AJAX buttons
+   - Manage focus after updates with FocusFirstCommand
+   - Ensure all triggers are keyboard-accessible (no click-only elements)
+   - Test with Tab, Enter, Space, Esc keys
+
+3. **Focus Management**
+   - Return focus to logical element after update
+   - Don't move focus unexpectedly (confuses users)
+   - Use FocusFirstCommand for new content regions
+   - Close dialogs with Esc key (built-in to dialog system)
+
+4. **Loading Indicators**
+   - Provide progress messages read by screen readers
+   - Show visual loading states (spinners, progress bars)
+   - Disable triggering element during processing (prevent double-submit)
+   - Clear loading state after completion
+
+5. **ARIA Attributes**
+   - Use `aria-live="polite"` for dynamic regions
+   - Use `aria-atomic="true"` to read entire updated region
+   - Add `aria-busy="true"` during loading
+   - Mark expanded/collapsed states with `aria-expanded`
+
+## Accessibility Testing Checklist
+
+**Accessibility Testing Checklist:**
+
+- [ ] Unplug mouse, navigate entire workflow with keyboard only
+- [ ] Test with NVDA (Windows), JAWS (Windows), or VoiceOver (Mac)
+- [ ] Verify all AJAX triggers are keyboard-accessible
+- [ ] Confirm screen reader announces all content changes
+- [ ] Check focus doesn't get lost after updates
+- [ ] Verify loading indicators are announced
+- [ ] Test with browser zoom at 200%
+- [ ] Run automated tests with axe DevTools or WAVE
 
 ## Pattern
 
@@ -50,27 +87,9 @@ $form['trigger']['#ajax']['progress'] = [
 ];
 ```
 
-**Accessibility testing checklist:**
-
-- [ ] Unplug mouse — navigate entire workflow with keyboard only
-- [ ] Test with NVDA (Windows), JAWS (Windows), or VoiceOver (Mac)
-- [ ] Verify all AJAX triggers are keyboard-accessible
-- [ ] Confirm screen reader announces all content changes
-- [ ] Check focus doesn't get lost after updates
-- [ ] Verify loading indicators are announced
-- [ ] Test with browser zoom at 200%
-- [ ] Run automated checks with axe DevTools or WAVE
-
-## Common Mistakes
-
-- **Wrong**: No screen reader announcement after AJAX update → **Right**: WCAG 4.1.3 violation; always announce with AnnounceCommand
-- **Wrong**: AJAX buttons only respond to click → **Right**: WCAG 2.1.1 violation; add `'keypress' => TRUE`
-- **Wrong**: Focus left on stale element after update → **Right**: WCAG 2.4.3; use FocusFirstCommand to restore context
-- **Wrong**: 'assertive' for non-critical updates → **Right**: Interrupts screen readers; 'polite' for most updates
-- **Wrong**: Skipping manual testing with screen readers → **Right**: Automated tools miss most ARIA issues; test with real assistive technology
-
 ## See Also
 
+- ← Previous: [Best Practices: Development Standards](best-practices-development.md)
 - [WCAG Compliance Patterns](wcag-compliance-patterns.md)
 - [Screen Reader Support](screen-reader-support.md)
 - Reference: [WCAG 2.1 Quick Reference](https://www.w3.org/WAI/WCAG21/quickref/), [Drupal Accessibility](https://www.drupal.org/about/features/accessibility)

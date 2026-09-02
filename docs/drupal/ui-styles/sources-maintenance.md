@@ -5,8 +5,7 @@ description: "Source references and maintenance manifest for the ui styles guide
 # Sources & Maintenance
 
 ## Research Install
-Path: /home/camoa/workspace/contrib/web
-
+Claims here were checked against a local Drupal install of core and the modules named below, rather than quoted from documentation.
 ## Web Sources
 No web sources are cited in the guide body. The two `https://example.com/...` URLs in Section 3 are placeholder values inside a YAML schema example, not citations.
 
@@ -21,7 +20,7 @@ No web sources are cited in the guide body. The two `https://example.com/...` UR
 | UI Styles Page | modules/contrib/ui_styles/modules/ui_styles_page/ | 9 | 8.x-1.21 |
 | UI Styles UI Patterns | modules/contrib/ui_styles/modules/ui_styles_ui_patterns/ | 10 | 8.x-1.21 |
 | UI Styles Library | modules/contrib/ui_styles/modules/ui_styles_library/ | 2 | 8.x-1.21 |
-| sabberworm/php-css-parser (Composer, external) | /home/camoa/workspace/contrib/vendor/sabberworm/ (outside the web root above) | 12 | not verified in this pass — package present, version not read from its own composer.json |
+| sabberworm/php-css-parser (Composer, external) | contrib/vendor/sabberworm/ (outside the web root above) | 12 | not verified in this pass — package present, version not read from its own composer.json |
 
 ## Version History
 | Date | Change |

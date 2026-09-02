@@ -8,7 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when adding action buttons to field widgets on entity edit forms. The `field_widget_actions` module is AI-agnostic — it provides the framework; other modules provide the actual AI plugins.
+> Use this guide when adding action buttons to field widgets on entity edit forms.
+
+The `field_widget_actions` module is an AI-agnostic framework for attaching action buttons to field widgets on entity forms. Other modules provide the actual plugins.
 
 ## Decision
 
@@ -20,7 +22,7 @@ drupal_version: "11.x"
 | Fill CKEditor | `FillEditorCommand` | CKEditor-specific AJAX command |
 | Deploy via recipe | `setComponentThirdPartySetting` config action | Declarative recipe config |
 
-## Pattern
+## Plugin System
 
 ```php
 use Drupal\field_widget_actions\Attribute\FieldWidgetAction;
@@ -48,8 +50,9 @@ class MyAction extends FieldWidgetActionBase {
 
 ## Modal Form Pattern
 
+For multi-step interactions, extend `FieldWidgetFormActionBase`:
+
 ```php
-// Extend FieldWidgetFormActionBase for multi-step interactions.
 public function buildModalForm(array $form, FormStateInterface $form_state, ?ContentEntityInterface $entity): array {
   $form['selection'] = ['#type' => 'radios', '#options' => [...]];
   return $form;
@@ -61,7 +64,14 @@ protected function submitModalFormFillFields(array $form, FormStateInterface $fo
 }
 ```
 
-## FieldWidgetActionBase Key Methods
+## Ajax Commands
+
+| Command | Purpose |
+|---------|---------|
+| `FillSimpleFieldCommand` | Fill an input/textarea |
+| `FillEditorCommand` | Fill a CKEditor instance |
+
+## Config Action for Recipes
 
 | Method | Purpose |
 |--------|---------|
@@ -69,8 +79,6 @@ protected function submitModalFormFillFields(array $form, FormStateInterface $fo
 | `getSuggestionsTarget($form, $form_state)` | Returns the CSS selector for the target field element |
 | `buildEntity($form, $form_state)` | Reconstructs the entity from form state (for context-aware actions) |
 | `processWidgetWithGroup($form, $form_state, $context)` | Processes widget actions grouped by field |
-
-## Deploy via Recipe
 
 ```yaml
 config:
@@ -86,17 +94,40 @@ config:
               prompt: 'Suggest content'
 ```
 
-## FORM_ELEMENT_PROPERTY Constant
+## FieldWidgetActionBase Key Methods
+
+| Method | Purpose |
+|--------|---------|
+| `returnSuggestions($suggestions, $selector)` | Returns an `AjaxResponse` showing suggestions in a modal dialog |
+| `getSuggestionsTarget($form, $form_state)` | Returns the CSS selector for the target field element |
+| `buildEntity($form, $form_state)` | Reconstructs the entity from form state (for context-aware actions) |
+| `processWidgetWithGroup($form, $form_state, $context)` | Processes widget actions grouped by field |
+
+## ImageAltTextActionButtonTrait
+
+Trait for image alt text actions that conditionally shows the button only when an image is uploaded. Uses Drupal `#states` visibility to hide the button until a file is present in the image widget.
+
+## FieldWidgetActionManager Methods
+
+| Method | Purpose |
+|--------|---------|
+| `getAllowedFieldWidgetActions($widget_type, $field_type)` | Returns plugins applicable to the given widget/field type combination |
+| `getFieldWidgetActionFormDefinitions($widget_type, $field_type)` | Returns form element definitions for the "manage form display" settings |
+
+## `FORM_ELEMENT_PROPERTY` Constant
 
 Override in your plugin for non-standard fields:
+
 - Default: `'value'`
 - Entity reference: `'target_id'`
 - Image alt: `'alt'`
 
 ## Common Mistakes
 
-- **Wrong**: Not implementing `isAvailable()` → **Right**: Button shows even when no provider is configured
-- **Wrong**: Using `FillEditorCommand` for a plain textarea → **Right**: Use `FillSimpleFieldCommand` for standard inputs; `FillEditorCommand` is CKEditor-specific
+| Mistake | Why it's wrong |
+|---------|---------------|
+| Not implementing `isAvailable()` | `FieldWidgetActionBase::isAvailable()` defaults to `TRUE` — the button shows even when no provider is configured, unless you override it (e.g., to check `hasProvidersForOperationType()`) |
+| Using `FillEditorCommand` for a plain textarea | `FillEditorCommand` is CKEditor-specific; use `FillSimpleFieldCommand` for standard inputs |
 
 ## See Also
 

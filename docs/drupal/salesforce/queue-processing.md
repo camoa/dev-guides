@@ -1,5 +1,5 @@
 ---
-description: Salesforce queue processing — cron vs standalone endpoints, configuration, scheduling decisions
+description: "Salesforce queue processing — cron vs standalone endpoints, configuration, scheduling decisions"
 tldr: "Use cron-based processing for standard setups. Use standalone endpoints when you need higher-frequency processing, custom scheduling (Jenkins, external cron), or separation from Drupal's cron run."
 drupal_version: "11.x"
 ---
@@ -10,7 +10,7 @@ drupal_version: "11.x"
 
 > Use cron-based processing for standard setups. Use standalone endpoints when you need higher-frequency processing, custom scheduling (Jenkins, external cron), or separation from Drupal's cron run.
 
-## Decision
+## Decision: Cron vs Standalone
 
 | Approach | Use When |
 |---|---|
@@ -19,9 +19,23 @@ drupal_version: "11.x"
 | Standalone pull endpoint | Custom scheduling, high-frequency pull |
 | Per-mapping standalone flag | Mix of cron and standalone for different mappings |
 
-## Pattern
+**Decision Point - Cron vs Standalone:**
+- Cron: Simple setup, standard Drupal workflow
+- Standalone: Custom scheduling, higher frequency, separate from site cron
 
-**Cron processing limits:**
+## Cron-Based Processing
+
+**Push Queue:**
+- Processes during cron run
+- Global limit: `salesforce.settings:global_push_limit`
+- Per-mapping limit: `salesforce_mapping.[id]:push_limit`
+- Failed items retry up to `push_retries` times
+
+**Pull Queue:**
+- Populates during cron based on `pull_frequency` and `pull_trigger_date`
+- Processes via standard Drupal queue workers
+- Max queue size: `salesforce.settings:pull_max_queue_size`
+
 ```
 Push: salesforce.settings:global_push_limit (default 10,000/run)
       Per-mapping: salesforce_mapping.[id]:push_limit
@@ -31,7 +45,23 @@ Pull: Populated by pull_frequency and pull_trigger_date
       Max queue: salesforce.settings:pull_max_queue_size
 ```
 
-**Standalone endpoint configuration:**
+## Standalone Queue Processing
+
+**Configuration:**
+- Global: `salesforce.settings:standalone = TRUE`
+- Per-mapping push: `salesforce_mapping.[id]:push_standalone = TRUE`
+- Per-mapping pull: `salesforce_mapping.[id]:pull_standalone = TRUE`
+
+**Endpoints:**
+- Push: `/salesforce/push/process-standalone`
+- Pull: `/salesforce/pull/process-standalone`
+
+**Standalone Setup:**
+1. Enable standalone mode in config
+2. Configure external scheduler (Jenkins, cron job, etc.)
+3. HTTP request to standalone endpoint
+4. Optional: Pass parameters for specific mappings/limits
+
 ```yaml
 # Global (salesforce.settings.yml)
 standalone: true
@@ -40,16 +70,6 @@ standalone: true
 push_standalone: true
 pull_standalone: true
 ```
-
-**Standalone endpoint URLs:**
-- Push: `/salesforce/push/process-standalone`
-- Pull: `/salesforce/pull/process-standalone`
-
-**External scheduler setup:**
-1. Enable `standalone: true` in `salesforce.settings.yml`
-2. Enable `push_standalone` or `pull_standalone` per mapping
-3. Configure external scheduler (Jenkins, system cron, etc.)
-4. Schedule HTTP requests to the standalone endpoint URLs
 
 ## Common Mistakes
 

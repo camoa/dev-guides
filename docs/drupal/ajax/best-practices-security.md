@@ -8,17 +8,54 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Apply every item in this guide to every AJAX implementation. AJAX callbacks and routes are HTTP endpoints — they require the same security rigor as any web API.
+Every AJAX implementation requires security considerations.
 
-## Decision
+## Critical Security Measures
+
+**Critical Security Measures:**
+
+1. **Access Control**
+   - Every AJAX callback and route needs `_permission` or `_custom_access`
+   - Check triggering element accessibility in Form API callbacks
+   - Never trust client-sent data; validate server-side
+
+2. **Input Validation**
+   - Validate and sanitize all user input
+   - Use FormStateInterface validation, not JavaScript-only
+   - Apply upload validators for file uploads (extension, size, MIME type)
+
+3. **CSRF Protection**
+   - Drupal handles CSRF for Form API automatically
+   - Add `_csrf_request_header_token: 'TRUE'` to custom POST AJAX routes (validates the X-CSRF-Token header Drupal AJAX sends automatically; `_csrf_token: 'TRUE'` validates a URL query param instead — see [CSRF Protection](csrf-protection.md))
+   - Verify `$request->isXmlHttpRequest()` to prevent direct calls
+
+4. **XSS Prevention**
+   - Always return render arrays, not HTML strings
+   - Use `Html::escape()` for user input in markup
+   - MessageCommand and AnnounceCommand auto-escape content
+   - Never use `'#markup' => $user_input` without sanitization
+
+5. **SQL Injection Prevention**
+   - Use Entity Query API, not direct database queries
+   - Never concatenate user input into queries
+   - Use parameterized queries for custom database operations
+
+6. **Content Security Policy (CSP)**
+   - Avoid inline JavaScript in AJAX responses
+   - Use attached libraries instead of inline scripts
+   - Configure CSP headers in settings.php
+
+## Common Vulnerabilities
+
+**Common Vulnerabilities:**
 
 | Vulnerability | Attack Vector | Prevention |
-|---------------|---------------|------------|
-| XSS | Unsanitized user input in AJAX response | Use render arrays; `Html::escape()` for manual markup |
+|---|---|---|
+| XSS | Unsanitized user input in AJAX response | Use render arrays, escape manually if needed |
 | CSRF | Forged requests to AJAX endpoints | Form API handles automatically; add `_csrf_request_header_token: 'TRUE'` on custom POST AJAX routes |
-| Unauthorized access | Missing permission checks | Add `_permission` or `_custom_access` to every route |
-| SQL injection | User input in queries | Use Entity Query API; never concatenate user input |
-| File upload attacks | Malicious file uploads | Configure `#upload_validators` with extension, size, MIME |
+| Unauthorized access | Missing permission checks | Add `_permission` or `_custom_access` |
+| SQL injection | User input in queries | Use Entity Query API |
+| File upload attacks | Malicious file uploads | Configure upload validators |
 
 ## Pattern
 
@@ -61,16 +98,9 @@ $nids = $this->entityTypeManager->getStorage('node')->getQuery()
   ->execute();
 ```
 
-## Common Mistakes
-
-- **Wrong**: Skipping access checks on AJAX routes → **Right**: Always define `_permission` or `_custom_access`
-- **Wrong**: Using `'#markup' => $user_input` without sanitization → **Right**: Use `$this->t('@var', ['@var' => $input])` or `Html::escape()`
-- **Wrong**: Accepting file uploads without validators → **Right**: Always validate extension, size, and MIME type
-- **Wrong**: Using inline JavaScript in AJAX responses → **Right**: Attach libraries via `#attached`; avoid inline scripts (CSP issues)
-- **Wrong**: Trusting client-side validation → **Right**: JavaScript validation can be bypassed; always validate server-side
-
 ## See Also
 
+- Next: [Best Practices: Performance](best-practices-performance.md)
 - [Access Control Patterns](access-control-patterns.md)
 - [CSRF Protection](csrf-protection.md)
 - Reference: [Writing secure code for Drupal](https://www.drupal.org/docs/administering-a-drupal-site/security-in-drupal/writing-secure-code-for-drupal), [OWASP Top 10](https://owasp.org/www-project-top-ten/)

@@ -1,5 +1,5 @@
 ---
-description: Salesforce event system — all available push/pull/delete events, EventSubscriber pattern, service definition
+description: "Salesforce event system — all available push/pull/delete events, EventSubscriber pattern, service definition"
 tldr: "Use EventSubscriber pattern for all Salesforce customization. The legacy hook system is deprecated."
 drupal_version: "11.x"
 ---
@@ -9,6 +9,8 @@ drupal_version: "11.x"
 ## When to Use
 
 > Use EventSubscriber pattern for all Salesforce customization. The legacy hook system is deprecated. Use push events to modify or veto outbound data; use pull events to modify inbound data or control entity creation.
+
+All customization should use EventSubscriber pattern. Legacy hook system deprecated.
 
 ## Decision
 

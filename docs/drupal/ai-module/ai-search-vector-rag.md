@@ -10,6 +10,17 @@ drupal_version: "11.x"
 
 > Use this guide when setting up semantic search or Retrieval-Augmented Generation (RAG) with vector databases. Use [AI Assistant API](ai-assistant-api.md) to wire the `rag_action` into an assistant.
 
+The `ai_search` module integrates Search API with Vector Databases for semantic search and RAG.
+
+**Status:** Experimental
+**Dependencies:** `ai`, `search_api`
+
+## Architecture
+
+```
+Content -> Chunk -> Embed -> Store in VDB -> Query -> Embed query -> Vector match -> Return
+```
+
 ## Decision
 
 | Situation | Choose | Why |
@@ -19,7 +30,7 @@ drupal_version: "11.x"
 | RAG in a chatbot | `rag_action` plugin on assistant | Retrieves semantically relevant content into LLM context |
 | Hybrid with keyword search | Boost processors | Combines vector and DB/Solr results |
 
-## Pattern
+## Programmatic Search
 
 ```php
 $index = \Drupal\search_api\Entity\Index::load('my_ai_index');
@@ -28,12 +39,18 @@ $query->keys('semantic search phrase');
 $results = $query->execute();
 
 foreach ($results->getResultItems() as $item) {
-  $score = $item->getScore();          // vector distance
+  $score = $item->getScore(); // vector distance
   $content = $item->getExtraData('content');
   $entity_id = $item->getExtraData('drupal_entity_id');
+  $offset = $item->getExtraData('real_offset');           // chunk offset within item
+  $reason = $item->getExtraData('reason_for_finish');     // why search stopped
+  $vscore = $item->getExtraData('current_vector_score');  // raw similarity score
 }
+```
 
-// Get chunk-level results instead of item-level:
+## Chunk-Level Results
+
+```php
 $query->setOption('search_api_ai_get_chunks_result', TRUE);
 ```
 
@@ -73,7 +90,15 @@ $query->setOption('search_api_ai_get_chunks_result', TRUE);
 | `chat_model` | Model for tokenizer (chunk size calculation) |
 | `include_raw_embedding_vector` | Expose raw vectors in results (for debugging/analysis) |
 
-## Hybrid Search Processors
+## VDB Provider Interface
+
+VDB providers must implement `AiVdbProviderSearchApiInterface`, which extends the base VDB interface with Search API-specific methods for indexing, querying, and deleting vectors. This is the contract between `ai_search` and any vector database backend.
+
+## RAG with AI Assistant
+
+Enable the `rag_action` plugin on an assistant. Configure it with a Search API index. The action retrieves semantically relevant content and injects it into the LLM context.
+
+## Hybrid Search (Boost Processors)
 
 | Processor | Backend | Description |
 |-----------|---------|-------------|
@@ -98,9 +123,11 @@ class MyStrategy extends EmbeddingBase {
 
 ## Common Mistakes
 
-- **Wrong**: No `main_content` field assigned → **Right**: At least one field must be `main_content` for embeddings to work
-- **Wrong**: Mismatched tokenizer model → **Right**: Chunk sizes are calculated from the tokenizer model; mismatch causes wrong chunk sizes
-- **Wrong**: Not re-indexing after strategy change → **Right**: Existing vectors don't match new strategy; must reindex
+| Mistake | Why it's wrong |
+|---------|---------------|
+| No `main_content` field assigned | At least one field must be `main_content` for embeddings |
+| Wrong tokenizer model | Chunk sizes calculated from tokenizer; mismatched model = wrong sizes |
+| Not re-indexing after strategy change | Existing vectors don't match new strategy; must reindex |
 
 ## See Also
 

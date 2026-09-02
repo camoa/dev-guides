@@ -10,6 +10,8 @@ drupal_version: "11.x"
 
 > Use this guide when calling a specific provider, building a custom provider plugin, or working with the provider/model selection form. Use [Operation Types](operation-types.md) for the typed Input/Output classes.
 
+Providers are plugins implementing `AiProviderInterface`. Each provider wraps one AI service and declares which operation types it supports.
+
 ## Decision
 
 | Situation | Choose | Why |
@@ -20,23 +22,26 @@ drupal_version: "11.x"
 | Check if operation is available | `hasProvidersForOperationType()` | Boolean check before calling |
 | Upload file to provider | `ai.file_manager` service | Lifecycle management; don't call provider file methods directly |
 
-## Pattern
+## Using Providers
 
 ```php
+// Get the provider manager
 $providerManager = \Drupal::service('ai.provider');
 
-// Get default provider for an operation type.
+// Get default provider for an operation type
 $defaults = $providerManager->getDefaultProviderForOperationType('chat');
+// Returns: ['provider_id' => 'anthropic', 'model_id' => 'claude-sonnet-4-20250514']
 
-// Create a provider instance (returns ProviderProxy).
+// Create a provider instance (returns ProviderProxy)
 $provider = $providerManager->createInstance('anthropic');
 
-// Check availability before calling.
-if (!$provider->isUsable('chat')) {
-  return;
-}
+// Check availability
+$providerManager->hasProvidersForOperationType('embeddings'); // bool
 
-// Get models for a select element.
+// Get all models for operation type
+$models = $provider->getConfiguredModels('chat');
+
+// Get simple options for form selects
 $options = $providerManager->getSimpleProviderModelOptions('chat');
 // Returns: ['anthropic__claude-3-sonnet' => 'Anthropic: Claude 3 Sonnet', ...]
 ```
@@ -58,7 +63,7 @@ class MyProvider extends AiProviderClientBase implements ChatInterface {
   }
 
   public function getSupportedOperationTypes(): array {
-    return ['chat'];
+    return ['chat', 'embeddings'];
   }
 
   public function getConfiguredModels(string $operation_type): array {
@@ -66,34 +71,14 @@ class MyProvider extends AiProviderClientBase implements ChatInterface {
   }
 
   public function chat(ChatInput $input, string $model_id, array $tags = []): ChatOutput {
-    // Call API, normalize response.
+    $client = $this->loadClient($model_id);
+    // ... call API, normalize response
     return new ChatOutput($input, $normalizedMessages, $rawResponse, []);
   }
 }
 ```
 
-## Provider File Handling (New in 1.4.2)
-
-Providers that support a remote Files API implement `AiFileProviderInterface` (`Drupal\ai\AiFileProviderInterface`):
-
-| Method | Purpose |
-|--------|---------|
-| `uploadFile(AiFileInterface $ai_file, mixed $file): AiFileInterface` | Upload binary/stream; MUST set remote ID on entity |
-| `deleteFile(AiFileInterface $ai_file): bool` | Delete remote file by stored remote ID |
-| `downloadFile(AiFileInterface $ai_file, ?string $destination = NULL): string` | Download to path, or return raw contents when no destination given |
-| `supportsMimeType(string $mime_type, string $purpose): bool` | Whether MIME type is allowed for the purpose |
-
-OpenAI-compatible providers get this via `FileApiTrait` (`Drupal\ai\Traits\OpenAi\FileApiTrait`), which maps to the OpenAI `files()` endpoint. Don't call provider file methods directly — use `ai.file_manager`. See [Operation Types](operation-types.md) for the `AiFileManager` API.
-
-## Scaffolding (New in 1.4)
-
-```bash
-drush generate plugin:ai:provider       # alias: ai-provider
-drush generate plugin:ai:guardrail      # alias: ai-guardrail
-drush generate plugin:ai:automator-type # alias: ai-automator-type
-```
-
-## Provider Matrix
+## Provider Matrix (Key Providers)
 
 | Provider | Chat | Embeddings | Moderation | TTS | STT | T2I | Translation |
 |----------|------|-----------|------------|-----|-----|-----|-------------|
@@ -107,6 +92,23 @@ drush generate plugin:ai:automator-type # alias: ai-automator-type
 | DeepL | | | | | | | Yes |
 | Vertex AI | Yes | Yes | | | | | Yes |
 
+## Key AiProviderInterface Methods
+
+Beyond `getConfiguredModels()`, `isUsable()`, `getSupportedOperationTypes()`:
+
+| Method | Purpose |
+|--------|---------|
+| `getAvailableConfiguration($op, $model)` | Returns configurable parameters (temperature, max_tokens, etc.) for the model config UI |
+| `getDefaultConfigurationValues($op, $model)` | Default values for configuration parameters |
+| `setAuthentication($auth)` | Override authentication at runtime (used by PreGenerateResponseEvent) |
+| `setConfiguration($config)` / `getConfiguration()` | Runtime config override |
+| `getSupportedCapabilities()` | Returns `AiModelCapability[]` or `AiProviderCapability[]` the provider supports |
+| `loadModelsForm($form, $state, $op, $model)` | Builds per-model config form in admin UI |
+| `hasPredefinedModels()` | `false` = system generates model list dynamically |
+| `getSetupData()` | Returns `key_config_name` (Key module integration) + `default_models` for initial setup |
+| `setTag($tag)` / `getTags()` / `resetTags()` | Tag management for logging/filtering |
+| `setDebugData($key, $value)` / `getDebugData()` | Attach debug metadata to requests |
+
 ## Base Classes
 
 | Class | Use When |
@@ -114,26 +116,39 @@ drush generate plugin:ai:automator-type # alias: ai-automator-type
 | `AiProviderClientBase` | Custom provider with unique API |
 | `OpenAiBasedProviderClientBase` | Provider with OpenAI-compatible API (e.g., Ollama, LiteLLM) |
 
-`OpenAiBasedProviderClientBase` implements `ChatInterface`, `ModerationInterface`, `EmbeddingsInterface`, `TextToSpeechInterface`, `SpeechToTextInterface`, and `TextToImageInterface` out of the box. It handles streaming, token usage extraction into `TokenUsageDto`, rate limit parsing into `ChatProviderLimitsDto`, and standard error mapping. Only `loadClient()` needs to be provided.
+`OpenAiBasedProviderClientBase` implements `ChatInterface`, `ModerationInterface`, `EmbeddingsInterface`, `TextToSpeechInterface`, `SpeechToTextInterface`, and `TextToImageInterface` out of the box using the `openai-php/client` library. It handles streaming via `OpenAiTypeStreamedChatMessageIterator`, token usage extraction into `TokenUsageDto`, rate limit parsing into `ChatProviderLimitsDto`, and standard error mapping to AI exceptions. Extend it when your provider's API is OpenAI-compatible — you only need to provide `loadClient()` with your endpoint/key.
 
-## Key AiProviderInterface Methods
+## Provider File Handling (New in 1.4.2)
+
+Providers that support a remote Files API (upload a document once, reference it across requests) implement `AiFileProviderInterface` (`Drupal\ai\AiFileProviderInterface`):
 
 | Method | Purpose |
 |--------|---------|
-| `getAvailableConfiguration($op, $model)` | Returns configurable parameters for model config UI |
-| `getDefaultConfigurationValues($op, $model)` | Default parameter values |
-| `setAuthentication($auth)` | Override authentication at runtime |
-| `getSupportedCapabilities()` | Returns `AiModelCapability[]` or `AiProviderCapability[]` the provider supports |
-| `getSetupData()` | Returns `key_config_name` (Key module) + `default_models` |
-| `setTag($tag)` / `getTags()` | Tag management for logging/filtering |
-| `setDebugData($key, $value)` / `getDebugData()` | Attach debug metadata to requests |
+| `uploadFile(AiFileInterface $ai_file, mixed $file): AiFileInterface` | Upload binary/stream to the provider; implementation MUST set the remote id on the entity |
+| `deleteFile(AiFileInterface $ai_file): bool` | Delete the remote file by its stored remote id |
+| `downloadFile(AiFileInterface $ai_file, ?string $destination = NULL): string` | Download remote file to a path, or return raw contents when no destination is given |
+| `supportsMimeType(string $mime_type, string $purpose): bool` | Whether a MIME type is allowed for the declared purpose |
+
+OpenAI-compatible providers get this for free via the `FileApiTrait` (`Drupal\ai\Traits\OpenAi\FileApiTrait`), which maps to the OpenAI `files()` endpoint and enforces per-purpose MIME rules (batch/fine-tune → `text/plain`, `application/jsonl`, `application/json`; vision → images; otherwise unrestricted). Don't call a provider's file methods directly — go through the `ai.file_manager` service (see [Operation Types](operation-types.md)).
+
+## Scaffolding Providers (New in 1.4)
+
+The module ships a Drush code generator for new providers:
+
+```bash
+drush generate plugin:ai:provider   # alias: ai-provider
+```
+
+(Companion generators exist for guardrails — `plugin:ai:guardrail` — and automator types — `plugin:ai:automator-type`.)
 
 ## Common Mistakes
 
-- **Wrong**: Using `createInstance()` without checking `isUsable()` → **Right**: Provider may lack API key — check first
-- **Wrong**: Not implementing `getAvailableConfiguration()` → **Right**: Breaks the form helper's model configuration UI
-- **Wrong**: Missing `loadClient()` → **Right**: Base class expects this for lazy client initialization
-- **Wrong**: Calling provider file methods directly → **Right**: Always use `ai.file_manager` service for file lifecycle management
+| Mistake | Why it's wrong |
+|---------|---------------|
+| Using `createInstance()` without checking `isUsable()` | Provider may lack API key — check first |
+| Not implementing `getAvailableConfiguration()` | Breaks the form helper's model configuration UI |
+| Missing `loadClient()` | Base class expects this for lazy client initialization |
+| Calling a provider's file methods directly | Always use the `ai.file_manager` service for file lifecycle management |
 
 ## See Also
 

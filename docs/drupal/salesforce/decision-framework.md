@@ -1,5 +1,5 @@
 ---
-description: Salesforce decision framework — submodule selection, events vs plugins vs config, when to customize vs configure
+description: "Salesforce decision framework — submodule selection, events vs plugins vs config, when to customize vs configure"
 tldr: "Use this guide when starting a Salesforce integration to select the right submodules and approach. Return to it when deciding whether to use events, custom plugins, or plain configuration."
 drupal_version: "11.x"
 ---
@@ -10,9 +10,7 @@ drupal_version: "11.x"
 
 > Use this guide when starting a Salesforce integration to select the right submodules and approach. Return to it when deciding whether to use events, custom plugins, or plain configuration.
 
-## Decision
-
-**Submodule selection:**
+## Decision: Which Submodule
 
 | Submodule | Status | When to Include |
 |---|---|---|
@@ -28,7 +26,26 @@ drupal_version: "11.x"
 | `salesforce_address` | Optional | Address (contrib) field → SF address fields |
 | `salesforce_soap` | Legacy/rare | Specific SOAP-only operations |
 
-**Events vs plugins:**
+**Required:**
+- `salesforce` - Always required (base module)
+- `salesforce_oauth` OR `salesforce_jwt` - One auth method required
+
+**Mapping:**
+- `salesforce_mapping` - Required for any entity sync
+- `salesforce_mapping_ui` - Required for UI-based configuration
+
+**Sync Direction:**
+- `salesforce_push` - Enable for Drupal → Salesforce sync
+- `salesforce_pull` - Enable for Salesforce → Drupal sync
+
+**Optional:**
+- `salesforce_logger` - Recommended for production debugging
+- `salesforce_example` - Development reference only
+- `salesforce_webform` - If using Webform module
+- `salesforce_address` - If using Address field module
+- `salesforce_soap` - Legacy/specific use cases only
+
+## Decision: Events vs Plugins
 
 | Approach | Use For |
 |---|---|
@@ -36,13 +53,28 @@ drupal_version: "11.x"
 | Field mapping plugin | Reusable field logic, custom field types, calculated values, integration with custom field types |
 | Configuration only | Standard property mappings, simple triggers, basic WHERE clauses |
 
-**When configuration is sufficient:**
+**Events (EventSubscriber):**
+- Modify behavior of existing mappings
+- Cross-cutting concerns (logging, validation)
+- Conditional logic (veto operations)
+- Complex field transformations
+- Related entity operations
+
+**Plugins (SalesforceMappingField):**
+- Reusable field mapping logic
+- Custom field type handling
+- Calculated/derived values
+- Integration with custom field types
+
+## Decision: Customize vs Configure
+
+**Configuration Sufficient:**
 - Standard field mappings (entity properties to SF fields)
 - Simple sync triggers (create/update/delete)
-- Basic WHERE clauses for pull filtering
+- Basic WHERE clauses
 - Standard pull frequency
 
-**When customization is required:**
+**Customization Required:**
 - Complex field transformations
 - Conditional push/pull logic
 - Related entity synchronization
@@ -66,11 +98,30 @@ drupal_version: "11.x"
 - **Wrong**: Using EventSubscriber for reusable field transformation logic used across multiple mappings → **Right**: Create a field mapping plugin (`PropertiesBase`) for reusable logic; use events for one-off behavior
 - **Wrong**: Customizing when configuration is sufficient — over-engineering → **Right**: Start with configuration; add events only when the standard mapping cannot express the required behavior
 
+## Guide Maintenance
+
+**Guide Maintenance:** This guide references specific file paths in the Salesforce module codebase. When upgrading the module, verify file locations and API changes. Event system is stable since 8.x-4.x branch.
+
+## Related Documentation
+
+**Drupal.org:**
+- Quick Start: https://www.drupal.org/docs/contributed-modules/salesforce-suite/quick-start
+- Mapping Guide: https://www.drupal.org/docs/contributed-modules/salesforce-suite/mapping
+- Push/Pull: https://www.drupal.org/docs/contributed-modules/salesforce-suite/push-and-pull
+
+**Salesforce Developer:**
+- REST API: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
+- SOQL: https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/
+- Connected Apps: https://help.salesforce.com/articleView?id=connected_app_create.htm
+
+**Code References:**
+- API Documentation: https://api.drupal.org/api/salesforce
+- Example Module: `/web/modules/contrib/salesforce/modules/salesforce_example`
+- Event Examples: `/web/modules/contrib/salesforce/modules/salesforce_example/src/EventSubscriber/SalesforceExampleSubscriber.php`
+
 ## See Also
 
 - [Architecture Overview](salesforce-overview.md)
 - [Event System](event-system.md)
 - [Custom Field Mapping Plugin](custom-field-mapping-plugin.md)
 - [Extension Patterns](extension-patterns.md)
-- Docs: https://www.drupal.org/docs/contributed-modules/salesforce-suite/quick-start
-- Salesforce REST API: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/

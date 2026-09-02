@@ -6,11 +6,9 @@ tldr: "Use `clip-path` when you need precise geometric cuts or responsive curves
 # CSS Shapes & Decorative Geometry
 
 ## When to Use
-
-> Use `clip-path` when you need precise geometric cuts or responsive curves. Use `border-radius` with uneven values when you need animatable organic blob shapes.
+When a client asks for blob shapes, wave dividers, organic forms, rounded section breaks, or any non-rectangular decorative element — all achievable without JavaScript or SVG imports.
 
 ## Decision
-
 | Client asks for... | Use... | Why |
 |---|---|---|
 | Wave section divider | `clip-path: path()` or SVG in `clip-path: url()` | Smooth curves, responsive |
@@ -22,58 +20,103 @@ tldr: "Use `clip-path` when you need precise geometric cuts or responsive curves
 | Animated morphing shape | `clip-path` polygon with same point count | Transitions between shapes |
 | Decorative floating blobs | `border-radius` + `animation` | Organic, animated backgrounds |
 
-## Pattern
-
+## Pattern: Wave Section Divider
 ```css
-/* Wave section divider */
+/* Using clip-path with path() */
+.section--wave {
+  clip-path: path('M0,0 L1440,0 L1440,280 Q720,360 0,280 Z');
+  /* Scale with vw for responsive */
+}
+
+/* Better: SVG approach with CSS */
+.section--wave-bottom {
+  position: relative;
+  padding-bottom: 80px;
+}
 .section--wave-bottom::after {
   content: '';
   position: absolute;
-  bottom: 0; left: 0;
-  width: 100%; height: 80px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
   background: var(--color-next-section);
   clip-path: ellipse(60% 100% at 50% 100%);
 }
+```
 
-/* Animated blob */
+## Pattern: Blob Shape (Animated)
+```css
 .blob {
-  width: 300px; height: 300px;
+  width: 300px;
+  height: 300px;
   background: var(--color-primary);
   border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
   animation: morph 8s ease-in-out infinite;
 }
+
 @keyframes morph {
   0%   { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+  25%  { border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%; }
   50%  { border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%; }
+  75%  { border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%; }
   100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
 }
+```
 
-/* Diagonal section */
+## Pattern: Diagonal Section Break
+```css
 .section--diagonal {
   clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
-  padding-bottom: 6rem;
+  padding-bottom: 6rem; /* Extra space for the angle */
 }
 
-/* shape() function — Chrome 2025+ */
+/* Reverse angle for alternating sections */
+.section--diagonal-reverse {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 85%);
+  padding-top: 6rem;
+}
+```
+
+## Pattern: shape() Function (Chrome 2025+)
+```css
+/* Responsive curves with percentage-based coords */
 .hero-mask {
   clip-path: shape(from 0% 0%,
-    line to 100% 0%, line to 100% 80%,
+    line to 100% 0%,
+    line to 100% 80%,
     curve to 50% 100% with 75% 90%,
-    curve to 0% 80% with 25% 90%, close
+    curve to 0% 80% with 25% 90%,
+    close
   );
 }
 ```
 
-## Common Mistakes
+## Pattern: Animated Shape Morph on Hover
+```css
+.morph-card {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  transition: clip-path 0.6s var(--ease-emphasized-decel);
+}
 
+.morph-card:hover {
+  clip-path: polygon(5% 5%, 95% 0, 100% 95%, 0 100%);
+}
+```
+
+## Tools
+- [Blobmaker.app](https://www.blobmaker.app/) — generate blob border-radius values
+- [Fancy Border Radius](https://9elements.github.io/fancy-border-radius/) — 8-value border-radius generator
+- [Clippy](https://bennettfeely.com/clippy/) — visual clip-path polygon editor
+- [CSS shape() editor](https://css-shape.com/) — the new shape() function builder
+
+## Common Mistakes
 - **Using SVG when clip-path suffices** — clip-path is more performant and CSS-native
-- **Forgetting padding** on clipped sections — clipped content is invisible but still occupies space
-- **Animating between different point counts** — `clip-path` polygon transitions require the same number of points
+- **Forgetting padding** on diagonally clipped sections — clipped content is invisible but still occupies space
+- **Animating between different point counts** — clip-path polygon transitions require the same number of points
 - **Fixed pixel values in clip-path** — use percentages for responsive shapes
 
 ## See Also
-
 - [Clip-Path and Masks](clip-path-and-masks.md) → reveals, iris animations, comparison sliders
-- [Glassmorphism and Frosted Glass](glassmorphism-and-frosted-glass.md) → frosted glass on shaped elements
+- [Glassmorphism](glassmorphism-and-frosted-glass.md) → frosted glass on shaped elements
 - [Gradient Craft](gradient-craft.md) → gradient fills inside shaped elements
-- Tools: [Blobmaker.app](https://www.blobmaker.app/), [Clippy](https://bennettfeely.com/clippy/), [CSS shape() editor](https://css-shape.com/)

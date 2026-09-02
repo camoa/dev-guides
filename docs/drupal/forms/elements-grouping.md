@@ -1,5 +1,5 @@
 ---
-description: Grouping and action elements - containers, fieldsets, buttons for form organization
+description: "Grouping and action elements - containers, fieldsets, buttons for form organization"
 tldr: "Use grouping elements to organize form structure and improve UX. Choose containers for AJAX wrappers, fieldsets for visual grouping, details for collapsible sections."
 drupal_version: "11.x"
 ---
@@ -10,87 +10,107 @@ drupal_version: "11.x"
 
 > Use grouping elements to organize form structure and improve UX. Choose containers for AJAX wrappers, fieldsets for visual grouping, details for collapsible sections.
 
-## Decision
+## Decision: Grouping/Container Elements
 
-| Situation | Element | Why |
-|-----------|---------|-----|
-| AJAX wrapper target | container | Invisible, structural |
-| Related fields grouping | fieldset | Visual border, legend |
-| Optional/advanced settings | details | Collapsible, saves space |
-| Multiple setting groups | vertical_tabs | Tabbed interface |
-| Form action buttons | actions | Standard wrapper, styling |
+**Layout Organization:**
 
-## Grouping Pattern
+| Element | Visual | Collapsible | When to Use |
+|---------|--------|-------------|-------------|
+| container | Invisible wrapper | No | Grouping for #states, AJAX wrapper |
+| fieldset | Border + legend | No | Related fields group |
+| details | Border + summary | Yes | Optional/advanced settings |
+| vertical_tabs | Tabbed interface | Yes | Multiple setting groups |
+| actions | Button wrapper | No | Form action buttons |
 
-```php
-// Container (invisible wrapper)
-$form['ajax_wrapper'] = [
-  '#type' => 'container',
-  '#attributes' => ['id' => 'ajax-wrapper'], // For AJAX targeting
-];
-
-// Fieldset (visible grouping)
-$form['contact_info'] = [
-  '#type' => 'fieldset',
-  '#title' => $this->t('Contact Information'),
-];
-
-// Details (collapsible)
-$form['advanced'] = [
-  '#type' => 'details',
-  '#title' => $this->t('Advanced Settings'),
-  '#open' => FALSE, // Collapsed by default
-];
-
-// Actions container (for buttons)
-$form['actions'] = [
-  '#type' => 'actions',
-];
-```
-
-## Button Pattern
-
-```php
-// Submit button (primary action)
-$form['actions']['submit'] = [
-  '#type' => 'submit',
-  '#value' => $this->t('Save'),
-];
-
-// Custom submit handler
-$form['actions']['save_continue'] = [
-  '#type' => 'submit',
-  '#value' => $this->t('Save and Continue'),
-  '#submit' => ['::saveContinue'], // Custom handler
-];
-
-// Button with validation control
-$form['actions']['previous'] = [
-  '#type' => 'submit',
-  '#value' => $this->t('Previous'),
-  '#limit_validation_errors' => [], // No validation
-  '#submit' => ['::previousStep'],
-];
-```
-
-## Button Handler Priority
+**Container Element:**
 
 ```
-1. Button #submit handlers (if that button clicked)
-2. Form-level #submit handlers
+Purpose: Structural wrapper, AJAX target
+No visual styling by default
+Common use: AJAX callback wrapper
+Properties: #attributes, #tree
+```
+
+**Fieldset Element:**
+
+```
+Purpose: Visual grouping with legend
+Properties: #title (becomes <legend>)
+Accessibility: Improves screen reader navigation
+```
+
+**Details Element:**
+
+```
+Purpose: Collapsible section
+Properties:
+  #title: Summary text (always visible)
+  #open: TRUE (default expanded) or FALSE (collapsed)
+Common: Advanced settings, optional fields
+```
+
+**Vertical Tabs:**
+
+```
+Complex element, study core usage
+Reference: /web/core/lib/Drupal/Core/Render/Element/VerticalTabs.php
+Common in: Node edit form, admin pages
+Child elements become tabs
+```
+
+**Actions Container:**
+
+```
+Standard wrapper for submit/cancel buttons
+Provides: Consistent spacing, styling
+Usage: $form['actions']['submit'] = [...]
+```
+
+## Reference: Action Elements (Buttons)
+
+**Button Types:**
+
+| Element | Purpose | Submits Form | Custom Handler |
+|---------|---------|--------------|----------------|
+| submit | Primary action | Yes | Optional #submit |
+| button | Custom action | Optional | #executes_submit_callback, #ajax |
+| image_button | Image submit | Yes | #src, #submit |
+
+**Submit Button Properties:**
+
+```
+#value: Button text
+#submit: Custom submit handlers array
+#validate: Custom validation handlers array
+#limit_validation_errors: Partial validation (multi-step)
+```
+
+**Multiple Submit Buttons Pattern:**
+
+```
+Different buttons trigger different handlers
+Use #submit property for button-specific logic
+Example: "Save", "Save and Continue", "Preview"
+```
+
+**Button-Specific Handlers:**
+
+```
+Priority order:
+1. Button #submit handlers (if button triggered)
+2. Form #submit handlers
 3. Class submitForm() method
 ```
 
 ## Common Mistakes
 
-- **Wrong**: Using button instead of submit → **Right**: Use submit (submits by default)
-- **Wrong**: No #limit_validation_errors on "Previous" → **Right**: Skip validation when going back
-- **Wrong**: Complex forms without grouping → **Right**: Use fieldset/details for clarity
-- **Wrong**: Creating custom buttons for simple submits → **Right**: Use #submit property
+- Using button instead of submit (doesn't submit by default)
+- Forgetting #executes_submit_callback on button elements
+- Not using #limit_validation_errors on "Previous" buttons
+- Creating custom buttons without AJAX for simple submits
 
 ## See Also
 
-- [Submission Architecture](submission-architecture.md)
-- [Multi-Step Forms](multi-step-forms.md)
-- [AJAX Architecture](ajax-architecture.md)
-- Reference: `/web/core/lib/Drupal/Core/Render/Element/Actions.php`
+- [Submission Architecture](submission-architecture.md) (dedicated section)
+- [Multi-Step Forms](multi-step-forms.md) (dedicated section)
+- [AJAX Buttons](ajax-architecture.md) (AJAX section)

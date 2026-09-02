@@ -10,47 +10,48 @@ drupal_version: "11.x"
 
 > Use the `install:` key to declare modules and themes that your recipe requires.
 
-## Decision
+The `install:` key declares modules and themes the recipe requires.
 
-| Situation | Choose | Why |
-|-----------|--------|-----|
-| Extension already installed, need specific config | Use `config.actions` | Modify installed extension config |
-| Extension not available | Ensure extension is in codebase | Recipes don't download code |
-| Theme needs module | List module in `install:` | Module provides theme dependency |
+## Steps: Declare Extensions and Understand Install Order
 
-## Pattern
+1. **List extensions** — Modules and themes by machine name
+   ```yaml
+   install:
+     - node
+     - image
+     - path
+     - olivero  # Theme
+   ```
 
-List extensions by machine name:
+2. **Installation order** — RecipeRunner processes in sequence
+   - Modules install first (via ModuleInstaller)
+   - Themes install second (via ThemeInstaller)
+   - Dependencies of extensions auto-install
+   - Already-installed extensions are skipped
 
-```yaml
-install:
-  - node
-  - image
-  - path
-  - olivero  # Theme
-```
+3. **Config override during install** — Recipe config overrides extension config
+   - Extension's `config/install` loaded
+   - Recipe's `config/` directory overlays extension defaults
+   - Uses RecipeOverrideConfigStorage to merge
 
-Installation order:
-- Modules install first (via ModuleInstaller)
-- Themes install second (via ThemeInstaller)
-- Dependencies of extensions auto-install
-- Already-installed extensions are skipped
+## Decision Points: Extension Availability and Theme Dependencies
 
-Config override during install:
-- Extension's `config/install` loaded
-- Recipe's `config/` directory overlays extension defaults
-- Uses RecipeOverrideConfigStorage to merge
+| At this step... | If... | Then... |
+|---|---|---|
+| Extension already installed | Recipe needs specific config | Use `config.actions` to modify installed extension config |
+| Extension not available | Extension is custom or contrib | Ensure extension is in codebase; recipes don't download code |
+| Theme needs module | Module provides theme dependency | List module in `install:` before or with theme |
 
 ## Common Mistakes
 
-- **Wrong**: Forgetting to install extension that provides config → **Right**: Validation catches config actions, not imports; causes runtime errors
-- **Wrong**: Listing themes before modules explicitly → **Right**: Runner handles order but explicit misordering is confusing
-- **Wrong**: Expecting recipes to download code → **Right**: Recipes install existing extensions; use Composer for code acquisition
-- **Wrong**: Not declaring transitive dependencies → **Right**: Extension dependencies auto-install but documenting helps clarity
-- **Wrong**: Installing extensions the recipe doesn't configure → **Right**: Keep `install:` minimal; only list extensions recipe uses
+- Forgetting to install extension that provides config → Validation catches config actions, not imports; causes runtime errors
+- Listing themes before modules explicitly → Runner handles order but explicit misordering is confusing
+- Expecting recipes to download code → Recipes install existing extensions; use Composer for code acquisition
+- Not declaring transitive dependencies → Extension dependencies auto-install but documenting helps clarity
+- Installing extensions the recipe doesn't configure → Keep `install:` minimal; only list extensions recipe uses
 
 ## See Also
 
-- [Recipe Composition & Dependencies](recipe-composition.md)
-- [Config Import & Strict Mode](config-import-strict.md)
+- Previous: ← [Recipe Composition & Dependencies](recipe-composition.md)
+- Next: [Config Import & Strict Mode](config-import-strict.md) →
 - Reference: `core/lib/Drupal/Core/Recipe/RecipeRunner.php` (processInstall method)

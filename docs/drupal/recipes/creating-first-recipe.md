@@ -10,62 +10,60 @@ drupal_version: "11.x"
 
 > Follow this workflow to create a minimal working recipe from scratch.
 
-## Decision
+## Steps: Create and Apply a Minimal Recipe
 
-| At this step | Choose | Why |
-|--------------|--------|-----|
-| Adding configuration - simple and static | Use `config/` directory | For config files that don't need dynamic updates |
-| Adding configuration - needs dynamic updates | Use `config.actions` | For config actions that merge with existing config |
-| Choosing strict mode - setting up new functionality | Use `strict: false` | Allows existing config, flexible application |
-| Choosing strict mode - enforcing specific config state | Use `strict: true` or array | Validates config matches expectations |
+1. **Create recipe directory** — Recipes live in discoverable locations
+   ```bash
+   mkdir -p recipes/my_recipe
+   ```
+   Recipes can be in `/recipes/`, module subdirectories, or Composer packages.
 
-## Pattern
+2. **Write recipe.yml** — Minimum viable recipe
+   ```yaml
+   name: 'My Recipe'
+   description: 'Example recipe.'
+   type: 'Feature'
+   install:
+     - node
+   config:
+     strict: false
+   ```
 
-Create recipe directory:
+3. **Add configuration (optional)** — Create `config/` directory for config files
+   ```bash
+   mkdir -p recipes/my_recipe/config
+   # Export config from active site
+   drush config:export --destination=recipes/my_recipe/config
+   ```
 
-```bash
-mkdir -p recipes/my_recipe
-```
+4. **Apply the recipe** — Using Drush or core script
+   ```bash
+   # Drush (recommended)
+   drush recipe recipes/my_recipe
 
-Write minimal recipe.yml:
+   # Core script (no Drush)
+   php core/scripts/drupal recipe recipes/my_recipe
+   ```
 
-```yaml
-name: 'My Recipe'
-description: 'Example recipe.'
-type: 'Feature'
-install:
-  - node
-config:
-  strict: false
-```
+## Decision Points: Config Layout and Strict Mode
 
-Add configuration (optional):
-
-```bash
-mkdir -p recipes/my_recipe/config
-drush config:export --destination=recipes/my_recipe/config
-```
-
-Apply the recipe:
-
-```bash
-# Drush (recommended)
-drush recipe recipes/my_recipe
-
-# Core script (no Drush)
-php core/scripts/drupal recipe recipes/my_recipe
-```
+| At this step... | If... | Then... |
+|---|---|---|
+| Adding configuration | Config is simple and static | Use `config/` directory for config files |
+| Adding configuration | Config needs dynamic updates | Use `config.actions` for config actions |
+| Choosing strict mode | Recipe sets up new functionality | Use `strict: false` to allow existing config |
+| Choosing strict mode | Recipe enforces specific config state | Use `strict: true` or array of config names to validate |
 
 ## Common Mistakes
 
-- **Wrong**: Applying recipe before installing required modules → **Right**: Use `install:` key to declare dependencies
-- **Wrong**: Putting recipe.yml in wrong location → **Right**: Must be in recipe root directory, not subdirectory
-- **Wrong**: Using `config:` key without understanding strict mode → **Right**: Defaults to `strict: true` in current core (may change)
-- **Wrong**: Not testing recipe on clean install → **Right**: Recipes should be idempotent but are designed for apply-once
-- **Wrong**: Forgetting composer.json for published recipes → **Right**: Recipes distributed via Composer need `type: drupal-recipe`
+- Applying recipe before installing required modules → Use `install:` key to declare dependencies
+- Putting recipe.yml in wrong location → Must be in recipe root directory, not subdirectory
+- Using `config:` key without understanding strict mode → Defaults to `strict: true` in current core (may change)
+- Not testing recipe on clean install → Recipes should be idempotent but are designed for apply-once
+- Forgetting composer.json for published recipes → Recipes distributed via Composer need `type: drupal-recipe`
 
 ## See Also
 
-- [Recipe YAML Schema](recipe-yaml-schema.md)
-- [Recipe Composition & Dependencies](recipe-composition.md)
+- Previous: ← [Recipe YAML Schema](recipe-yaml-schema.md)
+- Next: [Recipe Composition & Dependencies](recipe-composition.md) →
 - Reference: https://project.pages.drupalcode.org/distributions_recipes/recipe.html

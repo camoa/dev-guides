@@ -5,8 +5,7 @@ description: "Source references and maintenance manifest for the plus suite guid
 # Sources & Maintenance
 
 ## Research Install
-Path: /home/camoa/workspace/contrib/web
-
+Claims here were checked against a local Drupal install of core and the modules named below, rather than quoted from documentation.
 ## Web Sources
 | Source | URL | Guide Sections | Last Verified |
 |--------|-----|----------------|---------------|
@@ -19,7 +18,7 @@ Path: /home/camoa/workspace/contrib/web
 ## Code Sources
 | Module | Relative Path | Guide Sections | Version |
 |--------|---------------|----------------|---------|
-| Plus Suite (recipe) | /home/camoa/workspace/contrib/recipes/plus_suite/ (recipe source checkout, outside the /web install root) | 2.1, 3.1, 23.1, 25.1 | 1.1.21, stable (tracks declaration — recipe.yml carries no version field) |
+| Plus Suite (recipe) | contrib/recipes/plus_suite/ (recipe source checkout, outside the /web install root) | 2.1, 3.1, 23.1, 25.1 | 1.1.21, stable (tracks declaration — recipe.yml carries no version field) |
 | Navigation+ | modules/contrib/navigation_plus/ | 2.1-6.1, 13.1-14.1, 16.1, 19.1-23.1, 25.1 | 2.3.9 (installed; guide header states 2.3.4 — not re-verified against the newer release) |
 | LB+ | modules/contrib/lb_plus/ | 2.1-3.1, 6.1-8.1, 10.1-12.1, 16.1, 18.1-23.1, 26.1-29.1 | 3.6.12 (installed; guide header states 3.6.8 — not re-verified against the newer release) |
 | Edit+ | modules/contrib/edit_plus/ | 2.1-3.1, 6.1, 9.1-10.1, 14.1, 16.1, 18.1-26.1, 28.1-29.1 | 2.3.3 (installed; guide header states 2.3.0 — not re-verified against the newer release) |

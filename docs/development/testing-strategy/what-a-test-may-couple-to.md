@@ -1,5 +1,5 @@
 ---
-description: What a test may assert on — the contract line between promised return values and unpromised surfaces like printed messages or call order.
+description: "What a test may assert on — the contract line between promised return values and unpromised surfaces like printed messages or call order."
 tldr: "A test may assert only on promised contracts — return values, state changes, exit codes, exception types, spec'd fields — not on printed message wording or call order. Whole-program output matching is a behavioral test, not a unit test."
 drupal_version: "11.x"
 ---
@@ -46,6 +46,6 @@ Size is a proxy for this and usually a good one, but it is not the property. A o
 
 ## See Also
 
-- [Unit Testing Concepts](unit-testing-concepts.md) | Next: [Integration Testing Concepts](integration-testing-concepts.md)
+- Previous: [Unit Testing Concepts](unit-testing-concepts.md) | Next: [Integration Testing Concepts](integration-testing-concepts.md)
 - Related: [TDD & Spec-Driven Development — Changing Existing Tests](https://camoa.github.io/dev-guides/development/tdd-spec-driven/changing-existing-tests/) — who may change an assertion once it exists
 - Reference: Martin Fowler, [UnitTest](https://martinfowler.com/bliki/UnitTest.html) — solitary vs sociable unit tests

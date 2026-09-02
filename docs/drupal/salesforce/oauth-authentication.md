@@ -1,5 +1,5 @@
 ---
-description: Salesforce OAuth 2.0 Web Server authentication setup — when to use OAuth vs JWT, Connected App configuration
+description: "Salesforce OAuth 2.0 Web Server authentication setup — when to use OAuth vs JWT, Connected App configuration"
 tldr: "Use OAuth when interactive user authorization is needed or for single-org integrations. Use JWT when server-to-server automation is required, no interactive auth is possible, or multiple orgs are involved."
 drupal_version: "11.x"
 ---
@@ -10,7 +10,9 @@ drupal_version: "11.x"
 
 > Use OAuth when interactive user authorization is needed or for single-org integrations. Use JWT when server-to-server automation is required, no interactive auth is possible, or multiple orgs are involved.
 
-## Decision
+**Purpose:** OAuth 2.0 Web Server authentication flow
+
+## Decision: OAuth vs JWT
 
 | Situation | Choose | Why |
 |---|---|---|
@@ -20,18 +22,28 @@ drupal_version: "11.x"
 | Multiple Salesforce orgs | JWT | Simpler credential management |
 | Scheduled background jobs | JWT | No token expiry interruption |
 
-## Pattern
+**Decision Point - OAuth vs JWT:**
+- Use OAuth when: Interactive user authorization needed, single org integration
+- Use JWT when: Server-to-server integration, automated processes, multiple orgs
 
-**Required Salesforce setup:**
-1. Create Connected App in Salesforce: Setup > Apps > App Manager
-2. Configure OAuth scopes — minimum: "Perform requests on your behalf at any time"
-3. Set callback URL: `https://[your-site]/salesforce/oauth_callback`
+## Setup Requirements
+
+1. Create Connected App in Salesforce (Setup > Apps > App Manager)
+2. Configure OAuth scopes (minimum: "Perform requests on your behalf at any time")
+3. Set callback URL to `https://[your-site]/salesforce/oauth_callback`
 4. SSL required for authorization
 
-**Module configuration:**
+## Auth Provider Plugin
+
+- Location: `/web/modules/contrib/salesforce/modules/salesforce_oauth/src/Plugin/SalesforceAuthProvider/SalesforceOAuthPlugin.php`
 - Plugin ID: `oauth`
-- Plugin location: `/web/modules/contrib/salesforce/modules/salesforce_oauth/src/Plugin/SalesforceAuthProvider/SalesforceOAuthPlugin.php`
-- Required credentials: Consumer Key, Consumer Secret, Login URL (production vs sandbox)
+- Implements OAuth 2.0 Web Server Flow
+
+## Configuration
+
+- Consumer credentials (Consumer Key, Consumer Secret)
+- Login URL (production vs sandbox)
+- Callback URL: `/salesforce/oauth_callback`
 
 ## Common Mistakes
 

@@ -10,92 +10,89 @@ drupal_version: "11.x"
 
 > Use inputs when you need to externalize site-specific data that varies per environment, making recipes portable and reusable.
 
-## Decision
+Define user-provided values that vary per environment. Inputs enable recipe portability by externalizing site-specific data.
 
-| Need | Default Source | Why |
-|------|----------------|-----|
-| Value varies per environment | `source: env` | Different staging/prod values from environment variables |
-| Value comes from existing config | `source: config` | Recipe extends existing site config |
-| Value is fixed | `source: value` | All sites use same literal value |
-| Validation needed | Add `constraints` | Input format validation (email, URL, regex patterns) |
+## Steps: Define Inputs, Types, Constraints, Prompts and Forms
 
-## Pattern
+1. **Define input structure** — Each input requires description, data_type, default
+   ```yaml
+   input:
+     site_name:
+       description: 'The name of the site'
+       data_type: string
+       default:
+         source: value
+         value: 'My Site'
+   ```
 
-Define input structure (description, data_type, default required):
+2. **Specify data type** — Only primitive types supported
+   ```yaml
+   input:
+     enable_feature:
+       description: 'Enable experimental feature'
+       data_type: boolean
+       default: { source: value, value: false }
+     cache_lifetime:
+       description: 'Cache lifetime in seconds'
+       data_type: integer
+       default: { source: value, value: 3600 }
+   ```
 
-```yaml
-input:
-  site_name:
-    description: 'The name of the site'
-    data_type: string
-    default:
-      source: value
-      value: 'My Site'
-```
+3. **Add constraints** — Validate input values using Symfony constraints
+   ```yaml
+   input:
+     admin_email:
+       description: 'Administrator email address'
+       data_type: string
+       constraints:
+         Email: ~
+       default: { source: value, value: 'admin@example.com' }
+   ```
 
-Supported data types (primitives only):
+4. **Configure CLI prompts** — Control how inputs are collected interactively
+   ```yaml
+   input:
+     site_name:
+       description: 'Site name'
+       data_type: string
+       prompt:
+         method: ask
+         arguments:
+           question: 'What is your site name?'
+       default: { source: value, value: 'Default Site' }
+   ```
 
-```yaml
-input:
-  enable_feature:
-    description: 'Enable experimental feature'
-    data_type: boolean
-    default: { source: value, value: false }
-  cache_lifetime:
-    description: 'Cache lifetime in seconds'
-    data_type: integer
-    default: { source: value, value: 3600 }
-```
+5. **Configure form elements** — Define Form API properties for web forms
+   ```yaml
+   input:
+     site_name:
+       description: 'Site name'
+       data_type: string
+       form:
+         '#title': 'Site name'
+         '#required': true
+       default: { source: value, value: 'My Site' }
+   ```
 
-Add validation constraints:
+## Decision Points: Choosing a Default Source
 
-```yaml
-input:
-  admin_email:
-    description: 'Administrator email address'
-    data_type: string
-    constraints:
-      Email: ~
-    default: { source: value, value: 'admin@example.com' }
-```
-
-Configure CLI prompts:
-
-```yaml
-input:
-  site_name:
-    description: 'Site name'
-    data_type: string
-    prompt:
-      method: ask
-      arguments:
-        question: 'What is your site name?'
-    default: { source: value, value: 'Default Site' }
-```
-
-Configure form elements:
-
-```yaml
-input:
-  site_name:
-    description: 'Site name'
-    data_type: string
-    form:
-      '#title': 'Site name'
-      '#required': true
-    default: { source: value, value: 'My Site' }
-```
+| At this step... | If... | Then... |
+|---|---|---|
+| Value varies per environment | Different staging/prod values | Use `source: env` with environment variable |
+| Value comes from existing config | Recipe extends existing site | Use `source: config` with config path |
+| Value is fixed | All sites use same value | Use `source: value` with literal value |
+| Validation needed | Input format matters | Add `constraints` using Symfony validators |
 
 ## Common Mistakes
 
-- **Wrong**: Using complex data types → **Right**: Only primitives (string, integer, boolean, float) supported; no arrays or objects
-- **Wrong**: Forgetting default is required → **Right**: Every input must have default source defined; no default = validation error
-- **Wrong**: Not validating inputs → **Right**: Add constraints for format validation (email, URL, regex patterns)
-- **Wrong**: Assuming inputs persist → **Right**: Inputs are apply-time only; not stored in config after recipe runs
-- **Wrong**: Using Form API child elements in form definition → **Right**: Inputs are primitives; no child elements allowed
+- Using complex data types → Only primitives (string, integer, boolean, float) supported; no arrays or objects
+- Forgetting default is required → Every input must have default source defined; no default = validation error
+- Not validating inputs → Add constraints for format validation (email, URL, regex patterns)
+- Assuming inputs persist → Inputs are apply-time only; not stored in config after recipe runs
+- Using Form API child elements in form definition → Inputs are primitives; no child elements allowed
 
 ## See Also
 
-- [Config Actions - Advanced Patterns](config-actions-advanced.md)
-- [Input System - Default Sources](input-default-sources.md)
+- Previous: ← [Config Actions - Advanced Patterns](config-actions-advanced.md)
+- Next: [Input System - Default Sources](input-default-sources.md) →
 - Reference: `core/lib/Drupal/Core/Recipe/InputConfigurator.php`

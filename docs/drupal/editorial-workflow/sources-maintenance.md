@@ -6,7 +6,7 @@ description: "Source references and maintenance manifest for the editorial workf
 ## Sources & Maintenance Manifest
 
 ### Research Install
-Path: /home/camoa/workspace/contrib/web
+Path: contrib/web
 
 ### Web Sources
 | Source | URL | Guide Sections | Last Verified |
@@ -23,8 +23,8 @@ Path: /home/camoa/workspace/contrib/web
 | Demo: Umami (author/editor roles) | core/profiles/demo_umami/config/install/user.role.author.yml, user.role.editor.yml | editorial-role-permission-model.md | 11.4.5 |
 | Config Action: per-bundle permissions | core/lib/Drupal/Core/Config/Action/Plugin/ConfigAction/PermissionsPerBundle.php | editorial-role-permission-model.md | 11.4.5 |
 | Config Action: add moderation | core/modules/content_moderation/src/Plugin/ConfigAction/AddModeration.php | content-moderation-state-machine.md | 11.4.5 |
-| Content Editor Role (core recipe, shipped by Drupal CMS) | /home/camoa/workspace/drupal-cms/web/core/recipes/content_editor_role/config/user.role.content_editor.yml | editorial-role-permission-model.md | Drupal CMS 2.0.0 / core 11.3.2 |
-| Content Basics (basic_editorial workflow) | /home/camoa/workspace/drupal-cms/recipes/drupal_cms_content_type_base/config/workflows.workflow.basic_editorial.yml | content-moderation-state-machine.md | Drupal CMS 2.0.0 / core 11.3.2 |
+| Content Editor Role (core recipe, shipped by Drupal CMS) | drupal-cms/web/core/recipes/content_editor_role/config/user.role.content_editor.yml | editorial-role-permission-model.md | Drupal CMS 2.0.0 / core 11.3.2 |
+| Content Basics (basic_editorial workflow) | drupal-cms/recipes/drupal_cms_content_type_base/config/workflows.workflow.basic_editorial.yml | content-moderation-state-machine.md | Drupal CMS 2.0.0 / core 11.3.2 |
 
 The last two rows come from a second install outside the primary Research Install path, kept as full paths because they are not under it.
 

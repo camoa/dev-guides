@@ -40,9 +40,11 @@ drupal_version: "11.x"
 | `administer ai_assistant` | ai_assistant_api | Manage assistants |
 | `administer ai_automator` | ai_automators | Manage automators |
 | `use ai ckeditor` | ai_ckeditor | CKEditor AI features |
-| `access ai prompt` | ai_api_explorer | API testing UI (dev only) |
+| `access ai prompt` | ai_api_explorer | API testing UI |
+| `access ai content suggestion tools` | ai_content_suggestions | Content review |
 | `create ai content translation` | ai_translate | Trigger translation |
 | `administer ai observability` | ai_observability | Monitoring config |
+| `view ai log` | ai_logging | View logs |
 
 ## Prompt Injection
 
@@ -59,9 +61,11 @@ Using `search_api_bypass_access` in RAG queries leaks entity access-controlled c
 
 ## Common Mistakes
 
-- **Wrong**: Exposing agent tools without permission checks → **Right**: Any user who can chat with the agent inherits tool permissions
-- **Wrong**: Using `search_api_bypass_access` carelessly → **Right**: Leaks access-controlled content into AI responses
-- **Wrong**: Not using guardrails on user-facing features → **Right**: Prompt injection can bypass agent instructions
+| Mistake | Why it's wrong |
+|---------|---------------|
+| Exposing agent tools without permission checks | Any user who can chat with the agent inherits tool permissions |
+| Using `search_api_bypass_access` without caution | Leaks entity access-controlled content into AI responses |
+| Not using guardrails on user-facing features | Prompt injection can bypass agent instructions |
 
 ## See Also
 

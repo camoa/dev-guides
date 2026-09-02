@@ -1,5 +1,5 @@
 ---
-description: Master decision matrix — map any verification need to the right test type and the right guide, with quick-reference by stack.
+description: "Master decision matrix — map any verification need to the right test type and the right guide, with quick-reference by stack."
 tldr: "Map what you need to verify to the correct test type using this matrix. Most features need a combination: unit tests for logic, integration for seams, E2E for critical journeys only. Quick reference: Drupal uses PHPUnit Unit/Kernel/Functional; React/Next.js uses Vitest + RTL + Playwright."
 ---
 
@@ -7,9 +7,9 @@ tldr: "Map what you need to verify to the correct test type using this matrix. M
 
 ## When to Use
 
-> Use this master decision matrix when you know what you need to verify but are not sure which test type to reach for.
+> When you know what you need to verify but are not sure which test type to reach for. This is the master decision matrix — map a need to the right test type(s) and the right guide.
 
-## Decision
+## Master Decision Matrix
 
 | I need to verify... | Primary test type | Secondary / complement | Cross-link |
 |---|---|---|---|
@@ -39,7 +39,9 @@ The discriminator is not whether a browser is involved. Drupal's `BrowserTestBas
 
 See [TDD — What TDD Covers](https://camoa.github.io/dev-guides/development/tdd-spec-driven/what-tdd-covers/) for the full table, and [TDD — When Not to Write a Test](https://camoa.github.io/dev-guides/development/tdd-spec-driven/when-not-to-write-a-test/) for what the loop requires from a change and what counts as excess.
 
-## Pattern
+## When One Test Type Is Not Enough
+
+Most features need a combination. Use the pyramid/trophy shape as a guide:
 
 ```
 Feature: User Registration
@@ -61,12 +63,12 @@ Functional tests:
 E2E test:
   - One test: user fills form, submits, sees confirmation page
 
-Security tests (integration level):
+Security tests (at integration level):
   - SQL injection payload returns 400, not 500
   - Token in response is signed and contains correct claims
 ```
 
-**Quick reference by stack:**
+## Quick Reference by Stack
 
 | Stack | Unit | Integration | E2E |
 |---|---|---|---|
@@ -78,7 +80,7 @@ Security tests (integration level):
 
 ## See Also
 
-- [Best Practices and Anti-Patterns](best-practices-and-anti-patterns.md)
+- ← Previous: [Best Practices and Anti-Patterns](best-practices-and-anti-patterns.md)
 - Related: [development/tdd-spec-driven](https://camoa.github.io/dev-guides/development/tdd-spec-driven/) — TDD workflow that uses these test types
 - Related: [TDD — What TDD Covers](https://camoa.github.io/dev-guides/development/tdd-spec-driven/what-tdd-covers/) — which of these types the red-green loop actually produces
 - Related: [drupal/testing](https://camoa.github.io/dev-guides/drupal/testing/) — Drupal-specific test types and setup

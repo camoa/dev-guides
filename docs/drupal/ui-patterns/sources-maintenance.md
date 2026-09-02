@@ -1,17 +1,10 @@
 ---
-description: UI Patterns 2.x — source references, versions, and maintenance notes
+description: "Source references and maintenance manifest for the ui patterns guides — web sources, code sources, and version history"
 ---
 
 # Sources & Maintenance
 
-## Module Info
-
-- **Module:** `ui_patterns` 2.0.20
-- **Drupal:** 11.4
-- **Last Updated:** 2026-08-18
-
 ## Drupal Research Install
-
 Path: `~/workspace/contrib/web/` (ui_patterns **2.0.15** installed there)
 
 ## Verification Note (2026-08-18)
@@ -30,7 +23,6 @@ Every plugin ID, `#[Source]` attribute, deriver ID shape, config-schema key and 
 Not covered by this guide and worth a future pass: the `ui_patterns_field` sub-module (a `SourceValueItem` field type that stores UI Patterns source configuration as field data), which saw heavy work across 2.0.16–2.0.19.
 
 ## Web Sources
-
 | Source | URL | Guide Sections | Last Verified |
 |--------|-----|----------------|---------------|
 | UI Patterns 2 Official Docs | https://project.pages.drupalcode.org/ui_patterns/ | All sections | 2026-02-19 |
@@ -45,7 +37,6 @@ Not covered by this guide and worth a future pass: the `ui_patterns_field` sub-m
 | Evolving Web Tutorial | https://evolvingweb.com/blog/speed-front-end-development-drupal-ui-patterns | Overview & Decision | 2026-02-19 |
 
 ## Code Sources
-
 | Module | Relative Path | Guide Sections | Drupal Version |
 |--------|---------------|----------------|----------------|
 | ui_patterns | `modules/contrib/ui_patterns/` | All sections | 11.4 |

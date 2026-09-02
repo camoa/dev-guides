@@ -63,7 +63,7 @@ Path: not applicable — this guide covers Drupal.org workflow mechanics, not Dr
 
 ## Research Document Sources
 
-These internal research documents provided the primary content for this guide. They are stored in `/home/camoa/workspace/dev-guides/contrib-research/`.
+These internal research documents provided the primary content for this guide. They are stored in `dev-guides/contrib-research/`.
 
 | Document | Sections sourced | Date |
 |---|---|---|

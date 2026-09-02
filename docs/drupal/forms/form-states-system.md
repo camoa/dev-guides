@@ -1,5 +1,5 @@
 ---
-description: Form states system - client-side conditional field behavior with #states
+description: "Form states system - client-side conditional field behavior with #states"
 tldr: "Use #states for client-side show/hide and enable/disable. Use AJAX when server-side logic or dynamic options needed."
 drupal_version: "11.x"
 ---
@@ -10,113 +10,142 @@ drupal_version: "11.x"
 
 > Use #states for client-side show/hide and enable/disable. Use AJAX when server-side logic or dynamic options needed.
 
-## Decision
+**Purpose:** Client-side conditional field behavior (JavaScript)
 
-| Situation | Choose | Why |
-|-----------|--------|-----|
-| Simple show/hide logic | #states | Instant, client-side only |
-| Field enable/disable | #states | No server call needed |
-| Required status changes | #states | Client-side validation |
-| Options must change | AJAX | Need server data |
-| Need server-side data | AJAX | Complex logic |
-| Need to load entities | AJAX | Server processing required |
+**Use When:** Show/hide, enable/disable based on other field values
 
-## Supported States
+**Alternative:** AJAX (when server-side logic needed)
 
-**Visibility:** visible, invisible
+**Reference:**
 
-**Interaction:** enabled, disabled, readonly
+- Documentation: [Conditional Form Fields](https://www.drupal.org/docs/drupal-apis/form-api/conditional-form-fields)
+- Implementation: `/web/core/misc/states.js`
 
-**Validation:** required, optional
+## Reference: Supported States
 
-**Special:** checked, unchecked (checkbox), expanded, collapsed (details)
+**Visibility States:**
 
-## Basic Syntax
+| State | Effect |
+|-------|--------|
+| visible | Show element when condition true |
+| invisible | Hide element when condition true |
 
-```php
-// Show field when checkbox checked
-$form['custom_value'] = [
-  '#type' => 'textfield',
-  '#title' => $this->t('Custom Value'),
-  '#states' => [
-    'visible' => [
-      ':input[name="use_custom"]' => ['checked' => TRUE],
-    ],
-    'required' => [
-      ':input[name="use_custom"]' => ['checked' => TRUE],
-    ],
-  ],
-];
+**Interaction States:**
 
-// Show based on select value
-$form['other_value'] = [
-  '#type' => 'textfield',
-  '#title' => $this->t('Other'),
-  '#states' => [
-    'visible' => [
-      'select[name="type"]' => ['value' => 'other'],
-    ],
-  ],
-];
+| State | Effect |
+|-------|--------|
+| enabled | Enable input when condition true |
+| disabled | Disable input when condition true |
+| readonly | Make read-only when condition true |
 
-// Disable when another field empty
-$form['dependent'] = [
-  '#type' => 'textfield',
-  '#states' => [
-    'disabled' => [
-      ':input[name="primary"]' => ['empty' => TRUE],
-    ],
-  ],
-];
-```
+**Validation States:**
 
-## Trigger Conditions
+| State | Effect |
+|-------|--------|
+| required | Mark required when condition true |
+| optional | Mark optional when condition true |
+
+**Special States:**
+
+| State | Effect | Element Type |
+|-------|--------|--------------|
+| checked | Check checkbox when condition true | Checkbox |
+| unchecked | Uncheck checkbox when condition true | Checkbox |
+| expanded | Expand when condition true | Details |
+| collapsed | Collapse when condition true | Details |
+
+## Reference: Trigger Conditions
+
+**Checkbox Conditions:**
 
 | Condition | When True |
 |-----------|-----------|
 | `['checked' => TRUE]` | Checkbox is checked |
 | `['unchecked' => TRUE]` | Checkbox is not checked |
+
+**Value Conditions:**
+
+| Condition | When True |
+|-----------|-----------|
 | `['value' => 'foo']` | Exact value match |
 | `['value' => ['foo', 'bar']]` | Value in array |
 | `['!value' => 'foo']` | Value NOT equal |
+
+**State Conditions:**
+
+| Condition | When True |
+|-----------|-----------|
 | `['empty' => TRUE]` | Field is empty |
 | `['filled' => TRUE]` | Field has value |
 
-## Selector Syntax
+## Pattern: Basic Syntax
 
-```php
-// Simple field
-':input[name="field_name"]'
+**Single Condition:**
 
-// Nested field
-':input[name="container[field]"]'
-
-// Field API widget
-':input[name="field[0][value]"]'
-
-// Radio buttons
-':input[name="field_name"]' => ['value' => 'option1']
-
-// Select dropdown
-'select[name="field_name"]' => ['value' => 'option1']
-
-// Checkboxes group
-':input[name="field_name[option1]"]' => ['checked' => TRUE]
-```
-
-## Complex Conditions
-
-**AND (all must be true):**
 ```php
 '#states' => [
   'visible' => [
-    ':input[name="enable"]' => ['checked' => TRUE],
-    ':input[name="role"]' => ['value' => 'admin'],
+    ':input[name="enable_feature"]' => ['checked' => TRUE],
   ],
 ],
 ```
 
-**OR (any can be true):**
+**Multiple States (Same Element):**
+
+```php
+'#states' => [
+  'visible' => [
+    ':input[name="enable_feature"]' => ['checked' => TRUE],
+  ],
+  'required' => [
+    ':input[name="enable_feature"]' => ['checked' => TRUE],
+  ],
+],
+```
+
+## Reference: Selector Syntax
+
+**Input Name:**
+
+```php
+':input[name="field_name"]'           // Simple field
+':input[name="container[field]"]'     // Nested field
+':input[name="field[0][value]"]'      // Field API widget
+```
+
+**Radio Buttons:**
+
+```php
+':input[name="field_name"]' => ['value' => 'option1']
+```
+
+**Select Dropdowns:**
+
+```php
+'select[name="field_name"]' => ['value' => 'option1']
+```
+
+**Checkboxes (Group):**
+
+```php
+':input[name="field_name[option1]"]' => ['checked' => TRUE]
+```
+
+## Pattern: Complex Conditions
+
+**AND Conditions (All Must Be True):**
+
+```php
+'#states' => [
+  'visible' => [
+    ':input[name="enable_feature"]' => ['checked' => TRUE],
+    ':input[name="user_role"]' => ['value' => 'admin'],
+  ],
+],
+```
+
+**OR Conditions (Any Can Be True):**
+
 ```php
 '#states' => [
   'visible' => [
@@ -127,7 +156,8 @@ $form['dependent'] = [
 ],
 ```
 
-**XOR (exactly one true):**
+**XOR Conditions (Exactly One True):**
+
 ```php
 '#states' => [
   'visible' => [
@@ -138,7 +168,8 @@ $form['dependent'] = [
 ],
 ```
 
-**Nested (AND + OR):**
+**Nested Logic (AND + OR):**
+
 ```php
 '#states' => [
   'visible' => [
@@ -153,37 +184,120 @@ $form['dependent'] = [
 ],
 ```
 
-## States vs AJAX Decision
+## Pattern: Practical Examples
 
-**Use #states when:**
+**Show Field When Checkbox Checked:**
+
+```php
+$form['custom_value'] = [
+  '#type' => 'textfield',
+  '#title' => $this->t('Custom Value'),
+  '#states' => [
+    'visible' => [
+      ':input[name="use_custom"]' => ['checked' => TRUE],
+    ],
+    'required' => [
+      ':input[name="use_custom"]' => ['checked' => TRUE],
+    ],
+  ],
+];
+```
+
+**Show Field Based on Select:**
+
+```php
+$form['other_value'] = [
+  '#type' => 'textfield',
+  '#title' => $this->t('Other'),
+  '#states' => [
+    'visible' => [
+      'select[name="type"]' => ['value' => 'other'],
+    ],
+  ],
+];
+```
+
+**Disable Field When Another Empty:**
+
+```php
+$form['dependent'] = [
+  '#type' => 'textfield',
+  '#states' => [
+    'disabled' => [
+      ':input[name="primary"]' => ['empty' => TRUE],
+    ],
+  ],
+];
+```
+
+## Decision: States vs AJAX
+
+**Use #states When:**
+
 - Simple show/hide logic
 - Field enable/disable
 - Required status changes
 - No server-side processing needed
-- Performance important
+- Performance important (client-side only)
 
-**Use AJAX when:**
-- Options must change (dependent dropdowns)
+**Use AJAX When:**
+
+- Options must change (e.g., dependent dropdowns)
 - Need server-side data
 - Complex validation logic
 - Field structure must change
 - Need to load entities/data
 
-**Combine both:**
-- #states for instant UI feedback
-- AJAX for data loading
-- Best user experience
+**Combine Both:**
+
+```
+#states for instant UI feedback
+AJAX for data loading
+Best user experience
+```
 
 ## Common Mistakes
 
-- **Wrong**: Missing :input in selector → **Right**: Always use `:input[name="field"]`
-- **Wrong**: Nested field with dot notation → **Right**: Use brackets `container[field]`
-- **Wrong**: Separate conditions for OR → **Right**: Use array + 'or' operator
-- **Wrong**: String instead of array → **Right**: `[['field' => 'value']]` not `'field' => 'value'`
+**Wrong Selector:**
+
+```php
+// WRONG - missing :input
+'name="field"' => ['checked' => TRUE]
+
+// CORRECT
+':input[name="field"]' => ['checked' => TRUE]
+```
+
+**Nested Field Selector:**
+
+```php
+// WRONG - missing brackets
+':input[name="container.field"]'
+
+// CORRECT
+':input[name="container[field]"]'
+```
+
+**OR Logic:**
+
+```php
+// WRONG - separate conditions = AND
+'visible' => [
+  ':input[name="a"]' => ['checked' => TRUE],
+  ':input[name="b"]' => ['checked' => TRUE],
+]
+
+// CORRECT - array + 'or'
+'visible' => [
+  [':input[name="a"]' => ['checked' => TRUE]],
+  'or',
+  [':input[name="b"]' => ['checked' => TRUE]],
+]
+```
 
 ## See Also
 
-- [AJAX Forms](ajax-architecture.md)
-- [Form Alter](form-alter-system.md)
-- [JavaScript API](https://www.drupal.org/docs/develop/drupal-apis/javascript-api)
-- Reference: [Conditional Form Fields](https://www.drupal.org/docs/drupal-apis/form-api/conditional-form-fields)
+- [AJAX Forms](ajax-architecture.md) (when states insufficient)
+- [Form Alter](form-alter-system.md) (adding states via hook)
+- [JavaScript API Guide](../js-development/index.md)
+- Contributed module: [Conditional Fields](https://www.drupal.org/project/conditional_fields)

@@ -1,13 +1,12 @@
 ---
-description: Drupal multilingual guide sources and maintenance manifest — web sources, code sources, version history
+description: "Source references and maintenance manifest for the multilingual guides — web sources, code sources, and version history"
 ---
 
-# Sources & Maintenance Manifest
+# Sources & Maintenance
 
-### Drupal Research Install
-Path: `/home/camoa/workspace/contrib/web/`
-
-### Web Sources
+## Drupal Research Install
+Claims here were checked against a local Drupal install of core and the modules named below, rather than quoted from documentation.
+## Web Sources
 
 | Source | URL | Guide Sections | Last Verified |
 |--------|-----|----------------|---------------|
@@ -41,7 +40,7 @@ Path: `/home/camoa/workspace/contrib/web/`
 | Drupal Issue: latestRevision Language Awareness | https://www.drupal.org/project/drupal/issues/3088341 | 7.1, 14.1 | 2026-02-16 |
 | Localize.drupal.org | https://localize.drupal.org | 9.1 | 2026-02-16 |
 
-### Code Sources
+## Code Sources
 
 | Module | Relative Path | Guide Sections | Drupal Version |
 |--------|---------------|----------------|----------------|
@@ -56,12 +55,3 @@ Path: `/home/camoa/workspace/contrib/web/`
 | TMGMT module | modules/contrib/tmgmt/ | 15.1, 21.1 | 6.x |
 
 ---
-
-## Version History
-
-**1.0** (2026-02-16): Initial release
-- 22 atomic sections covering complete multilingual system
-- Drupal 11.x compatibility verified
-- Includes deprecation notice for content_translation.admin.inc (11.4.0)
-- Research-backed best practices from 2024-2026 sources
-- Code examples from Drupal 11.x core

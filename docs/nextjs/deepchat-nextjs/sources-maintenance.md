@@ -6,8 +6,7 @@ description: "Source references and maintenance manifest for the deepchat nextjs
 
 ## Drupal Research Install
 
-Path: `/home/camoa/workspace/contrib/web/`
-
+Claims here were checked against a local Drupal install of core and the modules named below, rather than quoted from documentation.
 ## Web Sources
 
 | Source | URL | Guide Sections | Last Verified |
@@ -42,10 +41,10 @@ Path: `/home/camoa/workspace/contrib/web/`
 
 | File | Guide Sections |
 |------|----------------|
-| `/home/camoa/workspace/claude_memory/guides/deepchat-nextjs-drupal-integration.md` | 4.2, 7.1, 12.1 |
-| `/home/camoa/workspace/claude_memory/skills/drupal-ai/references/deepchat-frontend-integration.md` | 3.1, 3.2, 6.1, 6.2 |
-| `/home/camoa/workspace/claude_memory/skills/drupal-ai/references/deepchat-backend.md` | 7.1, 7.2 |
-| `/home/camoa/workspace/claude_memory/future_skills/deep-chat-docs.md` | 1.1, 3.1, 9.1, 10.1 |
+| `claude_memory/guides/deepchat-nextjs-drupal-integration.md` | 4.2, 7.1, 12.1 |
+| `claude_memory/skills/drupal-ai/references/deepchat-frontend-integration.md` | 3.1, 3.2, 6.1, 6.2 |
+| `claude_memory/skills/drupal-ai/references/deepchat-backend.md` | 7.1, 7.2 |
+| `claude_memory/future_skills/deep-chat-docs.md` | 1.1, 3.1, 9.1, 10.1 |
 
 ---
 

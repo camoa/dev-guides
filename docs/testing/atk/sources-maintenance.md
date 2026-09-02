@@ -19,7 +19,7 @@ description: "Source references and maintenance manifest for the atk guides — 
 | Drupal core issue #3467492 (Replace Nightwatch with Playwright) | https://www.drupal.org/project/drupal/issues/3467492 | 2, 18 | 2026-05-08 |
 
 ## Code Sources
-`automated_testing_kit` and `qa_accounts` are not present under `/home/camoa/workspace/contrib/web/modules/contrib/` — neither module is installed on the research site. No installed ATK source was read for this guide. Every code sample (selector hook attribute name, helper function names, Drush command names, `atk_prerequisites.yml` shape, Testor subcommands) is example code from the guide's own text, and the guide repeatedly flags these as needing verification against the current module (see sections 7, 8, 9, 10, 12, 18: "verify against your repo" / "verify exact ... against the current"). Treat those names as unverified pending an install.
+`automated_testing_kit` and `qa_accounts` are not present under `contrib/web/modules/contrib/` — neither module is installed on the research site. No installed ATK source was read for this guide. Every code sample (selector hook attribute name, helper function names, Drush command names, `atk_prerequisites.yml` shape, Testor subcommands) is example code from the guide's own text, and the guide repeatedly flags these as needing verification against the current module (see sections 7, 8, 9, 10, 12, 18: "verify against your repo" / "verify exact ... against the current"). Treat those names as unverified pending an install.
 
 | Module | Relative Path | Guide Sections | Version |
 |--------|---------------|----------------|---------|

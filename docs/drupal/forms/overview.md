@@ -1,5 +1,5 @@
 ---
-description: Drupal Form API overview - declarative render array system for building secure forms
+description: "Drupal Form API overview - declarative render array system for building secure forms"
 tldr: "Use Form API when you need user input with validation and CSRF protection. Use render arrays for display-only content."
 drupal_version: "11.x"
 ---
@@ -10,19 +10,31 @@ drupal_version: "11.x"
 
 > Use Form API when you need user input with validation and CSRF protection. Use render arrays for display-only content.
 
-## Decision
+This guide provides architectural decision-making guidance for Drupal's Form API. It focuses on patterns, best practices, and references to core code implementations rather than step-by-step tutorials.
 
-| Situation | Choose | Why |
-|-----------|--------|-----|
-| Admin settings | ConfigFormBase | Automatic config sync, schema validation |
-| Custom business logic | FormBase | Full control, service injection |
-| Delete/confirm action | ConfirmFormBase | Standard confirmation UI |
-| Entity create/edit | EntityForm | Entity-specific features (see Entity API guide) |
-| Multi-step workflow | FormBase + setCached() | State persistence across steps |
+**Key Principle:** Form API is a declarative render array-based system that handles the complete form lifecycle: building, validation, submission, and security.
 
-## Pattern
+## Core Concepts
 
-Form API is declarative - you define structure, Drupal handles rendering and security.
+- Forms are controllers accessed via routes with `_form` parameter
+- Forms implement FormInterface (or extend base classes)
+- Lifecycle: Build → Validate → Submit → Redirect
+- Security: CSRF tokens, input sanitization, access control
+- State management: FormState object persists across rebuilds
+
+## Decision: When to Use Forms
+
+| Use Case | Form Type |
+|----------|-----------|
+| Admin settings | ConfigFormBase |
+| Custom business logic | FormBase |
+| Delete/confirm action | ConfirmFormBase |
+| Entity create/edit | EntityForm (see Entity API guide) |
+| Multi-step workflow | FormBase + setCached() |
+
+## Pattern: A Minimal Form
+
+Form API is declarative — you define structure, Drupal handles rendering and security.
 
 ```php
 class ExampleForm extends FormBase {
@@ -46,25 +58,11 @@ class ExampleForm extends FormBase {
 }
 ```
 
-## Core Concepts
-
-**Lifecycle:** Build → Validate → Submit → Redirect
-
-**Security:** Automatic CSRF tokens, input sanitization, access control
-
-**State Management:** FormState persists across rebuilds (AJAX, multi-step)
-
-**Forms as Controllers:** Accessed via routes with `_form` parameter
-
-## Common Mistakes
-
-- **Wrong**: Implementing FormInterface directly → **Right**: Extend FormBase (get helper methods)
-- **Wrong**: Using `$_POST` directly → **Right**: Use `$form_state->getValue()` (sanitized, CSRF-checked)
-- **Wrong**: Business logic in buildForm() → **Right**: buildForm() for UI only, submitForm() for logic
-
 ## See Also
 
-- [FormBase Pattern](pattern-standard-form.md)
-- [ConfigFormBase Pattern](pattern-config-form.md)
-- [Form Lifecycle](architecture-lifecycle.md)
+- [Entity API Guide](../entities/index.md) (for entity forms)
+- [AJAX API Guide](../ajax/index.md) (for advanced AJAX patterns)
+- [Security API Guide](../security/index.md) (for access control patterns)
+- [Architecture: Core Form Classes](architecture-core-classes.md)
+- [Architecture: Form Lifecycle](architecture-lifecycle.md)
 - Reference: `/web/core/lib/Drupal/Core/Form/`

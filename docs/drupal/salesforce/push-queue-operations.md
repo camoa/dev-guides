@@ -1,5 +1,5 @@
 ---
-description: Push queue programmatic operations — queue entity for push, process queue via service
+description: "Push queue programmatic operations — queue entity for push, process queue via service"
 tldr: "Use the `queue.salesforce_push` service when you need to programmatically queue entities for push outside of the normal entity save trigger — for example, in migrations, batch operations, or after importing data bypassing hooks."
 drupal_version: "11.x"
 ---
@@ -20,6 +20,10 @@ drupal_version: "11.x"
 | Push unmapped entities | `drush sfpu {mapping_id}` |
 
 ## Pattern
+
+**Service:** `queue.salesforce_push`
+
+**Interface:** `/web/modules/contrib/salesforce/modules/salesforce_push/src/PushQueueInterface.php`
 
 ```php
 $push_queue = \Drupal::service('queue.salesforce_push');

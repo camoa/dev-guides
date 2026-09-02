@@ -8,44 +8,85 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Apply these patterns when AJAX requests are slow, causing excessive database queries, large DOM updates, or timeouts on large operations.
+AJAX requests are slow, causing excessive database queries, large DOM updates, or poor user experience.
 
 ## Decision
 
 | If you need... | Use... | Why |
 |----------------|--------|-----|
-| Reduce DOM updates | Return smallest possible element | Replace only changed elements, not entire containers |
-| Large operations | Batch API | Prevents timeout for >100 items or >30s operations |
-| Fast repeated requests | CacheableAjaxResponse | Avoids redundant server processing |
-| Efficient queries | Entity query with range() | Reduces database load and memory use |
+| Reduce DOM updates | Minimal wrapper updates | Replace only changed elements, not entire containers |
+| Batch processing | Multiple callbacks or lazy loading | Prevents timeout on large operations |
+| Fast repeated requests | Response caching | Avoids redundant server processing |
+| Optimize database queries | Entity query optimization | Reduces database load |
+| Reduce asset size | Library aggregation | Fewer HTTP requests |
 
 ## Pattern
 
 ```php
-// Return smallest possible element (not entire form)
+// Minimal DOM updates - return smallest possible element
 public function ajaxCallback(array &$form, FormStateInterface $form_state) {
-  return $form['subcategory'];  // NOT $form
+  // BAD: Returns entire form
+  // return $form;
+
+  // GOOD: Returns only changed element
+  return $form['subcategory'];
 }
 
-// Limit database results
+// Batch processing for large operations
+public function buildForm(array $form, FormStateInterface $form_state) {
+  $form['process'] = [
+    '#type' => 'button',
+    '#value' => t('Process Items'),
+    '#ajax' => [
+      'callback' => '::processBatch',
+      'wrapper' => 'progress-wrapper',
+      'progress' => [
+        'type' => 'bar',
+        'url' => Url::fromRoute('my_module.batch_progress')->toString(),
+        'interval' => 1000,  // Check progress every second
+      ],
+    ],
+  ];
+
+  return $form;
+}
+
+public function processBatch(array &$form, FormStateInterface $form_state) {
+  $batch = [
+    'operations' => [
+      [[$this, 'processBatchOp'], [range(0, 99)]],
+    ],
+    'finished' => [$this, 'batchFinished'],
+  ];
+
+  batch_set($batch);
+  return batch_process();
+}
+
+// Database query optimization
 private function loadItems($category_id) {
-  $nids = $this->entityTypeManager->getStorage('node')->getQuery()
+  $query = $this->entityTypeManager->getStorage('node')->getQuery()
     ->condition('type', 'item')
     ->condition('field_category', $category_id)
-    ->range(0, 50)    // Always limit results
+    ->range(0, 50)  // Limit results
     ->sort('title')
-    ->accessCheck(TRUE)
-    ->execute();
+    ->accessCheck(TRUE);  // Use access check
 
-  return $this->entityTypeManager->getStorage('node')->loadMultiple($nids);
+  $nids = $query->execute();
+
+  // Load only needed fields
+  return $this->entityTypeManager->getStorage('node')
+    ->loadMultiple($nids);
 }
 
-// Cacheable response for shared content
+// Response caching (use cautiously - most AJAX is user-specific)
 use Drupal\Core\Cache\CacheableAjaxResponse;
 
 public function ajaxCallback(array &$form, FormStateInterface $form_state) {
   $response = new CacheableAjaxResponse();
   $response->addCommand(new ReplaceCommand('#target', $content));
+
+  // Cache for 5 minutes, vary by user permissions
   $response->getCacheableMetadata()
     ->setCacheMaxAge(300)
     ->setCacheContexts(['user.permissions']);
@@ -54,27 +95,18 @@ public function ajaxCallback(array &$form, FormStateInterface $form_state) {
 }
 ```
 
-**Performance thresholds:**
-
-| Operation Type | Target Time | Action if Exceeded |
-|----------------|-------------|--------------------|
-| Simple field update | <200ms | Optimize query, reduce DOM update size |
-| Autocomplete query | <500ms | Add result limit, index search fields |
-| File upload (2MB) | <5s | Use progress bar, increase PHP limits |
-| Batch operation | <30s total | Use Batch API with progress tracking |
-
 Reference: `core/lib/Drupal/Core/Cache/CacheableAjaxResponse.php`
 
 ## Common Mistakes
 
-- **Wrong**: Returning entire form when only one element changed → **Right**: Return only the specific element that changed
-- **Wrong**: No result limits on database queries → **Right**: Memory exhaustion; always use `range(0, N)`
-- **Wrong**: Not using Batch API for large operations → **Right**: Timeouts; use batch for >100 items
-- **Wrong**: Caching user-specific content without context → **Right**: Data leaks; verify cache contexts match data sensitivity
-- **Wrong**: No progress indicators for long operations → **Right**: Add progress for operations taking >2 seconds
+- Returning entire form when only one element changed → Massive DOM updates; return specific element
+- No result limits on database queries → Memory exhaustion; always use `range(0, N)`
+- Not using batch API for large operations → Timeouts; use batch for >100 items or >30 second operations
+- Caching user-specific content → Data leaks; verify cache contexts match data sensitivity
+- Loading all entity fields → Wasted memory; use entity query to load only needed fields
+- Not using progress indicators → Users don't know if request is processing; add progress for >2 second operations
 
 ## See Also
 
-- [Response Caching](response-caching.md)
-- [CSRF Protection](csrf-protection.md)
+- ← Previous: [CSRF Protection](csrf-protection.md) | Next: [Response Caching](response-caching.md)
 - Reference: `core/lib/Drupal/Core/Entity/Query/QueryInterface.php`

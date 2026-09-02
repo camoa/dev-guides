@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use JSON endpoints with React/Vue for fully decoupled sites. Use Drupal AJAX for simple enhancements. Choose one approach per feature — don't mix Drupal AJAX and framework AJAX for the same interaction.
+You're building a decoupled or progressively decoupled Drupal site with React, Vue, or other JavaScript frameworks consuming AJAX endpoints.
 
 ## Decision
 
@@ -20,45 +20,72 @@ drupal_version: "11.x"
 
 ## Pattern
 
-**PHP JSON endpoint:**
-
 ```php
+// JSON endpoint for frontend frameworks
+namespace Drupal\my_module\Controller;
+
+use Drupal\Core\Controller\ControllerBase;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+
 class ApiController extends ControllerBase {
   public function getData(Request $request) {
     $items = $this->loadItems();
-    $data = array_map(fn($item) => [
-      'id' => $item->id(),
-      'title' => $item->label(),
-      'body' => $item->get('body')->value,
-    ], $items);
+
+    $data = array_map(function($item) {
+      return [
+        'id' => $item->id(),
+        'title' => $item->label(),
+        'body' => $item->get('body')->value,
+        'created' => $item->getCreatedTime(),
+      ];
+    }, $items);
 
     return new JsonResponse(['data' => $data]);
   }
 }
 ```
 
-**React component consuming endpoint:**
-
 ```javascript
+// React component consuming endpoint
 // js/components/ItemList.jsx
+import React, { useState, useEffect } from 'react';
+
 function ItemList() {
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     fetch('/my-module/api/items')
-      .then(r => r.json())
-      .then(data => setItems(data.data));
+      .then(response => response.json())
+      .then(data => {
+        setItems(data.data);
+        setLoading(false);
+      });
   }, []);
-  return <ul>{items.map(i => <li key={i.id}>{i.title}</li>)}</ul>;
+
+  if (loading) return <div>Loading...</div>;
+
+  return (
+    <ul>
+      {items.map(item => (
+        <li key={item.id}>{item.title}</li>
+      ))}
+    </ul>
+  );
 }
 
-// Attach React component via Drupal.behaviors
+export default ItemList;
+
+// Attach React component to Drupal page
+// js/init-react.js
 (function (Drupal, React, ReactDOM) {
   Drupal.behaviors.reactItemList = {
-    attach(context) {
-      const el = document.getElementById('react-item-list');
-      if (el && !el.hasAttribute('data-react-initialized')) {
-        ReactDOM.render(<ItemList />, el);
-        el.setAttribute('data-react-initialized', 'true');
+    attach: function (context, settings) {
+      const container = document.getElementById('react-item-list');
+      if (container && !container.hasAttribute('data-react-initialized')) {
+        ReactDOM.render(<ItemList />, container);
+        container.setAttribute('data-react-initialized', 'true');
       }
     }
   };
@@ -69,14 +96,13 @@ Reference: `core/modules/jsonapi/` (JSON:API module)
 
 ## Common Mistakes
 
-- **Wrong**: Not protecting API endpoints → **Right**: Add authentication and CSRF protection for all data-changing endpoints
-- **Wrong**: Returning too much data → **Right**: Serialize only needed fields; avoid loading entire entity graphs
-- **Wrong**: Not handling CORS → **Right**: Configure CORS headers for cross-origin requests in services.yml
-- **Wrong**: Using both Drupal AJAX and framework AJAX for the same feature → **Right**: Choose one approach per interaction
-- **Wrong**: Rebuilding JSON:API for standard entities → **Right**: Use JSON:API module; don't reinvent a standards-compliant API
+- Not protecting API endpoints → Add authentication/CSRF for all data-changing endpoints
+- Returning too much data → Serialize only needed fields; avoid loading entire entity graphs
+- Not handling CORS → Configure CORS headers for cross-origin requests in services.yml
+- Duplicating Drupal AJAX → Choose Drupal AJAX OR framework AJAX, not both for same feature
+- Not using JSON:API for standard entities → JSON:API provides optimized, standards-compliant API; don't reinvent
 
 ## See Also
 
-- [Testing AJAX](testing-ajax.md)
-- [Best Practices: Security](best-practices-security.md)
+- ← Previous: [Testing AJAX](testing-ajax.md) | Next: [Best Practices: Security](best-practices-security.md)
 - Reference: [Decoupled Drupal documentation](https://www.drupal.org/docs/develop/decoupled-drupal)

@@ -117,9 +117,9 @@ description: "Source references and maintenance manifest for the radix sdc guide
 
 | Guide | Location | Relationship |
 |-------|----------|--------------|
-| Design System Recognition Guide | `/home/camoa/workspace/claude_memory/guides/design_system_recognition_guide.md` | **Use FIRST** to identify design system layers |
-| Design System Bootstrap Mapping Guide | `/home/camoa/workspace/claude_memory/guides/design_system_bootstrap_mapping_guide.md` | **Use SECOND** to map tokens to Bootstrap variables |
-| **This Guide** | `/home/camoa/workspace/claude_memory/guides/design-system-radix-sdc-mapping.md` | **Use THIRD** to implement in Radix with SDCs |
+| Design System Recognition Guide | `claude_memory/guides/design_system_recognition_guide.md` | **Use FIRST** to identify design system layers |
+| Design System Bootstrap Mapping Guide | `claude_memory/guides/design_system_bootstrap_mapping_guide.md` | **Use SECOND** to map tokens to Bootstrap variables |
+| **This Guide** | `claude_memory/guides/design-system-radix-sdc-mapping.md` | **Use THIRD** to implement in Radix with SDCs |
 
 ## Maintenance Notes
 

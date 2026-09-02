@@ -1,5 +1,5 @@
 ---
-description: Salesforce extension patterns — custom auth provider, custom queue processor, custom pull worker
+description: "Salesforce extension patterns — custom auth provider, custom queue processor, custom pull worker"
 tldr: "Use these extension points when built-in auth providers, queue processors, or pull workers cannot meet your requirements — for example, custom SSO auth, bulk API processing, or complex pull transformations not achievable via events."
 drupal_version: "11.x"
 ---
@@ -18,6 +18,32 @@ drupal_version: "11.x"
 | Custom queue processor | `PushQueueProcessorInterface` | Alternative API calls, bulk/external system integration |
 | Custom pull worker | QueueWorker plugin + `@QueueWorker` annotation | Complex pull processing, external API calls during pull |
 | Custom field mapping | `PropertiesBase` | Reusable custom field logic — see [Custom Field Mapping Plugin](custom-field-mapping-plugin.md) |
+
+## Custom Auth Provider
+
+**Extend:** `SalesforceAuthProviderPluginBase`
+
+**Implement:** `SalesforceAuthProviderInterface`
+
+**Annotation:** `@SalesforceAuthProvider`
+
+**Reference:** `/web/modules/contrib/salesforce/modules/salesforce_oauth/src/Plugin/SalesforceAuthProvider/SalesforceOAuthPlugin.php`
+
+## Custom Queue Processor
+
+**Implement:** `PushQueueProcessorInterface`
+
+**Plugin Manager:** `plugin.manager.salesforce_push_queue_processor`
+
+**Use Case:** Alternative API calls, bulk processing, external system integration
+
+## Custom Pull Worker
+
+**Extend:** QueueWorker plugin
+
+**Annotation:** `@QueueWorker(id = "custom_pull_worker")`
+
+**Use Case:** Custom processing logic, external API calls, complex transformations
 
 ## Pattern
 

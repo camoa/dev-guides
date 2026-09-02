@@ -3,12 +3,11 @@ description: "Source references and maintenance manifest for the twig guides —
 ---
 
 # Sources & Maintenance
-## Sources & Maintenance Manifest
 
-### Drupal Research Install
+## Drupal Research Install
 Path: `~/workspace/contrib/web/`
 
-### Web Sources
+## Web Sources
 | Source | URL | Guide Sections | Last Verified |
 |--------|-----|----------------|---------------|
 | Drupal Theming Guide | https://www.drupal.org/docs/develop/theming-drupal | All | 2026-02-18 |
@@ -30,7 +29,7 @@ Path: `~/workspace/contrib/web/`
 | Twig Field Value module | https://www.drupal.org/project/twig_field_value | 5 | 2026-02-18 |
 | OWASP XSS | https://owasp.org/www-community/attacks/xss/ | 22 | 2026-02-18 |
 
-### Code Sources
+## Code Sources
 | Module | Relative Path | Guide Sections | Drupal Version |
 |--------|---------------|----------------|----------------|
 | Twig Template Engine | `core/lib/Drupal/Core/Template/` | 1, 8, 13, 14, 22 | 11.x |

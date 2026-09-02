@@ -6,13 +6,11 @@ tldr: "Apply reduced-motion handling to every animation pattern. WCAG 2.1 SC 2.3
 # Accessibility and Motion
 
 ## When to Use
-
-> Apply reduced-motion handling to every animation pattern. WCAG 2.1 SC 2.3.3 requires it. Replace motion with crossfade — do not use a kill switch that removes all feedback.
+Every motion pattern in this guide must accommodate users who experience motion sickness, vestibular disorders, or seizure conditions. This is not optional — WCAG 2.1 SC 2.3.3 requires it.
 
 ## Decision
-
-| Situation | Choose | Why |
-|-----------|--------|-----|
+| If you need... | Use... | Why |
+|---|---|---|
 | Reduced motion for all animations | `@media (prefers-reduced-motion: reduce)` | System-level user preference |
 | Alternative to killing all motion | Replace transform-based with opacity crossfade | Users still get state feedback without spatial motion |
 | Keyboard focus indicator | `:focus-visible` with 2px 3:1 contrast ring | Only shows for keyboard nav, not mouse clicks |
@@ -21,68 +19,106 @@ tldr: "Apply reduced-motion handling to every animation pattern. WCAG 2.1 SC 2.3
 
 ## Pattern
 
-**Option A — Kill switch** (quick but removes all feedback):
+**Option A — Universal kill switch** (quick but removes all feedback):
 ```css
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
 }
 ```
 
-**Option B (preferred) — Crossfade replacement:**
+**Option B (preferred) — Crossfade replacement** (users still get visual feedback, just without spatial motion):
 ```css
 @media (prefers-reduced-motion: reduce) {
-  .reveal { transform: none; transition: opacity var(--duration-moderate) var(--ease-standard); }
-  .card:hover { transform: none; filter: brightness(1.05); }
-  .scroll-reveal { animation: none; opacity: 1; transform: none; }
+  .reveal {
+    transform: none;
+    transition: opacity var(--duration-moderate) var(--ease-standard);
+  }
+
+  .card:hover {
+    transform: none;
+    box-shadow: none;
+    filter: brightness(1.05);
+  }
+
+  .scroll-reveal {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
 }
 ```
 
 **JavaScript detection:**
 ```javascript
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-if (prefersReducedMotion.matches) { /* skip animations */ }
+const prefersReducedMotion = window.matchMedia(
+  '(prefers-reduced-motion: reduce)'
+);
+
+if (prefersReducedMotion.matches) {
+  // Skip IntersectionObserver setup, or set duration to 0
+}
+
+// Listen for mid-session preference changes
 prefersReducedMotion.addEventListener('change', (e) => {
   document.documentElement.classList.toggle('reduce-motion', e.matches);
 });
 ```
 
-**Focus-visible with forced-colors fallback:**
+**Focus-visible pattern:**
 ```css
-:where(a, button, input, [tabindex]):focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-focus, currentColor);
+/* Standard — outline with offset */
+:focus-visible {
+  outline: 2px solid var(--color-focus, currentColor);
+  outline-offset: 2px;
 }
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Advanced — double ring that follows border-radius */
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--color-background),     /* Gap ring */
+    0 0 0 4px var(--color-focus, currentColor); /* Focus ring */
+}
+
+/* Forced colors mode fallback — box-shadow is invisible */
 @media (forced-colors: active) {
-  :focus-visible { outline: 2px solid LinkText; outline-offset: 2px; box-shadow: none; }
+  :focus-visible {
+    outline: 2px solid LinkText;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
 }
 ```
 
-### WCAG Checklist
+## WCAG Checklist for CSS Craft
 
 | Requirement | WCAG | Rule |
-|-------------|------|------|
-| `prefers-reduced-motion` | 2.3.3 | Replace spatial motion with crossfade, not removal |
-| Focus indicator contrast | 1.4.11 | 3:1 minimum, 2px minimum thickness |
+|---|---|---|
+| Respect `prefers-reduced-motion` | 2.3.3 | Replace spatial motion with crossfade, not removal |
+| Focus indicator contrast | 1.4.11 | 3:1 minimum contrast, 2px minimum thickness |
 | Auto-playing animation >5s | 2.2.2 | Must have pause/stop controls |
-| Motion as sole state indicator | 1.3.3 | Never — pair with color, icon, or text |
-| Hover content keyboard accessible | 1.4.13 | Match `:hover` with `:focus-visible` |
-| Forced colors | 1.4.11 | Functional indicators must work in `forced-colors: active` |
+| Motion as sole state indicator | 1.3.3 | Never — always pair with color, icon, or text change |
+| Hover content must be keyboard accessible | 1.4.13 | Match `:hover` interactions with `:focus-visible` |
+| Forced colors support | 1.4.11 | Functional indicators must survive `forced-colors: active` |
 | Flashing content | 2.3.1 | No more than 3 flashes per second |
 
 ## Common Mistakes
-
-- **Wrong**: `prefers-reduced-motion` as kill switch only — **Right**: Replace with crossfade; users lose all feedback with kill switch
-- **Wrong**: Focus ring invisible on dark backgrounds — **Right**: Test on both light and dark themes
-- **Wrong**: `box-shadow` focus ring without `forced-colors` fallback — **Right**: `box-shadow` is invisible in Windows High Contrast mode
-- **Wrong**: Hover-only interactions — **Right**: Always add keyboard equivalents for screen reader and keyboard users
-- **Wrong**: `* { outline: none }` globally — **Right**: Use `:focus:not(:focus-visible)` to hide outline for mouse only
+- Using `prefers-reduced-motion` as a kill switch only — users lose ALL feedback; replace motion with crossfade instead
+- `:focus-visible` ring that disappears on dark backgrounds — test on both light and dark themes
+- `box-shadow` focus ring without `forced-colors` fallback — `box-shadow` is invisible in Windows High Contrast mode
+- Hover-only interactions with no keyboard equivalent — screen readers and keyboard users cannot access hover content
+- Removing `outline` globally (`* { outline: none }`) — destroys keyboard navigation; use `:focus:not(:focus-visible)` instead
 
 ## See Also
-
 - [Micro-Interactions](micro-interactions.md) — hover/focus patterns that need accessibility treatment
 - [Entrance Animations](entrance-animations.md) — scroll reveal reduced-motion alternatives
 - Reference: [Pope Tech: Accessible Animation and Movement](https://blog.pope.tech/2025/12/08/design-accessible-animation-and-movement/)

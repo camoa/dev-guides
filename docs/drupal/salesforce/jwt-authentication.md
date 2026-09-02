@@ -1,5 +1,5 @@
 ---
-description: Salesforce JWT Bearer Token authentication setup — standard vs GovCloud plugin, RSA key configuration
+description: "Salesforce JWT Bearer Token authentication setup — standard vs GovCloud plugin, RSA key configuration"
 tldr: "Use JWT when you need server-to-server authentication without interactive authorization. Use the GovCloud plugin only for Salesforce Government Cloud instances."
 drupal_version: "11.x"
 ---
@@ -10,7 +10,9 @@ drupal_version: "11.x"
 
 > Use JWT when you need server-to-server authentication without interactive authorization. Use the GovCloud plugin only for Salesforce Government Cloud instances.
 
-## Decision
+**Purpose:** JWT Bearer Token Flow for server-to-server authentication
+
+## Decision: Standard vs GovCloud
 
 | Situation | Choose | Why |
 |---|---|---|
@@ -19,16 +21,29 @@ drupal_version: "11.x"
 | Interactive authorization acceptable | Consider OAuth | JWT requires RSA key infrastructure |
 | Automated/background process | JWT | No user interaction needed |
 
-## Pattern
+**Decision Point - Standard vs GovCloud:**
+- Use GovCloud plugin for government cloud instances
+- Use standard plugin for all other instances
 
-**Required setup:**
-1. Generate RSA key pair (private key stays on server, public key uploaded to Salesforce)
-2. Upload public key to Salesforce Connected App
-3. Configure plugin with: Consumer Key, Login URL, encryption key (RSA private key), Salesforce username
+## Technical Requirements
 
-**Plugin locations:**
+- RSA key pair generation
+- Public key uploaded to Salesforce Connected App
+- No interactive authorization needed
+
+Order of operations: generate the RSA key pair (the private key stays on the server), upload the public key to the Salesforce Connected App, then configure the plugin.
+
+## Auth Provider Plugins
+
 - Standard: `/web/modules/contrib/salesforce/modules/salesforce_jwt/src/Plugin/SalesforceAuthProvider/SalesforceJWTPlugin.php`
 - GovCloud: `/web/modules/contrib/salesforce/modules/salesforce_jwt/src/Plugin/SalesforceAuthProvider/SalesforceJWTGovCloudPlugin.php`
+
+## Configuration
+
+- Consumer Key
+- Login URL
+- Encryption key (RSA private key)
+- Salesforce username
 
 ## Common Mistakes
 

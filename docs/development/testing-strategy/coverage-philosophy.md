@@ -1,29 +1,35 @@
 ---
-description: Coverage as a diagnostic signal, not a goal — line vs. branch coverage, mutation testing, and practical thresholds.
-tldr: Coverage tells you which lines were NOT executed, not whether tests verify correct behavior. 100% line coverage with vacuous assertions catches nothing. Use branch coverage over line coverage. Prefer mutation testing for quality signals on critical modules. Goodhart's Law applies — coverage mandates without quality enforcement produce hollow test suites.
+description: "Coverage as a diagnostic signal, not a goal — line vs. branch coverage, mutation testing, and practical thresholds."
+tldr: "Coverage tells you which lines were NOT executed, not whether tests verify correct behavior. 100% line coverage with vacuous assertions catches nothing. Use branch coverage over line coverage. Prefer mutation testing for quality signals on critical modules. Goodhart's Law applies — coverage mandates without quality enforcement produce hollow test suites."
 ---
 
 # Coverage Philosophy
 
 ## When to Use
 
-> Use coverage as a diagnostic signal to find untested paths — not as a goal to hit. When evaluating test suite adequacy or setting team standards, focus on what coverage does not tell you as much as what it does.
+> When evaluating whether your test suite is adequate, when setting team standards, or when you encounter coverage mandates. Coverage is a diagnostic tool, not a correctness guarantee.
 
-## Decision
+## Goodhart's Law and Coverage
 
-| Threshold | Interpretation |
-|---|---|
-| < 60% | Insufficient for most projects; high risk of undetected bugs |
-| 60–75% | Acceptable for many projects (Google considers 60% adequate) |
-| 75–85% | Commendable; covers critical paths and most common branches |
-| 85–90% | Excellent; diminishing returns begin here for typical code |
-| > 90% | High investment; only justified for safety-critical systems |
+**Coverage percentage tells you which lines were executed during tests. It does not tell you whether those tests are useful.**
 
-**Line coverage vs. branch coverage:** Line coverage measures whether a line was executed. Branch coverage measures whether each branch (if/else, switch case, ternary) was taken in both directions. Always prefer branch coverage for logic-heavy code.
+You can achieve 100% line coverage with tests that assert nothing. You can have 60% line coverage and catch every bug that matters. The number is a signal, not a goal.
 
-**Mutation testing** — the most reliable quality signal: a mutation testing tool introduces small deliberate faults (mutants) into code and checks whether at least one test fails for each. High mutation score = tests genuinely verify behavior. Tools: Stryker (JS/TS), PITest (Java), Infection (PHP), mutmut (Python). Use on critical modules, not the full codebase.
+Goodhart's Law: "When a measure becomes a target, it ceases to be a good measure." Coverage mandates without quality enforcement produce test suites that hit the number and catch nothing.
 
-## Pattern
+## What Coverage Tells You (and Doesn't)
+
+**Coverage tells you:** which lines, branches, and paths were NOT executed during tests. Uncovered critical logic is a gap to address.
+
+**Coverage does not tell you:**
+- Whether tests verify the right behavior
+- Whether tests catch real bugs (a test that always passes is worthless)
+- Whether the system is correct
+- Whether integration points work
+
+## Line Coverage vs. Branch Coverage
+
+Line coverage measures whether a line was executed. Branch coverage measures whether each branch (if/else, switch case, ternary) was taken in both directions.
 
 ```python
 def categorize_score(score):
@@ -33,23 +39,49 @@ def categorize_score(score):
         return 'B'
     return 'C'
 
-# 100% line coverage, but 50% branch coverage:
-test_categorize_score(95)  # hits True branches only
-test_categorize_score(75)  # hits False branches only
-# Missing: score=85 (second elif True branch)
+# 100% line coverage, 50% branch coverage:
+test_categorize_score(95)  # hits line 1, 2; only True branches
+test_categorize_score(75)  # hits line 1, 2, 3; only False branches of first two
+# Missing: score=85 (second elif True)
 ```
+
+**Prefer branch coverage (or condition coverage) over line coverage.** Most tools support it.
+
+## Mutation Testing
+
+Mutation testing verifies that tests actually catch bugs. A mutation testing tool introduces small deliberate faults (mutants) into the code — changing `>=` to `>`, `+` to `-`, removing a conditional — and checks whether at least one test fails for each mutation.
+
+If a mutation survives (no test fails), your test suite has a gap at that point. High mutation score (most mutants killed) indicates that your tests genuinely verify behavior.
+
+Tools: Stryker (JS/TS), PITest (Java), Infection (PHP), mutmut (Python).
+
+Mutation testing is slow (runs the full suite per mutation) but is the most reliable quality signal for test suites. Use it on critical modules, not the full codebase.
+
+## Practical Coverage Thresholds
+
+These are starting points — not absolute rules. Context (risk level, team maturity, project stage) always overrides them.
+
+| Threshold | Interpretation |
+|---|---|
+| < 60% | Insufficient for most projects; high risk of undetected bugs |
+| 60–75% | Acceptable for many projects (Google considers 60% adequate) |
+| 75–85% | Commendable; covers critical paths and most common branches |
+| 85–90% | Excellent; diminishing returns begin here for typical code |
+| > 90% | High investment, likely covering trivial code; only justified for safety-critical systems |
+
+Set the threshold that reflects your risk profile, not the highest number you can achieve.
 
 ## Common Mistakes
 
-- **Wrong**: Enforcing 80% coverage without enforcing test quality → **Right**: Teams write hollow tests; coverage passes, production breaks
-- **Wrong**: Treating line coverage as branch coverage → **Right**: Line coverage misses uncovered branches; measure branch coverage for logic-heavy code
-- **Wrong**: No coverage measurement at all → **Right**: Add coverage tooling even if you set no mandates; it reveals untested paths
-- **Wrong**: Gaming coverage with meaningless assertions → **Right**: `assert True` adds zero value; coverage ticks up, signal goes down
-- **Wrong**: Measuring coverage over generated/trivial code → **Right**: Exclude DTOs, getters, config classes; they inflate numbers without value
-- **Wrong**: Treating a coverage drop as an instruction to write tests here and now → **Right**: It is a signal to look; adding tests inside an unrelated bug fix makes that change harder to review and to revert
+- Enforcing 80% coverage without enforcing test quality → Teams write hollow tests; coverage passes, production breaks
+- Treating line coverage as branch coverage → Line coverage misses uncovered branches; always measure branch coverage for logic-heavy code
+- No coverage measurement at all → You are flying blind; add coverage tooling even if you set no mandates
+- Gaming coverage with meaningless tests → `assert True` passes; coverage ticks up; value is zero
+- Using coverage on generated/trivial code → DTOs, getters, config classes inflate coverage measurements without value; exclude them
+- Treating a coverage drop as an instruction to write tests here and now → It is a signal to look. Adding tests inside an unrelated bug fix makes that change harder to review and to revert
 
 ## See Also
 
-- [Determinism and Flakiness](determinism-and-flakiness.md) | Next: [What to Test and What Not To](what-to-test-and-what-not.md)
+- ← Previous: [Determinism and Flakiness](determinism-and-flakiness.md) | Next: [What to Test and What Not To](what-to-test-and-what-not.md) →
 - Related: [development/tdd-spec-driven](https://camoa.github.io/dev-guides/development/tdd-spec-driven/) — Test Coverage Strategy section
 - Reference: Martin Fowler, [TestCoverage](https://martinfowler.com/bliki/TestCoverage.html)

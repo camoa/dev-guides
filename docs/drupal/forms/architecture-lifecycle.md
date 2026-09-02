@@ -1,5 +1,5 @@
 ---
-description: Form request lifecycle and state management - build, validate, submit flow
+description: "Form request lifecycle and state management - build, validate, submit flow"
 tldr: "Understand the lifecycle to know when to cache forms (multi-step, AJAX) and where to place logic (buildForm vs submitForm)."
 drupal_version: "11.x"
 ---
@@ -10,35 +10,38 @@ drupal_version: "11.x"
 
 > Understand the lifecycle to know when to cache forms (multi-step, AJAX) and where to place logic (buildForm vs submitForm).
 
-## Decision
+## Reference: Request Flow
 
-| Situation | Action | Why |
-|-----------|--------|-----|
-| Multi-step form | `setCached(TRUE)` REQUIRED | Persist state across requests |
-| Frequent AJAX rebuilds | `setCached(TRUE)` recommended | Reduce database queries |
-| Expensive #options | `setCached(TRUE)` recommended | Cache generated options |
-| Simple single-step | No caching needed | Unnecessary overhead |
+**Standard Form Request:**
 
-## Pattern
+1. FormBuilder receives form class/ID from route/controller
+2. Instantiates form object via class resolver (DI container)
+3. Calls `buildForm()` to construct render array
+4. Adds security elements: CSRF token, form_id, form_build_id
+5. Processes elements: runs #process, #after_build callbacks
+6. Renders form to HTML
 
-Standard form request flow:
+**Form Submission Request:**
 
-```
-1. Route → FormBuilder receives form class
-2. Instantiate via DI container (create() method)
-3. buildForm() constructs render array
-4. Add security: CSRF token, form_id, form_build_id
-5. Process elements: #process, #after_build
-6. Render to HTML
+1. Validates CSRF token (fails → stops processing)
+2. Executes validation handlers (element → form → typed config)
+3. If validation passes: runs submit handlers
+4. Redirects or returns custom response
 
-Submission:
-1. Validate CSRF token (fail → stop)
-2. Run validation handlers
-3. If valid: Run submit handlers
-4. Redirect or custom response
-```
+**Reference Implementation:**
 
-## State Management
+- FormBuilder main flow: `/web/core/lib/Drupal/Core/Form/FormBuilder.php` lines 249-300
+- Complete lifecycle: Study `buildForm()`, `validateForm()`, `submitForm()` methods
+
+## Reference: State Management
+
+**FormState Object:**
+
+- Persists data across rebuild cycles (AJAX, multi-step)
+- Cached in database via `form_build_id` (when enabled)
+- Methods: `set()`/`get()` for persistent storage, `setTemporaryValue()` for single request
+
+## Decision: Storage Patterns
 
 | Type | Method | Persistence | Use Case |
 |------|--------|-------------|----------|
@@ -46,24 +49,27 @@ Submission:
 | Persistent | `set()`/`get()` | Across rebuilds | Multi-step data, workflow state |
 | Cached | `setCached(TRUE)` | Database cache | Multi-step forms, expensive builds |
 
-```php
-// Multi-step form caching
-$form_state->setCached(TRUE); // REQUIRED
-$form_state->set('step1_data', $data); // Persists across rebuilds
+## Decision: Form Caching
 
-// Temporary value (single request)
-$form_state->setTemporaryValue('display_mode', 'compact');
+```
+Multi-step form? → setCached(TRUE) REQUIRED
+Frequent AJAX rebuilds? → setCached(TRUE) recommended
+Expensive #options generation? → setCached(TRUE) recommended
+Simple single-step form? → No caching needed
 ```
 
 ## Common Mistakes
 
-- **Wrong**: Local variables for multi-step data → **Right**: Use `$form_state->set()` (persists)
-- **Wrong**: No `setCached(TRUE)` for multi-step → **Right**: Required for state persistence
-- **Wrong**: Storing sensitive data in cached forms → **Right**: Encrypt or don't cache sensitive data
+- Using local variables instead of `$form_state->set()` in multi-step forms
+    - **WHY BAD:** Local variables lost between page requests, form resets to step 1 on every submit, user data disappears
+- Not calling `setCached(TRUE)` for multi-step forms
+    - **WHY BAD:** FormState not persisted across requests, form_build_id link broken, multi-step navigation impossible
+- Storing sensitive data in cached forms without encryption
+    - **WHY BAD:** cache_form table not encrypted, database dumps leak data, session hijacking exposes sensitive info
 
 ## See Also
 
-- [Multi-Step Forms](multi-step-forms.md)
-- [Form State Methods](form-state-methods.md)
-- [AJAX Architecture](ajax-architecture.md)
-- Reference: `/web/core/lib/Drupal/Core/Form/FormBuilder.php` lines 249-300
+- [Multi-Step Form Pattern](multi-step-forms.md) (dedicated section)
+- [Form State Methods Reference](form-state-methods.md) (dedicated section)
+- [AJAX Form Architecture](ajax-architecture.md) (dedicated section)
+- Reference: [Form API Workflow](https://www.drupal.org/docs/drupal-apis/form-api/form-api-workflow)

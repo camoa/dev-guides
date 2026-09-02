@@ -1,5 +1,5 @@
 ---
-description: Salesforce troubleshooting — auth failures, push not triggering, pull not creating entities, field mapping issues, stuck queues, API limits
+description: "Salesforce troubleshooting — auth failures, push not triggering, pull not creating entities, field mapping issues, stuck queues, API limits"
 tldr: "Use this guide when sync is not working as expected. Enable `salesforce_logger` first to capture errors."
 drupal_version: "11.x"
 ---
@@ -21,45 +21,48 @@ drupal_version: "11.x"
 | Queue stuck / growing | Failed items in `salesforce_push_queue` | `drush queue:list`, check `fails > 0` |
 | API limit errors | Check `Sforce-Limit-Info` response header | `$client->getApiUsage()` |
 
-## Pattern
+## Authentication Issues
 
-**Auth issues checklist:**
+**Symptom:** "RestClient is not initialized" error
+
+**Check:**
 1. Auth provider configured: `/admin/config/salesforce`
-2. Credentials correct (Consumer Key, Secret, Login URL)
-3. Authorization completed (OAuth redirect finished, or JWT key uploaded)
-4. Token not expired: check `key_value` table for `salesforce.access_token`
+2. Credentials entered correctly
+3. Authorization completed
+4. Token not expired (check `key_value` table for `salesforce.access_token`)
 
-**Push not triggering checklist:**
-```
+**Debug:**
+- Service: `plugin.manager.salesforce.auth_providers`
+- Method: `getToken()`, `getProvider()`
+- Location: `/web/modules/contrib/salesforce/src/SalesforceAuthProviderPluginManager.php`
+
+## Push Not Triggering
+
+**Check:**
 1. Mapping exists for entity type/bundle
-2. sync_triggers.push_create or push_update is enabled
-3. Queue items exist: SELECT * FROM salesforce_push_queue
-4. Cron running: drush core:cron
-5. No PUSH_ALLOWED subscriber vetoing: add debug logging temporarily
-```
+2. Sync trigger enabled: `sync_triggers.push_create` / `push_update` / `push_delete`
+3. Queue items created: Check `salesforce_push_queue` table
+4. Push queue processing: Check cron, standalone endpoint
+5. Event subscribers not vetoing: Check `PUSH_ALLOWED` event
 
-**Pull not creating entities checklist:**
-```
-1. pull_create trigger enabled in mapping
-2. SOQL query returns records (test in Salesforce Developer Console)
-3. Pull frequency not throttling: check last pull timestamp
+**Debug:**
+- Enable `salesforce_logger` module
+- Check logs: `/admin/reports/dblog` (filter: salesforce)
+- Examine queue: `drush queue:list` → `salesforce_push`
+
+## Pull Not Creating Entities
+
+**Check:**
+1. Pull trigger configured: `sync_triggers.pull_create` / `pull_update`
+2. SOQL query returns records: Test query in Salesforce Developer Console
+3. Pull frequency not throttling: Check last pull timestamp
 4. WHERE clause not filtering all records
-5. Entity validation not failing: check dblog for validation errors
-```
+5. Entity creation not failing validation
 
-**Queue diagnosis:**
-```bash
-drush queue:list                    # Check salesforce_push queue size
-drush core:cron                     # Trigger manual cron
-drush sfpushq                       # Manually process push queue
-drush sfpq                          # Manually process pull queue
-```
-
-**API limit monitoring:**
-```php
-$client = \Drupal::service('salesforce.client');
-$usage = $client->getApiUsage(); // Returns usage from Sforce-Limit-Info header
-```
+**Debug:**
+- Event: `PULL_PREPULL` - Check if veto called
+- Event: `PULL_PRESAVE` - Check entity before save
+- Entity validation errors: Check logs
 
 ## Field Mapping Not Working
 
@@ -75,6 +78,24 @@ $usage = $client->getApiUsage(); // Returns usage from Sforce-Limit-Info header
 - Event: `PULL_ENTITY_VALUE` - Examine values during pull
 - Object describe: Check field metadata via `objectDescribe()`
 
+## API Limits
+
+**Monitor:**
+- Service: `salesforce.client`
+- Method: `getApiUsage()`
+- Header: `Sforce-Limit-Info` in API responses
+
+**Optimization:**
+- Reduce pull frequency
+- Lower global/mapping limits
+- Use selective WHERE clauses
+- Batch operations during off-peak
+
+```php
+$client = \Drupal::service('salesforce.client');
+$usage = $client->getApiUsage(); // Returns usage from Sforce-Limit-Info header
+```
+
 ## Queue Stuck/Growing
 
 **Diagnose:**
@@ -89,7 +110,12 @@ $usage = $client->getApiUsage(); // Returns usage from Sforce-Limit-Info header
 - Clear failed items: Custom query to delete permanent failures
 - Process manually: `drush sfpush` / `drush sfpull`
 
----
+```bash
+drush queue:list                    # Check salesforce_push queue size
+drush core:cron                     # Trigger manual cron
+drush sfpushq                       # Manually process push queue
+drush sfpq                          # Manually process pull queue
+```
 
 ## Common Mistakes
 

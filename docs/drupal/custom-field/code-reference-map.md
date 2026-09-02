@@ -151,5 +151,5 @@ You need to find specific source code for custom field functionality.
 
 ## See Also
 
-- Drupal install: `/home/camoa/workspace/contrib/web/`
-- Module path: `/home/camoa/workspace/contrib/web/modules/contrib/custom_field/`
+- Drupal install: `contrib/web/`
+- Module path: `contrib/web/modules/contrib/custom_field/`

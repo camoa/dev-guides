@@ -3,13 +3,12 @@ description: "Source references and maintenance manifest for the layout builder 
 ---
 
 # Sources & Maintenance
-## Sources & Maintenance Manifest
 
-### Drupal Research Install
+## Drupal Research Install
 
 Path: ~/workspace/contrib/web/
 
-### Web Sources
+## Web Sources
 
 | Source | URL | Guide Sections | Last Verified |
 |--------|-----|----------------|---------------|
@@ -27,7 +26,7 @@ Path: ~/workspace/contrib/web/
 | Bootstrap Spacing | https://getbootstrap.com/docs/5.3/utilities/spacing/ | 11.3 | 2026-02-15 |
 | Bootstrap Colors | https://getbootstrap.com/docs/5.3/utilities/colors/ | 11.3 | 2026-02-15 |
 
-### Code Sources
+## Code Sources
 
 | Module | Relative Path | Guide Sections | Drupal Version |
 |--------|---------------|----------------|----------------|
@@ -38,7 +37,8 @@ Path: ~/workspace/contrib/web/
 | Entity Display | core/lib/Drupal/Core/Entity/Display/ | 2, 3 | 11.x |
 | Layout Builder Styles | modules/contrib/layout_builder_styles/ | 11, 11.1, 11.2, 11.3, 11.4 | 2.1.0 |
 
-### Version History
+## Version History
 
 - **2026-02-15**: Expanded section 11 with comprehensive Layout Builder Styles coverage (v2.1.0): style groups, style definitions, Bootstrap integration, and programmatic extensions. Added subsections 11.1-11.4.
 - **2026-02-14**: Initial guide creation. Drupal 11.x. Configuration-first approach emphasizing defaults, config schema, and deployment workflows.
+<!-- END PARTITION: sources-maintenance -->
