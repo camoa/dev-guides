@@ -17,6 +17,8 @@ After that, a red test no longer tells you which of two things happened: the cod
 
 | Role / phase | Add a test | Change an assertion | Delete a test | Change production code |
 |---|---|---|---|---|
+| Test author (agent), RED | One per behavior, from the spec, without reading implementation | This is authoring it | No | No |
+| Implementer (agent), GREEN / REFACTOR | No | No | No | Yes; behavior-preserving in REFACTOR |
 | Author, RED | One, minimal | This is authoring it, not changing it | No | No |
 | Author, GREEN | No | No | No | Yes |
 | Author, REFACTOR | No | No | No | Behavior-preserving only |
@@ -27,7 +29,7 @@ After that, a red test no longer tells you which of two things happened: the cod
 ## The reviewer's output is a finding, not a commit
 An agent that can change the test it is judging is not verifying. It is grading its own homework. This is the same defect as a builder deciding whether its own repair worked, and it has the same fix.
 
-A reviewer that judges a test weak, wrong, or obsolete says so, and routes the finding back to the author or to the spec. It never edits the test and it never deletes one. Where a tool can enforce this it should: a reviewing agent's write access should not include test files. That is the one row of this matrix a tool can enforce outright rather than by asking.
+A reviewer that judges a test weak, wrong, or obsolete says so, and routes the finding back to the author or to the spec. It never edits the test and it never deletes one. Where a tool can enforce a row it should. Two rows are enforceable outright rather than by asking: a reviewing agent's write access excludes test files, and an implementing agent's write access excludes test files. When the implementer believes a test is wrong it stops and files a finding; it does not edit around the test. A human, or the test author in a fresh RED, changes the assertion with a recorded reason.
 
 ## The one exception, and why it is narrow
 A bug fix may reveal that a test asserted the wrong thing. The test then has to be correctable, or a flat prohibition gets bypassed rather than satisfied.
@@ -54,6 +56,7 @@ The dividing line is whether the set of program behaviors that pass the test cha
 - Editing a test in GREEN to make it pass - GREEN is for production code only. If the test itself is wrong, stop, return to RED, and change it there deliberately
 - Judging a test brittle so you may change it - A test is brittle only when you can name the implementation detail it asserts on. Name it and record the name. If you cannot name one, the code regressed
 - Letting the agent that wrote the code also judge the test - It resolves every ambiguity in favor of being finished
+- Letting the agent that will write the code also author its tests - It writes the assertion it already plans to satisfy. Author from the spec in a context that has not seen the implementation, then hand the frozen tests to the implementer
 - Deleting a test because it looks obsolete - Only the change that removes the feature removes its tests, and it removes them in the same commit
 - Reading a growing assertion count as growing confidence - Assertions added while fixing code that already existed usually ratify what the code does instead of constraining it
 
