@@ -30,6 +30,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DOCS_DIR = PROJECT_ROOT / "docs"
 RECIPES_DIR = DOCS_DIR / "agentic-recipes"          # task recipes
 PROCESS_RECIPES_DIR = DOCS_DIR / "process-recipes"  # process recipes (location = class)
+TOOLING_RECIPES_DIR = DOCS_DIR / "tooling-recipes"  # tooling recipes (location = class)
 
 # First three frontmatter keys, in order (routing block).
 ROUTING_KEYS = ["name", "capability", "description"]
@@ -49,6 +50,19 @@ REQUIRED_SECTIONS = [
     "Verifier",
     "References",
 ]
+
+# A tooling recipe says what a tool is, how to install it, and how to run it.
+# Three headings, deliberately: Run is also the check, so there is no verifier
+# section, and an install step that needs something absent fails with that
+# thing's own message, so there is no preconditions section. Grow this list when
+# a real recipe needs more, with that recipe as the reason.
+TOOLING_REQUIRED_SECTIONS = ["Goal", "Install", "Run"]
+
+SECTIONS_BY_KIND = {
+    "task": REQUIRED_SECTIONS,
+    "process": REQUIRED_SECTIONS,
+    "tooling": TOOLING_REQUIRED_SECTIONS,
+}
 
 # `name` is a globally-unique identifier the navigator uses as a cache key
 # (recipes.{<name>: …} in the navigator lockfile). snake_case only — a name with
@@ -193,13 +207,17 @@ def validate_oracle_block(body: str) -> list[str]:
     return errors
 
 
-def validate_recipe(path: Path, is_process: bool = False) -> list[str]:
+def validate_recipe(path: Path, kind: str = "task") -> list[str]:
     """Return a list of human-readable errors for one recipe (empty = valid).
 
-    `is_process` is set for recipes under docs/process-recipes/ — they get the
-    extra process-routing-key checks (section 6). Location is the source of truth
-    for the class, not the frontmatter flag.
+    `kind` is derived from the directory: docs/agentic-recipes/ -> "task",
+    docs/process-recipes/ -> "process", docs/tooling-recipes/ -> "tooling".
+    Location is the source of truth for the class, not the frontmatter flag —
+    the flag is enforced so the file self-declares, and rejected outside its own
+    root so a misfiled recipe cannot route to the wrong index.
     """
+    is_process = kind == "process"
+    is_tooling = kind == "tooling"
     errors: list[str] = []
     text = path.read_text(encoding="utf-8")
     fm_yaml, body = split_frontmatter(text)
@@ -251,12 +269,17 @@ def validate_recipe(path: Path, is_process: bool = False) -> list[str]:
 
     # 3. Required body sections.
     headings = {h.strip() for h in re.findall(r"^##\s+(.+)$", body, re.MULTILINE)}
-    for section in REQUIRED_SECTIONS:
+    for section in SECTIONS_BY_KIND[kind]:
         if section not in headings:
             errors.append(f"missing required section: ## {section}")
 
     # 4. Citations resolve.
-    for slug in sorted(cited_slugs(body)):
+    #    Skipped for tooling recipes: a tooling recipe cites no guide by design —
+    #    it names packages and commands — and a package name is character-for-
+    #    character indistinguishable from a guide slug (`drupal/coder`,
+    #    `phpstan/phpstan`). Running this check there reports every package as a
+    #    dangling citation.
+    for slug in sorted(() if is_tooling else cited_slugs(body)):
         if not slug_resolves(slug):
             errors.append(
                 f"cited guide/play does not resolve to a file: `{slug}` "
@@ -309,6 +332,24 @@ def validate_recipe(path: Path, is_process: bool = False) -> list[str]:
                 f"present, must equal `capability` ({meta.get('capability')!r}); "
                 f"found {atp!r}"
             )
+    elif is_tooling:
+        # 6b. Tooling-recipe routing keys. Routing is keyed by (tool x framework);
+        #     `capability` carries the tool name, which is unambiguous because the
+        #     directory already fixed the class before anything reads it. The
+        #     recipe_class flag is enforced so the file self-declares.
+        if meta.get("recipe_class") != "tooling":
+            errors.append(
+                f"tooling recipe must declare `recipe_class: tooling` "
+                f"(found {meta.get('recipe_class')!r})"
+            )
+        framework = meta.get("framework")
+        if not framework or not isinstance(framework, str):
+            errors.append("tooling recipe must carry a `framework` routing key (string)")
+        elif not TOKEN_RE.match(framework):
+            errors.append(
+                f"`framework` must be a single token matching {TOKEN_RE.pattern} "
+                f"(lowercase letters, digits, hyphens); found {framework!r}"
+            )
     else:
         # Task recipes MAY optionally declare `framework` to override the
         # path-derived routing token generate_recipes.py emits on the index line
@@ -321,10 +362,13 @@ def validate_recipe(path: Path, is_process: bool = False) -> list[str]:
                 f"`framework` must be a single token matching {TOKEN_RE.pattern} "
                 f"(lowercase letters, digits, hyphens); found {fw!r}"
             )
-        if meta.get("recipe_class") == "process":
+        declared = meta.get("recipe_class")
+        if declared in ("process", "tooling"):
+            root = "process-recipes" if declared == "process" else "tooling-recipes"
             errors.append(
-                "`recipe_class: process` is only valid under docs/process-recipes/; "
-                "move this file there so it routes to the process index, not the task index"
+                f"`recipe_class: {declared}` is only valid under docs/{root}/; "
+                f"move this file there so it routes to the {declared} index, "
+                "not the task index"
             )
 
     if is_process:
@@ -336,21 +380,25 @@ def validate_recipe(path: Path, is_process: bool = False) -> list[str]:
 def main() -> int:
     # Scan both recipe roots. Location decides the class: docs/agentic-recipes/ →
     # task recipes; docs/process-recipes/ → process recipes (extra section-6 checks).
-    roots = [(RECIPES_DIR, False), (PROCESS_RECIPES_DIR, True)]
-    recipe_files: list[tuple[Path, bool]] = []
-    for root, is_process in roots:
+    roots = [
+        (RECIPES_DIR, "task"),
+        (PROCESS_RECIPES_DIR, "process"),
+        (TOOLING_RECIPES_DIR, "tooling"),
+    ]
+    recipe_files: list[tuple[Path, str]] = []
+    for root, kind in roots:
         if not root.is_dir():
             continue
         recipe_files.extend(
-            (p, is_process)
+            (p, kind)
             for p in sorted(root.rglob("*.md"))
             if p.name != "index.md"
         )
 
     if not recipe_files:
         print(
-            "No recipe files under docs/agentic-recipes/ or docs/process-recipes/ "
-            "— nothing to validate."
+            "No recipe files under docs/agentic-recipes/, docs/process-recipes/ "
+            "or docs/tooling-recipes/ — nothing to validate."
         )
         return 0
 
@@ -360,10 +408,9 @@ def main() -> int:
     # silently collide there, so a duplicate is a global BLOCKER, not a per-file
     # one.
     names_seen: dict[str, list[Path]] = {}
-    for path, is_process in recipe_files:
+    for path, kind in recipe_files:
         rel = path.relative_to(PROJECT_ROOT)
-        kind = "process" if is_process else "task"
-        errors = validate_recipe(path, is_process=is_process)
+        errors = validate_recipe(path, kind=kind)
 
         fm_yaml, _ = split_frontmatter(path.read_text(encoding="utf-8"))
         try:
