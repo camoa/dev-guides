@@ -14,9 +14,9 @@ guide-meta:
     - Nightwatch.js
     - coverage metrics
   not:
-    - tool-agnostic TDD theory
     - CI/CD pipeline setup (see drupal/github-actions)
-  requires: []
+  requires:
+    - development/tdd-spec-driven
   complements:
     - drupal/testing
     - drupal/github-actions
@@ -32,6 +32,7 @@ guide-meta:
 
 | I need to... | Guide | Summary |
 |-------------|-------|---------|
+| Know who may add or change a test, and when to stop | the universal guide's [Changing Existing Tests](../../development/tdd-spec-driven/changing-existing-tests.md), [When Not to Write a Test](../../development/tdd-spec-driven/when-not-to-write-a-test.md), and [Fixing Bugs with TDD](../../development/tdd-spec-driven/fixing-bugs-with-tdd.md) | The discipline rules. Read them before any test is added, changed, or deleted in a Drupal change |
 | Choose the right test type | [Test Type Decision Matrix](test-type-decision-matrix.md) | Choose the right test type based on what you're testing and the level of Drupal infrastructure required. |
 | Apply RED-GREEN-REFACTOR cycle | [TDD Workflow: RED-GREEN-REFACTOR](tdd-workflow-red-green-refactor.md) | Applying the Test-Driven Development cycle to Drupal module development. Use this workflow when building new features, refactoring existing code, or fixing bugs where the expected behavior can be specified upfront. |
 | Set up PHPUnit configuration | [PHPUnit Configuration](phpunit-configuration.md) | Before running any PHPUnit tests in Drupal, copy /core/phpunit.xml.dist and set SIMPLETEST_BASE_URL and SIMPLETEST_DB. PHPUnit resolves transitively from drupal/core-dev — Drupal 11 requires ^11.5.50, Drupal 10 requires ^9.x. Never declare phpunit/phpunit directly in your module's composer.json. |

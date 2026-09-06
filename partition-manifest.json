@@ -186,8 +186,8 @@
     "guides_extracted": 26
   },
   "drupal/tdd": {
-    "source_hash": "927d92d1efb7db7b7980cbca7a67b3edd4a31c1fee718127d183c3a041d003c1",
-    "partitioned": "2026-09-01",
+    "source_hash": "f6a62d4b36087a9c282e9d2ff32a57fa5448e37223826656229b273d6bcbaa31",
+    "partitioned": "2026-09-06",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 25
   },
@@ -228,8 +228,8 @@
     "guides_extracted": 14
   },
   "development/tdd-spec-driven": {
-    "source_hash": "e1ebc1472c7175286724f3b248575b1d11b26a8c35120d2367f1e3250d6e58fe",
-    "partitioned": "2026-09-02",
+    "source_hash": "3b964384875b5221b894ae9d61bf3a2338d4b816b11257c52f96b50a73d945bf",
+    "partitioned": "2026-09-06",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 23
   },

@@ -96,20 +96,21 @@ class ContentExportTest extends BrowserTestBase {
 
 **Step 5 -- Refactor**:
 - Extract CSV generation to service
-- Add config for default export settings
-- Add tests for edge cases (no content, invalid content type)
+- Rename, deduplicate, improve structure; behavior-preserving only
+
+Adding config for default export settings is a new behavior, not a refactor, so it gets its own RED. The edge cases (no content, invalid content type) are new behaviors too: each starts with one failing test in its own cycle. REFACTOR adds no tests and changes no assertions -- see the universal guide's [Changing Existing Tests](https://camoa.github.io/dev-guides/development/tdd-spec-driven/changing-existing-tests/).
 
 ## AI-Assisted Workflow
 **Using Claude Code for spec-driven Drupal development**:
 
-1. Provide specification to Claude Code
-2. Claude Code generates test file based on spec
-3. Review the generated test against the spec and adjust assertions while authoring, before any implementation exists. Once implementation begins, an assertion changes only under the rules in the TDD guide's Changing Existing Tests section: with a recorded reason, and never by a reviewer
-4. Ask Claude Code to implement minimum code to pass tests
-5. Run tests, iterate until green
-6. Ask Claude Code to refactor while keeping tests green
+1. Provide the specification to a test-authoring context: "Create a content export feature with permission-based access, form for content type selection, CSV download". That context writes tests and nothing else
+2. It writes one test per acceptance criterion, each seen to fail because the behavior is absent. It does not read implementation code
+3. Review the tests against the spec before any implementation exists. Adjust assertions now or never: once implementation begins, an assertion changes only under the rules in the universal guide's [Changing Existing Tests](https://camoa.github.io/dev-guides/development/tdd-spec-driven/changing-existing-tests/) section -- with a recorded reason, and never by a reviewer
+4. A separate implementing context writes the minimum code to pass. It has no write access to the test files
+5. Run tests until green. Stop
+6. Refactor while the tests stay green. No new tests in this step
 
-**Benefits**: Faster test generation, consistent patterns, catches missing test cases
+**What this buys**: tests that constrain the code instead of describing it. "Catches missing test cases" is not a benefit here -- a test the spec did not ask for is a finding to record, not a test to add. See [When Not to Write a Test](https://camoa.github.io/dev-guides/development/tdd-spec-driven/when-not-to-write-a-test/).
 
 ## Common Mistakes
 - Writing implementation before tests -- defeats TDD purpose
