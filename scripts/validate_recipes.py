@@ -64,6 +64,15 @@ SECTIONS_BY_KIND = {
     "tooling": TOOLING_REQUIRED_SECTIONS,
 }
 
+# A tooling recipe is read by a machine as well as by a person: something resolves
+# the recipe and runs what it finds. Reading by position — "the first fence under
+# Install" — truncates a two-step install silently, which is how the first pair of
+# live recipes ran `composer config` without its `composer require` and reported
+# success. So the info string is the contract: `sh` means run this block, any other
+# label means read it. Nothing below inspects what a block says, so nothing guesses.
+TOOLING_COMMAND_TAG = "sh"
+FENCE_LINE_RE = re.compile(r"^\s*```(.*)$")
+
 # `name` is a globally-unique identifier the navigator uses as a cache key
 # (recipes.{<name>: …} in the navigator lockfile). snake_case only — a name with
 # spaces, brackets, or hyphens would corrupt the delimiter-structured index line
@@ -207,6 +216,94 @@ def validate_oracle_block(body: str) -> list[str]:
     return errors
 
 
+def section_lines(body: str, heading: str, line_offset: int) -> list[tuple[int, str]] | None:
+    """Lines of one `## <heading>` section, bounded at the next H2.
+
+    Each entry is (file line number, text) so an error can name where to look.
+    Returns None when the heading is absent — a missing section is already
+    reported by the required-sections check, and reporting it twice reads as two
+    problems.
+    """
+    lines = body.splitlines()
+    heading_re = re.compile(r"^##\s+" + re.escape(heading) + r"\s*$")
+    start = next((i + 1 for i, ln in enumerate(lines) if heading_re.match(ln)), None)
+    if start is None:
+        return None
+    out: list[tuple[int, str]] = []
+    for i in range(start, len(lines)):
+        if lines[i].startswith("## "):
+            break
+        out.append((line_offset + i + 1, lines[i]))
+    return out
+
+
+def fenced_blocks(section: list[tuple[int, str]]) -> list[tuple[int, str, list[str]]]:
+    """(opening line number, info string, content lines) per fence in a section.
+
+    The info string is stripped, so `sh` and `sh ` are the same tag — a trailing
+    space is invisible in an editor, and a correctly tagged block must not be
+    skipped for one.
+    """
+    blocks: list[tuple[int, str, list[str]]] = []
+    open_at: tuple[int, str] | None = None
+    content: list[str] = []
+    for lineno, line in section:
+        m = FENCE_LINE_RE.match(line)
+        if not m:
+            if open_at is not None:
+                content.append(line)
+            continue
+        if open_at is None:
+            open_at = (lineno, m.group(1).strip())
+            content = []
+        else:
+            blocks.append((open_at[0], open_at[1], content))
+            open_at = None
+    if open_at is not None:  # unclosed fence; report what was opened
+        blocks.append((open_at[0], open_at[1], content))
+    return blocks
+
+
+def tooling_fence_errors(body: str, line_offset: int) -> list[str]:
+    """Check the fence labels under `## Install` and `## Run` of a tooling recipe."""
+    errors: list[str] = []
+    for heading in ("Install", "Run"):
+        section = section_lines(body, heading, line_offset)
+        if section is None:
+            continue
+        blocks = fenced_blocks(section)
+        for lineno, info, _ in blocks:
+            if not info:
+                errors.append(
+                    f"line {lineno}: fenced block under `## {heading}` carries no info "
+                    f"string; tag it `{TOOLING_COMMAND_TAG}` to have it run, or anything "
+                    "else (`text`) to have it read"
+                )
+        commands = [b for b in blocks if b[1] == TOOLING_COMMAND_TAG]
+        if heading == "Install" and not commands:
+            errors.append(
+                f"`## Install` carries no block tagged `{TOOLING_COMMAND_TAG}`; the "
+                "commands that add the tool go in tagged blocks, read in order"
+            )
+        if heading == "Run":
+            if len(commands) != 1:
+                errors.append(
+                    f"`## Run` carries {len(commands)} blocks tagged "
+                    f"`{TOOLING_COMMAND_TAG}`; exactly one is the command to run — tag a "
+                    "worked example `text` so it is read rather than executed"
+                )
+            for lineno, _, content in commands:
+                # One command, so a reader cannot take the first line, drop the
+                # rest, and report a success nobody got.
+                body_lines = [ln for ln in content if ln.strip()]
+                if len(body_lines) != 1:
+                    errors.append(
+                        f"line {lineno}: the `{TOOLING_COMMAND_TAG}` block under `## Run` "
+                        f"holds {len(body_lines)} commands; Run is one command"
+                    )
+    return errors
+
+
 def validate_recipe(path: Path, kind: str = "task") -> list[str]:
     """Return a list of human-readable errors for one recipe (empty = valid).
 
@@ -272,6 +369,10 @@ def validate_recipe(path: Path, kind: str = "task") -> list[str]:
     for section in SECTIONS_BY_KIND[kind]:
         if section not in headings:
             errors.append(f"missing required section: ## {section}")
+
+    # 3b. Tooling recipes: the fences under Install and Run say what they are.
+    if is_tooling:
+        errors.extend(tooling_fence_errors(body, text[: len(text) - len(body)].count("\n")))
 
     # 4. Citations resolve.
     #    Skipped for tooling recipes: a tooling recipe cites no guide by design —

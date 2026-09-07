@@ -28,6 +28,14 @@ Each step runs as arguments, never through a shell. A step containing a shell me
 
 Every step is safe to run twice, because a project may already have part of what the tool needs.
 
+## What a fence says it is
+
+A tooling recipe is read by a machine as well as by a person, so a fence is labelled rather than counted. Under `## Install`, every block tagged `sh` holds commands, one per line, read in order — a block tagged anything else is read and not run, which is what makes a configuration example safe to put beside the commands. Under `## Run`, exactly one block is tagged `sh` and it holds a single command; a worked example of the same tool invoked another way is prose or a `text` block, because it is not a second thing to run.
+
+The tag names what the block holds, not how it is executed — steps still run as arguments, never through a shell.
+
+Nothing reads inside a block, so nothing guesses. `validate_recipes.py` rejects an untagged fence under either heading, an `## Install` with no `sh` block, a `## Run` with anything other than exactly one, and an `sh` block under `## Run` holding more than one command. Reading by position instead — "the first fence under Install" — is what shipped a `composer config` without its `composer require` and called it installed.
+
 ## Catalog
 
 | Framework | Tool | Recipe |

@@ -33,11 +33,11 @@ Allow the plugin that registers the standards, before requiring the package that
 carries them. Composer refuses to run an unlisted plugin, so this order matters:
 run it the other way round and `coder` installs while its standards do not appear.
 
-```
+```sh
 composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
 ```
 
-```
+```sh
 composer require --dev drupal/coder
 ```
 
@@ -49,7 +49,7 @@ running it as well does no harm and no good.
 
 ## Run
 
-```
+```sh
 ddev exec vendor/bin/phpcs --standard=Drupal,DrupalPractice web/modules/custom
 ```
 
@@ -62,7 +62,7 @@ module directory, a theme, or several paths in one invocation.
 
 To see which standards are registered rather than which findings exist:
 
-```
+```text
 ddev exec vendor/bin/phpcs -i
 ```
 
