@@ -12,7 +12,7 @@ Process recipes are **resolved by an orchestrator**, keyed by **`(phase × frame
 
 | Phase | Framework | Recipe | When to use |
 |---|---|---|---|
-| `research` | `drupal` | [Contrib prior-art research](drupal/contrib-prior-art.md) | A Drupal project must establish prior art on drupal.org and in contrib — usage, maintenance, security coverage and core-version fit — before any custom build. |
+| `research` | `drupal` | [Prior-art research](drupal/contrib-prior-art.md) | A Drupal project must establish prior art — first in its own custom code and exported configuration, then on drupal.org and in contrib by usage, maintenance, security coverage and core-version fit — before any custom build. |
 | `design` | `drupal` | [Service-based architecture design](drupal/architecture.md) | Turning researched requirements into a service-based architecture — business logic in injected services, a Drush entry point, and the form / entity / plugin pattern per component. |
 | `implement` | `drupal` | [Coding standards and test discipline](drupal/standards-and-tests.md) | Holding Drupal code to coding standards and the implementation-time security rules, with the PHPUnit tier selected per unit of logic and each test shaped Red-Green-Refactor. |
 | `review` | `drupal` | [Implementation review checks](drupal/checks.md) | Validating a Drupal implementation against its architecture and Drupal security — static `\Drupal::` in new code, logic in forms/controllers, Form API CSRF — before acceptance. |

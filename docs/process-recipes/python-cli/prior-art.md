@@ -2,7 +2,7 @@
 # Routing block — an orchestrator reads to here and decides.
 name: python_cli_research_prior_art
 capability: research
-description: Use when a Python project (a library, or a tool whose interface is one or more console scripts) enters the research phase and must establish what already exists before anything is written — searches the standard library first, then PyPI, reads each candidate for maintenance, typing, dependency weight, licence, yanked status and a pre-adoption vulnerability audit rather than for stars, and returns the candidates with the evidence behind each, ordered by closeness, for the design stage to decide on.
+description: Use when a Python project (a library, or a tool whose interface is one or more console scripts) enters the research phase and must establish what already exists before anything is written — searches the project's own code first, then the standard library, then PyPI, reads each candidate for maintenance, typing, dependency weight, licence, yanked status and a pre-adoption vulnerability audit rather than for stars, and returns the candidates with the evidence behind each, ordered by closeness, for the design stage to decide on.
 # Metadata — read only after a match.
 label: Python prior-art research
 recipe_schema_version: 1.0.0
@@ -22,7 +22,7 @@ license: GPL-2.0-or-later
 
 ## Goal
 
-Establish what already exists before a line is written, and return the candidates with the evidence that produced each reading. The research establishes whether the standard library already covers the capability, whether a maintained package covers it, and — when neither does — what was searched and why nothing answered.
+Establish what already exists before a line is written, and return the candidates with the evidence that produced each reading. The research establishes whether the project already built it, whether the standard library already covers the capability, whether a maintained package covers it, and — when neither does — what was searched and why nothing answered.
 
 **No verdict.** The recipe does not return reuse, extend or build. It returns what it found and what it read, ordered by closeness to the capability, and the design stage decides. Ordering by closeness is a fact; choosing between two candidates that both pass is judgment, and judgment belongs to the stage that owns it.
 
@@ -30,7 +30,7 @@ The plugin owns the generic research phase: when it runs, and how its findings a
 
 ## Opinion
 
-**The standard library is the first search, not the fallback.** `pathlib`, `dataclasses`, `argparse`, `json`, `sqlite3`, `difflib`, `tomllib`, `hashlib`, `subprocess` and `concurrent.futures` cover a large fraction of what a tool needs. A dependency added for something the stdlib already does is a permanent cost paid for a temporary convenience.
+**The standard library is the first place to look outside the project, not the fallback.** `pathlib`, `dataclasses`, `argparse`, `json`, `sqlite3`, `difflib`, `tomllib`, `hashlib`, `subprocess` and `concurrent.futures` cover a large fraction of what a tool needs. A dependency added for something the stdlib already does is a permanent cost paid for a temporary convenience.
 
 **Stars are not maintenance.** The signals that matter are the date of the last release, whether the issue tracker is answered, whether the package declares support for the Python versions the project targets, and whether it ships type information. A package with 20k stars and no release in three years is a liability; one with 300 stars and a release last month may not be.
 
@@ -75,9 +75,13 @@ offline: boolean              # optional; default false. When true, PyPI is not 
 
 If invoked in dry-run mode, perform all reads but emit a findings preview instead of recording anything. Dry-run is required.
 
-1. **Search the standard library first.** For each capability, name the stdlib modules that bear on it and say plainly whether they cover it, cover part of it, or do not. A capability the stdlib covers is recorded as a candidate of the standard-library kind, and the PyPI search for it stops there.
+1. **Search the project's own code, before anything outside it.** When `code_path` is given, look for an existing implementation of the capability inside it. A second implementation of something the project already has is the most expensive kind of duplication, because nothing external will ever flag it.
 
-2. **Search the project's own code.** When `code_path` is given, look for an existing implementation of the capability inside it. A second implementation of something the project already has is the most expensive kind of duplication, because nothing external will flag it.
+    Derive the roots from `pyproject.toml` rather than guessing: the packages the project declares, and whether it uses a `src` layout (`src/<package>/`) or a flat one (`<package>/` at the root). Read the module or class docstring at the top of each candidate file. Out of bounds: any virtual environment or `site-packages` inside the tree.
+
+    **Python has no framework-wide configuration convention** — configuration varies by application rather than by framework — so there is no configuration half to this search. Record that rather than inventing one. A declared package whose directory is missing is recorded too, not skipped.
+
+2. **Search the standard library.** For each capability, name the stdlib modules that bear on it and say plainly whether they cover it, cover part of it, or do not. A capability the stdlib covers is recorded as a candidate of the standard-library kind, and the PyPI search for it stops there.
 
 3. **Search PyPI for the remainder.** For each uncovered capability, find the candidate packages. Record the exact package name and current version; do not paraphrase a name from memory.
 
@@ -85,9 +89,17 @@ If invoked in dry-run mode, perform all reads but emit a findings preview instea
 
 5. **Run the machine-checkable facts.** For each surviving candidate, two lookups that an impression cannot substitute for. First, the yanked status: read `yanked` and `yanked_reason` from PyPI's JSON metadata for the version the project would take, and for the release history behind it — a yanked version the project would pin exactly still installs, so a yank in the range being considered is a finding, not a footnote. Second, the vulnerability check: resolve the candidate into a throwaway virtual environment under `scratch_path` and run `pip-audit` there, never against the project's own environment. Record every result, negatives included, so a later reader can tell a clean answer from an unasked question. In `offline` mode both lookups are recorded as not run.
 
-6. **Record each candidate as a finding.** Per candidate: what it is and a link to where it was found, so the design stage can open it — research deliberately does not read it for them; the date it was read; the three readings this framework takes, **maintained** (last release date, whether the tracker is answered), **used** (dependent projects, treated as weak evidence — stars are not maintenance), **supported** (declared Python support against the project's targets, `py.typed`, transitive dependency count, licence, yanked status, the `pip-audit` result); the acceptance criteria it speaks to, by id; and its kind — a standard-library answer or a PyPI package. A capability with no candidate at all is recorded with what was searched and when, because silence and a negative result look identical from outside and the design stage cannot go back and look.
+6. **Record each candidate as a finding.** Per candidate:
 
-7. **Record what was not searched, and what spoke to nothing.** Where the search was partial — offline, a private index unreachable, a capability too vaguely stated to search — say so per capability rather than letting the gap read as a clean result; in offline mode the yanked and audit lookups are among them. A candidate that speaks to no acceptance criterion is recorded as such and never dropped, because that is how work nobody asked for is caught. Order the candidates by closeness and hand the findings to the caller, which records them as `research/<search>.json` and renders `research/<search>.md` beside it. Do not name a winner. Remove the scratch environment.
+    - what it is, and a link to where it was found — the design stage opens it later, and research deliberately does not read it for them;
+    - the date it was read;
+    - the three readings this framework takes: **maintained** (last release date, whether the tracker is answered), **used** (dependent projects, treated as weak evidence — stars are not maintenance), **supported** (declared Python support against the project's targets, `py.typed`, transitive dependency count, licence, yanked status, the `pip-audit` result);
+    - the acceptance criteria it speaks to, by id;
+    - its kind — one of the project's own modules, a standard-library answer, or a PyPI package.
+
+    A capability with no candidate at all is recorded with what was searched and when, because silence and a negative result look identical from outside and the design stage cannot go back and look.
+
+7. **Record the gaps: an empty search, an unanswered criterion, a reading you could not take.** Where the search was partial — offline, a private index unreachable, a capability too vaguely stated to search — say so per capability rather than letting the gap read as a clean result; in offline mode the yanked and audit lookups are among them. A candidate that speaks to no acceptance criterion is recorded as such and never dropped, because that is how work nobody asked for is caught. Order the candidates by closeness and hand the findings to the caller, which records them as `research/<search>.json` and renders `research/<search>.md` beside it. Do not name a winner. Remove the scratch environment.
 
 ## Data flow
 
@@ -95,8 +107,9 @@ If invoked in dry-run mode, perform all reads but emit a findings preview instea
 input:  requirements, acceptance_criteria, code_path (optional),
         target_pythons (optional), scratch_path (optional),
         run_mode (optional), offline (optional)
-step 1: stdlib coverage per capability
-step 2: in-project prior art per capability
+step 1: in-project prior art per capability, from the packages pyproject declares
+        and whether the layout is src based
+step 2: stdlib coverage per capability
 step 3: PyPI candidates per uncovered capability, with exact names and versions
 step 4: per-candidate evidence — release date, Python support, py.typed, transitive count, licence
 step 5: per-candidate machine-checkable facts — yanked status with its reason, and a pip-audit
@@ -119,14 +132,15 @@ The recipe reads the requirements, the project at `code_path` when given, and pu
 
 After the recipe runs, verify:
 
-1. Every capability has an explicit stdlib finding — covered, partly covered, or not covered — and a capability whose candidates are all packages has a stated reason the stdlib was insufficient.
-2. Every candidate package is named with its exact name and current version, and carries a link to where it was found and the date it was read. A claim carrying no source is not a finding.
-3. Every candidate carries its readings: last release date, declared Python support, `py.typed` presence, transitive dependency count, and licence.
-4. Every candidate carries the two machine-checkable facts: its yanked status with the maintainer's reason where one is set, and a `pip-audit` result for the version the project would take — each recorded as an answer, including when the answer is clean.
-5. Every candidate names the acceptance criteria it speaks to, by id, and its kind. One that speaks to none is recorded as such rather than dropped.
-6. No verdict was returned. The candidates are ordered by closeness and no winner is named — the reuse-or-build decision belongs to the design stage. A capability with no candidate records what was searched and when.
-7. Anything not searched is recorded as not searched, with the reason, per capability. In offline mode the yanked and audit lookups are among them.
-8. The project is unchanged — nothing installed into its environment, no `pyproject.toml` edit, no code written; any candidate resolution happened in a throwaway environment outside the project tree and was removed.
+1. The project's own code was searched first, with the roots taken from `pyproject.toml` rather than assumed, or their absence recorded — and the finding that Python has no framework-wide configuration convention was stated rather than left out.
+2. Every capability has an explicit stdlib finding — covered, partly covered, or not covered — and a capability whose candidates are all packages has a stated reason the stdlib was insufficient.
+3. Every candidate package is named with its exact name and current version, and carries a link to where it was found and the date it was read. A claim carrying no source is not a finding.
+4. Every candidate carries its readings: last release date, declared Python support, `py.typed` presence, transitive dependency count, and licence.
+5. Every candidate carries the two machine-checkable facts: its yanked status with the maintainer's reason where one is set, and a `pip-audit` result for the version the project would take — each recorded as an answer, including when the answer is clean.
+6. Every candidate names the acceptance criteria it speaks to, by id, and its kind. One that speaks to none is recorded as such rather than dropped.
+7. No verdict was returned. The candidates are ordered by closeness and no winner is named — the reuse-or-build decision belongs to the design stage. A capability with no candidate records what was searched and when.
+8. Anything not searched is recorded as not searched, with the reason, per capability. In offline mode the yanked and audit lookups are among them.
+9. The project is unchanged — nothing installed into its environment, no `pyproject.toml` edit, no code written; any candidate resolution happened in a throwaway environment outside the project tree and was removed.
 
 This recipe ships no executable verifier of its own — the checks above are the agent-driven protocol; the plugin's research phase owns recording the findings into `research/<search>.json` and rendering `research/<search>.md`.
 

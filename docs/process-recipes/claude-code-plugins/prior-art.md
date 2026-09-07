@@ -2,7 +2,7 @@
 # Routing block — an orchestrator reads to here and decides.
 name: cc_plugins_research_prior_art
 capability: research
-description: Use when a Claude Code plugin project enters the research phase and must establish prior art before building — searches the installed skill / command / agent / hook / MCP surface and the reachable marketplaces, reads each candidate for availability, maintenance, trust and trigger-surface fit, and returns the candidates with the evidence behind each, ordered by closeness, for the design stage to decide on.
+description: Use when a Claude Code plugin project enters the research phase and must establish prior art before building — searches the plugin's own components first, then the installed skill / command / agent / hook / MCP surface and the reachable marketplaces, reads each candidate for availability, maintenance, trust and trigger-surface fit, and returns the candidates with the evidence behind each, ordered by closeness, for the design stage to decide on.
 # Metadata — read only after a match.
 label: Plugin prior-art research (Claude Code)
 recipe_schema_version: 1.0.0
@@ -22,7 +22,7 @@ license: GPL-2.0-or-later
 
 ## Goal
 
-Establish prior art before a single Claude Code component is scaffolded. The research asks one question from several angles: **does the capability already exist** — as an installed skill, command, agent, hook, or MCP server, or as a plugin reachable in a marketplace. It returns the candidates it found with the evidence behind each.
+Establish prior art before a single Claude Code component is scaffolded. The research asks one question from several angles: **does the capability already exist** — as a component of the plugin being worked on, as an installed skill, command, agent, hook, or MCP server, or as a plugin reachable in a marketplace. It returns the candidates it found with the evidence behind each.
 
 **No verdict.** The recipe does not return reuse, extend or build-new. It returns what it found and what it read, ordered by closeness to the framed need, and the design stage decides. Ordering by closeness is a fact; choosing between two candidates that both pass is judgment, and judgment belongs to the stage that owns it.
 
@@ -61,6 +61,8 @@ Source-agnostic, supplied by the caller (the orchestrator at the research phase,
 ```yaml
 need: string                  # the capability to research, described as the trigger /
                               #   use-case that would invoke it
+code_path: string             # absolute path to the plugin being worked on; its own
+                              #   components are the closest prior art there is
 acceptance_criteria:          # what a person can see working when the task is done;
   - id: string                #   ids are minted by the caller and are stable
     statement: string
@@ -78,23 +80,41 @@ If invoked in dry-run mode, perform all reads and emit a prior-art preview inste
 
 1. **Frame the need as a trigger surface.** Restate the need as the user phrasing or task that would invoke it, and as a candidate component type (skill for an auto-triggered workflow, command for a user-typed action, agent for isolated specialized work, hook for an event reaction, MCP for an external integration). This frame is what every candidate is matched against.
 
-2. **Search the installed surface.** Read the installed plugins and, within them, the skill `description` triggers, the `/command` set, the agent descriptions, the declared hooks, and the MCP servers. A skill whose description already fires on the framed trigger is prior art even if no command names it. Defer to `superpowers-developing-for-claude-code:working-with-claude-code` for how the registry and loading actually work this version.
+2. **Search the plugin's own components, before anything outside it.** The plugin being worked on has its own skills, commands, agents and hooks, and one of them that already fires on the framed trigger is the closest prior art there is.
 
-3. **Search the reachable marketplaces.** For needs the installed set does not cover, search the configured marketplaces (and any named in `marketplaces`) for candidate plugins, reading each candidate's described capability against the frame.
+    Derive the roots from `plugin.json` at `code_path`: it declares the component directories, so read what it declares rather than assuming the conventional layout. Read each candidate where its trigger actually lives — the `description` of a skill or an agent, the front matter and body of a command, the matcher of a hook. Out of bounds: the installed plugins and the marketplaces, which the next two steps cover; reading them here reports someone else's component as this plugin's own.
 
-4. **Read each candidate.** Take the three readings this framework takes: **maintained** (version, recency, changelog), **used** (whether it is installed here, and how widely the marketplace shows it carried), **supported** (trust — the marketplace owner, and no path traversal or over-broad permissions — plus trigger-surface fit, whether its description fires on the framed need, and component-type fit, whether it delivers the need as the right component type).
+    A declared component directory that does not exist is recorded, not skipped, and an unreadable `plugin.json` is a gap rather than a clean result.
 
-5. **Record each candidate as a finding.** Per candidate: what it is and a link to where it was found, so the design stage can open it — research deliberately does not read it for them; the date it was read; the three readings above; the acceptance criteria it speaks to, by id; and its **kind**, where Claude Code draws a real distinction — a component already installed, a plugin reachable in a marketplace, or a plugin that owns the domain and lacks one component, which the design stage would extend with `/plugin-creation-tools:add-component`. Record the recurrence evidence against the 5-and-10 threshold as evidence, and name scope as the stage that owns the question of whether the task should happen at all.
+3. **Search the installed surface.** Read the installed plugins and, within them, the skill `description` triggers, the `/command` set, the agent descriptions, the declared hooks, and the MCP servers. A skill whose description already fires on the framed trigger is prior art even if no command names it. Defer to `superpowers-developing-for-claude-code:working-with-claude-code` for how the registry and loading actually work this version.
 
-6. **Record the candidates that speak to nothing, a nothing, and a gap.** A candidate that speaks to no acceptance criterion is recorded as such and never dropped — that is how work nobody asked for is caught. If nothing installed and nothing reachable covers the need, say so explicitly with what was searched and when: silence and a negative result look identical from outside, and the design stage cannot go back and look. If a reading could not be taken — a marketplace unreachable, a manifest unreadable — name the reading rather than letting a partial search read as a clean result.
+4. **Search the reachable marketplaces.** For needs the installed set does not cover, search the configured marketplaces (and any named in `marketplaces`) for candidate plugins, reading each candidate's described capability against the frame.
 
-7. **Report.** Order the candidates by closeness to the framed need and hand them to the caller, which records them as `research/<search>.json` and renders `research/<search>.md` beside it. Do not name a winner and do not recommend deferring: closeness is a fact and belongs here, fit belongs to design, and whether to build at all belongs to scope.
+5. **Read each candidate.** Take the three readings this framework takes: **maintained** (version, recency, changelog), **used** (whether it is installed here, and how widely the marketplace shows it carried), **supported** (trust — the marketplace owner, and no path traversal or over-broad permissions — plus trigger-surface fit, whether its description fires on the framed need, and component-type fit, whether it delivers the need as the right component type).
+
+6. **Record each candidate as a finding.** Per candidate:
+
+    - what it is, and a link to where it was found — the design stage opens it later, and research deliberately does not read it for them;
+    - the date it was read;
+    - the three readings from the step above;
+    - the acceptance criteria it speaks to, by id;
+    - its kind, where Claude Code draws a real distinction — a component of the plugin being worked on, a component already installed, a plugin reachable in a marketplace, or a plugin that owns the domain and lacks one component, which the design stage would extend with `/plugin-creation-tools:add-component`.
+
+    Record how often the task has actually happened and whether it looks likely to recur. That evidence is for the stage that decides whether the task should happen at all, which is neither this one nor design.
+
+7. **Record the gaps: an empty search, an unanswered criterion, a reading you could not take.** A candidate that speaks to no acceptance criterion is recorded as such and never dropped — that is how work nobody asked for is caught. If nothing installed and nothing reachable covers the need, say so explicitly with what was searched and when: silence and a negative result look identical from outside, and the design stage cannot go back and look. If a reading could not be taken — a marketplace unreachable, a manifest unreadable — name the reading rather than letting a partial search read as a clean result.
+
+8. **Report.** Order the candidates by closeness to the framed need and hand them to the caller, which records them as `research/<search>.json` and renders `research/<search>.md` beside it. Do not name a winner and do not recommend deferring: closeness is a fact and belongs here, fit belongs to design, and whether to build at all belongs to scope.
 
 ## Data flow
 
 ```
-input: need, acceptance_criteria, component_hint (optional), marketplaces (optional),
-       recurrence (optional), run_mode (optional)
+input: need, acceptance_criteria, code_path, component_hint (optional),
+       marketplaces (optional), recurrence (optional), run_mode (optional)
+
+reads project state:
+       plugin.json at code_path (declares the component directories — read, not assumed)
+       the plugin's own skills / commands / agents / hooks, at those directories
 
 reads environment state:
        installed plugins + their skills / commands / agents / hooks / MCP servers
@@ -138,13 +158,14 @@ Idempotent for a fixed environment: running the research twice over the same ins
 
 After the recipe runs, verify:
 
-1. The installed surface was searched across all component types — skills (by `description` trigger), commands, agents, hooks, and MCP servers — not only the `/command` list.
-2. The reachable marketplaces were searched for needs the installed set did not cover, and each candidate was read against the framed trigger surface.
-3. Every candidate carries its readings — maintained, used, supported (trust, trigger-surface fit, component-type fit) — plus a link to where it was found and the date it was read. A claim carrying no source is not a finding.
-4. Every candidate names the acceptance criteria it speaks to, by id, and its kind. One that speaks to none is recorded as such rather than dropped.
-5. No verdict was returned, and no build was deferred. The candidates are ordered by closeness and no winner is named; the 5-and-10 recurrence evidence is recorded for the scope stage rather than used to rule a build in or out here.
-6. A need that nothing installed and nothing reachable covers is reported explicitly, with what was searched and when, and any reading that could not be taken is named rather than left as an apparently clean result.
-7. The research left the environment unchanged — nothing installed, scaffolded, or edited; the findings were returned for the plugin's research phase to record.
+1. The plugin's own components were searched first, with the directories taken from `plugin.json` rather than assumed, or their absence recorded. A local search that quietly read nothing does not pass.
+2. The installed surface was searched across all component types — skills (by `description` trigger), commands, agents, hooks, and MCP servers — not only the `/command` list.
+3. The reachable marketplaces were searched for needs the installed set did not cover, and each candidate was read against the framed trigger surface.
+4. Every candidate carries its readings — maintained, used, supported (trust, trigger-surface fit, component-type fit) — plus a link to where it was found and the date it was read. A claim carrying no source is not a finding.
+5. Every candidate names the acceptance criteria it speaks to, by id, and its kind. One that speaks to none is recorded as such rather than dropped.
+6. No verdict was returned, and no build was deferred. The candidates are ordered by closeness and no winner is named; the 5-and-10 recurrence evidence is recorded for the scope stage rather than used to rule a build in or out here.
+7. A need that nothing installed and nothing reachable covers is reported explicitly, with what was searched and when, and any reading that could not be taken is named rather than left as an apparently clean result.
+8. The research left the environment unchanged — nothing installed, scaffolded, or edited; the findings were returned for the plugin's research phase to record.
 
 This recipe ships no executable verifier of its own — the search-and-read steps are the agent-driven protocol; the plugin's research phase owns recording the findings into `research/<search>.json` and rendering `research/<search>.md`.
 
