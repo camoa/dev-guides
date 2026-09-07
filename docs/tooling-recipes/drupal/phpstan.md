@@ -34,11 +34,11 @@ Allow the plugin that loads the extensions, before requiring the packages that
 carry them. Composer refuses to run an unlisted plugin, so this order matters:
 run it the other way round and the extensions install without being loaded.
 
-```
+```sh
 composer config --no-plugins allow-plugins.phpstan/extension-installer true
 ```
 
-```
+```sh
 composer require --dev phpstan/phpstan phpstan/extension-installer mglaman/phpstan-drupal phpstan/phpstan-deprecation-rules
 ```
 
@@ -52,7 +52,7 @@ PHPStan has nothing to read.
 
 ## Run
 
-```
+```sh
 ddev exec vendor/bin/phpstan analyse
 ```
 
@@ -63,7 +63,7 @@ on it without reading the text.
 Paths and level come from `phpstan.neon`. To analyse something outside it, name the
 path and the level on the command line instead:
 
-```
+```text
 ddev exec vendor/bin/phpstan analyse --level 8 web/modules/custom/my_module
 ```
 
