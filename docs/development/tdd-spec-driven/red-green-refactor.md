@@ -53,8 +53,14 @@ class UserNameParser {
    - Tests must stay green throughout refactoring
    - If a test fails during refactor, you broke something - undo and try again
 
+### REFACTOR when an agent implements
+
+REFACTOR is where agents grow code and quietly drop guards. Run it as a separate step, under the same constraints as GREEN plus two of its own: no new tests and no changed assertions, and a diff-size budget.
+
+The frozen tests are the only proof the refactor preserved behavior. A guard, branch, or edge case with no test pinning it can be removed here and the suite will not notice. A mutation run at the end of the feature is the outer check for that - see [What TDD Covers](what-tdd-covers.md).
+
 ```javascript
-// REFACTOR: Handle edge cases we realized during implementation
+// WRONG - this is not a refactor. Read to the end of the block.
 class UserNameParser {
   parse(fullName) {
     if (!fullName || typeof fullName !== 'string') {

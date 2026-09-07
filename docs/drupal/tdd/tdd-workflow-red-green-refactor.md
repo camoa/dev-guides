@@ -9,15 +9,15 @@ tldr: "Applying the Test-Driven Development cycle to Drupal module development. 
 Applying the Test-Driven Development cycle to Drupal module development. Use this workflow when building new features, refactoring existing code, or fixing bugs where the expected behavior can be specified upfront.
 
 ## Decision
-| If you're working on... | TDD makes sense? | Why |
+| If you're working on... | Smallest tier that proves it | Notes |
 |---|---|---|
-| Service business logic (calculations, transformations) | YES -- HIGH VALUE | Fast unit/kernel tests, behavior well-defined |
-| Plugin implementations (blocks, field formatters) | YES -- HIGH VALUE | Clear input/output contracts, testable in isolation |
-| Access control logic | YES -- HIGH VALUE | Security-critical, explicit pass/fail conditions |
-| Entity/form validation | YES -- MEDIUM VALUE | Validation rules well-defined, but setup overhead |
-| Admin UI configuration forms | MAYBE -- LOW VALUE | Primarily CRUD, little custom logic, high setup cost |
-| Theme templates/preprocessing | NO -- LOW VALUE | Visual output hard to assert, changes frequently |
-| Migration plugins | MAYBE -- MEDIUM VALUE | Good for transform logic, expensive for full pipeline |
+| Service business logic (calculations, transformations) | Unit or Kernel | Fast, behavior well-defined |
+| Plugin implementations (blocks, field formatters) | Kernel | Clear input/output contract |
+| Access control logic | Kernel | Security-critical, explicit pass/fail |
+| Entity/form validation | Kernel | Test the rule, not the form chrome |
+| Admin UI configuration forms | Kernel for the custom logic; Functional only for a submit path you own | Test the 10% that is yours; framework CRUD is not your behavior |
+| Theme templates/preprocessing | Kernel for preprocess logic; templates are outer verification (visual regression) | Markup is not a promised behavior; a preprocess return value is |
+| Migration plugins | Unit for transforms | The full pipeline is outer verification |
 
 ## Pattern
 
@@ -141,13 +141,11 @@ class DiscountCalculatorTest extends KernelTestBase {
 }
 ```
 
-## When TDD Doesn't Make Sense in Drupal
+## When the behavior is not yours
 
-- **Exploratory coding**: When you don't know what the solution looks like yet (spike first, then TDD)
-- **Tight coupling to Drupal UI**: Testing admin forms that are 90% configuration, 10% logic (test the 10%)
-- **Visual/UX changes**: Theme adjustments, CSS, layout (manual QA more effective)
-- **One-off scripts**: Drush commands that run once during migration (cost > benefit)
-- **Prototyping**: Proof-of-concept work where requirements will change
+Some Drupal work has no behavior to specify: a config form that is 100% framework CRUD, a Twig change with no preprocess logic, a one-off Drush script that runs once during a migration. That work has no failing test because there is no promise to state, not because TDD is low value. The moment the change adds a branch, a return value, or an access decision, that behavior gets its RED. "Too simple to test" is not a reason -- see the universal guide's [When Not to Write a Test](https://camoa.github.io/dev-guides/development/tdd-spec-driven/when-not-to-write-a-test/).
+
+Spikes and prototypes are exploration. Throw them away; the real change starts at RED.
 
 ## Common Mistakes
 

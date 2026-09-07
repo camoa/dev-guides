@@ -80,6 +80,8 @@ Make executable: `chmod +x .git/hooks/pre-commit`
 
 **Pre-push gates** (slower, catches logic errors):
 
+A coverage floor is a signal to look, not an instruction to write tests in this change. Run it as a warning locally; enforce it, if at all, on the feature branch's merge in CI, and exempt bug-fix branches -- a fix contains one reproducing test, see the universal guide's [Fixing Bugs with TDD](https://camoa.github.io/dev-guides/development/tdd-spec-driven/fixing-bugs-with-tdd/).
+
 `.git/hooks/pre-push`:
 ```bash
 #!/bin/bash
@@ -92,18 +94,15 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-# Optional: Check coverage threshold
-echo "Checking coverage threshold..."
+# Optional: report coverage (advisory)
 COVERAGE=$(./vendor/bin/phpunit --coverage-text --colors=never | grep -oP 'Lines:\s+\K\d+')
 if [ "$COVERAGE" -lt 70 ]; then
-  echo "Coverage is $COVERAGE%, minimum is 70%"
-  exit 1
+  echo "WARNING: coverage is $COVERAGE%, below the 70% reference."
+  echo "Record it. Do not add tests to this change to reach it."
 fi
 
 exit 0
 ```
-
-A floor like this belongs on feature work. Running it on a bug fix pushes the author to add unrelated tests inside a change that should contain one reproducing test -- exempt fix branches, or make the gate advisory there.
 
 **Composer scripts** (standardized commands):
 ```json

@@ -60,6 +60,14 @@ The three laws create a rapid cycle, often **measured in minutes or even seconds
 5. Refactor if needed (30 seconds - 2 minutes)
 6. Repeat
 
+## Agent variant: batched RED per slice
+
+When the test author and the implementer are separate contexts, handing over one test at a time is impractical. The accepted variant is: the author writes the tests for one slice of the work - a small group of behaviors that can go green without stubbing later work - each seen to fail because its behavior is absent, then freezes them. The implementer works through them one at a time under Law 3.
+
+What this keeps: absence-RED for every test, and an oracle written before and outside the implementation. What it gives up: the design feedback that comes from authoring one test at a time. Keep slices small so the loss stays small.
+
+A slice whose tests cannot be written without guessing the interface is an architecture gap, not a reason to write the code first.
+
 This rhythm keeps you in "flow" - never more than a minute or two from running tests.
 
 ## Why These Laws Matter

@@ -103,9 +103,11 @@ test:
         path: coverage.xml
 ```
 
-## Coverage Targets by Code Type
+## What coverage a mature module tends to have, by code type
 
-| Code type | Target coverage | Rationale |
+These are descriptions of a module after months of TDD, not a floor for the change in front of you. A change adds exactly the tests its new behaviors require -- see the universal guide's [When Not to Write a Test](https://camoa.github.io/dev-guides/development/tdd-spec-driven/when-not-to-write-a-test/). If a change lowers coverage, that is a signal to look, recorded as a finding. It is never an instruction to add tests inside that change.
+
+| Code type | Typical mature coverage | Why |
 |---|---|---|
 | **Services (business logic)** | 80-90% | High reuse, critical to functionality |
 | **Plugins (blocks, formatters)** | 70-85% | Well-defined contracts, moderate complexity |
