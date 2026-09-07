@@ -1,25 +1,34 @@
 ---
-description: How to read Playwright HTML reports from multi-browser or multi-viewport project matrices.
-tldr: Each browser/viewport project appears as a separate row with a color-coded project tag. Filter by project chip to scope to one browser; search by test title without project filter to see all browser variants side by side. The report has no cross-browser diff view — inspect one project at a time.
+description: "How to read Playwright HTML reports from multi-browser or multi-viewport project matrices."
+tldr: "Each browser/viewport project appears as a separate row with a color-coded project tag. Filter by project chip to scope to one browser; search by test title without project filter to see all browser variants side by side. The report has no cross-browser diff view — inspect one project at a time."
 ---
 
 # Multiple Projects
 
 ## When to Use
 
-> Use this when reading reports from a multi-browser × multi-viewport matrix and you need to find, filter, or compare results across projects.
+> Reading reports from a multi-browser × multi-viewport matrix.
 
-## Decision
+## How Projects Appear
 
-| Task | How |
-|---|---|
-| Scope list to one browser | Use project filter chip at the top |
-| See all browsers for the same test | Search by test title, remove project filter |
-| Merge reports from sharded CI runs | Use blob reporter per shard, then `merge-reports` |
+Same `test()` runs once per project. The HTML report shows them as **separate rows with a project tag** (color-coded chip).
 
-## Pattern
+- Filter chips at the top scope the list to one or more projects
+- For VR tests, baselines are **per-project per-platform** by default — a regression in Firefox doesn't contaminate Chromium
 
-Sharded run merge:
+## Comparing Across Browsers
+
+To compare the same test across browsers:
+
+1. Search by test title
+2. Remove the project filter — all browser variants of that test appear
+3. Inspect each row individually
+
+The report does **not** currently render a side-by-side cross-browser diff. You inspect one project at a time.
+
+## Sharded Runs
+
+For runs split across multiple machines, use **blob reporter** on each shard, then merge:
 
 ```bash
 npx playwright merge-reports --reporter=html ./all-blobs
@@ -27,16 +36,10 @@ npx playwright merge-reports --reporter=html ./all-blobs
 
 Produces one unified HTML report from N parallel shards.
 
-## How Projects Appear
-
-- Same `test()` runs once per project → **separate rows with a color-coded project chip**
-- VR baselines are per-project per-platform by default — a regression in Firefox doesn't contaminate Chromium
-- Report has **no side-by-side cross-browser diff** — inspect each project individually
-
 ## Common Mistakes
 
-- **Wrong**: expecting a cross-browser slider comparison → **Right**: not supported; inspect each project row individually
-- **Wrong**: hiding project chips and getting confused by duplicate test titles → **Right**: the project tag distinguishes them; keep chips visible
+- **Expecting cross-browser slider comparison** — not supported; inspect each project individually
+- **Filtering away the project chips and getting confused by duplicate test titles** — the project tag distinguishes them; show project chips
 
 ## See Also
 

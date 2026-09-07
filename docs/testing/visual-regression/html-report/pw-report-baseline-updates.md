@@ -1,25 +1,34 @@
 ---
-description: How to update VR baselines after triaging failures in the Playwright HTML report.
-tldr: The HTML report has no approve/accept button — baseline updates are CLI-only with --update-snapshots. Always scope updates with --grep to avoid silently accepting regressions. Commit baselines after updating or CI will still fail.
+description: "How to update VR baselines after triaging failures in the Playwright HTML report."
+tldr: "The HTML report has no approve/accept button — baseline updates are CLI-only with --update-snapshots. Always scope updates with --grep to avoid silently accepting regressions. Commit baselines after updating or CI will still fail."
 ---
 
 # Baseline Updates
 
 ## When to Use
 
-> Use this after triaging a diff in the report and deciding "this change is intentional — accept the new baseline."
+> After a triage decision — "this is intentional, accept the new baseline."
 
-## Decision
+## The Hard Limitation
 
-| Situation | Command |
-|---|---|
-| Update all snapshots | `npx playwright test --update-snapshots` |
-| Update only matching tests (recommended) | `npx playwright test --update-snapshots --grep "test title"` |
-| Single spec file | `npx playwright test tests/header.spec.ts -u` |
+> **The HTML report has no "approve" / "accept new baseline" button.**
 
-## Pattern
+It is a read-only artifact viewer. Updating snapshots is exclusively a CLI operation.
 
-Full triage → update → confirm workflow:
+## Pattern: Update from CLI
+
+```bash
+# Update all snapshots
+npx playwright test --update-snapshots
+
+# Update only matching tests (recommended)
+npx playwright test --update-snapshots --grep "checkout flow"
+
+# Single file
+npx playwright test tests/header.spec.ts -u
+```
+
+## Pattern: Triage → Update → Re-run
 
 ```
 1. Open report          → npx playwright show-report
@@ -30,17 +39,17 @@ Full triage → update → confirm workflow:
 6. Commit baselines     → git add tests/**/*-snapshots/
 ```
 
-## Why There Is No Approve Button
+## Why No Approve Button?
 
-The Playwright maintainers intentionally decline to add this: an "approve" click that auto-runs `--update-snapshots` removes the friction that makes baseline updates an explicit engineering action. Auto-accept is how regressions ship.
+The Playwright maintainers decline to add this on purpose: an "approve" click that auto-runs `--update-snapshots` removes the friction that makes baseline updates an explicit engineering action. Auto-accept is how regressions ship.
 
-Community workflows fill this gap with PR-comment bots (`/approve-snapshots`) that re-run `--update-snapshots` in CI and commit back to the PR branch — but this is outside the core report.
+Community workflows fill this gap with PR-comment bots (`/approve-snapshots`) that re-run `--update-snapshots` in CI and commit back to the PR branch — but this is out of scope for the core report.
 
 ## Common Mistakes
 
-- **Wrong**: looking for the approve button → **Right**: it doesn't exist; CLI is the only path
-- **Wrong**: bulk `--update-snapshots` across the whole suite as a default response → **Right**: use `--grep` to scope; bulk accept silently accepts regressions
-- **Wrong**: not committing baselines after updating → **Right**: local run is green but CI fails because baselines are still old
+- **Looking for the approve button forever** — it's not there; CLI is the answer
+- **Bulk `--update-snapshots`** of the whole suite as the default response — accepts regressions silently
+- **Forgetting to commit baselines** — re-running locally green; CI fails because baselines are still old
 
 ## See Also
 

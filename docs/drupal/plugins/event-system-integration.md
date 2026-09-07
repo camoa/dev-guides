@@ -22,7 +22,7 @@ drupal_version: "11.x"
 
 ## Pattern
 
-**Provider Pattern - Internal Events**:
+**Pattern Reference**: AI module event system
 
 ```yaml
 # Event subscriber registration
@@ -39,7 +39,11 @@ services:
 - `my_module.service.post_execute` - After successful execution
 - `my_module.service.error` - On execution error
 
-**Service Collector - Polling Events**:
+**Reference**: `/web/modules/contrib/orchestration/src/Event/`
+
+**Polling Events**:
+- `orchestration_poll.timestamp` - Timestamp-based polling
+- `orchestration_poll.id` - ID-based polling
 
 ```php
 // External system triggers poll via REST API
@@ -69,16 +73,16 @@ $this->webhooks->dispatch('entity_updates', [
   'type' => 'node',
   'operation' => 'update'
 ]);
-// POSTs to registered external callback URLs
+// POSTs to https://external-system.com/webhook/drupal-updates
 ```
 
 **Key Difference**: Service collector events designed for external system integration via REST API, not internal Drupal event workflow.
 
 ## Common Mistakes
 
-- **Wrong**: Using provider pattern events for external integration → **Right**: Use service collector polling/webhook events
-- **Wrong**: Webhook dispatch without error handling → **Right**: Log failed webhook calls, implement retry logic
-- **Wrong**: Polling without pagination → **Right**: Limit poll results, use cursor-based pagination
+- **Provider pattern events for external integration** → WHY: Internal events never reach the external system; use polling or webhook events instead
+- **Webhook dispatch without error handling** → WHY: `Webhooks::dispatch()` swallows the Guzzle exception, so a failed callback is silent unless you log it and retry
+- **Polling without a result limit** → WHY: `PollEventBase` collects into an unbounded output array, so one busy interval can return a response large enough to exhaust memory
 
 ## See Also
 

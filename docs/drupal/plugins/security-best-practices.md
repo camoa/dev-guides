@@ -8,45 +8,41 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Apply these security patterns to every plugin architecture implementation. Plugin systems are vulnerable because they load and execute code dynamically.
+> Every plugin architecture implementation must address security. Plugin systems are particularly vulnerable because they load and execute code dynamically.
 
 ## Decision
 
 | Threat | Mitigation | Why |
 |--------|------------|-----|
 | Untrusted plugin code | Validate plugin definitions in `processDefinition()` | Plugins from contrib can contain malicious code |
-| API key exposure | Use Key module or config overrides, never hardcode | Keys in code end up in version control |
+| API key exposure | Use `KeyModule` or config overrides, never hardcode | Keys in code end up in version control |
 | Input injection | Sanitize all plugin configuration values | Plugin config may come from user forms |
 | Privilege escalation | Enforce access checks in plugin manager, not just routes | Plugins may bypass route-level access |
 | SSRF via provider plugins | Validate/whitelist external URLs in provider config | Malicious providers could target internal services |
 
 ## Pattern
 
-**Plugin Definition Validation**:
+**Plugin definition validation** - reject a malformed or hostile definition at discovery time:
 
 ```php
-// In plugin manager's processDefinition()
 public function processDefinition(&$definition, $plugin_id) {
   parent::processDefinition($definition, $plugin_id);
 
-  // Validate required fields
   if (empty($definition['label'])) {
-    throw new InvalidPluginDefinitionException($plugin_id, "Missing label");
+    throw new InvalidPluginDefinitionException($plugin_id, 'Missing label');
   }
 
-  // Validate URL fields
   if (!empty($definition['api_endpoint'])) {
     if (!UrlHelper::isValid($definition['api_endpoint'], TRUE)) {
-      throw new InvalidPluginDefinitionException($plugin_id, "Invalid API endpoint");
+      throw new InvalidPluginDefinitionException($plugin_id, 'Invalid API endpoint');
     }
   }
 }
 ```
 
-**Access Control in Plugin Manager**:
+**Access control before instantiation** - a route-level check does not cover programmatic callers:
 
 ```php
-// Enforce access checks before plugin instantiation
 public function createInstance($plugin_id, array $configuration = []) {
   if (!$this->currentUser->hasPermission('use ' . $plugin_id)) {
     throw new AccessDeniedHttpException();
@@ -55,10 +51,9 @@ public function createInstance($plugin_id, array $configuration = []) {
 }
 ```
 
-**Configuration Sanitization**:
+**Configuration sanitization** - validate credential fields on the plugin's own form:
 
 ```php
-// Sanitize user-provided configuration
 public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
   $form['api_key'] = [
     '#type' => 'textfield',
@@ -80,10 +75,10 @@ public function validateConfigurationForm(array &$form, FormStateInterface $form
 
 ## Common Mistakes
 
-- **Wrong**: Storing API keys in plugin annotations → **Right**: Use Key module or environment variables
-- **Wrong**: Trusting plugin-provided HTML → **Right**: Use `#plain_text` or `Xss::filter()` on plugin output
-- **Wrong**: No access check on plugin operations → **Right**: Enforce permissions in plugin manager
-- **Wrong**: Exposing internal service details in REST responses → **Right**: Return sanitized, minimal data
+- **Storing API keys in plugin annotations** → WHY: Annotations are cached and can be exposed via debug tools
+- **Trusting plugin-provided HTML** → WHY: Plugin output rendered without sanitization enables XSS; render it as `#plain_text` or pass it through `Xss::filter()`
+- **No access check on plugin operations** → WHY: Any plugin consumer can execute privileged operations
+- **Exposing internal service details in REST responses** → WHY: Leaks architecture information to attackers
 
 ## See Also
 

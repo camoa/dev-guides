@@ -12,39 +12,43 @@ drupal_version: "11.x"
 
 ## Decision
 
-### Choose Foundation + Extension When
+### Choose Foundation + Extension When:
 
-| Criteria | Why |
-|----------|-----|
-| Mature plugin ecosystem exists (Commerce, Entity, Views) | Leverage proven infrastructure and admin interfaces |
-| Entity integration needed | `BundlePluginInterface` standard workflow for bundle fields |
-| Want existing admin UX | Users expect consistent patterns across modules |
-| Multiple plugin types working together | Gateway + Method Type + Entity Type coordination |
-| Service specialization | Optimizing for specific service implementations |
+| Criteria | Foundation Pattern |
+|----------|-------------------|
+| **Existing Infrastructure** | ✅ Mature plugin ecosystem exists (Commerce, Entity, Views) |
+| **Entity Integration** | ✅ Need bundle fields and entity relationships |
+| **Admin Interfaces** | ✅ Want to leverage existing admin UX and workflows |
+| **Multiple Plugin Types** | ✅ Gateway + Method Type + Entity Type working together |
+| **Service Specialization** | ✅ Optimizing for specific service implementations |
+| **User Familiarity** | ✅ Users expect consistent patterns across modules |
 
-### Choose Provider Plugin When
+### Choose Provider Plugin When:
 
-| Criteria | Why |
-|----------|-----|
-| No existing plugin ecosystem | Creating new service category from scratch |
-| Service abstraction needed | Consistent API across diverse external services |
-| Cross-cutting concerns | Proxy, events, caching, monitoring in main module |
-| Provider-agnostic consumers | Consumers should work with any provider implementation |
-| User choice of provider | End users select preferred service providers |
-| Distributed modules | Providers as separate contrib modules |
+| Criteria | Provider Pattern |
+|----------|-----------------|
+| **No Existing System** | ✅ Creating new service category from scratch |
+| **Service Abstraction** | ✅ Need consistent API across diverse services |
+| **Cross-Cutting Concerns** | ✅ Require proxy, events, caching, monitoring |
+| **Provider Agnostic** | ✅ Consumers should work with any provider |
+| **External Services** | ✅ Integrating with many different external APIs |
+| **User Choice** | ✅ End users select preferred service providers |
+| **Distributed Modules** | ✅ Providers as separate contrib modules |
 
-### Choose Service Collector When
+### Choose Service Collector When:
 
-| Criteria | Why |
-|----------|-----|
-| Stateless aggregation | Services execute independently without shared state |
-| REST API-first | External systems consume services via HTTP API |
-| Webhook integration | Push notifications to external system callbacks |
-| Polling events | Pull-based synchronization (timestamp or ID polling) |
-| Minimal interface | Simple 3-method contract sufficient |
-| Self-describing config | Configuration metadata auto-generated from constraints |
-| No annotation overhead | Tagged service discovery simpler than plugin discovery |
-| No plugin alterations | Services don't need `hook_plugin_info_alter` |
+| Criteria | Service Collector Pattern |
+|----------|--------------------------|
+| **Stateless Aggregation** | ✅ Services execute independently without shared state |
+| **REST API First** | ✅ External systems consume services via HTTP API |
+| **Webhook Integration** | ✅ Push notifications to external system callbacks |
+| **Polling Events** | ✅ Pull-based synchronization (timestamp or ID polling) |
+| **Minimal Interface** | ✅ Simple 3-method contract sufficient |
+| **Self-describing config** | ✅ Configuration metadata auto-generated from constraints |
+| **No annotation overhead** | ✅ Tagged service discovery simpler than plugin discovery |
+| **No Plugin Alterations** | ✅ Services don't need `hook_plugin_info_alter` customization |
+| **JSON Serialization** | ✅ All data structures must serialize to JSON for REST |
+| **No Admin UI Needed** | ✅ External systems provide their own configuration interface |
 
 ## Pattern
 

@@ -1,13 +1,13 @@
 ---
-description: How to use the VR diff panel in the Playwright HTML report to triage toHaveScreenshot() failures.
-tldr: When toHaveScreenshot() fails, the per-test detail shows a diff panel with Expected, Actual, and Diff images in four interactive modes — Slider is the most useful for catching pixel shifts. Red diff pixels exceed threshold; yellow are anti-aliasing skips.
+description: "How to use the VR diff panel in the Playwright HTML report to triage toHaveScreenshot() failures."
+tldr: "When toHaveScreenshot() fails, the per-test detail shows a diff panel with Expected, Actual, and Diff images in four interactive modes — Slider is the most useful for catching pixel shifts. Red diff pixels exceed threshold; yellow are anti-aliasing skips."
 ---
 
 # VR Diff Panel
 
 ## When to Use
 
-> Use this when triaging an `expect(page).toHaveScreenshot()` failure — the diff panel is the primary tool for deciding intentional change vs regression.
+> Triaging an `expect(page).toHaveScreenshot()` failure.
 
 ## What You See
 
@@ -17,44 +17,42 @@ When a screenshot assertion fails, the per-test detail page renders a dedicated 
 2. **Actual** — the screenshot captured this run (`<name>-actual.png`)
 3. **Diff** — pixelmatch-style overlay highlighting changed pixels (`<name>-diff.png`)
 
-## Decision
+## Four Interactive Modes (tabs above the image)
 
-| Mode | Use when |
-|---|---|
-| **Side-by-side** | Spotting layout shifts at a glance |
-| **Slider** | Catching small element shifts — the most useful mode |
-| **Onion-skin / Overlay** | Spotting sub-pixel positional drift |
-| **Diff** | Confirming where the diff is; interpreting red vs yellow regions |
+| Mode | What it does | Use when |
+|---|---|---|
+| **Side-by-side** | Expected and Actual rendered next to each other | Spotting layout shifts at a glance |
+| **Slider** | Single image area with a draggable vertical handle that wipes between Expected (left) and Actual (right) | Catching small element shifts; the most useful mode |
+| **Onion-skin / Overlay** | Expected and Actual stacked with adjustable opacity slider | Spotting sub-pixel positional drift |
+| **Diff** | Highlight overlay; **red** = exceeds tolerance, **yellow** = within tolerance | Confirming where the diff actually is |
 
-## Pattern
+## Pattern: Triage with the Slider
 
-Standard triage flow with the slider:
-
-```
 1. Open the failing test
-2. Switch to Slider mode
-3. Drag handle slowly across the image
-4. Cross-check with Diff mode to confirm red regions match what you saw
-5. Decide: intentional change vs regression
-```
+2. Switch to **Slider** mode
+3. Drag the handle slowly across the image
+4. Cross-check with **Diff** mode to confirm red regions match what your eye saw
+5. Decide: intentional vs regression
 
-## Reading Diff PNG Colors
+## Reading the Diff PNG Colors
 
 | Color | Meaning |
 |---|---|
-| Red | Pixel exceeds `threshold` — counts toward `maxDiffPixels` / `maxDiffPixelRatio` |
-| Yellow | Pixel differs but detected as anti-aliasing — skipped by pixelmatch |
-| Faded original | Background content behind the overlay |
+| Red | Pixel exceeds `threshold` and counts toward `maxDiffPixels` / `maxDiffPixelRatio` |
+| Yellow | Pixel differs but was detected as anti-aliasing — skipped |
+| Faded original colors | The original image's content rendered behind the overlay (controlled by pixelmatch's `alpha` option) |
 
 If multiple `toHaveScreenshot()` calls fail in one test, each gets its own labeled diff block.
 
-Each image is clickable to open at full resolution in a new tab.
+## Click-Through
+
+Each image is clickable to open at full resolution in a new tab. The report also surfaces the comparison parameters Playwright used (threshold, `maxDiffPixelRatio`, animation handling) when the assertion failed.
 
 ## Common Mistakes
 
-- **Wrong**: trusting "looks the same" in Side-by-side without using Slider → **Right**: the eye misses 1px shifts at thumbnail size
-- **Wrong**: dismissing yellow regions as safe → **Right**: they're within tolerance now; if tolerance is misconfigured they should have been red
-- **Wrong**: not clicking to full resolution → **Right**: fine details require the full-resolution view; one click away
+- **Trusting "looks the same" in Side-by-side without Slider** — the eye misses 1px shifts at thumbnail size
+- **Dismissing yellow regions** — they're within tolerance now; if your tolerance is wrong, they should have been red
+- **Not zooming** — full-resolution view is one click; use it for fine details
 
 ## See Also
 

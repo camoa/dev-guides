@@ -22,7 +22,9 @@ drupal_version: "11.x"
 
 ## Pattern
 
-**Foundation Pattern - Unit Test**:
+**Foundation Pattern Testing**:
+
+**Reference**: Commerce Payment module tests
 
 ```php
 <?php
@@ -45,7 +47,9 @@ class ServiceGatewayTest extends TestCase {
 }
 ```
 
-**Provider Pattern - Proxy Event Test**:
+**Provider Pattern Testing**:
+
+**Reference**: AI module provider tests pattern
 
 ```php
 <?php
@@ -72,7 +76,9 @@ class ServiceProviderProxyTest extends TestCase {
 }
 ```
 
-**Service Collector - Unit Test**:
+**Service Collector Pattern Testing**:
+
+Orchestration ships no test directory, so there is no reference implementation to read for this pattern. The test below is written from the pattern itself.
 
 ```php
 <?php
@@ -96,10 +102,26 @@ class ServicesProviderManagerTest extends TestCase {
     $this->assertCount(1, $services);
     $this->assertEquals('test_provider::test_service', array_key_first($services));
   }
+
+  public function testServiceExecution() {
+    $manager = new ServicesProviderManager();
+
+    $provider = $this->createMock(ServicesProviderInterface::class);
+    $provider->method('getId')->willReturn('test');
+    $provider->method('execute')->willReturn(['result' => 'success']);
+
+    $service = new Service($provider, 'svc', 'Service', 'Desc');
+    $provider->method('getAll')->willReturn([$service]);
+
+    $manager->addServicesProvider($provider);
+
+    $result = $manager->executeService('test::svc', ['param' => 'value']);
+    $this->assertEquals(['result' => 'success'], $result);
+  }
 }
 ```
 
-**REST API - Functional Test**:
+**REST API Testing Pattern**:
 
 ```php
 <?php
@@ -119,6 +141,27 @@ class RestApiTest extends BrowserTestBase {
     $services = json_decode($response, TRUE);
     $this->assertIsArray($services);
     $this->assertArrayHasKey('id', $services[0]);
+    $this->assertArrayHasKey('label', $services[0]);
+    $this->assertArrayHasKey('config', $services[0]);
+  }
+
+  public function testServiceExecution() {
+    $this->drupalLogin($this->drupalCreateUser(['use orchestration']));
+
+    $data = [
+      'id' => 'eca::test_service',
+      'config' => ['param1' => 'value1']
+    ];
+
+    $response = $this->drupalPost(
+      '/orchestration/service/execute',
+      json_encode($data),
+      ['Content-Type' => 'application/json']
+    );
+
+    $this->assertSession()->statusCodeEquals(200);
+    $result = json_decode($response, TRUE);
+    $this->assertNotEmpty($result);
   }
 }
 ```

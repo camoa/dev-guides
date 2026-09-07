@@ -1,35 +1,23 @@
 ---
-description: How to share a Playwright HTML report with teammates, designers, or CI reviewers.
-tldr: Share by zip+send, GitHub Actions artifact upload, static hosting, or port forwarding. Recipient always needs a real HTTP server (show-report) — never file://. For large reports with CDN-offloaded images, use attachmentsBaseURL with a trailing slash.
+description: "How to share a Playwright HTML report with teammates, designers, or CI reviewers."
+tldr: "Share by zip+send, GitHub Actions artifact upload, static hosting, or port forwarding. Recipient always needs a real HTTP server (show-report) — never file://. For large reports with CDN-offloaded images, use attachmentsBaseURL with a trailing slash."
 ---
 
 # Sharing Reports
 
 ## When to Use
 
-> Use this when letting a teammate, designer, or reviewer look at a report you generated.
+> Letting a teammate, designer, or reviewer look at a report you generated.
 
-## Decision
-
-| Approach | When |
-|---|---|
-| Zip + send | Quick teammate share |
-| GitHub Actions artifact | Standard CI — retained per run |
-| GitHub Pages / static hosting | Persistent URL per PR or SHA |
-| Port forwarding | Give access to a report on a remote host |
-| `attachmentsBaseURL` | Huge reports — offload images/traces to object storage |
-
-## Pattern
-
-Zip and send:
+## Pattern: Zip + Send
 
 ```bash
 zip -r playwright-report.zip playwright-report/
 ```
 
-Recipient extracts, then runs `npx playwright show-report ./playwright-report`.
+Recipient extracts, then runs `npx playwright show-report ./playwright-report`. **A real HTTP server is needed** for traces — `file://` breaks trace iframes.
 
-GitHub Actions artifact (CI standard):
+## Pattern: GitHub Actions Artifact (CI Standard)
 
 ```yaml
 - uses: actions/upload-artifact@v4
@@ -40,19 +28,38 @@ GitHub Actions artifact (CI standard):
     retention-days: 30
 ```
 
-CDN-offloaded attachments:
+Reviewers download from the run's Artifacts panel.
+
+## Pattern: GitHub Pages (gh-pages Style)
+
+Push `playwright-report/` to a `gh-pages` branch keyed by SHA or PR number; serve via Pages. Each PR gets a stable URL.
+
+## Pattern: Static Hosting
+
+Netlify drop, S3 + CloudFront, Cloudflare Pages, internal nginx — just upload the directory.
+
+## Pattern: Port Forwarding
+
+```bash
+ssh -L 9323:localhost:9323 ci-host
+# while show-report runs there
+```
+
+## Pattern: `attachmentsBaseURL` for CDN-Offloaded Images
+
+For huge reports where you want the HTML/JS only and offload images/traces to object storage:
 
 ```ts
 reporter: [['html', { attachmentsBaseURL: 'https://cdn.example.com/runs/123/' }]],
 ```
 
-The report fetches `data/<file>` from that base URL instead of next to `index.html`. Trailing slash is required.
+The report fetches `data/<file>` from that base URL instead of looking next to `index.html`. Trailing slash is required.
 
 ## Common Mistakes
 
-- **Wrong**: sharing via `file://` → **Right**: trace viewer breaks; recipient needs `show-report` or HTTP server
-- **Wrong**: `attachmentsBaseURL` without trailing slash → **Right**: URL concatenation fails with 404 on every attachment
-- **Wrong**: uploading `test-results/` instead of `playwright-report/` → **Right**: wrong artifact; report won't render
+- **Sharing via `file://`** — recipient sees a broken trace viewer
+- **`attachmentsBaseURL` without trailing slash** — URL concatenation fails; "404 not found" on every attachment
+- **Uploading `test-results/` instead of `playwright-report/`** — wrong artifact; report won't render
 
 ## See Also
 
