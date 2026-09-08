@@ -387,6 +387,42 @@ def validate_recipe(path: Path, kind: str = "task") -> list[str]:
                 f"(expected docs/{slug}.md or docs/{slug}/index.md)"
             )
 
+    # 4b. `requires_tooling` names resolve to a tooling recipe for THIS framework.
+    #     A process recipe knows which tools its method needs; the caller only knows
+    #     it wants a standards check, not that a Drupal standards check means phpcs.
+    #     The tool name is the whole contract, so a name that resolves to nothing has
+    #     to fail here — at publish — rather than on the machine of whoever runs it.
+    #     Resolution is per framework on purpose: the same tool installs differently
+    #     per stack, which is why phpunit is two recipes and not one.
+    #     OPTIONAL, checked only when present, so a recipe whose framework has no
+    #     tooling recipes yet stays valid.
+    decl = meta.get("requires_tooling")
+    if decl is not None:
+        if not isinstance(decl, list):
+            errors.append(
+                f"`requires_tooling` must be a list of tool names (got {type(decl).__name__})"
+            )
+        else:
+            fw = meta.get("framework")
+            for tool in decl:
+                if not isinstance(tool, str) or not TOKEN_RE.match(tool):
+                    errors.append(
+                        f"`requires_tooling` entry must be a single lowercase token naming a "
+                        f"tool (got {tool!r})"
+                    )
+                    continue
+                if not fw:
+                    errors.append(
+                        f"`requires_tooling` names `{tool}` but the recipe declares no "
+                        "`framework`; a tool resolves per framework, so it cannot be checked"
+                    )
+                    continue
+                if not (TOOLING_RECIPES_DIR / str(fw) / f"{tool}.md").is_file():
+                    errors.append(
+                        f"`requires_tooling` names `{tool}`, which has no tooling recipe for "
+                        f"framework `{fw}` (expected docs/tooling-recipes/{fw}/{tool}.md)"
+                    )
+
     # 5. Machine-readable `requires_*` frontmatter slugs resolve.
     #    Honors the contract recipe-loader relies on (degrade-paths.md:14 — dev-guides CI owns dangling
     #    requires_* slugs). OPTIONAL keys: checked only WHEN PRESENT, so older recipes with no machine

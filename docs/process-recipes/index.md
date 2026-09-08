@@ -62,7 +62,7 @@ them. A recipe ships no code assets. Two tests before anything goes in a recipe:
 
 | Type | Its job | Not its job |
 |---|---|---|
-| `research` | Establish what already exists, in the ecosystem and in the project, and return **named** candidates with a reuse / extend / build-new verdict and the evidence behind it. | Choosing the architecture. Judging code that does not exist yet. |
+| `research` | Establish what already exists, in the project's own code and configuration first and then in the ecosystem, and return **named** candidates with the evidence behind each, ordered by closeness. | Returning a verdict. The reuse-or-build call belongs to the stage that decides the architecture, and a recipe that returns one is one edit away from a recipe that decides. Judging code that does not exist yet. |
 | `design` | Turn researched requirements into structure — where business logic lives, the programmatic entry point, which of the stack's patterns each component takes, and the boundary the language or framework enforces. | Coding standards. Test tiers. Anything about how the code will be written. |
 | `implement` | The rules applied **while** code is written: coding standards, the implementation-time security guarantees, test-tier selection, and the test-first cycle. This is where a stack's best practices live. | Running linters — the recipe judges what a standard means, the tooling runs it. Post-hoc validation. |
 | `review` | The **blocking** validations run before work is accepted, in the stack's own terms, in a deliberate order. | Restating the generic review. Re-authoring checks `implement` already applied inline. |
@@ -146,7 +146,17 @@ framework: drupal                 # required; the 2nd half of the resolution key
 
 **4. Required body sections** (same nine as every recipe): `Goal`, `Opinion`, `Preconditions`, `Input contract`, `Sequence`, `Data flow`, `State-awareness contract`, `Verifier`, `References`.
 
-**5. Reference origin; do not ship code assets.** A process recipe carries the framework-specific *binding* as prose and **references** canonical sources (module docs, Playwright, etc.) — it does not bake in `.ts`/`.sh` files. The plugin owns the generic machinery; the recipe binds the framework into it.
+**5. Declare the tooling your method needs.** A process recipe knows which tools its method requires; the caller does not. It knows it wants a standards check, not that a Drupal standards check means `phpcs`. Declare them by tool name, and the caller resolves each one against the tooling index rather than guessing what a framework's method runs:
+
+```yaml
+requires_tooling:                 # optional; tool names, resolved for THIS recipe's framework
+  - phpcs
+  - phpstan
+```
+
+The name is the whole contract — a tooling recipe is named for its tool, and whatever needs the tool refers to it by that name. `scripts/validate_recipes.py` checks that each declared name resolves to a real tooling recipe for the recipe's own framework, so a name that resolves to nothing fails when the recipe is published rather than when somebody runs it. The key is optional and checked only when present, so a recipe whose framework has no tooling recipes yet stays valid.
+
+**6. Reference origin; do not ship code assets.** A process recipe carries the framework-specific *binding* as prose and **references** canonical sources (module docs, Playwright, etc.) — it does not bake in `.ts`/`.sh` files. The plugin owns the generic machinery; the recipe binds the framework into it.
 
 ### What the build produces
 
