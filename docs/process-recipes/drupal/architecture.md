@@ -2,9 +2,9 @@
 # Routing block — an orchestrator reads to here and decides.
 name: drupal_design_architecture
 capability: design
-description: Use when a Drupal project enters the design phase and must turn researched requirements into a service-based architecture — places business logic in injected services, defines a Drush entry point, selects the form / entity / plugin pattern for each component, and grounds every choice in a canonical Drupal core example before any code is written.
+description: Use when a Drupal project enters the design phase and must turn researched requirements into the units to build and the order to build them in — places business logic in injected services, defines a Drush entry point, selects the form / entity / plugin pattern for each component, and grounds every choice in a canonical Drupal core example before any code is written.
 # Metadata — read only after a match.
-label: Service-based architecture design (Drupal)
+label: Design (Drupal)
 recipe_schema_version: 1.0.0
 version: 0.1.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
@@ -31,7 +31,7 @@ license: GPL-2.0-or-later
 
 Turn researched requirements into a Drupal architecture decision before any code is written: business logic placed in services that are registered in a `*.services.yml` file with their dependencies injected, a Drush command entry point for every feature, the right pattern chosen for each form / storage / plugin component, and each choice grounded in a canonical Drupal core example.
 
-The plugin owns the generic mechanism — when the design phase runs, the shape of the architecture artifact, the mandatory architecture checklist that gates Phase 3, and how the decision is recorded and reviewed. This recipe owns the part the stack-neutral mechanism cannot know: how a Drupal architecture is actually shaped — Library-First service design, the CLI-First Drush entry point, the Drupal pattern catalogue and its decision criteria, and where the canonical example for each pattern lives in Drupal core.
+The plugin owns the generic mechanism — when the design phase runs, the shape of a work order, the check that every acceptance criterion is served by one, and the approval a person gives. There is no architecture document: the work orders and the order they run in are the architecture. This recipe owns the part the stack-neutral mechanism cannot know: how a Drupal architecture is actually shaped — Library-First service design, the CLI-First Drush entry point, the Drupal pattern catalogue and its decision criteria, and where the canonical example for each pattern lives in Drupal core.
 
 ## Opinion
 
@@ -47,14 +47,18 @@ The plugin owns the generic mechanism — when the design phase runs, the shape 
 
 **Mechanics are referenced, not re-authored.** *How* dependency injection, a form, an entity type, or a config schema is actually wired is the knowledge guides' domain. This recipe references `drupal/services`, `drupal/forms`, `drupal/entities`, and `drupal/config-management` for those mechanics and stays focused on the architectural decisions on top of them.
 
-**Design decides; it does not build.** This phase produces an architecture decision for a human to approve — the component breakdown, the dependency map, the pattern choices, and the implementation order. It writes no module code, registers no service, and installs nothing. Recording the decision into the architecture artifact is the plugin's design phase; building from it is Phase 3.
+**Design decides; it does not build.** This phase produces the units and the order they are built in, for a person to approve. It writes no module code, registers no service, and installs nothing. The caller records the work orders; building from them comes later.
+
+**A configuration answer is a buildable unit, not only a storage choice.** Drupal answers a great deal with configuration — a view, a content type, a field, a display mode — and none of it is code. That is still a unit with a test: it states what the test must observe, and the file it owns is a configuration file. A design that does not know this writes a code order for something nobody should write code for, and every count-and-match check downstream still passes, because those checks cannot see that an order is about the wrong kind of thing. The storage table below already draws the content-entity against config-entity line; what matters here is that the config side is a thing to build, not merely a place to put data.
+
+**Name what must exist beside the code, or whoever builds it invents the rest.** A Drupal service is not finished by its class. It needs its entry in a `*.services.yml`, and depending on the unit a route, a permission, a config schema, a library declaration, an install hook. These are files, so they belong to the unit that owns them and the unit is not done until they exist.
 
 ## Preconditions
 
 - A Drupal 10.3+ or 11.x project, Composer-managed, whose target core version is resolvable (so pattern availability can be judged against it).
 - The research phase has produced requirements and any prior-art findings (see the `contrib-prior-art` recipe) — the design starts from a known problem and a known build/extend/reuse posture, not a blank brief.
 - Read access to a Drupal core checkout (the project's core directory) so canonical example paths can be confirmed, or knowledge of the canonical paths the catalogue names.
-- The plugin's generic design phase is present: the architecture artifact and the architecture checklist that gates Phase 3. This recipe supplies the Drupal-specific design method; it does not recreate the artifact or the gate.
+- The plugin's generic design phase is present: it owns the work order's shape, the check that every acceptance criterion is served, and the approval step. This recipe supplies the Drupal-specific design method; it does not recreate any of that.
 
 ## Input contract
 
@@ -65,8 +69,15 @@ code_path: string             # absolute path to the Drupal project root
 requirements: string          # the researched feature/problem to architect
 components:                   # optional; pre-identified units to design for
   - string                    #   e.g. "import service", "settings form"
-prior_art:                   # optional; the research phase's use/extend/build call
-  recommendation: string      #   so design extends contrib rather than re-building it
+acceptance_criteria:          # what a person can see working when the task is done;
+  - id: string                #   ids are minted by the caller and are stable
+    statement: string
+non_goals:                    # optional; what this task is not doing, with ids
+  - id: string
+    statement: string
+prior_art:                    # optional; the candidates research found, inside the
+  candidates: [string]        #   project and outside it, ordered by closeness and
+                              #   carrying NO verdict — deciding is what design is for
 core_version: string          # optional; the target Drupal core constraint;
                               #   if absent, derived from the project's composer.json
 ```
@@ -75,7 +86,7 @@ core_version: string          # optional; the target Drupal core constraint;
 
 If invoked in dry-run mode, perform all reads but emit an architecture-decision preview instead of recording anything. Dry-run is required.
 
-1. **Frame the components.** From `requirements` (and `prior_art`, so an extend recommendation reuses the contrib module rather than re-implementing it), list the units the feature needs: the services that hold its logic, the Drush commands that drive them, the forms / controllers that surface them, and the entities or config that store its data. Services are listed first because everything else depends on them.
+1. **Frame the units.** From `requirements`, the acceptance criteria, and `prior_art` — whose candidates carry no verdict, so the reuse call is made here — list the units the feature needs: the services that hold its logic, the Drush commands that drive them, the forms / controllers that surface them, and the entities or config that store its data. Services are listed first because everything else depends on them.
 
 2. **Apply Library-First.** For each unit of business logic, define a service with an interface, a `*.services.yml` registration, and constructor-injected dependencies. Confirm no service reaches for a `\Drupal::` static. Demote every form and controller to a thin orchestrator over those services. The mechanics of DI and service registration are referenced to `drupal/services`, not restated here.
 
@@ -112,7 +123,9 @@ If invoked in dry-run mode, perform all reads but emit an architecture-decision 
 
 5. **Anchor each choice to a canonical example.** For every selected pattern, confirm the core file the implementer should study. Check the catalogue paths above first; for anything not in the catalogue, locate the example in core — Grep core for `class <PatternName>`, `extends <BaseClass>`, or `implements <Interface>`, read no more than three candidate files, and record the path plus the key methods and the dependencies it injects. The output of this step is a path, not a paraphrase.
 
-6. **Assemble the architecture decision.** Produce the component breakdown (services first), the dependency map (who injects whom), the per-component pattern choice with its reasoning and its core example path, and the implementation order — services → Drush commands → forms/controllers → integration. Hand the decision to the caller; the plugin's design phase records it into the architecture artifact and runs the checklist gate. The recipe method writes no file of its own.
+6. **Name what each unit needs beside its code.** Per unit: its `*.services.yml` entry, and where the unit calls for them a `*.routing.yml` route, a permission in `*.permissions.yml`, a config schema under `config/schema/`, a library declaration in `*.libraries.yml`. A unit built with configuration rather than code names the configuration file it owns instead. These are the files the unit owns and no other unit may write, and the unit is not finished until they exist.
+
+7. **Return the units and their order.** Per unit: what it is, the interface it offers to the units that depend on it (its PHP interface plus its registered service id), the pattern chosen with its reasoning and its core example path, the files it owns, and — for a unit built with configuration — what its test must observe, since there is no code to read. The order is the dependency between them: services → Drush commands → forms and controllers → integration. Hand these to the caller, which records them. The recipe method writes no file of its own, and produces no architecture document — the units and their order are the architecture.
 
 ## Data flow
 
@@ -121,8 +134,9 @@ input: code_path, requirements, components (optional), prior_art (optional),
        core_version (optional)
 
 reads project state:
-       composer.json (core constraint), existing architecture artifact
+       composer.json (core constraint)
        existing custom modules: *.services.yml, src/, *.routing.yml
+       exported configuration, so a config answer that already exists is found
        Drupal core (canonical example paths for the chosen patterns)
 
 applies opinion:
@@ -138,18 +152,22 @@ references origin (never duplicated):
        drupal/config-management — config schema and settings mechanics
        Drupal core            — the canonical example for each pattern
 
-emits (to the caller; the recipe method writes nothing):
-       components:     services (first), Drush commands, forms, entities/config
-       dependency map: constructor-injection graph
-       patterns:       per-component choice + reasoning + core example path
-       order:          services → Drush → forms/controllers → integration
+emits (to the caller, which records them; the recipe method writes no file):
+       units:      services (first), Drush commands, forms, entities, and the
+                   configuration answers — a view or a content type is a unit
+       interface:  per unit, the PHP interface plus the registered service id
+                   the units depending on it read
+       alongside:  per unit, the services entry, route, permission, schema or
+                   library declaration it also owns
+       reasoning:  per unit, the pattern chosen + why + its core example path
+       order:      services → Drush → forms/controllers → integration
 ```
 
 ## State-awareness contract
 
-The recipe reads existing state before deciding. The project's `composer.json` core constraint, any existing architecture artifact, and the current custom-module layout (`*.services.yml`, `src/`, `*.routing.yml`) are read so the design extends what is present rather than colliding with it — and so an extend recommendation from prior art is honoured instead of re-architected from scratch. The method is read-only on the project: it registers no service, writes no module file, and installs nothing; the architecture decision is returned to the caller, which owns recording it.
+The recipe reads existing state before deciding. The project's `composer.json` core constraint, the exported configuration, and the current custom-module layout (`*.services.yml`, `src/`, `*.routing.yml`) are read so the design extends what is present rather than colliding with it — and so an extend recommendation from prior art is honoured instead of re-architected from scratch. The method is read-only on the project: it registers no service, writes no module file, and installs nothing; the units and their order are returned to the caller, which owns recording them.
 
-Idempotent: running the recipe twice on identical input and identical project state produces the same architecture decision, with no side effect on either run. A decision that changes because the requirements or the project's existing components changed is the method reflecting current reality, not a non-deterministic recipe.
+Idempotent: running the recipe twice on identical input and identical project state produces the same units in the same order, with no side effect on either run. A decision that changes because the requirements or the project's existing components changed is the method reflecting current reality, not a non-deterministic recipe.
 
 ## Verifier
 
@@ -159,9 +177,11 @@ After the recipe runs, verify:
 2. Every feature has a Drush command entry point that calls the same service its UI calls; no feature is UI-only.
 3. Each component names a chosen pattern with explicit decision reasoning **and** a canonical Drupal-core file path to study.
 4. Forms and controllers in the design hold orchestration only — no business logic has been left in a `buildForm()` or a controller method.
-5. The design left the project code unchanged — no service registered, no module file written by the method itself, nothing installed; the architecture decision was returned for the plugin's design phase to record.
+5. Every unit names the files it owns, including what must exist beside its code — the `*.services.yml` entry and, where the unit calls for them, its route, permission, config schema or library declaration.
+6. A feature Drupal answers with configuration is a unit in its own right, with what its test must observe stated, rather than a code unit written for something nobody should write code for.
+7. The design left the project code unchanged — no service registered, no module file written by the method itself, nothing installed; the units and their order were returned for the caller to record.
 
-This recipe ships no executable verifier of its own — the checks above are the agent-driven protocol; the plugin's design phase owns the architecture artifact and the checklist gate that blocks Phase 3 on a failed item.
+This recipe ships no executable verifier of its own — the checks above are the agent-driven protocol; the caller owns the work order's shape and the check that every acceptance criterion is served by one.
 
 ## References
 
@@ -183,4 +203,4 @@ This recipe ships no executable verifier of its own — the checks above are the
 
 ### Plugin-side generic mechanism (ai-dev-assistant)
 
-The stack-neutral design phase this recipe binds Drupal into — when design runs, the shape of the architecture artifact, the mandatory architecture checklist that gates Phase 3, and how the decision is recorded and reviewed — is documented in the plugin itself, not duplicated here. The recipe supplies only the Drupal-specific design method (Library-First service design, the CLI-First Drush entry point, the pattern catalogue and its criteria, and the core-example anchoring) on top of that mechanism.
+The stack-neutral design phase this recipe binds Drupal into — when design runs, the shape of a work order, the check that every acceptance criterion is served, and the approval a person gives — is documented in the plugin itself, not duplicated here. The recipe supplies only the Drupal-specific design method (Library-First service design, the CLI-First Drush entry point, the pattern catalogue and its criteria, and the core-example anchoring) on top of that mechanism.
