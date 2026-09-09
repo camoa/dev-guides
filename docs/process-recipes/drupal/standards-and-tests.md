@@ -215,4 +215,4 @@ These are the standards-and-tests oracle files. A Drupal project that also set u
 
 ### Plugin-side generic mechanism (ai-dev-assistant)
 
-The stack-neutral implementation phase this recipe binds Drupal into — when implementation runs, the test-first gate that blocks completion, and how the results are recorded against the task — is documented in the plugin itself, not duplicated here. The recipe supplies only the Drupal-specific standards-and-tests method (coding-standard application, the implementation-time security rules, and PHPUnit tier selection with the test-first shape) on top of that mechanism.
+The stack-neutral implementation phase this recipe binds Drupal into — when implementation runs, the test-first gate that blocks completion, and how the results are recorded against the task — is documented in the plugin itself, not duplicated here. The recipe supplies only the Drupal-specific method it owns on top of that mechanism: coding-standard application and the implementation-time security rules, applied to code written against a test that arrived red.

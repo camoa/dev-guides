@@ -30,7 +30,7 @@ license: GPL-2.0-or-later
 
 Hold PHP CLI implementation-phase code to the standard it must meet before it can be reviewed: PHP/PSR coding standards applied as the code is written, every unit of logic covered by a PHPUnit test written test-first at the smallest tier that answers the question, every CLI flag and exit code exercised, and a fixture-driven end-to-end tier that runs the built binary against a fixture tree and asserts on its output. The judgement of *which* standard applies and *which* test tier fits is the recipe's; running the linters is the code-quality-tools plugin's.
 
-The plugin owns the generic mechanism — when the implement phase runs, the test-first gate that blocks completion, the oracle-tamper guard that stops a builder weakening a measurement file, and how findings are recorded against the task. This recipe owns the part the stack-neutral mechanism cannot know: how PHP coding standards are applied to a CLI library, how the PHPUnit test tiers are selected and shaped, what "test the CLI end-to-end" means without a browser, and the extensionless-binary trap a naive syntax-check glob walks straight into.
+The plugin owns the generic mechanism — when the implement phase runs, the test-first gate that blocks completion, the oracle-tamper guard that stops a builder weakening a measurement file, and how findings are recorded against the task. This recipe owns the part the stack-neutral mechanism cannot know: how PHP coding standards are applied to a CLI library, why a CLI's end-to-end coverage is a test level rather than a phase, and the extensionless-binary trap a naive syntax-check glob walks straight into.
 
 ## Opinion
 
@@ -213,4 +213,4 @@ These are the standards-and-tests oracle files — the same set a standalone PHP
 
 ### Plugin-side generic mechanism (ai-dev-assistant)
 
-The stack-neutral implement phase this recipe binds PHP CLI into — when implementation runs, the test-first gate that blocks completion, the oracle-tamper guard that reads the list above, and how the results are recorded against the task — is documented in the plugin itself, not duplicated here. The recipe supplies only the PHP-CLI-specific standards-and-tests method (PSR-12 with strict types and readonly value objects, PHPUnit tier selection, the CLI flag/exit-code and fixture-driven end-to-end coverage, and the extensionless-binary syntax check) on top of that mechanism.
+The stack-neutral implement phase this recipe binds PHP CLI into — when implementation runs, the test-first gate that blocks completion, the oracle-tamper guard that reads the list above, and how the results are recorded against the task — is documented in the plugin itself, not duplicated here. The recipe supplies only the PHP-CLI-specific method it owns on top of that mechanism: PSR-12 with strict types and readonly value objects, the flag-and-exit-code coverage confirmation, and the extensionless-binary syntax check.
