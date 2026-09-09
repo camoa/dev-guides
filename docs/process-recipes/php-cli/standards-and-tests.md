@@ -61,6 +61,10 @@ The plugin owns the generic mechanism — when the implement phase runs, the tes
 
 All four stay prose. They are design-artifact and plugin-availability conditions with no argv-safe filesystem probe, and the one condition that did carry a machine-readable entry — the PHPUnit runner — moved to the `test-execution` recipe, which owns the commands it is a condition of.
 
+```yaml
+preconditions: []
+```
+
 ## Input contract
 
 Source-agnostic, supplied by the caller (the orchestrator at the implement phase, or a human operator).

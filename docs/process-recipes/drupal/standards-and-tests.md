@@ -64,6 +64,10 @@ The plugin owns the generic mechanism — when the implementation phase runs, th
 
 All four stay prose. They are design-artifact and plugin-availability conditions with no argv-safe filesystem probe, and the one condition that did carry a machine-readable entry — the PHPUnit runner — moved to the `test-execution` recipe, which owns the commands it is a condition of. Its check moved with a correction: `test -x vendor/bin/phpunit` reported `met` with DDEV stopped and nothing set, because Composer installs that binary regardless.
 
+```yaml
+preconditions: []
+```
+
 ## Input contract
 
 Source-agnostic, supplied by the caller (the orchestrator at the implementation phase, or a human operator).

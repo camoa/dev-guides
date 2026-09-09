@@ -70,6 +70,10 @@ The plugin owns the generic mechanism — when the implement phase runs, the tes
 
 All four stay prose here. The module and toolchain claims are checkable, and their entries — with the honest limitation that `go version` is both the check and its own subject — moved to the `test-execution` recipe alongside the commands that need them. The remaining three are design-artifact and plugin-availability conditions with no argv-safe filesystem probe.
 
+```yaml
+preconditions: []
+```
+
 ## Input contract
 
 Source-agnostic, supplied by the caller (the orchestrator at the implement phase, or a human operator).

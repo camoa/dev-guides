@@ -74,6 +74,10 @@ Pushing pure logic into a fixture test that needs a temp tree, or doubling a col
 
 All three stay prose here. The checkable half — the manifest, the interpreter and the runner in the project's own environment — moved to the `test-execution` recipe alongside the commands that need them, carrying with it the two limitations worth recording rather than discovering: `python3 --version` is both the check and its own subject, and `.venv/` is a convention rather than a standard, so a tox or container layout reports `unmet` while being perfectly runnable.
 
+```yaml
+preconditions: []
+```
+
 ## Input contract
 
 ```yaml

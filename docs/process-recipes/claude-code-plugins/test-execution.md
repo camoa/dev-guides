@@ -39,6 +39,10 @@ None specific to running tests, because nothing here runs tests.
 
 The two conditions this framework does declare — a `.claude-plugin` directory, and the availability of the authoring plugins — are conditions of *authoring* a component rather than of running one, so they stay with the `implement` recipe where they already are. Moving them here would put a precondition in front of a phase that does nothing with it.
 
+```yaml
+preconditions: []
+```
+
 ## Input contract
 
 Source-agnostic, supplied by the caller. Every field is accepted and none changes the answer.

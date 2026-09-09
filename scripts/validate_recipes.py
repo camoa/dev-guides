@@ -310,9 +310,20 @@ def tooling_fence_errors(body: str, line_offset: int) -> list[str]:
 # shape `## Preconditions` has shipped in since it was written, and the command
 # declaration matches it so one parser reads both and an author writes one form.
 def body_block(body: str, key: str) -> str | None:
-    """The unfenced YAML block introduced by `<key>:` at column 1, or None."""
+    """The YAML block introduced by `<key>:` at column 1, or None.
+
+    `<key>: []` on one line counts. A recipe that declares none has to be
+    distinguishable from one whose key is misspelled, and the empty list is how it
+    says so — a reader that could not see it would read both as "nobody could tell".
+    """
     lines = body.splitlines()
-    start = next((i for i, ln in enumerate(lines) if ln.rstrip() == f"{key}:"), None)
+    start = next(
+        (
+            i for i, ln in enumerate(lines)
+            if ln.rstrip() == f"{key}:" or ln.rstrip() == f"{key}: []"
+        ),
+        None,
+    )
     if start is None:
         return None
     out = [lines[start]]
@@ -349,8 +360,13 @@ def validate_preconditions_block(body: str) -> list[str]:
     rows, errors = load_body_block(body, "preconditions")
     if errors or rows is None:
         return errors
-    if not isinstance(rows, list) or not rows:
-        return ["`preconditions:` must be a non-empty list of entries"]
+    if not isinstance(rows, list):
+        return ["`preconditions:` must be a list of entries, or `[]` for none"]
+    if not rows:
+        # An explicit empty list is an answer: declared, and there are none. It is
+        # what separates a recipe with no conditions from one whose key is
+        # misspelled, so it must validate rather than read as an empty block.
+        return errors
     seen: set[str] = set()
     for i, row in enumerate(rows):
         if not isinstance(row, dict):
