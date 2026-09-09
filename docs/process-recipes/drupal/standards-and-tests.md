@@ -2,11 +2,11 @@
 # Routing block — an orchestrator reads to here and decides.
 name: drupal_implement_standards_and_tests
 capability: implement
-description: Use when a Drupal project enters the implementation phase and must hold code to Drupal/PHP coding standards, the implementation-time security rules, and test-first discipline — applies the no-static-service rule and Form-API / Twig / parameterized-query guarantees, selects the right PHPUnit test tier per unit of logic, and shapes each test Red-Green-Refactor before any production code is written. Defers linter execution to the code-quality-tools plugin.
+description: Use when a Drupal project enters the implementation phase holding a test that already fails, and must turn it green under Drupal/PHP coding standards and the implementation-time security rules — applies the no-static-service rule and the Form-API / Twig / parameterized-query guarantees, then refactors under a green bar. Which tier the test sits at and how it is written belong to the test-authoring recipe; linter execution is deferred to the code-quality-tools plugin.
 # Metadata — read only after a match.
 label: Coding standards and test discipline (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.5.0
+version: 0.6.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -31,9 +31,9 @@ license: GPL-2.0-or-later
 
 ## Goal
 
-Hold Drupal implementation-phase code to the standard it must meet before it can be reviewed: Drupal/PHP coding standards applied as the code is written, the implementation-time security rules guaranteed (Form API tokens, Twig auto-escaping, parameterized queries, no static service access in new code), and every unit of logic covered by a PHPUnit test written test-first at the right tier. The judgement of *which* standard applies and *which* test tier fits is the recipe's; running the linters is the code-quality-tools plugin's.
+Hold Drupal implementation-phase code to the standard it must meet before it can be reviewed: Drupal/PHP coding standards applied as the code is written, the implementation-time security rules guaranteed (Form API tokens, Twig auto-escaping, parameterized queries, no static service access in new code), and a test that arrived red turned green without weakening it. The judgement of *which* standard applies is the recipe's; running the linters is the code-quality-tools plugin's; choosing and writing the test is `drupal/test-authoring.md`'s.
 
-The plugin owns the generic mechanism — when the implementation phase runs, the test-first gate that blocks completion, and how findings are recorded against the task. This recipe owns the part the stack-neutral mechanism cannot know: how Drupal coding standards are actually applied, what the Drupal security rules are at implementation time, and how the PHPUnit test tiers are selected and shaped.
+The plugin owns the generic mechanism — when the implementation phase runs, the test-first gate that blocks completion, and how findings are recorded against the task. This recipe owns the part the stack-neutral mechanism cannot know: how Drupal coding standards are actually applied, and what the Drupal security rules are at implementation time.
 
 ## Opinion
 
@@ -43,11 +43,11 @@ The plugin owns the generic mechanism — when the implementation phase runs, th
 
 **Security is a property of the code, not a later audit.** Four guarantees hold at implementation time: Form API builds and validates every data-entry form so its CSRF token is present and checked; output is escaped — Twig auto-escaping is left on and never defeated with `|raw` or an unsanitised render-array `#markup`; database access is parameterized through the query builder or placeholders, never string-concatenated user input; and access checks are present on every route and operation. A security issue found here is fixed here, not deferred.
 
-**The test tier matches the dependency surface, not habit.** Pure logic with no Drupal bootstrap is a Unit test; logic that needs the container, entities, or the database is a Kernel test; behaviour that needs a full request and a rendered page is a Functional test (`BrowserTestBase` — runs no JavaScript); behaviour that needs JavaScript executed in the browser (Ajax forms, JS-driven UI) is a FunctionalJavascript test (`WebDriverTestBase`/`FunctionalJavascriptTestBase`). Pushing a Kernel concern into a slow Functional test, faking a container in a Unit test that really needs one, or testing an Ajax behaviour in a non-JS Functional test that silently cannot exercise it, are all tier mismatches — name the tier deliberately.
+**The tier, the file and the test's name are not decided here.** Which tier a behaviour belongs at, where the test file goes, what it is called, how the criterion it specifies is traced to it, and what a Drupal test may not do are the `test-authoring` recipe's — `drupal/test-authoring.md`. That reader writes the test and stops at red; this one takes the red test and makes it green. The rules are stated once, there, because a reader that may not write production code cannot be handed this file.
 
-**All four PHPUnit tiers are the TDD loop; Playwright and visual regression are not.** Each tier above is written before the code and run red then green, where the red comes from a behaviour that does not exist yet rather than from code broken to force it — FunctionalJavascript included, which drives a real browser and is still inside the loop. The Playwright/ATK suite the `e2e-setup` recipe configures and the snapshot baselines the `visual-regression` recipe configures are outer verification: they run against a site that already stands, they cannot drive a design decision, and they are written after the behaviour exists. Their coverage neither substitutes for a tier chosen here nor counts toward the test-first requirement. "The e2e suite covers it" is not an answer to "which tier specifies this behaviour".
+**Coverage that runs against a site already standing does not count toward the test-first requirement.** The Playwright/ATK suite the `e2e-setup` recipe configures and the snapshot baselines the `visual-regression` recipe configures are outer verification: they cannot drive a design decision, and they are written after the behaviour exists. Report them separately. Which tiers *are* inside the loop is stated in `drupal/test-authoring.md`.
 
-**Adding a test is not automatically progress.** The loop's requirement for a change is one specification per behaviour the change creates, at the smallest tier that answers the question, each seen to fail first *because the behaviour it names did not exist yet* — and past that, more tests make the change harder to review without specifying anything new. The full set of cases (a test written after the code, a duplicate one tier up, an assertion on an unpromised surface) belongs to `development/tdd-spec-driven` and is cited, not restated. What is Drupal-specific is the local form the last case takes: a Functional test asserting on rendered markup that no template or API contract pins is the common one here, and the repair is a Kernel test against the service that produced the value, not a stricter string match.
+**Adding a test is not automatically progress.** The loop's requirement for a change is one specification per behaviour the change creates, at the smallest tier that answers the question, each seen to fail first *because the behaviour it names did not exist yet* — and past that, more tests make the change harder to review without specifying anything new. The full set of cases (a test written after the code, a duplicate one tier up, an assertion on an unpromised surface) belongs to `development/tdd-spec-driven` and is cited, not restated, and the Drupal-specific forms are stated in `drupal/test-authoring.md` beside the reader that would write them.
 
 **Standards are applied by judgement; linters are run by the tooling.** This recipe decides what Drupal coding standards mean for the code in front of it — PSR-12/Drupal layout, docblocks on classes and public methods, type hints, no deprecated APIs, PascalCase classes / camelCase methods. The *execution* of `phpcs --standard=Drupal,DrupalPractice` and `phpstan` is the code-quality-tools plugin's job; this recipe references that plugin for the run and does not re-author the linter invocation.
 
@@ -76,26 +76,25 @@ Source-agnostic, supplied by the caller (the orchestrator at the implementation 
 code_path: string             # absolute path to the Drupal project root
 component: string             # the unit being implemented (a service, form, Drush command…)
 behavior: string             # the specific behaviour to test-drive and build
-test_tier: string             # optional; unit | kernel | functional | functional-javascript —
-                              #   if absent, derived from the dependency surface
+test_tier: string             # the tier the test-authoring recipe chose, carried through
 architecture_ref: string      # optional; pointer to the design decision this implements
 ```
 
 ## Sequence
 
-If invoked in dry-run mode, perform all reads and emit a test-and-standards plan (the tier choice, the test shape, the standards/security checklist) instead of writing any test or production code. Dry-run is required.
+If invoked in dry-run mode, perform all reads and emit a standards-and-security plan (what the code must do to turn the test green, and the standards and security checklist it must hold) instead of writing production code. Dry-run is required.
 
-1. **Select the test tier.** From `behavior` and the component's dependency surface, choose the tier: **Unit** (`tests/src/Unit/`) for pure logic with no Drupal bootstrap; **Kernel** (`tests/src/Kernel/`) for services, entities, or database access against a minimal container; **Functional** (`tests/src/Functional/`) for full page requests and rendered output with no JavaScript; **FunctionalJavascript** (`tests/src/FunctionalJavascript/`) for behaviour that needs JavaScript executed in the browser (Ajax, JS-driven UI). Use `test_tier` if supplied; otherwise derive it. The mechanics of each base class are referenced to `drupal/testing`, not restated here.
+1. **Take the failing test.** The tier, the file, the namespace, the test name and the criterion it carries are `drupal/test-authoring.md`'s, and it hands them over red. Confirm the failure is an assertion that ran and did not hold rather than a harness error or a run that selected nothing — `drupal/test-execution.md` declares how to tell those apart. A behaviour arriving with no failing test does not enter this phase; send it back.
 
-2. **Write the failing test (RED).** Author the test before any production code, shaped Arrange-Act-Assert against the `Drupal\Tests\{module}\{Type}` namespace. Run it (`ddev phpunit --testsuite {tier}` or the test path — `--testsuite`, not `--filter`, since `--filter` matches the test identifier regex and would catch the wrong tier) and confirm it fails for the right reason — the behaviour is absent. Not a broken test, and not working code you broke or reverted to force the failure; that proves the test is sensitive, never that it came first (see `development/tdd-spec-driven/what-a-failing-test-proves`). A test that passes immediately is rejected and rewritten. TDD-cycle detail is referenced to `drupal/tdd`. Rewriting *this* test is the author's own move, made before the production code exists; once a test is committed, who may change or delete it is the mutability matrix's answer in `development/tdd-spec-driven`, not this phase's.
+2. **Confirm the red is the right red.** The behaviour is absent — not a broken test, and not working code broken or reverted to force the failure, which proves the test is sensitive and never that it came first (see `development/tdd-spec-driven/what-a-failing-test-proves`). A test that passed on arrival is not a starting point; return it. Once a test is committed, who may change or delete it is the mutability matrix's answer in `development/tdd-spec-driven`, not this phase's — and this phase changes none.
 
 3. **Write the minimum code to pass (GREEN).** Implement only what the test demands — no extra features, no premature optimisation, no "while I'm here" additions. As you write, hold the standards inline: constructor-inject every dependency (no static `\Drupal::` in the new class), docblocks on the class and public methods, type hints on parameters and returns, no deprecated APIs, Drupal layout and naming. Run the test to green.
 
-4. **Apply the implementation security rules.** Before the unit is considered done, confirm the four guarantees against `drupal/security`: Form API builds/validates every data-entry form (CSRF token present and checked); output is escaped (Twig auto-escaping intact, no unsanitised `|raw` or `#markup`); all database access is parameterized (query builder / placeholders, never concatenated user input); and access checks cover every route and operation. Any gap is fixed now, with a test that proves the fix where the behaviour is testable.
+4. **Apply the implementation security rules.** Before the unit is considered done, confirm the four guarantees against `drupal/security`: Form API builds/validates every data-entry form (CSRF token present and checked); output is escaped (Twig auto-escaping intact, no unsanitised `|raw` or `#markup`); all database access is parameterized (query builder / placeholders, never concatenated user input); and access checks cover every route and operation. Any gap is fixed now. Where the fix needs a test to prove it, that test is authored by `drupal/test-authoring.md` and arrives red like any other; this phase does not write it.
 
 5. **Refactor under green (REFACTOR).** With tests green, improve structure without changing behaviour — extract duplication into a service or trait, lean on Drupal base classes, align with the house conventions in `drupal/best-practices/camoa`. Re-run the tests; they stay green or the refactor is reverted.
 
-6. **Defer the linters to the tooling, then hand back.** Invoke the code-quality-tools plugin to run `phpcs --standard=Drupal,DrupalPractice` and `phpstan` over the changed files — this recipe judges what the standards mean but does not re-author or replace that run. Return the test results, the tier choices, the security-rule confirmation, and the linter outcome to the caller; the plugin's implementation phase records them against the task and owns the completion gate. The recipe writes test and production code for the component, but writes no task record of its own.
+6. **Defer the linters to the tooling, then hand back.** Invoke the code-quality-tools plugin to run `phpcs --standard=Drupal,DrupalPractice` and `phpstan` over the changed files — this recipe judges what the standards mean but does not re-author or replace that run. Return the test results, the security-rule confirmation, and the linter outcome to the caller; the plugin's implementation phase records them against the task and owns the completion gate. The recipe writes production code for the component, changes no test, and writes no task record of its own.
 
 ## Data flow
 
@@ -130,7 +129,7 @@ emits (to the caller; the recipe writes no task record):
 
 ## State-awareness contract
 
-The recipe reads existing state before writing. The architecture decision, the current module layout (`src/`, `*.services.yml`, `*.routing.yml`), and any existing tests for the component are read so new code extends the design and new tests extend the suite rather than colliding with or duplicating them. The method writes test and production code for the component under implementation, but installs nothing and writes no task record — the results are returned to the caller, which owns recording them and gating completion.
+The recipe reads existing state before writing. The architecture decision, the current module layout (`src/`, `*.services.yml`, `*.routing.yml`), and the tests that arrived for the component are read so new code extends the design rather than colliding with it. The method writes production code for the component under implementation, changes no test, installs nothing and writes no task record — the results are returned to the caller, which owns recording them and gating completion.
 
 Idempotent at the discipline level: re-running on a component whose tests already pass and whose standards and security rules already hold produces no new change — the tests stay green, the linters stay clean, nothing is rewritten. A change on re-run means a regression was found or the behaviour moved, which is the method reflecting current reality, not non-determinism.
 
@@ -138,13 +137,12 @@ Idempotent at the discipline level: re-running on a component whose tests alread
 
 After the recipe runs, verify:
 
-1. Every implemented behaviour has a PHPUnit test at a deliberately chosen tier (Unit / Kernel / Functional / FunctionalJavascript), and each test was seen to fail before the code existed *because the behaviour was absent* — not because working code was broken or reverted, and no test passed on its first run unexamined.
+1. Every implemented behaviour arrived with a PHPUnit test that had been seen to fail *because the behaviour was absent* — not because working code was broken or reverted, and no test passed on arrival unexamined. The tier that test sits at is `drupal/test-authoring.md`'s choice, verified there.
 2. No new class reaches for a static `\Drupal::` service; every dependency is constructor-injected.
 3. The four security guarantees hold: Form API on every data-entry form (token present and checked), Twig auto-escaping intact (no unsanitised `|raw`/`#markup`), all database access parameterized, access checks on every route and operation.
 4. New code carries docblocks on classes and public methods, type hints on parameters and returns, no deprecated APIs, and Drupal layout/naming — and the code-quality-tools `phpcs --standard=Drupal,DrupalPractice` and `phpstan` run over the changed files is clean (or its findings are recorded for the gate).
 5. The tests are green and the refactor (if any) left them green; the results were returned to the caller for the plugin's implementation phase to record — the recipe wrote no task record of its own.
-6. Each test names the behaviour it specifies, and no test in the change was written after the code it covers — a test that cannot name a behaviour is measuring or ratifying, and does not count toward item 1.
-7. No test asserts on rendered markup, a log line, or a message string that no template or API contract pins; assertions land on returned values, entity or state changes, response codes, or thrown exception types.
+6. No test in the change was written after the code it covers — a test that cannot name a behaviour is measuring or ratifying, and does not count toward item 1. This phase wrote none of them.
 8. Where the project has Playwright/ATK e2e or visual-regression coverage, it is reported separately and is not counted toward the test-first requirement in item 1.
 9. Every pre-existing test the change modified or deleted was changed by a role the mutability matrix permits — the only rows that may delete are a feature removal taking its own tests in the same commit; RED authoring is the only row that writes an assertion, and GREEN, REFACTOR and a bug fix change none. A reviewer that wanted a test changed filed a finding instead. See `development/tdd-spec-driven`.
 
@@ -195,6 +193,13 @@ These are the standards-and-tests oracle files. A Drupal project that also set u
 | `drupal/testing` | The Unit / Kernel / Functional base classes and PHPUnit mechanics behind the tier choice |
 | `drupal/security` | Form API tokens, output escaping, query parameterization, and access checks — the implementation-time security rules |
 | `drupal/best-practices/camoa` | The house Drupal coding conventions the refactor step aligns to |
+
+### Sibling process recipes
+
+| Recipe | What it holds |
+|---|---|
+| `drupal/test-authoring.md` | Which tier a behaviour belongs at, where the test file goes and what it is called, how a criterion is traced to a test, and what a Drupal test may not do — the half of the cycle that ends at red |
+| `drupal/test-execution.md` | The command at each scope, its cost, the conditions for running one, and how to read what came back |
 
 ### Plugin-side tooling (referenced, not authored here)
 

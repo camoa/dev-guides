@@ -1,6 +1,7 @@
 nav:
 - PHP CLI prior-art research: prior-art.md
 - Design (PHP CLI): architecture.md
+- Test authoring (PHP CLI): test-authoring.md
 - PHP CLI standards and tests: standards-and-tests.md
 - Test execution (PHP CLI): test-execution.md
 - PHP CLI review checks: checks.md

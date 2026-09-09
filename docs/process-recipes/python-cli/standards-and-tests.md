@@ -2,11 +2,11 @@
 # Routing block — an orchestrator reads to here and decides.
 name: python_cli_implement_standards_and_tests
 capability: implement
-description: Use when a Python project enters the implementation phase and must hold code to the project's formatting, linting and typing standards alongside test-first discipline — writes the failing test before the code, keeps logic in the importable package and out of the console script, honours the entrypoint contract the design fixed, adds no dependency the design did not decide, and runs the toolchain locally before the change is offered for review.
+description: Use when a Python project enters the implementation phase holding a test that already fails, and must turn it green under the project's formatting, linting and typing standards — keeps logic in the importable package and out of the console script, honours the entrypoint contract the design fixed, adds no dependency the design did not decide, and runs the toolchain locally before the change is offered for review. Which level the test sits at and how it is written belong to the test-authoring recipe.
 # Metadata — read only after a match.
 label: Python implementation standards and tests
 recipe_schema_version: 1.0.0
-version: 0.4.0
+version: 0.5.0
 # Machine-readable dependency declaration (recipe-loader resolves these
 # without parsing prose). The test-mutability rule is stack-neutral: it is
 # cited here, never restated per framework.
@@ -36,17 +36,7 @@ The plugin owns the generic implement phase — when it runs, the TDD discipline
 
 **The failing test comes first, and it fails for the right reason.** A test that fails with `ImportError` has not tested anything. Write it so it fails on the assertion, then make it pass. The right reason is that the behaviour is absent — deleting or breaking working code to watch an existing test fail proves the test is sensitive, never that it came first (see `development/tdd-spec-driven/what-a-failing-test-proves`).
 
-**Tests import the package; they do not shell out.** A test that runs the console script as a subprocess tests the wiring and nothing else, slowly. Test the entry point the design named. One test per console script may exercise the wiring end to end; the rest reach the library.
-
-**The test tier matches the dependency surface — pick the smallest that answers the question.** Five tiers, and naming one deliberately is the point:
-
-- **plain unit** — pure logic with no collaborators and no I/O. Constructs the object or calls the function and asserts on what comes back.
-- **unit with collaborators wired** — the behaviour needs its collaborators. Use the real ones where they are cheap and deterministic; reach for a double only at a boundary that must be isolated (network, clock, randomness).
-- **integration / fixture** — only the composed pieces answer the question: real file I/O against `tmp_path`, a real config tree, a real database.
-- **entry point** — calls the function the console script wraps, passing argv as a list and reading streams through `capsys`. This is the **default tier for CLI behaviour**: it exercises argument parsing, the exit-code mapping and the library call in one fast, coverage-instrumented, debuggable test with no build or subprocess.
-- **subprocess** — reserved for what only exists at the process boundary: the exit status the interpreter actually returns, signal handling, and stdin arriving from a real pipe. At most one per console script, per the rule above.
-
-Pushing pure logic into a fixture test that needs a temp tree, or doubling a collaborator a unit really needs so the test proves nothing, are both tier mismatches. `pytest.mark.parametrize` is the table-driven shape and is the default for a tier with more than two cases.
+**The level, the file and the test's name are not decided here.** Which level a behaviour belongs at, where the test file goes, what the function is called, how the criterion it specifies is traced to it, and what a pytest test may not do are `python-cli/test-authoring.md`'s — including the rule that tests import the package rather than shelling out to the console script. That reader writes the test and stops at red; this one takes the red test and makes it green. The rules are stated once, there, because a reader that may not write production code cannot be handed this file.
 
 **Every tier above is inside the TDD loop; browser E2E and visual regression are not.** The line is not whether a subprocess is spawned, it is whether the test was written before the code and run red. All five tiers are written from the contract the design fixed, so they constrain it. A Playwright suite or a snapshot baseline, where a project has one, runs against something already built, cannot drive a design decision, and does not count toward the test-first requirement here.
 
@@ -84,8 +74,7 @@ preconditions: []
 code_path: string             # absolute path to the project root (the dir with pyproject.toml)
 architecture: string          # path to the component map the change must conform to
 scope: string                 # the capability or component being implemented
-test_tier: string             # optional; plain-unit | unit-with-collaborators | integration |
-                              # entry-point | subprocess — derived from the dependency surface if absent
+test_tier: string             # the level the test-authoring recipe chose, carried through
 target_pythons: [string]      # optional; the versions the change must work on
 ```
 
@@ -95,9 +84,9 @@ If invoked in dry-run mode, perform all reads and report the plan and the comman
 
 1. **Read the component map for the scope.** Find the entry point this change delivers, the protocol it implements or consumes, and the entrypoint contract it must honour. A change with no corresponding entry in the map is out of scope; stop and say so.
 
-2. **Select the test tier.** From the behaviour and the component's dependency surface, choose the smallest tier that answers the question: **plain unit** for pure logic; **unit with collaborators wired** where the behaviour needs them; **integration/fixture** where only the composed pieces answer it; the **entry-point** tier for anything the console script exposes; and the **subprocess** tier only for the real exit status, signals, or a real stdin pipe. Use `test_tier` if supplied; otherwise derive it.
+2. **Take the failing test.** The level, the file, the function name and the criterion it carries are `python-cli/test-authoring.md`'s, and it hands them over red. A capability arriving with no failing test does not enter this phase; send it back.
 
-3. **Write the failing test.** At the tier selected above, importing the package rather than shelling out. Run it and confirm it fails on the assertion rather than on an import, and that it fails because the behaviour is absent rather than because working code was removed (see `development/tdd-spec-driven/what-a-failing-test-proves`). Record the failure message. Rewriting *this* test is the author's own move, made before the production code exists; once a test is committed, who may change or delete it is the mutability matrix's answer in `development/tdd-spec-driven`, not this phase's.
+3. **Confirm the red is the right red.** The failure is the assertion, not an `ImportError`, and it is there because the behaviour is absent rather than because working code was removed (see `development/tdd-spec-driven/what-a-failing-test-proves`). Record the failure message. A test that passed on arrival is not a starting point; return it. Once a test is committed, who may change or delete it is the mutability matrix's answer in `development/tdd-spec-driven`, not this phase's — and this phase changes none.
 
 4. **Write the minimum code to pass it.** In the package module the map names, not in the console script. Annotate the public signature — the typing posture the design recorded applies from the first line, not as a later pass.
 
@@ -132,16 +121,14 @@ The recipe writes package code, tests and script wiring inside `code_path`. It d
 
 After the recipe runs, verify:
 
-1. Every implemented behaviour has a test at a deliberately chosen tier (plain unit / unit-with-collaborators / integration / entry-point / subprocess), it was written before the code, and it was seen to fail on its assertion *because the behaviour did not exist yet* — a failure produced by removing working code proves sensitivity, not authoring order, and no test passed on its first run unexamined.
-2. Tests import the package rather than running the console script, except for at most one end-to-end wiring test per script.
+1. Every implemented behaviour arrived with a test that had been seen to fail on its assertion *because the behaviour did not exist yet* — a failure produced by removing working code proves sensitivity, not authoring order, and no test passed on arrival unexamined. The level that test sits at is `python-cli/test-authoring.md`'s choice, verified there.
 3. No logic was added to a console script — the diff's script changes are argument parsing and wiring only.
 4. Every failure class the change introduces raises a distinct exception type, and the script maps it to the exit code the contract assigns.
 5. The formatter, linter and type checker each report nothing over the changed scope, and the tests pass.
 6. No dependency was added that the design did not decide; `pyproject.toml`'s dependency list is unchanged unless the design changed it.
 7. No swallowed exception, no import-time work, no `shell=True` with an interpolated value, no mutable default argument.
 8. Public signatures are annotated to the typing posture the design recorded.
-9. Each test names the behaviour it specifies, and no test in the change was written after the code it covers — a test that cannot name a behaviour is measuring or ratifying, and does not count toward item 1.
-10. No test asserts on the wording of captured stdout or stderr; assertions land on the return value, the raised exception type, or the exit code the contract assigns.
+9. No test in the change was written after the code it covers — a test that cannot name a behaviour is measuring or ratifying, and does not count toward item 1. This phase wrote none of them.
 11. Every `parametrize` row reaches a branch or boundary no other row reaches; rows differing only in input formatting are duplication, not coverage.
 12. Every pre-existing test the change modified or deleted was changed by a role the mutability matrix permits — the only rows that may delete are a feature removal taking its own tests in the same commit; RED authoring is the only row that writes an assertion, and GREEN, REFACTOR and a bug fix change none. A reviewer that wanted a test changed filed a finding instead. See `development/tdd-spec-driven`.
 
@@ -181,6 +168,13 @@ Two things about this list are worth stating, because they are what makes it wor
 **Python has no static-analysis baseline in the toolchain, so that halt rule has no counterpart here.** There is no equivalent of a phpstan baseline to append a new finding to; the nearest thing is a per-file ignore list inside a tool config, which is why those configs are watched. A project that layers a snapshot-testing plugin on top of pytest gains a real golden-file oracle and should add its snapshot directory to this list with a halt — that path is plugin-specific and is not asserted here. A project that declares no oracle files at all is an honest "no oracle configured" state: the guard reports it ran with nothing to watch, rather than reporting a pass it never checked.
 
 ## References
+
+### Sibling process recipes
+
+| Recipe | What it holds |
+|---|---|
+| `python-cli/test-authoring.md` | Which level a behaviour belongs at, where the file goes and what the test function is called, how a criterion is traced to a test, and what a pytest test may not do — the half of the cycle that ends at red |
+| `python-cli/test-execution.md` | The command at each scope, its cost, the conditions for running one, the node-identifier form, and how to read what came back |
 
 ### External origins (referenced, not authored here)
 

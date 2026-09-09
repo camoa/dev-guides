@@ -138,6 +138,7 @@ def slug_resolves(slug: str) -> bool:
 # cosmetic — the fence must parse, the row keys must be the agreed set, and
 # `test_delete` must appear exactly once so it is a stable selector.
 ORACLE_H2 = "## Oracle files"
+ORACLE_H2_RE = re.compile(rf"^{re.escape(ORACLE_H2)}\s*$", re.M)
 ORACLE_KEYS = {"type", "globs", "changes", "oracle_class", "severity"}
 JSON_FENCE_RE = re.compile(r"```json\s*\n(.*?)\n```", re.S)
 
@@ -149,12 +150,15 @@ def validate_oracle_block(body: str) -> list[str]:
     "no oracle configured" state, not an omission.
     """
     errors: list[str] = []
-    idx = body.find(ORACLE_H2)
-    if idx == -1:
+    # Match the HEADING, not the words. A recipe that only *mentions* the
+    # section — "declared once, in the implement recipe under `## Oracle
+    # files`" — declares no oracles and must not be asked for a fence.
+    head = ORACLE_H2_RE.search(body)
+    if head is None:
         return errors
 
     # Bound the section at the next H2 so a later fence cannot be mistaken for it.
-    rest = body[idx + len(ORACLE_H2):]
+    rest = body[head.end():]
     nxt = re.search(r"^## ", rest, re.M)
     section = rest[: nxt.start()] if nxt else rest
 
