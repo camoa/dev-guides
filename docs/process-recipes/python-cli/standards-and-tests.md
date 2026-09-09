@@ -6,7 +6,7 @@ description: Use when a Python project enters the implementation phase and must 
 # Metadata — read only after a match.
 label: Python implementation standards and tests
 recipe_schema_version: 1.0.0
-version: 0.3.0
+version: 0.4.0
 # Machine-readable dependency declaration (recipe-loader resolves these
 # without parsing prose). The test-mutability rule is stack-neutral: it is
 # cited here, never restated per framework.
@@ -69,27 +69,10 @@ Pushing pure logic into a fixture test that needs a temp tree, or doubling a col
 ## Preconditions
 
 - The design phase has run and its component map is available — module boundary, entry points, entrypoint contract, seams, postures.
-- The project's toolchain is declared in `pyproject.toml` and installable.
+- The project's toolchain is declared in `pyproject.toml` and installable. The manifest, interpreter and runner claims carry machine-readable entries in the `test-execution` recipe for this framework, which owns the commands they are conditions of.
 - The change to implement is scoped to one capability or one component of the map.
 
-Three of these are prose because they are design-artifact and scoping conditions with no filesystem probe behind them. The project and runner claims are checkable, and are declared in machine-readable form below.
-
-One honest limitation, recorded rather than hidden. `python3 --version` is both the check and its own subject: with no interpreter on the path it exits 127 and the engine records `unknown / check_command_not_found` — a missing checker says nothing about the precondition, applied to the case where the missing checker *is* the finding. That is weaker than `unmet`, but it is not `met`, so the phase still does not proceed as though an interpreter were present. The manifest check has no such ambiguity: `test` is always available, so it answers either way. The runner check sits between them — it returns a real `unmet` when the interpreter is present and pytest is not, which is the case worth catching, and degrades to the same `unknown` as the interpreter check when there is no interpreter at all.
-
-The `test-runner` check looks in `.venv/bin/`, matching what the PHP CLI recipe does with the PHPUnit binary under `vendor/` — the convention the packaging tool actually creates. It is checked there rather than through the system interpreter because a project's runner lives in the project's environment: `python3 -m pytest` asks whatever interpreter the engine happens to run under, which on a uv, poetry or plain-venv project is not the one the tests run on, and reports `unmet` against a project whose pytest is installed and working.
-
-The limit is worth stating rather than discovering. `.venv/` is a convention, not a standard: a project using tox, a container with pytest on `PATH` and no local virtualenv, or a poetry install configured to keep its environment outside the tree will report `unmet` while being perfectly runnable. That is a fail-closed error in the safe direction — the phase halts and the operator reads the `what:` line — but it is a false negative, and no single argv command (the engine never uses a shell, so these cannot be OR'd) covers both layouts.
-
-preconditions:
-  - id: python-project
-    what: a pyproject.toml at the project root, where the toolchain and postures are declared
-    check: test -f pyproject.toml
-  - id: python-interpreter
-    what: a Python interpreter on the path, so the toolchain and the tests can run at all
-    check: python3 --version
-  - id: test-runner
-    what: a pytest runner in the project's own environment whose failure the failing-test step can observe
-    check: test -x .venv/bin/pytest
+All three stay prose here. The checkable half — the manifest, the interpreter and the runner in the project's own environment — moved to the `test-execution` recipe alongside the commands that need them, carrying with it the two limitations worth recording rather than discovering: `python3 --version` is both the check and its own subject, and `.venv/` is a convention rather than a standard, so a tox or container layout reports `unmet` while being perfectly runnable.
 
 ## Input contract
 

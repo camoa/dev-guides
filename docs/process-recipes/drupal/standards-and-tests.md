@@ -6,7 +6,7 @@ description: Use when a Drupal project enters the implementation phase and must 
 # Metadata — read only after a match.
 label: Coding standards and test discipline (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.4.0
+version: 0.5.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -57,18 +57,12 @@ The plugin owns the generic mechanism — when the implementation phase runs, th
 
 ## Preconditions
 
-- A Drupal 10.3+ or 11.x project, Composer-managed, with a DDEV environment and a configured PHPUnit runner — a `ddev phpunit` custom command (or `ddev exec vendor/bin/phpunit`) with `SIMPLETEST_DB` set, plus `SIMPLETEST_BASE_URL` and `BROWSERTEST_OUTPUT_DIRECTORY` for the Functional/FunctionalJavascript tiers (see `drupal/testing` for the runner config) — so the tests and the code-quality-tools linters can run.
+- A Drupal 10.3+ or 11.x project, Composer-managed, with a DDEV environment. The conditions for *running* a test — the runner reachable through the project's documented invocation, and the environment each tier needs — are declared by the `test-execution` recipe for this framework, which is where the commands that need them live.
 - The design phase has produced an architecture decision (see the `architecture` recipe) — the services, Drush commands, forms, and storage to implement are known, so this phase tests and builds against a plan rather than improvising structure.
 - The code-quality-tools plugin is available for linter execution (`phpcs --standard=Drupal,DrupalPractice`, `phpstan`); this recipe does not bundle or re-author those runners.
 - The plugin's generic implementation phase is present: the test-first gate and the task record. This recipe supplies the Drupal-specific standards-and-tests method; it does not recreate the gate.
 
-The first bullet is the one the engine can check, so it is also declared in machine-readable form below. The rest stay prose: they are design-artifact and plugin-availability conditions with no argv-safe filesystem probe.
-
-preconditions:
-  - id: test-runner
-    what: a PHPUnit runner whose failure the RED step can observe
-    check: test -x vendor/bin/phpunit
-    owner: code-quality-tools:setup
+All four stay prose. They are design-artifact and plugin-availability conditions with no argv-safe filesystem probe, and the one condition that did carry a machine-readable entry — the PHPUnit runner — moved to the `test-execution` recipe, which owns the commands it is a condition of. Its check moved with a correction: `test -x vendor/bin/phpunit` reported `met` with DDEV stopped and nothing set, because Composer installs that binary regardless.
 
 ## Input contract
 

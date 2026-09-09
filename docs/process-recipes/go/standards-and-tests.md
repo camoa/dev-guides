@@ -6,7 +6,7 @@ description: Use when a Go project enters the implementation phase and must hold
 # Metadata — read only after a match.
 label: Go standards and tests
 recipe_schema_version: 1.0.0
-version: 0.3.0
+version: 0.4.0
 # Machine-readable dependency declaration (recipe-loader resolves these
 # without parsing prose). The test-mutability rule is stack-neutral: it is
 # cited here, never restated per framework.
@@ -63,22 +63,12 @@ The plugin owns the generic mechanism — when the implement phase runs, the tes
 
 ## Preconditions
 
-- A Go project with a `go.mod` at the module root and a toolchain the go command can resolve, so `go test`, `go vet`, and `gofmt` run without setup.
+- A Go project with a `go.mod` at the module root and a toolchain the go command can resolve, so `go vet` and `gofmt` run without setup. Both conditions carry machine-readable entries in the `test-execution` recipe for this framework, which owns the commands they are conditions of.
 - The design phase has produced an architecture decision (see the architecture recipe under this framework): the `internal/`-versus-exported boundary, the `run(ctx, …)` entry point below each command, the exit-code contract, and the exported error surface are known, so this phase builds against a plan rather than improvising structure.
 - Where the project uses `golangci-lint`, its config is committed at the module root, so the same rule set runs locally and in review.
 - The plugin's generic implement phase is present: the test-first gate, the oracle-tamper guard, and the task record. This recipe supplies the Go-specific standards-and-tests method; it does not recreate the gate.
 
-The first bullet splits into two checkable claims, declared in machine-readable form below.
-
-One honest limitation worth recording rather than hiding. `go version` is both the check and its own subject, so when no Go toolchain is installed it exits 127 and the engine records `unknown / check_command_not_found` — the rule that a missing checker says nothing about the precondition, applied to a case where the missing checker *is* the finding. That is weaker than `unmet`, but it is not `met`, so the phase still does not proceed as though a toolchain were present. The module-root check has no such ambiguity: `test` is always available, so it returns a real answer either way.
-
-preconditions:
-  - id: go-module
-    what: a go.mod at the module root, so the go command resolves packages at all
-    check: test -f go.mod
-  - id: go-toolchain
-    what: a Go toolchain the go command can resolve, so gofmt / go vet / go test run without setup
-    check: go version
+All four stay prose here. The module and toolchain claims are checkable, and their entries — with the honest limitation that `go version` is both the check and its own subject — moved to the `test-execution` recipe alongside the commands that need them. The remaining three are design-artifact and plugin-availability conditions with no argv-safe filesystem probe.
 
 ## Input contract
 

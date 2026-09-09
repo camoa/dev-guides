@@ -6,7 +6,7 @@ description: Use when a PHP CLI project (a Composer library or application whose
 # Metadata — read only after a match.
 label: PHP CLI standards and tests
 recipe_schema_version: 1.0.0
-version: 0.4.0
+version: 0.5.0
 # Machine-readable dependency declaration (recipe-loader resolves these
 # without parsing prose). The test-mutability rule is stack-neutral: it is
 # cited here, never restated per framework.
@@ -54,18 +54,12 @@ The plugin owns the generic mechanism — when the implement phase runs, the tes
 
 ## Preconditions
 
-- A PHP project, Composer-managed, with a configured PHPUnit runner (`php vendor/bin/phpunit` against a committed `phpunit.xml` / `phpunit.xml.dist`) — so the tests and the code-quality-tools linters can run.
+- A PHP project, Composer-managed. The condition for *running* a test — a configured PHPUnit runner against a committed `phpunit.xml` or `phpunit.xml.dist` — is declared by the `test-execution` recipe for this framework, which is where the commands that need it live.
 - The design phase has produced an architecture decision (see the architecture recipe under this framework): the library boundary, the thin-binary contract, the exit-code semantics, and the component map are known, so this phase tests and builds against a plan rather than improvising structure.
 - The code-quality-tools plugin is available for linter execution (`phpcs`, `phpstan` at the project's declared level); this recipe does not bundle or re-author those runners.
 - The plugin's generic implement phase is present: the test-first gate, the oracle-tamper guard, and the task record. This recipe supplies the PHP-CLI-specific standards-and-tests method; it does not recreate the gate.
 
-The runner bullet is the one the engine can check, so it is also declared in machine-readable form below. The rest stay prose: they are design-artifact and plugin-availability conditions with no argv-safe filesystem probe.
-
-preconditions:
-  - id: test-runner
-    what: a PHPUnit runner whose failure the RED step can observe
-    check: test -x vendor/bin/phpunit
-    owner: code-quality-tools:setup
+All four stay prose. They are design-artifact and plugin-availability conditions with no argv-safe filesystem probe, and the one condition that did carry a machine-readable entry — the PHPUnit runner — moved to the `test-execution` recipe, which owns the commands it is a condition of.
 
 ## Input contract
 
