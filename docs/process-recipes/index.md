@@ -148,6 +148,32 @@ degraded in silence. The validator checks the entry keys and rejects an unknown 
 owns an entry, say so — `owner: operator` for a toolchain the machine's owner installs — so that an
 entry nobody owns and an entry whose owner was forgotten stop looking the same.
 
+**A check may assert on what it printed, with `expect:`.** A `check:` is decided by its exit status,
+and some commands answer in their output instead: `ddev describe -j` reports whether a project is
+running and exits 0 either way. Where that is the case, the entry adds an optional `expect:` beside
+its `check:`.
+
+```yaml
+preconditions:
+  - id: test-runner
+    what: a running DDEV environment, so the runner the project documents can be reached at all
+    check: ddev describe -j
+    expect: '"status_desc":"running"'
+    owner: code-quality-tools:setup
+```
+
+The exit status is still read first and keeps every meaning it has: a command that is not found says
+nothing about the condition, and any other non-zero exit is a condition that answered no. Only on a
+zero exit does `expect:` decide, and it decides one way — the literal string appears in what the
+command wrote to standard output, or the condition answered no. It is a substring test and nothing
+more: no regular expression, no glob, no path into a document, no shell, for the same reason the
+command itself never reaches one. Choose the string so that its **presence** is the answer, because
+a JSON document reporting several things at once usually contains the string you meant to rule out —
+and test it against every state the command can report, not just the two obvious ones. The example
+above uses `status_desc` rather than `status` for exactly that reason: `status` appears once per
+service, so a paused project still prints `"status":"running"` for whatever stayed up. An entry with
+no `expect:` is decided exactly as before, so nothing that already works changes.
+
 **`## Oracle files` is parsed, not just read.** As of 2026-09-01 a consumer takes the `globs` off the
 row whose `type` is `test_delete` to answer "which files in this repository are tests", instead of
 trusting a list the caller supplied. Three things are therefore load-bearing inside that section and

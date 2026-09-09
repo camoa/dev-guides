@@ -351,7 +351,7 @@ def load_body_block(body: str, key: str) -> tuple[object | None, list[str]]:
 # A precondition entry has looked structured since it was written and, until now,
 # nothing read it — so a misspelled `check:`, `owner:` or `id:` degraded in silence
 # and the consumer that trusts the block got one key fewer than the author wrote.
-PRECONDITION_KEYS = {"id", "what", "check", "owner"}
+PRECONDITION_KEYS = {"id", "what", "check", "expect", "owner"}
 PRECONDITION_REQUIRED = ("id", "what")
 
 
@@ -391,10 +391,23 @@ def validate_preconditions_block(body: str) -> list[str]:
             if pid in seen:
                 errors.append(f"precondition id {pid!r} appears more than once")
             seen.add(pid)
-        for key in ("check", "owner"):
+        for key in ("check", "owner", "expect"):
             val = row.get(key)
             if val is not None and not isinstance(val, str):
                 errors.append(f"precondition {pid or i} `{key}:` must be a string")
+        # `expect:` reads what the command printed, so without a command it reads
+        # nothing and decides nothing — a silent no-op is the defect this block is
+        # being taught to catch, not one to add.
+        if "expect" in row and not row.get("check"):
+            errors.append(
+                f"precondition {pid or i} carries `expect:` with no `check:`; the field "
+                "reads what a command printed, so there has to be a command"
+            )
+        if "expect" in row and isinstance(row.get("expect"), str) and not row["expect"].strip():
+            errors.append(
+                f"precondition {pid or i} `expect:` is empty; an empty string appears in "
+                "every output, so the condition would always answer yes"
+            )
     return errors
 
 

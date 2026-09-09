@@ -50,18 +50,26 @@ This recipe runs nothing and judges nothing. It is read by whatever is about to 
 - A Drupal 10.3+ or 11.x project, Composer-managed, with the runner reachable through the invocation the project documents — a `ddev phpunit` custom command, or `ddev exec vendor/bin/phpunit` — and the environment the tier needs: `SIMPLETEST_DB` for Kernel and above, plus `SIMPLETEST_BASE_URL` for Functional and FunctionalJavascript. See `drupal/testing` for the runner configuration.
 - The DDEV environment is running. Every command below executes inside it.
 
-The runner condition is declared in machine-readable form below, and it is declared **without a `check:`**, which is a deliberate correction rather than an omission.
+The environment condition is declared in machine-readable form below. What it probes is exactly what it claims: that the DDEV environment is up. It does not claim the database variables are set, which is why the first bullet stays prose.
 
-`test -x vendor/bin/phpunit` was the check here until now, and it answers a different question from the one the condition asks. Composer installs that binary on any Drupal project that requires core-dev, so it is present and executable with DDEV stopped and nothing set — the entry reported `met` while no test in any tier could run. A `met` that is wrong is worse than an `unknown` that is right, because a caller acts on the first and stops on the second.
+**Two checks were rejected before this one, and the reasons are worth keeping.** `test -x vendor/bin/phpunit` answers a different question from the one the condition asks: Composer installs that binary on any Drupal project that requires core-dev, so it is present and executable with DDEV stopped and nothing set, and the entry reported `met` while no test in any tier could run. And `ddev exec`, the obvious way to probe the documented path, **starts a stopped project** — observed here, where the containers were built and started by the probe. A check decides whether to proceed and must not change the thing it is deciding about.
 
-The obvious repair — probe the documented path with `ddev exec` — is worse. `ddev exec` on a stopped project **starts it**, which was observed while writing this: the containers were built and started by the probe. A precondition check decides whether to proceed and must not change the thing it is deciding about, so no `ddev` command qualifies. Nor does a check on the environment variables: `SIMPLETEST_DB` reaches the runner either from the container environment or from a `<env>` element in the project's own `phpunit.xml`, and the engine never uses a shell, so the two cannot be OR'd into one argv command.
+`ddev describe -j` does neither. Verified on DDEV v1.25.4: it leaves a stopped project stopped, and it reports the state as JSON. Its exit status is 0 whether the project is running or not, so the answer is in what it printed, which is what `expect:` reads.
 
-So the entry carries `what:` and `owner:` and no check, exactly as `claude-code-plugins` does for its own unverifiable entry. The engine records `unknown` — never `met` — and the phase does not proceed as though a runner were present.
+**The key is `status_desc`, and the reason is worth knowing before someone shortens it.** The obvious literal, `"status":"running"`, is wrong: `status` appears once per service as well as once for the project, so a **paused** project reports `"status":"paused"` at the top and still prints `"status":"running"` for any service that stayed up — observed on a paused project whose web and database containers had exited. That environment cannot run a test and the naive string says it can. `status_desc` appears exactly once in the document and carries the project's own state, so it decides all three states correctly: present when running, absent when stopped, absent when paused.
+
+**The expectation names the state it wants, never the one it rejects.** A running project prints `"status":"stopped"` too, for any optional service that is not up, so a test for the absence of that string would fail on a healthy environment. Presence is the answer.
+
+One limit, in the safe direction. The literal includes the closing quote, so it matches only a value of exactly `running`. If a future DDEV appends detail to that field, the check reports the condition unmet and the phase stops, rather than proceeding on a stale reading.
+
+What this still does not decide is `SIMPLETEST_DB`. It reaches the runner either from the container environment or from an `<env>` element in the project's own `phpunit.xml`, and a check is one command that never passes through a shell, so the two places cannot be combined. That condition stays prose, and a Kernel test erroring with `Assertions: 0` is how it surfaces — see the failure signal below.
 
 ```yaml
 preconditions:
   - id: test-runner
-    what: a PHPUnit runner reachable through the project's documented invocation, with SIMPLETEST_DB set for Kernel and above and SIMPLETEST_BASE_URL for Functional and above
+    what: a running DDEV environment, so the runner the project documents can be reached at all
+    check: ddev describe -j
+    expect: '"status_desc":"running"'
     owner: code-quality-tools:setup
 ```
 
