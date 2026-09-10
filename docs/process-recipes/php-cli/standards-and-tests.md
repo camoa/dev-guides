@@ -28,7 +28,7 @@ license: GPL-2.0-or-later
 
 ## Goal
 
-Hold PHP CLI implementation-phase code to the standard it must meet before it can be reviewed: PHP/PSR coding standards applied as the code is written, every unit of logic covered by a PHPUnit test written test-first at the smallest tier that answers the question, every CLI flag and exit code exercised, and a fixture-driven end-to-end tier that runs the built binary against a fixture tree and asserts on its output. The judgement of *which* standard applies and *which* test tier fits is the recipe's; running the linters is the code-quality-tools plugin's.
+Hold PHP CLI implementation-phase code to the standard it must meet before it can be reviewed: PHP/PSR coding standards applied as the code is written, a test that arrived red turned green without weakening it, and the coverage the contract requires confirmed present — every CLI flag and exit code exercised, and a check-style unit carrying its negative case. The judgement of *which* standard applies is the recipe's; running the linters is the code-quality-tools plugin's; choosing and writing the test is `php-cli/test-authoring.md`'s.
 
 The plugin owns the generic mechanism — when the implement phase runs, the test-first gate that blocks completion, the oracle-tamper guard that stops a builder weakening a measurement file, and how findings are recorded against the task. This recipe owns the part the stack-neutral mechanism cannot know: how PHP coding standards are applied to a CLI library, why a CLI's end-to-end coverage is a test level rather than a phase, and the extensionless-binary trap a naive syntax-check glob walks straight into.
 
@@ -46,7 +46,7 @@ The plugin owns the generic mechanism — when the implement phase runs, the tes
 
 **That fixture tier is inside the TDD loop; a browser suite would not be.** The distinction is not whether a subprocess or a browser is involved, it is whether the test was written before the code and run red. The fixture-driven CLI test is written from the flag-and-exit-code contract before the flag exists, so it constrains the design. Visual regression and browser E2E, where a project has them, run against something already built, cannot drive a design decision, and do not count toward the test-first requirement here.
 
-**Adding a test is not automatically progress.** The loop's requirement for a change is one specification per behaviour the change creates, at the smallest tier that answers the question, each seen to fail first *because the behaviour it names did not exist yet*. Past that, more tests make the change harder to review without specifying anything new. The full set of excess cases belongs to `development/tdd-spec-driven` and is cited, not restated. The local form worth naming: a CLI tool's most tempting bad assertion is a match on the exact wording of its own stdout. The exit code and the structured output are contracts; the prose around them is not, and a test that pins the prose breaks on a reword while proving nothing. Where a behaviour has no surface but prose, that is a finding about the tool — give it an exit code or a machine-readable mode — not a reason to assert harder.
+**Adding a test is not automatically progress.** The loop's requirement for a change is one specification per behaviour the change creates, at the level `php-cli/test-authoring.md` chose, each seen to fail first *because the behaviour it names did not exist yet*. Past that, more tests make the change harder to review without specifying anything new. The full set of excess cases belongs to `development/tdd-spec-driven` and is cited, not restated, and the PHP-CLI-specific forms are stated in `php-cli/test-authoring.md` beside the reader that would write them. What belongs here is what a prose-only surface means for the **code**: where a behaviour a user depends on can only be observed by reading the tool's own wording, give it an exit code or a machine-readable mode. That is a change to the tool, made in this phase.
 
 **Syntax-check and lint every shipped binary, including the extensionless ones.** A Composer CLI's binaries are conventionally extensionless — `bin/<tool>`, not a `.php` file — so a naive `find -name '*.php'` syntax-check glob silently skips the very entrypoints a user runs. Enumerate the binaries to check from the `bin` array in composer.json instead of globbing by extension, and syntax-check (and hand to the linters) every one of them, extensionless included. A binary that never gets linted is the file most likely to ship a fatal parse error.
 
@@ -107,7 +107,7 @@ reads project state:
 
 applies opinion:
        test-first (RED→GREEN→REFACTOR) · PSR-12 + declare(strict_types=1) + readonly
-       value objects · smallest tier that answers the question · every flag + exit code
+       value objects · the test arrives red and is not rewritten · every flag + exit code
        tested · check-style unit needs a negative case · fixture-driven CLI e2e lives
        here · syntax-check every binary incl. extensionless · standards by judgement,
        linters by tooling

@@ -6,7 +6,7 @@ description: Use when a context is about to write the tests for executable code 
 # Metadata — read only after a match.
 label: Test authoring (Claude Code plugins)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -84,16 +84,19 @@ preconditions: []
 ## Input contract
 
 ```yaml
-plugin_path: string           # absolute path to the plugin root
+code_path: string             # absolute path to the plugin root
 script: string                # the script the behaviour belongs to, relative to the plugin root
 criterion_id: string          # the identifier of the criterion this spec case specifies
 behavior: string              # what the spec must observe, in a sentence
-contract: string              # the exit codes, the printed fields, or the event the script answers
+interface: string             # what the script declares: its exit codes, the fields it prints, or the event it binds
 test_level: string            # optional; unit | script-contract | event-contract | runner
 ```
 
-`contract` is the only thing this reader gets about code that already exists. Where it is empty, the
-behaviour must be observable from the script's documented exit codes and output alone.
+The field names match the other four frameworks so one caller can fill a uniform set: `script` is
+this framework's unit field, where Drupal has `module` and Go has `package`. `interface` is the only
+thing this reader gets about code that already exists, and it is a declaration rather than source.
+Where it is empty, the behaviour must be observable from the script's documented exit codes and
+output alone.
 
 ## Sequence
 
@@ -135,7 +138,7 @@ planned, and write nothing. Dry-run is required.
 
 ## Data flow
 
-Input: one criterion, the behaviour it names, the script's declared contract.
+Input: one criterion, the behaviour it names, the script's declared interface.
 Output: one spec file under `<plugin>/tests/`, and for each case the criterion it carries and the
 output of the run that failed.
 Boundaries: reads no production script source; writes only under the plugin's tests directory; builds

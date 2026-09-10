@@ -6,7 +6,7 @@ description: Use when a context is about to write the tests for one unit of work
 # Metadata — read only after a match.
 label: Test authoring (PHP CLI)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -41,24 +41,54 @@ A rule that needs the class in front of you is a rule this reader cannot follow.
 
 **The level follows the dependency surface, decided from the behaviour and not from the code.**
 
-| Level | Choose it when the behaviour needs | Cost |
-|---|---|---|
-| plain unit | nothing but the class and its arguments: construct it and assert on what comes back | milliseconds |
-| unit with collaborators wired | its collaborators — real ones where they are cheap and deterministic, a double only at a boundary that must be isolated | milliseconds |
-| integration / fixture | only the composed library API answers the question: real file I/O against a temp tree, a real config tree | tenths of a second |
-| CLI end to end | the whole contract a user hits: run the built binary against a fixture tree and assert on stdout, stderr and the exit code | a process per test |
+| Level | Where the file goes | Choose it when the behaviour needs | Cost |
+|---|---|---|---|
+| plain unit | `tests/<path mirroring src>/<Name>Test.php` | nothing but the class and its arguments: construct it and assert on what comes back | milliseconds |
+| unit with collaborators wired | the same | its collaborators — real ones where they are cheap and deterministic, a double only at a boundary that must be isolated | milliseconds |
+| integration / fixture | the same, with the tree it needs under `tests/fixtures/` | only the composed library API answers the question: real file I/O against a temp tree, a real config tree | tenths of a second |
+| CLI end to end | the same, driving the binary `composer.json` names in its `bin` array | the whole contract a user hits: run the built binary against a fixture tree and assert on stdout, stderr and the exit code | a process per test |
 
-The CLI end-to-end level is this framework's real end-to-end shape. "No browser e2e" does not mean
-the tool has no end-to-end test, and that level is written before the code like the other three.
-
-**Where the file goes.** Under `tests/` at the project root, in the namespace `composer.json` maps
-there under `autoload-dev`, mirroring the `src/` layout of the unit under test. The file is named
-after the class and ends in `Test.php`. The authoritative file pattern is declared once, in
+Unlike Drupal, this framework's runner does **not** map a level to a directory: PHPUnit discovers by
+the testsuite path and the `Test.php` suffix, and the level is a judgement recorded in the test's own
+name and shape. Nothing enforces it, which is why naming it deliberately is the point. The whole tree
+sits under `tests/` at the project root, in the namespace `composer.json` maps there under
+`autoload-dev`, mirroring `src/`. The authoritative file pattern is declared once, in
 `php-cli/standards-and-tests.md` under `## Oracle files`, and is not repeated here.
+
+**Start at the level the contract is stated at.** For anything a user reaches through the binary,
+that is the CLI end-to-end level, because the flag and the exit code *are* the contract and no
+cheaper level tests them. For library behaviour the plain unit genuinely is right first — a PHP CLI
+library is mostly its own code rather than a framework's, so the cheapest level usually does answer
+the question. What stops it being reached for when it is wrong is one check: if answering the
+question means doubling a collaborator the behaviour actually needs, the level is too low and the
+test proves the double.
+
+**The CLI end-to-end level is this framework's real end-to-end shape, and it is inside the loop.**
+"No browser e2e" does not mean the tool has no end-to-end test, and that level is written before the
+code like the other three. What is **outside** the loop is any suite that runs against something
+already built — a browser suite or a visual comparison, where a project has one. Those cannot drive a
+design decision, never substitute for a level chosen here, and are reported separately rather than
+counted toward the test-first requirement.
+
+**Which tests the contract requires, beyond the one the criterion names.** Two rules, and both are
+about what to write rather than how:
+
+- **Every CLI flag and every exit code the component touches is a behaviour with a contract, and each
+  gets a test that pins it** — a flag that changes output, a bad-input path that returns the
+  documented non-zero code.
+- **A check-style unit — one whose job is to *report problems*, such as a linter rule, a scanner or a
+  validator — additionally needs a negative case:** an assertion that correct input produces **no**
+  output and no finding. Without it the check cannot be tuned, because a rule that flags everything
+  and a rule that flags nothing both pass a suite that only ever feeds them bad input. This is the
+  local form of the defect this whole phase exists to catch: a check that cannot fail proves nothing,
+  and nothing detects it.
 
 **One test per behaviour the criterion names, and no more.** Past that, tests make the change harder
 to review without specifying anything new. The full set of excess cases belongs to
-`development/tdd-spec-driven` and is cited, not restated.
+`development/tdd-spec-driven` and is cited, not restated. The local form worth naming: a CLI tool's
+most tempting bad assertion is a match on the exact wording of its own stdout. The exit code and the
+structured output are contracts; the prose around them is not, and a test that pins the prose breaks
+on a reword while proving nothing.
 
 ## Preconditions
 
@@ -95,7 +125,7 @@ assertions planned, and write nothing. Dry-run is required.
    Opinion. Use `test_level` if supplied. If the behaviour cannot be placed without opening the code,
    stop and report that rather than guessing: the choice belongs earlier.
 
-2. **Place and name the file.** `tests/<Path mirroring src>/<Name>Test.php`, class `<Name>Test`, in
+2. **Place and name the file.** `tests/<path mirroring src>/<Name>Test.php`, class `<Name>Test`, in
    the namespace `autoload-dev` maps to `tests/`.
 
 3. **Name the method so the runner collects it.** A method is collected only when its name begins
@@ -154,6 +184,9 @@ Do not read the production source to make that decision. The test tree is readab
   class** collect nothing: the run reports `is not static`, then `No tests found in class`, then
   `No tests executed!`, and exits 2 — so a class whose only provider was written non-static
   contributes zero tests to a run that otherwise looks fine.
+- Every CLI flag and every exit code the component touches is covered, and a check-style unit carries
+  its negative case — correct input yields no output and no finding — so the check can be tuned
+  rather than only fired.
 - Each new test was seen to fail, and the recorded failure is an assertion that ran and did not hold
   rather than a harness error or a run that selected nothing.
 - No test pins the exact wording of the tool's own prose output. The exit code and any

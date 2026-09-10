@@ -6,7 +6,7 @@ description: Use when a context is about to write the tests for one unit of work
 # Metadata — read only after a match.
 label: Test authoring (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -130,7 +130,13 @@ planned, and write nothing. Dry-run is required.
    pattern is declared once, in `drupal/standards-and-tests.md` under `## Oracle files`, and is not
    repeated here.
 
-3. **Name the criterion in the test, and tag it.** The criterion identifier goes at the end of the
+3. **Name the method so the runner collects it, then name the criterion in it.** A method is
+   collected only when its name begins with `test` or it carries the `#[Test]` attribute. Neither is a
+   style preference: a method with neither is not collected and nothing says so — on the PHPUnit
+   11.5.56 that core 11.4.5 resolves, it simply does not appear in `--list-tests`, so the behaviour
+   looks covered and is not.
+
+   The criterion identifier goes at the end of the
    test method name, capitalised, with no separator, because the Drupal coding standard rejects an
    underscore in a method name: `testSubmittedFormSavesTheNodeC3()`. It goes last and nothing follows
    it, which keeps the criterion in the failure output and findable by grep with no runner support.
@@ -183,6 +189,8 @@ Do not read the production source to make that decision. The test tree is readab
 
 - Each test carries its criterion identifier at the end of its method name and a matching
   `#[Group]` tag, so the criterion is both readable in the failure output and exactly selectable.
+- Every test method begins with `test` or carries `#[Test]`. A method with neither is not collected
+  and nothing reports it.
 - Every data provider method is `static`. On PHPUnit 11.5 a non-static provider makes the whole class
   collect nothing — the run reports `is not static`, then `No tests found in class`, then
   `No tests executed!`, and exits 2 — so a class whose only provider was written non-static
@@ -229,4 +237,4 @@ Do not read the production source to make that decision. The test tree is readab
 |---|---|
 | `ai_best_practices`, skill `drupal-automated-testing`, citing a core committer and drupal.org issue #3581672 | That starting at Unit is wrong for Drupal; the unasserted `waitForElement`; the per-tier namespace and the `FunctionalJavascript` capitalisation; build tests as a fifth type |
 | Drupal core 11.4.5 — `core/phpunit.xml.dist`, `BrowserTestBase`, `KernelTestBase`, `JSWebAssert`, `TestDiscovery` | The six declared testsuites and what each scans; the deprecation status of `#[RunTestsInSeparateProcesses]`; the nullable return of the wait helpers; the namespace-to-directory mapping; that core itself stacks two `#[Group]` attributes on a class |
-| PHPUnit 11.5.56, the runner core 11.4.5 resolves | That `--group` matches exactly while `--filter` is an unanchored regular expression over the test identifier; that a non-static data provider makes the whole class collect nothing and exit 2 |
+| PHPUnit 11.5.56, the runner core 11.4.5 resolves | That a method with neither a `test` prefix nor `#[Test]` is not collected and nothing says so; that `--group` matches exactly while `--filter` is an unanchored regular expression over the test identifier; that a non-static data provider makes the whole class collect nothing and exit 2 |

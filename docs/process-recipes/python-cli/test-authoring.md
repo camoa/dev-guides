@@ -6,7 +6,7 @@ description: Use when a context is about to write the tests for one unit of work
 # Metadata — read only after a match.
 label: Test authoring (Python CLI)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -41,17 +41,32 @@ A rule that needs the module in front of you is a rule this reader cannot follow
 
 **The level follows the dependency surface, decided from the behaviour and not from the code.**
 
-| Level | Choose it when the behaviour needs | Cost |
-|---|---|---|
-| plain unit | nothing but the function or object and its arguments: call it and assert on what comes back | microseconds |
-| unit with collaborators wired | its collaborators — real ones where they are cheap and deterministic, a double only at a boundary that must be isolated (network, clock, randomness) | milliseconds |
-| integration / fixture | only the composed pieces answer the question: real file I/O against `tmp_path`, a real config tree, a real database | tenths of a second |
-| entry point | anything the console script exposes: argument parsing, the exit-code mapping and the library call, driven by passing argv as a list and reading the streams through `capsys` | milliseconds |
-| subprocess | only what exists at the process boundary: the exit status the interpreter really returns, signal handling, stdin arriving from a real pipe | a process per test |
+| Level | Where the file goes | Choose it when the behaviour needs | Cost |
+|---|---|---|---|
+| plain unit | `tests/<path mirroring the package>/test_<module>.py` | nothing but the function or object and its arguments: call it and assert on what comes back | microseconds |
+| unit with collaborators wired | the same | its collaborators — real ones where they are cheap and deterministic, a double only at a boundary that must be isolated (network, clock, randomness) | milliseconds |
+| integration / fixture | the same, with the tree it needs built under `tmp_path` | only the composed pieces answer the question: real file I/O, a real config tree, a real database | tenths of a second |
+| entry point | `tests/test_cli.py`, or the file mirroring the module the console script wraps | anything the console script exposes: argument parsing, the exit-code mapping and the library call, driven by passing argv as a list and reading the streams through `capsys` | milliseconds |
+| subprocess | the same file as the entry-point test for that script | only what exists at the process boundary: the exit status the interpreter really returns, signal handling, stdin arriving from a real pipe | a process per test |
 
-The entry-point level is the default for CLI behaviour, and the subprocess level is the exception
-reserved for those three things — at most one per console script. `pytest.mark.parametrize` is the
-table-driven shape and is the default for a level with more than two cases.
+pytest does **not** map a level to a directory: it discovers by filename pattern, and the level is a
+judgement recorded in the test's own shape. Nothing enforces it, which is why naming it deliberately
+is the point.
+
+**Start at the entry point for anything the console script exposes.** That is the default, because
+argument parsing, the exit-code mapping and the library call are one contract and no cheaper level
+tests them together. The subprocess level is the exception reserved for the three process-boundary
+things above — at most one per console script, because a test that runs the script as a subprocess
+tests the wiring and nothing else, slowly. For library behaviour the plain unit is genuinely right
+first. What stops it being reached for when it is wrong is one check: if answering the question means
+doubling a collaborator the behaviour actually needs, the level is too low and the test proves the
+double. `pytest.mark.parametrize` is the table-driven shape and is the default for a level with more
+than two cases.
+
+**All five levels are written before the code. A browser suite and a snapshot baseline are not.**
+Where a project has either, they run against something already built, cannot drive a design decision,
+never substitute for a level chosen here, and are reported separately rather than counted toward the
+test-first requirement.
 
 **Where the file goes, and what it is called.** This is stated here because nothing else in this
 framework's set states it, and a rule that lives only inside a delete-guard glob is not an
