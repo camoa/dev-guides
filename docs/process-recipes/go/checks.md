@@ -6,7 +6,7 @@ description: Use when a Go change reaches the review phase and must pass its gat
 # Metadata — read only after a match.
 label: Go review checks
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -189,6 +189,38 @@ code_quality_extensions: [".go", ".mod"]
 ```
 
 Without this declaration a pure-Go change filters to an empty list against the framework-neutral floor (`.php` `.js` `.mjs` `.cjs` `.ts` `.tsx` `.vue`) and every change-scoped gate skips itself — a clean-looking run that examined nothing. `.sum` is deliberately excluded: `go.sum` is a generated verification lockfile carrying no reviewable decision, and the dependency decision it reflects is already visible in `.mod`.
+
+## Check commands
+
+Three rows — `coding-standards`, `static-analysis`, `security` — each a command, and none of them
+takes `{paths}`. Step 2 of the Sequence runs every toolchain gate over the whole module regardless
+of diff scope, and the tools agree with it: `go vet` handed files from two directories stops with
+`named files must all be in one directory`, `gofmt` handed a `go.mod` parses it as Go and exits 2,
+and `govulncheck` takes a package pattern, not a file. The first two were run on go1.27.1;
+the third is what govulncheck's own documentation says, since it is not installed with the toolchain.
+
+```yaml
+check_commands:
+  - id: coding-standards
+    argv: ["gofmt", "-l", "."]
+    signal: empty-stdout
+  - id: static-analysis
+    argv: ["go", "vet", "./..."]
+  - id: security
+    argv: ["govulncheck", "./..."]
+```
+
+**`signal: empty-stdout` is the gofmt row's whole point.** `gofmt -l` exits 0 whether it lists a
+file or not, which Opinion names as the first gate that can silently never fire; a caller reading
+its exit status alone has a green light wired to nothing. The key tells the caller to read a zero
+exit with any standard output as unmet. A non-zero exit is still unmet on its own — a file that
+does not parse is a real failure, not a formatting one.
+
+`go vet ./...` is the full analyzer set, not the subset `go test` runs. `govulncheck` exits
+non-zero when it reports a vulnerability, and in its default source mode it reports only advisories
+whose vulnerable symbols the code reaches, which is what lets the row block; it is not part of the
+toolchain, so the row runs only where the precondition above holds, and a `command not found` is
+recorded as not run, never as met.
 
 ## State-awareness contract
 

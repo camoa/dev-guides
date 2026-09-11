@@ -534,6 +534,106 @@ def validate_test_commands(body: str) -> list[str]:
     return errors
 
 
+# The three rows a caller asks a review recipe for — the tool checks a build record
+# runs before anything judges the code. Same posture as `test_commands`: absent is
+# an answer, a row nobody wrote is not. Two optional keys exist because two tools
+# did not fit the plain shape when they were run: `extensions:` narrows `{paths}`
+# to the file types the tool reads (mypy parses a `.toml` as Python), and
+# `signal: empty-stdout` marks a tool that cannot fail by exit status (`gofmt -l`
+# exits 0 whether or not it lists a file).
+REVIEW_PHASE = "review"
+CHECK_COMMAND_IDS = ["coding-standards", "static-analysis", "security"]
+CHECK_COMMAND_KEYS = {"id", "argv", "absent", "extensions", "signal"}
+SIGNAL_VALUES = {"exit-status", "empty-stdout"}
+PATHS_PLACEHOLDER = "{paths}"
+EXTENSION_RE = re.compile(r"^\.[a-z0-9]+$")
+
+
+def validate_check_commands(body: str) -> list[str]:
+    """Check `check_commands:` for a review recipe."""
+    rows, errors = load_body_block(body, "check_commands")
+    if rows is None:
+        return errors or [
+            "`## Check commands` carries no `check_commands:` block; a caller running a "
+            "check and reading nothing back must stop, not read a false unmet"
+        ]
+    if not isinstance(rows, list):
+        return ["`check_commands:` must be a list of rows"]
+
+    ids: list[str] = []
+    for i, row in enumerate(rows):
+        if not isinstance(row, dict):
+            errors.append(f"check command {i} must be a mapping, not {type(row).__name__}")
+            continue
+        unknown = sorted(set(row) - CHECK_COMMAND_KEYS)
+        if unknown:
+            errors.append(
+                f"check command {i} carries unknown key(s) {unknown}; the row keys are "
+                f"{sorted(CHECK_COMMAND_KEYS)}"
+            )
+        rid = row.get("id")
+        if isinstance(rid, str):
+            ids.append(rid)
+        else:
+            errors.append(f"check command {i} is missing `id:`")
+        has_argv, has_absent = "argv" in row, "absent" in row
+        if has_argv == has_absent:
+            errors.append(
+                f"check command {rid or i} must carry exactly one of `argv:` (the command) "
+                "or `absent:` (why this framework has none)"
+            )
+        if has_argv:
+            errors.extend(argv_errors(row["argv"], f"check command {rid or i} `argv`"))
+        if has_absent:
+            if not str(row.get("absent", "")).strip():
+                errors.append(f"check command {rid or i} `absent:` must say why")
+            # An absent row has nothing to run, so nothing to scope or to read.
+            for key in ("extensions", "signal"):
+                if key in row:
+                    errors.append(
+                        f"check command {rid or i} carries `{key}:` with `absent:`; "
+                        "there is no command for it to describe"
+                    )
+        if "extensions" in row:
+            exts = row["extensions"]
+            takes_paths = isinstance(row.get("argv"), list) and PATHS_PLACEHOLDER in row["argv"]
+            if not takes_paths:
+                errors.append(
+                    f"check command {rid or i} carries `extensions:` but its `argv` has no "
+                    f"`{PATHS_PLACEHOLDER}` token; the key narrows what that token expands to"
+                )
+            if (
+                not isinstance(exts, list)
+                or not exts
+                or not all(isinstance(e, str) and EXTENSION_RE.match(e) for e in exts)
+            ):
+                errors.append(
+                    f"check command {rid or i} `extensions:` must be a non-empty list of "
+                    "extensions written with their dot, like `.py`"
+                )
+        if "signal" in row and row["signal"] not in SIGNAL_VALUES:
+            errors.append(
+                f"check command {rid or i} `signal:` must be one of {sorted(SIGNAL_VALUES)}; "
+                f"found {row['signal']!r}"
+            )
+
+    missing = [r for r in CHECK_COMMAND_IDS if r not in ids]
+    if missing:
+        errors.append(
+            f"`check_commands:` is missing row(s) {missing}; all of {CHECK_COMMAND_IDS} are "
+            "answered, with a command or with `absent:`"
+        )
+    extra = sorted(set(ids) - set(CHECK_COMMAND_IDS))
+    if extra:
+        errors.append(f"`check_commands:` carries unknown row id(s) {extra}")
+    if ids != [r for r in CHECK_COMMAND_IDS if r in ids]:
+        errors.append(f"`check_commands:` rows must appear in the order {CHECK_COMMAND_IDS}")
+    dupes = sorted({r for r in ids if ids.count(r) > 1})
+    if dupes:
+        errors.append(f"`check_commands:` row id(s) {dupes} appear more than once")
+    return errors
+
+
 def validate_recipe(path: Path, kind: str = "task") -> list[str]:
     """Return a list of human-readable errors for one recipe (empty = valid).
 
@@ -756,6 +856,18 @@ def validate_recipe(path: Path, kind: str = "task") -> list[str]:
                 )
             else:
                 errors.extend(validate_test_commands(body))
+        # 9. A review recipe declares the three tool checks a build record runs,
+        #    and that declaration fails closed while the review's other two blocks
+        #    stay fail-open: a caller running `coding-standards` and reading
+        #    nothing back must stop rather than record a false unmet.
+        if meta.get("capability") == REVIEW_PHASE:
+            if "Check commands" not in headings:
+                errors.append(
+                    "a `review` recipe must carry `## Check commands`; spelling is "
+                    "load-bearing, and a heading that can be missed does not error"
+                )
+            else:
+                errors.extend(validate_check_commands(body))
 
     return errors
 

@@ -6,7 +6,7 @@ description: 'Use when a Drupal implementation reaches the review phase and must
 # Metadata — read only after a match.
 label: Implementation review checks (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/security
@@ -212,6 +212,44 @@ Machine-readable form the plugin unions onto the neutral language floor:
   "code_quality_extensions": [".module", ".inc", ".install", ".profile", ".theme", ".engine", ".twig"]
 }
 ```
+
+## Check commands
+
+Three rows — `coding-standards`, `static-analysis`, `security` — each a command or a named
+statement that Drupal has none. `{paths}` expands to one argv token per file in the caller's file
+list, relative to the project root. Both commands run through `ddev exec`, the same environment
+`drupal/test-execution.md` declares as a precondition and the tooling recipes under
+`tooling-recipes/drupal/` run in; `ddev exec` hands the tokens to the container without a shell
+and returns the tool's own exit status, and a relative path resolves because the container mirrors
+the project root.
+
+```yaml
+check_commands:
+  - id: coding-standards
+    argv: ["ddev", "exec", "vendor/bin/phpcs", "--standard=Drupal,DrupalPractice", "--extensions=php,module,inc,install,profile,theme,engine", "{paths}"]
+  - id: static-analysis
+    argv: ["ddev", "exec", "vendor/bin/phpstan", "analyse", "{paths}"]
+  - id: security
+    absent: >-
+      Drupal names no dedicated security-scanning tool. The security-sink reading (Form
+      API CSRF, Twig escaping, Entity Query access, the private:// stream, unserialize on
+      user input) is a manual reviewer check, not a tool run over files.
+```
+
+**`--extensions` is load-bearing on the phpcs row.** The `Drupal` ruleset in `drupal/coder` 8.3.31
+sets no file extensions, so PHP_CodeSniffer keeps its default of `php`, `inc`, `js` and `css` — and
+a `.module`, `.install`, `.theme`, `.profile` or `.engine` file named on the command line is skipped
+in silence, with exit 0 and no output, verified on PHP_CodeSniffer 3.13.6. The flag lists the PHP
+file types this recipe's own `## Code-quality extensions` declares, so the two agree; a file type
+outside it, `.twig` or `.yml`, is skipped rather than failed, which is why the row needs no
+`extensions:` key. PHPStan needs no flag: `mglaman/phpstan-drupal` 2.1.2 registers those same
+extensions, and a `.yml` handed to it is skipped in the same way.
+
+Both commands override what the project declares in one direction each. `--standard` wins over a
+project's `phpcs.xml.dist`, so the row enforces this recipe's standard rather than a narrower
+project one. PHPStan takes its level and its extensions from the project's `phpstan.neon` and only
+the paths from the row; without that file it runs at level 0, which finds almost nothing, and the
+tooling recipe for it says a project needs one.
 
 ## References
 

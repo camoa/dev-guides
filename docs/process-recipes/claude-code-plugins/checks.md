@@ -6,7 +6,7 @@ description: Use when a Claude Code plugin reaches the review phase and must be 
 # Metadata — read only after a match.
 label: Plugin review checks (Claude Code)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -166,6 +166,30 @@ After the recipe runs, verify:
 6. The review left the plugin unchanged — nothing edited, reverted, or installed; the verdict was returned for the plugin's review phase to record and gate on.
 
 This recipe ships no executable verifier of its own — the checks above are the agent-driven protocol, run through the tools that own them; the plugin's review phase owns the gate envelope and what a BLOCKED verdict does to the lifecycle.
+
+## Check commands
+
+Three rows, all absent. A plugin's substance is markdown and JSON manifests, not a target a tool
+runs over files, and the structural gate this recipe does run, `/plugin-creation-tools:validate`,
+is a slash command an agent performs from a checklist — it returns findings, not an exit status a
+script can read.
+
+```yaml
+check_commands:
+  - id: coding-standards
+    absent: >-
+      A plugin's substance is markdown and JSON manifests, not a linter target. This
+      framework declares no code-quality extensions for the same reason.
+  - id: static-analysis
+    absent: >-
+      Structural validity is /plugin-creation-tools:validate, a slash command an agent
+      performs, and semantic validity is a trace through code-paper-test:paper-test.
+      Neither is a tool with an exit status a script can run over files.
+  - id: security
+    absent: >-
+      No dedicated security scanner is named. Instruction-artifact and hallucinated-symbol
+      checks are part of the same manual trace as static-analysis above.
+```
 
 ## References
 

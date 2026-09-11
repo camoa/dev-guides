@@ -6,7 +6,7 @@ description: Use when a PHP CLI implementation (a Composer library or applicatio
 # Metadata — read only after a match.
 label: PHP CLI review checks
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -155,6 +155,38 @@ After the recipe runs, verify:
 5. The review left the project code unchanged — nothing edited, nothing reverted, nothing installed; the verdict was returned for the plugin's review phase to record and gate on.
 
 This recipe ships no executable verifier of its own — the checks above are the agent-driven protocol; the plugin's review phase owns the gate envelope and what a BLOCKED verdict does to the lifecycle. The concrete static-analysis run that complements this review — phpstan and phpcs at the project's declared level — is the code-quality-tools plugin's, not this recipe's.
+
+## Check commands
+
+Three rows — `coding-standards`, `static-analysis`, `security` — each a command or a named
+statement that PHP CLI has none. `{paths}` expands to one argv token per file in the caller's file
+list, relative to the project root. The binaries are invoked through `php`, the way
+`php-cli/test-execution.md` invokes PHPUnit, so the row does not depend on the executable bit
+Composer sets on its proxies.
+
+```yaml
+check_commands:
+  - id: coding-standards
+    argv: ["php", "vendor/bin/phpcs", "--standard=PSR12", "{paths}"]
+  - id: static-analysis
+    argv: ["php", "vendor/bin/phpstan", "analyse", "{paths}"]
+  - id: security
+    absent: >-
+      Same reasoning as Drupal. The input-validation, shell-out, unserialize and
+      file-handling sinks are read by hand; no tool is named for them.
+```
+
+**The phpcs row does not reach an extensionless binary, and the phpstan row does.** PHP_CodeSniffer
+3.13.6 skips a file whose extension is not in its list even when the file is named on the command
+line — `bin/<tool>` produces exit 0 and no output — and `--extensions` cannot name "no extension".
+That is the gap Opinion describes, and it holds for this row too: the every-shipped-binary check
+stays with the reviewer. PHPStan 2.2.8 analyses an explicit extensionless path, so the
+static-analysis row does cover a binary the caller lists.
+
+`--standard=PSR12` wins over a project's `phpcs.xml.dist`, so the row enforces this recipe's
+standard rather than a narrower one. PHPStan takes its level from the project's `phpstan.neon` and
+only the paths from the row; without that file it runs at level 0, which is not the declared level
+the standards check above asks for.
 
 ## References
 

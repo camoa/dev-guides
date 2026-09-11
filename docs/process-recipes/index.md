@@ -138,7 +138,7 @@ here.
 |---|---|---|
 | `implement` | `## Oracle files`, `## Routing hints`, `## Preconditions` | fail-open (`## Preconditions` fails closed) |
 | `test-execution` | `## Test commands`, `## Preconditions` | **fail-closed** (both) |
-| `review` | `## Change-impact globs`, `## Code-quality extensions` | fail-open |
+| `review` | `## Change-impact globs`, `## Code-quality extensions`, `## Check commands` | fail-open (`## Check commands` fails closed) |
 | `visual-regression` | `## Change-impact globs`, `## Screenshot capture` | fail-open |
 | `e2e-setup` | `e2e.preflight_command` (a YAML key in the registry seed) | **fail-closed** |
 
@@ -157,7 +157,7 @@ tell a failed assertion from a harness that never reached the behaviour, in that
 output — the frameworks differ sharply here, and two of them report a selector that matched nothing
 as a success.
 
-Both blocks are plain YAML in the body, introduced by a line that is exactly the key. A fenced
+These blocks are plain YAML in the body, introduced by a line that is exactly the key. A fenced
 ```yaml block reads the same to the parser and renders as a code block rather than as one collapsed
 paragraph, so fence anything longer than a few lines.
 
@@ -192,6 +192,27 @@ and test it against every state the command can report, not just the two obvious
 above uses `status_desc` rather than `status` for exactly that reason: `status` appears once per
 service, so a paused project still prints `"status":"running"` for whatever stayed up. An entry with
 no `expect:` is decided exactly as before, so nothing that already works changes.
+
+**`## Check commands` is parsed, and it fails closed.** A `review` recipe declares three rows —
+`coding-standards`, `static-analysis`, `security` — and each is either a command or a named
+statement that this framework has none. Absent is an answer; a row nobody wrote is not, which is
+why the set is fixed and `scripts/validate_recipes.py` rejects a recipe missing one. A command is
+a list of argv tokens, never a shell string, and `{paths}` expands to one token per file in the
+caller's file list, relative to the project root, never concatenated and never passed through a
+shell — the same rule `test_commands` places on `{file}`, `{test_id}` and `{paths}` there. A row
+answered `absent:` carries no `argv:` and no `{paths}`; its reason text is what a person reads when
+they ask why the check never ran for this framework. A row with no `{paths}` runs whole, over
+whatever scope its own tool takes.
+
+Two optional keys exist because two tools were run and did not fit the plain shape. `extensions:`
+lists the file extensions the tool reads; where it is present, `{paths}` expands to only those
+files, because a tool handed a file type it does not read either skips it in silence or parses it
+as its own language and fails on it. Where the expansion is empty the row does not run and is
+recorded as not applicable, never as met. `signal: empty-stdout` marks a tool that cannot fail by
+exit status: the caller reads a zero exit with anything on standard output as unmet, and a caller
+that does not read the key must record the row as not run rather than met, because reading that
+tool's exit status alone is a gate wired to nothing. Without the key, the exit status decides —
+zero is met, and any other status is unmet.
 
 **`## Oracle files` is parsed, not just read.** As of 2026-09-01 a consumer takes the `globs` off the
 row whose `type` is `test_delete` to answer "which files in this repository are tests", instead of
