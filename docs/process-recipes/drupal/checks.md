@@ -6,7 +6,7 @@ description: 'Use when a Drupal implementation reaches the review phase and must
 # Metadata — read only after a match.
 label: Implementation review checks (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.3.0
+version: 0.3.1
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/security
@@ -235,23 +235,28 @@ check_commands:
       API CSRF, Twig escaping, Entity Query access, the private:// stream, unserialize on
       user input) is a manual reviewer check, not a tool run over files.
   - id: duplication
-    argv: ["ddev", "exec", "vendor/bin/phpcpd", "--suffix", ".php", "--suffix", ".module", "--suffix", ".inc", "--suffix", ".install", "--suffix", ".profile", "--suffix", ".theme", "--suffix", ".engine", "web/modules/custom", "web/themes/custom"]
+    argv: ["ddev", "exec", "vendor/bin/phpcpd", "--suffix", ".php", "--suffix", ".module", "--suffix", ".inc", "--suffix", ".install", "--suffix", ".profile", "--suffix", ".theme", "--suffix", ".engine", "{dirs}"]
   - id: design-metrics
     argv: ["ddev", "exec", "vendor/bin/phpmd", "{paths}", "text", "codesize,design", "--suffixes", "php,module,inc,install,profile,theme,engine"]
 ```
 
-**The duplication row takes directories, not `{paths}`.** `phpcpd` 8.0.0 (the `systemsdk/phpcpd`
+**The duplication row takes `{dirs}`, not `{paths}`.** `phpcpd` 8.0.0 (the `systemsdk/phpcpd`
 fork; the original is unmaintained) scans directories only — a file named on its command line
-produces `No files found to scan` and exit 1 — so the row names the two places a Drupal project
-keeps its own code, under the `web/` docroot the e2e recipe assumes. A directory that does not
-exist is skipped while the other has files; when neither has any, the same `No files found` exit 1
-is a false unmet, and it is the one reading of this row that is not a clone. Its default suffix
-is `.php` alone, which is why the row repeats `--suffix` for each PHP file type. Exit 1 means a
-clone was found, 0 means none.
+produces `No files found to scan` and exit 1 — so the row takes the directories that hold the
+caller's files. It does not name `web/modules/custom`: run against a project that keeps its own
+modules at `web/modules/<name>` with an unrelated `web/modules/custom` beside them, that row
+reported `No code clones found` over code the change never touched, and a scan of `web/modules`
+whole found 1,105 clones inside a module's vendored dependencies. The scope this row measures is
+the changed directories, so a clone against an untouched file elsewhere in the module is outside
+it. Its default suffix is `.php` alone, which is why the row repeats `--suffix` for each PHP file
+type. Exit 1 means a clone was found; it is also what `No files found to scan` exits with, so an
+empty scope reads as unmet rather than as clean.
 
 **The design-metrics row reads exit 2, not 1.** PHPMD 2.15.0 exits 2 when it reports a violation,
 1 when it cannot run (a path that does not exist), and 0 when clean; both non-zero readings are
-unmet, and the output separates them. Its ruleset argument is the two shipped sets that measure
+unmet, and the output separates them. On PHP 8.4 the run also prints a page of `Deprecated:
+implicitly marking parameter as nullable` notices from PDepend 2.16.2 before the findings; they are
+noise, not violations, and they do not change the exit status. Its ruleset argument is the two shipped sets that measure
 size and coupling; a project that commits a `phpmd.xml` names it there instead. `--suffixes` is
 needed for the same reason `--extensions` is on the phpcs row: without it a `.module` file named
 on the command line is skipped in silence, verified on the same file that phpcs skipped.

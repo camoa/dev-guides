@@ -211,7 +211,10 @@ caller's file list, relative to the project root, never concatenated and never p
 shell — the same rule `test_commands` places on `{file}`, `{test_id}` and `{paths}` there. A row
 answered `absent:` carries no `argv:` and no `{paths}`; its reason text is what a person reads when
 they ask why the check never ran for this framework. A row with no `{paths}` runs whole, over
-whatever scope its own tool takes.
+whatever scope its own tool takes. A tool that takes directories rather than files takes `{dirs}`:
+one token per distinct directory that directly contains a file in the caller's list, relative to
+the project root, with any directory that lies inside another listed one dropped, so that no file
+is scanned twice.
 
 Two optional keys exist because two tools were run and did not fit the plain shape. `extensions:`
 lists the file extensions the tool reads; where it is present, `{paths}` expands to only those
