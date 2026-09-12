@@ -6,7 +6,7 @@ description: Use when anything needs to run a Drupal test — the failing-test s
 # Metadata — read only after a match.
 label: Test execution (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.2.0
+version: 0.2.1
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/testing
@@ -131,21 +131,32 @@ test_commands:
     argv: ["ddev", "exec", "vendor/bin/infection", "run", "--no-interaction", "{paths}"]
     cost: end-of-task
     trap: >-
-      A report, not a gate. Infection 0.35 exits 0 whatever the score unless
-      `--min-msi` is passed; the score is the `Mutation Score Indicator (MSI)` line and
-      the survivors are the `Escaped mutants` section, twenty by default. It needs an
-      `infection.json5` naming the source directories, a coverage driver (pcov or
-      Xdebug) in the web container, and a PHPUnit run it can reuse; a Kernel or
-      Functional test in that run boots a site once per mutant, so keep the source
-      scope to code Unit tests cover, or the run does not finish.
+      A report, not a gate. Infection 0.35.4 exited 0 with 165 of 434 mutants
+      escaped; the score is the `Metrics:` block (`Covered Code MSI: 61%`, and `msi`
+      in the summary JSON) and the survivors are the `Escaped mutants:` section,
+      twenty by default. By default it mutates only lines a test covers, so an
+      untested method reports nothing at all — `--with-uncovered` is what shows it.
+      It needs an `infection.json5` naming the source directories, a coverage driver
+      (pcov or Xdebug) in the web container, and a PHPUnit config it can reuse; a
+      Kernel or Functional test in that run boots a site once per mutant, so keep the
+      source scope to code Unit tests cover, or the run does not finish.
 ```
 
 **The mutation row takes its files as positional arguments.** `--filter` is deprecated since
 Infection 0.34 and refused when paths are also given, so the row passes the changed files as
 `{paths}`, one token each, which is the form 0.35.4's own help documents. `--no-interaction` is
-what makes a missing configuration an error rather than a prompt the caller cannot answer. This
-was read from the installed tool's help; no Drupal project in reach carries a coverage driver, so
-the run itself was not observed.
+what makes a missing configuration an error rather than a prompt the caller cannot answer.
+
+**Infection needs its own bootstrap on Drupal, not core's.** Infection reflects over the source
+while it generates mutants, and a class that extends a module class fails there with `Class
+"Drupal\<module>\..." does not exist`, because Composer's autoloader knows core and vendor and not
+the extensions. Core's `web/core/tests/bootstrap.php` registers them, and it also installs
+PHPUnit's error handler, which asserts a loaded PHPUnit configuration and fatals inside Infection's
+own process. So `infection.json5` carries a `bootstrap` of its own that requires
+`vendor/autoload.php` and adds `Drupal\<name>\` → `<extension>/src` for every `*.info.yml` under
+`web/`, and nothing else; the PHPUnit config it points at keeps core's bootstrap, because that one
+runs inside PHPUnit. Observed on a module with 104 unit tests: 434 mutants in 1m 26s on 15
+threads with pcov.
 
 **Tiers and what they cost.** Core's `phpunit.xml.dist` declares six testsuites, not four: `unit-component`, `unit`, `kernel`, `functional`, `functional-javascript` and `build`. The four the implement phase selects among are the middle ones; a caller passing `--testsuite` sees all six and should not invent a name.
 
