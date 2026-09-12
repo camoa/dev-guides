@@ -216,11 +216,14 @@ one token per distinct directory that directly contains a file in the caller's l
 the project root, with any directory that lies inside another listed one dropped, so that no file
 is scanned twice.
 
-Two optional keys exist because two tools were run and did not fit the plain shape. `extensions:`
-lists the file extensions the tool reads; where it is present, `{paths}` expands to only those
-files, because a tool handed a file type it does not read either skips it in silence or parses it
-as its own language and fails on it. Where the expansion is empty the row does not run and is
-recorded as not applicable, never as met. `signal: empty-stdout` marks a tool that cannot fail by
+Two optional keys exist for tools that do not fit the plain shape. `extensions:` lists the file
+extensions the tool reads; where it is present, `{paths}` expands to only those files, because a
+tool handed a file type it does not read either skips it in silence or parses it as its own
+language and fails on it. Where the expansion is empty the row does not run and is recorded as not
+applicable, never as met. No shipped row carries it today: the tool that first needed it, mypy,
+turned out to replace the project's declared scope with whatever paths it is given, and now runs
+whole instead. The key stays defined for the next tool that reads a file list and chokes on a type
+in it. `signal: empty-stdout` marks a tool that cannot fail by
 exit status: the caller reads a zero exit with anything on standard output as unmet, and a caller
 that does not read the key must record the row as not run rather than met, because reading that
 tool's exit status alone is a gate wired to nothing. Without the key, the exit status decides —

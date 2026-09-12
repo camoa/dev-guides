@@ -6,7 +6,7 @@ description: Use when a Python change reaches the review phase and must pass its
 # Metadata — read only after a match.
 label: Python review checks
 recipe_schema_version: 1.0.0
-version: 0.3.0
+version: 0.3.1
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -129,8 +129,7 @@ check_commands:
   - id: coding-standards
     argv: ["ruff", "check", "{paths}"]
   - id: static-analysis
-    argv: ["mypy", "{paths}"]
-    extensions: [".py", ".pyi"]
+    argv: ["mypy"]
   - id: security
     argv: ["pip-audit"]
   - id: duplication
@@ -152,10 +151,22 @@ rows run a tool the project did not choose. Record the substitution where it hap
 1 to 3 record which tool ran. `ruff format --check` has no row of its own: formatting is the first
 gate in the Sequence and is not one of the three checks this block answers.
 
-**`extensions:` is on the mypy row because mypy parses whatever it is handed.** This recipe scopes
-`.toml` in, so `pyproject.toml` is in the caller's list, and mypy 2.3.1 given that file reports
-`Name "project" is not defined` and exits 1 — a block caused by the file type, not by the code.
-Ruff needs no such key: `ruff check` 0.15 given a `.toml` reports `All checks passed!` and moves on.
+**The mypy row takes no `{paths}`, because paths on its command line replace the project's scope.**
+`[tool.mypy] files` is where a project says what is typed to which strictness, and a path argument
+overrides it. Run with `{paths}` against a project declaring `files = ["src"]` and `strict = true`,
+the row handed mypy 2.3.1 the tests as well and got thirteen errors in six test files that the
+project had scoped out on purpose, while bare `mypy` on the same tree reported `Success: no issues
+found in 14 source files`. mypy also parses whatever it is handed, so a `pyproject.toml` in the
+list — this recipe scopes `.toml` in — reports `Name "project" is not defined`. Bare `mypy` reads
+`files` and `strict` from the project and neither problem arises. Where `[tool.mypy]` declares no
+`files`, mypy exits 2 with `Missing target module, package, files, or command`: unmet, with the
+reason in the output, and the fix is a line in `pyproject.toml`. Ruff has neither problem:
+`ruff check` 0.15 given a `.toml` reports `All checks passed!` and honours `per-file-ignores`.
+
+**`pip-audit` reads the environment it runs in.** Run from the project's virtualenv it audits that
+environment's installed distributions, prints `No known vulnerabilities found` on standard error,
+exits 0, and lists the project's own distribution as skipped because it is not on PyPI. Run from
+another interpreter it audits that one instead, so the caller's `PATH` decides what is audited.
 
 ## Surface commands
 

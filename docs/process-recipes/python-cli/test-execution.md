@@ -6,7 +6,7 @@ description: Use when anything needs to run a Python project's tests — the fai
 # Metadata — read only after a match.
 label: Test execution (Python CLI)
 recipe_schema_version: 1.0.0
-version: 0.2.0
+version: 0.2.1
 requires_guides:
   - development/tdd-spec-driven
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
@@ -125,21 +125,37 @@ test_commands:
     argv: ["mutmut", "run"]
     cost: end-of-task
     trap: >-
-      A report, not a gate, and it takes no path. mutmut 3.8.0 exits 0 with survivors;
-      the last line of the run is a count per outcome — `🎉` killed, `🙁` survived,
-      `⏰` timed out, `🫥` no test covered it — and `mutmut results` lists each
-      survivor by mutant name, `pkg.m.x_big__mutmut_1`. What it mutates comes from
-      `[tool.mutmut] source_paths` in `pyproject.toml`, not from argv: `run` accepts
-      mutant names, and `--paths-to-mutate` is not an option. Scoping to changed files
-      is a change to that config, not to this row.
+      A report, not a gate, and it takes no path. mutmut 3.8.0 exited 0 with 658 of
+      2,982 mutants survived; the last line of the run is a count per outcome — `🎉`
+      killed, `🙁` survived, `⏰` timed out, `🫥` no test covered it — and
+      `mutmut results` lists each survivor by mutant name, `pkg.m.x_big__mutmut_1`.
+      What it mutates comes from `[tool.mutmut] source_paths` in `pyproject.toml`, not
+      from argv: `run` accepts mutant names, and `--paths-to-mutate` is not an option.
+      Scoping to changed files is `use_git_change_detection` in that section, not a
+      change to this row. It rewrites the source into a `mutants/` directory at the
+      project root and leaves it there, and its first step runs the whole suite once
+      and stops at the first failure with `failed to collect stats. runner returned 1`,
+      exit 1.
 ```
 
 **Why the mutation row carries no `{paths}`.** mutmut 3 rewrote its interface: `mutmut run` takes
 mutant names, the source paths live in `pyproject.toml`, and the older `paths_to_mutate` key is
 deprecated in favour of `source_paths`. A mutant name that matches nothing —
 `mutmut run pkg.m.big` — stops with `Filtered for specific mutants, but nothing matches` and exit 1,
-so a scoped run that mistypes its target is an error rather than an empty pass. All of this was
-run on 3.8.0.
+so a scoped run that mistypes its target is an error rather than an empty pass.
+
+**Two kinds of test do not work under mutmut, and both are ones this catalog asks for.** mutmut runs
+pytest from inside `mutants/`, a copy of the tree holding a rewritten package whose every function
+imports a trampoline from `mutmut` itself. A test that runs the package in a child interpreter —
+the subprocess level, `python -S -c` with only `src` on the path — either cannot import the
+trampoline and fails, or imports the real package from its own path and exercises unmutated code,
+so a mutant covered only by such tests reports as survived or as `🫥 no tests` and is not a test
+gap. A test that builds the wheel finds a tree with no `README.md` and with `.meta` and `.spans`
+files in it. Both were hit on a project with 27 source files: the stats run stopped on an
+isolated-child test, then on a wheel test. What made it run was a `[tool.mutmut]` section with
+`also_copy = ["README.md", "LICENSE", "NOTICE"]` and `pytest_add_cli_args` deselecting the
+subprocess and packaging tests; 2,982 mutants then ran in 70 s, and 401 of the 406 `no tests`
+results sat in the one module that is tested through the console script.
 
 **What each row costs.** The tiers this framework's implement recipe selects among differ mostly at the subprocess boundary.
 

@@ -543,7 +543,8 @@ def validate_test_commands(body: str) -> list[str]:
 # posture as `test_commands`: absent is an answer, a row nobody wrote is not,
 # which is why each set of ids is fixed and ordered. Optional keys exist because
 # tools did not fit the plain shape when they were run: `extensions:` narrows
-# `{paths}` to the file types the tool reads (mypy parses a `.toml` as Python),
+# `{paths}` to the file types the tool reads (mypy parses a `.toml` as Python;
+# that row now runs whole, and the key stays for the next such tool),
 # `signal: empty-stdout` marks a tool that cannot fail by exit status (`gofmt -l`
 # exits 0 whether or not it lists a file), and `silent_pass:` on a surface row
 # says how a run that selected nothing prints itself.
