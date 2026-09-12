@@ -8,7 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you're designing a component API, deciding if something should be a prop or slot, or debugging schema validation errors.
+> - You're designing a component API
+> - You need to decide if something should be a prop or slot
+> - You're debugging schema validation errors
 
 ## Decision
 
@@ -30,7 +32,9 @@ drupal_version: "11.x"
 
 ## Pattern
 
-**Props for Configuration** — Reference: `/themes/contrib/radix/components/button/button.component.yml`
+**Pattern: Props for Configuration**
+
+Reference: `/themes/contrib/radix/components/button/button.component.yml`
 
 ```yaml
 props:
@@ -51,7 +55,9 @@ props:
 
 These control button appearance and behavior — perfect for props. The `default:` lines document intent; `button.twig` is what makes them happen (`{% set variant = variant|default('primary') %}`). Check the template before you rely on any of them.
 
-**Slots for Content** — Reference: `/core/themes/olivero/components/teaser/teaser.component.yml`
+**Pattern: Slots for Content**
+
+Reference: `/core/themes/olivero/components/teaser/teaser.component.yml`
 
 ```yaml
 slots:
@@ -66,7 +72,9 @@ slots:
 
 These accept arbitrary renderable content — perfect for slots. There is no `required:` key for slots: the schema does not define one and no code reads one, so "required" can only be a note to the next developer plus a sensible fallback inside the `{% block %}`.
 
-**Mixed Props and Slots** — most components use both.
+**Pattern: Mixed Props and Slots**
+
+Most components use both props (configuration) and slots (content).
 
 ```yaml
 # Alert component example
@@ -90,10 +98,17 @@ slots:
 
 ## Common Mistakes
 
-- **Wrong**: Writing `required: true` on a slot → **Right**: Nothing in core reads it. `ComponentNodeVisitor::validateSlots()` only reports *undeclared* slots. The component ships and renders an empty region in production with no warning. Handle the omission in the template.
-- **Wrong**: Using props for HTML/renderable content → **Right**: Props must validate against JSON Schema. HTML/render arrays don't have predictable schemas. Use slots instead.
-- **Wrong**: Using slots for simple text/boolean/enum values → **Right**: Slots bypass validation. Simple values should be validated props for better error messages and type safety.
-- **Wrong**: Applying logic to slot content in templates beyond existence checks → **Right**: Slots contain arbitrary renderables. Can't reliably check their properties. Capture the block and test the rendered output (`{% set x %}{% block x %}{% endblock %}{% endset %}{% if x|trim is not empty %}`) — see [Twig Templates in SDCs](twig-templates-in-sdcs.md). Never test a slot-named variable around a `{% block %}`; it does not exist on the `{% embed %}` path.
+**Common Mistake:** Writing `required: true` on a slot.
+**WHY:** Nothing in core reads it. `ComponentNodeVisitor::validateSlots()` only reports *undeclared* slots. The component ships and renders an empty region in production with no warning. Handle the omission in the template.
+
+**Common Mistake:** Using props for HTML/renderable content.
+**WHY:** Props must validate against JSON Schema. HTML/render arrays don't have predictable schemas. Use slots instead.
+
+**Common Mistake:** Using slots for simple text/boolean/enum values.
+**WHY:** Slots bypass validation. Simple values should be validated props for better error messages and type safety.
+
+**Common Mistake:** Applying logic to slot content in templates beyond existence checks.
+**WHY:** Slots contain arbitrary renderables. Can't reliably check their properties. Capture the block and test the rendered output (`{% set x %}{% block x %}{% endblock %}{% endset %}{% if x|trim is not empty %}`) — see [Twig Templates in SDCs](twig-templates-in-sdcs.md). Never test a slot-named variable around a `{% block %}`; it does not exist on the `{% embed %}` path.
 
 ## See Also
 

@@ -1,26 +1,30 @@
 ---
-description: How to navigate the Playwright HTML report home page to find tests to triage.
-tldr: The report home page is a flat list filtered by status, project, and free-text search. Use status chip (Failed) → project filter → keyword search → click row as the standard triage flow. Tests are failed-first ordered; there is no manual sort.
+description: "How to navigate the Playwright HTML report home page to find tests to triage."
+tldr: "The report home page is a flat list filtered by status, project, and free-text search. Use status chip (Failed) → project filter → keyword search → click row as the standard triage flow. Tests are failed-first ordered; there is no manual sort."
 ---
 
 # Report Navigation
 
 ## When to Use
 
-> Use this when finding a specific test to triage in a long report, especially in multi-browser × multi-viewport runs.
+> Finding the test you want to triage in a long report.
 
-## Decision
+## Home Page Layout
 
-| Task | How |
-|---|---|
-| Narrow to failures | Click **Failed** status chip |
-| Scope to one browser | Use project filter chip |
-| Find by name or file | Free-text search box |
-| Filter by tag | Click `@tag` chip or use `@tag` in search |
+A flat list of all executed tests. Per-test row: title, file path, project (browser), duration, status pill (`passed` / `failed` / `flaky` / `skipped` / `timed out`).
 
-## Pattern
+## Top-of-Page Controls
 
-Standard triage flow:
+- **Status filter chips** — All / Passed / Failed / Flaky / Skipped
+- **Project filter** — appears when `projects` config has multiple entries
+- **Free-text search** — matches title and file path; supports prefixes:
+  - `s:failed` — status filter
+  - `p:chromium` — project filter
+  - `@tag` — annotation tag
+  - `file:` — file filter
+- **Tags** — `@smoke`, `@vr` etc. become clickable filter chips
+
+## Pattern: Triage Flow
 
 ```
 1. Click Failed status chip          → narrow to failures
@@ -29,19 +33,10 @@ Standard triage flow:
 4. Click row                          → open per-test detail
 ```
 
-Search prefixes:
-
-| Prefix | Example | What it filters |
-|---|---|---|
-| `s:` | `s:failed` | Status |
-| `p:` | `p:chromium` | Project |
-| `@` | `@smoke` | Annotation tag |
-| `file:` | `file:header` | File path |
-
 ## Common Mistakes
 
-- **Wrong**: expecting a sort UI → **Right**: ordering is implicit (failed first, then by file); no manual sort
-- **Wrong**: looking for `@tag` filter chips when tests have no annotations → **Right**: tags only appear if tests use `test.annotations` with tag syntax
+- **Sorting expectations** — sorting is implicit (failed first, then by file); no manual sort UI
+- **Looking for tag UI without tagging tests** — `@smoke` etc. only appear if tests carry annotations
 
 ## See Also
 

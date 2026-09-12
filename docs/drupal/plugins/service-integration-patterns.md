@@ -23,6 +23,8 @@ drupal_version: "11.x"
 
 **Consumer Service with Provider Abstraction**:
 
+**Reference Pattern**: AI module consumer services pattern
+
 ```yaml
 # Consumer service registration
 services:
@@ -34,29 +36,31 @@ services:
       - '@event_dispatcher'
 ```
 
-```php
-// Consumer service methods
-public function executeOperation($operation_type, $data, $options) {
-  // Auto-select provider based on configuration
-}
+**Consumer Service Pattern**:
 
-public function executeWithProvider($provider_id, $config_id, $data, $options) {
-  // Use specific provider
-}
-```
+**Key Methods**:
+- `executeOperation($operation_type, $data, $options)` - Auto-select provider
+- `executeWithProvider($provider_id, $config_id, $data, $options)` - Specific provider
 
 **Service Collector Consumer Pattern**:
+
+**Reference**: `/web/modules/contrib/orchestration/src/Controller/Connect.php`
 
 ```php
 // REST API controller consuming service collector manager
 public function execute(): JsonResponse {
   $data = json_decode($this->request->getContent(), TRUE);
-  return new JsonResponse(
-    $this->servicesProviderManager->executeService(
-      $data['id'] ?? '',
-      $data['config'] ?? []
-    )
-  );
+  try {
+    return new JsonResponse(
+      $this->servicesProviderManager->executeService(
+        $data['id'] ?? '',
+        $data['config'] ?? []
+      )
+    );
+  }
+  catch (\Exception $e) {
+    return new JsonResponse(['error' => $e->getMessage()], 500);
+  }
 }
 ```
 
@@ -64,9 +68,9 @@ public function execute(): JsonResponse {
 
 ## Common Mistakes
 
-- **Wrong**: External systems calling plugin manager directly → **Right**: Use service collector with REST API endpoints
-- **Wrong**: Consumer service hardcoded to specific provider → **Right**: Use provider-agnostic interface with configuration-driven selection
-- **Wrong**: No error handling in REST API controller → **Right**: Wrap execution in try/catch, return proper HTTP status codes
+- **External systems calling the plugin manager directly** → WHY: The plugin manager has no HTTP contract; the service collector's REST endpoints are the supported external surface
+- **Hardcoding a consumer service to one provider** → WHY: Provider selection belongs in configuration, so the consumer keeps working when the provider changes
+- **No try/catch in the REST API controller** → WHY: An uncaught provider exception returns a 500 with a stack trace instead of a structured error body
 
 ## See Also
 

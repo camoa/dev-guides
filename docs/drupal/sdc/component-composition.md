@@ -8,7 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you're including one component in another, deciding between `include()`, `embed`, or render arrays, or nesting components.
+> - You're including one component in another
+> - You need to decide between `include()`, `embed`, or render arrays
+> - You're nesting components
 
 ## Decision
 
@@ -20,11 +22,13 @@ drupal_version: "11.x"
 
 `include()` can also fill a slot, but only if the component template prints it as a variable (`{{ header }}`) rather than as a `{% block %}`. It cannot override blocks. That is the whole reason `embed` exists.
 
-**Precondition for `embed`:** the component you are embedding must render that slot through `{% block name %}`. If its template prints a bare `{{ name }}` instead, or wraps the block in `{% if name %}`, your block override is silently discarded — see [Twig Templates in SDCs](twig-templates-in-sdcs.md). Open the component's `.twig` before you write the embed.
+**Precondition:** the component you are embedding must render that slot through `{% block name %}`. If its template prints a bare `{{ name }}` instead, or wraps the block in `{% if name %}`, your block override is silently discarded — see [Twig Templates in SDCs](twig-templates-in-sdcs.md). Open the component's `.twig` before you write the embed.
 
 ## Pattern
 
-**`include()` — most common:**
+**Pattern: include() Function (Most Common)**
+
+Use for simple component inclusion with props only.
 
 ```twig
 {# Simple inclusion #}
@@ -43,7 +47,11 @@ drupal_version: "11.x"
 
 **WHY `with_context = false`:** Prevents automatic variable leakage into the component, keeping components isolated and predictable.
 
-**`embed` — only for filling slots via blocks.** Reference (component side): `/core/themes/olivero/components/teaser/teaser.twig`
+**Pattern: embed Tag (Only for Slots)**
+
+Use when populating slots via Twig blocks.
+
+Reference (component side): `/core/themes/olivero/components/teaser/teaser.twig`
 
 ```twig
 {% embed 'my_theme:card' with {
@@ -66,7 +74,9 @@ drupal_version: "11.x"
 {% endembed %}
 ```
 
-**Render arrays — programmatic:**
+**Pattern: Render Arrays (Programmatic)**
+
+Use in preprocessing, controllers, forms, hooks.
 
 ```php
 // In .theme file or controller
@@ -84,7 +94,9 @@ $build = [
 ];
 ```
 
-**Nested components:**
+**Pattern: Nested Components**
+
+Components can include other components via slots or direct inclusion.
 
 ```twig
 {# Parent component with child components in slots #}
@@ -104,8 +116,11 @@ $build = [
 
 ## Common Mistakes
 
-- **Wrong**: Using `embed` when `include()` is sufficient → **Right**: `embed` has overhead and complexity. Only use it when you need to populate slots with Twig blocks. For props-only components, use `include()`.
-- **Wrong**: Hardcoding child components instead of using slots → **Right**: Reduces flexibility. Slots allow different child components in different contexts. Hardcoding couples the parent to specific children.
+**Common Mistake:** Using `embed` when `include()` is sufficient.
+**WHY:** `embed` has overhead and complexity. Only use when you need to populate slots with Twig blocks. For props-only components, use `include()`.
+
+**Common Mistake:** Hardcoding child components instead of using slots.
+**WHY:** Reduces flexibility. Slots allow different child components in different contexts. Hardcoding couples parent to specific children.
 
 ## See Also
 

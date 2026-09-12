@@ -8,24 +8,29 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you're optimizing component loading, debugging slow page loads with many components, or implementing caching strategies.
+> - You're optimizing component loading
+> - You're debugging slow page loads with many components
+> - You're implementing caching strategies
 
 ## Decision
 
-**Automatic Library Loading.** Components automatically generate asset libraries, loaded only when the component renders.
+**Pattern: Automatic Library Loading**
 
-- Format: `core/components.{provider}--{component-name}`
-- Includes matching `.css` and `.js` files.
-- Auto-attached when the component renders.
-- Aggregated with other libraries in production.
+Components automatically generate asset libraries, loaded only when component renders.
 
-**WHY automatic is better:** no manual library management. Assets only load when the component is actually used on the page.
+**Generated Library Format:**
+- `core/components.{provider}--{component-name}`
+- Includes matching `.css` and `.js` files
+- Auto-attached when component renders
+- Aggregated with other libraries in production
 
-Declare dependencies to optimize loading order. `libraryOverrides` is the only key core reads — there is no `libraryDependencies` (see [Component YAML Schema](component-yaml-schema.md)).
+**WHY automatic is better:** No manual library management. Assets only load when component actually used on page.
 
 ## Pattern
 
-**Library Dependencies:**
+**Pattern: Library Dependencies**
+
+Declare dependencies to optimize loading order. `libraryOverrides` is the only key core reads — there is no `libraryDependencies` (see [Component YAML Schema](component-yaml-schema.md)).
 
 ```yaml
 libraryOverrides:
@@ -39,7 +44,9 @@ libraryOverrides:
 
 The `js:` key here **replaces** the auto-discovered `my-component.js` entry rather than adding to it (`array_merge` at `ComponentPluginManager.php:213-216`), so list the file with the same name you want to keep loading.
 
-**Render Caching:**
+**Pattern: Render Caching**
+
+Cache component render output when possible.
 
 ```php
 // In render array
@@ -56,7 +63,9 @@ $build = [
 ];
 ```
 
-**Lazy Loading Components** — for below-fold or modal components, consider lazy loading.
+**Pattern: Lazy Loading Components**
+
+For below-fold or modal components, consider lazy loading.
 
 ```twig
 {# Use BigPipe for heavy components #}
@@ -71,7 +80,9 @@ $build = [
 </div>
 ```
 
-**CSS Performance** — minimize component CSS file size and complexity.
+**Pattern: CSS Performance**
+
+Minimize component CSS file size and complexity.
 
 ```css
 /* ✓ GOOD: Simple, scoped selectors */
@@ -86,9 +97,14 @@ $build = [
 
 ## Common Mistakes
 
-- **Wrong**: Including heavy JavaScript libraries in every component → **Right**: Bloats page weight. Use `libraryOverrides: dependencies:` to share one common library across components rather than duplicating code per component.
-- **Wrong**: Not enabling CSS/JS aggregation in production → **Right**: Individual component files create many HTTP requests. Enable aggregation in production settings.
-- **Wrong**: Over-componentizing (a component for every small element) → **Right**: Each component has overhead. Group related elements together when they always appear together.
+**Common Mistake:** Including heavy JavaScript libraries in every component.
+**WHY:** Bloats page weight. Use `libraryOverrides: dependencies:` to share one common library across components rather than duplicating code per component.
+
+**Common Mistake:** Not enabling CSS/JS aggregation in production.
+**WHY:** Individual component files create many HTTP requests. Enable aggregation in production settings.
+
+**Common Mistake:** Over-componentizing (components for every small element).
+**WHY:** Each component has overhead. Group related elements together when they always appear together.
 
 ## See Also
 

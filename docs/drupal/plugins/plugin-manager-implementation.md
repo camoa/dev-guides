@@ -22,7 +22,7 @@ drupal_version: "11.x"
 
 ## Pattern
 
-**Plugin Manager Registration**:
+**Standard Plugin Manager Registration**:
 
 ```yaml
 # module.services.yml
@@ -35,30 +35,37 @@ services:
     class: Drupal\foundation_module\ServiceGatewayManager
     parent: default_plugin_manager
 
+  plugin.manager.foundation_service_method_type:
+    class: Drupal\foundation_module\ServiceMethodTypeManager
+    parent: default_plugin_manager
+
   # Provider Pattern - Single Manager with Proxy
   my_module.service_provider:
     class: Drupal\my_module\ServiceProviderPluginManager
     parent: default_plugin_manager
     arguments: ['@service_container']
-```
 
-**Service Collector Registration**:
-
-```yaml
-# Service Collector Pattern - Manager with Tagged Collection
-services:
+  # Service Collector Pattern - Manager with Tagged Collection
   orchestration.services_manager:
     class: Drupal\orchestration\ServicesProviderManager
     tags:
       - { name: 'service_collector', tag: 'orchestration_services_provider', call: 'addServicesProvider' }
 ```
 
-**Plugin Manager Key Methods**:
+**Plugin Manager Pattern Reference**:
+
+**Reference**: `/web/core/lib/Drupal/Core/Plugin/DefaultPluginManager.php`
+
+**Key Methods**:
 - `getDefinitions()` - Get all plugin definitions
 - `createInstance($plugin_id, array $configuration)` - Instantiate plugin
 - `hasDefinition($plugin_id)` - Check if plugin exists
 
-**Service Collector Key Methods**:
+**Service Collector Pattern Reference**:
+
+**Reference**: `/web/modules/contrib/orchestration/src/ServicesProviderManager.php`
+
+**Key Methods**:
 - `addServicesProvider(ServicesProviderInterface $provider)` - Called by service collector
 - `getAllServices()` - Aggregate services from all providers
 - `executeService($serviceId, array $config)` - Execute specific service

@@ -1,6 +1,8 @@
 nav:
 - Python prior-art research: prior-art.md
-- Python CLI architecture: architecture.md
+- Design (Python CLI): architecture.md
+- Test authoring (Python CLI): test-authoring.md
 - Python implementation standards and tests: standards-and-tests.md
+- Test execution (Python CLI): test-execution.md
 - Python review checks: checks.md
 append_unmatched: true

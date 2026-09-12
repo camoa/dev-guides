@@ -8,7 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you're writing component Twig templates, accessing props and rendering slots, or working with the `attributes` object.
+> - You're writing component Twig templates
+> - You need to access props and render slots
+> - You're working with the `attributes` object
 
 ## Decision
 
@@ -16,7 +18,9 @@ drupal_version: "11.x"
 
 Props you never declared in the YAML also arrive here and work: the validator narrows the context to declared names before checking it, and it is `assert()`-gated anyway. That is convenient and it is a trap — an undeclared prop is invisible to every tool that reads the YAML (UI Patterns, component pickers, IDE autocompletion), so declare what you use.
 
-**Rendering Slots — the three call paths.** A slot reaches the template by one of three routes, and they do **not** deliver it the same way:
+**Pattern: Rendering Slots — and the three call paths**
+
+A slot reaches the template by one of three routes, and they do **not** deliver it the same way:
 
 | Caller | Slot arrives as | `{% block name %}` sees it | `{{ name }}` sees it |
 |---|---|---|---|
@@ -59,7 +63,9 @@ Reference: `/core/themes/olivero/components/teaser/teaser.twig` (bare blocks), `
 
 Putting `{{ content|default('') }}` *inside* the block makes the component work on all three paths at once: `{% embed %}` overrides the block, `include()` leaves the block alone and the fallback prints the variable, and the render element does both and the override wins.
 
-**Attributes Object** — the `attributes` object (type `Drupal\Core\Template\Attribute`) provides attribute merging.
+**Pattern: Attributes Object**
+
+The `attributes` object (type `Drupal\Core\Template\Attribute`) provides attribute merging.
 
 ```twig
 {# Class addition #}
@@ -75,7 +81,9 @@ Putting `{{ content|default('') }}` *inside* the block makes the component work 
   .removeAttribute('id') }}>
 ```
 
-**Conditional Slot Rendering** — you will want to skip an empty wrapper. Doing it the obvious way silently deletes your caller's content:
+**Pattern: Conditional Slot Rendering**
+
+You will want to skip an empty wrapper. Doing it the obvious way silently deletes your caller's content:
 
 ```twig
 {# ✗ BROKEN — do not do this #}
@@ -107,8 +115,11 @@ The capture renders the block — picking up an `{% embed %}` override — and i
 
 ## Common Mistakes
 
-- **Wrong**: Wrapping `{% block name %}` in `{% if name %}` → **Right**: Only the render-element path defines a variable named after the slot. On the `{% embed %}` path the conditional is always false and the caller's content vanishes with no error. Capture the block into a variable and test that instead.
-- **Wrong**: Applying complex logic to slot content → **Right**: Slots contain arbitrary renderables. Test the *rendered* capture (`|trim is not empty`), never the renderable's internals. All logic should be in props.
+**Common Mistake:** Wrapping `{% block name %}` in `{% if name %}`.
+**WHY:** Only the render-element path defines a variable named after the slot. On the `{% embed %}` path the conditional is always false and the caller's content vanishes with no error. Capture the block into a variable and test that instead.
+
+**Common Mistake:** Applying complex logic to slot content.
+**WHY:** Slots contain arbitrary renderables. Test the *rendered* capture (`|trim is not empty`), never the renderable's internals. All logic should be in props.
 
 ## See Also
 

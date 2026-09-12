@@ -6,7 +6,7 @@ description: Use when a Claude Code plugin reaches the review phase and must be 
 # Metadata — read only after a match.
 label: Plugin review checks (Claude Code)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.3.0
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -166,6 +166,64 @@ After the recipe runs, verify:
 6. The review left the plugin unchanged — nothing edited, reverted, or installed; the verdict was returned for the plugin's review phase to record and gate on.
 
 This recipe ships no executable verifier of its own — the checks above are the agent-driven protocol, run through the tools that own them; the plugin's review phase owns the gate envelope and what a BLOCKED verdict does to the lifecycle.
+
+## Check commands
+
+Five rows, all absent. A plugin's substance is markdown and JSON manifests, not a target a tool
+runs over files, and the structural gate this recipe does run, `/plugin-creation-tools:validate`,
+is a slash command an agent performs from a checklist — it returns findings, not an exit status a
+script can read.
+
+```yaml
+check_commands:
+  - id: coding-standards
+    absent: >-
+      A plugin's substance is markdown and JSON manifests, not a linter target. This
+      framework declares no code-quality extensions for the same reason.
+  - id: static-analysis
+    absent: >-
+      Structural validity is /plugin-creation-tools:validate, a slash command an agent
+      performs, and semantic validity is a trace through code-paper-test:paper-test.
+      Neither is a tool with an exit status a script can run over files.
+  - id: security
+    absent: >-
+      No dedicated security scanner is named. Instruction-artifact and hallucinated-symbol
+      checks are part of the same manual trace as static-analysis above.
+  - id: duplication
+    absent: >-
+      Instructions and manifests are not a duplication-tool target. Two components that
+      say the same thing are a finding of the structure auditor, read rather than measured.
+  - id: design-metrics
+    absent: >-
+      There is no code to measure. Component balance and single responsibility are the
+      structure auditor's judgement, not a metric a tool computes over files.
+```
+
+## Surface commands
+
+Five rows, all absent. Surface commands are the suites review runs over a framework's user-visible
+surfaces, and a Claude Code plugin has none: it has no rendered or behavioural runtime surface, which is why it binds no e2e-setup or visual-regression phase. The rows are declared absent rather than left out because a
+present block with absent rows is how review knows a framework has no surfaces, while a missing
+block is a heading it could not find.
+
+```yaml
+surface_commands:
+  - id: e2e
+    absent: >-
+      A plugin has no runtime surface a browser or a process harness could drive; its behaviour is traced through code-paper-test:paper-test under implement, which is a method rather than a suite.
+  - id: visual-regression
+    absent: >-
+      No rendered surface exists to screenshot, so there is no baseline to diff against.
+  - id: visual-regression-accept
+    absent: >-
+      There is no visual-regression suite, so there is no baseline to accept.
+  - id: visual-parity
+    absent: >-
+      This framework names no parity harness.
+  - id: visual-parity-accept
+    absent: >-
+      There is no parity suite, so there is no baseline to accept.
+```
 
 ## References
 

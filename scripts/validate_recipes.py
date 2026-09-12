@@ -138,6 +138,7 @@ def slug_resolves(slug: str) -> bool:
 # cosmetic — the fence must parse, the row keys must be the agreed set, and
 # `test_delete` must appear exactly once so it is a stable selector.
 ORACLE_H2 = "## Oracle files"
+ORACLE_H2_RE = re.compile(rf"^{re.escape(ORACLE_H2)}\s*$", re.M)
 ORACLE_KEYS = {"type", "globs", "changes", "oracle_class", "severity"}
 JSON_FENCE_RE = re.compile(r"```json\s*\n(.*?)\n```", re.S)
 
@@ -149,12 +150,15 @@ def validate_oracle_block(body: str) -> list[str]:
     "no oracle configured" state, not an omission.
     """
     errors: list[str] = []
-    idx = body.find(ORACLE_H2)
-    if idx == -1:
+    # Match the HEADING, not the words. A recipe that only *mentions* the
+    # section — "declared once, in the implement recipe under `## Oracle
+    # files`" — declares no oracles and must not be asked for a fence.
+    head = ORACLE_H2_RE.search(body)
+    if head is None:
         return errors
 
     # Bound the section at the next H2 so a later fence cannot be mistaken for it.
-    rest = body[idx + len(ORACLE_H2):]
+    rest = body[head.end():]
     nxt = re.search(r"^## ", rest, re.M)
     section = rest[: nxt.start()] if nxt else rest
 
@@ -304,6 +308,365 @@ def tooling_fence_errors(body: str, line_offset: int) -> list[str]:
     return errors
 
 
+# `preconditions:` and `test_commands:` are unfenced YAML blocks in the BODY, not
+# frontmatter. The block starts at a line that is exactly `<key>:` in column 1 and
+# runs to the first following line that is neither blank nor indented. That is the
+# shape `## Preconditions` has shipped in since it was written, and the command
+# declaration matches it so one parser reads both and an author writes one form.
+def body_block(body: str, key: str) -> str | None:
+    """The YAML block introduced by `<key>:` at column 1, or None.
+
+    `<key>: []` on one line counts. A recipe that declares none has to be
+    distinguishable from one whose key is misspelled, and the empty list is how it
+    says so — a reader that could not see it would read both as "nobody could tell".
+    """
+    lines = body.splitlines()
+    start = next(
+        (
+            i for i, ln in enumerate(lines)
+            if ln.rstrip() == f"{key}:" or ln.rstrip() == f"{key}: []"
+        ),
+        None,
+    )
+    if start is None:
+        return None
+    out = [lines[start]]
+    for ln in lines[start + 1:]:
+        if ln.strip() and not ln[:1].isspace():
+            break
+        out.append(ln)
+    return "\n".join(out)
+
+
+def load_body_block(body: str, key: str) -> tuple[object | None, list[str]]:
+    """(parsed value under `key`, errors). (None, []) when the block is absent."""
+    raw = body_block(body, key)
+    if raw is None:
+        return None, []
+    try:
+        parsed = yaml.safe_load(raw) or {}
+    except yaml.YAMLError as exc:
+        return None, [f"`{key}:` block does not parse as YAML: {exc}"]
+    if not isinstance(parsed, dict) or key not in parsed:
+        return None, [f"`{key}:` block does not parse to a `{key}` mapping"]
+    return parsed[key], []
+
+
+# A precondition entry has looked structured since it was written and, until now,
+# nothing read it — so a misspelled `check:`, `owner:` or `id:` degraded in silence
+# and the consumer that trusts the block got one key fewer than the author wrote.
+PRECONDITION_KEYS = {"id", "what", "check", "expect", "owner"}
+PRECONDITION_REQUIRED = ("id", "what")
+
+
+def validate_preconditions_block(body: str) -> list[str]:
+    """Check the `preconditions:` block. Absent is valid — the key is optional."""
+    rows, errors = load_body_block(body, "preconditions")
+    if errors or rows is None:
+        return errors
+    if not isinstance(rows, list):
+        return ["`preconditions:` must be a list of entries, or `[]` for none"]
+    if not rows:
+        # An explicit empty list is an answer: declared, and there are none. It is
+        # what separates a recipe with no conditions from one whose key is
+        # misspelled, so it must validate rather than read as an empty block.
+        return errors
+    seen: set[str] = set()
+    for i, row in enumerate(rows):
+        if not isinstance(row, dict):
+            errors.append(f"precondition {i} must be a mapping, not {type(row).__name__}")
+            continue
+        unknown = sorted(set(row) - PRECONDITION_KEYS)
+        if unknown:
+            errors.append(
+                f"precondition {i} carries unknown key(s) {unknown}; the entry keys are "
+                f"{sorted(PRECONDITION_KEYS)} — a misspelled one is dropped in silence"
+            )
+        for req in PRECONDITION_REQUIRED:
+            if not row.get(req):
+                errors.append(f"precondition {i} is missing `{req}:`")
+        pid = row.get("id")
+        if pid is not None and not (isinstance(pid, str) and TOKEN_RE.match(pid)):
+            errors.append(
+                f"precondition `id` must be a single token matching {TOKEN_RE.pattern}; "
+                f"found {pid!r}"
+            )
+        elif isinstance(pid, str):
+            if pid in seen:
+                errors.append(f"precondition id {pid!r} appears more than once")
+            seen.add(pid)
+        for key in ("check", "owner", "expect"):
+            val = row.get(key)
+            if val is not None and not isinstance(val, str):
+                errors.append(f"precondition {pid or i} `{key}:` must be a string")
+        # `expect:` reads what the command printed, so without a command it reads
+        # nothing and decides nothing — a silent no-op is the defect this block is
+        # being taught to catch, not one to add.
+        if "expect" in row and not row.get("check"):
+            errors.append(
+                f"precondition {pid or i} carries `expect:` with no `check:`; the field "
+                "reads what a command printed, so there has to be a command"
+            )
+        if "expect" in row and isinstance(row.get("expect"), str) and not row["expect"].strip():
+            errors.append(
+                f"precondition {pid or i} `expect:` is empty; an empty string appears in "
+                "every output, so the condition would always answer yes"
+            )
+    return errors
+
+
+# The six rows a caller asks a framework for. Each is a command or a named
+# statement that this framework has none — absent is an answer, and it is not the
+# same as a row nobody wrote, which is why the set is fixed and checked. The
+# `mutation` row is a report rather than a gate: every mutation tool run for it
+# exits 0 with survivors, so its `trap:` says where the score and the survivors
+# print.
+TEST_EXECUTION_PHASE = "test-execution"
+TEST_COMMAND_IDS = ["suite", "file", "test", "changed", "smoke", "mutation"]
+TEST_COMMAND_KEYS = {"id", "argv", "absent", "nearest", "cost", "trap", "id_form"}
+COST_VALUES = {"every-attempt", "end-of-task"}
+# A command is argv, never a shell string: the caller executes the token list
+# directly, so a token that only means something to a shell would mean something
+# other than what its author read. The set is deliberately narrow. A regex anchor
+# (`^$`, `/::testName$/`) and a package pattern (`./...`) are ordinary argv content
+# and must pass; whitespace, redirection, chaining and substitution must not.
+SHELL_CHARS = set(" \t|&;<>`\\\"'")
+SHELL_SUBSTRINGS = ("$(",)
+# A placeholder is substituted whole, so a token either IS one or contains no brace
+# at all — `--filter={test_id}` would substitute into nothing.
+PLACEHOLDER_RE = re.compile(r"^\{[a-z][a-z0-9_]*\}$")
+BRACE_CHARS = set("{}")
+
+
+def argv_errors(argv: object, where: str) -> list[str]:
+    """Check one argv token list."""
+    if not isinstance(argv, list) or not argv or not all(isinstance(t, str) for t in argv):
+        return [f"{where} must be a non-empty list of string tokens"]
+    errors: list[str] = []
+    for token in argv:
+        if PLACEHOLDER_RE.match(token):
+            continue
+        bad = sorted(set(token) & SHELL_CHARS)
+        bad += [sub for sub in SHELL_SUBSTRINGS if sub in token]
+        if bad:
+            errors.append(
+                f"{where} token {token!r} carries shell syntax {bad}; the token list is "
+                "executed directly, so nothing expands it"
+            )
+        if set(token) & BRACE_CHARS:
+            errors.append(
+                f"{where} token {token!r} embeds a brace; a placeholder is substituted "
+                "whole, so a token is exactly `{name}` or carries no brace at all"
+            )
+    return errors
+
+
+def validate_test_commands(body: str) -> list[str]:
+    """Check `test_commands:` and `failure_signal:` for a test-execution recipe."""
+    rows, errors = load_body_block(body, "test_commands")
+    if rows is None:
+        return errors or [
+            "`## Test commands` carries no `test_commands:` block; a framework whose "
+            "test commands cannot be read cannot be built against"
+        ]
+    if not isinstance(rows, list):
+        return ["`test_commands:` must be a list of rows"]
+
+    ids: list[str] = []
+    for i, row in enumerate(rows):
+        if not isinstance(row, dict):
+            errors.append(f"test command {i} must be a mapping, not {type(row).__name__}")
+            continue
+        unknown = sorted(set(row) - TEST_COMMAND_KEYS)
+        if unknown:
+            errors.append(
+                f"test command {i} carries unknown key(s) {unknown}; the row keys are "
+                f"{sorted(TEST_COMMAND_KEYS)}"
+            )
+        rid = row.get("id")
+        if isinstance(rid, str):
+            ids.append(rid)
+        else:
+            errors.append(f"test command {i} is missing `id:`")
+        has_argv, has_absent = "argv" in row, "absent" in row
+        if has_argv == has_absent:
+            errors.append(
+                f"test command {rid or i} must carry exactly one of `argv:` (the command) "
+                "or `absent:` (why this framework has none)"
+            )
+        if has_argv:
+            errors.extend(argv_errors(row["argv"], f"test command {rid or i} `argv`"))
+            if row.get("cost") not in COST_VALUES:
+                errors.append(
+                    f"test command {rid or i} needs `cost:` — one of {sorted(COST_VALUES)}; "
+                    "without it a caller runs the cheapest thing or runs everything"
+                )
+        if has_absent and not str(row.get("absent", "")).strip():
+            errors.append(f"test command {rid or i} `absent:` must say why")
+        if "nearest" in row:
+            errors.extend(argv_errors(row["nearest"], f"test command {rid or i} `nearest`"))
+
+    missing = [r for r in TEST_COMMAND_IDS if r not in ids]
+    if missing:
+        errors.append(
+            f"`test_commands:` is missing row(s) {missing}; all of {TEST_COMMAND_IDS} are "
+            "answered, with a command or with `absent:`"
+        )
+    extra = sorted(set(ids) - set(TEST_COMMAND_IDS))
+    if extra:
+        errors.append(f"`test_commands:` carries unknown row id(s) {extra}")
+    dupes = sorted({r for r in ids if ids.count(r) > 1})
+    if dupes:
+        errors.append(f"`test_commands:` row id(s) {dupes} appear more than once")
+
+    signal, sig_errors = load_body_block(body, "failure_signal")
+    errors.extend(sig_errors)
+    if signal is None and not sig_errors:
+        errors.append(
+            "`## Test commands` carries no `failure_signal:` block; without it a caller "
+            "cannot tell a failed assertion from a harness that never ran the test"
+        )
+    elif isinstance(signal, dict):
+        if "absent" not in signal and not all(signal.get(k) for k in ("assertion", "harness")):
+            errors.append(
+                "`failure_signal:` needs `assertion:` and `harness:` (or `absent:` where "
+                "the framework has no harness to read)"
+            )
+    elif signal is not None:
+        errors.append("`failure_signal:` must be a mapping")
+    return errors
+
+
+# The rows a caller asks a review recipe for. `check_commands` holds the tool
+# checks a build record runs before anything judges the code; `surface_commands`
+# holds the suites review runs over the framework's user-visible surfaces. Same
+# posture as `test_commands`: absent is an answer, a row nobody wrote is not,
+# which is why each set of ids is fixed and ordered. Optional keys exist because
+# tools did not fit the plain shape when they were run: `extensions:` narrows
+# `{paths}` to the file types the tool reads (mypy parses a `.toml` as Python;
+# that row now runs whole, and the key stays for the next such tool),
+# `signal: empty-stdout` marks a tool that cannot fail by exit status (`gofmt -l`
+# exits 0 whether or not it lists a file), and `silent_pass:` on a surface row
+# says how a run that selected nothing prints itself.
+REVIEW_PHASE = "review"
+CHECK_COMMAND_IDS = [
+    "coding-standards", "static-analysis", "security", "duplication", "design-metrics",
+]
+CHECK_COMMAND_KEYS = {"id", "argv", "absent", "extensions", "signal"}
+SURFACE_COMMAND_IDS = [
+    "e2e", "visual-regression", "visual-regression-accept",
+    "visual-parity", "visual-parity-accept",
+]
+SURFACE_COMMAND_KEYS = CHECK_COMMAND_KEYS | {"silent_pass"}
+SIGNAL_VALUES = {"exit-status", "empty-stdout"}
+PATHS_PLACEHOLDER = "{paths}"
+EXTENSION_RE = re.compile(r"^\.[a-z0-9]+$")
+
+
+def validate_command_rows(
+    body: str, key: str, heading: str, ids_wanted: list[str], keys: set[str], label: str,
+) -> list[str]:
+    """Check one fixed-id command block (`check_commands:` or `surface_commands:`)."""
+    rows, errors = load_body_block(body, key)
+    if rows is None:
+        return errors or [
+            f"`## {heading}` carries no `{key}:` block; a caller running a row and "
+            "reading nothing back must stop, not read a false unmet"
+        ]
+    if not isinstance(rows, list):
+        return [f"`{key}:` must be a list of rows"]
+
+    ids: list[str] = []
+    for i, row in enumerate(rows):
+        if not isinstance(row, dict):
+            errors.append(f"{label} {i} must be a mapping, not {type(row).__name__}")
+            continue
+        unknown = sorted(set(row) - keys)
+        if unknown:
+            errors.append(
+                f"{label} {i} carries unknown key(s) {unknown}; the row keys are {sorted(keys)}"
+            )
+        rid = row.get("id")
+        if isinstance(rid, str):
+            ids.append(rid)
+        else:
+            errors.append(f"{label} {i} is missing `id:`")
+        has_argv, has_absent = "argv" in row, "absent" in row
+        if has_argv == has_absent:
+            errors.append(
+                f"{label} {rid or i} must carry exactly one of `argv:` (the command) "
+                "or `absent:` (why this framework has none)"
+            )
+        if has_argv:
+            errors.extend(argv_errors(row["argv"], f"{label} {rid or i} `argv`"))
+        if has_absent:
+            if not str(row.get("absent", "")).strip():
+                errors.append(f"{label} {rid or i} `absent:` must say why")
+            # An absent row has nothing to run, so nothing to scope or to read.
+            for k in ("extensions", "signal", "silent_pass"):
+                if k in row:
+                    errors.append(
+                        f"{label} {rid or i} carries `{k}:` with `absent:`; "
+                        "there is no command for it to describe"
+                    )
+        if "extensions" in row:
+            exts = row["extensions"]
+            takes_paths = isinstance(row.get("argv"), list) and PATHS_PLACEHOLDER in row["argv"]
+            if not takes_paths:
+                errors.append(
+                    f"{label} {rid or i} carries `extensions:` but its `argv` has no "
+                    f"`{PATHS_PLACEHOLDER}` token; the key narrows what that token expands to"
+                )
+            if (
+                not isinstance(exts, list)
+                or not exts
+                or not all(isinstance(e, str) and EXTENSION_RE.match(e) for e in exts)
+            ):
+                errors.append(
+                    f"{label} {rid or i} `extensions:` must be a non-empty list of "
+                    "extensions written with their dot, like `.py`"
+                )
+        if "signal" in row and row["signal"] not in SIGNAL_VALUES:
+            errors.append(
+                f"{label} {rid or i} `signal:` must be one of {sorted(SIGNAL_VALUES)}; "
+                f"found {row['signal']!r}"
+            )
+        if "silent_pass" in row and not str(row.get("silent_pass", "")).strip():
+            errors.append(f"{label} {rid or i} `silent_pass:` must say how a run that selected nothing prints itself")
+
+    missing = [r for r in ids_wanted if r not in ids]
+    if missing:
+        errors.append(
+            f"`{key}:` is missing row(s) {missing}; all of {ids_wanted} are answered, "
+            "with a command or with `absent:`"
+        )
+    extra = sorted(set(ids) - set(ids_wanted))
+    if extra:
+        errors.append(f"`{key}:` carries unknown row id(s) {extra}")
+    if ids != [r for r in ids_wanted if r in ids]:
+        errors.append(f"`{key}:` rows must appear in the order {ids_wanted}")
+    dupes = sorted({r for r in ids if ids.count(r) > 1})
+    if dupes:
+        errors.append(f"`{key}:` row id(s) {dupes} appear more than once")
+    return errors
+
+
+def validate_check_commands(body: str) -> list[str]:
+    """Check `check_commands:` for a review recipe."""
+    return validate_command_rows(
+        body, "check_commands", "Check commands", CHECK_COMMAND_IDS, CHECK_COMMAND_KEYS,
+        "check command",
+    )
+
+
+def validate_surface_commands(body: str) -> list[str]:
+    """Check `surface_commands:` for a review recipe."""
+    return validate_command_rows(
+        body, "surface_commands", "Surface commands", SURFACE_COMMAND_IDS,
+        SURFACE_COMMAND_KEYS, "surface command",
+    )
+
+
 def validate_recipe(path: Path, kind: str = "task") -> list[str]:
     """Return a list of human-readable errors for one recipe (empty = valid).
 
@@ -386,6 +749,42 @@ def validate_recipe(path: Path, kind: str = "task") -> list[str]:
                 f"cited guide/play does not resolve to a file: `{slug}` "
                 f"(expected docs/{slug}.md or docs/{slug}/index.md)"
             )
+
+    # 4b. `requires_tooling` names resolve to a tooling recipe for THIS framework.
+    #     A process recipe knows which tools its method needs; the caller only knows
+    #     it wants a standards check, not that a Drupal standards check means phpcs.
+    #     The tool name is the whole contract, so a name that resolves to nothing has
+    #     to fail here — at publish — rather than on the machine of whoever runs it.
+    #     Resolution is per framework on purpose: the same tool installs differently
+    #     per stack, which is why phpunit is two recipes and not one.
+    #     OPTIONAL, checked only when present, so a recipe whose framework has no
+    #     tooling recipes yet stays valid.
+    decl = meta.get("requires_tooling")
+    if decl is not None:
+        if not isinstance(decl, list):
+            errors.append(
+                f"`requires_tooling` must be a list of tool names (got {type(decl).__name__})"
+            )
+        else:
+            fw = meta.get("framework")
+            for tool in decl:
+                if not isinstance(tool, str) or not TOKEN_RE.match(tool):
+                    errors.append(
+                        f"`requires_tooling` entry must be a single lowercase token naming a "
+                        f"tool (got {tool!r})"
+                    )
+                    continue
+                if not fw:
+                    errors.append(
+                        f"`requires_tooling` names `{tool}` but the recipe declares no "
+                        "`framework`; a tool resolves per framework, so it cannot be checked"
+                    )
+                    continue
+                if not (TOOLING_RECIPES_DIR / str(fw) / f"{tool}.md").is_file():
+                    errors.append(
+                        f"`requires_tooling` names `{tool}`, which has no tooling recipe for "
+                        f"framework `{fw}` (expected docs/tooling-recipes/{fw}/{tool}.md)"
+                    )
 
     # 5. Machine-readable `requires_*` frontmatter slugs resolve.
     #    Honors the contract recipe-loader relies on (degrade-paths.md:14 — dev-guides CI owns dangling
@@ -474,6 +873,38 @@ def validate_recipe(path: Path, kind: str = "task") -> list[str]:
 
     if is_process:
         errors.extend(validate_oracle_block(body))
+        # 7. The `preconditions:` block is parsed, not just headed. It has looked
+        #    structured since it was written and nothing read it, so a misspelled
+        #    key degraded in silence. Optional: checked only when present.
+        errors.extend(validate_preconditions_block(body))
+        # 8. A test-execution recipe declares the commands that run tests, and the
+        #    declaration fails closed for the same reason `## Preconditions` does:
+        #    a framework whose test commands cannot be read cannot be built
+        #    against, and saying so is the useful answer.
+        if meta.get("capability") == TEST_EXECUTION_PHASE:
+            if "Test commands" not in headings:
+                errors.append(
+                    "a `test-execution` recipe must carry `## Test commands`; spelling is "
+                    "load-bearing, and a heading that can be missed does not error"
+                )
+            else:
+                errors.extend(validate_test_commands(body))
+        # 9. A review recipe declares the three tool checks a build record runs,
+        #    and that declaration fails closed while the review's other two blocks
+        #    stay fail-open: a caller running `coding-standards` and reading
+        #    nothing back must stop rather than record a false unmet.
+        if meta.get("capability") == REVIEW_PHASE:
+            for heading, check in (
+                ("Check commands", validate_check_commands),
+                ("Surface commands", validate_surface_commands),
+            ):
+                if heading not in headings:
+                    errors.append(
+                        f"a `review` recipe must carry `## {heading}`; spelling is "
+                        "load-bearing, and a heading that can be missed does not error"
+                    )
+                else:
+                    errors.extend(check(body))
 
     return errors
 

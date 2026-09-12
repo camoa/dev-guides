@@ -8,7 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you're adding interactive behavior to components, you need to use the Drupal.behaviors pattern, or you're integrating with `once()` or other Drupal JS APIs.
+> - You're adding interactive behavior to components
+> - You need to use Drupal.behaviors pattern
+> - You're integrating with `once()` or other Drupal JS APIs
 
 ## Decision
 
@@ -16,7 +18,9 @@ Attach behavior with `Drupal.behaviors` and scope every query to the passed `con
 
 ## Pattern
 
-**Drupal.behaviors with once()** — Reference: `/themes/contrib/radix/` JavaScript patterns
+**Pattern: Drupal.behaviors with once()**
+
+Reference: `/themes/contrib/radix/` JavaScript patterns
 
 ```javascript
 /**
@@ -54,7 +58,9 @@ Attach behavior with `Drupal.behaviors` and scope every query to the passed `con
 })(Drupal, once);
 ```
 
-**Library Dependencies** — declare JS dependencies in component YAML with `libraryOverrides` (there is no `libraryDependencies` key — see [Component YAML Schema](component-yaml-schema.md)):
+**Pattern: Library Dependencies**
+
+Declare JS dependencies in component YAML. There is no `libraryDependencies` key — see [Component YAML Schema](component-yaml-schema.md).
 
 ```yaml
 libraryOverrides:
@@ -68,7 +74,9 @@ libraryOverrides:
       preprocess: false
 ```
 
-**Progressive Enhancement** — assume the component works without JavaScript, enhance with JS.
+**Pattern: Progressive Enhancement**
+
+Assume component works without JavaScript, enhance with JS.
 
 ```javascript
 Drupal.behaviors.myComponent = {
@@ -94,14 +102,18 @@ Drupal.behaviors.myComponent = {
 
 ## Common Mistakes
 
-- **Wrong**: Not using `once()` to prevent duplicate initialization → **Right**: Drupal.behaviors can attach multiple times (AJAX, BigPipe). Without `once()`, event listeners get added multiple times, causing bugs.
-- **Wrong**: Querying the entire document instead of the scoped `context` → **Right**: Drupal passes `context` to limit behavior to new content. Ignoring it causes performance issues and processes elements multiple times.
-- **Wrong**: Not implementing `detach` → **Right**: Without cleanup, event listeners and instances persist after elements are removed, causing memory leaks.
+**Common Mistake:** Not using `once()` to prevent duplicate initialization.
+**WHY:** Drupal.behaviors can attach multiple times (AJAX, BigPipe). Without `once()`, event listeners get added multiple times, causing bugs.
+
+**Common Mistake:** Querying entire document instead of scoped `context`.
+**WHY:** Drupal passes `context` to limit behavior to new content. Ignoring it causes performance issues and processes elements multiple times.
+
+**Common Mistake:** Not implementing `detach` method.
+**WHY:** Without cleanup, event listeners and instances persist after elements removed, causing memory leaks.
 
 ## See Also
 
 - Reference: `/core/misc/drupal.js` — Core Drupal JavaScript
 - Reference: `/core/assets/vendor/once/once.js` — `once()` implementation
-- [Component YAML Schema](component-yaml-schema.md)
 - [Performance](performance.md)
 - [Drupal JavaScript API](https://www.drupal.org/docs/drupal-apis/javascript-api/javascript-api-overview)

@@ -1,6 +1,8 @@
 nav:
 - Go prior-art research: prior-art.md
-- Go architecture: architecture.md
+- Design (Go): architecture.md
+- Test authoring (Go): test-authoring.md
 - Go standards and tests: standards-and-tests.md
+- Test execution (Go): test-execution.md
 - Go review checks: checks.md
 append_unmatched: true

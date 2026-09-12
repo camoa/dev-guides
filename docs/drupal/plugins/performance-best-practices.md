@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Apply these patterns to any plugin system handling more than a handful of plugins or processing external API calls.
+> Any plugin system handling more than a handful of plugins or processing external API calls.
 
 ## Decision
 
@@ -22,17 +22,18 @@ drupal_version: "11.x"
 
 ## Pattern
 
-**Plugin Discovery Caching**:
+**Plugin discovery caching** - `DefaultPluginManager` implements `CachedDiscoveryInterface`, but only caches once you give it a backend:
 
 ```php
-// DefaultPluginManager extends CachedDiscoveryInterface automatically
 class MyPluginManager extends DefaultPluginManager {
+
   public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
     parent::__construct(
       'Plugin/MyPluginType',
       $namespaces,
       $module_handler,
       'Drupal\my_module\Plugin\MyPluginTypeInterface',
+      'Drupal\my_module\Attribute\MyPluginType',
       'Drupal\my_module\Annotation\MyPluginType'
     );
     $this->setCacheBackend($cache_backend, 'my_plugin_type_plugins');
@@ -40,10 +41,11 @@ class MyPluginManager extends DefaultPluginManager {
 }
 ```
 
-**Provider API Caching**:
+The fifth argument is the **attribute** class and the sixth the annotation class kept for backward compatibility. Passing an annotation class in the attribute position triggers a deprecation in Drupal 11.2 and stops working in Drupal 12.
+
+**Provider response caching** - tag the entry so a provider change can invalidate it:
 
 ```php
-// Cache provider responses with invalidation
 public function executeWithCache($operation, $data) {
   $cid = 'provider:' . $this->providerId . ':' . md5(serialize($data));
 
@@ -62,31 +64,9 @@ public function executeWithCache($operation, $data) {
 }
 ```
 
-**Lazy Service Collection**:
-
-```yaml
-# Use service_id_collector for lazy loading
-services:
-  my_module.service_manager:
-    class: Drupal\my_module\ServiceManager
-    tags:
-      - { name: 'service_id_collector', tag: 'my_module_service', call: 'addServiceId' }
-```
+**Check before instantiate** - `hasDefinition()` costs a lookup, a failed `createInstance()` costs an exception:
 
 ```php
-// Load service only when needed
-public function getService($service_id) {
-  if (!isset($this->services[$service_id])) {
-    $this->services[$service_id] = $this->container->get($service_id);
-  }
-  return $this->services[$service_id];
-}
-```
-
-**Check Before Instantiate**:
-
-```php
-// Use hasDefinition() to avoid expensive exception handling
 public function getPlugin($plugin_id, array $config = []) {
   if (!$this->pluginManager->hasDefinition($plugin_id)) {
     $this->logger->warning('Plugin @id not found', ['@id' => $plugin_id]);
@@ -98,10 +78,10 @@ public function getPlugin($plugin_id, array $config = []) {
 
 ## Common Mistakes
 
-- **Wrong**: Calling `getDefinitions()` in hot paths → **Right**: Cache results at request level or use `hasDefinition()`
-- **Wrong**: Not using `hasDefinition()` before `createInstance()` → **Right**: Check existence to avoid expensive exception handling
-- **Wrong**: Loading all providers to find one → **Right**: Use capability-based discovery to filter first
-- **Wrong**: No timeout on external provider calls → **Right**: Set reasonable timeouts (30s default, configurable)
+- **Calling `getDefinitions()` in hot paths** → WHY: Even cached, deserialization of large definition arrays is expensive
+- **Not using `hasDefinition()` before `createInstance()`** → WHY: Failed instantiation throws exceptions which are expensive
+- **Loading all providers to find one** → WHY: Use capability-based discovery (`getProvidersByCapability()`) to filter first
+- **No timeout on external provider calls** → WHY: One slow provider blocks the entire request
 
 ## See Also
 

@@ -8,7 +8,10 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you're defining component metadata, specifying props and slots, configuring library dependencies, or reading someone else's `.component.yml` to find out how their component behaves.
+> - You're defining component metadata
+> - You need to specify props and slots
+> - You're configuring library dependencies
+> - You're reading someone else's `.component.yml` to find out how their component behaves
 
 ## THE MECHANISM: the YAML declares, the Twig decides
 
@@ -29,25 +32,20 @@ Core reads the `.component.yml` in order to *validate* and to *describe*. It nev
 **Minimum viable file:** an empty `.component.yml` is valid. The JSON Schema declares no `required` array, and `ComponentMetadata` defaults `name` to the title-cased machine name, `status` to `stable`, `description` to a placeholder and `group` to "All Components" (`ComponentMetadata.php:135-142`). Core's own kernel test asserts that a component with an empty metadata file is found.
 
 **Keys core actually reads:**
-
-| Key | Purpose | Notes |
-|---|---|---|
-| `$schema` | JSON Schema URL | Enables IDE validation; no runtime effect |
-| `name` | Human-readable name | Defaults to title-cased machine name |
-| `description` | Component purpose | — |
-| `status` | `experimental \| stable \| deprecated \| obsolete` | Defaults to `stable`; also falls back to `stable` for any value outside the enum, though the definition validator flags it when assertions are on |
-| `noUi` | Exclude the component from component-picker UIs | — |
-| `group` | Admin category | Read by `ComponentPluginManager::processDefinitionCategory()` but **absent from both JSON Schema files** — valid, just undocumented upstream |
-| `replaces` | Replacement directive | Also read by PHP but absent from the JSON Schemas. Usable from themes **and** modules — see [Replacing Templates with SDCs](replacing-templates-with-sdcs.md) |
-| `props` | JSON Schema for typed data | — |
-| `slots` | Content insertion points | — |
-| `variants` | Named variant metadata | Drupal **11.2+** — see [Component Variants](component-variants.md) |
-| `libraryOverrides` | The only library key | Carries `dependencies`, `css` and `js` |
-| `thirdPartySettings` | Free-form storage for contrib | — |
+- `$schema` - JSON Schema URL (enables IDE validation; no runtime effect)
+- `name` - Human-readable name (defaults to title-cased machine name)
+- `description` - Component purpose
+- `status` - experimental | stable | deprecated | obsolete (defaults to `stable`; `ComponentMetadata` also falls back to `stable` for any value outside the enum, though the definition validator flags it when assertions are on)
+- `noUi` - Exclude the component from component-picker UIs
+- `group` - Admin category. Read by `ComponentPluginManager::processDefinitionCategory()` but **absent from both JSON Schema files** — valid, just undocumented upstream.
+- `replaces` - Replacement directive. Also read by PHP but absent from the JSON Schemas. Usable from themes **and** modules — see [Replacing Templates with SDCs](replacing-templates-with-sdcs.md).
+- `props` - JSON Schema for typed data
+- `slots` - Content insertion points
+- `variants` - Named variant metadata (Drupal **11.2+** — see [Component Variants](component-variants.md))
+- `libraryOverrides` - The only library key. Carries `dependencies`, `css` and `js`.
+- `thirdPartySettings` - Free-form storage for contrib
 
 **There is no `libraryDependencies` key.** It is not in `metadata.schema.json`, not in `metadata-full.schema.json`, and `ComponentPluginManager::libraryFromDefinition()` reads only `$definition['libraryOverrides']` (`:207-220`). Because neither schema sets `additionalProperties: false` at the top level, writing `libraryDependencies:` raises no error at any validation level — your `core/once` dependency is simply never attached and the component's JS breaks at runtime with nothing pointing back at the YAML. Use `libraryOverrides: dependencies:`.
-
-**Slot names and prop names share one namespace.** `ComponentValidator::validateDefinition()` throws `InvalidComponentException` when the same key is declared as both (`ComponentValidator.php:55-67`).
 
 ## Pattern
 
@@ -58,7 +56,12 @@ name: 'Component Name'
 status: stable
 ```
 
-**Props** — Reference: `/core/modules/system/tests/modules/sdc_test/components/my-button/my-button.component.yml`
+**Pattern: Props Definition**
+
+Props are **strictly typed, validated data** for component logic.
+
+Reference: `/core/modules/system/tests/modules/sdc_test/components/my-button/my-button.component.yml`
+
 ```yaml
 props:
   type: object
@@ -89,7 +92,14 @@ The `default:` lines above do **not** make `variant` become `primary` when the c
 
 Keep the two in sync, and treat a mismatch between them as a bug in the YAML.
 
-**Slots** — Reference: `/core/themes/olivero/components/teaser/teaser.component.yml`
+**Slot names and prop names share one namespace.** `ComponentValidator::validateDefinition()` throws `InvalidComponentException` when the same key is declared as both (`ComponentValidator.php:55-67`).
+
+**Pattern: Slots Definition**
+
+Slots are **unstructured content areas** for renderables.
+
+Reference: `/core/themes/olivero/components/teaser/teaser.component.yml`
+
 ```yaml
 slots:
   content:
@@ -102,7 +112,10 @@ slots:
 
 `title`, `description` and `examples` are the only keys the slot schema allows. **Do not write `required: true` on a slot** — nothing reads it (see THE MECHANISM above), so it reads as a guarantee to the next developer that core will not honour. If a slot is genuinely mandatory, say so in `description:` and give the block a sensible fallback inside the template.
 
-**Library Dependencies** — Reference: `/core/modules/system/tests/modules/sdc_test_replacements/components/my-button/my-button.component.yml`
+**Pattern: Library Dependencies**
+
+Reference: `/core/modules/system/tests/modules/sdc_test_replacements/components/my-button/my-button.component.yml`
+
 ```yaml
 libraryOverrides:
   dependencies:
@@ -120,10 +133,14 @@ Two things to know about `libraryOverrides`:
 
 ## Common Mistakes
 
-- **Wrong**: Writing `libraryDependencies:` → **Right**: Use `libraryOverrides: dependencies:`. The wrong key raises no error anywhere; your dependency is simply never attached.
-- **Wrong**: Not including `$schema` URL → **Right**: Without it, IDEs can't provide validation/autocomplete, and developers lose development-time error checking.
-- **Wrong**: Using `type: array` for renderable content (e.g. `card_title_prefix`) → **Right**: Arrays of renderable content should be slots, not props. Props are for typed scalar/object data that validates against JSON Schema.
-- **Wrong**: Trusting an unfamiliar component's `.component.yml` as the description of its API → **Right**: Nothing keeps the YAML honest at runtime. Undeclared props still work, declared defaults are never applied, and required slots are never enforced. Open the `.twig` before you write the call.
+**Common Mistake:** Not including `$schema` URL.
+**WHY:** Without schema URL, IDEs can't provide validation/autocomplete, and developers lose development-time error checking.
+
+**Common Mistake:** Using `type: array` for `card_title_prefix` when it should be a slot.
+**WHY:** Arrays of renderable content should be slots, not props. Props are for typed scalar/object data that validates against JSON Schema. See Radix card component for corrected pattern.
+
+**Common Mistake:** Trusting an unfamiliar component's `.component.yml` as the description of its API.
+**WHY:** Nothing keeps the YAML honest at runtime. Undeclared props still work, declared defaults are never applied, and required slots are never enforced. Open the `.twig` before you write the call.
 
 ## See Also
 

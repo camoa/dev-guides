@@ -6,7 +6,7 @@ description: Use when a PHP CLI implementation (a Composer library or applicatio
 # Metadata — read only after a match.
 label: PHP CLI review checks
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.3.0
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -155,6 +155,76 @@ After the recipe runs, verify:
 5. The review left the project code unchanged — nothing edited, nothing reverted, nothing installed; the verdict was returned for the plugin's review phase to record and gate on.
 
 This recipe ships no executable verifier of its own — the checks above are the agent-driven protocol; the plugin's review phase owns the gate envelope and what a BLOCKED verdict does to the lifecycle. The concrete static-analysis run that complements this review — phpstan and phpcs at the project's declared level — is the code-quality-tools plugin's, not this recipe's.
+
+## Check commands
+
+Five rows — `coding-standards`, `static-analysis`, `security`, `duplication`, `design-metrics` —
+each a command or a named statement that PHP CLI has none. `{paths}` expands to one argv token per
+file in the caller's file list, relative to the project root. The binaries are invoked through
+`php`, the way `php-cli/test-execution.md` invokes PHPUnit, so the row does not depend on the
+executable bit Composer sets on its proxies.
+
+```yaml
+check_commands:
+  - id: coding-standards
+    argv: ["php", "vendor/bin/phpcs", "--standard=PSR12", "{paths}"]
+  - id: static-analysis
+    argv: ["php", "vendor/bin/phpstan", "analyse", "{paths}"]
+  - id: security
+    absent: >-
+      Same reasoning as Drupal. The input-validation, shell-out, unserialize and
+      file-handling sinks are read by hand; no tool is named for them.
+  - id: duplication
+    argv: ["php", "vendor/bin/phpcpd", "src"]
+  - id: design-metrics
+    argv: ["php", "vendor/bin/phpmd", "{paths}", "text", "codesize,design"]
+```
+
+**The phpcs row and the phpmd row do not reach an extensionless binary; the phpstan row does.**
+PHP_CodeSniffer 3.13.6 and PHPMD 2.15.0 both skip a file whose extension is not in their list even
+when the file is named on the command line — `bin/<tool>` produces exit 0 and no output from
+either — and neither `--extensions` nor `--suffixes` can name "no extension". That is the gap
+Opinion describes, and it holds for these rows too: the every-shipped-binary check stays with the
+reviewer. PHPStan 2.2.8 analyses an explicit extensionless path, so the static-analysis row does
+cover a binary the caller lists.
+
+**The duplication row takes a directory, not `{paths}`.** `phpcpd` 8.0.0 (the `systemsdk/phpcpd`
+fork; the original is unmaintained) scans directories only — a file on its command line produces
+`No files found to scan` and exit 1 — so the row names `src/`, where this framework keeps the
+library. Exit 1 means a clone was found, and also means no file was found, so an empty `src/`
+reads as unmet. PHPMD exits 2 on a violation, 1 when it cannot run, and 0 when clean; a project
+that commits a `phpmd.xml` names it in place of the two shipped rulesets.
+
+## Surface commands
+
+Five rows, all absent. Surface commands are the suites review runs over a framework's user-visible
+surfaces, and a PHP CLI tool has none: its interface is one or more binaries, and its end-to-end shape is a test level chosen in `php-cli/test-authoring.md`, not a phase. The rows are declared absent rather than left out because a
+present block with absent rows is how review knows a framework has no surfaces, while a missing
+block is a heading it could not find.
+
+```yaml
+surface_commands:
+  - id: e2e
+    absent: >-
+      A CLI's end-to-end coverage is the fixture-driven level the test-authoring recipe chooses, run by the suite row of `php-cli/test-execution.md`; there is no browser surface for a separate e2e suite to drive.
+  - id: visual-regression
+    absent: >-
+      No rendered surface exists to screenshot, so there is no baseline to diff against.
+  - id: visual-regression-accept
+    absent: >-
+      There is no visual-regression suite, so there is no baseline to accept.
+  - id: visual-parity
+    absent: >-
+      This framework names no parity harness.
+  - id: visual-parity-accept
+    absent: >-
+      There is no parity suite, so there is no baseline to accept.
+```
+
+`--standard=PSR12` wins over a project's `phpcs.xml.dist`, so the row enforces this recipe's
+standard rather than a narrower one. PHPStan takes its level from the project's `phpstan.neon` and
+only the paths from the row; without that file it runs at level 0, which is not the declared level
+the standards check above asks for.
 
 ## References
 
