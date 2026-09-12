@@ -6,7 +6,7 @@ description: Use when anything needs to run a Python project's tests — the fai
 # Metadata — read only after a match.
 label: Test execution (Python CLI)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 requires_guides:
   - development/tdd-spec-driven
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
@@ -80,7 +80,7 @@ paths: [string]               # optional; the test files a change is scoped to
 
 ## Test commands
 
-Five rows. Each is a command or a named statement that this framework has none. `{runner}` is the project's declared runner, `{file}` one test file path, `{test_id}` one node identifier, and `{paths}` a list that expands to one token per element.
+Six rows. Each is a command or a named statement that this framework has none. `{runner}` is the project's declared runner, `{file}` one test file path, `{test_id}` one node identifier, and `{paths}` a list that expands to one token per element.
 
 ```yaml
 test_commands:
@@ -121,7 +121,25 @@ test_commands:
       Proves collection and every import it performs. It runs no test, so it proves
       nothing about behaviour — but an import error in the package surfaces here,
       which is the failure most often mistaken for a failing test.
+  - id: mutation
+    argv: ["mutmut", "run"]
+    cost: end-of-task
+    trap: >-
+      A report, not a gate, and it takes no path. mutmut 3.8.0 exits 0 with survivors;
+      the last line of the run is a count per outcome — `🎉` killed, `🙁` survived,
+      `⏰` timed out, `🫥` no test covered it — and `mutmut results` lists each
+      survivor by mutant name, `pkg.m.x_big__mutmut_1`. What it mutates comes from
+      `[tool.mutmut] source_paths` in `pyproject.toml`, not from argv: `run` accepts
+      mutant names, and `--paths-to-mutate` is not an option. Scoping to changed files
+      is a change to that config, not to this row.
 ```
+
+**Why the mutation row carries no `{paths}`.** mutmut 3 rewrote its interface: `mutmut run` takes
+mutant names, the source paths live in `pyproject.toml`, and the older `paths_to_mutate` key is
+deprecated in favour of `source_paths`. A mutant name that matches nothing —
+`mutmut run pkg.m.big` — stops with `Filtered for specific mutants, but nothing matches` and exit 1,
+so a scoped run that mistypes its target is an error rather than an empty pass. All of this was
+run on 3.8.0.
 
 **What each row costs.** The tiers this framework's implement recipe selects among differ mostly at the subprocess boundary.
 

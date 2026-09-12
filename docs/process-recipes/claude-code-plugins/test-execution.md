@@ -6,7 +6,7 @@ description: Use when anything needs to run a Claude Code plugin project's tests
 # Metadata — read only after a match.
 label: Test execution (Claude Code plugins)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase; there is
 # no separate applies_to_phase. `framework` is the second routing dimension.
@@ -54,7 +54,7 @@ scope: string                 # suite | file | test | changed | smoke — the ro
 
 ## Test commands
 
-Five rows, five statements of absence. Each says what a caller asking for that scope should do instead.
+Six rows, six statements of absence. Each says what a caller asking for that scope should do instead.
 
 ```yaml
 test_commands:
@@ -81,6 +81,10 @@ test_commands:
       Nothing proves a harness runs, because there is no harness. The nearest thing
       is the structural validator the review phase owns, and it is not a test run —
       a green from it says the files parse, never that a component behaves.
+  - id: mutation
+    absent: >-
+      No mutation tool is established for this framework, and there is no suite for
+      one to run: a mutant of an instruction has no test that would kill it.
 ```
 
 **What answers instead, and who owns it.**

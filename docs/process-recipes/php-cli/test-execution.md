@@ -6,7 +6,7 @@ description: Use when anything needs to run a PHP CLI project's tests — the fa
 # Metadata — read only after a match.
 label: Test execution (PHP CLI)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 requires_guides:
   - development/tdd-spec-driven
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
@@ -69,7 +69,7 @@ paths: [string]               # optional; the test files a change is scoped to
 
 ## Test commands
 
-Five rows. Each is a command or a named statement that this framework has none. `{file}` is one test file path, `{test_id}` one anchored filter, and `{paths}` a list that expands to one token per element.
+Six rows. Each is a command or a named statement that this framework has none. `{file}` is one test file path, `{test_id}` one anchored filter, and `{paths}` a list that expands to one token per element.
 
 ```yaml
 test_commands:
@@ -107,7 +107,25 @@ test_commands:
     trap: >-
       Proves the configuration parses, the bootstrap loads and the suites resolve.
       It runs no test, so it proves nothing about behaviour.
+  - id: mutation
+    argv: ["php", "vendor/bin/infection", "run", "--no-interaction", "{paths}"]
+    cost: end-of-task
+    trap: >-
+      A report, not a gate. Infection 0.35 exits 0 whatever the score unless
+      `--min-msi` is passed; the score is the `Mutation Score Indicator (MSI)` line and
+      the survivors are the `Escaped mutants` section, twenty by default. It needs an
+      `infection.json5` naming the source directories and a coverage driver (pcov or
+      Xdebug); the fixture-driven end-to-end tier spawns the binary once per case per
+      mutant, so `--only-covering-test-cases` is the difference between a run that
+      finishes and one that does not.
 ```
+
+**The mutation row takes its files as positional arguments.** `--filter` is deprecated since
+Infection 0.34 and refused when paths are also given, so the row passes the changed files as
+`{paths}`, one token each, which is the form 0.35.4's own help documents. `--no-interaction` is
+what makes a missing configuration an error rather than a prompt the caller cannot answer. Read
+from the installed tool's help; the host PHP carries no coverage driver, so the run itself was not
+observed.
 
 **What each row costs.** The tiers this framework's implement recipe selects among differ mostly at the end-to-end boundary.
 

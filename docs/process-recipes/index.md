@@ -138,16 +138,16 @@ here.
 |---|---|---|
 | `implement` | `## Oracle files`, `## Routing hints`, `## Preconditions` | fail-open (`## Preconditions` fails closed) |
 | `test-execution` | `## Test commands`, `## Preconditions` | **fail-closed** (both) |
-| `review` | `## Change-impact globs`, `## Code-quality extensions`, `## Check commands` | fail-open (`## Check commands` fails closed) |
+| `review` | `## Change-impact globs`, `## Code-quality extensions`, `## Check commands`, `## Surface commands` | fail-open (`## Check commands` and `## Surface commands` fail closed) |
 | `visual-regression` | `## Change-impact globs`, `## Screenshot capture` | fail-open |
 | `e2e-setup` | `e2e.preflight_command` (a YAML key in the registry seed) | **fail-closed** |
 
 Spelling is load-bearing. A fail-open declaration with a misspelled heading does not error — it silently
 degrades to the neutral floor, and the run looks clean while checking less than you think.
 
-**`## Test commands` is parsed, and it fails closed.** A `test-execution` recipe declares five rows —
-`suite`, `file`, `test`, `changed`, `smoke` — and each is either a command or a named statement that
-this framework has none. Absent is an answer; a row nobody wrote is not, which is why the set is
+**`## Test commands` is parsed, and it fails closed.** A `test-execution` recipe declares six rows —
+`suite`, `file`, `test`, `changed`, `smoke`, `mutation` — and each is either a command or a named
+statement that this framework has none. Absent is an answer; a row nobody wrote is not, which is why the set is
 fixed and `scripts/validate_recipes.py` rejects a recipe missing one. A command is a list of argv
 tokens, never a shell string, and a token that is exactly a `{placeholder}` is substituted whole —
 the same rule `check:` lives under, for the same reason. Each command carries a `cost:` of
@@ -156,6 +156,13 @@ under-checks or runs everything on every attempt. Alongside the rows, `failure_s
 tell a failed assertion from a harness that never reached the behaviour, in that harness's own
 output — the frameworks differ sharply here, and two of them report a selector that matched nothing
 as a success.
+
+**The `mutation` row is a report, not a gate.** Every mutation tool run for it — Infection, mutmut,
+gremlins — exits 0 with surviving mutants, and gremlins exited 0 with its own efficacy threshold
+unmet, so a caller reading exit status learns nothing from this row. Its `trap:` says where the
+score and the survivors print, in that tool's own output, and that is what a caller reads. Two of
+the three tools take no file list: mutmut scopes by `pyproject.toml` and gremlins by the module
+root, so `{paths}` appears only where the tool documents positional file arguments.
 
 These blocks are plain YAML in the body, introduced by a line that is exactly the key. A fenced
 ```yaml block reads the same to the parser and renders as a code block rather than as one collapsed
@@ -193,9 +200,11 @@ above uses `status_desc` rather than `status` for exactly that reason: `status` 
 service, so a paused project still prints `"status":"running"` for whatever stayed up. An entry with
 no `expect:` is decided exactly as before, so nothing that already works changes.
 
-**`## Check commands` is parsed, and it fails closed.** A `review` recipe declares three rows —
-`coding-standards`, `static-analysis`, `security` — and each is either a command or a named
-statement that this framework has none. Absent is an answer; a row nobody wrote is not, which is
+**`## Check commands` is parsed, and it fails closed.** A `review` recipe declares five rows —
+`coding-standards`, `static-analysis`, `security`, `duplication`, `design-metrics` — and each is
+either a command or a named statement that this framework has none. The first three are the checks
+a build record runs before anything judges the code; the last two feed the review's own duplication
+and design reads, and are absent on every framework whose recipe names no tool for them. Absent is an answer; a row nobody wrote is not, which is
 why the set is fixed and `scripts/validate_recipes.py` rejects a recipe missing one. A command is
 a list of argv tokens, never a shell string, and `{paths}` expands to one token per file in the
 caller's file list, relative to the project root, never concatenated and never passed through a
@@ -212,7 +221,21 @@ recorded as not applicable, never as met. `signal: empty-stdout` marks a tool th
 exit status: the caller reads a zero exit with anything on standard output as unmet, and a caller
 that does not read the key must record the row as not run rather than met, because reading that
 tool's exit status alone is a gate wired to nothing. Without the key, the exit status decides —
-zero is met, and any other status is unmet.
+zero is met, and any other status is unmet. The list of ids grows by editing the validator and
+this paragraph together, never by a recipe adding a row on its own: a consumer addresses a row by
+an id it already knows, and an id it does not know is a row it never runs.
+
+**`## Surface commands` is parsed, and it fails closed.** A `review` recipe declares five rows —
+`e2e`, `visual-regression`, `visual-regression-accept`, `visual-parity`, `visual-parity-accept` —
+the suites review runs over a framework's user-visible surfaces, and the command that accepts a
+suite's current output as its new baseline. An accept row is a second id, never a key on the
+suite's row. The rows take the same keys as `## Check commands`, plus `silent_pass:` on a row that
+runs a suite: how a run that selected nothing prints itself, in that harness's own output, the
+same job the key does under `failure_signal:`. A framework with no such surfaces declares every
+row absent, each with its own reason; the block is present either way, because rows that are not
+absent are how review knows a framework has surfaces, and a missing block is a heading it could
+not find. One framework in this catalog has surfaces, and its rows run on the host rather than in
+its container, because that is where its e2e recipe put the browser.
 
 **`## Oracle files` is parsed, not just read.** As of 2026-09-01 a consumer takes the `globs` off the
 row whose `type` is `test_delete` to answer "which files in this repository are tests", instead of

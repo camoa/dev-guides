@@ -6,7 +6,7 @@ description: Use when anything needs to run a Drupal test — the failing-test s
 # Metadata — read only after a match.
 label: Test execution (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/testing
@@ -88,7 +88,7 @@ paths: [string]               # optional; the test files a change is scoped to
 
 ## Test commands
 
-Five rows. Each is a command or a named statement that Drupal has none. `{file}` is one test file path, `{test_id}` one anchored filter, `{tier}` one testsuite name, and `{paths}` a list that expands to one token per element.
+Six rows. Each is a command or a named statement that Drupal has none. `{file}` is one test file path, `{test_id}` one anchored filter, `{tier}` one testsuite name, and `{paths}` a list that expands to one token per element.
 
 `ddev phpunit` is the project-defined custom command the preconditions name. Where a project has not defined one, the same argv reads `ddev exec vendor/bin/phpunit -c web/core` and everything else holds.
 
@@ -127,7 +127,25 @@ test_commands:
       Proves the configuration parses and the suites resolve inside the running
       environment. It does not prove `SIMPLETEST_DB` is set, which only a Kernel
       test reaching a database proves.
+  - id: mutation
+    argv: ["ddev", "exec", "vendor/bin/infection", "run", "--no-interaction", "{paths}"]
+    cost: end-of-task
+    trap: >-
+      A report, not a gate. Infection 0.35 exits 0 whatever the score unless
+      `--min-msi` is passed; the score is the `Mutation Score Indicator (MSI)` line and
+      the survivors are the `Escaped mutants` section, twenty by default. It needs an
+      `infection.json5` naming the source directories, a coverage driver (pcov or
+      Xdebug) in the web container, and a PHPUnit run it can reuse; a Kernel or
+      Functional test in that run boots a site once per mutant, so keep the source
+      scope to code Unit tests cover, or the run does not finish.
 ```
+
+**The mutation row takes its files as positional arguments.** `--filter` is deprecated since
+Infection 0.34 and refused when paths are also given, so the row passes the changed files as
+`{paths}`, one token each, which is the form 0.35.4's own help documents. `--no-interaction` is
+what makes a missing configuration an error rather than a prompt the caller cannot answer. This
+was read from the installed tool's help; no Drupal project in reach carries a coverage driver, so
+the run itself was not observed.
 
 **Tiers and what they cost.** Core's `phpunit.xml.dist` declares six testsuites, not four: `unit-component`, `unit`, `kernel`, `functional`, `functional-javascript` and `build`. The four the implement phase selects among are the middle ones; a caller passing `--testsuite` sees all six and should not invent a name.
 

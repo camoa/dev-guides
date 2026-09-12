@@ -6,7 +6,7 @@ description: Use when a Python change reaches the review phase and must pass its
 # Metadata — read only after a match.
 label: Python review checks
 recipe_schema_version: 1.0.0
-version: 0.2.0
+version: 0.3.0
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -118,10 +118,11 @@ Without this declaration a pure-Python change filters to an empty list against t
 
 ## Check commands
 
-Three rows — `coding-standards`, `static-analysis`, `security` — each a command. `{paths}`
-expands to one argv token per file in the caller's file list, relative to the project root.
-`pip-audit` audits the current environment's installed distributions, not a file list, so its row
-carries no `{paths}`; it exits 1 when it finds a known vulnerability and 0 otherwise.
+Five rows — `coding-standards`, `static-analysis`, `security`, `duplication`, `design-metrics` —
+each a command or a named statement that this framework has none. `{paths}` expands to one argv
+token per file in the caller's file list, relative to the project root. `pip-audit` audits the
+current environment's installed distributions, not a file list, so its row carries no `{paths}`;
+it exits 1 when it finds a known vulnerability and 0 otherwise.
 
 ```yaml
 check_commands:
@@ -132,6 +133,15 @@ check_commands:
     extensions: [".py", ".pyi"]
   - id: security
     argv: ["pip-audit"]
+  - id: duplication
+    absent: >-
+      The floor names no duplication tool. pylint's duplicate-code checker exists and is
+      a project's choice to enable under [tool.pylint]; this recipe does not choose it.
+  - id: design-metrics
+    absent: >-
+      The floor names no design-metrics tool. Ruff's C901 rule measures cyclomatic
+      complexity alone, and only when a project selects it; radon and xenon are a
+      project's choice. This recipe selects no rule set for a project.
 ```
 
 **The first two rows are the floor, not the project's choice.** Opinion says the project's
@@ -146,6 +156,32 @@ gate in the Sequence and is not one of the three checks this block answers.
 `.toml` in, so `pyproject.toml` is in the caller's list, and mypy 2.3.1 given that file reports
 `Name "project" is not defined` and exits 1 — a block caused by the file type, not by the code.
 Ruff needs no such key: `ruff check` 0.15 given a `.toml` reports `All checks passed!` and moves on.
+
+## Surface commands
+
+Five rows, all absent. Surface commands are the suites review runs over a framework's user-visible
+surfaces, and a Python CLI has none: its interface is a console script, and its end-to-end shape is the entry-point and subprocess levels chosen in `python-cli/test-authoring.md`, not a phase. The rows are declared absent rather than left out because a
+present block with absent rows is how review knows a framework has no surfaces, while a missing
+block is a heading it could not find.
+
+```yaml
+surface_commands:
+  - id: e2e
+    absent: >-
+      A CLI's end-to-end coverage is the entry-point or subprocess level the test-authoring recipe chooses, run by the suite row of `python-cli/test-execution.md`; there is no browser surface for a separate e2e suite to drive.
+  - id: visual-regression
+    absent: >-
+      No rendered surface exists to screenshot, so there is no baseline to diff against.
+  - id: visual-regression-accept
+    absent: >-
+      There is no visual-regression suite, so there is no baseline to accept.
+  - id: visual-parity
+    absent: >-
+      This framework names no parity harness.
+  - id: visual-parity-accept
+    absent: >-
+      There is no parity suite, so there is no baseline to accept.
+```
 
 ## State-awareness contract
 

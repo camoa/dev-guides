@@ -6,7 +6,7 @@ description: Use when a Go change reaches the review phase and must pass its gat
 # Metadata — read only after a match.
 label: Go review checks
 recipe_schema_version: 1.0.0
-version: 0.2.0
+version: 0.3.0
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -192,8 +192,8 @@ Without this declaration a pure-Go change filters to an empty list against the f
 
 ## Check commands
 
-Three rows — `coding-standards`, `static-analysis`, `security` — each a command, and none of them
-takes `{paths}`. Step 2 of the Sequence runs every toolchain gate over the whole module regardless
+Five rows — `coding-standards`, `static-analysis`, `security`, `duplication`, `design-metrics` —
+each a command or a named statement that Go has none, and none of the commands takes `{paths}`. Step 2 of the Sequence runs every toolchain gate over the whole module regardless
 of diff scope, and the tools agree with it: `go vet` handed files from two directories stops with
 `named files must all be in one directory`, `gofmt` handed a `go.mod` parses it as Go and exits 2,
 and `govulncheck` takes a package pattern, not a file. The first two were run on go1.27.1;
@@ -208,6 +208,16 @@ check_commands:
     argv: ["go", "vet", "./..."]
   - id: security
     argv: ["govulncheck", "./..."]
+  - id: duplication
+    absent: >-
+      The toolchain ships no duplication check. golangci-lint's dupl linter is one, and
+      it runs inside the configured-linter gate above only where the project's committed
+      config enables it; this recipe enables no linter for a project.
+  - id: design-metrics
+    absent: >-
+      The toolchain ships no design-metrics check. golangci-lint's gocyclo and gocognit
+      linters measure complexity inside the configured-linter gate where a project enables
+      them; this recipe enables no linter for a project.
 ```
 
 **`signal: empty-stdout` is the gofmt row's whole point.** `gofmt -l` exits 0 whether it lists a
@@ -221,6 +231,32 @@ non-zero when it reports a vulnerability, and in its default source mode it repo
 whose vulnerable symbols the code reaches, which is what lets the row block; it is not part of the
 toolchain, so the row runs only where the precondition above holds, and a `command not found` is
 recorded as not run, never as met.
+
+## Surface commands
+
+Five rows, all absent. Surface commands are the suites review runs over a framework's user-visible
+surfaces, and a Go module has none: a Go CLI's end-to-end shape is the entry-point and subprocess levels chosen in `go/test-authoring.md`, not a phase. The rows are declared absent rather than left out because a
+present block with absent rows is how review knows a framework has no surfaces, while a missing
+block is a heading it could not find.
+
+```yaml
+surface_commands:
+  - id: e2e
+    absent: >-
+      A CLI's end-to-end coverage is the entry-point or subprocess level the test-authoring recipe chooses, run by the suite row of `go/test-execution.md`; there is no browser surface for a separate e2e suite to drive.
+  - id: visual-regression
+    absent: >-
+      No rendered surface exists to screenshot, so there is no baseline to diff against.
+  - id: visual-regression-accept
+    absent: >-
+      There is no visual-regression suite, so there is no baseline to accept.
+  - id: visual-parity
+    absent: >-
+      This framework names no parity harness.
+  - id: visual-parity-accept
+    absent: >-
+      There is no parity suite, so there is no baseline to accept.
+```
 
 ## State-awareness contract
 

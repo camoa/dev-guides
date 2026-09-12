@@ -6,7 +6,7 @@ description: Use when anything needs to run a Go test — the failing-test step 
 # Metadata — read only after a match.
 label: Test execution (Go)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 requires_guides:
   - development/tdd-spec-driven
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
@@ -76,7 +76,7 @@ packages: [string]            # optional; the package patterns a change is scope
 
 ## Test commands
 
-Five rows. Each is a command or a named statement that Go has none. `{package}` is one package pattern, `{test_id}` one anchored `-run` pattern, and `{packages}` a list that expands to one token per element.
+Six rows. Each is a command or a named statement that Go has none. `{package}` is one package pattern, `{test_id}` one anchored `-run` pattern, and `{packages}` a list that expands to one token per element.
 
 ```yaml
 test_commands:
@@ -116,7 +116,25 @@ test_commands:
       Compiles every test binary in the module and runs no test. It proves the
       toolchain, the module graph and every test file compile; it proves nothing
       about behaviour, and it exits 0 on a module whose every test would fail.
+  - id: mutation
+    argv: ["gremlins", "unleash", "."]
+    cost: end-of-task
+    trap: >-
+      A report, not a gate, and it takes the module root. gremlins 0.6.0 exits 0 with
+      survivors — and exited 0 with `--threshold-efficacy 90` against 66.67%, so the
+      threshold is not a gate either. Each survivor prints as
+      `LIVED <mutator> at file:line:col`, and the score as `Test efficacy: N%`. A
+      package directory in place of the module root reports 0 mutants and exits 0.
+      `--diff <base>` scopes to files changed against a branch or commit; there is no
+      file-list form.
 ```
+
+**Why gremlins, and why no `{paths}`.** The toolchain ships no mutation tester, and of the tools
+that exist, `zimmski/go-mutesting` last released in 2021 while gremlins released 0.6.0 in December
+2025 and is what the row names; the `avito-tech/go-mutesting` fork is also maintained, and a project
+that has chosen it overrides the row. `gremlins unleash` takes one path, the module root: a file
+path fails to gather coverage and exits 1, a package directory yields nothing. Everything in the
+row was run on gremlins 0.6.0 against go1.27.1.
 
 **What each row costs.** Go has no test tiers, so the cost is set by the flags and the breadth, not by a tier name.
 
