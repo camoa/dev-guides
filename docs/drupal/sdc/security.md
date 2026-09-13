@@ -8,13 +8,15 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you're handling user-generated content in components, passing data from untrusted sources, or working with attributes and HTML markup.
+> - You're handling user-generated content in components
+> - You're passing data from untrusted sources
+> - You're working with attributes and HTML markup
 
 ## Decision
 
 Twig auto-escapes all output by default. Use the `Attribute` object for dynamic attributes. **Prop schemas are a development-time lint. They are not a runtime defence and must never be the thing standing between user input and your markup.**
 
-Three reasons prop validation does not hold as a security boundary:
+Three reasons it does not hold:
 - The validation call is `assert($this->doValidateProps($context, $component_id));` (`ComponentsTwigExtension.php:106`). On a production `zend.assertions=-1` PHP compiles the call away. Nothing runs.
 - Even with assertions on, `ComponentValidator::validateProps()` takes the context by value and returns a bool (`:172`). A failing prop is *reported*, never corrected or removed — the bad value still reaches the Twig.
 - The context is narrowed to declared prop names before validating (`:189-190`), so a prop nobody declared is never examined at all.
@@ -23,7 +25,11 @@ Three reasons prop validation does not hold as a security boundary:
 
 ## Pattern
 
-**Auto-Escaping in Twig** — Reference: [Drupal Security Documentation](https://www.drupal.org/docs/administering-a-drupal-site/security-in-drupal/writing-secure-code-for-drupal)
+**Pattern: Auto-Escaping in Twig**
+
+Twig auto-escapes all output by default.
+
+Reference: [Drupal Security Documentation](https://www.drupal.org/docs/administering-a-drupal-site/security-in-drupal/writing-secure-code-for-drupal)
 
 ```twig
 {# Auto-escaped by default #}
@@ -33,7 +39,20 @@ Three reasons prop validation does not hold as a security boundary:
 <div>{{ content|raw }}</div>  <!-- DANGER: No escaping -->
 ```
 
-**Attribute Object for Safe Attribute Handling:**
+**WHY auto-escape is critical:** Prevents XSS attacks. User input automatically sanitized unless explicitly marked safe.
+
+**Pattern: Attribute Object for Safe Attribute Handling**
+
+Always use `Attribute` object for dynamic attributes.
+
+```yaml
+# In component schema
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+```
 
 ```twig
 {# Safe: Attribute object handles escaping #}
@@ -42,6 +61,8 @@ Three reasons prop validation does not hold as a security boundary:
 {# DANGER: Manual attribute string concatenation #}
 <div class="{{ classes }}">  <!-- Vulnerable to XSS -->
 ```
+
+**WHY use Attribute:** Handles proper escaping of attribute values, prevents injection attacks.
 
 **Anti-Pattern: Props Validation as a Security Control**
 
@@ -73,7 +94,9 @@ and in the template, prefer Drupal's own escaping over trusting the prop:
 <a{{ attributes.setAttribute('href', url) }}>{{ text }}</a>
 ```
 
-**Sanitizing User Input** — for user-generated content in props (rare), sanitize before passing.
+**Pattern: Sanitizing User Input**
+
+For user-generated content in props (rare), sanitize before passing.
 
 ```php
 // In preprocessing or controller
@@ -93,7 +116,9 @@ $build = [
 ];
 ```
 
-**Safe Markup in Slots** — slots should contain render arrays or safe markup objects.
+**Pattern: Safe Markup in Slots**
+
+Slots should contain render arrays or safe markup objects.
 
 ```php
 // Proper slot content handling
@@ -107,10 +132,17 @@ $build = [
 
 ## Common Mistakes
 
-- **Wrong**: Using `|raw` on user-generated content → **Right**: Disables auto-escaping. Only use on trusted, pre-sanitized markup from the Drupal render system.
-- **Wrong**: Building attributes as strings instead of the `Attribute` object → **Right**: String concatenation doesn't escape attribute values. Use the `Attribute` object for safe attribute handling.
-- **Wrong**: Not validating props with schema in development → **Right**: Invalid data passes through in production without validation. Development is the only place a schema violation can be seen, so always test with assertions enabled.
-- **Wrong**: Treating a prop schema as a security boundary → **Right**: It is `assert()`-gated, non-mutating, and skips undeclared props entirely. Filter and escape at the source; let the schema catch integration mistakes, not attackers.
+**Common Mistake:** Using `|raw` filter on user-generated content.
+**WHY:** Disables auto-escaping. Only use on trusted, pre-sanitized markup from Drupal render system.
+
+**Common Mistake:** Building attributes as strings instead of Attribute object.
+**WHY:** String concatenation doesn't escape attribute values. Use Attribute object for safe attribute handling.
+
+**Common Mistake:** Not validating props with schema in development.
+**WHY:** Invalid data passes through in production without validation. Development is the only place a schema violation can be seen, so always test with assertions enabled.
+
+**Common Mistake:** Treating a prop schema as a security boundary.
+**WHY:** It is `assert()`-gated, non-mutating, and skips undeclared props entirely. Filter and escape at the source; let the schema catch integration mistakes, not attackers.
 
 ## See Also
 

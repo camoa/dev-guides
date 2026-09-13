@@ -8,7 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you're creating a new component, debugging "component not found" errors, or you need to understand automatic asset loading.
+> - You're creating a new component
+> - You're debugging "component not found" errors
+> - You need to understand automatic asset loading
 
 ## Decision
 
@@ -58,7 +60,9 @@ my-button/
 └── my_button.twig             ← template not found
 ```
 
-**Automatic Library Generation:** each component generates a library automatically.
+**Pattern: Automatic Library Generation**
+
+Each component generates a library automatically:
 - Format: `core/components.{provider}--{component-name}`
 - Example: `core/components.my_theme--hero-banner`
 - Includes CSS/JS files named identically to component
@@ -66,8 +70,10 @@ my-button/
 
 ## Common Mistakes
 
-- **Wrong**: Renaming the directory to fix "component not found" → **Right**: The directory name is never read; check that the ID equals `provider:{yml basename}` and that the `.twig` shares that basename.
-- **Wrong**: Using underscores in component names → **Right**: Component names should use hyphens (kebab-case) per Drupal conventions. Underscores in provider names are converted to hyphens in library names.
+- **Renaming the directory to fix "component not found"** — The directory name is never read; check that the ID equals `provider:{yml basename}` and that the `.twig` shares that basename.
+
+**Common Mistake:** Using underscores in component names.
+**WHY:** Component names should use hyphens (kebab-case) per Drupal conventions. The provider name is left exactly as written — `Component::getLibraryName()` replaces only the `:` separator, with `--`, so `my_theme:hero-banner` becomes `core/components.my_theme--hero-banner` and the underscore survives.
 
 ## See Also
 

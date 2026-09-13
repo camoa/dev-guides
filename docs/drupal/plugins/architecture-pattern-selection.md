@@ -25,20 +25,25 @@ drupal_version: "11.x"
 
 **Three Proven Architectural Approaches**:
 
+Based on analysis of successful Drupal contrib modules, there are **three distinct architectural patterns** for plugin systems:
+
 1. **Foundation + Extension Pattern** (Commerce Payment Model)
-   - Create foundational plugin ecosystem with multiple plugin types
-   - Extensions specialize existing plugin types
+   - Create foundational plugin ecosystem with multiple plugin types working together
+   - Extensions specialize existing plugin types with service-specific implementations
    - Leverage existing infrastructure and admin interfaces
+   - Example: Commerce Payment (foundation) → Commerce Stripe (extension)
 
 2. **Provider Plugin Pattern** (AI Module Model)
    - Create new plugin managers for service provider abstraction
    - Standardize diverse services under consistent interfaces
    - Build cross-cutting infrastructure (proxy, events, caching)
+   - Example: AI module with multiple provider plugins (OpenAI, Anthropic, etc.)
 
 3. **Service Collector Pattern** (Orchestration Module Model)
    - Aggregate stateless services via tagged service collection
    - Minimal interface contracts for simple, focused services
    - REST API-first architecture for external system integration
+   - Example: Orchestration module with webhook and polling event systems
 
 ## Common Mistakes
 

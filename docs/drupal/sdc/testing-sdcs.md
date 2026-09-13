@@ -8,11 +8,15 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you're setting up a component development workflow, you need to test components in isolation, or you're implementing visual regression testing.
+> - You're setting up component development workflow
+> - You need to test components in isolation
+> - You're implementing visual regression testing
 
 ## Decision
 
-Enable schema validation in development to catch errors early — it is the only environment where a schema violation is ever visible.
+**Pattern: Development Environment Validation**
+
+Enable schema validation in development to catch errors early.
 
 ```php
 // In settings.local.php
@@ -36,7 +40,9 @@ Turn both on in development. Neither is a production safety net.
 
 ## Pattern
 
-**Storybook Integration** — use CL Server module for a Storybook-style component library.
+**Pattern: Storybook Integration**
+
+Use CL Server module for Storybook-style component library.
 
 ```bash
 # Install and enable
@@ -46,23 +52,35 @@ drush en cl_server cl_devel
 # Access component library at /cl
 ```
 
-**Manual Testing Checklist:**
-- All defined variants (props enums).
-- With/without optional slots.
-- With invalid props (should error in development).
-- Mobile/tablet/desktop breakpoints.
-- Keyboard navigation (accessibility).
-- Screen reader compatibility.
+**Pattern: Manual Testing Checklist**
+
+Test components across:
+- All defined variants (props enums)
+- With/without optional slots
+- With invalid props (should error in development)
+- Mobile/tablet/desktop breakpoints
+- Keyboard navigation (accessibility)
+- Screen reader compatibility
 
 **And test every call path you support.** A slot bug is usually path-specific: a `{% block %}` a caller can only fill from `{% embed %}`, a bare `{{ slot }}` a caller can only fill from `include()`, and `#type: component`, which fills both and therefore hides both failures. If the component is intended for `{% embed %}`, exercise it from a real `{% embed %}` — testing it through the render element proves nothing about that path.
 
-**Visual Regression Testing** — consider tools for automated visual testing: BackstopJS (screenshot comparison), Percy (visual testing platform), Playwright (end-to-end testing with screenshots).
+**Pattern: Visual Regression Testing**
+
+Consider tools for automated visual testing:
+- BackstopJS - Screenshot comparison
+- Percy - Visual testing platform
+- Playwright - End-to-end testing with screenshots
 
 ## Common Mistakes
 
-- **Wrong**: Not testing with schema validation enabled → **Right**: Production doesn't validate props — the check is compiled out with assertions off. Development is the *only* place a schema error can surface, so a component never rendered under assertions has effectively never been schema-checked.
-- **Wrong**: Treating a green run under `enforce_prop_schemas` as proof the slots are right → **Right**: Slot validation reports only slots you passed but never declared. A declared slot nobody filled, or a slot whose block is unreachable behind an `{% if %}`, passes every check core has.
-- **Wrong**: Only testing default prop values → **Right**: Variations and edge cases often have bugs. Test all enum values and required/optional prop combinations.
+**Common Mistake:** Not testing with schema validation enabled.
+**WHY:** Production doesn't validate props — the check is compiled out with assertions off. Development is the *only* place a schema error can surface, so a component never rendered under assertions has effectively never been schema-checked.
+
+**Common Mistake:** Treating a green run under `enforce_prop_schemas` as proof the slots are right.
+**WHY:** Slot validation reports only slots you passed but never declared. A declared slot nobody filled, or a slot whose block is unreachable behind an `{% if %}`, passes every check core has.
+
+**Common Mistake:** Only testing default prop values.
+**WHY:** Variations and edge cases often have bugs. Test all enum values and required/optional prop combinations.
 
 ## See Also
 

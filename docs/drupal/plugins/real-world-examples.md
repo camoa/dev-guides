@@ -22,7 +22,11 @@ drupal_version: "11.x"
 
 ## Pattern
 
-**Foundation Pattern: Commerce Payment**
+**Foundation Pattern: Commerce Payment Style**
+
+**Reference**: `/web/modules/contrib/commerce/modules/payment/`
+
+**Multiple Plugin Types Working Together**:
 
 ```php
 // Gateway + Method Type + Entity Type coordination
@@ -37,7 +41,13 @@ foreach ($method_types as $method_type_id) {
 }
 ```
 
-**Provider Pattern: AI Module**
+**Entity Integration Reference**: `/web/modules/contrib/commerce/modules/payment/src/Entity/PaymentMethod.php`
+
+**Provider Pattern: AI Module Style**
+
+**Reference**: `/web/modules/contrib/ai/`
+
+**Service Abstraction Across Providers**:
 
 ```php
 // Consumer code works with any provider
@@ -52,7 +62,11 @@ $result = $this->myModuleService->executeOperation('text_generation', [
 // Local Provider: Uses local LLM
 ```
 
-**Service Collector Pattern: Orchestration Module**
+**Service Collector Pattern: Orchestration Module Style**
+
+**Reference**: `/web/modules/contrib/orchestration/`
+
+**REST API-First External Integration**:
 
 ```php
 // External system discovers available services
@@ -77,12 +91,35 @@ POST /orchestration/service/execute
   }
 }
 
+// External system registers webhook for push notifications
+POST /orchestration/webhook/register
+{
+  "id": "entity_updates",
+  "webHookUrl": "https://external-system.com/webhook/drupal-updates"
+}
+
 // External system polls for new data (timestamp-based)
 POST /orchestration/poll
 {
   "name": "entity_updates",
   "timestamp": 1234567890
 }
+// Returns: [
+//   {"timestamp": 1234567891, "data": {"entity_id": 124, ...}},
+//   {"timestamp": 1234567892, "data": {"entity_id": 125, ...}}
+// ]
+```
+
+**Webhook Dispatch Pattern**:
+
+```php
+// Drupal dispatches to registered webhooks
+$this->webhooks->dispatch('entity_updates', [
+  'entity_id' => 123,
+  'type' => 'node',
+  'operation' => 'update'
+]);
+// POSTs to https://external-system.com/webhook/drupal-updates
 ```
 
 ## Common Mistakes
@@ -100,3 +137,4 @@ POST /orchestration/poll
 - Reference: `/web/modules/contrib/ai/`
 - Reference: `/web/modules/contrib/orchestration/`
 - Reference: [Building module-specific REST endpoints](https://drupalzone.com/tutorial/headless-drupal/100-creating-custom-api-endpoints)
+- Reference: [Decoupled Drupal: Webhooks Vs. APIs](https://www.axelerant.com/blog/decoupled-drupal-webhooks-vs-apis)

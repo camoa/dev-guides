@@ -8,7 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you're migrating existing Twig templates to SDC, overriding contrib module/theme components, or implementing field formatters with components.
+> - You're migrating existing Twig templates to SDC
+> - You need to override contrib module/theme components
+> - You're implementing field formatters with components
 
 ## Decision
 
@@ -30,7 +32,7 @@ One quiet exception: if the component named in `replaces` does not exist at all,
 
 ## Pattern
 
-**Override with `replaces`:**
+**Pattern: Override with `replaces`**
 
 ```yaml
 # themes/my_theme/components/enhanced-button/enhanced-button.component.yml
@@ -55,7 +57,9 @@ props:
       type: string
 ```
 
-**Custom Field Formatter** — Reference: Field formatter integration patterns
+**Pattern: Custom Field Formatter**
+
+Reference: Field formatter integration patterns
 
 ```php
 // Custom field formatter using components
@@ -85,17 +89,23 @@ class ComponentFieldFormatter extends FormatterBase {
 }
 ```
 
-**Migration Path from Traditional Templates:**
-1. Create SDC with equivalent structure.
-2. Update calling templates to use `include('provider:component')`.
-3. Test in development with schema validation enabled.
-4. For complete replacement, use the `replaces` directive (from a theme or a module).
+**Pattern: Migration Path from Traditional Templates**
+
+1. Create SDC with equivalent structure
+2. Update calling templates to use `include('provider:component')`
+3. Test in development with schema validation enabled
+4. For complete replacement, use the `replaces` directive (from a theme or a module)
 
 ## Common Mistakes
 
-- **Wrong**: Expecting a same-named component in your theme to take over a module's → **Right**: Components are namespaced by provider. `my_theme:card` and `my_module:card` are separate plugins and both stay live. Replacement happens only through an explicit `replaces` key.
-- **Wrong**: Assuming a module cannot replace a component → **Right**: It can. A theme candidate in the active theme hierarchy wins when there is one; the module candidate is the fallback, not a forbidden case.
-- **Wrong**: Narrowing the schema when using `replaces` → **Right**: Removing a `type`, dropping an `enum` value, or changing the required-prop set breaks callers written against the original and throws at cache rebuild. *Widening* is fine — extra optional props, extra accepted types, extra enum values all pass.
+**Common Mistake:** Expecting a same-named component in your theme to take over a module's.
+**WHY:** Components are namespaced by provider. `my_theme:card` and `my_module:card` are separate plugins and both stay live. Replacement happens only through an explicit `replaces` key.
+
+**Common Mistake:** Assuming a module cannot replace a component.
+**WHY:** It can. A theme candidate in the active theme hierarchy wins when there is one; the module candidate is the fallback, not a forbidden case.
+
+**Common Mistake:** Narrowing the schema when using `replaces`.
+**WHY:** Removing a `type`, dropping an `enum` value, or changing the required-prop set breaks callers written against the original and throws at cache rebuild. *Widening* is fine — extra optional props, extra accepted types, extra enum values all pass.
 
 ## See Also
 

@@ -4,7 +4,7 @@ name: go_design_architecture
 capability: design
 description: Use when a Go project enters the design phase and must turn researched requirements into a package layout with a compiler-enforced boundary — fixes what lives under internal/ versus the exported surface, holds cmd/ to argument parsing, exit codes and stream wiring only, settles the module path and its compatibility promise, places interfaces at the consumer rather than the producer, threads context through the call graph, decides the wrapped-error and exported-sentinel surface, and bans init() side effects, before any code is written.
 # Metadata — read only after a match.
-label: Go architecture
+label: Design (Go)
 recipe_schema_version: 1.0.0
 version: 0.1.0
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
@@ -24,7 +24,7 @@ license: GPL-2.0-or-later
 
 Turn researched requirements into a **package layout whose boundary the compiler enforces** before any code is written. The design decides **what is exported and what lives under `internal/`** (in Go this is a real boundary, not a naming convention), **what a `cmd/` binary is allowed to contain** (argument parsing, exit codes, stream wiring — and nothing else), **what the module path is and what promise it carries**, **where interfaces are declared** (at the consumer, not the producer), **how `context.Context` threads through the call graph**, **which errors are part of the exported API** and how the rest are wrapped, and **what may not happen at package initialisation**. It records a package map — the architecture artifact the implement and review phases conform to.
 
-The plugin owns the generic design phase — when it runs, the shape of the architecture artifact, and the checklist gate that blocks the implement phase. This recipe owns the part the stack-neutral mechanism cannot know: the Go-specific decisions, most of which are load-bearing in Go precisely because the toolchain enforces them and a later change is a breaking one.
+The plugin owns the generic design phase — when it runs, the shape of a work order, the check that every acceptance criterion is served by one, and the approval a person gives. There is no architecture document: the units and the order they are built in are the architecture. This recipe owns the part the stack-neutral mechanism cannot know: the Go-specific decisions, most of which are load-bearing in Go precisely because the toolchain enforces them and a later change is a breaking one.
 
 ## Opinion
 
@@ -46,13 +46,15 @@ The plugin owns the generic design phase — when it runs, the shape of the arch
 
 **The module path is decided once and carries a promise.** The module path is simultaneously the import path every consumer types, the identity the proxy and checksum database key on, and — through its major-version suffix — the compatibility contract. Changing it later breaks every importer. Record it now, along with the honest version posture: `v0` states that the API may break on any minor release, which is a legitimate and often correct choice for a young project; `v1` is a commitment not to break exported API, and `v2+` requires the major version in the path. The design records which of these the project is choosing and, if `v1` or later, what the exported surface it is committing to actually is — which is a direct consequence of the `internal/` default above.
 
-**Design decides; it does not build.** This phase produces an architecture decision for a human to approve — the package map, the boundary, the entry-point contract, the interface placement, the context and error surfaces, and the build order. It writes no Go, creates no directory, edits no `go.mod`, and requires nothing. Recording the decision into the architecture artifact is the plugin's design phase; building from it is the implement phase.
+**Go builds nothing without code, and that is worth recording.** Some frameworks answer a requirement with configuration — a Drupal view is a unit with a test and no code in it. Here every unit is code. Record that plainly rather than leaving it unsaid, because a recorded "no" is an answer and silence is not. A Go package also needs nothing registered elsewhere to exist: the directory and its files are the whole unit, which is one fewer thing a work order has to name.
+
+**Design decides; it does not build.** This phase produces the units and the order they are built in, for a person to approve — the packages, the boundary, the entry-point contract, the interface placement, the context and error surfaces, and the build order. It writes no Go, creates no directory, edits no `go.mod`, and requires nothing. Recording the decision into the architecture artifact is the plugin's design phase; building from it is the implement phase.
 
 ## Preconditions
 
 - A Go project with a `go.mod` at the module root (or a decided module path where the module does not yet exist), and a resolvable toolchain — so the language version constrains which features the design may assume.
 - The research phase has produced requirements and any prior-art findings (see the prior-art recipe under this framework) — the design starts from a known problem and a known stdlib / copy-a-slice / reuse / extend / build-new posture, and honours it rather than re-deriving one.
-- The plugin's generic design phase is present: the architecture artifact and the checklist that gates the implement phase. This recipe supplies the Go-specific design method; it does not recreate the artifact or the gate.
+- The plugin's generic design phase is present: it owns the work order's shape, the check that every acceptance criterion is served, and the approval step. This recipe supplies the Go-specific design method; it does not recreate any of that.
 
 ## Input contract
 
@@ -62,7 +64,7 @@ Source-agnostic, supplied by the caller (the orchestrator at the design phase, o
 code_path: string             # absolute path to the Go module root (the dir with go.mod)
 requirements: string          # the researched capability/problem to architect
 research:                     # optional; the research phase's stdlib/copy/reuse/extend/
-  recommendation: string      #   build call, so the design builds on the prior-art
+  candidates: [string]        #   ordered by closeness, carrying no verdict — the
                               #   decision rather than re-deriving it
 components:                   # optional; pre-identified units to design for
   - string                    #   e.g. "the scan capability", "the report writer"
@@ -77,7 +79,7 @@ If invoked in dry-run mode, perform all reads but emit a package-map preview ins
 
 1. **Settle the module path and the version posture.** Read the existing `module` line, or decide one. Record the posture — `v0` (no compatibility promise, breaking changes allowed on any minor), `v1` (committed not to break exported API), or `v2+` (major version carried in the path) — because everything downstream about what may be exported depends on which promise the project is making.
 
-2. **Draw the boundary, `internal/` first.** From `requirements` (and `research`, so a reuse recommendation leans on the found module rather than re-implementing it), list the packages the capability needs, and place every one of them under `internal/` by default. Then promote, one at a time and with a stated reason: a package moves to the exported surface only if an external importer needs it and the project will support it under the posture fixed in step 1. Record the exported set explicitly — it is the API the compatibility promise covers.
+2. **Draw the boundary, `internal/` first.** From `requirements` (and `research`, whose candidates carry no verdict, so the reuse call is made here rather than inherited), list the packages the capability needs, and place every one of them under `internal/` by default. Then promote, one at a time and with a stated reason: a package moves to the exported surface only if an external importer needs it and the project will support it under the posture fixed in step 1. Record the exported set explicitly — it is the API the compatibility promise covers.
 
 3. **Design the binaries as shims.** For each command, fix what `cmd/` contains: flag parsing into a config value, the single call into the package below, the error-to-exit-code translation, and the stream wiring. Name the entry-point function that sits below it — the `run(ctx, args, stdin, stdout, stderr) error` shape — and confirm `os.Exit` appears only in `main`, so no deferred cleanup below it is skipped. Any logic the requirements put in a command is moved down into a package and named there.
 
@@ -89,7 +91,7 @@ If invoked in dry-run mode, perform all reads but emit a package-map preview ins
 
 7. **Rule out initialisation side effects.** Confirm nothing in the design depends on work happening in an `init` function or on package-level mutable state — configuration is read in `main` and passed down, and collaborators are constructed explicitly. Where a blank-import registration pattern is being consumed from a library, record it as a consumed pattern with its reason.
 
-8. **Assemble the package map.** Produce the map in dependency order: the `internal/` packages first (each with its purpose, its exported-within-the-module surface, and the interfaces its consumers declare over it), then the promoted exported packages with the reason each was promoted, then the `cmd/` shims with their argument surface and the entry point each calls. Include the module path and version posture, the exit-code contract, the context and error surfaces, and the build order — packages → entry-point function → command shim → tests. Hand the map to the caller; the plugin's design phase records it into the architecture artifact and runs the checklist gate. The recipe method writes no file of its own.
+8. **Return the units and their order.** Hand the caller the packages in dependency order, which is the build order: the `internal/` packages first (each with its purpose, its exported-within-the-module surface, and the interfaces its consumers declare over it), then the promoted exported packages with the reason each was promoted, then the `cmd/` shims with their argument surface and the entry point each calls. Include the module path and version posture, the exit-code contract, the context and error surfaces, and the build order — packages → entry-point function → command shim → tests. Hand the map to the caller; the plugin's design phase records it into the architecture artifact and runs the checklist gate. The recipe method writes no file of its own.
 
 ## Data flow
 
@@ -101,8 +103,8 @@ reads project state:
        go.mod (module path, the `go` language line, the existing require closure)
        the existing package tree (what is already under internal/, cmd/, the root)
        the existing exported surface (what a consumer can already import today)
-       existing architecture artifact
-       the research recommendation (stdlib | copy-a-slice | reuse | extend | build-new)
+       the candidates research found, ordered by closeness and carrying no verdict —
+              deciding between them is what this stage is for
 
 applies opinion:
        internal/ is the default and the compiler enforces it · cmd/ parses, exits,
@@ -130,7 +132,7 @@ emits (to the caller; the recipe method writes nothing):
 
 The recipe reads existing state before deciding. The `go.mod` module path and language line, the current package tree, and whatever is already exported are read so the design extends what is present rather than colliding with it — and so a promotion out of `internal/`, or a change to the module path, is recognised as the breaking change it is rather than made silently. An extend recommendation and a stated dependency posture from prior art are honoured, not re-derived. The method is read-only on the project: it writes no Go, creates no directory, edits no `go.mod`, and requires nothing; the package map is returned to the caller, which owns recording it as the architecture artifact the downstream phases consume.
 
-Idempotent: running the recipe twice on identical input and identical project state produces the same package map, with no side effect on either run. A map that changes because the requirements, the research recommendation, or the existing tree changed is the method reflecting current reality, not a non-deterministic recipe.
+Idempotent: running the recipe twice on identical input and identical project state produces the same units in the same order, with no side effect on either run. An answer that changes because the requirements, the research candidates or the project's packages changed is the method reflecting current reality, not a non-deterministic recipe.
 
 ## Verifier
 
@@ -145,9 +147,9 @@ After the recipe runs, verify:
 7. `context.Context` is the first parameter on every entry point and every blocking path, rooted at a cancellable context in `main`; no design element stores a context in a struct.
 8. The exported error surface is recorded — the sentinels and error types callers may match with `errors.Is` / `errors.As` — together with the rule that intermediate layers wrap with `%w` and that message text is not part of the contract.
 9. Nothing in the design depends on an `init` function side effect or on package-level mutable state; any consumed blank-import registration pattern is recorded as such with its reason.
-10. The design left the project unchanged — no Go written, no directory created, no `go.mod` edit, nothing required; the package map was returned for the plugin's design phase to record as the artifact the implement and review phases conform to.
+10. The design left the project unchanged — no Go written, no directory created, no `go.mod` edit, nothing required; the units and their order were returned for the caller to record.
 
-This recipe ships no executable verifier of its own — the checks above are the agent-driven protocol; the plugin's design phase owns the architecture artifact and the checklist gate that blocks the implement phase on a failed item.
+This recipe ships no executable verifier of its own — the checks above are the agent-driven protocol; the caller owns the work order's shape and the check that every acceptance criterion is served by one.
 
 ## References
 
@@ -155,7 +157,7 @@ This recipe ships no executable verifier of its own — the checks above are the
 
 | Source | Used for |
 |---|---|
-| Organizing a Go module (go.dev/doc/modules/layout) | The official layout guidance the package map conforms to — package directories at the module root, `internal/` for what should not be imported, `cmd/` for commands, and the absence of a prescribed `pkg/` |
+| Organizing a Go module (go.dev/doc/modules/layout) | The official layout guidance the package units conform to — package directories at the module root, `internal/` for what should not be imported, `cmd/` for commands, and the absence of a prescribed `pkg/` |
 | The go command's internal-package rule (`go doc cmd/go`, "Internal packages") | The compiler-enforced boundary the `internal/`-by-default decision rests on: code in or below an `internal` directory is importable only by code sharing the import path above it |
 | Go Modules Reference (go.dev/ref/mod) | The module-path identity and semantic import versioning rules behind the version posture — `v0` compatibility, the `v1` commitment, and the major-version path suffix from `v2` up |
 | Effective Go and the Go proverbs | The interface-placement convention the design applies — accept interfaces, return structs; the interface belongs to the consumer |
@@ -163,4 +165,4 @@ This recipe ships no executable verifier of its own — the checks above are the
 
 ### Plugin-side generic mechanism (ai-dev-assistant)
 
-The stack-neutral design phase this recipe binds Go into — when design runs, the shape of the architecture artifact, the checklist gate that blocks the implement phase, and how the decision is recorded and reviewed — is documented in the plugin itself, not duplicated here. The recipe supplies only the Go-specific design method: the `internal/`-by-default boundary, the `cmd/` shim and its exit-code contract, the module path and version posture, consumer-side interface placement, context propagation, the exported error surface, and the ban on initialisation side effects.
+The stack-neutral design phase this recipe binds Go into — when design runs, the shape of a work order, the check that every acceptance criterion is served, and the approval a person gives — is documented in the plugin itself, not duplicated here. The recipe supplies only the Go-specific design method: the `internal/`-by-default boundary, the `cmd/` shim and its exit-code contract, the module path and version posture, consumer-side interface placement, context propagation, the exported error surface, and the ban on initialisation side effects.

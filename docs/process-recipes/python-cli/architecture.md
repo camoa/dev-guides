@@ -4,7 +4,7 @@ name: python_cli_design_architecture
 capability: design
 description: Use when a Python project (a library, or a tool whose interface is one or more console scripts) enters the design phase and must turn researched requirements into a library-first architecture with a thin CLI entrypoint — fixes the package/CLI boundary, names a programmatic entry point per capability, specifies the entrypoint contract (exit codes, stream split, machine-readable output), chooses extension seams as protocols rather than conditionals, records the dependency and typing posture, and emits a component map the implement and review phases conform to, before any code is written.
 # Metadata — read only after a match.
-label: Python CLI architecture
+label: Design (Python CLI)
 recipe_schema_version: 1.0.0
 version: 0.1.0
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
@@ -24,7 +24,7 @@ license: GPL-2.0-or-later
 
 Turn researched requirements into a **library-first architecture with a thin CLI entrypoint** before any code is written. The design decides where the package boundary sits, how each capability is reached programmatically, what the entrypoint contract is, where behaviour varies and through what seam, and what the dependency and typing postures are. It records a component map — the artifact the implement and review phases conform to.
 
-The plugin owns the generic design phase. This recipe owns what the stack-neutral mechanism cannot know: the Python-specific decisions — the package layout, the console-script boundary, the entry-point contract, protocol seams, and the postures on dependencies and typing.
+The plugin owns the generic design phase — when it runs, the shape of a work order, the check that every acceptance criterion is served by one, and the approval a person gives. There is no architecture document: the units and the order they are built in are the architecture. This recipe owns what the stack-neutral mechanism cannot know: the Python-specific decisions — the package layout, the console-script boundary, the entry-point contract, protocol seams, and the postures on dependencies and typing.
 
 ## Opinion
 
@@ -74,7 +74,9 @@ If invoked in dry-run mode, perform all reads but emit a component-map preview i
 
 6. **Decide the data shapes at the boundaries.** For each capability's input and output, name the type — a dataclass, a `TypedDict`, a named tuple — rather than an untyped dictionary. Boundaries the tool serialises across get their shape written down here.
 
-7. **Assemble the component map.** In dependency order: the package modules with their entry points and protocols, then the console script with its argument surface and the entry points it calls, then the wiring and the entrypoint contract it honours. Include the postures and the build order — modules → script → wiring → tests. Hand the map to the caller; the plugin's design phase records it. The recipe writes no file of its own.
+7. **Return the units and their order.** In dependency order, which is the build order: the package modules with their entry points and protocols, then the console script with its argument surface and the entry points it calls, then the wiring and the entrypoint contract it honours. Include the postures, and per unit the files it owns. The order is modules → script → wiring → tests. Hand these to the caller, which records them. The recipe writes no file of its own, and produces no architecture document — the units and their order are the architecture.
+
+   Python answers nothing with configuration the way some frameworks do: every unit here is code. Record that plainly rather than leaving it unsaid, because a recorded "no" is an answer and silence is not.
 
 ## Data flow
 
@@ -86,8 +88,10 @@ step 3: entrypoint contract — exit codes, stream split, machine-readable mode
 step 4: seams — protocol per varying point, with its implementations
 step 5: dependency posture (with transitive count) and typing posture
 step 6: boundary data shapes, named types rather than bare dicts
-step 7: component map in dependency order, with the build order
-output: component map, returned to the caller. The recipe writes no file of its own.
+step 7: the units in dependency order, which is the build order, each with the
+        files it owns
+output: the units and their order, returned to the caller, which records them.
+        The recipe writes no file of its own.
 ```
 
 ## State-awareness contract
@@ -106,7 +110,7 @@ After the recipe runs, verify:
 6. Boundary data has named types rather than untyped dictionaries.
 7. The design left the project unchanged — no Python written, no script added, no `pyproject.toml` edit, nothing installed.
 
-This recipe ships no executable verifier of its own — the checks above are the agent-driven protocol; the plugin's design phase owns the architecture artifact and the checklist gate that blocks the implement phase.
+This recipe ships no executable verifier of its own — the checks above are the agent-driven protocol; the caller owns the work order's shape and the check that every acceptance criterion is served by one.
 
 ## References
 
@@ -121,4 +125,4 @@ This recipe ships no executable verifier of its own — the checks above are the
 
 ### Plugin-side generic mechanism (ai-dev-assistant)
 
-The stack-neutral design phase this recipe binds Python into — when the design runs, the architecture artifact it records, and the checklist gate that blocks the implement phase — is documented in the plugin itself, not duplicated here. The recipe supplies only the Python-specific decisions: the package and console-script boundary, the named programmatic entry point per capability, the entrypoint contract, protocol seams, and the dependency and typing postures.
+The stack-neutral design phase this recipe binds Python into — when the design runs, the shape of a work order, the check that every acceptance criterion is served, and the approval a person gives — is documented in the plugin itself, not duplicated here. The recipe supplies only the Python-specific decisions: the package and console-script boundary, the named programmatic entry point per capability, the entrypoint contract, protocol seams, and the dependency and typing postures.

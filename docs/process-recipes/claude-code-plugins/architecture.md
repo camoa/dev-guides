@@ -4,7 +4,7 @@ name: cc_plugins_design_architecture
 capability: design
 description: Use when a Claude Code plugin project enters the design phase and must turn a researched need into a component architecture — applies the decision framework to choose skill / command / agent / hook / MCP per capability, enforces progressive disclosure and the description budget, fixes the plugin boundary and manifest layout, and records a component map the implement and review phases conform to, before any component is scaffolded.
 # Metadata — read only after a match.
-label: Plugin component architecture (Claude Code)
+label: Design (Claude Code plugins)
 recipe_schema_version: 1.0.0
 version: 0.1.0
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
@@ -22,7 +22,9 @@ license: GPL-2.0-or-later
 
 ## Goal
 
-Turn the researched need into a component architecture before any component is scaffolded. The design decides, for each capability the plugin must deliver, **which component type carries it** (skill, command, agent, hook, MCP server, theme), **how the components decompose** (one responsibility each), **how progressive disclosure is honoured** (lean bodies, detail in references, descriptions inside the budget), and **where the plugin boundary sits** (a new plugin, or components added to an existing one). It records a component map — the architecture artifact the implement and review phases conform to.
+Turn the researched need into a component architecture before any component is scaffolded. The design decides, for each capability the plugin must deliver, **which component type carries it** (skill, command, agent, hook, MCP server, theme), **how the components decompose** (one responsibility each), **how progressive disclosure is honoured** (lean bodies, detail in references, descriptions inside the budget), and **where the plugin boundary sits** (a new plugin, or components added to an existing one). It returns the units to build and the order to build them in, and the caller records them. There is no architecture document: the units and their order are the architecture.
+
+The plugin owns the generic design phase — when it runs, the shape of a work order, the check that every acceptance criterion is served by one, and the approval a person gives.
 
 The plugin owns the generic design phase — when it runs and the artifact slot it fills. This recipe owns the Claude-Code-specific judgement the stack-neutral mechanism cannot make: the component-type decision, the progressive-disclosure and description-budget constraints, and the manifest-and-boundary layout.
 
@@ -42,12 +44,14 @@ The plugin owns the generic design phase — when it runs and the artifact slot 
 
 **The manifest and the boundary are decided here.** `.claude-plugin/plugin.json` is the only manifest home; the design records it and the directory layout, and notes the path semantics that bite later — `skills/` *adds* to the default while `commands`, `agents`, and `experimental.themes` *replace* their default folder when a custom path is set. The plugin boundary follows the research recommendation: extend an existing plugin with the new components, or stand up a new one only when no existing plugin owns the domain.
 
-**Design grounds every choice and records it; it scaffolds nothing.** Each component-type decision is grounded in the decision framework and the canonical templates rather than taste, and the result is written as a component map for the downstream phases to build and check against. The design creates no files and runs no scaffolder — that is the implement phase's work.
+**Design grounds every choice and returns it; it scaffolds nothing, and it writes nothing.** Each component-type decision is grounded in the decision framework and the canonical templates rather than taste, and the result is handed to the caller, which records it. The design creates no files and runs no scaffolder — that is the implement phase's work. This recipe previously said to write the artifact here while its own verifier asserted nothing was written; the verifier was right.
+
+**A Claude Code plugin builds nothing without code, and that is worth recording.** Some frameworks answer a requirement with configuration — a Drupal view is a unit with a test and no code in it. Here every unit is an authored component. Record that plainly rather than leaving it unsaid, because a recorded "no" is an answer and silence is not.
 
 ## Preconditions
 
 - A Claude Code environment with plugin support, Composer-free (plugins are file-based) — the design needs only the research output and the documented component contracts.
-- The research recommendation is available (see the prior-art recipe under this framework): reuse / extend / build-new, with the plugin and domain it concerns. The design conforms the boundary to that recommendation rather than re-deriving it.
+- Research's candidates are available (see the prior-art recipe under this framework), ordered by closeness and carrying no verdict — whether the work extends an existing plugin or stands up a new one is decided here, because deciding is what this stage is for.
 - The plugin's generic design phase is present: the phase that invokes this method and slots the artifact. This recipe supplies the Claude-Code-specific architecture; it does not recreate the phase.
 
 ## Input contract
@@ -56,7 +60,11 @@ Source-agnostic, supplied by the caller (the orchestrator at the design phase, o
 
 ```yaml
 need: string                  # the capability set the plugin must deliver
-research: string              # the prior-art recommendation (reuse | extend | build-new)
+acceptance_criteria:          # what a person can see working when the task is done;
+  - id: string                #   ids are minted by the caller and are stable
+    statement: string
+research: [string]            # the candidates research found, ordered by closeness
+                              #   and carrying no verdict — design makes the call
                               #   and the plugin / domain it named
 target_plugin: string         # optional; the existing plugin to extend, when research
                               #   recommended extend
@@ -67,7 +75,7 @@ constraints: [string]         # optional; tool-permission, model, or distributio
 
 If invoked in dry-run mode, perform all reads and emit a component-map preview instead of recording the artifact. Dry-run is required.
 
-1. **Read the research recommendation.** Resolve whether the work extends an existing plugin (and which) or stands up a new one, so the boundary is fixed before components are placed. Read the documented component contracts through `plugin-creation-tools:plugin-creation` rather than recalling them.
+1. **Read research's candidates and decide the boundary.** They arrive ordered by closeness with no verdict attached. Decide here whether the work extends an existing plugin (and which) or stands up a new one, so the boundary is fixed before components are placed. Read the documented component contracts through `plugin-creation-tools:plugin-creation` rather than recalling them.
 
 2. **Apply the decision framework per capability.** For each capability in the need, choose the component type — skill, command, agent, hook, MCP, or theme — against the framework, and record *why* that type and not its neighbours. Default new model-invoked workflows to skills; reserve commands for deliberately user-typed actions.
 
@@ -75,19 +83,20 @@ If invoked in dry-run mode, perform all reads and emit a component-map preview i
 
 4. **Apply progressive disclosure and the description budget.** For each skill, split the lean `SKILL.md` body from the on-demand `references/` depth, and draft the `description` inside the budget with the primary trigger front-loaded. A component that cannot be expressed within these constraints is flagged for splitting before it reaches implement.
 
-5. **Lay out the manifest and the boundary.** Record the `.claude-plugin/plugin.json` shape and the directory layout, noting the add-vs-replace path semantics. Confirm the plugin boundary matches the research recommendation (extend the named plugin, or a new plugin only when no existing one owns the domain).
+5. **Lay out the manifest and the boundary.** Record the `.claude-plugin/plugin.json` shape and the directory layout, noting the add-vs-replace path semantics. Confirm the plugin boundary matches the decision made in step 1 (extend the named plugin, or a new plugin only when no existing one owns the domain).
 
-6. **Record the component map.** Write the architecture artifact — every component with its type, responsibility, trigger, permissions, model, and body/references split, plus the manifest and boundary decision. This is what the implement phase builds and the review phase conforms against.
+6. **Return the units and their order.** Per unit: its type, responsibility, trigger, permissions, model, and body/references split, the files it owns, and the interface it offers to the units that depend on it. Add the manifest and boundary decision, and the order they are built in. Hand these to the caller, which records them. The recipe writes no file of its own.
 
 ## Data flow
 
 ```
-input: need, research recommendation, target_plugin (optional), constraints (optional)
+input: need, acceptance_criteria, research candidates (no verdict attached),
+       target_plugin (optional), constraints (optional)
 
 reads project / environment state:
-       the research recommendation (reuse | extend | build-new + named plugin/domain)
+       research's candidates, ordered by closeness, carrying no verdict
        the documented component contracts (skill / command / agent / hook / MCP / theme)
-       the existing plugin's layout, when the recommendation was extend
+       the existing plugin's layout, when this stage decided to extend one
 
 applies opinion:
        component type is chosen via the decision framework · skills over commands for
@@ -111,9 +120,9 @@ emits (to the caller; the recipe writes nothing):
 
 ## State-awareness contract
 
-The recipe reads the research recommendation and, when the work extends a plugin, that plugin's existing layout before placing anything — it conforms the boundary to a recorded decision and designs around what is already there, not around a blank slate. The method is read-only on the project: it scaffolds no component, writes no manifest, installs nothing; the component map is returned to the caller, which owns recording it as the architecture artifact the downstream phases consume.
+The recipe reads research's candidates and, when the work extends a plugin, that plugin's existing layout before placing anything — it designs around what is already there, not around a blank slate. The method is read-only on the project: it scaffolds no component, writes no manifest, installs nothing; the units and their order are returned to the caller, which owns recording them.
 
-Idempotent for fixed inputs: running the design twice over the same need, the same research recommendation, and the same existing-plugin state produces the same component map. A map that changes because the need or the research changed is the design reflecting current reality, not a non-deterministic recipe.
+Idempotent for fixed inputs: running the design twice over the same need, the same research candidates, and the same existing-plugin state produces the same units in the same order. An answer that changes because the need or the research changed is the design reflecting current reality, not a non-deterministic recipe.
 
 ## Verifier
 
@@ -122,10 +131,11 @@ After the recipe runs, verify:
 1. Every capability in the need maps to exactly one component type, each chosen against the decision framework with the reason recorded — and no new model-invoked workflow was placed in a command where a skill was the right home.
 2. Each component carries a single responsibility, a kebab-case name, a trigger surface, a minimum tool-permission set, and a model decision (skills left to inherit unless justified; no skill pinned to a sub-1M-context model).
 3. Each skill records its body/`references/` split and a `description` drafted inside the budget with the primary trigger front-loaded; any component that could not fit the constraints is flagged for splitting.
-4. The manifest shape and directory layout are recorded, with the add-vs-replace path semantics noted, and the plugin boundary matches the research recommendation.
-5. The design left the project unchanged — no component scaffolded, no manifest written, nothing installed; the component map was returned for the plugin's design phase to record as the artifact the implement and review phases conform to.
+4. The manifest shape and directory layout are recorded, with the add-vs-replace path semantics noted, and the plugin boundary is decided here from research's candidates rather than taken as given.
+5. Every unit names the files it owns and the interface it offers to the units that depend on it, and the fact that this framework builds nothing without code is recorded rather than left unsaid.
+6. The design left the project unchanged — no component scaffolded, no manifest written, nothing installed; the units and their order were returned for the caller to record.
 
-This recipe ships no executable verifier of its own — the decision-and-decomposition steps are the agent-driven protocol; the plugin's design phase owns the artifact slot and how the component map feeds the implement phase.
+This recipe ships no executable verifier of its own — the decision-and-decomposition steps are the agent-driven protocol; the caller owns the work order's shape and the check that every acceptance criterion is served by one.
 
 ## References
 
@@ -138,4 +148,4 @@ This recipe ships no executable verifier of its own — the decision-and-decompo
 
 ### Plugin-side generic mechanism (ai-dev-assistant)
 
-The stack-neutral design phase this recipe binds Claude Code into — when the phase runs, the artifact slot it fills, and how the component map feeds the implement and review phases — is documented in the plugin itself, not duplicated here. The recipe supplies only the Claude-Code-specific architecture: the component-type decision, the progressive-disclosure and description-budget constraints, and the manifest-and-boundary layout.
+The stack-neutral design phase this recipe binds Claude Code into — when the phase runs, the shape of a work order, the check that every acceptance criterion is served, and the approval a person gives — is documented in the plugin itself, not duplicated here. The recipe supplies only the Claude-Code-specific architecture: the component-type decision, the progressive-disclosure and description-budget constraints, and the manifest-and-boundary layout.

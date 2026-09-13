@@ -36,6 +36,18 @@ The tag names what the block holds, not how it is executed — steps still run a
 
 Nothing reads inside a block, so nothing guesses. `validate_recipes.py` rejects an untagged fence under either heading, an `## Install` with no `sh` block, a `## Run` with anything other than exactly one, and an `sh` block under `## Run` holding more than one command. Reading by position instead — "the first fence under Install" — is what shipped a `composer config` without its `composer require` and called it installed.
 
+## What the build produces
+
+On deploy, `scripts/generate_tooling_recipes.py` emits one routing line per recipe into `tooling-recipes.txt`, plus `tooling-recipes.hash`:
+
+```
+- <name> [tool=<tool> framework=<framework>] (sha:XXXXXXXX): <when-to-use> — <site-url>
+```
+
+Two keys, because there are two lookups. **Tool name** serves a caller that already knows which tool it wants — the name is the whole contract, since a tooling recipe is named for its tool and whatever needs it refers to it by that name. **Framework** is on the line because the same tool installs differently per stack: PHPUnit on Drupal runs through Composer inside a container and PHPUnit on a PHP CLI project does not, so those are two recipes rather than one. A caller that does not yet know the tool matches search words against the description instead.
+
+Without this listing the pages exist and nothing can find them. A process recipe names the tools its method needs with `requires_tooling:`, and `scripts/validate_recipes.py` checks each name resolves to a recipe for that recipe's own framework — so a name that resolves to nothing fails at publish rather than on somebody's machine.
+
 ## Catalog
 
 | Framework | Tool | Recipe |

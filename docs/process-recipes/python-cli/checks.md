@@ -6,7 +6,7 @@ description: Use when a Python change reaches the review phase and must pass its
 # Metadata — read only after a match.
 label: Python review checks
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.3.1
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -115,6 +115,84 @@ Without this declaration a pure-Python change filters to an empty list against t
 `.toml` is the judgement call, and it goes in for the same reason Go declares `.mod`. `pyproject.toml` is where the dependency posture, the target versions and the tool configuration are decided, and a change that touches only it — adding a dependency the design did not decide, which is a blocking finding above — would otherwise scope to an empty list and be judged by nothing. The honest cost is that this filter matches **extensions, not paths**, so it cannot scope in the manifest while scoping out a generated lockfile the way Go excludes `.sum`: a PEP 751 `pylock` file is also `.toml` and will be pulled in. Treat a lockfile diff as evidence of the dependency decision, not as code to judge on its own terms — and note that the same limitation cuts the other way for suppressions, which is the subject of the next paragraph.
 
 `# noqa` and `# type: ignore` are the checks most worth watching and are reachable by no extension declaration at all, because they are inline comments rather than files. The unexplained-suppression rule in the Sequence is a read of the diff by the reviewer for exactly that reason; no value this block could hold would reach it.
+
+## Check commands
+
+Five rows — `coding-standards`, `static-analysis`, `security`, `duplication`, `design-metrics` —
+each a command or a named statement that this framework has none. `{paths}` expands to one argv
+token per file in the caller's file list, relative to the project root. `pip-audit` audits the
+current environment's installed distributions, not a file list, so its row carries no `{paths}`;
+it exits 1 when it finds a known vulnerability and 0 otherwise.
+
+```yaml
+check_commands:
+  - id: coding-standards
+    argv: ["ruff", "check", "{paths}"]
+  - id: static-analysis
+    argv: ["mypy"]
+  - id: security
+    argv: ["pip-audit"]
+  - id: duplication
+    absent: >-
+      The floor names no duplication tool. pylint's duplicate-code checker exists and is
+      a project's choice to enable under [tool.pylint]; this recipe does not choose it.
+  - id: design-metrics
+    absent: >-
+      The floor names no design-metrics tool. Ruff's C901 rule measures cyclomatic
+      complexity alone, and only when a project selects it; radon and xenon are a
+      project's choice. This recipe selects no rule set for a project.
+```
+
+**The first two rows are the floor, not the project's choice.** Opinion says the project's
+`pyproject.toml` names the linter and the type checker and this recipe names them only where it
+does not. A block a script reads cannot express that deferral, so the rows carry the floor, and a
+project that declares pyright, pyrefly or another linter under `[tool.*]` is one where these two
+rows run a tool the project did not choose. Record the substitution where it happens, the way step
+1 to 3 record which tool ran. `ruff format --check` has no row of its own: formatting is the first
+gate in the Sequence and is not one of the three checks this block answers.
+
+**The mypy row takes no `{paths}`, because paths on its command line replace the project's scope.**
+`[tool.mypy] files` is where a project says what is typed to which strictness, and a path argument
+overrides it. Run with `{paths}` against a project declaring `files = ["src"]` and `strict = true`,
+the row handed mypy 2.3.1 the tests as well and got thirteen errors in six test files that the
+project had scoped out on purpose, while bare `mypy` on the same tree reported `Success: no issues
+found in 14 source files`. mypy also parses whatever it is handed, so a `pyproject.toml` in the
+list — this recipe scopes `.toml` in — reports `Name "project" is not defined`. Bare `mypy` reads
+`files` and `strict` from the project and neither problem arises. Where `[tool.mypy]` declares no
+`files`, mypy exits 2 with `Missing target module, package, files, or command`: unmet, with the
+reason in the output, and the fix is a line in `pyproject.toml`. Ruff has neither problem:
+`ruff check` 0.15 given a `.toml` reports `All checks passed!` and honours `per-file-ignores`.
+
+**`pip-audit` reads the environment it runs in.** Run from the project's virtualenv it audits that
+environment's installed distributions, prints `No known vulnerabilities found` on standard error,
+exits 0, and lists the project's own distribution as skipped because it is not on PyPI. Run from
+another interpreter it audits that one instead, so the caller's `PATH` decides what is audited.
+
+## Surface commands
+
+Five rows, all absent. Surface commands are the suites review runs over a framework's user-visible
+surfaces, and a Python CLI has none: its interface is a console script, and its end-to-end shape is the entry-point and subprocess levels chosen in `python-cli/test-authoring.md`, not a phase. The rows are declared absent rather than left out because a
+present block with absent rows is how review knows a framework has no surfaces, while a missing
+block is a heading it could not find.
+
+```yaml
+surface_commands:
+  - id: e2e
+    absent: >-
+      A CLI's end-to-end coverage is the entry-point or subprocess level the test-authoring recipe chooses, run by the suite row of `python-cli/test-execution.md`; there is no browser surface for a separate e2e suite to drive.
+  - id: visual-regression
+    absent: >-
+      No rendered surface exists to screenshot, so there is no baseline to diff against.
+  - id: visual-regression-accept
+    absent: >-
+      There is no visual-regression suite, so there is no baseline to accept.
+  - id: visual-parity
+    absent: >-
+      This framework names no parity harness.
+  - id: visual-parity-accept
+    absent: >-
+      There is no parity suite, so there is no baseline to accept.
+```
 
 ## State-awareness contract
 

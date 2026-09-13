@@ -6,7 +6,7 @@ description: Use when a Drupal project needs PHP_CodeSniffer with the Drupal and
 # Metadata, read only after a match.
 label: PHP_CodeSniffer (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 recipe_class: tooling
 framework: drupal
 authors:
@@ -50,12 +50,18 @@ running it as well does no harm and no good.
 ## Run
 
 ```sh
-ddev exec vendor/bin/phpcs --standard=Drupal,DrupalPractice web/modules/custom
+ddev exec vendor/bin/phpcs --standard=Drupal,DrupalPractice --extensions=php,module,inc,install,profile,theme,engine web/modules/custom
 ```
 
 Findings print to stdout, grouped by file, with a line and column for each. The exit
 status is non-zero when anything was reported, so a caller can branch on it without
 reading the text.
+
+`--extensions` is not optional. The `Drupal` ruleset in `drupal/coder` 8.3.31 sets no
+file extensions, so PHP_CodeSniffer keeps its default of `php`, `inc`, `js` and `css`
+and skips every `.module`, `.install`, `.theme`, `.profile` and `.engine` file — in
+silence, with exit 0 and no output, verified on PHP_CodeSniffer 3.13.6. Without the
+flag the command above reports on a module's classes and never on its hooks.
 
 Point the last argument at whatever the caller means by its own code — a single
 module directory, a theme, or several paths in one invocation.

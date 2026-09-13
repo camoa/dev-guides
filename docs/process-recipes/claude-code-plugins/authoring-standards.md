@@ -6,7 +6,7 @@ description: Use when a Claude Code plugin project enters the implementation pha
 # Metadata — read only after a match.
 label: Component authoring standards (Claude Code)
 recipe_schema_version: 1.0.0
-version: 0.3.0
+version: 0.4.0
 # Machine-readable dependency declaration (recipe-loader resolves these
 # without parsing prose). The test-discipline rules are stack-neutral: they are
 # cited here, never restated per framework.
@@ -45,7 +45,7 @@ The plugin owns the generic implement phase — when it runs and the oracle/enve
 
 **Test-first for a plugin is paper-testing the instructions.** A component's "code" is the instruction set it feeds the model, so the test that matters is a line-by-line trace of that instruction set with concrete values — does the skill's logic hold, does the command's argument handling do what the frontmatter promises, does the hook fire on the event it claims. This trace is run *before* the component is trusted, the Red-Green discipline applied to prose, and it is deferred to `code-paper-test:paper-test` (or `/code-paper-test:test-team` for a large or security-sensitive component) rather than re-implemented here.
 
-**The paper-test is the loop's analogue, and it is worth being precise about how far the analogy runs.** A plugin's substance is instructions, so there is no failing assertion to watch go red — what stands in for it is tracing the instruction set against what the component was designed to do, before anyone relies on it. That much is genuinely the same discipline: the contract comes first, and the component is judged against it rather than described by it. What it is not is a substitute for a test suite where a plugin ships executable code — a hook script, a validator, a helper — which is ordinary code and gets ordinary test-first treatment at the tier its dependency surface calls for.
+**The paper-test is the loop's analogue, and it is worth being precise about how far the analogy runs.** A plugin's substance is instructions, so there is no failing assertion to watch go red — what stands in for it is tracing the instruction set against what the component was designed to do, before anyone relies on it. That much is genuinely the same discipline: the contract comes first, and the component is judged against it rather than described by it. What it is not is a substitute for a test suite where a plugin ships executable code — a hook script, a validator, a helper — which is ordinary code and gets ordinary test-first treatment. The levels that code has, where its spec file goes, what it is called, and what such a spec may not do are `claude-code-plugins/test-authoring.md`'s; that recipe also states that the paper trace is the thing it is not.
 
 **Adding a check is not automatically progress.** The same brake applies here as to any suite: a check earns its place by specifying a behaviour the component promised, and past that it makes the component harder to review without constraining anything new. The full set of excess cases belongs to `development/tdd-spec-driven` and is cited, not restated. Two local forms worth naming: a paper-test that re-asserts the frontmatter rules `/plugin-creation-tools:validate` already enforces deterministically is duplication of a check that runs for free, and a trace that quotes a component's own body back as evidence that the body is correct is the ratifying case in its plainest form — the trace has to come from the design, not from the prose it is judging.
 
@@ -96,7 +96,7 @@ If invoked in dry-run mode, perform the reads and emit an authoring plan plus th
 
 4. **Author hooks defensively.** Bind the recognised event and a valid handler, prefer exec form with explicit `args`, brace every `${CLAUDE_*}` placeholder, set an explicit timeout, and route nothing to `/dev/tty`.
 
-5. **Paper-test every component before trusting it.** Trace each component's instructions with concrete values through `code-paper-test:paper-test` (or `/code-paper-test:test-team` for a large or security-sensitive component), and verify every external reference — tool, sibling skill, flag, API symbol — resolves to something real. Fix what the trace surfaces before the component is considered done. Where the component ships executable code, its tests follow the ordinary test-first discipline, and once such a test is committed, who may change or delete it is the mutability matrix's answer in `development/tdd-spec-driven`, not this phase's.
+5. **Paper-test every component before trusting it.** Trace each component's instructions with concrete values through `code-paper-test:paper-test` (or `/code-paper-test:test-team` for a large or security-sensitive component), and verify every external reference — tool, sibling skill, flag, API symbol — resolves to something real. Fix what the trace surfaces before the component is considered done. Where the component ships executable code, its spec arrives already failing from `claude-code-plugins/test-authoring.md` and this phase turns it green without changing it; once such a test is committed, who may change or delete it is the mutability matrix's answer in `development/tdd-spec-driven`, not this phase's.
 
 6. **Sanity-check, and hand the gate to review.** Optionally run `/plugin-creation-tools:validate --dry-run` to catch a structural slip early. The blocking structural verdict is not formed here — it is the review phase's; this phase returns the authored, paper-tested components and the trace results.
 
@@ -182,6 +182,13 @@ Two things about this list are worth stating, because they are what makes it wor
 **The paper-test is not an oracle and cannot be one.** The trace of a component's instructions is judgement applied at authoring time and leaves no file behind for a guard to watch. That is a real limit rather than an omission: for the part of a plugin that is prose, the protection against a weakened check is the review phase reading the diff, never the tamper guard. A project that declares no oracle files at all is an honest "no oracle configured" state — the guard reports it ran with nothing to watch, rather than reporting a pass it never checked.
 
 ## References
+
+### Sibling process recipes
+
+| Recipe | What it holds |
+|---|---|
+| `claude-code-plugins/test-authoring.md` | For the executable code a plugin ships: which level a behaviour belongs at, where the spec file goes and what it is called, how a criterion is traced to a case, and what such a spec may not do — and why a component that is only instructions is paper-traced here instead |
+| `claude-code-plugins/test-execution.md` | That this framework ships no test harness, and what answers in its place |
 
 ### External origins (referenced, not authored here)
 

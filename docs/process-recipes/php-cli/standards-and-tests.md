@@ -2,11 +2,11 @@
 # Routing block — an orchestrator reads to here and decides.
 name: php_cli_implement_standards_and_tests
 capability: implement
-description: Use when a PHP CLI project (a Composer library or application whose interface is one or more CLI binaries) enters the implementation phase and must hold code to PHP/PSR standards and test-first discipline — applies PSR-12 with declare(strict_types=1) and readonly value objects, selects the smallest PHPUnit tier that answers the question, tests every CLI flag and exit code with a fixture-driven end-to-end tier, and syntax-checks every shipped binary including extensionless ones. Defers linter execution to the code-quality-tools plugin.
+description: Use when a PHP CLI project (a Composer library or application whose interface is one or more CLI binaries) enters the implementation phase holding a test that already fails, and must turn it green under PHP/PSR standards — applies PSR-12 with declare(strict_types=1) and readonly value objects, confirms every CLI flag and exit code the change touches is covered, and syntax-checks every shipped binary including extensionless ones. Which level the test sits at and how it is written belong to the test-authoring recipe; linter execution is deferred to the code-quality-tools plugin.
 # Metadata — read only after a match.
 label: PHP CLI standards and tests
 recipe_schema_version: 1.0.0
-version: 0.4.0
+version: 0.6.0
 # Machine-readable dependency declaration (recipe-loader resolves these
 # without parsing prose). The test-mutability rule is stack-neutral: it is
 # cited here, never restated per framework.
@@ -28,9 +28,9 @@ license: GPL-2.0-or-later
 
 ## Goal
 
-Hold PHP CLI implementation-phase code to the standard it must meet before it can be reviewed: PHP/PSR coding standards applied as the code is written, every unit of logic covered by a PHPUnit test written test-first at the smallest tier that answers the question, every CLI flag and exit code exercised, and a fixture-driven end-to-end tier that runs the built binary against a fixture tree and asserts on its output. The judgement of *which* standard applies and *which* test tier fits is the recipe's; running the linters is the code-quality-tools plugin's.
+Hold PHP CLI implementation-phase code to the standard it must meet before it can be reviewed: PHP/PSR coding standards applied as the code is written, a test that arrived red turned green without weakening it, and the coverage the contract requires confirmed present — every CLI flag and exit code exercised, and a check-style unit carrying its negative case. The judgement of *which* standard applies is the recipe's; running the linters is the code-quality-tools plugin's; choosing and writing the test is `php-cli/test-authoring.md`'s.
 
-The plugin owns the generic mechanism — when the implement phase runs, the test-first gate that blocks completion, the oracle-tamper guard that stops a builder weakening a measurement file, and how findings are recorded against the task. This recipe owns the part the stack-neutral mechanism cannot know: how PHP coding standards are applied to a CLI library, how the PHPUnit test tiers are selected and shaped, what "test the CLI end-to-end" means without a browser, and the extensionless-binary trap a naive syntax-check glob walks straight into.
+The plugin owns the generic mechanism — when the implement phase runs, the test-first gate that blocks completion, the oracle-tamper guard that stops a builder weakening a measurement file, and how findings are recorded against the task. This recipe owns the part the stack-neutral mechanism cannot know: how PHP coding standards are applied to a CLI library, why a CLI's end-to-end coverage is a test level rather than a phase, and the extensionless-binary trap a naive syntax-check glob walks straight into.
 
 ## Opinion
 
@@ -38,15 +38,15 @@ The plugin owns the generic mechanism — when the implement phase runs, the tes
 
 **PSR-12, strict types everywhere, readonly value objects across seams.** Every file carries `declare(strict_types=1)` and conforms to PSR-12 layout, PascalCase classes / camelCase methods, docblocks on classes and public methods, and type hints on every parameter and return. Data carried between layers — from the thin binary into the library, from one collaborator to the next — travels as a `readonly` value object, not a loose array, so the shape is explicit and cannot be mutated behind a caller's back. No deprecated APIs reach the diff.
 
-**The test tier matches the dependency surface, not habit — pick the smallest that answers the question.** Pure logic with no collaborators is a plain unit test that constructs the class and asserts on its return. Logic that needs collaborators is a unit test with those collaborators wired (real ones where cheap, doubles where a boundary must be isolated). Behaviour that only makes sense against the whole library — a service composed of several parts, real file I/O against a temp tree — is a fixture or integration tier that exercises the library API. Pushing pure logic into a slow fixture test, or faking a collaborator a unit really needs so the test proves nothing, are both tier mismatches — name the tier deliberately.
+**The level, the file and the test's name are not decided here.** Which level a behaviour belongs at, where the test file goes, what the class and method are called, how the criterion it specifies is traced to it, and what a PHPUnit test may not do are `php-cli/test-authoring.md`'s. That reader writes the test and stops at red; this one takes the red test and makes it green. The rules are stated once, there, because a reader that may not write production code cannot be handed this file.
 
 **Every CLI flag and exit code needs a test, and a check-style unit needs a negative case.** Each flag the binary accepts and each exit code it can return is a behaviour with a contract, and each gets a test that pins it — a flag that changes output, a bad-input path that returns the documented non-zero code. A **check-style** unit — one whose job is to *report problems* (a linter rule, a scanner, a validator) — additionally needs a **negative case**: an assertion that correct input produces **no** output and no finding. Without the negative case the check cannot be tuned — a rule that flags everything and a rule that flags nothing both pass a suite that only ever feeds them bad input.
 
-**Fixture-driven end-to-end IS the CLI's e2e, and it belongs here.** "No e2e" for a PHP CLI means no *browser* e2e — it does not mean the tool has no end-to-end shape. A CLI tool's real end-to-end test runs the built binary against a fixture tree and asserts on its stdout, its stderr, and its exit code — the whole contract a user actually hits. The plugin's e2e-setup machinery is Playwright-shaped and does not fit a tool with no rendered surface, so this coverage does not live in an e2e-setup phase; it lives here (and in review) as a test tier, driving the binary as a subprocess exactly as a user would invoke it.
+**Fixture-driven end-to-end IS the CLI's e2e, and it is not a phase.** "No e2e" for a PHP CLI means no *browser* e2e — it does not mean the tool has no end-to-end shape. The plugin's e2e-setup machinery is Playwright-shaped and does not fit a tool with no rendered surface, so that coverage never becomes an `e2e-setup` binding: it is a test level, chosen in `php-cli/test-authoring.md` and checked at `review` like any other.
 
 **That fixture tier is inside the TDD loop; a browser suite would not be.** The distinction is not whether a subprocess or a browser is involved, it is whether the test was written before the code and run red. The fixture-driven CLI test is written from the flag-and-exit-code contract before the flag exists, so it constrains the design. Visual regression and browser E2E, where a project has them, run against something already built, cannot drive a design decision, and do not count toward the test-first requirement here.
 
-**Adding a test is not automatically progress.** The loop's requirement for a change is one specification per behaviour the change creates, at the smallest tier that answers the question, each seen to fail first *because the behaviour it names did not exist yet*. Past that, more tests make the change harder to review without specifying anything new. The full set of excess cases belongs to `development/tdd-spec-driven` and is cited, not restated. The local form worth naming: a CLI tool's most tempting bad assertion is a match on the exact wording of its own stdout. The exit code and the structured output are contracts; the prose around them is not, and a test that pins the prose breaks on a reword while proving nothing. Where a behaviour has no surface but prose, that is a finding about the tool — give it an exit code or a machine-readable mode — not a reason to assert harder.
+**Adding a test is not automatically progress.** The loop's requirement for a change is one specification per behaviour the change creates, at the level `php-cli/test-authoring.md` chose, each seen to fail first *because the behaviour it names did not exist yet*. Past that, more tests make the change harder to review without specifying anything new. The full set of excess cases belongs to `development/tdd-spec-driven` and is cited, not restated, and the PHP-CLI-specific forms are stated in `php-cli/test-authoring.md` beside the reader that would write them. What belongs here is what a prose-only surface means for the **code**: where a behaviour a user depends on can only be observed by reading the tool's own wording, give it an exit code or a machine-readable mode. That is a change to the tool, made in this phase.
 
 **Syntax-check and lint every shipped binary, including the extensionless ones.** A Composer CLI's binaries are conventionally extensionless — `bin/<tool>`, not a `.php` file — so a naive `find -name '*.php'` syntax-check glob silently skips the very entrypoints a user runs. Enumerate the binaries to check from the `bin` array in composer.json instead of globbing by extension, and syntax-check (and hand to the linters) every one of them, extensionless included. A binary that never gets linted is the file most likely to ship a fatal parse error.
 
@@ -54,18 +54,16 @@ The plugin owns the generic mechanism — when the implement phase runs, the tes
 
 ## Preconditions
 
-- A PHP project, Composer-managed, with a configured PHPUnit runner (`php vendor/bin/phpunit` against a committed `phpunit.xml` / `phpunit.xml.dist`) — so the tests and the code-quality-tools linters can run.
+- A PHP project, Composer-managed. The condition for *running* a test — a configured PHPUnit runner against a committed `phpunit.xml` or `phpunit.xml.dist` — is declared by the `test-execution` recipe for this framework, which is where the commands that need it live.
 - The design phase has produced an architecture decision (see the architecture recipe under this framework): the library boundary, the thin-binary contract, the exit-code semantics, and the component map are known, so this phase tests and builds against a plan rather than improvising structure.
 - The code-quality-tools plugin is available for linter execution (`phpcs`, `phpstan` at the project's declared level); this recipe does not bundle or re-author those runners.
 - The plugin's generic implement phase is present: the test-first gate, the oracle-tamper guard, and the task record. This recipe supplies the PHP-CLI-specific standards-and-tests method; it does not recreate the gate.
 
-The runner bullet is the one the engine can check, so it is also declared in machine-readable form below. The rest stay prose: they are design-artifact and plugin-availability conditions with no argv-safe filesystem probe.
+All four stay prose. They are design-artifact and plugin-availability conditions with no argv-safe filesystem probe, and the one condition that did carry a machine-readable entry — the PHPUnit runner — moved to the `test-execution` recipe, which owns the commands it is a condition of.
 
-preconditions:
-  - id: test-runner
-    what: a PHPUnit runner whose failure the RED step can observe
-    check: test -x vendor/bin/phpunit
-    owner: code-quality-tools:setup
+```yaml
+preconditions: []
+```
 
 ## Input contract
 
@@ -75,28 +73,27 @@ Source-agnostic, supplied by the caller (the orchestrator at the implement phase
 code_path: string             # absolute path to the PHP project root
 component: string             # the unit being implemented (a service, a command, a rule…)
 behavior: string             # the specific behaviour to test-drive and build
-test_tier: string             # optional; unit | unit-with-collaborators | integration |
-                              #   cli-e2e — if absent, derived from the dependency surface
+test_tier: string             # the level the test-authoring recipe chose, carried through
 architecture_ref: string      # optional; pointer to the design decision this implements
 ```
 
 ## Sequence
 
-If invoked in dry-run mode, perform all reads and emit a test-and-standards plan (the tier choice, the test shape, the flag/exit-code list to cover, the binaries to syntax-check) instead of writing any test or production code. Dry-run is required.
+If invoked in dry-run mode, perform all reads and emit a standards plan (what the code must do to turn the test green, the flag and exit-code coverage to confirm, the binaries to syntax-check) instead of writing production code. Dry-run is required.
 
-1. **Select the test tier.** From `behavior` and the component's dependency surface, choose the smallest tier that answers the question: a **plain unit** test for pure logic; a **unit with collaborators wired** where the behaviour needs them; an **integration/fixture** tier where only the composed library API makes sense; and, for anything the binary exposes, the **CLI end-to-end** tier that runs the built binary against a fixture tree. Use `test_tier` if supplied; otherwise derive it. Tests live under `tests/`.
+1. **Take the failing test.** The level, the file, the class and method names and the criterion each carries are `php-cli/test-authoring.md`'s, and it hands them over red. Confirm the failure is an assertion that ran and did not hold rather than a harness error or a run that selected nothing — `php-cli/test-execution.md` declares how to tell those apart. A behaviour arriving with no failing test does not enter this phase; send it back.
 
-2. **Write the failing test (RED).** Author the test before any production code, shaped Arrange-Act-Assert. For every CLI flag and exit code the component touches, include an exit-code-contract test that invokes the binary and asserts on the returned status and the stdout/stderr split; for behaviour a user reaches through the binary, include fixture-based CLI end-to-end coverage that drives the built binary as a subprocess against a fixture tree. If the component is a check-style unit, include the **negative case** — correct input yields no output/no finding. Run the tests and confirm each fails because the behaviour is absent — a failure produced by breaking or reverting working code proves sensitivity, not authoring order (see `development/tdd-spec-driven/what-a-failing-test-proves`). A test that passes immediately is rejected and rewritten. Rewriting *this* test is the author's own move, made before the production code exists; once a test is committed, who may change or delete it is the mutability matrix's answer in `development/tdd-spec-driven`, not this phase's.
+2. **Confirm the red is the right red, and that the coverage the contract needs arrived with it.** The behaviour is absent — not a failure produced by breaking or reverting working code, which proves the test is sensitive and never that it came first (see `development/tdd-spec-driven/what-a-failing-test-proves`). Confirm the set covers every CLI flag and exit code the component touches, and that a check-style unit brought its **negative case** — correct input yields no output and no finding. A gap in that coverage goes back to test authoring; it is not filled here. A test that passed on arrival is not a starting point; return it. Once a test is committed, who may change or delete it is the mutability matrix's answer in `development/tdd-spec-driven`, not this phase's — and this phase changes none.
 
 3. **Write the minimum code to pass (GREEN).** Implement only what the tests demand — no extra features, no premature optimisation. As you write, hold the standards inline: `declare(strict_types=1)` at the top of every file, PSR-12 layout, docblocks and type hints, PascalCase classes / camelCase methods, and `readonly` value objects for data crossing the binary/library seam or passed between collaborators rather than loose arrays. Keep the binary thin — arg parsing and wiring only, logic in the library (the boundary the architecture recipe fixed). Run the tests to green.
 
-4. **Apply and confirm the standards inline.** Before the unit is considered done, confirm no deprecated APIs entered the diff, every new file declares strict types, and the layer boundary held (no business logic leaked into `bin/`). Any gap is fixed now, with a test that proves the fix where the behaviour is testable.
+4. **Apply and confirm the standards inline.** Before the unit is considered done, confirm no deprecated APIs entered the diff, every new file declares strict types, and the layer boundary held (no business logic leaked into `bin/`). Any gap is fixed now. Where the fix needs a test to prove it, that test is authored by `php-cli/test-authoring.md` and arrives red like any other; this phase does not write it.
 
 5. **Syntax-check every shipped binary, extensionless included.** Enumerate the binaries from the `bin` array in composer.json — not from a `*.php` glob, which skips the extensionless ones — and syntax-check every entry (`php -l` per binary). An extensionless `bin/<tool>` is checked exactly like a `.php` file. A binary that fails the syntax check is fixed before the phase hands back.
 
 6. **Refactor under green (REFACTOR).** With tests green, improve structure without changing behaviour — extract duplication into the library, lean on interfaces at the extension seams the design named, tighten the value objects. Re-run the tests; they stay green or the refactor is reverted.
 
-7. **Defer the linters to the tooling, then hand back.** Invoke the code-quality-tools plugin to run `phpcs` and `phpstan` over the changed files, binaries included — this recipe judges what the standards mean but does not re-author or replace that run. Return the test results, the tier choices, the flag/exit-code coverage, the fixture-based CLI-e2e result, the binary syntax-check outcome, and the linter outcome to the caller; the plugin's implement phase records them against the task and owns the completion gate. The recipe writes test and production code for the component, but writes no task record of its own.
+7. **Defer the linters to the tooling, then hand back.** Invoke the code-quality-tools plugin to run `phpcs` and `phpstan` over the changed files, binaries included — this recipe judges what the standards mean but does not re-author or replace that run. Return the test results, the flag and exit-code coverage confirmation, the binary syntax-check outcome, and the linter outcome to the caller; the plugin's implement phase records them against the task and owns the completion gate. The recipe writes production code for the component, changes no test, and writes no task record of its own.
 
 ## Data flow
 
@@ -110,7 +107,7 @@ reads project state:
 
 applies opinion:
        test-first (RED→GREEN→REFACTOR) · PSR-12 + declare(strict_types=1) + readonly
-       value objects · smallest tier that answers the question · every flag + exit code
+       value objects · the test arrives red and is not rewritten · every flag + exit code
        tested · check-style unit needs a negative case · fixture-driven CLI e2e lives
        here · syntax-check every binary incl. extensionless · standards by judgement,
        linters by tooling
@@ -131,7 +128,7 @@ emits (to the caller; the recipe writes no task record):
 
 ## State-awareness contract
 
-The recipe reads existing state before writing. The architecture decision, the current library layout (`src/`, `bin/`), the `bin` array in composer.json, and any existing tests under `tests/` are read so new code extends the design, the binary list is enumerated from source of truth rather than guessed, and new tests extend the suite rather than colliding with or duplicating it. The method writes test and production code for the component under implementation, but installs nothing and writes no task record — the results are returned to the caller, which owns recording them and gating completion.
+The recipe reads existing state before writing. The architecture decision, the current library layout (`src/`, `bin/`), the `bin` array in composer.json, and any existing tests under `tests/` are read so new code extends the design and the binary list is enumerated from source of truth rather than guessed. The method writes production code for the component under implementation, changes no test, installs nothing and writes no task record — the results are returned to the caller, which owns recording them and gating completion.
 
 Idempotent at the discipline level: re-running on a component whose tests already pass, whose standards already hold, and whose binaries already syntax-check produces no new change — the tests stay green, the linters stay clean, nothing is rewritten. A change on re-run means a regression was found or the behaviour moved, which is the method reflecting current reality, not non-determinism.
 
@@ -139,11 +136,10 @@ Idempotent at the discipline level: re-running on a component whose tests alread
 
 After the recipe runs, verify:
 
-1. Every implemented behaviour has a PHPUnit test at a deliberately chosen tier (plain unit / unit-with-collaborators / integration / CLI end-to-end), and each test was seen to fail before the code existed *because the behaviour was absent* — not because working code was broken or reverted, and no test passed on its first run unexamined.
+1. Every implemented behaviour arrived with a PHPUnit test that had been seen to fail *because the behaviour was absent* — not because working code was broken or reverted, and no test passed on arrival unexamined. The level that test sits at is `php-cli/test-authoring.md`'s choice, verified there.
 2. Every check-style unit carries a negative case — an assertion that correct input produces no output and no finding — so the check can be tuned, not just fired.
 3. Every CLI flag and every exit code the component touches is covered, and fixture-based CLI end-to-end coverage exists that drives the built binary against a fixture tree and asserts on stdout / stderr / exit code.
-4. Each test names the behaviour it specifies, and no test in the change was written after the code it covers — a test that cannot name a behaviour is measuring or ratifying, and does not count toward item 1.
-5. No test asserts on the wording of a printed message; assertions land on the exit code, structured output, returned values, or thrown exception types.
+4. No test in the change was written after the code it covers — a test that cannot name a behaviour is measuring or ratifying, and does not count toward item 1. This phase wrote none of them.
 6. Every shipped binary — enumerated from the `bin` array in composer.json, extensionless entries included — was syntax-checked and passes; none was skipped by an extension-only glob.
 7. New code carries `declare(strict_types=1)` in every file, PSR-12 layout, docblocks and type hints, `readonly` value objects across the seams, no deprecated APIs, and no business logic in `bin/`.
 8. The code-quality-tools `phpcs` and `phpstan` run over the changed files (binaries included) is clean, or its findings are recorded for the gate; this recipe did not re-author that run.
@@ -195,6 +191,13 @@ These are the standards-and-tests oracle files — the same set a standalone PHP
 
 ## References
 
+### Sibling process recipes
+
+| Recipe | What it holds |
+|---|---|
+| `php-cli/test-authoring.md` | Which level a behaviour belongs at, where the file goes and what the class and method are called, how a criterion is traced to a test, and what a PHPUnit test may not do — the half of the cycle that ends at red |
+| `php-cli/test-execution.md` | The command at each scope, its cost, the condition for running one, and how to read what came back |
+
 ### Plugin-side tooling (referenced, not authored here)
 
 | Source | Used for |
@@ -210,4 +213,4 @@ These are the standards-and-tests oracle files — the same set a standalone PHP
 
 ### Plugin-side generic mechanism (ai-dev-assistant)
 
-The stack-neutral implement phase this recipe binds PHP CLI into — when implementation runs, the test-first gate that blocks completion, the oracle-tamper guard that reads the list above, and how the results are recorded against the task — is documented in the plugin itself, not duplicated here. The recipe supplies only the PHP-CLI-specific standards-and-tests method (PSR-12 with strict types and readonly value objects, PHPUnit tier selection, the CLI flag/exit-code and fixture-driven end-to-end coverage, and the extensionless-binary syntax check) on top of that mechanism.
+The stack-neutral implement phase this recipe binds PHP CLI into — when implementation runs, the test-first gate that blocks completion, the oracle-tamper guard that reads the list above, and how the results are recorded against the task — is documented in the plugin itself, not duplicated here. The recipe supplies only the PHP-CLI-specific method it owns on top of that mechanism: PSR-12 with strict types and readonly value objects, the flag-and-exit-code coverage confirmation, and the extensionless-binary syntax check.

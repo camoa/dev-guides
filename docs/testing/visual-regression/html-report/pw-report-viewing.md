@@ -1,45 +1,49 @@
 ---
-description: How to open and view a generated Playwright HTML report locally, in DDEV, or in CI.
-tldr: Use `npx playwright show-report` to open reports — never open index.html via file:// as it breaks the trace viewer. The command starts a static HTTP server at localhost:9323. On failure, the report auto-opens locally; in CI (CI=true) it never auto-opens.
+description: "How to open and view a generated Playwright HTML report locally, in DDEV, or in CI."
+tldr: "Use `npx playwright show-report` to open reports — never open index.html via file:// as it breaks the trace viewer. The command starts a static HTTP server at localhost:9323. On failure, the report auto-opens locally; in CI (CI=true) it never auto-opens."
 ---
 
 # Viewing Reports
 
 ## When to Use
 
-> Use `npx playwright show-report` when opening a generated report to triage failures. Never open `index.html` directly via `file://`.
+> Opening a generated report to triage failures.
 
-## Decision
-
-| Context | Default behavior |
-|---|---|
-| Local, run failed | Auto-opens browser to the report |
-| Local, run passed | Does not auto-open |
-| CI (`CI=true`) | Does not auto-open |
-
-## Pattern
-
-Open latest report:
+## Pattern: Open Latest Report
 
 ```bash
 npx playwright show-report
 ```
 
-Open specific report:
+Defaults to `http://localhost:9323`.
+
+## Pattern: Open Specific Report
 
 ```bash
 npx playwright show-report ./playwright-report
 npx playwright show-report ./reports/run-2026-05-08
 ```
 
-Change port or bind interface:
+## Pattern: Change Port / Host
 
 ```bash
 npx playwright show-report --port 8080
 npx playwright show-report --host 0.0.0.0     # bind on all interfaces (LAN sharing)
 ```
 
-## Environment Variables
+## Why a Real HTTP Server?
+
+`show-report` starts a small static server. This is required because traces and some XHR-loaded attachments need correct MIME types and same-origin fetches. **Opening `index.html` via `file://` breaks** the trace viewer iframe.
+
+## Auto-Open Behavior
+
+| Context | Default |
+|---|---|
+| Local, run failed | Auto-opens browser to the report |
+| Local, run passed | Doesn't open |
+| CI (`CI=true`) | Doesn't open |
+
+## Environment Variables (override config without editing)
 
 | Var | Purpose |
 |---|---|
@@ -50,9 +54,9 @@ npx playwright show-report --host 0.0.0.0     # bind on all interfaces (LAN shar
 
 ## Common Mistakes
 
-- **Wrong**: opening `index.html` via `file://` → **Right**: trace viewer breaks; always use `show-report` or another HTTP server
-- **Wrong**: port `9323` collision with no error handling → **Right**: use `--port` or `PLAYWRIGHT_HTML_PORT` to override
-- **Wrong**: running `show-report` from the wrong cwd and getting an old report → **Right**: always pass an explicit path
+- **Opening `index.html` via `file://`** — trace viewer breaks; always use `show-report` or another HTTP server
+- **Port `9323` collision** — error message is explicit; use `--port` or `PLAYWRIGHT_HTML_PORT`
+- **`show-report` from wrong cwd** — opens an old report from elsewhere; always pass an explicit path
 
 ## See Also
 

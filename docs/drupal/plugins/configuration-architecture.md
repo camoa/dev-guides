@@ -22,7 +22,11 @@ drupal_version: "11.x"
 
 ## Pattern
 
-**Foundation Pattern - Entity Configuration**:
+**Foundation Pattern Configuration**:
+
+**Reference**: `/web/modules/contrib/commerce/modules/payment/config/install/`
+
+**Pattern**: Entity-based configuration with plugin field
 
 ```yaml
 # Entity configuration stores plugin ID
@@ -34,7 +38,9 @@ configuration:
   timeout: 30
 ```
 
-**Provider Pattern - Config Objects**:
+**Provider Pattern Configuration**:
+
+**Reference**: AI module provider configuration pattern
 
 ```yaml
 # Provider module configuration
@@ -53,7 +59,11 @@ default_configs:
   process: 'default'
 ```
 
-**Service Collector - Constraint-Driven ServiceConfig**:
+**Service Collector Pattern Configuration**:
+
+**Reference**: `/web/modules/contrib/orchestration/src/ServiceConfig.php`
+
+**Pattern**: Constraint-driven self-describing configuration
 
 ```php
 // ServiceConfig with constraints auto-generates UI metadata
@@ -72,7 +82,7 @@ new ServiceConfig(
 // Auto-generates: {options: [{key: 'webhook1', name: 'Webhook 1'}, ...]}
 ```
 
-**Key Advantage**: Service Collector configuration metadata embedded in service definition, automatically exposed via REST API for external UI generation.
+**Key Advantage**: Configuration metadata embedded in service definition, automatically exposed via REST API for external UI generation.
 
 ## Common Mistakes
 

@@ -8,15 +8,21 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you're adding styles to a component, you need to scope CSS properly, or you're importing Bootstrap variables in Radix sub-themes.
+> - You're adding styles to a component
+> - You need to scope CSS properly
+> - You're importing Bootstrap variables in Radix sub-themes
 
 ## Decision
 
-Use BEM for component-scoped styles to prevent collisions. Prefer CSS custom properties for theming values.
+See the patterns below for scoping strategy.
 
 ## Pattern
 
-**BEM Methodology** — Reference: `/core/themes/olivero/components/teaser/teaser.css`
+**Pattern: BEM Methodology**
+
+Use BEM for component-scoped styles to prevent collisions.
+
+Reference: `/core/themes/olivero/components/teaser/teaser.css`
 
 ```css
 /* Block */
@@ -42,7 +48,9 @@ Use BEM for component-scoped styles to prevent collisions. Prefer CSS custom pro
 }
 ```
 
-**Importing Radix/Bootstrap Variables** — Reference: `/themes/contrib/radix/` structure
+**Pattern: Importing Radix/Bootstrap Variables**
+
+Reference: `/themes/contrib/radix/` structure
 
 ```scss
 /* In component SCSS file */
@@ -62,7 +70,9 @@ Use BEM for component-scoped styles to prevent collisions. Prefer CSS custom pro
 }
 ```
 
-**Custom Properties (CSS Variables)**
+**Pattern: Custom Properties (CSS Variables)**
+
+Prefer CSS custom properties for theming values.
 
 ```css
 .component {
@@ -81,13 +91,17 @@ Use BEM for component-scoped styles to prevent collisions. Prefer CSS custom pro
 
 ## Common Mistakes
 
-- **Wrong**: Not scoping CSS with a component-specific class → **Right**: Global selectors like `.button` or `.card` collide with other components. Always use a unique component class as namespace.
-- **Wrong**: Using `@extend` in Sass → **Right**: `@extend` creates unexpected selector chains and bloats compiled CSS. Use mixins or utility classes instead.
-- **Wrong**: Using `!important` → **Right**: Indicates specificity problems. Fix selector specificity instead of using `!important`.
+**Common Mistake:** Not scoping CSS with component-specific class.
+**WHY:** Global selectors like `.button` or `.card` collide with other components. Always use unique component class as namespace.
+
+**Common Mistake:** Using `@extend` in Sass.
+**WHY:** `@extend` creates unexpected selector chains and bloats compiled CSS. Use mixins or utility classes instead.
+
+**Common Mistake:** Using `!important`.
+**WHY:** Indicates specificity problems. Fix selector specificity instead of using `!important`.
 
 ## See Also
 
-- Reference: `/core/themes/olivero/components/teaser/teaser.css`
-- Reference: `/themes/contrib/radix/` structure
+- [Radix Sub-Theme Best Practices](../../design-systems/radix-sdc/radix-sub-theme-best-practices.md)
 - [Component File Structure](component-file-structure.md)
 - [Bootstrap Documentation](https://getbootstrap.com/docs/5.3/customize/sass/)

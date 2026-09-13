@@ -8,11 +8,13 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you're code reviewing component implementations, debugging component issues, or establishing component development standards.
+> - You're code reviewing component implementations
+> - You're debugging component issues
+> - You're establishing component development standards
 
 ## Decision
 
-Twelve recurring mistakes, grouped by consequence: some are dead weight (schema keys nothing reads), some silently drop content, and two throw hard errors at cache rebuild in production.
+Twelve recurring mistakes, grouped by consequence. Most cost you only maintainability, CSS bloat or discovery overhead. Two (9 and 11) drop or ignore content silently, with no error and no log entry. One (12) throws a hard error at cache rebuild in production as well as development, because `alterDefinitions()` raises `IncompatibleComponentSchema` outside any `assert()` (`ComponentPluginManager.php:311`) — unlike the missing-schema check beside it, which is `assert()`-gated and therefore says nothing on a production `zend.assertions=-1`.
 
 ## Pattern
 
@@ -106,7 +108,7 @@ slots:
 {{ include('my_theme:button', { text: 'Click' }) }}
 ```
 
-**WHY this is wrong:** The component inherits all parent template variables. Creates hidden dependencies and unpredictable behavior.
+**WHY this is wrong:** The component inherits all parent template variables. This creates hidden dependencies and unpredictable behavior.
 
 **CORRECT:** Use `with_context = false` to isolate component context.
 

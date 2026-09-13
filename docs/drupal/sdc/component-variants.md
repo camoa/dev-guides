@@ -8,7 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you need multiple visual variations of a component, you're deciding between prop-based variants vs separate components, or you're implementing the variants API (Drupal 11.2+).
+> - You need multiple visual variations of a component
+> - You're deciding between prop-based variants vs separate components
+> - You're implementing the variants API (Drupal 11.2+)
 
 ## Decision
 
@@ -30,7 +32,11 @@ So `variants:` is metadata for component pickers and for humans. **The styling s
 
 ## Pattern
 
-**Enum Props (recommended for minor variations)** — Reference: `/themes/contrib/radix/components/button/button.component.yml`
+**Pattern 1: Enum Props (Recommended for Minor Variations)**
+
+Use when variations share same structure/slots, differ only in styling/behavior.
+
+Reference: `/themes/contrib/radix/components/button/button.component.yml`
 
 ```yaml
 props:
@@ -49,7 +55,11 @@ props:
       default: false
 ```
 
-**Separate Components (for major variations)**
+**WHY:** Single component handles all variations via props. Easier to maintain, better for design system consistency.
+
+**Pattern 2: Separate Components (for Major Variations)**
+
+Use when variations have fundamentally different structure/props/slots.
 
 ```
 components/
@@ -64,7 +74,13 @@ components/
     └── card-product.twig
 ```
 
-**Component Variants API (Drupal 11.2+)** — Reference: [Component Variants Issue](https://www.drupal.org/project/drupal/issues/3514072)
+**WHY:** Different structures require separate components. Trying to handle via props leads to complex conditionals and hard-to-maintain templates.
+
+**Pattern 3: Component Variants API (Drupal 11.2+)**
+
+Non-breaking API for named variants with titles/descriptions.
+
+Reference: [Component Variants Issue](https://www.drupal.org/project/drupal/issues/3514072)
 
 ```yaml
 # Component with variants
@@ -93,10 +109,14 @@ $build = [
 
 ## Common Mistakes
 
-- **Wrong**: Creating separate components for minor style variations → **Right**: Duplicates structure and maintenance. Use enum props for variations that differ only in styling.
-- **Wrong**: Using props to handle fundamentally different structures → **Right**: Leads to complex Twig conditionals. Create separate components when structure differs significantly.
-- **Wrong**: Shipping a `variants:` block targeting Drupal 11.1 or earlier → **Right**: The feature does not exist before 11.2; the block is silently ignored and `#variant` is an unknown render-array key.
-- **Wrong**: Relying on `variants:` to restrict which variant values are accepted → **Right**: `variants:` is unread by the validator. Declare `variant` as an `enum` prop as well if you need the value validated.
+**Common Mistake:** Creating separate components for minor style variations.
+**WHY:** Duplicates structure and maintenance. Use enum props for variations that differ only in styling.
+
+**Common Mistake:** Using props to handle fundamentally different structures.
+**WHY:** Leads to complex Twig conditionals. Create separate components when structure differs significantly.
+
+- **Shipping a `variants:` block targeting Drupal 11.1 or earlier** — `variants` is absent from `metadata.schema.json` on 11.0.x and 11.1.x; `ComponentMetadata::$variants` and `ComponentElement`'s `#variant` land only from 11.2.x. On 11.1 or earlier the block is accepted without error and does nothing.
+- **Relying on `variants:` to restrict which variant values are accepted** — `variants:` does not declare a `variant` prop and does not restrict the value; `parseSchemaInfo()` never touches it, so a variant name absent from the `variants:` map is passed straight through. Declare `variant` as an `enum` prop as well if you need the value validated.
 
 ## See Also
 

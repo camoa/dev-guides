@@ -8,7 +8,9 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you need to understand how Drupal discovers and loads components, when you're debugging component registration issues, or when you're planning component organization across modules/themes.
+> - You need to understand how Drupal discovers and loads components
+> - You're debugging component registration issues
+> - You're planning component organization across modules/themes
 
 ## Decision
 
@@ -19,14 +21,11 @@ drupal_version: "11.x"
 - Caches component definitions for performance.
 
 **Discovery Locations (all scanned, no precedence between them):**
+1. Active theme: `themes/{theme_name}/components/`
+2. Base themes: `themes/{base_theme}/components/`
+3. Modules: `modules/{module_name}/components/`
 
-| Location | Path |
-|---|---|
-| Active theme | `themes/{theme_name}/components/` |
-| Base themes | `themes/{base_theme}/components/` |
-| Modules | `modules/{module_name}/components/` |
-
-Components are namespaced by provider, so `my_theme:card` and `my_module:card` are two distinct plugins that coexist. **Dropping a same-named component into your theme does not take over a module's component** — see the replacement rules in [Replacing Templates with SDCs](replacing-templates-with-sdcs.md).
+Components are namespaced by provider, so `my_theme:card` and `my_module:card` are two distinct plugins that coexist. **Dropping a same-named component into your theme does not take over a module's component** — see the replacement rules below and in [Replacing Templates with SDCs](replacing-templates-with-sdcs.md).
 
 **Precedence applies only to replacement.** `ComponentNegotiator::doNegotiate()` first filters all definitions down to those whose `replaces` key equals the requested ID, then picks a winner among *those* candidates: a theme in the active theme hierarchy wins (active theme before base themes), and a module-provided candidate is the fallback when no theme claims it. With no `replaces` declared anywhere, there are no candidates and the requested plugin ID is instantiated directly.
 
@@ -38,7 +37,7 @@ Components are namespaced by provider, so `my_theme:card` and `my_module:card` a
 
 ## Pattern
 
-**Component ID Format:**
+**Pattern: Component ID Format**
 
 ```
 provider:component-name
@@ -52,7 +51,8 @@ Examples:
 
 ## Common Mistakes
 
-- **Wrong**: Expecting nested directories to create namespaces → **Right**: The scan *is* recursive, so `components/atoms/button/button.component.yml` is found — but the ID is still `provider:button`, not `provider:atoms:button`. Subdirectories are for your own organization only, and two `.component.yml` files with the same basename under one provider collide no matter how deeply they are nested.
+**Common Mistake:** Expecting nested directories to create namespaces.
+**WHY:** The scan *is* recursive, so `components/atoms/button/button.component.yml` is found — but the ID is still `provider:button`, not `provider:atoms:button`. Subdirectories are for your own organization only, and two `.component.yml` files with the same basename under one provider collide no matter how deeply they are nested.
 
 ## See Also
 

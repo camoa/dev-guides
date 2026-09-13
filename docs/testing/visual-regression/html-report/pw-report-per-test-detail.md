@@ -1,15 +1,40 @@
 ---
-description: What the Playwright per-test detail page contains and how to use it to investigate failures.
-tldr: The per-test detail page shows errors, test source, step timings, attachments, console output, network log, and retry tabs. Use retry tabs to compare flaky attempts; use network log to find failed font or resource loads that cause visual changes.
+description: "What the Playwright per-test detail page contains and how to use it to investigate failures."
+tldr: "The per-test detail page shows errors, test source, step timings, attachments, console output, network log, and retry tabs. Use retry tabs to compare flaky attempts; use network log to find failed font or resource loads that cause visual changes."
 ---
 
 # Per-Test Detail
 
 ## When to Use
 
-> Use this when investigating a test failure beyond the diff — to understand context, diagnose flakes, or trace unexpected navigation.
+> Investigating a test failure beyond just the diff — understanding context.
 
-## Pattern: video for "what happened?"
+## What's on the Page
+
+Beyond the VR diff panel:
+
+| Section | Contents |
+|---|---|
+| **Errors** | Full stack with the failing line of source code highlighted |
+| **Test source** | Synced view of the test file with the executed step pointer |
+| **Steps** | Collapsible tree of `test.step()` blocks and built-in actions, with timings |
+| **Attachments** | `page.screenshot()` files, videos (when `video: 'on'` or `'retain-on-failure'`), arbitrary `testInfo.attach('name', { body, contentType })` payloads |
+| **Console output** | Captured `console.log/warn/error` from the page under test |
+| **Network log** | Every request/response with method, status, content type, size |
+| **Stdout / Stderr** | Captured from the test process itself |
+| **Trace** link | Opens the [Trace Viewer](pw-report-trace-viewer.md) |
+| **Retry tabs** | When `retries > 0`, each attempt gets its own tab to compare attempts |
+
+## Pattern: Investigating a Flake
+
+When the same test was flaky (passed on retry):
+
+1. Click the test row (status: `flaky`)
+2. Per-test page shows multiple retry tabs
+3. Compare the failed attempt vs the passing attempt
+4. Likely causes: console errors only on first attempt, network requests timing differently, dynamic content not yet stable
+
+## Pattern: Video for "What Happened?"
 
 If `video: 'retain-on-failure'` is set, the report includes a `<video>` player. Useful when:
 
@@ -17,47 +42,11 @@ If `video: 'retain-on-failure'` is set, the report includes a `<video>` player. 
 - A click triggered a redirect you didn't expect
 - A modal appeared that wasn't visible in the screenshot
 
-## Decision
-
-| Situation | Where to look |
-|---|---|
-| Stack trace for the failure | Errors section |
-| Which step took too long | Steps tree with timings |
-| Video of what happened | Attachments → video player |
-| Console errors on the page | Console output section |
-| Failed font or resource loads | Network log section |
-| Comparing flaky retry attempts | Retry tabs |
-
-## Pattern
-
-Investigating a flaky test:
-
-```
-1. Click flaky test row (status: flaky)
-2. Per-test page shows multiple retry tabs
-3. Compare failed attempt vs passing attempt
-4. Check: console errors only on first attempt? Network requests timing differently? Dynamic content not stable?
-```
-
-## Page Sections
-
-| Section | Contents |
-|---|---|
-| Errors | Full stack with failing line highlighted |
-| Test source | Synced view of test file with step pointer |
-| Steps | Collapsible tree of `test.step()` blocks and built-in actions with timings |
-| Attachments | `page.screenshot()` files, videos, arbitrary `testInfo.attach()` payloads |
-| Console output | Captured `console.log/warn/error` from the page |
-| Network log | Every request/response — method, status, content type, size |
-| Stdout / Stderr | Output from the test process itself |
-| Trace link | Opens the Trace Viewer |
-| Retry tabs | Each attempt gets its own tab when `retries > 0` |
-
 ## Common Mistakes
 
-- **Wrong**: `video: 'on'` in CI → **Right**: use `'retain-on-failure'` — avoid generating large videos for every test
-- **Wrong**: ignoring console errors → **Right**: a JS error often causes the rendering issue visible in the diff
-- **Wrong**: skipping the network log → **Right**: failed font loads are a classic source of mysterious visual changes
+- **`video: 'on'` in CI** — produces large videos for every test; use `'retain-on-failure'`
+- **Ignoring console errors** — a JavaScript error often causes the rendering issue you're seeing in the diff
+- **Not checking the network log** — failed font loads are a classic source of "visual changed mysteriously"
 
 ## See Also
 

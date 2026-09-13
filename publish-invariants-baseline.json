@@ -136,8 +136,6 @@
     "drupal/modeler-api/modeler-landscape",
     "drupal/modeler-api/when-to-use",
     "drupal/orchestration/what-orchestration-is",
-    "drupal/plugins/performance-best-practices",
-    "drupal/plugins/security-best-practices",
     "drupal/recipes/anti-patterns-mistakes",
     "drupal/recipes/best-practices-patterns",
     "drupal/recipes/code-reference-map",
