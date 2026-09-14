@@ -143,7 +143,7 @@ here.
 | `review` | `## Change-impact globs`, `## Code-quality extensions`, `## Check commands`, `## Surface commands` | fail-open (`## Check commands` and `## Surface commands` fail closed) |
 | `visual-regression` | `## Install`, `## Files`, `## Viewports`, `## Surfaces`, `## Discovery` | **fail-closed** (`## Install` with no `sh` block refuses the install; the rest read as empty) |
 | `e2e-setup` | `## Install`, `## Files`, `## Surfaces`, `## Discovery` | **fail-closed** (`## Install` with no `sh` block refuses the install; the rest read as empty) |
-| `worktree-environment` | `## Preconditions`, `## Bring up`, `## Address`, `## Tear down`, `## Build in place` | **fail-closed** (any of `## Bring up`, `## Address` or `## Tear down` with no `sh` block refuses the offer, because an environment nobody can remove is not offered; `## Build in place` reads as empty) |
+| `worktree-environment` | `## Preconditions`, `## Tokens`, `## Files`, `## Bring up` (twice, around `## Address`), `## Address`, `## Tear down`, `## Build in place` | **fail-closed** (any of `## Bring up`, `## Address` or `## Tear down` with no `sh` block refuses the offer, because an environment nobody can remove is not offered; a `## Tokens` command that prints nothing refuses it by the token's name; `## Files` follows the setup rule; `## Build in place` reads as empty) |
 
 Spelling is load-bearing. A fail-open declaration with a misspelled heading does not error — it silently
 degrades to the neutral floor, and the run looks clean while checking less than you think.
@@ -275,22 +275,28 @@ is prose a consumer prints for the person who confirms the list. The commands re
 installed harness are not here: they are the `## Surface commands` rows of the same framework's
 `review` recipe, and a setup recipe names those ids in one sentence so a reader knows where to look.
 
-**`## Bring up`, `## Address`, `## Tear down` and `## Build in place` are parsed from a
-`worktree-environment` recipe.** The first three hold fenced `sh` blocks under the same rules as
-`## Install`: one command per line, run as arguments from the worktree, a shell character refused.
-A placeholder is a whole token, and this point has its own: the recipe names each one it needs and
-says where the consumer reads its value, because an environment's commands address the main
-checkout by a name the consumer has to look up, not by the path it already holds. `## Address`
-holds one command and names, in prose, two fields of its output: the site's address, which the
-consumer records in the task and exports as `PLAYWRIGHT_BASE_URL` for every run of that task, and
-the directory the environment tool resolved the project from. The consumer runs the first
-`## Bring up` block, then `## Address`, and goes on to the remaining blocks only when that
-directory is the worktree. An environment tool that resolved another project would seed that one
-instead. `## Build in place` is prose the consumer shows at the point of choice: which kinds of
-task should not have a worktree environment at all, and why. `## Preconditions` is one of the nine
-required sections and here it also carries what the consumer checks before it offers bring-up. A
-framework with no served environment writes no recipe at this point, and a consumer that finds
-none says so once and goes on with a worktree that has files and no site.
+**`## Tokens`, `## Files`, `## Bring up`, `## Address`, `## Tear down` and `## Build in place` are
+parsed from a `worktree-environment` recipe, in document order.** `## Tokens` holds one fenced `sh`
+block per token, the token's name as the fence's second word, one command. The consumer runs each
+in the worktree after `## Files` is written and before the first `## Bring up`, as arguments and
+never through a shell, and the first line of standard output is the token's value. `{codePath}`, the main checkout's path, is the one token
+the consumer fills itself, and it may appear in those commands as a whole argument. A command that
+prints nothing or exits non-zero refuses the bring-up and names the token. A command that needs a
+pipe or a filter lives in a script the recipe writes under `## Files`, by the setup recipes' rule.
+The consumer commits what `## Files` writes on the task's branch before it runs a token command,
+because an untracked file fails the clean-tree check and `git worktree remove` refuses the tree.
+`## Bring up` appears twice: the blocks before the `## Address` heading run first, then the address
+command, then the blocks after it. `## Address` holds one command whose output is `key: value`
+lines. `address:` is the site's address, recorded in the task and exported as
+`PLAYWRIGHT_BASE_URL` for every run of that task. `root:` is the directory the environment tool
+resolved the project from; the consumer stops when it is not the worktree, because a tool that
+resolved another project would seed that one. Every other key is a token for the blocks that
+follow and for `## Tear down`. `## Build in place` is prose the consumer shows at the point of
+choice: which kinds of task should not have a worktree environment at all, and why.
+`## Preconditions` is one of the nine required sections and here it also carries what the consumer
+checks before it offers bring-up. A framework with no served environment writes no recipe at this
+point, and a consumer that finds none says so once and goes on with a worktree that has files and
+no site.
 
 **`## Oracle files` is parsed, not just read.** As of 2026-09-01 a consumer takes the `globs` off the
 row whose `type` is `test_delete` to answer "which files in this repository are tests", instead of

@@ -6,7 +6,7 @@ description: Use when a Drupal project on DDEV gives a task's git worktree a run
 # Metadata, read only after a match.
 label: Worktree environment (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 recipe_class: process
 framework: drupal
 drupal_compatibility: "^10.3 || ^11"
@@ -23,6 +23,10 @@ ship with a branch; a running site does not. Without this, a baseline, a review 
 check made "from the worktree" reaches the main checkout's site and captures code the branch never
 touched. With it, the task's `PLAYWRIGHT_BASE_URL` is the worktree's address, and every run reads
 the branch.
+
+The sections a consumer runs are read in document order: `## Tokens`, then the `## Bring up` before
+`## Address`, then `## Address`, then the `## Bring up` after it. The second `## Bring up` is not a
+mistake; the address is read between the two because it is the guard for the second.
 
 ## Opinion
 
@@ -57,8 +61,8 @@ from a directory DDEV no longer knows, cannot land on another project.
 
 ## Preconditions
 
-- The worktree is a sibling of the main checkout, `<parent of the code tree>/<task id>`, never a
-  directory inside it. A consumer that finds the worktree under the code tree refuses bring-up and
+- The worktree is a sibling of the main checkout, under the same parent directory, never a
+  directory inside it. Its directory name is the project's name and hostname label. A consumer that finds the worktree under the code tree refuses bring-up and
   says why, because DDEV would run every command against the main project.
 - `.ddev/config.yaml` is committed with no `name:` line, so each checkout is named after its
   directory. A consumer checks the file and the line, and refuses bring-up while the line is
@@ -68,31 +72,34 @@ from a directory DDEV no longer knows, cannot land on another project.
 - The main checkout's DDEV project is running: `ddev list -j` shows one row whose `approot` is the
   main checkout with `status` `running`. The snapshot is taken from that project.
 - Docker has room for a second web container, a second database container and a second database
-  volume.
-- The task id is lowercase letters, digits and hyphens, because it becomes a hostname. DDEV
-  replaces `_` with `-` and changes nothing else, so `Add_login.v2` becomes the project
-  `Add-login.v2` at `add-login.v2.ddev.site`, a name with a dot inside the label. A consumer that
-  offers this recipe validates the id to this rule first.
+  volume. `bash` and `jq` are on the host's `PATH`, for the three scripts under `## Files`.
+- The worktree's directory name is lowercase letters, digits and hyphens, because it becomes a
+  hostname label. DDEV replaces `_` with `-` and changes nothing else, so `Add_login.v2` becomes
+  the project `Add-login.v2` at `add-login.v2.ddev.site`, a name with a dot inside the label. A
+  consumer that offers this recipe validates the name to this rule first.
+- The worktree has a clean working tree, and the consumer commits what `## Files` writes on the
+  task's branch, the way it commits what a setup recipe's install writes. Untracked files there
+  fail the clean-tree check every stage runs, and `git worktree remove` refuses a tree that holds
+  them.
 - The worktree is a fresh checkout. On a project that ignores `vendor/` and the Composer-installed
   directories, as the Composer template for a Drupal site does once it has a `.gitignore`, bring-up installs them
   and needs the network; on a project that tracks them, that step changes nothing.
 
 ## Input contract
 
-Three tokens the consumer fills, each a whole argument. The first two come from `ddev list -j`,
-from the row whose `approot` is the main checkout's path; the third from the `## Address` output
-at bring-up:
+One token the consumer holds, and three the recipe produces, each a whole argument:
 
 ```yaml
-{mainProject}: string      # that row's name: the main checkout's DDEV project name
-{mainFiles}: string        # that row's approot, then its docroot, then sites/default/files:
-                           #   the main site's public files directory as an absolute path
-{worktreeProject}: string  # .raw.name from ddev describe -j in the worktree, kept in the task record
+{codePath}: string         # the main checkout's path; the consumer fills it, in ## Tokens only
+{mainProject}: string      # ## Tokens: the main checkout's DDEV project name
+{mainFiles}: string        # ## Tokens: the main site's public files directory, absolute
+{worktreeProject}: string  # ## Address, the project: line; kept in the task record for ## Tear down
 ```
 
 DDEV addresses a project by name and never by path, so the main checkout's path on its own cannot
-name it; the `name` field of its row can. Every other command here runs in the worktree, and DDEV
-resolves the worktree's own project from there.
+name it. The `## Tokens` commands turn the path into the name and the files directory by reading
+DDEV's project list. Every other command here runs in the worktree, and DDEV resolves the
+worktree's own project from there.
 
 ## Sequence
 
@@ -100,25 +107,31 @@ resolves the worktree's own project from there.
    tree, reads `.ddev/config.yaml` in the worktree for a `name:` line, and refuses with the reason
    when either fails. It shows the rest of `## Preconditions` as things a person confirms.
 
-2. **Offer.** The consumer prints the `## Bring up` lines with both tokens filled and the
-   `## Build in place` prose, and asks once. A no leaves a worktree with files and no site, and the
-   task record says so. An autonomous run takes the no.
+2. **Offer.** The consumer prints the `## Bring up` lines with the tokens by name, and the
+   `## Build in place` prose, and asks once. A no writes nothing: the worktree keeps its files and
+   has no site, and the task record says so. An autonomous run takes the no.
 
-3. **Start and confirm the project.** On a yes, the consumer runs the first `## Bring up` block,
-   then the `## Address` command, and reads `.raw.approot` from its output. A value that is not the
+3. **Write, commit, fill.** On a yes, the consumer writes the `## Files` where absent and
+   commits them on the task's branch. It then runs each `## Tokens` command in the worktree with
+   `{codePath}` filled and takes the first line each prints as the token's value. A command that
+   prints nothing or exits non-zero refuses the bring-up by the token's name.
+
+4. **Start and confirm the project.** The consumer runs the `## Bring up` before `## Address`,
+   then the `## Address` command, and reads its `root:` line. A value that is not the
    worktree's path means DDEV resolved another project, and the consumer stops before anything is
    written to a database. The check costs one command and is the whole guard against the nested
    layout the first precondition rules out.
 
-4. **Seed.** The consumer runs the second `## Bring up` block: a snapshot of the main project,
-   its restore in the worktree, the main files directory imported, and a cache rebuild so no
-   cached page keeps the main hostname.
+5. **Seed.** The consumer runs the `## Bring up` after `## Address`: a snapshot of the main
+   project, its restore in the worktree, the main files directory imported, and a cache rebuild
+   so no cached page keeps the main hostname.
 
-5. **Record the address.** The consumer reads `.raw.primary_url` from the same `## Address`
-   output and writes it into the task record. Review and `baseline` export it as
-   `PLAYWRIGHT_BASE_URL` for that task and do not ask a person for one.
+6. **Record the address.** The consumer keeps the `address:` line from the same `## Address`
+   output as the task's address, and every other line as a token, so `project:` is
+   `{worktreeProject}`. Review and `baseline` export the address as `PLAYWRIGHT_BASE_URL` for
+   that task and do not ask a person for one.
 
-6. **Tear down.** When the task is pruned, the consumer runs `## Tear down` in the worktree
+7. **Tear down.** When the task is pruned, the consumer runs `## Tear down` in the worktree
    first, and only then `git worktree remove`. A tear-down that exits non-zero leaves both the
    worktree and its project in place and says so, because removing the directory then would make
    the orphan the ordering exists to prevent.
@@ -126,17 +139,23 @@ resolves the worktree's own project from there.
 ## Data flow
 
 ```
-input:  {mainProject}, {mainFiles}       from ddev list -j, the main checkout's row
-        {worktreeProject}                 from ddev describe -j in the worktree, at bring-up
+input:  {codePath}                       held by the consumer
 
-bring up, first block (in the worktree):
+files (written where absent, committed with the tree):
+        .aida/environment/main-project.sh, main-files.sh, address.sh
+
+tokens (in the worktree, before bring-up):
+        main-project.sh {codePath}        → {mainProject}, from ddev list -j
+        main-files.sh {codePath}          → {mainFiles}, from the same row
+
+bring up, before ## Address (in the worktree):
         ddev start                        → the worktree's containers, named after the directory
         ddev composer install             → vendor/ and the installed directories, from the lock file
 
 address (in the worktree):
-        ddev describe -j                  → .raw.approot checked, .raw.primary_url recorded
+        address.sh                        → root: checked; address: recorded; project: → {worktreeProject}
 
-bring up, second block (in the worktree):
+bring up, after ## Address (in the worktree):
         ddev snapshot {mainProject}       → <main>/.ddev/db_snapshots/<main>_<time>-<db>.zst, DDEV-ignored
         ddev snapshot restore --latest    → the worktree database, from that sibling snapshot
         ddev import-files {mainFiles}     → the worktree's sites/default/files, replaced
@@ -159,7 +178,12 @@ Each bring-up leaves one snapshot in the main checkout's `.ddev/db_snapshots/`, 
 time. `ddev snapshot --list` there shows them, and removing them is a person's call in the main
 checkout, never this recipe's.
 
-Nothing here writes a tracked file. `.ddev/db_snapshots/` is ignored by DDEV's own
+The three `## Files` are written once, where absent, and refused where a file exists with other
+content, the rule every setup recipe's files follow. The consumer commits them on the task's
+branch before a token runs, so the tree is clean for the stages that check it. A worktree made
+after that branch merges carries them already.
+
+Beyond those, nothing here writes a tracked file. `.ddev/db_snapshots/` is ignored by DDEV's own
 `.ddev/.gitignore`; the worktree's `sites/default/files` is ignored by the same rule that ignores
 the main checkout's. A `settings.ddev.php` DDEV writes at `ddev start` is one the main checkout
 already ignores.
@@ -174,9 +198,9 @@ In the worktree, after bring-up, with the main checkout still running:
 
 1. `ddev list -j` shows two rows with the main checkout's `approot` and the worktree's, each
    `running`, with different `name` and `primary_url` values.
-2. `ddev describe -j` prints JSON whose `.raw.approot` is the worktree's path and whose
-   `.raw.primary_url` is `https://<worktree name>.ddev.site`; `curl -sSI` on that address returns
-   `HTTP/2 200`.
+2. `bash .aida/environment/address.sh` prints three lines, `address:`, `project:` and `root:`, the
+   root being the worktree's path and the address `https://<worktree name>.ddev.site`; `curl -sSI`
+   on that address returns `HTTP/2 200`.
 3. `ddev drush status --field=uri` prints the worktree's address, and
    `ddev drush config:get system.site name` prints the same site name the main checkout does,
    which shows the database came across.
@@ -188,17 +212,63 @@ In the worktree, after bring-up, with the main checkout still running:
    exits 0 and leaves the main row running; then `git worktree remove` takes the directory.
 
 Observed on 2026-09-13 against a fresh Drupal 11.4 standard install on DDEV 1.25.4 with Docker on
-Linux. The main checkout sat in a directory with no `name:` line, the worktree beside it, and
-every command ran without a terminal. Steps 1 to 6 held as written. Bring-up took about 75
-seconds, 35 of them the restore. A second bring-up left a second timestamped snapshot, and
-`--latest` picked it.
+Linux, twice, on 0.1.0 and on 0.2.0. The main checkout sat in a directory with no `name:` line,
+the worktree beside it, and every command ran without a terminal. Steps 1 to 4 held as written on
+both runs. The token scripts printed their values, and nothing with exit 4 for a path that is no
+project. Steps 5 and 6 held on 0.1.0, which wrote no files. On 0.2.0 the three `## Files` were
+written and not committed, and both failed: `git status` showed `.aida/` untracked, and
+`git worktree remove` refused the tree with exit 128. That is why the commit is a step; a run with
+the commit made is not yet observed. Bring-up took about 75 seconds, 35 of them the restore. A
+second bring-up left a second timestamped snapshot, and `--latest` picked it.
+
+## Tokens
+
+One fenced `sh` block per token, the token's name as the fence's second word, one command. The
+consumer runs each in the worktree before the first `## Bring up`, as arguments and never through a
+shell, with `{codePath}` filled whole, and takes the first line of standard output as the value. A
+command that prints nothing, or exits non-zero, refuses the bring-up and names the token.
+
+```sh mainProject
+bash .aida/environment/main-project.sh {codePath}
+```
+
+```sh mainFiles
+bash .aida/environment/main-files.sh {codePath}
+```
+
+Both scripts read DDEV's project list and select the row whose `approot` is the main checkout,
+because a pipe and a filter are more than one argument can say. A checkout that is not a listed
+project prints nothing and exits 4, which is the refusal.
+
+## Files
+
+Three scripts, written where absent, the path as the fence's second word. They hold every DDEV and
+`jq` invocation the tokens and the address need, so the consumer runs them and knows neither.
+
+```sh .aida/environment/main-project.sh
+#!/usr/bin/env bash
+# Prints the DDEV project name of the checkout at $1, from the project list.
+ddev list -j | jq -e -r --arg root "$1" '.raw[] | select(.approot == $root) | .name'
+```
+
+```sh .aida/environment/main-files.sh
+#!/usr/bin/env bash
+# Prints the public files directory of the checkout at $1: its approot, its docroot, sites/default/files.
+ddev list -j | jq -e -r --arg root "$1" '.raw[] | select(.approot == $root)
+  | (if .docroot == "" then .approot else .approot + "/" + .docroot end) + "/sites/default/files"'
+```
+
+```sh .aida/environment/address.sh
+#!/usr/bin/env bash
+# Prints the worktree project's address, name and root, one key per line, from where it is run.
+ddev describe -j | jq -r '.raw | "address: \(.primary_url)\nproject: \(.name)\nroot: \(.approot)"'
+```
 
 ## Bring up
 
-The consumer reads every fenced block tagged `sh` under this heading, in order, one command per
-line, and runs each as arguments from the worktree, never through a shell. The two tokens are
-filled whole; no other argument varies. Between the two blocks the consumer runs `## Address` and
-checks `.raw.approot`, as `## Sequence` step 3 says.
+The consumer reads every fenced block tagged `sh` under a `## Bring up` heading, in document order,
+one command per line, and runs each as arguments from the worktree, never through a shell. This
+first heading runs before `## Address`.
 
 ```sh
 ddev start
@@ -207,6 +277,23 @@ ddev composer install
 
 The worktree tracks `composer.lock` and, on most projects, not what it installs, so the site has no
 code to serve until Composer runs.
+
+## Address
+
+One command, run in the worktree. Its standard output is `key: value` lines:
+
+```sh
+bash .aida/environment/address.sh
+```
+
+`address:` is the site's address, for example `https://add-login.ddev.site`, which review and
+`baseline` export as `PLAYWRIGHT_BASE_URL`. `root:` is the directory DDEV resolved the project
+from, and must be the worktree; the consumer stops here when it is not. `project:` is the
+worktree's DDEV project name, kept as `{worktreeProject}` for `## Tear down`.
+
+## Bring up
+
+This second heading runs after `## Address` has confirmed the project.
 
 ```sh
 ddev snapshot {mainProject} --yes
@@ -222,23 +309,10 @@ snapshot under a name that exists is refused with exit 0, and the restore would 
 first seed again with nothing to show for it. The cache rebuild runs before the first request,
 because the restored cache tables were built under the main hostname.
 
-## Address
-
-One command, run in the worktree, and the fields to read from its output:
-
-```sh
-ddev describe -j
-```
-
-The address is `.raw.primary_url` in the JSON on standard output, for example
-`https://add-login.ddev.site`; `.raw.approot` is the directory DDEV resolved the project from, and
-must be the worktree. Review and `baseline` export the address as `PLAYWRIGHT_BASE_URL`.
-
 ## Tear down
 
-Run in the worktree, before `git worktree remove`. The last argument is the worktree's project
-name, which is its directory name with `_` replaced by `-`, and is also `.raw.name` in the
-`## Address` output:
+Run in the worktree, before `git worktree remove`. The last argument is `{worktreeProject}`, the
+`project:` line `## Address` printed at bring-up:
 
 ```sh
 ddev delete --omit-snapshot --yes {worktreeProject}
