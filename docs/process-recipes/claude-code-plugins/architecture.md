@@ -6,7 +6,7 @@ description: Use when a Claude Code plugin project enters the design phase and m
 # Metadata — read only after a match.
 label: Design (Claude Code plugins)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.1.1
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -47,6 +47,8 @@ The plugin owns the generic design phase — when it runs and the artifact slot 
 **Design grounds every choice and returns it; it scaffolds nothing, and it writes nothing.** Each component-type decision is grounded in the decision framework and the canonical templates rather than taste, and the result is handed to the caller, which records it. The design creates no files and runs no scaffolder — that is the implement phase's work. This recipe previously said to write the artifact here while its own verifier asserted nothing was written; the verifier was right.
 
 **A Claude Code plugin builds nothing without code, and that is worth recording.** Some frameworks answer a requirement with configuration — a Drupal view is a unit with a test and no code in it. Here every unit is an authored component. Record that plainly rather than leaving it unsaid, because a recorded "no" is an answer and silence is not.
+
+**A plugin's features have no entry point apart from the conversation, except the code they ship.** A skill, a command or an agent is reached by the model or by the person typing it, and there is no second door to design; the design records that plainly for each such component. Where a component ships executable code — a hook script, a validator, a helper — that script run with its arguments is the entry point that is not a screen, and the design names it: the script path and the arguments the component passes it. A behaviour that lives only in a component's prose is reachable only by invoking the component, and the design says so rather than inventing a caller.
 
 ## Preconditions
 

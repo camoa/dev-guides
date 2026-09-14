@@ -6,7 +6,7 @@ description: Use when a Python project (a library, or a tool whose interface is 
 # Metadata — read only after a match.
 label: Design (Python CLI)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.1.1
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -33,6 +33,13 @@ The plugin owns the generic design phase — when it runs, the shape of a work o
 **A `src/` layout, and a `pyproject.toml`.** The `src/` layout stops the tests from importing the working directory instead of the installed package, which is the single most common way a Python test suite passes against code nobody ships. `pyproject.toml` is where the project is declared; `setup.py` is legacy.
 
 **Console scripts are declared, not scripted.** `[project.scripts]` in `pyproject.toml`, pointing at a function. A shell wrapper, a `__main__` that does work, or a script outside the package are all ways of putting logic where the tests cannot reach it.
+
+**Every feature has an importable entry point, and the console script calls it.** For each thing
+the tool does, the design names the function in the package that does it — module and name — and
+the console script's command for that feature is a thin call to it. The function is the entry
+point that is not a screen: a test imports it, a notebook or a second tool imports it, and the
+command line is one caller among several. A feature reachable only by running the console script
+has no such entry point and is flagged for extraction before implement.
 
 **Extension seams are `typing.Protocol`, not base classes or conditionals.** A protocol states what a collaborator must provide without forcing an inheritance relationship, which is what makes a second implementation — including a fake in a test — cheap. A seam invented with no second implementation in view is speculative and is not added.
 
