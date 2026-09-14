@@ -138,7 +138,7 @@ here.
 
 | Type | Declaration (exact heading) | Posture |
 |---|---|---|
-| `implement` | `## Oracle files`, `## Routing hints`, `## Preconditions`, `## Configuration gate` | fail-open (`## Preconditions` fails closed; `## Configuration gate` fails closed for an order whose proof is the gate) |
+| `implement` | `## Oracle files`, `## Routing hints`, `## Preconditions`, `## Configuration gate`, `## Unit declaration` | fail-open (`## Preconditions` fails closed; `## Configuration gate` fails closed for an order whose proof is the gate; a missing `## Unit declaration` means no file declares a unit, so a red that holds only a harness marker is refused for every order) |
 | `test-execution` | `## Test commands`, `## Preconditions` | **fail-closed** (both) |
 | `review` | `## Change-impact globs`, `## Code-quality extensions`, `## Check commands`, `## Surface commands` | fail-open (`## Check commands` and `## Surface commands` fail closed) |
 | `visual-regression` | `## Install`, `## Files`, `## Viewports`, `## Surfaces`, `## Discovery` | **fail-closed** (`## Install` with no `sh` block refuses the install; the rest read as empty) |
@@ -158,7 +158,11 @@ the same rule `check:` lives under, for the same reason. Each command carries a 
 under-checks or runs everything on every attempt. Alongside the rows, `failure_signal:` says how to
 tell a failed assertion from a harness that never reached the behaviour, in that harness's own
 output — the frameworks differ sharply here, and two of them report a selector that matched nothing
-as a success.
+as a success. `harness:` is the setup-gap signal, and there is no separate key for it: a red run whose
+output holds a `harness:` marker and no `assertion:` marker never reached the behaviour, which is what
+`test-execution` and `test-authoring` both call a setup gap, and a consumer refuses such a run as one
+instead of freezing it as a red. It reads `assertion:` first, because PHPUnit numbers an erroring test
+the same way as a failing one and a `failure_line:` selector matches both.
 
 **`failure_line:` on the suite row selects the lines a red baseline is subtracted on.** A build
 that starts from a commit whose suite is already red must subtract the old failures from the new
@@ -256,7 +260,10 @@ keys as `## Check commands`, plus `silent_pass:` on a row that runs a suite: how
 selected nothing prints itself, in that harness's own output, the same job the key does under
 `failure_signal:`. Every code span in either text is a marker: a consumer reads a run whose
 output holds one as having selected nothing, before it reads the exit status, so a span holds
-only what the harness prints and every other name stays in plain words. A text that begins
+only what the harness prints and every other name stays in plain words. The same rule reads every key
+under `failure_signal:`, `assertion:` and `harness:` included, because a folded text offers a consumer no
+other way to lift a marker out of it: a span there is text the runner prints whole, so a placeholder such
+as a test's name or a package path has no place inside one, and an option name stays in plain words. A text that begins
 `None` declares no marker. A framework with no such surfaces declares every row absent, each with its own
 reason; the block is present either way, because rows that are not absent are how review knows a
 framework has surfaces, and a missing block is a heading it could not find. One framework in this
@@ -330,6 +337,20 @@ is frozen with zero tests and built with these lines as its check. In a framewor
 recipe has no such section, that order is refused at design, because a unit nobody can prove is not
 cut. A framework that answers nothing with configuration declares no section, and nothing changes
 for it.
+
+**`## Unit declaration` names the file whose presence makes a unit exist, as data.** As of
+2026-09-14 only `drupal/standards-and-tests.md` 0.8.0 carries one, and no consumer reads it yet;
+this is the shape a consumer meets. A new module's first red is a setup gap by the `harness:` rule above: its
+tests error where the harness enables the module, before any assertion runs, and nothing in a build
+may write the module first to get a better red. The block is one `unit_declaration:` mapping in the
+same YAML shape as `preconditions:`, holding `globs:`, the patterns of the file that declares a unit
+in this framework. An order whose owned files match one is a new unit, and a consumer may accept a
+red that holds only a harness marker for it, with the reason that nothing can fail an assertion
+before the unit exists. `scripts/validate_recipes.py` checks the block when present: a mapping holding
+`globs:` and no other key, a non-empty list of strings. The review recipe's `## Change-impact globs` lists the same file
+to say which checks a change to it triggers, which is a different question; a consumer wanting to
+know what makes a unit exist reads this block. A framework with no such file declares no section,
+and a harness-only red stays refused for it.
 
 **`## Oracle files` is parsed, not just read.** As of 2026-09-01 a consumer takes the `globs` off the
 row whose `type` is `test_delete` to answer "which files in this repository are tests", instead of

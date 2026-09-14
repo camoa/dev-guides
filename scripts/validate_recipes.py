@@ -359,6 +359,28 @@ PRECONDITION_KEYS = {"id", "what", "check", "expect", "owner"}
 PRECONDITION_REQUIRED = ("id", "what")
 
 
+# `unit_declaration:` on an implement recipe names the file whose presence makes
+# a unit exist (`**/*.info.yml` for Drupal). A consumer reads its `globs` to accept
+# a harness-only red for an order that creates the unit. Fail-open when absent, so
+# a misspelled key would silently refuse every such red; the shape is checked when
+# the block is present.
+def validate_unit_declaration_block(body: str) -> list[str]:
+    """Check the `unit_declaration:` block. Absent is valid — the key is optional."""
+    block, errors = load_body_block(body, "unit_declaration")
+    if errors or block is None:
+        return errors
+    if not isinstance(block, dict) or set(block) != {"globs"}:
+        return ["`unit_declaration:` must be a mapping with exactly one key, `globs:`"]
+    globs = block["globs"]
+    if (
+        not isinstance(globs, list)
+        or not globs
+        or not all(isinstance(g, str) and g.strip() for g in globs)
+    ):
+        return ["`unit_declaration:` `globs:` must be a non-empty list of glob strings"]
+    return errors
+
+
 def validate_preconditions_block(body: str) -> list[str]:
     """Check the `preconditions:` block. Absent is valid — the key is optional."""
     rows, errors = load_body_block(body, "preconditions")
@@ -894,6 +916,7 @@ def validate_recipe(path: Path, kind: str = "task") -> list[str]:
         #    structured since it was written and nothing read it, so a misspelled
         #    key degraded in silence. Optional: checked only when present.
         errors.extend(validate_preconditions_block(body))
+        errors.extend(validate_unit_declaration_block(body))
         # 8. A test-execution recipe declares the commands that run tests, and the
         #    declaration fails closed for the same reason `## Preconditions` does:
         #    a framework whose test commands cannot be read cannot be built
