@@ -238,7 +238,10 @@ a framework's user-visible surfaces, and the command that accepts a suite's curr
 new baseline. An accept row is a second id, never a key on the suite's row. The rows take the same
 keys as `## Check commands`, plus `silent_pass:` on a row that runs a suite: how a run that
 selected nothing prints itself, in that harness's own output, the same job the key does under
-`failure_signal:`. A framework with no such surfaces declares every row absent, each with its own
+`failure_signal:`. Every code span in either text is a marker: a consumer reads a run whose
+output holds one as having selected nothing, before it reads the exit status, so a span holds
+only what the harness prints and every other name stays in plain words. A text that begins
+`None` declares no marker. A framework with no such surfaces declares every row absent, each with its own
 reason; the block is present either way, because rows that are not absent are how review knows a
 framework has surfaces, and a missing block is a heading it could not find. One framework in this
 catalog has surfaces, and its rows run on the host rather than in its container, because that is

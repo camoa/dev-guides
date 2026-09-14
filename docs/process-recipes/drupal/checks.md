@@ -6,7 +6,7 @@ description: 'Use when a Drupal implementation reaches the review phase and must
 # Metadata — read only after a match.
 label: Implementation review checks (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.4.0
+version: 0.4.1
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/security
@@ -298,11 +298,13 @@ surface_commands:
     argv: ["npx", "playwright", "test", "--config", "tests/e2e/playwright.config.ts", "--project", "chromium"]
     silent_pass: >-
       Yes, and the exit status does not show it. With no enabled e2e surface and no journey
-      spec the run still prints `1 passed` and exits 0, because the `chromium` project depends
-      on `setup` and the setup test runs and counts. Observed on Playwright 1.63.0 with every
+      spec the run still reports one test passed and exits 0, because the chromium project
+      depends on the setup project and the setup test runs and counts. The surfaces spec the
+      setup recipe writes prints `no e2e surface is enabled` at collection in that case, and
+      nothing else in a Playwright run prints it. Observed on Playwright 1.63.0 with every
       surface disabled. A surface is read off the output, not off the exit: an enabled id
-      absent from the output is unmet, whatever the run exited. A failed preflight prints
-      `did not run` for every test and exits 1.
+      absent from the output is unmet, whatever the run exited. A failed preflight marks
+      every test as not run and exits 1.
   - id: visual-regression
     argv: ["npx", "playwright", "test", "--config", "tests/visual/playwright.config.ts"]
     silent_pass: >-

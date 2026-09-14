@@ -6,7 +6,7 @@ description: Use when a Drupal project on DDEV sets up visual regression testing
 # Metadata, read only after a match.
 label: Visual-regression setup (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.3.0
+version: 0.3.1
 recipe_class: process
 framework: drupal
 drupal_compatibility: "^10.3 || ^11"
@@ -297,11 +297,19 @@ person edits the list before anything is registered.
 
 ## Discovery
 
-Read these from the code tree and the running site, every one as data.
+Read these from the code tree and the running site, every one as data. Locate the two folders
+first, and assume neither: the docroot is the path `composer.json` maps `type:drupal-core` to
+under `extra.installer-paths` (`web/core` means `web/`; `core/` means the repository root), or
+what `ddev drush status --field=root` prints after `/var/www/html/`, DDEV's mount of the code
+tree; the configuration sync folder is
+`$settings['config_sync_directory']` in `settings.php`, or what
+`ddev drush status --field=config-sync` prints, relative to the docroot. A project may keep it
+at `sites/default/sync/`, `../config/sync/` or anywhere else, so a fixed path finds nothing.
 
-**Viewports, from the theme.** The default theme's `<theme>.breakpoints.yml`, under
-`web/themes/custom/<theme>/` for a built sub-theme. Each top-level key is a breakpoint; read its
-`weight` and the `min-width` inside `mediaQuery`. Sort by weight and drop repeated widths. The
+**Viewports, from the theme.** Read `system.theme.yml` in the sync folder and take its `default`
+key; that theme's `<theme>.breakpoints.yml` sits in the theme's own directory, under
+`<docroot>/themes/custom/<theme>/` for a built sub-theme. Each top-level key is a breakpoint;
+read its `weight` and the `min-width` inside `mediaQuery`. Sort by weight and drop repeated widths. The
 lowest-weight breakpoint with no `min-width` is the mobile base; give it the mobile width below.
 Radix ships no runtime `breakpoints.yml` of its own, only a starterkit template, so a Radix
 sub-theme's file is the one to read, and a theme with none keeps the `## Viewports` list. Propose
@@ -309,9 +317,9 @@ one viewport per breakpoint, with a height from the device class (844 for a phon
 tablet, 900 for a desktop), and pass the confirmed list as `--viewport` at install.
 
 **Surfaces, from the site.** One surface per rendering template a person can reach anonymously:
-the front page; one node of each content type in `node.type.*`, by its path; each page display of
-an enabled View in `views.view.*`, by its `display.<id>.display_options.path`; the `/user/login`
-form; and a 404. Propose each with its path as `url`. A path that redirects anonymous users to
+the front page; one node of each content type in the sync folder's `node.type.*.yml`, by its
+path; each page display of an enabled View in `views.view.*.yml` there, by its
+`display.<id>.display_options.path`; the `/user/login` form; and a 404. Propose each with its path as `url`. A path that redirects anonymous users to
 login is not a surface here (see Opinion). Say when two candidates render the same template so
 the person keeps one.
 
@@ -329,7 +337,7 @@ mask only from what was found, with that count beside it: a mask that covers 29 
 teaser cards paints over everything the surface exists to protect, and the person decides with
 that number in view. Prefer the narrowest selector that still covers the churn, the listing's own
 wrapper rather than the section around it. For each View behind a proposed mask, read
-`display.<display_id>.display_options.pager.type` in `views.view.<name>`, falling back to the
+`display.<display_id>.display_options.pager.type` in `views.view.<name>.yml`, falling back to the
 `default` display, and warn when it is `none`: `some`, `mini` and `full` bound the row count and
 `none` does not, so an unbounded listing grows the page when an editor publishes and the
 comparison fails as a size mismatch before any mask applies. That is a View to bound, and the
