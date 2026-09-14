@@ -6,7 +6,7 @@ description: Use when a Drupal project on DDEV sets up end-to-end testing with P
 # Metadata, read only after a match.
 label: ATK end-to-end test setup (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.2.0
+version: 0.2.1
 recipe_class: process
 framework: drupal
 drupal_compatibility: "^11"
@@ -189,7 +189,9 @@ the consumer names the file and stops.
 ATK writes `tests/e2e/tests/support/loginAuth-<account>.json` at each preflight and reuses it for
 fifteen minutes; those files and `tests/e2e/test-results/` are ignored by the `.gitignore` the
 recipe writes, and everything else under `tests/e2e/` is committed. The surface file is the
-consumer's, merged by id, never rewritten here.
+consumer's, merged by id, never rewritten here. A `surfaces.spec.ts` written by 0.2.0 lacks the
+`no e2e surface is enabled` line; the install never overwrites it, so a person adds that line from
+the block above.
 
 ## Verifier
 
@@ -205,11 +207,15 @@ After the install, in the code tree with `PLAYWRIGHT_BASE_URL` exported:
    test first, then prints `<id> responds` once per enabled e2e surface, and exits 0 when every
    surface answers below 400 or with 403.
 4. `git status` shows no `loginAuth-*.json` and no `test-results/`.
+5. With every e2e surface disabled, the `chromium` run prints `no e2e surface is enabled` once,
+   before `Running 1 test`, and still exits 0 on the setup test alone. That line is what the `e2e`
+   row's `silent_pass` reads.
 
 Observed on 2026-09-13 against a fresh Drupal 11.4 standard install on DDEV 1.25.4 with Automated
 Testing Kit 2.1.0-beta5, QA Accounts, Playwright 1.63.0 and Node 22.14, with the four `## Surfaces`
 seed rows enabled: steps 1 to 4 as written, `/user/register` answering 403, and the preflight
-failing with the message above when QA Accounts was off.
+failing with the message above when QA Accounts was off. Step 5 was checked on Playwright 1.63.0
+with a spec of this shape.
 
 ## Install
 
@@ -326,6 +332,10 @@ const file = path.resolve(__dirname, '../../../../.visual-review/surfaces.json')
 const doc = JSON.parse(readFileSync(file, 'utf8')) as { surfaces: Surface[] };
 const surfaces = doc.surfaces.filter((s) => s.enabled && s.kinds.includes('e2e'));
 
+// Printed once, at collection, before the run summary. With no enabled surface the run still
+// passes on the setup project's own test, and this line is how review tells that run apart.
+if (surfaces.length === 0) console.log('no e2e surface is enabled');
+
 for (const surface of surfaces) {
   test(`${surface.id} responds`, async ({ page }) => {
     const response = await page.goto(surface.url);
@@ -366,7 +376,9 @@ Read these from the code tree and the running site, every one as data:
 - custom modules' `*.routing.yml`, for routes and the `_permission`, `_role` or `_access`
   requirement on each;
 - `buildForm()` in `src/Form/*.php`, for the fields a journey fills and which are required;
-- `node.type.*` and `field.field.node.*` config, for the content types and their fields;
+- `node.type.*.yml` and `field.field.node.*.yml` in the configuration sync folder, which
+  `ddev drush status --field=config-sync` prints relative to the docroot, for the content
+  types and their fields;
 - `*.permissions.yml`, for the capabilities a role gates;
 - `ddev drush role:list --format=json`, for the roles that exist.
 

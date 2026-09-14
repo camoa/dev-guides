@@ -20,6 +20,7 @@ Process recipes are **resolved by an orchestrator**, keyed by **`(phase × frame
 | `review` | `drupal` | [Implementation review checks](drupal/checks.md) | Validating a Drupal implementation against its architecture and Drupal security — static `\Drupal::` in new code, logic in forms/controllers, Form API CSRF — before acceptance. |
 | `e2e-setup` | `drupal` | [ATK end-to-end test setup](drupal/e2e-setup-atk.md) | A Drupal project (DDEV + Playwright) needs an end-to-end harness review can run over its surfaces. |
 | `visual-regression` | `drupal` | [Visual-regression setup](drupal/visual-regression-setup.md) | A Drupal project needs a visual-regression suite that reads its surfaces from a file and names each baseline from them. |
+| `worktree-environment` | `drupal` | [Worktree environment](drupal/worktree-environment.md) | A task built in its own git worktree on a DDEV project needs a running site of its own, seeded from the main checkout, with an address review can run against. |
 | `research` | `claude-code-plugins` | [Plugin prior-art research](claude-code-plugins/prior-art.md) | A Claude Code plugin project must establish prior art (reuse / extend / build-new) before scaffolding a component. |
 | `design` | `claude-code-plugins` | [Design](claude-code-plugins/architecture.md) | Turning a researched need into a component map — type choice, progressive disclosure, manifest + boundary. |
 | `test-authoring` | `claude-code-plugins` | [Test authoring](claude-code-plugins/test-authoring.md) | Writing a spec for the executable code a plugin ships — a hook script, a validator, a helper — before that code exists, and knowing why a component that is only instructions is paper-traced instead. |
@@ -82,6 +83,7 @@ them. A recipe ships no code assets. Two tests before anything goes in a recipe:
 | `review` | The **blocking** validations run before work is accepted, in the stack's own terms, in a deliberate order. | Restating the generic review. Re-authoring checks `implement` already applied inline. |
 | `e2e-setup` | One-time setup of an end-to-end harness: the commands that install it, the files it writes, and the sources discovery reads to propose the surfaces. | Running the suite. Deciding which surfaces a project has: discovery proposes, a person confirms. |
 | `visual-regression` | One-time setup of a visual-regression suite: the commands that install it, the files it writes, the viewports it starts from, and the sources discovery reads. | Capturing or approving baselines on an ongoing basis. Holding an address. |
+| `worktree-environment` | Giving a task's git worktree a running environment of its own: what must be true first, the commands that bring it up and seed it from the main checkout, the one command that prints its address, the commands that tear it down, and which tasks build on the served checkout instead. | Bringing an environment up without a person's yes. Holding a database command of its own: the consumer runs the recipe's lines. A framework with no served environment declares nothing at this point, and a worktree there has files and no site. |
 
 **Two of these phases are named and not yet written.** `protected-tests` and `build-checks` have
 their names and their jobs above, and no recipe files. They were named alongside `test-authoring`
@@ -141,6 +143,7 @@ here.
 | `review` | `## Change-impact globs`, `## Code-quality extensions`, `## Check commands`, `## Surface commands` | fail-open (`## Check commands` and `## Surface commands` fail closed) |
 | `visual-regression` | `## Install`, `## Files`, `## Viewports`, `## Surfaces`, `## Discovery` | **fail-closed** (`## Install` with no `sh` block refuses the install; the rest read as empty) |
 | `e2e-setup` | `## Install`, `## Files`, `## Surfaces`, `## Discovery` | **fail-closed** (`## Install` with no `sh` block refuses the install; the rest read as empty) |
+| `worktree-environment` | `## Preconditions`, `## Tokens`, `## Files`, `## Bring up` (twice, around `## Address`), `## Address`, `## Tear down`, `## Build in place` | **fail-closed** (any of `## Bring up`, `## Address` or `## Tear down` with no `sh` block refuses the offer, because an environment nobody can remove is not offered; a `## Tokens` command that prints nothing refuses it by the token's name; `## Files` follows the setup rule; `## Build in place` reads as empty) |
 
 Spelling is load-bearing. A fail-open declaration with a misspelled heading does not error — it silently
 degrades to the neutral floor, and the run looks clean while checking less than you think.
@@ -238,7 +241,10 @@ a framework's user-visible surfaces, and the command that accepts a suite's curr
 new baseline. An accept row is a second id, never a key on the suite's row. The rows take the same
 keys as `## Check commands`, plus `silent_pass:` on a row that runs a suite: how a run that
 selected nothing prints itself, in that harness's own output, the same job the key does under
-`failure_signal:`. A framework with no such surfaces declares every row absent, each with its own
+`failure_signal:`. Every code span in either text is a marker: a consumer reads a run whose
+output holds one as having selected nothing, before it reads the exit status, so a span holds
+only what the harness prints and every other name stays in plain words. A text that begins
+`None` declares no marker. A framework with no such surfaces declares every row absent, each with its own
 reason; the block is present either way, because rows that are not absent are how review knows a
 framework has surfaces, and a missing block is a heading it could not find. One framework in this
 catalog has surfaces, and its rows run on the host rather than in its container, because that is
@@ -248,9 +254,12 @@ Three things a consumer does with these rows. The `e2e-preflight` row runs befor
 a non-zero exit records the preflight unmet, reads the `e2e` check unknown, and the suite does not
 run, because a site that is not ready and a journey that failed are two different findings. Each
 suite row names its kind's own config with `--config`, so a caller never has to know which
-directory a suite reads from. The accept row carries `{surfaces}`, one token: the caller fills it
-with the ids whose baselines are to be rewritten, joined by `|`, and the harness matches it against
-test titles, which is why every title in a surface suite begins with its surface id. The address a
+directory a suite reads from. The two suite rows and the accept row carry `{surfaces}`, one
+token: the caller fills it with the ids to run, or whose baselines are to be rewritten, joined by
+`|`, and the harness matches it against test titles, which is why every title in a surface suite
+begins with its surface id. A caller running the whole set fills it with every enabled id, and one
+running the surfaces a change touched fills it with those, so a row with the token never runs with
+an empty grep. The address a
 suite runs against is never in a recipe or a file: the caller exports it as `PLAYWRIGHT_BASE_URL`
 for the row, and every config the setup recipes write reads that variable.
 
@@ -265,6 +274,29 @@ the viewport list a surface file starts with and the seed rows discovery propose
 is prose a consumer prints for the person who confirms the list. The commands review runs over the
 installed harness are not here: they are the `## Surface commands` rows of the same framework's
 `review` recipe, and a setup recipe names those ids in one sentence so a reader knows where to look.
+
+**`## Tokens`, `## Files`, `## Bring up`, `## Address`, `## Tear down` and `## Build in place` are
+parsed from a `worktree-environment` recipe, in document order.** `## Tokens` holds one fenced `sh`
+block per token, the token's name as the fence's second word, one command. The consumer runs each
+in the worktree after `## Files` is written and before the first `## Bring up`, as arguments and
+never through a shell, and the first line of standard output is the token's value. `{codePath}`, the main checkout's path, is the one token
+the consumer fills itself, and it may appear in those commands as a whole argument. A command that
+prints nothing or exits non-zero refuses the bring-up and names the token. A command that needs a
+pipe or a filter lives in a script the recipe writes under `## Files`, by the setup recipes' rule.
+The consumer commits what `## Files` writes on the task's branch before it runs a token command,
+because an untracked file fails the clean-tree check and `git worktree remove` refuses the tree.
+`## Bring up` appears twice: the blocks before the `## Address` heading run first, then the address
+command, then the blocks after it. `## Address` holds one command whose output is `key: value`
+lines. `address:` is the site's address, recorded in the task and exported as
+`PLAYWRIGHT_BASE_URL` for every run of that task. `root:` is the directory the environment tool
+resolved the project from; the consumer stops when it is not the worktree, because a tool that
+resolved another project would seed that one. Every other key is a token for the blocks that
+follow and for `## Tear down`. `## Build in place` is prose the consumer shows at the point of
+choice: which kinds of task should not have a worktree environment at all, and why.
+`## Preconditions` is one of the nine required sections and here it also carries what the consumer
+checks before it offers bring-up. A framework with no served environment writes no recipe at this
+point, and a consumer that finds none says so once and goes on with a worktree that has files and
+no site.
 
 **`## Oracle files` is parsed, not just read.** As of 2026-09-01 a consumer takes the `globs` off the
 row whose `type` is `test_delete` to answer "which files in this repository are tests", instead of

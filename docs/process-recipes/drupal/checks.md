@@ -6,7 +6,7 @@ description: 'Use when a Drupal implementation reaches the review phase and must
 # Metadata — read only after a match.
 label: Implementation review checks (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.4.0
+version: 0.5.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/security
@@ -295,16 +295,19 @@ surface_commands:
       `preflightTest()` and then logs each QA account in. With the group absent Playwright
       prints `Error: No tests found` and exits 1, so a missing preflight is a failure.
   - id: e2e
-    argv: ["npx", "playwright", "test", "--config", "tests/e2e/playwright.config.ts", "--project", "chromium"]
+    argv: ["npx", "playwright", "test", "--config", "tests/e2e/playwright.config.ts", "--project", "chromium", "--grep", "{surfaces}"]
     silent_pass: >-
       Yes, and the exit status does not show it. With no enabled e2e surface and no journey
-      spec the run still prints `1 passed` and exits 0, because the `chromium` project depends
-      on `setup` and the setup test runs and counts. Observed on Playwright 1.63.0 with every
+      spec the run still reports one test passed and exits 0, because the chromium project
+      depends on the setup project and the setup test runs and counts. The surfaces spec the
+      setup recipe writes prints `no e2e surface is enabled` at collection in that case, and
+      nothing else in a Playwright run prints it. Observed on Playwright 1.63.0 with every
       surface disabled. A surface is read off the output, not off the exit: an enabled id
-      absent from the output is unmet, whatever the run exited. A failed preflight prints
-      `did not run` for every test and exits 1.
+      absent from the output is unmet, whatever the run exited. A failed preflight marks
+      every test as not run and exits 1. A grep that matches no title reports no tests
+      found and exits 1, and the setup project does not run either.
   - id: visual-regression
-    argv: ["npx", "playwright", "test", "--config", "tests/visual/playwright.config.ts"]
+    argv: ["npx", "playwright", "test", "--config", "tests/visual/playwright.config.ts", "--grep", "{surfaces}"]
     silent_pass: >-
       None. The suite writes one test per enabled surface and viewport from
       `.visual-review/surfaces.json`; with none enabled it prints `Error: No tests found`
@@ -337,12 +340,17 @@ non-zero exit. The `e2e` project depends on `setup`, so a run of the `e2e` row a
 stop there; the separate row is what lets a caller tell a site that is not ready from a journey
 that failed.
 
-**The accept row takes `{surfaces}`, one token.** The caller fills it with the ids to re-baseline
-joined by `|`, and Playwright's `--grep` matches that as a regular expression against each test
-title. Every title in the visual suite begins with its surface id, so `front|about` selects those
-two surfaces at every viewport and no other, verified on 1.63.0. An id that is a prefix of another
-id, `front` and `front-page`, selects both; a caller that needs one of them anchors the pattern.
-The row writes into the working tree and is never a gate.
+**The two suite rows and the accept row take `{surfaces}`, one token.** The caller fills it with
+the ids to run, or to re-baseline, joined by `|`, and Playwright's `--grep` matches that as a
+regular expression against each test title. Every title in both suites begins with its surface id,
+so `front|about` selects those two surfaces, at every viewport in the visual suite, and no other,
+verified on 1.63.0. A caller running the whole set fills the token with every enabled id, so the
+rows never run with an empty grep; one running the surfaces a diff touched fills it with those.
+On the `e2e` row the grep leaves the `setup` project's test in the run, because a dependency is
+not filtered, and a fill that matches no title is `Error: No tests found` with exit 1 before any
+project runs. An id that is a prefix of another id, `front` and `front-page`, selects both; a
+caller that needs one of them anchors the pattern. The accept row writes into the working tree and
+is never a gate.
 
 All four commands read exit status: 0 is a pass, and any other value is a failure the `list`
 reporter's output explains. None needs `signal:`, and the `e2e` row's `silent_pass` says why exit
