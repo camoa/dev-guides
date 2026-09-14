@@ -251,9 +251,12 @@ Three things a consumer does with these rows. The `e2e-preflight` row runs befor
 a non-zero exit records the preflight unmet, reads the `e2e` check unknown, and the suite does not
 run, because a site that is not ready and a journey that failed are two different findings. Each
 suite row names its kind's own config with `--config`, so a caller never has to know which
-directory a suite reads from. The accept row carries `{surfaces}`, one token: the caller fills it
-with the ids whose baselines are to be rewritten, joined by `|`, and the harness matches it against
-test titles, which is why every title in a surface suite begins with its surface id. The address a
+directory a suite reads from. The two suite rows and the accept row carry `{surfaces}`, one
+token: the caller fills it with the ids to run, or whose baselines are to be rewritten, joined by
+`|`, and the harness matches it against test titles, which is why every title in a surface suite
+begins with its surface id. A caller running the whole set fills it with every enabled id, and one
+running the surfaces a change touched fills it with those, so a row with the token never runs with
+an empty grep. The address a
 suite runs against is never in a recipe or a file: the caller exports it as `PLAYWRIGHT_BASE_URL`
 for the row, and every config the setup recipes write reads that variable.
 
