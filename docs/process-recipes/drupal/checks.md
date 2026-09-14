@@ -6,7 +6,7 @@ description: 'Use when a Drupal implementation reaches the review phase and must
 # Metadata — read only after a match.
 label: Implementation review checks (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.3.1
+version: 0.4.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/security
@@ -261,57 +261,6 @@ size and coupling; a project that commits a `phpmd.xml` names it there instead. 
 needed for the same reason `--extensions` is on the phpcs row: without it a `.module` file named
 on the command line is skipped in silence, verified on the same file that phpcs skipped.
 
-## Surface commands
-
-Five rows — `e2e`, `visual-regression`, `visual-regression-accept`, `visual-parity`,
-`visual-parity-accept` — the suites review runs over the site's user-visible surfaces, and the
-accept command that rewrites a suite's baselines. Drupal is the framework in this catalog with
-such surfaces, bound by `drupal/e2e-setup-atk.md` and `drupal/visual-regression-setup.md`; the
-rows below are the commands those two recipes wire up, in the form a script runs them.
-
-```yaml
-surface_commands:
-  - id: e2e
-    argv: ["npx", "playwright", "test", "--project", "e2e-chromium"]
-    silent_pass: >-
-      None. A filter that matches no test file prints `Error: No tests found.` and
-      exits 1, and a `--project` that is not defined in the config prints
-      `Project(s) "e2e-chromium" not found` and exits 1. Verified on Playwright 1.62.1.
-  - id: visual-regression
-    argv: ["npx", "playwright", "test", "tests/visual"]
-    silent_pass: >-
-      None, for the same reasons as the e2e row. A surface with no committed baseline is
-      a failure, not a pass: Playwright reports `A snapshot doesn't exist`, writes the
-      actual image beside the expected path, and exits 1.
-  - id: visual-regression-accept
-    argv: ["npx", "playwright", "test", "tests/visual", "--update-snapshots"]
-  - id: visual-parity
-    absent: >-
-      This framework names no parity harness. The surface registry's gate vocabulary
-      carries `visual_parity`, and no Drupal recipe binds a suite to it.
-  - id: visual-parity-accept
-    absent: >-
-      There is no parity suite, so there is no baseline for it to accept.
-```
-
-**These commands run on the host, not through `ddev exec`.** The e2e recipe scaffolds Playwright
-on the host — `npm init`, `@playwright/test`, `npx playwright install --with-deps` — and points it
-at the DDEV site by URL. The web container has no browsers, so `ddev exec npx playwright` would
-find nothing to run with. The ATK preflight the e2e recipe describes is the registry's
-`e2e.preflight_command`, run by the caller before the `e2e` row, not part of the row.
-
-**The visual rows select by directory, not by project name.** The visual-regression recipe
-registers one Playwright project per viewport and per authenticated context —
-`visual-chromium-<vp>` and `visual-chromium-<vp>-<ctx>` — so no single `--project` names the
-suite. Every one of them reads its tests from under `tests/visual/`, and the `e2e-chromium` project
-reads from `tests/e2e/behavioral`, so the path filter `tests/visual` selects every visual project
-and nothing else; verified on 1.62.1 with two projects in one config. The accept row is the
-command the plugin's baseline manager runs after its plan-and-confirm step, on Linux so the
-`-linux` suffix in every baseline name is right; it writes to the working tree and is never a gate.
-
-Both suites read exit status: 0 is a pass, and any other value is a failure the JSON report
-explains. Neither needs `signal:`.
-
 **`--extensions` is load-bearing on the phpcs row.** The `Drupal` ruleset in `drupal/coder` 8.3.31
 sets no file extensions, so PHP_CodeSniffer keeps its default of `php`, `inc`, `js` and `css` — and
 a `.module`, `.install`, `.theme`, `.profile` or `.engine` file named on the command line is skipped
@@ -326,6 +275,78 @@ project's `phpcs.xml.dist`, so the row enforces this recipe's standard rather th
 project one. PHPStan takes its level and its extensions from the project's `phpstan.neon` and only
 the paths from the row; without that file it runs at level 0, which finds almost nothing, and the
 tooling recipe for it says a project needs one.
+
+## Surface commands
+
+Six rows — `e2e-preflight`, `e2e`, `visual-regression`, `visual-regression-accept`,
+`visual-parity`, `visual-parity-accept` — the readiness check and the suites review runs over the
+site's user-visible surfaces, and the accept command that rewrites chosen baselines. Drupal is the
+framework in this catalog with such surfaces, set up by `drupal/e2e-setup-atk.md` and
+`drupal/visual-regression-setup.md`; the rows below run the harness those two recipes write, in the
+form a script runs them. Each row names its kind's own config with `--config`, so the two suites
+share no file and neither can select the other's tests.
+
+```yaml
+surface_commands:
+  - id: e2e-preflight
+    argv: ["npx", "playwright", "test", "--config", "tests/e2e/playwright.config.ts", "--project", "setup"]
+    silent_pass: >-
+      None. The `setup` project holds one test, ATK's `atk_session.setup.js`, which calls
+      `preflightTest()` and then logs each QA account in. With the group absent Playwright
+      prints `Error: No tests found` and exits 1, so a missing preflight is a failure.
+  - id: e2e
+    argv: ["npx", "playwright", "test", "--config", "tests/e2e/playwright.config.ts", "--project", "chromium"]
+    silent_pass: >-
+      Yes, and the exit status does not show it. With no enabled e2e surface and no journey
+      spec the run still prints `1 passed` and exits 0, because the `chromium` project depends
+      on `setup` and the setup test runs and counts. Observed on Playwright 1.63.0 with every
+      surface disabled. A surface is read off the output, not off the exit: an enabled id
+      absent from the output is unmet, whatever the run exited. A failed preflight prints
+      `did not run` for every test and exits 1.
+  - id: visual-regression
+    argv: ["npx", "playwright", "test", "--config", "tests/visual/playwright.config.ts"]
+    silent_pass: >-
+      None. The suite writes one test per enabled surface and viewport from
+      `.visual-review/surfaces.json`; with none enabled it prints `Error: No tests found`
+      and exits 1. A surface with no committed baseline is a failure, not a pass: Playwright
+      prints `A snapshot doesn't exist`, writes the actual image as the new baseline, and
+      exits 1. Verified on Playwright 1.63.0.
+  - id: visual-regression-accept
+    argv: ["npx", "playwright", "test", "--config", "tests/visual/playwright.config.ts", "--update-snapshots", "--grep", "{surfaces}"]
+  - id: visual-parity
+    absent: >-
+      This framework names no parity harness. The surface file's kind vocabulary carries
+      `visual-parity`, and no Drupal recipe binds a suite to it.
+  - id: visual-parity-accept
+    absent: >-
+      There is no parity suite, so there is no baseline for it to accept.
+```
+
+**These commands run on the host, not through `ddev exec`.** The e2e recipe installs Playwright on
+the host — `npm install`, `npx playwright install` — and the suites reach the DDEV site by the
+address the caller exports as `PLAYWRIGHT_BASE_URL`. The web container has no browsers, so
+`ddev exec npx playwright` would find nothing to run with. Drush is reached the other way round:
+ATK's helpers run `ddev drush` from the host, set as `drushCmd` in `tests/e2e/playwright.atk.config.js`.
+
+**The preflight is a Playwright project, because ATK has no Drush command for it.** Automated
+Testing Kit 2.1.0-beta5 registers two Drush commands, `file:properties` and `file:create`; there is
+no `atk:preflight`. Its readiness check is `preflightTest()` in `atk_commands.js`: it reads
+`tests/data/preflightTests.yml`, runs each listed Drush command, and throws when a condition fails,
+so a site with ATK or QA Accounts disabled fails the `setup` project with that message and a
+non-zero exit. The `e2e` project depends on `setup`, so a run of the `e2e` row alone would also
+stop there; the separate row is what lets a caller tell a site that is not ready from a journey
+that failed.
+
+**The accept row takes `{surfaces}`, one token.** The caller fills it with the ids to re-baseline
+joined by `|`, and Playwright's `--grep` matches that as a regular expression against each test
+title. Every title in the visual suite begins with its surface id, so `front|about` selects those
+two surfaces at every viewport and no other, verified on 1.63.0. An id that is a prefix of another
+id, `front` and `front-page`, selects both; a caller that needs one of them anchors the pattern.
+The row writes into the working tree and is never a gate.
+
+All four commands read exit status: 0 is a pass, and any other value is a failure the `list`
+reporter's output explains. None needs `signal:`, and the `e2e` row's `silent_pass` says why exit
+status alone is not enough for it.
 
 ## References
 

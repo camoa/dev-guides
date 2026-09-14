@@ -6,7 +6,7 @@ description: Use when a Claude Code plugin reaches the review phase and must be 
 # Metadata — read only after a match.
 label: Plugin review checks (Claude Code)
 recipe_schema_version: 1.0.0
-version: 0.3.0
+version: 0.3.1
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -208,6 +208,9 @@ block is a heading it could not find.
 
 ```yaml
 surface_commands:
+  - id: e2e-preflight
+    absent: >-
+      There is no e2e suite here, so there is no site readiness to check before one runs.
   - id: e2e
     absent: >-
       A plugin has no runtime surface a browser or a process harness could drive; its behaviour is traced through code-paper-test:paper-test under implement, which is a method rather than a suite.
