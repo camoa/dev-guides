@@ -160,6 +160,19 @@ tell a failed assertion from a harness that never reached the behaviour, in that
 output — the frameworks differ sharply here, and two of them report a selector that matched nothing
 as a success.
 
+**`failure_line:` on the suite row selects the lines a red baseline is subtracted on.** A build
+that starts from a commit whose suite is already red must subtract the old failures from the new
+run, or every order spends its attempts on a question the suite cannot answer. Subtracting the
+whole output line by line is exact for a linter and wrong for a test runner: the progress line
+and the counts line change whenever a test is added, so the suite reads unmet on any red baseline.
+The key is a regular expression in the same YAML shape as `silent_pass:`. It matches the lines
+that name one failing test, one line per failure, and the recipe's prose says what else it can
+catch. The four recipes with a suite command carry one, each observed on its runner:
+`'^[0-9]+\) [\w\\]+::\w+'` for PHPUnit, `'^(FAILED|ERROR) '` for pytest, `'^\s*--- FAIL: '` for Go.
+`scripts/validate_recipes.py` refuses a selector that does not compile or sits on an `absent:` row. A consumer subtracts only the matching lines, on
+both sides, and records the selector it used; a recipe without the key keeps whole-output
+subtraction, with the limit above.
+
 **The `mutation` row is a report, not a gate.** Every mutation tool run for it — Infection, mutmut,
 gremlins — exits 0 with surviving mutants, and gremlins exited 0 with its own efficacy threshold
 unmet, so a caller reading exit status learns nothing from this row. Its `trap:` says where the

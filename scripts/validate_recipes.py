@@ -423,7 +423,13 @@ def validate_preconditions_block(body: str) -> list[str]:
 # print.
 TEST_EXECUTION_PHASE = "test-execution"
 TEST_COMMAND_IDS = ["suite", "file", "test", "changed", "smoke", "mutation"]
-TEST_COMMAND_KEYS = {"id", "argv", "absent", "nearest", "cost", "trap", "id_form"}
+TEST_COMMAND_KEYS = {"id", "argv", "absent", "nearest", "cost", "trap", "id_form", "failure_line"}
+# `failure_line:` is a regular expression that selects the lines naming one failing
+# test, one line per failure, stable across runs that add or fix other tests. A
+# consumer that subtracts a red baseline line by line subtracts only these lines,
+# because a progress line and a counts line change whenever a test is added. It is
+# optional and lives on a row with `argv:`; it must compile, or the consumer would
+# fall back to whole-output subtraction while believing it had a selector.
 COST_VALUES = {"every-attempt", "end-of-task"}
 # A command is argv, never a shell string: the caller executes the token list
 # directly, so a token that only means something to a shell would mean something
@@ -503,6 +509,17 @@ def validate_test_commands(body: str) -> list[str]:
                 )
         if has_absent and not str(row.get("absent", "")).strip():
             errors.append(f"test command {rid or i} `absent:` must say why")
+        if "failure_line" in row:
+            fl = row["failure_line"]
+            if has_absent:
+                errors.append(f"test command {rid or i} `failure_line:` needs a command; an `absent:` row prints nothing to select")
+            if not isinstance(fl, str) or not fl.strip():
+                errors.append(f"test command {rid or i} `failure_line:` must be a non-empty regular expression")
+            else:
+                try:
+                    re.compile(fl)
+                except re.error as exc:
+                    errors.append(f"test command {rid or i} `failure_line:` does not compile: {exc}")
         if "nearest" in row:
             errors.extend(argv_errors(row["nearest"], f"test command {rid or i} `nearest`"))
 
