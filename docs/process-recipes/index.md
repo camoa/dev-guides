@@ -143,7 +143,7 @@ here.
 | `review` | `## Change-impact globs`, `## Code-quality extensions`, `## Check commands`, `## Surface commands` | fail-open (`## Check commands` and `## Surface commands` fail closed) |
 | `visual-regression` | `## Install`, `## Files`, `## Viewports`, `## Surfaces`, `## Discovery` | **fail-closed** (`## Install` with no `sh` block refuses the install; the rest read as empty) |
 | `e2e-setup` | `## Install`, `## Files`, `## Surfaces`, `## Discovery` | **fail-closed** (`## Install` with no `sh` block refuses the install; the rest read as empty) |
-| `worktree-environment` | `## Preconditions`, `## Tokens`, `## Files`, `## Bring up` (twice, around `## Address`), `## Address`, `## Tear down`, `## Build in place` | **fail-closed** (any of `## Bring up`, `## Address` or `## Tear down` with no `sh` block refuses the offer, because an environment nobody can remove is not offered; a `## Tokens` command that prints nothing refuses it by the token's name; `## Files` follows the setup rule; `## Build in place` reads as empty) |
+| `worktree-environment` | `## Preconditions` (prose and one `sh` line), `## Tokens`, `## Files`, `## Bring up` (twice, around `## Address`), `## Address`, `## Tear down`, `## Build in place` | **fail-closed** (any of `## Bring up`, `## Address` or `## Tear down` with no `sh` block refuses the offer, because an environment nobody can remove is not offered; a `## Preconditions` line that exits non-zero refuses it, removes the files that run wrote and commits nothing; a `## Tokens` command that prints nothing refuses it by the token's name; `## Files` follows the setup rule; `## Build in place` reads as empty) |
 
 Spelling is load-bearing. A fail-open declaration with a misspelled heading does not error — it silently
 degrades to the neutral floor, and the run looks clean while checking less than you think.
@@ -275,8 +275,13 @@ is prose a consumer prints for the person who confirms the list. The commands re
 installed harness are not here: they are the `## Surface commands` rows of the same framework's
 `review` recipe, and a setup recipe names those ids in one sentence so a reader knows where to look.
 
-**`## Tokens`, `## Files`, `## Bring up`, `## Address`, `## Tear down` and `## Build in place` are
-parsed from a `worktree-environment` recipe, in document order.** `## Tokens` holds one fenced `sh`
+**`## Preconditions`, `## Tokens`, `## Files`, `## Bring up`, `## Address`, `## Tear down` and
+`## Build in place` are parsed from a `worktree-environment` recipe, in document order.**
+`## Preconditions` keeps its prose, the reason for each check, and holds one fenced `sh` block, one
+command per line, `{codePath}` as a whole argument. The consumer runs it in the worktree after
+`## Files` is written and before anything is committed or a token runs; every line must exit 0,
+and a line that does not refuses the bring-up, prints the command's output, removes the files that
+run wrote, and commits nothing. `## Tokens` holds one fenced `sh`
 block per token, the token's name as the fence's second word, one command. The consumer runs each
 in the worktree after `## Files` is written and before the first `## Bring up`, as arguments and
 never through a shell, and the first line of standard output is the token's value. `{codePath}`, the main checkout's path, is the one token
@@ -293,8 +298,7 @@ resolved the project from; the consumer stops when it is not the worktree, becau
 resolved another project would seed that one. Every other key is a token for the blocks that
 follow and for `## Tear down`. `## Build in place` is prose the consumer shows at the point of
 choice: which kinds of task should not have a worktree environment at all, and why.
-`## Preconditions` is one of the nine required sections and here it also carries what the consumer
-checks before it offers bring-up. A framework with no served environment writes no recipe at this
+A framework with no served environment writes no recipe at this
 point, and a consumer that finds none says so once and goes on with a worktree that has files and
 no site.
 
