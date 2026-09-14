@@ -263,6 +263,82 @@ def build_guide_manifests(topics: list[dict]) -> int:
     return total
 
 
+PLAYS_MANIFEST_NAME = "plays.json"
+PLAY_LABELS = {"what": "**What:**", "rationale": "**Rationale:**", "when": "**When it applies:**"}
+PLAY_FIELDS = ["id", "title", "what", "rationale", "when", "guide", "sha256"]
+
+
+def extract_labelled_paragraph(content: str, label: str) -> str:
+    """The first paragraph after a bold label, as the playbook guides write it.
+
+    The label opens the paragraph (`**What:** text …`) and the paragraph runs to
+    the next blank line. A label the guide does not carry yields "", never a
+    missing key, so a reader can tell "empty" from "misspelled".
+    """
+    lines = content.splitlines()
+    for i, line in enumerate(lines):
+        if not line.startswith(label):
+            continue
+        paragraph = [line[len(label):].strip()]
+        for following in lines[i + 1:]:
+            if not following.strip():
+                break
+            paragraph.append(following.strip())
+        return " ".join(part for part in paragraph if part)
+    return ""
+
+
+def extract_play(guide: Path) -> dict:
+    """One `plays.json` entry for one playbook guide, keyed the way the loader reads it."""
+    raw = guide.read_bytes()
+    content = raw.decode("utf-8")
+    play = {
+        "id": guide.stem,
+        "title": extract_h1(content),
+        "guide": guide.name,
+        # The same raw-bytes sha `guide-index.json` carries, so one file's two
+        # manifests agree and a cached body can be checked against either.
+        "sha256": hashlib.sha256(raw).hexdigest(),
+    }
+    for key, label in PLAY_LABELS.items():
+        play[key] = extract_labelled_paragraph(content, label)
+    return {key: play[key] for key in PLAY_FIELDS}
+
+
+def build_plays_manifests(topics: list[dict]) -> int:
+    """Emit `plays.json` for every topic whose `index.md` declares `playbook: true`.
+
+    A playbook set is a topic a project subscribes to and every role that writes
+    or judges code follows by path; its loader wants one file per set with each
+    guide's rule, rationale and scope already lifted out, instead of parsing the
+    routing table. One entry per guide: `index.md` is the table, not a rule, and
+    `sources-maintenance.md` is generated, so both are left out. Written to
+    `site/<topic>/plays.json` beside `guide-index.json`.
+
+    Returns the number of topics that got one.
+    """
+    written = 0
+    for t in topics:
+        topic_key = t["topic_key"]
+        index_file = DOCS_DIR / topic_key / "index.md"
+        if not index_file.exists():
+            continue
+        if extract_frontmatter(index_file.read_text(encoding="utf-8")).get("playbook") is not True:
+            continue
+        guides = sorted(
+            f for f in (DOCS_DIR / topic_key).glob("*.md")
+            if f.name not in ("index.md", "sources-maintenance.md")
+        )
+        plays = [extract_play(f) for f in guides]
+        out_dir = SITE_DIR / topic_key
+        out_dir.mkdir(parents=True, exist_ok=True)
+        (out_dir / PLAYS_MANIFEST_NAME).write_text(
+            json.dumps(plays, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+        )
+        written += 1
+    return written
+
+
 def build_llms_hash(llms_content: str) -> None:
     """Generate llms.hash — SHA-256 of llms.txt for cache freshness."""
     content_hash = hashlib.sha256(llms_content.encode("utf-8")).hexdigest()
@@ -302,11 +378,15 @@ def main():
     # Generate per-topic guide manifests (per-guide body shas for the navigator).
     files_hashed = build_guide_manifests(topics)
 
+    # Generate plays.json for every playbook topic (the rule, rationale and scope per guide).
+    playbooks = build_plays_manifests(topics)
+
     print(f"\nDone!")
     print(f"  Topics: {len(topics)}")
     print(f"  Total guides: {total_guides}")
     print(f"  Index: {index_path}")
     print(f"  Guide manifests: {len(topics)} × {GUIDE_MANIFEST_NAME} ({files_hashed} files hashed)")
+    print(f"  Playbooks: {playbooks} × {PLAYS_MANIFEST_NAME}")
 
 
 if __name__ == "__main__":

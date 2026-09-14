@@ -554,7 +554,7 @@ CHECK_COMMAND_IDS = [
 ]
 CHECK_COMMAND_KEYS = {"id", "argv", "absent", "extensions", "signal"}
 SURFACE_COMMAND_IDS = [
-    "e2e", "visual-regression", "visual-regression-accept",
+    "e2e-preflight", "e2e", "visual-regression", "visual-regression-accept",
     "visual-parity", "visual-parity-accept",
 ]
 SURFACE_COMMAND_KEYS = CHECK_COMMAND_KEYS | {"silent_pass"}
