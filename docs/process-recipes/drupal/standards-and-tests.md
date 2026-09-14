@@ -6,7 +6,7 @@ description: Use when a Drupal project enters the implementation phase holding a
 # Metadata — read only after a match.
 label: Coding standards and test discipline (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.6.0
+version: 0.7.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -61,8 +61,9 @@ The plugin owns the generic mechanism — when the implementation phase runs, th
 - The design phase has produced an architecture decision (see the `architecture` recipe) — the services, Drush commands, forms, and storage to implement are known, so this phase tests and builds against a plan rather than improvising structure.
 - The code-quality-tools plugin is available for linter execution (`phpcs --standard=Drupal,DrupalPractice`, `phpstan`); this recipe does not bundle or re-author those runners.
 - The plugin's generic implementation phase is present: the test-first gate and the task record. This recipe supplies the Drupal-specific standards-and-tests method; it does not recreate the gate.
+- For a configuration unit only: the worktree site the `worktree-environment` recipe brings up, with the snapshot its bring-up took. The `## Configuration gate` restores that snapshot and imports into that site; without them the gate has nothing to prove against and its first line says so.
 
-All four stay prose. They are design-artifact and plugin-availability conditions with no argv-safe filesystem probe, and the one condition that did carry a machine-readable entry — the PHPUnit runner — moved to the `test-execution` recipe, which owns the commands it is a condition of. Its check moved with a correction: `test -x vendor/bin/phpunit` reported `met` with DDEV stopped and nothing set, because Composer installs that binary regardless.
+All five stay prose. They are design-artifact and plugin-availability conditions with no argv-safe filesystem probe, and the one condition that did carry a machine-readable entry — the PHPUnit runner — moved to the `test-execution` recipe, which owns the commands it is a condition of. Its check moved with a correction: `test -x vendor/bin/phpunit` reported `met` with DDEV stopped and nothing set, because Composer installs that binary regardless.
 
 ```yaml
 preconditions: []
@@ -84,11 +85,11 @@ architecture_ref: string      # optional; pointer to the design decision this im
 
 If invoked in dry-run mode, perform all reads and emit a standards-and-security plan (what the code must do to turn the test green, and the standards and security checklist it must hold) instead of writing production code. Dry-run is required.
 
-1. **Take the failing test.** The tier, the file, the namespace, the test name and the criterion it carries are `drupal/test-authoring.md`'s, and it hands them over red. Confirm the failure is an assertion that ran and did not hold rather than a harness error or a run that selected nothing — `drupal/test-execution.md` declares how to tell those apart. A behaviour arriving with no failing test does not enter this phase; send it back.
+1. **Take the failing test.** The tier, the file, the namespace, the test name and the criterion it carries are `drupal/test-authoring.md`'s, and it hands them over red. Confirm the failure is an assertion that ran and did not hold rather than a harness error or a run that selected nothing — `drupal/test-execution.md` declares how to tell those apart. A behaviour arriving with no failing test does not enter this phase; send it back. The one exception is a unit whose deliverable is exported site configuration: it arrives with no test and goes to `## Configuration gate`.
 
 2. **Confirm the red is the right red.** The behaviour is absent — not a broken test, and not working code broken or reverted to force the failure, which proves the test is sensitive and never that it came first (see `development/tdd-spec-driven/what-a-failing-test-proves`). A test that passed on arrival is not a starting point; return it. Once a test is committed, who may change or delete it is the mutability matrix's answer in `development/tdd-spec-driven`, not this phase's — and this phase changes none.
 
-3. **Write the minimum code to pass (GREEN).** Implement only what the test demands — no extra features, no premature optimisation, no "while I'm here" additions. As you write, hold the standards inline: constructor-inject every dependency (no static `\Drupal::` in the new class), docblocks on the class and public methods, type hints on parameters and returns, no deprecated APIs, Drupal layout and naming. Run the test to green.
+3. **Write the minimum code to pass (GREEN).** Implement only what the test demands — no extra features, no premature optimisation, no "while I'm here" additions. A unit whose deliverable is exported configuration is the `## Configuration gate`'s, not this step's. As you write, hold the standards inline: constructor-inject every dependency (no static `\Drupal::` in the new class), docblocks on the class and public methods, type hints on parameters and returns, no deprecated APIs, Drupal layout and naming. Run the test to green.
 
 4. **Apply the implementation security rules.** Before the unit is considered done, confirm the four guarantees against `drupal/security`: Form API builds/validates every data-entry form (CSRF token present and checked); output is escaped (Twig auto-escaping intact, no unsanitised `|raw` or `#markup`); all database access is parameterized (query builder / placeholders, never concatenated user input); and access checks cover every route and operation. Any gap is fixed now. Where the fix needs a test to prove it, that test is authored by `drupal/test-authoring.md` and arrives red like any other; this phase does not write it.
 
@@ -125,6 +126,7 @@ emits (to the caller; the recipe writes no task record):
        code:         the minimum production code that turns them green
        security:     confirmation of the four implementation-time guarantees
        linting:      the code-quality-tools run outcome over the changed files
+       gate:         for a configuration unit, what the ## Configuration gate lines printed
 ```
 
 ## State-awareness contract
@@ -137,7 +139,7 @@ Idempotent at the discipline level: re-running on a component whose tests alread
 
 After the recipe runs, verify:
 
-1. Every implemented behaviour arrived with a PHPUnit test that had been seen to fail *because the behaviour was absent* — not because working code was broken or reverted, and no test passed on arrival unexamined. The tier that test sits at is `drupal/test-authoring.md`'s choice, verified there.
+1. Every implemented behaviour arrived with a PHPUnit test that had been seen to fail *because the behaviour was absent* — not because working code was broken or reverted, and no test passed on arrival unexamined. The tier that test sits at is `drupal/test-authoring.md`'s choice, verified there. A configuration unit is the exception: it arrived with no test, was produced through Drupal and exported, and its `## Configuration gate` lines all exited 0 in the worktree, with line 2 not printing `There are no changes to import`.
 2. No new class reaches for a static `\Drupal::` service; every dependency is constructor-injected.
 3. The four security guarantees hold: Form API on every data-entry form (token present and checked), Twig auto-escaping intact (no unsanitised `|raw`/`#markup`), all database access parameterized, access checks on every route and operation.
 4. New code carries docblocks on classes and public methods, type hints on parameters and returns, no deprecated APIs, and Drupal layout/naming — and the code-quality-tools `phpcs --standard=Drupal,DrupalPractice` and `phpstan` run over the changed files is clean (or its findings are recorded for the gate).
@@ -147,6 +149,37 @@ After the recipe runs, verify:
 9. Every pre-existing test the change modified or deleted was changed by a role the mutability matrix permits — the only rows that may delete are a feature removal taking its own tests in the same commit; RED authoring is the only row that writes an assertion, and GREEN, REFACTOR and a bug fix change none. A reviewer that wanted a test changed filed a finding instead. See `development/tdd-spec-driven`.
 
 This recipe ships no executable verifier of its own — the checks above are the agent-driven protocol; the linter execution is the code-quality-tools plugin's, and the plugin's implementation phase owns the test-first completion gate.
+
+## Configuration gate
+
+A unit whose deliverable is exported site configuration, a field, a display, a view, a content type under the sync folder, is proved by this gate, not by a PHPUnit test. The design recipe sizes such a unit around the Drupal operation and says why a test that reads YAML back proves nothing; this section says how the configuration is produced and what proves it.
+
+**Produce it through Drupal, never by hand.** Make the change in the worktree's site, through the UI or `drush`, then `ddev drush config:export`, and commit what the export wrote. Hand-authored YAML skips what Drupal does when it saves an object: it calculates the dependencies and casts the values to the schema. The export only copies what the site holds and repairs nothing: `config:export` compares data, not bytes, so a file whose data the site already holds is left as written. Two things the unit may not do: carry site configuration in a module's `config/install`, and edit exported YAML by hand after the export.
+
+**"Implement only what the test demands" is about production code.** A configuration unit has no test to demand anything; its done-when lines bind on their own and the gate is how they are proved. The builder runs the gate and reports what it printed.
+
+The gate is one `sh` block, one command per line, each line one command split on spaces and never run through a shell, from the worktree's project root. The first line puts the worktree's database back to the seed the `worktree-environment` recipe took from the main checkout at bring-up, so the import that follows is a real import of the branch's configuration onto a site that does not have it yet. Without that line the database already holds the change the builder made, `config:import` prints `There are no changes to import` before it validates anything, and the gate proves nothing. The restore discards whatever the builder did to the worktree's database that the export does not carry; that is the point. Every line must exit 0 for the gate to pass, and the first non-zero line is the finding.
+
+```sh
+ddev snapshot restore --latest
+ddev drush config:import --yes
+ddev drush config:export --yes
+git add --intent-to-add --no-all .
+git diff --exit-code --stat HEAD
+```
+
+What a failure of each line means:
+
+1. No snapshot to restore, or no running project: the worktree was not brought up by the `worktree-environment` recipe, whose bring-up takes the snapshot this line restores. The environment's defect, not the order's. `--latest` restores the newest snapshot the project can see, which is the one bring-up took unless someone has taken another since.
+2. `config:import` refused the export, and its message names the reason. `Configuration X depends on the Y configuration that will not exist after import` is the sizing defect: the order ships a file whose dependency it does not ship, or deletes a file that another still lists. On core 11.4.6, an order that deleted a field's two files and left the three displays that list it to other orders was refused with one such line per display. `Invalid data type in config ... Duplicate key` is a YAML file nobody exported. A line that prints `There are no changes to import` and exits 0 is a finding for a configuration unit, not a pass: its export changes nothing against the seed, so either the unit built nothing or line 1 did not restore. Exit codes are the consumer's to judge; this string is the reviewer's. The builder reports the gate's output with the order, and a review that finds the string there refuses the order.
+3. `config:export` could not write the sync folder. The environment's defect.
+4. `git add --intent-to-add --no-all .` marks files the export created so the last line sees them, and nothing else: `--no-all` leaves a deleted file to the diff instead of staging its removal. It fails only when the worktree is not a git checkout.
+5. The export does not match the commit: the export rewrote, added or removed a file, and `--stat` names it. Drupal completed on save what the committed YAML lacked, or the operation touched a file the order did not commit. Diffing against `HEAD` is what makes a deletion show; a plain `git diff` misses a removed file once anything stages it. In the observed runs the import refused first and this line never failed; it stands for the YAML an import accepts and Drupal then completes.
+
+Why the other candidates lost: `config:status` returns rows or nothing and exits 0 either way, and Drush's own usage pipes it through `grep "No differences"` for CI, so it cannot be a line a reader judges by exit code. `config:import --diff` only changes the preview; the refusal is the same. `config:inspect` belongs to the contrib `config_inspector` module and is not assumed on a project.
+
+What the plugin does with it: an order the design marks `proof: gate` is frozen with zero tests, its build runs these lines as the order's own check and records the output, no test author is dispatched for it, and a `proof: gate` order in a project whose recipe has no `## Configuration gate` is refused at design. Reading the block, deciding the posture and recording the output are the plugin's; the lines and their meaning are this recipe's.
+
 ## Oracle files
 
 A measurement oracle is a file the gates read to decide pass or fail — a static-analysis baseline, a test, a coverage config. An autonomous builder must never weaken one to make a red gate go green: only adding tests or fixing code is allowed, never suppressing a finding. The plugin's deterministic oracle-tamper guard enforces this at the review/critique rung, but the guard itself is framework-agnostic — it carries no Drupal knowledge and monitors only the file list it is handed. This section is that list for Drupal: the caller reconstructs it from here on every run (so there is no persistent project file a builder could empty to switch monitoring off) and hands it to the guard.
@@ -200,6 +233,8 @@ These are the standards-and-tests oracle files. A Drupal project that also set u
 |---|---|
 | `drupal/test-authoring.md` | Which tier a behaviour belongs at, where the test file goes and what it is called, how a criterion is traced to a test, and what a Drupal test may not do — the half of the cycle that ends at red |
 | `drupal/test-execution.md` | The command at each scope, its cost, the conditions for running one, and how to read what came back |
+| `drupal/architecture.md` | Sizes a configuration unit around the Drupal operation and names the critic's check on it; the gate here is what proves that unit |
+| `drupal/worktree-environment.md` | Seeds the worktree's database from the checkout before the order, which is what makes the gate's first line a real import |
 
 ### Plugin-side tooling (referenced, not authored here)
 

@@ -138,7 +138,7 @@ here.
 
 | Type | Declaration (exact heading) | Posture |
 |---|---|---|
-| `implement` | `## Oracle files`, `## Routing hints`, `## Preconditions` | fail-open (`## Preconditions` fails closed) |
+| `implement` | `## Oracle files`, `## Routing hints`, `## Preconditions`, `## Configuration gate` | fail-open (`## Preconditions` fails closed; `## Configuration gate` fails closed for an order whose proof is the gate) |
 | `test-execution` | `## Test commands`, `## Preconditions` | **fail-closed** (both) |
 | `review` | `## Change-impact globs`, `## Code-quality extensions`, `## Check commands`, `## Surface commands` | fail-open (`## Check commands` and `## Surface commands` fail closed) |
 | `visual-regression` | `## Install`, `## Files`, `## Viewports`, `## Surfaces`, `## Discovery` | **fail-closed** (`## Install` with no `sh` block refuses the install; the rest read as empty) |
@@ -301,6 +301,22 @@ choice: which kinds of task should not have a worktree environment at all, and w
 A framework with no served environment writes no recipe at this
 point, and a consumer that finds none says so once and goes on with a worktree that has files and
 no site.
+
+**`## Configuration gate` is the contract an `implement` recipe offers for a unit that writes no
+test, and it fails closed for the orders that need it.** As of 2026-09-14 only
+`drupal/standards-and-tests.md` 0.7.0 carries one, and no consumer reads it yet; this is the shape a
+consumer meets. A unit whose deliverable is exported configuration has no PHPUnit test to freeze.
+The design recipe sizes it around the operation it performs, and this section is its proof. The
+block is one `sh` fence, one command per line, each line one command split on spaces and never run
+through a shell, from the worktree's project root. Its first line restores the database to the seed
+the `worktree-environment` recipe took at bring-up, so the import that follows is real. Every line
+must exit 0; the first non-zero line is the finding, and the recipe's prose says what each line's
+failure means. A consumer reads it the way it reads the environment recipe's `## Bring up`, as lines,
+not the way it reads `## Test commands`, as `argv:` rows. An order the design marks as gate-proved
+is frozen with zero tests and built with these lines as its check. In a framework whose `implement`
+recipe has no such section, that order is refused at design, because a unit nobody can prove is not
+cut. A framework that answers nothing with configuration declares no section, and nothing changes
+for it.
 
 **`## Oracle files` is parsed, not just read.** As of 2026-09-01 a consumer takes the `globs` off the
 row whose `type` is `test_delete` to answer "which files in this repository are tests", instead of
