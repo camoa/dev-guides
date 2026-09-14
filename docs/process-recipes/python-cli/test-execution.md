@@ -6,7 +6,7 @@ description: Use when anything needs to run a Python project's tests — the fai
 # Metadata — read only after a match.
 label: Test execution (Python CLI)
 recipe_schema_version: 1.0.0
-version: 0.2.2
+version: 0.2.3
 requires_guides:
   - development/tdd-spec-driven
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
@@ -33,7 +33,7 @@ This recipe runs nothing and judges nothing. It is read by whatever is about to 
 
 **`python -m pytest` and `pytest` are not the same command.** The module form prepends the current directory to `sys.path`, so a project whose package is importable only from the tree passes under one and fails to import under the other. Whichever form the project declares is the form every row uses, because a baseline taken with one and a check run with the other are not comparable.
 
-**pytest's exit codes carry real information, which is unusual and worth using.** Exit 1 is a failed assertion. Exit 4 is a usage error, which is also what a mistyped node identifier and a missing file produce. Exit 5 is nothing collected. All three were observed on pytest 9.1.1. Unlike the other frameworks in this catalog, a mistyped selector here does not report success.
+**pytest's exit codes carry real information, which is unusual and worth using.** Exit 1 is a failed assertion or a fixture that raised, and the summary line tells them apart: `FAILED` for the first, `ERROR` for the second. Exit 4 is a usage error, which is also what a mistyped node identifier and a missing file produce. Exit 5 is nothing collected. All three were observed on pytest 9.1.1. Unlike the other frameworks in this catalog, a mistyped selector here does not report success.
 
 **`-k` deselects, and deselecting everything is a success by count and a failure of intent.** A `-k` that matches nothing exits 5, so it is detectable — but `-k` matches substrings across the whole identifier, so a pattern intended to select one case routinely selects several. A node identifier selects exactly one; prefer it.
 
@@ -174,14 +174,18 @@ results sat in the one module that is tested through the console script.
 ```yaml
 failure_signal:
   assertion: >-
-    Exit 1, with a `FAILED <node id>` line per failing test — the test ran, asserted,
-    and the assertion did not hold. This is the only outcome that proves a behaviour
-    is absent.
+    Exit 1, with a `FAILED` summary line per failing test, naming the test — the test
+    ran, asserted, and the assertion did not hold. This is the only outcome that
+    proves a behaviour is absent.
   harness: >-
-    Exit 4 is a usage error, and it covers a mistyped node identifier, a missing file
-    and an unknown option — the run never started. Exit 5 means nothing was collected,
-    which a `-k` that deselects everything produces. Exit 2 is an interrupted run and
-    exit 3 an internal error. None of these says anything about the code.
+    `ERROR` where that line would be — the run never reached the behaviour. Observed
+    on pytest 9.1.1: a fixture that raises prints it with the test's name and exits 1,
+    the same status as a failed assertion; a test file that does not import prints it
+    with the file and exits 2, an interrupted collection; a mistyped node identifier,
+    a missing file and an unknown option print it with a usage message and exit 4.
+    Exit 5 means nothing was collected, which a keyword filter that deselects
+    everything produces, and exit 3 is an internal error. None of these says anything
+    about the code.
   silent_pass: >-
     None. This is the framework where a selector that matches nothing is a distinct
     exit code rather than a success, so a green here is a green.
@@ -201,7 +205,7 @@ If invoked in dry-run mode, resolve and return the command without executing it.
 
 5. **Return the command, the cost, and the failure signal.** The caller runs it. This recipe neither executes it nor judges its output.
 
-6. **Read the result against the failure signal.** Only exit 1 is a statement about the code. Exit 4 and exit 5 are the run never happening, and reporting either as a red is how absent code gets mistaken for proven-absent code.
+6. **Read the result against the failure signal.** Only exit 1 with a `FAILED` line is a statement about the code. Exit 1 with `ERROR` is a fixture that never reached the behaviour, and exit 4 and exit 5 are the run never happening; reporting any of them as a red is how absent code gets mistaken for proven-absent code.
 
 ## Data flow
 
@@ -215,7 +219,7 @@ reads project state:
 applies opinion:
        argv, never a shell string · the project's declared runner, not a fixed
        binary · python -m pytest and pytest differ in sys.path · a node identifier
-       over -k · exit 1 alone is a statement about the code
+       over -k · exit 1 with FAILED, not ERROR, is a statement about the code
 
 references origin (never duplicated):
        pytest — the runner, its node-identifier syntax, and its exit codes
@@ -223,7 +227,8 @@ references origin (never duplicated):
 emits (to the caller; the recipe runs nothing):
        command:  the argv token list for the requested row, placeholders substituted
        cost:     every-attempt | end-of-task
-       signal:   how to read the exit code — assertion, usage, or nothing collected
+       signal:   how to read the exit code and summary line — assertion, fixture,
+                 usage, or nothing collected
 ```
 
 ## State-awareness contract

@@ -6,7 +6,7 @@ description: Use when anything needs to run a Drupal test — the failing-test s
 # Metadata — read only after a match.
 label: Test execution (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.2.2
+version: 0.2.3
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/testing
@@ -180,9 +180,13 @@ failure_signal:
     that proves a behaviour is absent.
   harness: >-
     Exit 2 with `ERRORS!` and a zero assertion count — the run never reached a
-    behaviour. Verified on core 11.4.5 with `SIMPLETEST_DB` unset, which errors on
+    behaviour. Verified on core 11.4.5 with SIMPLETEST_DB unset, which errors on
     every test with "There is no database connection so no tests can be run" rather
-    than skipping. Exit 2 also covers a missing test file and an unknown option,
+    than skipping; a kernel test whose module the extension scan cannot find errors
+    the same way, with "Unavailable module" and the name. A run holding one erroring
+    test and one failed assertion prints `ERRORS!` and not the assertion marker, on PHPUnit
+    11.5.56, so a mixed run reads as a setup gap and only a run without errors can
+    read as a red. Exit 2 also covers a missing test file and an unknown option,
     which print no counts line at all. Exit 255 is a PHP fatal before any test ran.
   silent_pass: >-
     Exit 0 with `No tests executed!` — a filter or a path matched nothing. Success
@@ -208,7 +212,7 @@ If invoked in dry-run mode, resolve and return the command without executing it.
 
 4. **Return the command, the cost, and the failure signal.** The caller runs it. This recipe neither executes it nor judges its output.
 
-5. **Read the result against the failure signal.** Whatever ran the command reads the counts line before the exit code: assertions greater than zero with failures is a red that proves something; zero assertions, or `No tests executed!`, is a run that said nothing and must not be reported as either red or green.
+5. **Read the result against the failure signal.** Whatever ran the command reads the status and counts lines before the exit code: `FAILURES!` with assertions greater than zero is a red that proves something; `ERRORS!`, zero assertions, or `No tests executed!` is a run that never reached the behaviour, or not cleanly, and must not be reported as either red or green.
 
 ## Data flow
 

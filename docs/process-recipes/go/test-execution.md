@@ -6,7 +6,7 @@ description: Use when anything needs to run a Go test — the failing-test step 
 # Metadata — read only after a match.
 label: Test execution (Go)
 recipe_schema_version: 1.0.0
-version: 0.2.1
+version: 0.2.2
 requires_guides:
   - development/tdd-spec-driven
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
@@ -153,16 +153,18 @@ row was run on gremlins 0.6.0 against go1.27.1.
 ```yaml
 failure_signal:
   assertion: >-
-    Exit 1 with a `--- FAIL: TestName` line — the test ran and its assertion did not
-    hold. This is the only outcome that proves a behaviour is absent.
+    Exit 1 with a `--- FAIL:` line naming the test — the test ran and its assertion
+    did not hold, and a subtest prints its own line indented under its parent's.
+    This is the only outcome that proves a behaviour is absent.
   harness: >-
-    Exit 1 with `FAIL <package> [build failed]` — the package or its test file did
-    not compile, so nothing was asserted. Observed on go1.27.1: a compile error and a
-    failed assertion produce the same exit status and differ only in this marker.
+    Exit 1 with `[build failed]` on the package's FAIL line — the package or its test
+    file did not compile, so nothing was asserted. Observed on go1.27.1: a compile
+    error and a failed assertion produce the same exit status and differ only in this
+    marker.
   silent_pass: >-
-    Exit 0 with `[no tests to run]` (a `-run` pattern matched nothing) or
-    `? <package> [no test files]` (a package has no tests). Both report success
-    while proving nothing, so the output must be read before a green is believed.
+    Exit 0 with `[no tests to run]` (a run filter matched nothing) or
+    `[no test files]` (a package has no tests). Both report success while proving
+    nothing, so the output must be read before a green is believed.
 ```
 
 ## Sequence

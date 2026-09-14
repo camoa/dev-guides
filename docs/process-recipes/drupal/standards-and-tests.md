@@ -6,7 +6,7 @@ description: Use when a Drupal project enters the implementation phase holding a
 # Metadata — read only after a match.
 label: Coding standards and test discipline (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.7.0
+version: 0.8.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -179,6 +179,20 @@ What a failure of each line means:
 Why the other candidates lost: `config:status` returns rows or nothing and exits 0 either way, and Drush's own usage pipes it through `grep "No differences"` for CI, so it cannot be a line a reader judges by exit code. `config:import --diff` only changes the preview; the refusal is the same. `config:inspect` belongs to the contrib `config_inspector` module and is not assumed on a project.
 
 What the plugin does with it: an order the design marks `proof: gate` is frozen with zero tests, its build runs these lines as the order's own check and records the output, no test author is dispatched for it, and a `proof: gate` order in a project whose recipe has no `## Configuration gate` is refused at design. Reading the block, deciding the posture and recording the output are the plugin's; the lines and their meaning are this recipe's.
+
+## Unit declaration
+
+A Drupal module or theme exists when its `<name>.info.yml` exists, and the test harness reads nothing else to decide that: a kernel test enables its `$modules` in `setUp()` through an extension scan for info files, and a module the scan does not find stops the run there with `Unavailable module:` and the name, before any assertion runs. The run prints `ERRORS!` with an assertion count of zero, the `harness:` marker of `drupal/test-execution.md`, so by that recipe it is a setup gap and not a red. For a new module it is also the only red that can exist before the module does: nothing in a build writes the info file before the tests are frozen, and a test author may not scaffold one to watch its assertions fail, because that is a production write.
+
+```yaml
+unit_declaration:
+  globs:
+    - "**/*.info.yml"
+```
+
+An order whose owned files match a glob here is a new unit. `checks.md` carries the same glob under `## Change-impact globs`, as the row that says which review checks a change to an info file triggers; that table answers what to re-run when the file changes, not what makes a unit exist, and a consumer asking the second question reads this block.
+
+What the plugin does with it: at the tests freeze, a red file that holds the `harness:` marker and no `assertion:` marker is a setup gap and is refused, unless the order's owned files match a glob here, in which case the file is accepted as the new unit's red with the reason that nothing can fail an assertion before the unit exists. Deciding that is the plugin's; the glob and what it means are this recipe's.
 
 ## Oracle files
 

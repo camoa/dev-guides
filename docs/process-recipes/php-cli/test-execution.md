@@ -6,7 +6,7 @@ description: Use when anything needs to run a PHP CLI project's tests — the fa
 # Metadata — read only after a match.
 label: Test execution (PHP CLI)
 recipe_schema_version: 1.0.0
-version: 0.2.1
+version: 0.2.2
 requires_guides:
   - development/tdd-spec-driven
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
@@ -150,7 +150,10 @@ failure_signal:
     Exit 2. It covers two different things and the counts line separates them: with
     `ERRORS!` and a counts line, a test threw before it asserted; with a bare message
     and no counts line ("Test file ... not found", "Unknown option"), the runner never
-    started. Exit 255 is a PHP fatal before any test ran.
+    started. A run holding one erroring test and one failed assertion prints `ERRORS!`
+    and not the assertion marker, on PHPUnit 11.5.56, so a mixed run reads as a setup gap and
+    only a run without errors can read as a red. Exit 255 is a PHP fatal before any
+    test ran.
   silent_pass: >-
     Exit 0 with `No tests executed!` — a filter matched nothing. Success and "nothing
     ran" are the same exit code, so the counts line is the only thing that
@@ -169,7 +172,7 @@ If invoked in dry-run mode, resolve and return the command without executing it.
 
 4. **Return the command, the cost, and the failure signal.** The caller runs it. This recipe neither executes it nor judges its output.
 
-5. **Read the result against the failure signal.** Whatever ran the command reads the counts line before the exit code: a non-zero assertion count with failures is a red that proves something; `Assertions: 0`, or `No tests executed!`, is a run that said nothing and must not be reported as either red or green.
+5. **Read the result against the failure signal.** Whatever ran the command reads the status and counts lines before the exit code: `FAILURES!` with a non-zero assertion count is a red that proves something; `ERRORS!`, `Assertions: 0`, or `No tests executed!` is a run that never reached the behaviour, or not cleanly, and must not be reported as either red or green.
 
 ## Data flow
 
