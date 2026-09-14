@@ -6,7 +6,7 @@ description: Use when anything needs to run a Drupal test — the failing-test s
 # Metadata — read only after a match.
 label: Test execution (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.2.1
+version: 0.2.2
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/testing
@@ -97,6 +97,7 @@ test_commands:
   - id: suite
     argv: ["ddev", "phpunit"]
     cost: end-of-task
+    failure_line: '^[0-9]+\) [\w\\]+::\w+'
     trap: >-
       Runs every tier, Functional and FunctionalJavascript included, each booting a
       real site. This is the end-of-task gate, not something to run inside a loop.
@@ -141,6 +142,8 @@ test_commands:
       Kernel or Functional test in that run boots a site once per mutant, so keep the
       source scope to code Unit tests cover, or the run does not finish.
 ```
+
+**The suite row's `failure_line:` selects one line per failing test.** `'^[0-9]+\) [\w\\]+::\w+'` matches PHPUnit's numbered headers whose subject is a test, `1) Class::method`, one per failing, erroring or risky test; observed on PHPUnit 11.5.56 with two failures and one error. The numbering restarts in each section; the ask's consumer removes digit runs before comparing, so that does not register. The `Class::method` part is what keeps the issue lists out: with `displayDetailsOnTestsThatTriggerDeprecations` and its siblings on, as Drupal core's `phpunit.xml.dist` sets them, PHPUnit also prints `N) <message>` headers for deprecations, warnings and PHP notices, one per distinct message rather than per test, and a bare `'^[0-9]+\) '` would count a new deprecation as a new failing test. A message that itself begins with a `Class::method` token still matches; that is the residual. The progress line, the `file:line` under each header and the `Tests: N, Assertions: N, Failures: N.` line are not selected: the first and last change whenever a test is added.
 
 **The mutation row takes its files as positional arguments.** `--filter` is deprecated since
 Infection 0.34 and refused when paths are also given, so the row passes the changed files as

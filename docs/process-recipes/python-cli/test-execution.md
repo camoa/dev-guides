@@ -6,7 +6,7 @@ description: Use when anything needs to run a Python project's tests — the fai
 # Metadata — read only after a match.
 label: Test execution (Python CLI)
 recipe_schema_version: 1.0.0
-version: 0.2.1
+version: 0.2.2
 requires_guides:
   - development/tdd-spec-driven
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
@@ -87,6 +87,7 @@ test_commands:
   - id: suite
     argv: ["{runner}"]
     cost: end-of-task
+    failure_line: '^(FAILED|ERROR) '
     trap: >-
       Collects from the roots `pyproject.toml` declares. A project that declares
       none collects from the working directory, so the same command run from a
@@ -137,6 +138,8 @@ test_commands:
       and stops at the first failure with `failed to collect stats. runner returned 1`,
       exit 1.
 ```
+
+**The suite row's `failure_line:` selects one line per failing test.** `'^(FAILED|ERROR) '` matches the lines of pytest's short test summary, `FAILED tests/test_x.py::test_y - AssertionError: nope` and, for a test whose setup raised, `ERROR tests/test_x.py::test_z - RuntimeError: boom`, one per test; both observed on pytest 9.1.1 under the default `-r fE`. The per-test lines `-v` prints end with the word rather than start with it, so they are not selected, and neither is the `3 failed, 1 passed in 0.02s` counts line. The text after ` - ` is the assertion message and changes with the test's data; a project whose `addopts` sets `-r` without `f` and `E` (`-rN` drops the summary) prints no such lines and has nothing to select.
 
 **Why the mutation row carries no `{paths}`.** mutmut 3 rewrote its interface: `mutmut run` takes
 mutant names, the source paths live in `pyproject.toml`, and the older `paths_to_mutate` key is
