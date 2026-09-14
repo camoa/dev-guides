@@ -6,7 +6,7 @@ description: Use when a Drupal project on DDEV gives a task's git worktree a run
 # Metadata, read only after a match.
 label: Worktree environment (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.2.0
+version: 0.2.1
 recipe_class: process
 framework: drupal
 drupal_compatibility: "^10.3 || ^11"
@@ -93,7 +93,7 @@ One token the consumer holds, and three the recipe produces, each a whole argume
 {codePath}: string         # the main checkout's path; the consumer fills it, in ## Tokens only
 {mainProject}: string      # ## Tokens: the main checkout's DDEV project name
 {mainFiles}: string        # ## Tokens: the main site's public files directory, absolute
-{worktreeProject}: string  # ## Address, the project: line; kept in the task record for ## Tear down
+{project}: string          # ## Address, the project: line; kept in the task record for ## Tear down
 ```
 
 DDEV addresses a project by name and never by path, so the main checkout's path on its own cannot
@@ -128,7 +128,7 @@ worktree's own project from there.
 
 6. **Record the address.** The consumer keeps the `address:` line from the same `## Address`
    output as the task's address, and every other line as a token, so `project:` is
-   `{worktreeProject}`. Review and `baseline` export the address as `PLAYWRIGHT_BASE_URL` for
+   `{project}`. Review and `baseline` export the address as `PLAYWRIGHT_BASE_URL` for
    that task and do not ask a person for one.
 
 7. **Tear down.** When the task is pruned, the consumer runs `## Tear down` in the worktree
@@ -153,7 +153,7 @@ bring up, before ## Address (in the worktree):
         ddev composer install             → vendor/ and the installed directories, from the lock file
 
 address (in the worktree):
-        address.sh                        → root: checked; address: recorded; project: → {worktreeProject}
+        address.sh                        → root: checked; address: recorded; project: → {project}
 
 bring up, after ## Address (in the worktree):
         ddev snapshot {mainProject}       → <main>/.ddev/db_snapshots/<main>_<time>-<db>.zst, DDEV-ignored
@@ -162,7 +162,7 @@ bring up, after ## Address (in the worktree):
         ddev drush cr                     → caches rebuilt under the worktree's hostname
 
 tear down (in the worktree, before git worktree remove):
-        ddev delete --omit-snapshot --yes {worktreeProject}
+        ddev delete --omit-snapshot --yes {project}
                                           → containers, volume, registry entry gone; files stay
 ```
 
@@ -289,7 +289,7 @@ bash .aida/environment/address.sh
 `address:` is the site's address, for example `https://add-login.ddev.site`, which review and
 `baseline` export as `PLAYWRIGHT_BASE_URL`. `root:` is the directory DDEV resolved the project
 from, and must be the worktree; the consumer stops here when it is not. `project:` is the
-worktree's DDEV project name, kept as `{worktreeProject}` for `## Tear down`.
+worktree's DDEV project name, kept as `{project}` for `## Tear down`.
 
 ## Bring up
 
@@ -311,11 +311,11 @@ because the restored cache tables were built under the main hostname.
 
 ## Tear down
 
-Run in the worktree, before `git worktree remove`. The last argument is `{worktreeProject}`, the
+Run in the worktree, before `git worktree remove`. The last argument is `{project}`, the
 `project:` line `## Address` printed at bring-up:
 
 ```sh
-ddev delete --omit-snapshot --yes {worktreeProject}
+ddev delete --omit-snapshot --yes {project}
 ```
 
 `--omit-snapshot` skips DDEV's pre-delete snapshot because the database is a copy the main
