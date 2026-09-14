@@ -7,4 +7,5 @@ nav:
 - Implementation review checks (Drupal): checks.md
 - ATK end-to-end test setup (Drupal): e2e-setup-atk.md
 - Visual-regression setup (Drupal): visual-regression-setup.md
+- Worktree environment (Drupal): worktree-environment.md
 append_unmatched: true
