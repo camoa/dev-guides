@@ -6,7 +6,7 @@ description: Use when a Drupal project enters the design phase and must turn res
 # Metadata — read only after a match.
 label: Design (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/services
@@ -49,7 +49,11 @@ The plugin owns the generic mechanism — when the design phase runs, the shape 
 
 **Design decides; it does not build.** This phase produces the units and the order they are built in, for a person to approve. It writes no module code, registers no service, and installs nothing. The caller records the work orders; building from them comes later.
 
-**A configuration answer is a buildable unit, not only a storage choice.** Drupal answers a great deal with configuration — a view, a content type, a field, a display mode — and none of it is code. That is still a unit with a test: it states what the test must observe, and the file it owns is a configuration file. A design that does not know this writes a code order for something nobody should write code for, and every count-and-match check downstream still passes, because those checks cannot see that an order is about the wrong kind of thing. The storage table below already draws the content-entity against config-entity line; what matters here is that the config side is a thing to build, not merely a place to put data.
+**A configuration answer is a buildable unit, not only a storage choice.** Drupal answers a great deal with configuration — a view, a content type, a field, a display mode — and none of it is code. That is still a unit to build: it states what its gate must show, and the files it owns are configuration files. A design that does not know this writes a code order for something nobody should write code for, and every count-and-match check downstream still passes, because those checks cannot see that an order is about the wrong kind of thing. The storage table below already draws the content-entity against config-entity line; what matters here is that the config side is a thing to build, not merely a place to put data.
+
+**A configuration unit is the Drupal operation, and it owns every file that operation rewrites.** The unit is not a file; it is delete a field, add a view mode, change a display, and it owns every file Drupal rewrites when that operation runs through it. Find that set before the orders are cut: run the operation on a scratch site and export, or walk the `dependencies:` of the files the change touches. A display that lists a field is rewritten when the field is deleted; on core 11.4.6, deleting one field rewrote five files, the two field files gone and three displays changed. An order that owns the field files and leaves the displays to other orders cuts one atomic change into pieces that cannot import on their own. A unit whose files are all configuration writes no PHPUnit test: a test that reads the YAML back restates the file and cannot fail for the right reason. Its proof is the `## Configuration gate` in `drupal/standards-and-tests.md`, which restores the worktree's database to the seed and imports the branch's export onto it, plus the behavioural test of the order that consumes what it configures.
+
+**The critic's check on a configuration unit is one question: does the order own every file the operation rewrites, and does its gate exist?** An order that fails either half is not buildable, whatever its count-and-match checks say. The sentence is prose a critic reads, not a declaration a script parses; design carries none.
 
 **Name what must exist beside the code, or whoever builds it invents the rest.** A Drupal service is not finished by its class. It needs its entry in a `*.services.yml`, and depending on the unit a route, a permission, a config schema, a library declaration, an install hook. These are files, so they belong to the unit that owns them and the unit is not done until they exist.
 
@@ -123,9 +127,9 @@ If invoked in dry-run mode, perform all reads but emit an architecture-decision 
 
 5. **Anchor each choice to a canonical example.** For every selected pattern, confirm the core file the implementer should study. Check the catalogue paths above first; for anything not in the catalogue, locate the example in core — Grep core for `class <PatternName>`, `extends <BaseClass>`, or `implements <Interface>`, read no more than three candidate files, and record the path plus the key methods and the dependencies it injects. The output of this step is a path, not a paraphrase.
 
-6. **Name what each unit needs beside its code.** Per unit: its `*.services.yml` entry, and where the unit calls for them a `*.routing.yml` route, a permission in `*.permissions.yml`, a config schema under `config/schema/`, a library declaration in `*.libraries.yml`. A unit built with configuration rather than code names the configuration file it owns instead. These are the files the unit owns and no other unit may write, and the unit is not finished until they exist.
+6. **Name what each unit needs beside its code.** Per unit: its `*.services.yml` entry, and where the unit calls for them a `*.routing.yml` route, a permission in `*.permissions.yml`, a config schema under `config/schema/`, a library declaration in `*.libraries.yml`. A unit built with configuration rather than code names every configuration file its operation rewrites instead, found as the Opinion says. These are the files the unit owns and no other unit may write, and the unit is not finished until they exist.
 
-7. **Return the units and their order.** Per unit: what it is, the interface it offers to the units that depend on it (its PHP interface plus its registered service id), the pattern chosen with its reasoning and its core example path, the files it owns, and — for a unit built with configuration — what its test must observe, since there is no code to read. The order is the dependency between them: services → Drush commands → forms and controllers → integration. Hand these to the caller, which records them. The recipe method writes no file of its own, and produces no architecture document — the units and their order are the architecture.
+7. **Return the units and their order.** Per unit: what it is, the interface it offers to the units that depend on it (its PHP interface plus its registered service id), the pattern chosen with its reasoning and its core example path, the files it owns, and — for a unit built with configuration — what its gate must show, since there is no code to read and no PHPUnit test to write. The order is the dependency between them: services → Drush commands → forms and controllers → integration. Hand these to the caller, which records them. The recipe method writes no file of its own, and produces no architecture document — the units and their order are the architecture.
 
 ## Data flow
 
@@ -178,7 +182,7 @@ After the recipe runs, verify:
 3. Each component names a chosen pattern with explicit decision reasoning **and** a canonical Drupal-core file path to study.
 4. Forms and controllers in the design hold orchestration only — no business logic has been left in a `buildForm()` or a controller method.
 5. Every unit names the files it owns, including what must exist beside its code — the `*.services.yml` entry and, where the unit calls for them, its route, permission, config schema or library declaration.
-6. A feature Drupal answers with configuration is a unit in its own right, with what its test must observe stated, rather than a code unit written for something nobody should write code for.
+6. A feature Drupal answers with configuration is a unit in its own right, sized around the operation so it owns every file the operation rewrites, with what its gate must show stated and no PHPUnit test asked of it, rather than a code unit written for something nobody should write code for.
 7. The design left the project code unchanged — no service registered, no module file written by the method itself, nothing installed; the units and their order were returned for the caller to record.
 
 This recipe ships no executable verifier of its own — the checks above are the agent-driven protocol; the caller owns the work order's shape and the check that every acceptance criterion is served by one.
@@ -193,6 +197,12 @@ This recipe ships no executable verifier of its own — the checks above are the
 | `drupal/forms` | Form base classes and form-building mechanics behind the form-pattern choice |
 | `drupal/entities` | Content-entity vs config-entity mechanics behind the storage-pattern choice |
 | `drupal/config-management` | Config schema and settings mechanics behind the config-storage choice |
+
+### Sibling process recipes
+
+| Recipe | What it holds |
+|---|---|
+| `drupal/standards-and-tests.md` | The `## Configuration gate` that proves a configuration unit, and the rule that exported configuration is produced through Drupal, never by hand |
 
 ### External origins (referenced, not authored here)
 

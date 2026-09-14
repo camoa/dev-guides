@@ -6,7 +6,7 @@ description: Use when a context is about to write the tests for one unit of work
 # Metadata — read only after a match.
 label: Test authoring (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.2.0
+version: 0.2.1
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -56,7 +56,7 @@ booted. A Unit test that mocks the container proves the mock.
 
 | Tier | Directory | Choose it when the behaviour needs | Cost |
 |---|---|---|---|
-| Kernel | `tests/src/Kernel/` | a service, an entity, configuration, or the database, with a minimal container | seconds per test |
+| Kernel | `tests/src/Kernel/` | a service, an entity, code that reads configuration, or the database, with a minimal container. Exported site configuration itself is no tier's subject: it is proved by the `## Configuration gate` in `drupal/standards-and-tests.md`, not by a test | seconds per test |
 | Functional | `tests/src/Functional/` | a real request, a form, a route, or rendered output, with no JavaScript | a site boot per test |
 | FunctionalJavascript | `tests/src/FunctionalJavascript/` | JavaScript executed in a browser: Ajax, a modal, dynamic visibility | a site boot plus a browser session per test |
 | Unit | `tests/src/Unit/` | nothing from Drupal at all: a pure function over its arguments | milliseconds |

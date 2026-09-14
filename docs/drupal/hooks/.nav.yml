@@ -1,0 +1,12 @@
+nav:
+- index.md
+- hook-implementation-decision.md
+- hook-attribute-anatomy.md
+- hook-ordering.md
+- procedural-only-hooks.md
+- theme-hooks-oop.md
+- procedural-scan-performance.md
+- migrating-to-oop-hooks.md
+- hooks-deprecation-timeline.md
+- hooks-best-practices.md
+append_unmatched: true
