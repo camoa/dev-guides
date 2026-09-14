@@ -1,4 +1,10 @@
 {
+  "drupal/hooks": {
+    "source_hash": "322bc3b22bcc94bf88fced038dd166cd41a84d64a5bb2d0124b5ad7fac8de4d5",
+    "partitioned": "2026-09-14",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 9
+  },
   "drupal/contributing": {
     "source_hash": "595df87cf9993bb12b554dd2d2aeb6304ebb9b03465f02e36e93f59211b1d7ed",
     "partitioned": "2026-09-02",

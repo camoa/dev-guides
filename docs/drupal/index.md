@@ -26,6 +26,7 @@ guide-meta:
 | Write JavaScript for Drupal | [JS Development](js-development/index.md) |
 | Create a content or config entity | [Entities](entities/index.md) |
 | Create a plugin type or service architecture | [Plugins](plugins/index.md) |
+| Convert hooks to #[Hook] classes, order them, or write theme hooks | [Hooks](hooks/index.md) |
 | Set up routes and access control | [Routing](routing/index.md) |
 | Build configuration forms and admin interfaces | [Config Forms](config-forms/index.md) |
 | Use the Icon API for unified icon management | [Icon API](icon-api/index.md) |
