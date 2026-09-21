@@ -6,7 +6,7 @@ description: Use when anything needs to run a Drupal test — the failing-test s
 # Metadata — read only after a match.
 label: Test execution (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.3.0
+version: 0.3.1
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/testing
@@ -39,7 +39,7 @@ This recipe runs nothing and judges nothing. It is read by whatever is about to 
 
 **A `--filter` that matches nothing exits zero.** PHPUnit prints `No tests executed!` and reports success, so a mistyped case name is indistinguishable from a passing run by exit code alone. Anchor the filter (`/::testName$/`) and read the test count, because an unanchored `testFoo` also selects `testFooBar`.
 
-**Zero assertions is the tell that the harness never ran.** A Kernel test with no `SIMPLETEST_DB` reports `ERRORS!` with `Assertions: 0` and exits 2 — the same exit code as a mistyped option. A test that errors before it asserts has said nothing about the behaviour, and treating it as a red is how a phase concludes that absent code is proven absent when the database was simply not there.
+**`ERRORS!` is the tell that the harness never reached the behaviour, whatever the assertion count.** A Kernel test with no `SIMPLETEST_DB` reports `ERRORS!` with `Assertions: 0` and exits 2 — the same exit code as a mistyped option. The count is not the marker: a base class that asserts in `setUp()` makes it non-zero on every erroring run, and on one live run a test whose body met a class that did not exist yet printed `ERRORS! Tests: 1, Assertions: 20, Errors: 1`, twenty assertions from the base class and none from the test. A test that errors has said nothing about the behaviour, and treating it as a red is how a phase concludes that absent code is proven absent when the database was simply not there.
 
 **The four tiers differ by an order of magnitude, so they carry different costs.** Unit and Kernel are cheap enough to run on every build attempt over the changed scope. Functional boots a real site per test; FunctionalJavascript adds a browser on top of that. Both belong at the end of a task, not inside the loop. A caller with no cost label either runs the cheapest thing and under-checks, or runs everything on every attempt and pays for a full site boot per attempt.
 
@@ -173,7 +173,7 @@ threads with pcov.
 | Functional | `functional` | a real site boot per test | once, at the end of a task |
 | FunctionalJavascript | `functional-javascript` | a site boot plus a browser session per test | once, at the end of a task |
 
-**Telling a failed assertion from harness noise.** PHPUnit's exit code is not enough on its own, because 2 covers both a test that errored and a runner that was misused. The counts line is what separates them: a run that reached the behaviour has assertions.
+**Telling a failed assertion from harness noise.** PHPUnit's exit code is not enough on its own, because 2 covers both a test that errored and a runner that was misused. The status line is what separates them: `ERRORS!` is a test that threw or a harness that stopped, `FAILURES!` a run that reached the behaviour and found it wrong, and a bare message with no counts line is a runner that never started.
 
 ```yaml
 failure_signal:
@@ -182,8 +182,9 @@ failure_signal:
     the test ran, asserted, and the assertion did not hold. This is the only outcome
     that proves a behaviour is absent.
   harness: >-
-    Exit 2 with `ERRORS!` and a zero assertion count — the run never reached a
-    behaviour. Verified on core 11.4.5 with SIMPLETEST_DB unset, which errors on
+    Exit 2 with `ERRORS!`, whatever the assertion count — the run never reached a
+    behaviour; a base class that asserts in its setup method makes the count non-zero
+    on every erroring run, so the count decides nothing. Verified on core 11.4.5 with SIMPLETEST_DB unset, which errors on
     every test with "There is no database connection so no tests can be run" rather
     than skipping; a kernel test whose module the extension scan cannot find errors
     the same way, with "Unavailable module" and the name. A run holding one erroring
@@ -220,7 +221,7 @@ If invoked in dry-run mode, resolve and return the command without executing it.
 
 4. **Return the command, the cost, and the failure signal.** The caller runs it. This recipe neither executes it nor judges its output.
 
-5. **Read the result against the failure signal.** Whatever ran the command reads the status and counts lines before the exit code: `FAILURES!` with assertions greater than zero is a red that proves something; `ERRORS!`, zero assertions, or `No tests executed!` is a run that never reached the behaviour, or not cleanly, and must not be reported as either red or green.
+5. **Read the result against the failure signal.** Whatever ran the command reads the status and counts lines before the exit code: `FAILURES!` is a red that proves something; `ERRORS!` or `No tests executed!` is a run that never reached the behaviour, or not cleanly, whatever its assertion count, and must not be reported as either red or green.
 
 ## Data flow
 
@@ -236,7 +237,7 @@ reads project state:
 applies opinion:
        argv, never a shell string · --testsuite scopes a tier, --filter does not ·
        an anchored filter, because an unanchored one over-selects · a filter that
-       matches nothing exits 0 · zero assertions means the harness never ran ·
+       matches nothing exits 0 · ERRORS! means the harness never reached the behaviour ·
        tier cost decides every-attempt versus end-of-task
 
 references origin (never duplicated):
@@ -263,7 +264,7 @@ After the recipe runs, verify:
 3. A command scoping a tier used `--testsuite` with one of core's declared suite names, never `--filter`.
 4. A command selecting one case used an anchored filter, and the run's test count was read rather than its exit code alone.
 5. The cost label travelled with the command, and no caller running on every build attempt received a Functional or FunctionalJavascript command.
-6. Any result reported as red carried a non-zero assertion count. A run reporting `Assertions: 0`, or `No tests executed!`, was reported as having said nothing rather than as a pass or a failure.
+6. Any result reported as red carried `FAILURES!`. A run reporting `ERRORS!`, or `No tests executed!`, was reported as having said nothing rather than as a pass or a failure, whatever its assertion count.
 
 This recipe ships no executable verifier of its own — it produces a command and the means to read the result, and the phase that runs it owns the gate.
 

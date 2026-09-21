@@ -6,7 +6,7 @@ description: Use when anything needs to run a PHP CLI project's tests — the fa
 # Metadata — read only after a match.
 label: Test execution (PHP CLI)
 recipe_schema_version: 1.0.0
-version: 0.2.3
+version: 0.2.4
 requires_guides:
   - development/tdd-spec-driven
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
@@ -148,7 +148,8 @@ failure_signal:
     that proves a behaviour is absent.
   harness: >-
     Exit 2. It covers two different things and the counts line separates them: with
-    `ERRORS!` and a counts line, a test threw before it asserted; with a bare message
+    `ERRORS!` and a counts line, a test threw, whatever the assertion count, since a
+    setup method that asserts makes it non-zero on every erroring run; with a bare message
     and no counts line ("Test file ... not found", "Unknown option"), the runner never
     started. A run holding one erroring test and one failed assertion prints `ERRORS!`
     and not the assertion marker, on PHPUnit 11.5.56, so a mixed run reads as a setup gap and
@@ -173,7 +174,7 @@ If invoked in dry-run mode, resolve and return the command without executing it.
 
 4. **Return the command, the cost, and the failure signal.** The caller runs it. This recipe neither executes it nor judges its output.
 
-5. **Read the result against the failure signal.** Whatever ran the command reads the status and counts lines before the exit code: `FAILURES!` with a non-zero assertion count is a red that proves something; `ERRORS!`, `Assertions: 0`, or `No tests executed!` is a run that never reached the behaviour, or not cleanly, and must not be reported as either red or green.
+5. **Read the result against the failure signal.** Whatever ran the command reads the status and counts lines before the exit code: `FAILURES!` is a red that proves something; `ERRORS!` or `No tests executed!` is a run that never reached the behaviour, or not cleanly, whatever its assertion count, and must not be reported as either red or green.
 
 ## Data flow
 
@@ -211,7 +212,7 @@ After the recipe runs, verify:
 2. The row requested was the row returned. A row answered `absent:` returned that statement, not a wider command that happens to include the wanted tests.
 3. A command selecting one case used an anchored filter, and the run's test count was read rather than its exit code alone.
 4. The cost label travelled with the command, and no caller running on every build attempt received the CLI end-to-end tier.
-5. Any result reported as red carried a non-zero assertion count, and an exit 2 was classified by whether a counts line was present at all.
+5. Any result reported as red carried `FAILURES!`; an `ERRORS!` run was reported as having said nothing whatever its assertion count, and an exit 2 was classified by whether a counts line was present at all.
 6. A run reporting `No tests executed!` was reported as having said nothing rather than as a pass.
 
 This recipe ships no executable verifier of its own — it produces a command and the means to read the result, and the phase that runs it owns the gate.

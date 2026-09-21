@@ -6,7 +6,7 @@ description: Use when a context is about to write the tests for one unit of work
 # Metadata — read only after a match.
 label: Test authoring (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.2.2
+version: 0.2.3
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -93,6 +93,20 @@ does, so a test that extends a module-local base class fatals at autoload before
 exit 255 and `Fatal error` with `not found`, a harness marker and not an assertion, so it is accepted only for the order that creates the module and refused for every other. The module-local base class waits for the
 order that creates the module, or the first tests extend `KernelTestBase` or `BrowserTestBase`
 directly. Observed on core 11.4.5, eleven kernel tests of a new module, every one refused.
+
+**A test for a class that does not exist yet opens with one assertion that names it.** The
+commonest red in test-first work is a class, or a service, inside a module that exists, and the
+natural first run errors in autoload: `Error: Class "..." not found`, `ERRORS!`, exit 2, which
+the freeze reads as a setup gap and not as a red, because a red is read by the assertion marker
+and an autoload error carries none. So the first line of the test asserts the thing exists,
+`assertTrue(class_exists(OccurrenceExpander::class), 'OccurrenceExpander does not exist yet')`
+for a class, `assertTrue($this->container->has('module.occurrence_expander'))` for a service in a
+Kernel test, and
+the body follows. The first run then fails that assertion, `FAILURES!` and exit 1, and stops
+there; once the class exists the assertion passes and the body runs. Observed on PHPUnit
+11.5.56: the unguarded form printed `ERRORS! Tests: 1, Assertions: 2, Errors: 1`, the guarded
+form `FAILURES! Tests: 1, Assertions: 3, Failures: 1`, the extra assertions being the test's
+own `setUp()`.
 
 ## Preconditions
 
