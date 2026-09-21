@@ -21,6 +21,7 @@ locally and in CI before `mkdocs build`.
 
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -452,6 +453,7 @@ TEST_COMMAND_KEYS = {"id", "argv", "absent", "nearest", "cost", "trap", "id_form
 # because a progress line and a counts line change whenever a test is added. It is
 # optional and lives on a row with `argv:`; it must compile, or the consumer would
 # fall back to whole-output subtraction while believing it had a selector.
+PERL_CLASS_IN_BRACKET = re.compile(r"\[[^\]]*\\[wds]")
 COST_VALUES = {"every-attempt", "end-of-task"}
 # A command is argv, never a shell string: the caller executes the token list
 # directly, so a token that only means something to a shell would mean something
@@ -538,10 +540,21 @@ def validate_test_commands(body: str) -> list[str]:
             if not isinstance(fl, str) or not fl.strip():
                 errors.append(f"test command {rid or i} `failure_line:` must be a non-empty regular expression")
             else:
-                try:
-                    re.compile(fl)
-                except re.error as exc:
-                    errors.append(f"test command {rid or i} `failure_line:` does not compile: {exc}")
+                # The consumer applies the selector with `grep -E`, so it is checked in
+                # that dialect: POSIX ERE has no `\w`, `\d` or `\s` inside a bracket
+                # expression, and Python's `re` would accept a spelling GNU grep reads
+                # as two literal characters.
+                if PERL_CLASS_IN_BRACKET.search(fl):
+                    errors.append(
+                        f"test command {rid or i} `failure_line:` uses a backslash class inside a "
+                        "bracket expression; POSIX ERE reads it as literal characters, spell the set out"
+                    )
+                probe = subprocess.run(["grep", "-E", "-e", fl], input=b"", capture_output=True)
+                if probe.returncode == 2:
+                    errors.append(
+                        f"test command {rid or i} `failure_line:` does not compile under grep -E: "
+                        f"{probe.stderr.decode().strip()}"
+                    )
         if "nearest" in row:
             errors.extend(argv_errors(row["nearest"], f"test command {rid or i} `nearest`"))
 

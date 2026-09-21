@@ -6,7 +6,7 @@ description: Use when a Drupal project enters the implementation phase holding a
 # Metadata — read only after a match.
 label: Coding standards and test discipline (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.8.0
+version: 0.8.1
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -182,7 +182,7 @@ What the plugin does with it: an order the design marks `proof: gate` is frozen 
 
 ## Unit declaration
 
-A Drupal module or theme exists when its `<name>.info.yml` exists, and the test harness reads nothing else to decide that: a kernel test enables its `$modules` in `setUp()` through an extension scan for info files, and a module the scan does not find stops the run there with `Unavailable module:` and the name, before any assertion runs. The run prints `ERRORS!` with an assertion count of zero, the `harness:` marker of `drupal/test-execution.md`, so by that recipe it is a setup gap and not a red. For a new module it is also the only red that can exist before the module does: nothing in a build writes the info file before the tests are frozen, and a test author may not scaffold one to watch its assertions fail, because that is a production write.
+A Drupal module or theme exists when its `<name>.info.yml` exists, and the test harness reads nothing else to decide that: a kernel test enables its `$modules` in `setUp()` through an extension scan for info files, and a module the scan does not find stops the run there with `Unavailable module:` and the name, before any assertion runs. The run prints `ERRORS!` with an assertion count of zero, the `harness:` marker of `drupal/test-execution.md`, so by that recipe it is a setup gap and not a red. For a new module it is one of the two reds that can exist before the module does, and the other is a PHP fatal: with no info file, nothing registers the module's `Drupal\Tests\<module>\` namespace, so a test that extends a base class in that namespace stops at autoload with `Fatal error`, `not found` and the class name, exit 255 and no counts line, also a `harness:` marker of `drupal/test-execution.md`. Nothing in a build writes the info file before the tests are frozen, and a test author may not scaffold one to watch its assertions fail, because that is a production write.
 
 ```yaml
 unit_declaration:
@@ -260,7 +260,7 @@ These are the standards-and-tests oracle files. A Drupal project that also set u
 
 | Source | Used for |
 |---|---|
-| PHPUnit / DDEV (`ddev phpunit`) | The test runner the Unit / Kernel / Functional tiers execute against |
+| PHPUnit / DDEV (`ddev exec vendor/bin/phpunit -c phpunit.xml`) | The test runner the Unit / Kernel / Functional tiers execute against |
 
 ### Plugin-side generic mechanism (ai-dev-assistant)
 

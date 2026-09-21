@@ -6,7 +6,7 @@ description: Use when a Drupal project on DDEV gives a task's git worktree a run
 # Metadata, read only after a match.
 label: Worktree environment (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.3.0
+version: 0.3.1
 recipe_class: process
 framework: drupal
 drupal_compatibility: "^10.3 || ^11"
@@ -84,6 +84,10 @@ from a directory DDEV no longer knows, cannot land on another project.
   task's branch, the way it commits what a setup recipe's install writes. Untracked files there
   fail the clean-tree check every stage runs, and `git worktree remove` refuses a tree that holds
   them.
+  One known way a tree turns dirty on its own: DDEV 1.25.4 rewrites `.ddev/providers/platform.yaml`,
+  a file it marks `#ddev-generated`, on `ddev start`, so a project that tracks that file fails the
+  clean-tree check after the first start until the refreshed file is committed. Observed on a live
+  run; commit the file once and it stays clean.
 - The worktree is a fresh checkout. On a project that ignores `vendor/` and the Composer-installed
   directories, as the Composer template for a Drupal site does once it has a `.gitignore`, bring-up installs them
   and needs the network; on a project that tracks them, that step changes nothing.

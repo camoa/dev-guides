@@ -6,7 +6,7 @@ description: Use when anything needs to run a Go test — the failing-test step 
 # Metadata — read only after a match.
 label: Test execution (Go)
 recipe_schema_version: 1.0.0
-version: 0.2.2
+version: 0.2.3
 requires_guides:
   - development/tdd-spec-driven
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
@@ -83,7 +83,7 @@ test_commands:
   - id: suite
     argv: ["go", "test", "-race", "./..."]
     cost: end-of-task
-    failure_line: '^\s*--- FAIL: '
+    failure_line: '^[[:space:]]*--- FAIL: '
     trap: >-
       `-race` costs roughly an order of magnitude in time and memory. Run with
       `-shuffle=on` at least once before handing back, and add `-count=1` where the
@@ -130,7 +130,7 @@ test_commands:
       file-list form.
 ```
 
-**The suite row's `failure_line:` selects one line per failing test.** `'^\s*--- FAIL: '` matches `--- FAIL: TestName (0.00s)` and, indented under it, `    --- FAIL: TestName/subtest (0.00s)`; observed on go1.27.1, a failing subtest prints both lines, so the leading whitespace is part of the selector. The bare `FAIL` and `FAIL\t<package>\t0.003s` lines are not selected. The duration in parentheses changes every run; the ask's consumer removes digit runs before comparing, so it does not register.
+**The suite row's `failure_line:` selects one line per failing test.** `'^[[:space:]]*--- FAIL: '` matches `--- FAIL: TestName (0.00s)` and, indented under it, `    --- FAIL: TestName/subtest (0.00s)`; observed on go1.27.1, a failing subtest prints both lines, so the leading whitespace is part of the selector. The bracket expression is POSIX ERE: the consumer applies the selector with `grep -E`, and GNU grep reads `\s` outside a bracket as an extension, which is why the earlier `^\s*` also matched, but the portable form is what the recipe carries. The bare `FAIL` and `FAIL\t<package>\t0.003s` lines are not selected. The duration in parentheses changes every run; the ask's consumer removes digit runs before comparing, so it does not register.
 
 **Why gremlins, and why no `{paths}`.** The toolchain ships no mutation tester, and of the tools
 that exist, `zimmski/go-mutesting` last released in 2021 while gremlins released 0.6.0 in December
