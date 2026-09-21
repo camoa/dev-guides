@@ -6,7 +6,7 @@ description: Use when a Drupal project enters the design phase and must turn res
 # Metadata — read only after a match.
 label: Design (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.2.0
+version: 0.3.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/services
@@ -57,6 +57,18 @@ The plugin owns the generic mechanism — when the design phase runs, the shape 
 
 **Name what must exist beside the code, or whoever builds it invents the rest.** A Drupal service is not finished by its class. It needs its entry in a `*.services.yml`, and depending on the unit a route, a permission, a config schema, a library declaration, an install hook. These are files, so they belong to the unit that owns them and the unit is not done until they exist.
 
+**Drupal's file couplings, so an owned-files list is read against something and not against memory.** A designer writes a unit's owned list from this and a critic reads it against this.
+
+- A class registered as a service: a change to its constructor arguments rewrites the `arguments:` list in the `*.services.yml` that registers it; under `autowire: true` a typed argument whose interface core aliases rewrites nothing, and the unit owns the file either way, because that is where a critic reads the dependency.
+- A controller or form reached by a route: a change to its path, its parameters or its access rewrites `*.routing.yml`.
+- A plugin: a change to its definition rewrites the attribute or annotation in the class itself, and a change to its configuration shape rewrites `config/schema/*.schema.yml`.
+- A configuration entity exported to the sync folder: a change to its shape rewrites the export and the schema that describes it.
+- A permission, a menu link, a library: `*.permissions.yml`, `*.links.*.yml`, `*.libraries.yml`.
+- A hook implementation: the `.module` file, or the hook class under `src/Hook/`.
+- A service or a module the unit starts to depend on: `*.info.yml` declares the module that provides it, so a unit that injects `file.repository` or reads media storage owns the info file and adds `file` or `media` to its `dependencies:`. On one live run a unit did both, no unit owned the info file, and the module installed broken on a fresh site; the reviewer saw it and could cite no rule, so the finding had no route.
+
+A unit that changes a class must own every file in this list that names the class; a critic reads the owned list against it, and a file the operation must rewrite that no unit owns is a sizing defect found at design, not on the first build. On one live run the missing file was a `*.services.yml`: the design closed four times and a critique of thirty-two findings ran, the implementer found it on the first build, and the only alternatives inside the owned list were the two forms the implement recipe forbids.
+
 ## Preconditions
 
 - A Drupal 10.3+ or 11.x project, Composer-managed, whose target core version is resolvable (so pattern availability can be judged against it).
@@ -90,7 +102,7 @@ core_version: string          # optional; the target Drupal core constraint;
 
 If invoked in dry-run mode, perform all reads but emit an architecture-decision preview instead of recording anything. Dry-run is required.
 
-1. **Frame the units.** From `requirements`, the acceptance criteria, and `prior_art` — whose candidates carry no verdict, so the reuse call is made here — list the units the feature needs: the services that hold its logic, the Drush commands that drive them, the forms / controllers that surface them, and the entities or config that store its data. Services are listed first because everything else depends on them.
+1. **Frame the units.** From `requirements`, the acceptance criteria, and `prior_art` — whose candidates carry no verdict, so the reuse call is made here — list the units the feature needs: the services that hold its logic, the Drush commands that drive them, the forms / controllers that surface them, and the entities or config that store its data. Services are listed first because everything else depends on them. Every candidate gets one of four verdicts, recorded with its reason: reuse, extend, supersede, or decline. Decline is a verdict, not a silence: a candidate weighed and set aside with no recorded verdict is indistinguishable from one nobody saw. For each unit that stores its data as configuration, the candidates include every exported configuration entity of the same kind as the unit, whether or not research named it: an image style unit lists the exported image styles, a media display unit lists the exported view displays of that media type, a field unit lists the exported field storages of that field type. Research searches for the feature and the collision happens per unit, so an exported entity of the unit's kind is a candidate research could not have listed, and a candidate nobody disposed is how a second convention gets built beside the first: on one live run the export held idle image styles and a focal-point ladder that no candidate list carried, and the first pass added a new image convention beside them without anyone choosing.
 
 2. **Apply Library-First.** For each unit of business logic, define a service with an interface, a `*.services.yml` registration, and constructor-injected dependencies. Confirm no service reaches for a `\Drupal::` static. Demote every form and controller to a thin orchestrator over those services. The mechanics of DI and service registration are referenced to `drupal/services`, not restated here.
 
@@ -127,9 +139,9 @@ If invoked in dry-run mode, perform all reads but emit an architecture-decision 
 
 5. **Anchor each choice to a canonical example.** For every selected pattern, confirm the core file the implementer should study. Check the catalogue paths above first; for anything not in the catalogue, locate the example in core — Grep core for `class <PatternName>`, `extends <BaseClass>`, or `implements <Interface>`, read no more than three candidate files, and record the path plus the key methods and the dependencies it injects. The output of this step is a path, not a paraphrase.
 
-6. **Name what each unit needs beside its code.** Per unit: its `*.services.yml` entry, and where the unit calls for them a `*.routing.yml` route, a permission in `*.permissions.yml`, a config schema under `config/schema/`, a library declaration in `*.libraries.yml`. A unit built with configuration rather than code names every configuration file its operation rewrites instead, found as the Opinion says. These are the files the unit owns and no other unit may write, and the unit is not finished until they exist.
+6. **Name what each unit needs beside its code.** Per unit: its `*.services.yml` entry, and where the unit calls for them a `*.routing.yml` route, a permission in `*.permissions.yml`, a config schema under `config/schema/`, a library declaration in `*.libraries.yml`, read against the couplings list in the Opinion. A unit built with configuration rather than code names every configuration file its operation rewrites instead, found as the Opinion says. These are the files the unit owns and no other unit may write, and the unit is not finished until they exist.
 
-7. **Return the units and their order.** Per unit: what it is, the interface it offers to the units that depend on it (its PHP interface plus its registered service id), the pattern chosen with its reasoning and its core example path, the files it owns, and — for a unit built with configuration — what its gate must show, since there is no code to read and no PHPUnit test to write. The order is the dependency between them: services → Drush commands → forms and controllers → integration. Hand these to the caller, which records them. The recipe method writes no file of its own, and produces no architecture document — the units and their order are the architecture.
+7. **Return the units and their order.** Per unit: what it is, the interface it offers to the units that depend on it (its PHP interface plus its registered service id), the pattern chosen with its reasoning and its core example path, the files it owns, and — for a unit built with configuration — what its gate must show, since there is no code to read and no PHPUnit test to write. A unit's test is one of the five tiers in `drupal/test-authoring.md`, a file written before the code, red then green. The visual-regression and end-to-end rows of `drupal/checks.md` run at review, after every order has closed, and are not a unit's test: a criterion that only a screenshot or a browser walk can prove is verified by a person at review's surface row and is declared so in the scope contract, and a unit that names one of its own surfaces as its test has named a check the tests step cannot take. The order is the dependency between them: services → Drush commands → forms and controllers → integration. Hand these to the caller, which records them. The recipe method writes no file of its own, and produces no architecture document — the units and their order are the architecture.
 
 ## Data flow
 
@@ -181,7 +193,7 @@ After the recipe runs, verify:
 2. Every feature has a Drush command entry point that calls the same service its UI calls; no feature is UI-only.
 3. Each component names a chosen pattern with explicit decision reasoning **and** a canonical Drupal-core file path to study.
 4. Forms and controllers in the design hold orchestration only — no business logic has been left in a `buildForm()` or a controller method.
-5. Every unit names the files it owns, including what must exist beside its code — the `*.services.yml` entry and, where the unit calls for them, its route, permission, config schema or library declaration.
+5. Every unit names the files it owns, including what must exist beside its code — the `*.services.yml` entry and, where the unit calls for them, its route, permission, config schema, library declaration or `*.info.yml` dependency — read against the couplings list; and every candidate, prior art or an exported entity of the unit's kind, carries one of the four verdicts with its reason.
 6. A feature Drupal answers with configuration is a unit in its own right, sized around the operation so it owns every file the operation rewrites, with what its gate must show stated and no PHPUnit test asked of it, rather than a code unit written for something nobody should write code for.
 7. The design left the project code unchanged — no service registered, no module file written by the method itself, nothing installed; the units and their order were returned for the caller to record.
 
@@ -203,6 +215,8 @@ This recipe ships no executable verifier of its own — the checks above are the
 | Recipe | What it holds |
 |---|---|
 | `drupal/standards-and-tests.md` | The `## Configuration gate` that proves a configuration unit, and the rule that exported configuration is produced through Drupal, never by hand |
+| `drupal/test-authoring.md` | The five tiers a unit's test is written at, before the code |
+| `drupal/checks.md` | The visual-regression and end-to-end rows that run at review, which are not a unit's test |
 
 ### External origins (referenced, not authored here)
 

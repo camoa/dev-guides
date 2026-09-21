@@ -6,7 +6,7 @@ description: Use when a context is about to write the tests for one unit of work
 # Metadata — read only after a match.
 label: Test authoring (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.2.1
+version: 0.2.2
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -86,6 +86,13 @@ to review without specifying anything new. The full set of excess cases belongs 
 **Mechanics are referenced, not re-authored.** How a base class is extended, how a Kernel test
 installs its schema, and the house conventions belong to `drupal/testing`, `drupal/tdd` and
 `drupal/best-practices/camoa`.
+
+**A test for a module that does not exist yet extends core's base class, not one in the module's
+own test namespace.** Nothing registers `Drupal\Tests\<module>\` before the module's info file
+does, so a test that extends a module-local base class fatals at autoload before any test runs,
+exit 255 and `Fatal error` with `not found`, a harness marker and not an assertion, so it is accepted only for the order that creates the module and refused for every other. The module-local base class waits for the
+order that creates the module, or the first tests extend `KernelTestBase` or `BrowserTestBase`
+directly. Observed on core 11.4.5, eleven kernel tests of a new module, every one refused.
 
 ## Preconditions
 

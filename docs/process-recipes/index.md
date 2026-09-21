@@ -172,8 +172,13 @@ and the counts line change whenever a test is added, so the suite reads unmet on
 The key is a regular expression in the same YAML shape as `silent_pass:`. It matches the lines
 that name one failing test, one line per failure, and the recipe's prose says what else it can
 catch. The four recipes with a suite command carry one, each observed on its runner:
-`'^[0-9]+\) [\w\\]+::\w+'` for PHPUnit, `'^(FAILED|ERROR) '` for pytest, `'^\s*--- FAIL: '` for Go.
-`scripts/validate_recipes.py` refuses a selector that does not compile or sits on an `absent:` row. A consumer subtracts only the matching lines, on
+`'^[0-9]+\) [A-Za-z0-9_\\]+::[A-Za-z0-9_]+'` for PHPUnit, `'^(FAILED|ERROR) '` for pytest,
+`'^[[:space:]]*--- FAIL: '` for Go. A selector is POSIX ERE, because a consumer applies it with
+`grep -E`, GNU grep on Linux, where `\w`, `\d` and `\s` have no meaning inside a bracket expression:
+the first PHPUnit spelling used `[\w\\]`, compiled, and matched nothing on the machine that ran the
+check, while a shell whose `grep` resolves to ugrep accepted it. Check a selector through `/bin/grep -E`.
+`scripts/validate_recipes.py` refuses a selector that does not compile under `grep -E`, one that puts a
+backslash class inside a bracket expression, or one that sits on an `absent:` row. A consumer subtracts only the matching lines, on
 both sides, and records the selector it used; a recipe without the key keeps whole-output
 subtraction, with the limit above.
 
@@ -339,9 +344,10 @@ cut. A framework that answers nothing with configuration declares no section, an
 for it.
 
 **`## Unit declaration` names the file whose presence makes a unit exist, as data.** As of
-2026-09-14 only `drupal/standards-and-tests.md` 0.8.0 carries one, and no consumer reads it yet;
+2026-09-14 only `drupal/standards-and-tests.md` 0.8.1 carries one, and no consumer reads it yet;
 this is the shape a consumer meets. A new module's first red is a setup gap by the `harness:` rule above: its
-tests error where the harness enables the module, before any assertion runs, and nothing in a build
+tests error where the harness enables the module, or fatal at autoload on a base class in the module's
+own test namespace, before any assertion runs, and nothing in a build
 may write the module first to get a better red. The block is one `unit_declaration:` mapping in the
 same YAML shape as `preconditions:`, holding `globs:`, the patterns of the file that declares a unit
 in this framework. An order whose owned files match one is a new unit, and a consumer may accept a

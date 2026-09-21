@@ -6,7 +6,7 @@ description: Use when anything needs to run a Drupal test — the failing-test s
 # Metadata — read only after a match.
 label: Test execution (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.2.3
+version: 0.3.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/testing
@@ -47,7 +47,7 @@ This recipe runs nothing and judges nothing. It is read by whatever is about to 
 
 ## Preconditions
 
-- A Drupal 10.3+ or 11.x project, Composer-managed, with the runner reachable through the invocation the project documents — a `ddev phpunit` custom command, or `ddev exec vendor/bin/phpunit` — and the environment the tier needs: `SIMPLETEST_DB` for Kernel and above, plus `SIMPLETEST_BASE_URL` for Functional and FunctionalJavascript. See `drupal/testing` for the runner configuration.
+- A Drupal 10.3+ or 11.x project, Composer-managed, with `phpunit.xml` at the project root, the location drupal.org's PHPUnit documentation gives, so `ddev exec vendor/bin/phpunit -c phpunit.xml` reaches the runner, and the environment the tier needs: `SIMPLETEST_DB` for Kernel and above, plus `SIMPLETEST_BASE_URL` for Functional and FunctionalJavascript. See `drupal/testing` for the runner configuration.
 - The DDEV environment is running. Every command below executes inside it.
 
 The environment condition is declared in machine-readable form below. What it probes is exactly what it claims: that the DDEV environment is up. It does not claim the database variables are set, which is why the first bullet stays prose.
@@ -90,25 +90,25 @@ paths: [string]               # optional; the test files a change is scoped to
 
 Six rows. Each is a command or a named statement that Drupal has none. `{file}` is one test file path, `{test_id}` one anchored filter, `{tier}` one testsuite name, and `{paths}` a list that expands to one token per element.
 
-`ddev phpunit` is the project-defined custom command the preconditions name. Where a project has not defined one, the same argv reads `ddev exec vendor/bin/phpunit -c web/core` and everything else holds.
+**Every row calls the binary, with the project's configuration named.** `ddev exec vendor/bin/phpunit -c phpunit.xml` runs from the project root inside the container, and `phpunit.xml` at that root is where drupal.org's PHPUnit documentation puts the file; nothing scaffolds it, so it is the project's own copy, `core/phpunit.xml.dist` copied to the root with its paths and `SIMPLETEST_DB` filled in, and in practice with its suites narrowed to the project's own modules. A project that keeps the file anywhere else moves or copies it to the root; the rows do not follow it. The rows used to call `ddev phpunit`, the ddev-drupal-contrib add-on's wrapper, and a wrapper decides what the caller's arguments mean: on a project with no root `phpunit.xml`, copies of the add-on older than 2025-08-28 put their own target path before the caller's, so a `{file}` landed second and was ignored, a `--filter` applied to the whole custom directory, and every per-attempt run was the whole suite, observed as a five-minute timeout on a two-second file. Calling the binary gives the row its arguments back. Core's own configuration lost as the default: `-c web/core` reads `core/phpunit.xml.dist`, whose suites scan contrib and whose `SIMPLETEST_DB` ships empty, and its `../modules/*/**` suite directories sweep every contrib module's tests into the listing, so one contrib module with a broken or duplicated test class fatals `--list-suites` with exit 255; observed on two projects, once on a missing base class and once on a duplicate class declaration from a vendored copy of core. The smoke row keeps `web/modules/custom` before `--list-suites` for the same reason: without a path the listing loads every suite the configuration declares, and with one it lists only the classes under that path, observed on PHPUnit 11.5.56. A project whose docroot is not `web/`, or whose custom modules live elsewhere, sets that path in its own copy.
 
 ```yaml
 test_commands:
   - id: suite
-    argv: ["ddev", "phpunit"]
+    argv: ["ddev", "exec", "vendor/bin/phpunit", "-c", "phpunit.xml"]
     cost: end-of-task
-    failure_line: '^[0-9]+\) [\w\\]+::\w+'
+    failure_line: '^[0-9]+\) [A-Za-z0-9_\\]+::[A-Za-z0-9_]+'
     trap: >-
       Runs every tier, Functional and FunctionalJavascript included, each booting a
       real site. This is the end-of-task gate, not something to run inside a loop.
   - id: file
-    argv: ["ddev", "phpunit", "{file}"]
+    argv: ["ddev", "exec", "vendor/bin/phpunit", "-c", "phpunit.xml", "{file}"]
     cost: every-attempt
     trap: >-
       Cost follows the tier the file belongs to, not the fact that it is one file.
       One FunctionalJavascript file is not an every-attempt command.
   - id: test
-    argv: ["ddev", "phpunit", "{file}", "--filter", "{test_id}"]
+    argv: ["ddev", "exec", "vendor/bin/phpunit", "-c", "phpunit.xml", "{file}", "--filter", "{test_id}"]
     id_form: >-
       An anchored regex against the test identifier, `/::testName$/`. Unanchored
       `testName` also selects `testNameSomethingElse`.
@@ -120,14 +120,17 @@ test_commands:
     absent: >-
       Drupal ships no flag that maps changed paths to the tests covering them. The
       caller decides which test files cover the change and passes them.
-    nearest: ["ddev", "phpunit", "{paths}"]
+    nearest: ["ddev", "exec", "vendor/bin/phpunit", "-c", "phpunit.xml", "{paths}"]
   - id: smoke
-    argv: ["ddev", "phpunit", "--list-suites"]
+    argv: ["ddev", "exec", "vendor/bin/phpunit", "-c", "phpunit.xml", "web/modules/custom", "--list-suites"]
     cost: every-attempt
     trap: >-
-      Proves the configuration parses and the suites resolve inside the running
-      environment. It does not prove `SIMPLETEST_DB` is set, which only a Kernel
-      test reaching a database proves.
+      Proves the configuration parses and the project's own test classes resolve
+      inside the running environment: with a path before it, the listing is the
+      classes under that path with their test counts. `Available test suite:` with
+      nothing under it exits 0 too, so an empty list is a finding, not a pass. It
+      does not prove `SIMPLETEST_DB` is set, which only a Kernel test reaching a
+      database proves.
   - id: mutation
     argv: ["ddev", "exec", "vendor/bin/infection", "run", "--no-interaction", "{paths}"]
     cost: end-of-task
@@ -143,7 +146,7 @@ test_commands:
       source scope to code Unit tests cover, or the run does not finish.
 ```
 
-**The suite row's `failure_line:` selects one line per failing test.** `'^[0-9]+\) [\w\\]+::\w+'` matches PHPUnit's numbered headers whose subject is a test, `1) Class::method`, one per failing, erroring or risky test; observed on PHPUnit 11.5.56 with two failures and one error. The numbering restarts in each section; the ask's consumer removes digit runs before comparing, so that does not register. The `Class::method` part is what keeps the issue lists out: with `displayDetailsOnTestsThatTriggerDeprecations` and its siblings on, as Drupal core's `phpunit.xml.dist` sets them, PHPUnit also prints `N) <message>` headers for deprecations, warnings and PHP notices, one per distinct message rather than per test, and a bare `'^[0-9]+\) '` would count a new deprecation as a new failing test. A message that itself begins with a `Class::method` token still matches; that is the residual. The progress line, the `file:line` under each header and the `Tests: N, Assertions: N, Failures: N.` line are not selected: the first and last change whenever a test is added.
+**The suite row's `failure_line:` selects one line per failing test.** `'^[0-9]+\) [A-Za-z0-9_\\]+::[A-Za-z0-9_]+'` matches PHPUnit's numbered headers whose subject is a test, `1) Class::method`, one per failing, erroring or risky test; observed on PHPUnit 11.5.56 with two failures and one error. The selector is POSIX ERE, because the consumer applies it with `grep -E`, which on Linux is GNU grep: `\w`, `\d` and `\s` mean nothing inside a bracket expression there, so `[\w\\]` was the two literal characters and matched no header on the machine that ran the check, while a shell whose `grep` resolves to ugrep accepted it and hid the difference. Check a selector through `/bin/grep -E`, not through whatever `grep` the shell resolves to. The numbering restarts in each section; the ask's consumer removes digit runs before comparing, so that does not register. The `Class::method` part is what keeps the issue lists out: with `displayDetailsOnTestsThatTriggerDeprecations` and its siblings on, as Drupal core's `phpunit.xml.dist` sets them, PHPUnit also prints `N) <message>` headers for deprecations, warnings and PHP notices, one per distinct message rather than per test, and a bare `'^[0-9]+\) '` would count a new deprecation as a new failing test. A message that itself begins with a `Class::method` token still matches; that is the residual. The progress line, the `file:line` under each header and the `Tests: N, Assertions: N, Failures: N.` line are not selected: the first and last change whenever a test is added.
 
 **The mutation row takes its files as positional arguments.** `--filter` is deprecated since
 Infection 0.34 and refused when paths are also given, so the row passes the changed files as
@@ -187,7 +190,12 @@ failure_signal:
     test and one failed assertion prints `ERRORS!` and not the assertion marker, on PHPUnit
     11.5.56, so a mixed run reads as a setup gap and only a run without errors can
     read as a red. Exit 2 also covers a missing test file and an unknown option,
-    which print no counts line at all. Exit 255 is a PHP fatal before any test ran.
+    which print no counts line at all. Exit 255 with `Fatal error` and no counts
+    line is the harness stopping before any test ran, printed with or without the word PHP in
+    front, which the error-log setting decides; a class the autoloader cannot
+    find prints `not found` and the class name, which is what a new module's tests
+    print when they extend a base class in the module's own test namespace before
+    an info file registers it.
   silent_pass: >-
     Exit 0 with `No tests executed!` — a filter or a path matched nothing. Success
     and "nothing ran" are the same exit code, so the counts line is the only thing
@@ -220,8 +228,8 @@ If invoked in dry-run mode, resolve and return the command without executing it.
 input: code_path, scope, tier (optional), file / test_id / paths (optional)
 
 reads project state:
-       the project's documented invocation (a ddev phpunit custom command, or
-                                            ddev exec vendor/bin/phpunit -c web/core)
+       the project's phpunit.xml at its root, reached as
+                                            ddev exec vendor/bin/phpunit -c phpunit.xml
        core's phpunit.xml.dist — the six testsuite names
        the project's own phpunit.xml, where it declares SIMPLETEST_DB itself
 
@@ -273,7 +281,7 @@ This recipe ships no executable verifier of its own — it produces a command an
 |---|---|
 | Drupal core `core/phpunit.xml.dist` | The six declared testsuite names and the environment variables the tiers read |
 | PHPUnit 11 | The exit codes and the counts line the failure signal reads |
-| DDEV (`ddev phpunit`, `ddev exec`) | The invocation path every command runs through |
+| DDEV (`ddev exec`) | The invocation path every command runs through; the ddev-drupal-contrib `ddev phpunit` wrapper is what the rows no longer call, and why is in `## Test commands` |
 
 ### Plugin-side generic mechanism (ai-dev-assistant)
 

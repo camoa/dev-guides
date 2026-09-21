@@ -6,7 +6,7 @@ description: Use when anything needs to run a PHP CLI project's tests — the fa
 # Metadata — read only after a match.
 label: Test execution (PHP CLI)
 recipe_schema_version: 1.0.0
-version: 0.2.2
+version: 0.2.3
 requires_guides:
   - development/tdd-spec-driven
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
@@ -76,7 +76,7 @@ test_commands:
   - id: suite
     argv: ["php", "vendor/bin/phpunit"]
     cost: end-of-task
-    failure_line: '^[0-9]+\) [\w\\]+::\w+'
+    failure_line: '^[0-9]+\) [A-Za-z0-9_\\]+::[A-Za-z0-9_]+'
     trap: >-
       Runs every suite the configuration declares, the fixture-driven CLI
       end-to-end tier included, which spawns the built binary once per case.
@@ -121,7 +121,7 @@ test_commands:
       finishes and one that does not.
 ```
 
-**The suite row's `failure_line:` selects one line per failing test.** `'^[0-9]+\) [\w\\]+::\w+'` matches PHPUnit's numbered headers whose subject is a test, `1) Class::method`, one per failing, erroring or risky test; observed on PHPUnit 11.5.56 with two failures and one error. The numbering restarts in each section; the ask's consumer removes digit runs before comparing, so that does not register. The `Class::method` part is what keeps the issue lists out: with `displayDetailsOnTestsThatTriggerDeprecations` and its siblings on, as a project may set them, PHPUnit also prints `N) <message>` headers for deprecations, warnings and PHP notices, one per distinct message rather than per test, and a bare `'^[0-9]+\) '` would count a new deprecation as a new failing test. A message that itself begins with a `Class::method` token still matches; that is the residual. The progress line, the `file:line` under each header and the `Tests: N, Assertions: N, Failures: N.` line are not selected: the first and last change whenever a test is added.
+**The suite row's `failure_line:` selects one line per failing test.** `'^[0-9]+\) [A-Za-z0-9_\\]+::[A-Za-z0-9_]+'` matches PHPUnit's numbered headers whose subject is a test, `1) Class::method`, one per failing, erroring or risky test; observed on PHPUnit 11.5.56 with two failures and one error. The selector is POSIX ERE, because the consumer applies it with `grep -E`, which on Linux is GNU grep: `\w`, `\d` and `\s` mean nothing inside a bracket expression there, so `[\w\\]` was the two literal characters and matched no header on the machine that ran the check, while a shell whose `grep` resolves to ugrep accepted it and hid the difference. Check a selector through `/bin/grep -E`, not through whatever `grep` the shell resolves to. The numbering restarts in each section; the ask's consumer removes digit runs before comparing, so that does not register. The `Class::method` part is what keeps the issue lists out: with `displayDetailsOnTestsThatTriggerDeprecations` and its siblings on, as a project may set them, PHPUnit also prints `N) <message>` headers for deprecations, warnings and PHP notices, one per distinct message rather than per test, and a bare `'^[0-9]+\) '` would count a new deprecation as a new failing test. A message that itself begins with a `Class::method` token still matches; that is the residual. The progress line, the `file:line` under each header and the `Tests: N, Assertions: N, Failures: N.` line are not selected: the first and last change whenever a test is added.
 
 **The mutation row takes its files as positional arguments.** `--filter` is deprecated since
 Infection 0.34 and refused when paths are also given, so the row passes the changed files as
@@ -152,8 +152,9 @@ failure_signal:
     and no counts line ("Test file ... not found", "Unknown option"), the runner never
     started. A run holding one erroring test and one failed assertion prints `ERRORS!`
     and not the assertion marker, on PHPUnit 11.5.56, so a mixed run reads as a setup gap and
-    only a run without errors can read as a red. Exit 255 is a PHP fatal before any
-    test ran.
+    only a run without errors can read as a red. Exit 255 with `Fatal error` and no
+    counts line is the harness stopping before any test ran; a class the autoloader
+    cannot find prints `not found` and the class name.
   silent_pass: >-
     Exit 0 with `No tests executed!` — a filter matched nothing. Success and "nothing
     ran" are the same exit code, so the counts line is the only thing that

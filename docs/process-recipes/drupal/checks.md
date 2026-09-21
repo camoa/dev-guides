@@ -6,7 +6,7 @@ description: 'Use when a Drupal implementation reaches the review phase and must
 # Metadata — read only after a match.
 label: Implementation review checks (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.5.0
+version: 0.5.1
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/security
@@ -233,7 +233,11 @@ check_commands:
     absent: >-
       Drupal names no dedicated security-scanning tool. The security-sink reading (Form
       API CSRF, Twig escaping, Entity Query access, the private:// stream, unserialize on
-      user input) is a manual reviewer check, not a tool run over files.
+      user input) is a manual reviewer check, not a tool run over files. A row that runs
+      `composer audit` one day goes through `ddev exec composer audit`, not `ddev composer
+      audit`: the audit exits 1 when it finds an advisory, and on a live run DDEV's own
+      wrapper reported that exit as a failure and dropped the table, while `ddev exec`
+      passed the table through.
   - id: duplication
     argv: ["ddev", "exec", "vendor/bin/phpcpd", "--suffix", ".php", "--suffix", ".module", "--suffix", ".inc", "--suffix", ".install", "--suffix", ".profile", "--suffix", ".theme", "--suffix", ".engine", "{dirs}"]
   - id: design-metrics
