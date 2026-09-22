@@ -6,7 +6,7 @@ description: Use when a Drupal project on DDEV gives a task's git worktree a run
 # Metadata, read only after a match.
 label: Worktree environment (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.3.1
+version: 0.4.0
 recipe_class: process
 framework: drupal
 drupal_compatibility: "^10.3 || ^11"
@@ -115,7 +115,7 @@ One token the consumer holds, and three the recipe produces, each a whole argume
 {codePath}: string         # the main checkout's path; the consumer fills it, in ## Tokens only
 {mainProject}: string      # ## Tokens: the main checkout's DDEV project name
 {mainFiles}: string        # ## Tokens: the main site's public files directory, absolute
-{project}: string          # ## Address, the project: line; kept in the task record for ## Tear down
+{project}: string          # ## Address, the project: line; kept in the task record for the second ## Bring up, ## Tear down and the configuration gate
 ```
 
 DDEV addresses a project by name and never by path, so the main checkout's path on its own cannot
@@ -145,14 +145,17 @@ worktree's own project from there.
    written to a database. The check costs one command and is the whole guard against the nested
    layout the first precondition rules out.
 
-5. **Seed.** The consumer runs the `## Bring up` after `## Address`: a snapshot of the main
-   project, its restore in the worktree, the main files directory imported, and a cache rebuild
-   so no cached page keeps the main hostname.
-
-6. **Record the address.** The consumer keeps the `address:` line from the same `## Address`
+5. **Record the address.** The consumer keeps the `address:` line from the same `## Address`
    output as the task's address, and every other line as a token, so `project:` is
    `{project}`. Review and `baseline` export the address as `PLAYWRIGHT_BASE_URL` for
    that task and do not ask a person for one.
+
+6. **Seed.** The consumer runs the `## Bring up` after `## Address`: a snapshot of the main
+   project, its restore in the worktree, the main files directory imported, a cache rebuild
+   so no cached page keeps the main hostname, and then, after every snapshot the worktree held
+   before is removed, two snapshots of the seeded database under the worktree's own names,
+   `seed-{project}` and `gate-{project}`, for the `## Configuration gate` of
+   `drupal/standards-and-tests.md`.
 
 7. **Tear down.** When the task is pruned, the consumer runs `## Tear down` in the worktree
    first, and only then `git worktree remove`. A tear-down that exits non-zero leaves both the
@@ -186,6 +189,11 @@ bring up, after ## Address (in the worktree):
         ddev snapshot restore --latest    → the worktree database, from that sibling snapshot
         ddev import-files {mainFiles}     → the worktree's sites/default/files, replaced
         ddev drush cr                     → caches rebuilt under the worktree's hostname
+        ddev snapshot --cleanup --yes     → the worktree's own earlier snapshots removed, none is fine
+        ddev snapshot --name seed-{project} --yes
+                                          → <worktree>/.ddev/db_snapshots/seed-{project}-<db>.zst, the seed by name
+        ddev snapshot --name gate-{project} --yes
+                                          → gate-{project}-<db>.zst beside it, the name the configuration gate retakes
 
 tear down (in the worktree, before git worktree remove):
         ddev delete --omit-snapshot --yes {project}
@@ -194,15 +202,22 @@ tear down (in the worktree, before git worktree remove):
 
 ## State-awareness contract
 
-Every `## Bring up` line is safe to run twice. `ddev start` on a running project restarts it.
-`ddev composer install` changes nothing when the lock file is satisfied. `ddev snapshot` takes a
-new snapshot each time, and `ddev snapshot restore --latest` replaces the database with the
-newest one. `ddev import-files` replaces the destination directory, and `ddev drush cr` is a
-cache rebuild. Running bring-up again is how a task refreshes its copy from the main checkout.
+Every `## Bring up` line can run twice. `ddev start` on a running project restarts it.
+`ddev composer install` changes nothing when the lock file is satisfied. `ddev snapshot` with no
+name takes a new snapshot each time, and `ddev snapshot restore --latest` replaces the database
+with the newest one. `ddev import-files` replaces the destination directory, and `ddev drush cr`
+is a cache rebuild. `ddev snapshot --cleanup --yes` with no name removes the worktree's own
+snapshots, for the reason `## Bring up` gives, and is what lets the two named snapshots after it
+run again. Running bring-up
+again is how a task refreshes its copy from the main checkout. The refresh replaces the two
+named snapshots and loses whatever the worktree's database held since, which is the branch's
+content, so a task that has built on the site does not refresh without a person's yes.
 
 Each bring-up leaves one snapshot in the main checkout's `.ddev/db_snapshots/`, named with its
 time. `ddev snapshot --list` there shows them, and removing them is a person's call in the main
-checkout, never this recipe's.
+checkout, never this recipe's. The worktree's own `.ddev/db_snapshots/` holds `seed-{project}` and
+`gate-{project}`; the cleanup line clears it at each bring-up, and `git worktree remove` takes the
+directory with it, because `ddev delete` leaves the `.ddev` folder alone.
 
 The five `## Files` are written once, where absent, and refused where a file exists with other
 content, the rule every setup recipe's files follow. The consumer commits them on the task's
@@ -237,7 +252,8 @@ After bring-up:
    on that address returns `HTTP/2 200`.
 4. `ddev drush status --field=uri` prints the worktree's address, and
    `ddev drush config:get system.site name` prints the same site name the main checkout does,
-   which shows the database came across.
+   which shows the database came across. `ddev snapshot --list` in the worktree lists
+   `seed-{project}` and `gate-{project}` among its rows.
 5. A file added under the worktree's docroot is served at the worktree's address and answers 404
    at the main checkout's.
 6. `git status --short` in the worktree and in the main checkout print nothing.
@@ -259,7 +275,12 @@ and exit 1, and the passing case printed nothing and exit 0. The token scripts w
 checkout's path plain, with a trailing slash, and through a symbolic link, and printed the same
 name and files directory each time; DDEV itself lists a project under the path `ddev start` was
 run from, link included, which is why the scripts compare resolved paths. Bring-up took about 75 seconds, 35 of them the restore. A
-second bring-up left a second timestamped snapshot, and `--latest` picked it.
+second bring-up left a second timestamped snapshot, and `--latest` picked it. The three lines added
+on 2026-09-22, the cleanup and the two named snapshots, are read from DDEV 1.25.4's source
+(`pkg/ddevapp/snapshot.go` and `cmd/ddev/cmd/snapshot.go`) and not yet run. What was read: a
+cleanup with no name lists the project's own snapshot directory and deletes each entry, so an
+empty directory exits 0. A cleanup with a name that does not exist exits 1. A failure inside a
+snapshot prints a warning and exits 0, so step 4's listing is the check that both names exist.
 
 ## Tokens
 
@@ -379,7 +400,8 @@ bash .aida/environment/address.sh
 `address:` is the site's address, for example `https://add-login.ddev.site`, which review and
 `baseline` export as `PLAYWRIGHT_BASE_URL`. `root:` is the directory DDEV resolved the project
 from, and must be the worktree; the consumer stops here when it is not. `project:` is the
-worktree's DDEV project name, kept as `{project}` for `## Tear down`.
+worktree's DDEV project name, kept as `{project}` for the second `## Bring up`, `## Tear down`
+and the configuration gate of `drupal/standards-and-tests.md`.
 
 ## Bring up
 
@@ -390,14 +412,30 @@ ddev snapshot {mainProject} --yes
 ddev snapshot restore --latest
 ddev import-files --source {mainFiles}
 ddev drush cr
+ddev snapshot --cleanup --yes
+ddev snapshot --name seed-{project} --yes
+ddev snapshot --name gate-{project} --yes
 ```
 
 The snapshot is taken in the main project and restored in the worktree without a path between
 them, which is DDEV's worktree support doing the copy. It carries no `--name`: DDEV names it with
-the time, and `--latest` restores the one just taken. A fixed name would not do, because a second
-snapshot under a name that exists is refused with exit 0, and the restore would then load the
-first seed again with nothing to show for it. The cache rebuild runs before the first request,
-because the restored cache tables were built under the main hostname.
+the time, and `--latest` restores the one just taken. A fixed name would not do there, because a
+second snapshot under a name that exists is refused with exit 0, and the restore would then load
+the first seed again with nothing to show for it. The cache rebuild runs before the first request,
+because the restored cache tables were built under the main hostname. `--latest` picks the newest
+snapshot file across the worktree's own directory and every sibling worktree's, which is the one
+the first line just took.
+
+The last three lines keep the seeded database under the worktree's own names, so a later step can
+restore it without knowing the time the main snapshot carries. The cleanup takes no name, so it
+touches only the worktree's own snapshots and exits 0 when there are none; it removes the copies a
+previous bring-up left, and the two snapshots that follow are never refused. `seed-{project}` is
+the seed the configuration gate of `drupal/standards-and-tests.md` restores. `gate-{project}` is
+the name that gate removes and retakes on every run; bring-up leaves it so the gate's first line,
+which removes it by name, has something to remove and fails on a worktree not brought up this
+way. The names carry `{project}`, the `project:` line `## Address` printed, for the reason the
+gate gives: a bare name is looked up in sibling worktrees too. Nothing in the main checkout is
+named or removed.
 
 ## Tear down
 

@@ -328,16 +328,22 @@ point, and a consumer that finds none says so once and goes on with a worktree t
 no site.
 
 **`## Configuration gate` is the contract an `implement` recipe offers for a unit that writes no
-test, and it fails closed for the orders that need it.** As of 2026-09-14 only
-`drupal/standards-and-tests.md` 0.7.0 carries one, and no consumer reads it yet; this is the shape a
-consumer meets. A unit whose deliverable is exported configuration has no PHPUnit test to freeze.
-The design recipe sizes it around the operation it performs, and this section is its proof. The
-block is one `sh` fence, one command per line, each line one command split on spaces and never run
-through a shell, from the worktree's project root. Its first line restores the database to the seed
-the `worktree-environment` recipe took at bring-up, so the import that follows is real. Every line
-must exit 0; the first non-zero line is the finding, and the recipe's prose says what each line's
-failure means. A consumer reads it the way it reads the environment recipe's `## Bring up`, as lines,
-not the way it reads `## Test commands`, as `argv:` rows. An order the design marks as gate-proved
+test, and it fails closed for the orders that need it.** As of 2026-09-22 only
+`drupal/standards-and-tests.md` carries one, at 0.9.0; this is the shape a consumer meets. A unit
+whose deliverable is exported configuration has no PHPUnit test to freeze. The design recipe sizes
+it around the operation it performs, and this section is its proof. The section holds two `sh`
+fences, one command per line, each line one command split on spaces and never run through a shell,
+from the worktree's project root, carrying the `{project}` token the `worktree-environment` recipe
+records. The first fence is the gate: its first lines keep the worktree's database as the builder
+left it under a name and prove the copy exists, then one restores the seed the
+`worktree-environment` recipe, at 0.4.0 or later, left under a name at bring-up, so the import
+that follows is real. Every line must exit 0; the consumer stops at the first non-zero line, that
+line is the finding, and the recipe's prose says what each line's failure means. The second fence
+puts the site back by restoring the kept database; the consumer runs it after a gate that reached
+the seed restore stops, pass or fail, and before anything looks at the site, because until then
+the site holds the seed's content and not the branch's. A consumer reads
+both the way it reads the environment recipe's `## Bring up`, as lines with tokens put in, not the
+way it reads `## Test commands`, as `argv:` rows. An order the design marks as gate-proved
 is frozen with zero tests and built with these lines as its check. In a framework whose `implement`
 recipe has no such section, that order is refused at design, because a unit nobody can prove is not
 cut. A framework that answers nothing with configuration declares no section, and nothing changes
