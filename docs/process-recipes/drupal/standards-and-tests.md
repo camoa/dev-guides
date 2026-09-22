@@ -6,7 +6,7 @@ description: Use when a Drupal project enters the implementation phase holding a
 # Metadata — read only after a match.
 label: Coding standards and test discipline (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.8.2
+version: 0.9.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -61,7 +61,7 @@ The plugin owns the generic mechanism — when the implementation phase runs, th
 - The design phase has produced an architecture decision (see the `architecture` recipe) — the services, Drush commands, forms, and storage to implement are known, so this phase tests and builds against a plan rather than improvising structure.
 - The code-quality-tools plugin is available for linter execution (`phpcs --standard=Drupal,DrupalPractice`, `phpstan`); this recipe does not bundle or re-author those runners.
 - The plugin's generic implementation phase is present: the test-first gate and the task record. This recipe supplies the Drupal-specific standards-and-tests method; it does not recreate the gate.
-- For a configuration unit only: the worktree site the `worktree-environment` recipe brings up, with the snapshot its bring-up took. The `## Configuration gate` restores that snapshot and imports into that site; without them the gate has nothing to prove against and its first line says so.
+- For a configuration unit only: the worktree site the `worktree-environment` recipe brings up, with the two named snapshots its bring-up leaves in the worktree (that recipe at 0.4.0 or later) and the `project:` token it recorded. The `## Configuration gate` restores the seed by name and imports into that site; without them the gate has nothing to prove against and its first lines say so.
 
 All five stay prose. They are design-artifact and plugin-availability conditions with no argv-safe filesystem probe, and the one condition that did carry a machine-readable entry — the PHPUnit runner — moved to the `test-execution` recipe, which owns the commands it is a condition of. Its check moved with a correction: `test -x vendor/bin/phpunit` reported `met` with DDEV stopped and nothing set, because Composer installs that binary regardless.
 
@@ -139,7 +139,7 @@ Idempotent at the discipline level: re-running on a component whose tests alread
 
 After the recipe runs, verify:
 
-1. Every implemented behaviour arrived with a PHPUnit test that had been seen to fail *because the behaviour was absent* — not because working code was broken or reverted, and no test passed on arrival unexamined. The tier that test sits at is `drupal/test-authoring.md`'s choice, verified there. A configuration unit is the exception: it arrived with no test, was produced through Drupal and exported, and its `## Configuration gate` lines all exited 0 in the worktree, with line 2 not printing `There are no changes to import`.
+1. Every implemented behaviour arrived with a PHPUnit test that had been seen to fail *because the behaviour was absent* — not because working code was broken or reverted, and no test passed on arrival unexamined. The tier that test sits at is `drupal/test-authoring.md`'s choice, verified there. A configuration unit is the exception: it arrived with no test, was produced through Drupal and exported, and its `## Configuration gate` lines all exited 0 in the worktree, with line 5 not printing `There are no changes to import`, and the put-back line exited 0 after them.
 2. No new class reaches for a static `\Drupal::` service; every dependency is constructor-injected.
 3. The four security guarantees hold: Form API on every data-entry form (token present and checked), Twig auto-escaping intact (no unsanitised `|raw`/`#markup`), all database access parameterized, access checks on every route and operation.
 4. New code carries docblocks on classes and public methods, type hints on parameters and returns, no deprecated APIs, and Drupal layout/naming — and the code-quality-tools `phpcs --standard=Drupal,DrupalPractice` and `phpstan` run over the changed files is clean (or its findings are recorded for the gate).
@@ -158,27 +158,45 @@ A unit whose deliverable is exported site configuration, a field, a display, a v
 
 **"Implement only what the test demands" is about production code.** A configuration unit has no test to demand anything; its done-when lines bind on their own and the gate is how they are proved. The builder runs the gate and reports what it printed.
 
-The gate is one `sh` block, one command per line, each line one command split on spaces and never run through a shell, from the worktree's project root. The first line puts the worktree's database back to the seed the `worktree-environment` recipe took from the main checkout at bring-up, so the import that follows is a real import of the branch's configuration onto a site that does not have it yet. Without that line the database already holds the change the builder made, `config:import` prints `There are no changes to import` before it validates anything, and the gate proves nothing. The restore discards whatever the builder did to the worktree's database that the export does not carry; that is the point. Every line must exit 0 for the gate to pass, and the first non-zero line is the finding.
+The gate is one `sh` block, one command per line, each line one command split on spaces and never run through a shell, from the worktree's project root. `{project}` is the `project:` line the `worktree-environment` recipe's `## Address` printed at bring-up, put in before the split, the way that recipe's `## Tear down` line takes it. It is in the snapshot names because a bare name DDEV does not find in the project's own snapshot directory is looked up in every sibling worktree's, and a name that carries the project's own is found in one place or nowhere.
+
+The first three lines keep the worktree's database as the builder left it, under the name `gate-{project}`, and prove that they did. The first removes the copy a previous run or bring-up left, and fails when there is none. The second takes the new copy. Its exit code proves nothing, because a failure inside the snapshot itself prints `Failed to snapshot` and exits 0, so the third line restores the copy just taken: that changes nothing in the database, and it fails with `not found` when the second line kept nothing. The fourth line puts the database back to the seed the `worktree-environment` recipe left in the worktree at bring-up, under the name `seed-{project}`, so the import that follows is a real import of the branch's configuration onto a site that does not have it yet. Without that line the database already holds the change the builder made, `config:import` prints `There are no changes to import` before it validates anything, and the gate proves nothing. The restore discards everything written to the worktree's database since bring-up that the export does not carry: every node, term, user, path alias, file entity and setting, the content an earlier order's fixtures made, and anything a person changed through the UI. The seed is the main checkout's database at bring-up, and the branch's content lives nowhere else, which is why the copy is kept and proved before the seed is restored. Every line must exit 0 for the gate to pass; the consumer stops at the first non-zero line, and that line is the finding.
 
 ```sh
-ddev snapshot restore --latest
+ddev snapshot --cleanup --name gate-{project} --yes
+ddev snapshot --name gate-{project} --yes
+ddev snapshot restore gate-{project}
+ddev snapshot restore seed-{project}
 ddev drush config:import --yes
 ddev drush config:export --yes
 git add --intent-to-add --no-all .
 git diff --exit-code --stat HEAD
 ```
 
-What a failure of each line means:
+**Put the site back.** After a gate that reached its fourth line stops, at its last line or at the first non-zero one, the consumer runs this line from the same directory. It restores the database the gate kept, so the site holds what the builder had, content and hand edits included, and the seed stays the seed. The snapshot stays too: it is what the next gate's first line removes. The line restores the database only, so a rewrite the last gate line found stays in the sync folder, as the evidence the finding names. A gate that stopped at its first or second line, or at its third with `not found`, changed nothing and kept nothing, so there is nothing to put back and the line is not run; it would print `not found`.
 
-1. No snapshot to restore, or no running project: the worktree was not brought up by the `worktree-environment` recipe, whose bring-up takes the snapshot this line restores. The environment's defect, not the order's. `--latest` restores the newest snapshot the project can see, which is the one bring-up took unless someone has taken another since.
-2. `config:import` refused the export, and its message names the reason. `Configuration X depends on the Y configuration that will not exist after import` is the sizing defect: the order ships a file whose dependency it does not ship, or deletes a file that another still lists. On core 11.4.6, an order that deleted a field's two files and left the three displays that list it to other orders was refused with one such line per display. `Invalid data type in config ... Duplicate key` is a YAML file nobody exported. A line that prints `There are no changes to import` and exits 0 is a finding for a configuration unit, not a pass: its export changes nothing against the seed, so either the unit built nothing or line 1 did not restore. Exit codes are the consumer's to judge; this string is the reviewer's. The builder reports the gate's output with the order, and a review that finds the string there refuses the order.
-3. `config:export` could not write the sync folder. The environment's defect.
-4. `git add --intent-to-add --no-all .` marks files the export created so the last line sees them, and nothing else: `--no-all` leaves a deleted file to the diff instead of staging its removal. It fails only when the worktree is not a git checkout.
-5. The export does not match the commit: the export rewrote, added or removed a file, and `--stat` names it. Drupal completed on save what the committed YAML lacked, or the operation touched a file the order did not commit. Diffing against `HEAD` is what makes a deletion show; a plain `git diff` misses a removed file once anything stages it. In the observed runs the import refused first and this line never failed; it stands for the YAML an import accepts and Drupal then completes.
+```sh
+ddev snapshot restore gate-{project}
+```
+
+After a gate that restored the seed, and until this line has run, the site holds the seed's content, with the branch's export on top when the import ran, and a look at its pages, an end-to-end run against its address, or a person's check would judge stale pages. On one observed run a gate that restored the seed and stopped there discarded a week of fixture content and an alias, and a person repaired the site by hand before its pages showed the branch's content again. The third gate line restored this same snapshot minutes before, so a non-zero exit here is the environment's; the database is whatever the failed restore left, and not the builder's, until a person runs the line again.
+
+What a failure of each gate line means:
+
+1. `not found` after `gate-{project}`: the worktree holds no snapshot by that name, and the gate stops with the database untouched. The environment's defect. When an earlier gate stopped after its first line and before its fourth, a person puts the name back with `ddev snapshot --name gate-{project} --yes` in the worktree, which copies the database as it stands. When the worktree was brought up by a `worktree-environment` recipe older than 0.4.0, or not by that recipe at all, the seed is missing too, and item 4 is the remedy. No project resolving from the directory fails here too.
+2. Exits non-zero when no project resolves from the directory, or when the project was not running and DDEV could not start it, or could not return it to the state it found it in. A failure inside the snapshot itself exits 0, as above, and the next line is what catches it.
+3. `not found` after `gate-{project}`: the second line kept nothing, and the gate stops before anything has changed the database. The environment's defect, and the second line's output says which.
+4. `not found` after `seed-{project}`: the worktree holds no seed by that name. It was brought up by a `worktree-environment` recipe older than 0.4.0, which kept no named seed, or not by that recipe at all, or bring-up's snapshot of it failed inside itself, which shows only in that recipe's verifier listing. The environment's defect. The seed exists only as the main checkout's database, so the way to that name is that recipe's `## Bring up` again, which replaces the worktree's database with the main checkout's and loses the branch's content. That is a person's call, never the consumer's, and the gate stopped before the database changed.
+5. `config:import` refused the export, and its message names the reason. `Configuration X depends on the Y configuration that will not exist after import` is the sizing defect: the order ships a file whose dependency it does not ship, or deletes a file that another still lists. On core 11.4.6, an order that deleted a field's two files and left the three displays that list it to other orders was refused with one such line per display. `Invalid data type in config ... Duplicate key` is a YAML file nobody exported. A line that prints `There are no changes to import` and exits 0 is a finding for a configuration unit, not a pass: its export changes nothing against the seed, so either the unit built nothing or line 4 did not restore. Exit codes are the consumer's to judge; this string is the reviewer's. The builder reports the gate's output with the order, and a review that finds the string there refuses the order.
+6. `config:export` could not write the sync folder. The environment's defect.
+7. `git add --intent-to-add --no-all .` marks files the export created so the last line sees them, and nothing else: `--no-all` leaves a deleted file to the diff instead of staging its removal. It fails only when the worktree is not a git checkout.
+8. The export does not match the commit: the export rewrote, added or removed a file, and `--stat` names it. Drupal completed on save what the committed YAML lacked, or the operation touched a file the order did not commit. Diffing against `HEAD` is what makes a deletion show; a plain `git diff` misses a removed file once anything stages it. In the observed runs the import refused first and this line never failed; it stands for the YAML an import accepts and Drupal then completes.
+
+The three lines that keep and prove the copy, the seed restore by name and the put-back line were added on 2026-09-22 from DDEV 1.25.4's source and are not yet run; `drupal/worktree-environment.md` records what was read. The observed runs above are of the gate before them, whose first line was the seed restore by `--latest`.
 
 Why the other candidates lost: `config:status` returns rows or nothing and exits 0 either way, and Drush's own usage pipes it through `grep "No differences"` for CI, so it cannot be a line a reader judges by exit code. `config:import --diff` only changes the preview; the refusal is the same. `config:inspect` belongs to the contrib `config_inspector` module and is not assumed on a project.
 
-What the plugin does with it: an order the design marks `proof: gate` is frozen with zero tests, its build runs these lines as the order's own check and records the output, no test author is dispatched for it, and a `proof: gate` order in a project whose recipe has no `## Configuration gate` is refused at design. Reading the block, deciding the posture and recording the output are the plugin's; the lines and their meaning are this recipe's.
+What the plugin does with it: an order the design marks `proof: gate` is frozen with zero tests, its build runs the gate lines as the order's own check, records the output, and runs the put-back line after a gate that reached its fourth line; no test author is dispatched for it, and a `proof: gate` order in a project whose recipe has no `## Configuration gate` is refused at design. Reading the block, deciding the posture and recording the output are the plugin's; the lines and their meaning are this recipe's.
 
 ## Unit declaration
 
@@ -248,7 +266,7 @@ These are the standards-and-tests oracle files. A Drupal project that also set u
 | `drupal/test-authoring.md` | Which tier a behaviour belongs at, where the test file goes and what it is called, how a criterion is traced to a test, and what a Drupal test may not do — the half of the cycle that ends at red |
 | `drupal/test-execution.md` | The command at each scope, its cost, the conditions for running one, and how to read what came back |
 | `drupal/architecture.md` | Sizes a configuration unit around the Drupal operation and names the critic's check on it; the gate here is what proves that unit |
-| `drupal/worktree-environment.md` | Seeds the worktree's database from the checkout before the order, which is what makes the gate's first line a real import |
+| `drupal/worktree-environment.md` | Seeds the worktree's database from the checkout before the order, and leaves it under the name `seed-{project}`, which is what makes the gate's import a real one |
 
 ### Plugin-side tooling (referenced, not authored here)
 
