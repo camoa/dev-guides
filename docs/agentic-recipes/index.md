@@ -16,6 +16,7 @@ Recipes are published to a separate index, `agentic-recipes.txt` (not `llms.txt`
 |---|---|---|
 | `responsive-image-delivery` | [Responsive image wiring](drupal/responsive-image-wiring.md) | A Drupal site has named image use-cases (hero, card thumbnail, content inline) that must render as responsive images on image fields. |
 | `drupal-seo-foundation` | [Drupal SEO foundation](drupal/drupal-seo-foundation.md) | A Drupal site needs its SEO/GEO foundation wired to an opinionated, verifier-gated contract — metatag per bundle, Schema.org/JSON-LD, sitemap, pathauto + redirect, robots. |
+| `drupal-module-test-authoring` | [Drupal module test authoring](drupal/module-test-authoring.md) | A Drupal module needs tests written or extended: which kind each behaviour gets, written to the conventions current core and PHPUnit enforce, and proved by a run whose output was read. |
 
 ## Authoring an agentic recipe
 

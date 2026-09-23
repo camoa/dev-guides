@@ -123,7 +123,7 @@ public function testEmailValidation($email, $expected_valid, $description): void
   $this->assertEquals($expected_valid, $result, $description);
 }
 
-// A data provider must be static, or PHPUnit discards the whole class.
+// A data provider must be static, or PHPUnit drops the tests it feeds.
 public static function emailProvider(): array {
   return [
     'valid email' => ['test@example.com', TRUE, 'Standard email format'],

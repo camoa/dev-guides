@@ -89,7 +89,7 @@ class CalculatorTest extends UnitTestCase {
 - Not using `#[CoversClass]` → Unclear what code is being tested
 - Declaring a data provider as `public function` instead of `public static function` → PHPUnit prints `Data Provider method ...::additionProvider() is not static`, then `No tests found in class` and `No tests executed!`, and exits 2
 
-**WHY these are mistakes**: Unit tests must be fast and isolated. Bootstrapping Drupal defeats the purpose. Unmocked dependencies create fragile tests that break when dependencies change. Multiple behaviors in one test make failures harder to diagnose. A non-static data provider is the costliest of these, because PHPUnit does not fail the one test — it discards the whole class, so the file looks green while it contributes nothing.
+**WHY these are mistakes**: Unit tests must be fast and isolated. Bootstrapping Drupal defeats the purpose. Unmocked dependencies create fragile tests that break when dependencies change. Multiple behaviors in one test make failures harder to diagnose. A non-static data provider is the costliest of these. PHPUnit does not fail the one test: it drops every test the provider feeds, and when that is the only test in the class the run prints `No tests found in class` and `No tests executed!`. A class with other tests keeps them and prints `ERRORS!` instead. Either way the provider's own cases are never asserted.
 
 ## See Also
 
