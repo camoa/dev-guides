@@ -28,15 +28,18 @@ Write Gander performance tests for modules with site-wide performance impact: ev
 namespace Drupal\Tests\my_module\FunctionalJavascript;
 
 use Drupal\FunctionalJavascriptTests\PerformanceTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the my_module performance characteristics.
- *
- * @group my_module
- * @group Performance
- * @group #slow
- * @requires extension apcu
  */
+#[Group('my_module')]
+#[Group('Performance')]
+#[Group('#slow')]
+#[RequiresPhpExtension('apcu')]
+#[RunTestsInSeparateProcesses]
 class MyModulePerformanceTest extends PerformanceTestBase {
 
   protected static $modules = ['my_module', 'node'];
@@ -108,11 +111,13 @@ class MyModulePerformanceTest extends PerformanceTestBase {
 
 ## Common Mistakes
 
-- **Wrong**: Running performance tests without APCu enabled → **Right**: Enable APCu extension for accurate cache metrics
-- **Wrong**: Not warming caches before hot cache tests → **Right**: Run request once, then measure second request
-- **Wrong**: Setting unrealistic performance budgets → **Right**: Base budgets on actual measurements
-- **Wrong**: Testing performance too early in development → **Right**: Add performance tests after features stabilize
-- **Wrong**: Not comparing with/without module enabled → **Right**: Measure baseline to understand actual impact
+- Running performance tests without APCu enabled → Inaccurate cache metrics
+- Not warming caches before hot cache tests → Measuring cold cache instead
+- Setting unrealistic performance budgets → Tests always fail
+- Testing performance too early in development → Budgets change as features evolve
+- Not comparing with/without module enabled → Unknown actual impact
+
+**WHY these are mistakes**: Performance tests measure real system behavior, which requires production-like conditions. APCu provides accurate cache metrics. Cache warming is required for realistic hot-cache measurements. Performance budgets must be based on actual measurements, not guesses. Always measure baseline performance without your module to understand true impact.
 
 ## See Also
 

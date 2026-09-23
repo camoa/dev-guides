@@ -53,7 +53,9 @@ Acceptance criteria:
 namespace Drupal\Tests\content_export\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class ContentExportTest extends BrowserTestBase {
 
   protected static $modules = ['node', 'content_export'];
@@ -122,4 +124,5 @@ Adding config for default export settings is a new behavior, not a refactor, so 
 ## See Also
 - [Testing Events & Hooks](testing-events-hooks.md)
 - [Nightwatch.js Testing](nightwatch-testing.md)
+- Universal TDD principles: [TDD & Spec-Driven Development](../../development/tdd-spec-driven/index.md)
 - [Test Driven Development in Drupal | Oliver Davies](https://www.oliverdavies.uk/blog/writing-new-drupal-8-module-using-test-driven-development-tdd)

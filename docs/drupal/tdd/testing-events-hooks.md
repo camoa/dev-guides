@@ -21,8 +21,10 @@ Verifying event subscribers work, hooks fire correctly, alter hooks modify data 
 namespace Drupal\Tests\my_module\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+#[RunTestsInSeparateProcesses]
 class EventSubscriberTest extends KernelTestBase {
 
   protected static $modules = ['my_module'];

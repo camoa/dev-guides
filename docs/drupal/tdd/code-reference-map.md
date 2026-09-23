@@ -11,7 +11,7 @@ Finding test base classes, traits, assertions, example tests in Drupal core.
 | Class | Path | Use Case |
 |-------|------|----------|
 | UnitTestCase | `/core/tests/Drupal/Tests/UnitTestCase.php` | Pure PHP logic, no Drupal dependencies |
-| KernelTestBase | `/core/tests/Drupal/KernelTests/KernelTestBase.php` | Services, database, entities, no HTTP |
+| KernelTestBase | `/core/tests/Drupal/KernelTests/KernelTestBase.php` | Services, database, entities, and pages read through the HTTP kernel |
 | BrowserTestBase | `/core/tests/Drupal/Tests/BrowserTestBase.php` | Full Drupal, HTTP simulation, no JS |
 | WebDriverTestBase | `/core/tests/Drupal/FunctionalJavascriptTests/WebDriverTestBase.php` | JavaScript, AJAX, real browser |
 

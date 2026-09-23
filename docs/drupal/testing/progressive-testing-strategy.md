@@ -49,6 +49,21 @@ abstract class MyModuleKernelTestBase extends KernelTestBase {
     $this->installConfig(['my_module']);
   }
 }
+
+// tests/src/Kernel/EntityProcessorTest.php
+// The base class stays bare; the class PHPUnit runs carries the attribute.
+namespace Drupal\Tests\my_module\Kernel;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+
+#[Group('my_module')]
+#[RunTestsInSeparateProcesses]
+class EntityProcessorTest extends MyModuleKernelTestBase {
+  public function testProcessing(): void {
+    $processor = $this->container->get('my_module.entity_processor');
+    $this->assertNotNull($processor);
+  }
+}
 ```
 
 **Priority**: Test core business logic and Drupal integration first.
@@ -104,11 +119,13 @@ abstract class MyModulePerformanceTestBase extends PerformanceTestBase {
 
 ## Common Mistakes
 
-- **Wrong**: Trying to achieve 100% coverage immediately → **Right**: Start with 30-40% coverage of critical paths
-- **Wrong**: Writing performance tests before features stabilize → **Right**: Add performance tests in final phase
-- **Wrong**: Skipping base test classes → **Right**: Create abstract base classes to reduce duplication
-- **Wrong**: Not prioritizing high-risk code → **Right**: Test critical business logic first
-- **Wrong**: Writing all tests at once → **Right**: Progressive approach provides early feedback
+- Trying to achieve 100% coverage immediately → Burnout and abandoned testing
+- Writing performance tests before features stabilize → Wasted effort on changing code
+- Skipping base test classes → Code duplication across test files
+- Not prioritizing high-risk code → Testing trivial code while critical paths untested
+- Writing all tests at once → No early feedback, integration issues found late
+
+**WHY these are mistakes**: Testing is an investment. Start with high-value tests that catch the most bugs. Building complete coverage takes time - progressive approach maintains momentum. Base classes reduce duplication and make tests easier to maintain. Performance testing unstable features wastes time because budgets change constantly. Early testing provides early feedback - don't wait until all features are complete.
 
 ## See Also
 

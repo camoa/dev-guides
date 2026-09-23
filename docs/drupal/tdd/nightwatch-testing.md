@@ -97,7 +97,7 @@ Reference: `/core/tests/Drupal/Nightwatch/` — the directory holds `Commands/`,
 - Using absolute URLs instead of `drupalRelativeURL()` → breaks in different environments
 - Not waiting for elements → intermittent failures
 - Running Nightwatch for unit-level JS logic → overkill, and core ships no JS unit-test runner to fall back on — a module supplies its own (Jest, Vitest) outside core's tooling
-- Reaching for Nightwatch because a test needs a browser → `WebDriverTestBase` drives a real browser too, is the recommended tier, and is not the one core has decided to replace
+- Reaching for Nightwatch because a test needs a browser → `WebDriverTestBase` drives a real browser too
 - Forgetting `@tags` annotation → can't filter tests by module
 
 ## See Also

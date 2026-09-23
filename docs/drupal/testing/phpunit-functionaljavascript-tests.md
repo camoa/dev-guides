@@ -28,12 +28,14 @@ Write FunctionalJavascript tests only when testing features that require JavaScr
 namespace Drupal\Tests\my_module\FunctionalJavascript;
 
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the my_module AJAX form interactions.
- *
- * @group my_module
  */
+#[Group('my_module')]
+#[RunTestsInSeparateProcesses]
 class AjaxFormTest extends WebDriverTestBase {
 
   protected $defaultTheme = 'stark';
@@ -125,11 +127,13 @@ class AjaxFormTest extends WebDriverTestBase {
 
 ## Common Mistakes
 
-- **Wrong**: Not calling `assertWaitOnAjaxRequest()` after AJAX triggers → **Right**: Always wait for AJAX to complete
-- **Wrong**: Using `drupalGet()` and immediately checking for AJAX content → **Right**: Wait for elements to appear
-- **Wrong**: Not configuring ChromeDriver/WebDriver → **Right**: Start ChromeDriver before running tests
-- **Wrong**: Writing FunctionalJavascript tests for non-JavaScript features → **Right**: Use Functional tests when no JavaScript needed
-- **Wrong**: Using `sleep()` instead of proper waits → **Right**: Use `waitForElement()` or `assertWaitOnAjaxRequest()`
+- Not calling `assertWaitOnAjaxRequest()` after AJAX triggers → Race conditions, flaky tests
+- Using `drupalGet()` and immediately checking for AJAX content → Content not loaded yet
+- Not configuring ChromeDriver/WebDriver → Tests fail with connection errors
+- Writing FunctionalJavascript tests for non-JavaScript features → Unnecessary slowness
+- Using `sleep()` instead of proper waits → Unreliable timing, slow tests
+
+**WHY these are mistakes**: JavaScript execution is asynchronous. Tests must explicitly wait for AJAX requests to complete or elements to appear. Using fixed `sleep()` calls creates flaky tests that sometimes pass and sometimes fail based on system load. FunctionalJavascript tests are the slowest - only use them when JavaScript is required. ChromeDriver must be running as a separate process before tests execute.
 
 ## See Also
 

@@ -24,7 +24,7 @@ Writing maintainable, fast, reliable tests that verify behavior, not implementat
 
 ### Performance
 - **Minimize module list**: Only install modules you need -- every module adds overhead
-- **Prefer Kernel over Browser**: 10x faster, use Browser only when HTTP context required
+- **Prefer Kernel over Browser**: 10x faster, use Browser only for a form submission or a logged-in session
 - **Prefer Unit over Kernel**: 100x faster, use Kernel only when container/database required
 - **Parallel execution**: Use `--process-isolation` for independent tests (slower per test, faster overall)
 - **Avoid full installs in Kernel**: Use `enableModules()`, `installConfig()` selectively
@@ -68,10 +68,13 @@ public function testFeature(): void {
 ```
 
 ### Data Providers for Multiple Cases
+
+A provider method must be `static`, and `#[DataProvider]` replaces the `@dataProvider` doc-comment. PHPUnit 11.5 refuses a non-static provider: it prints "Data Provider method ... is not static", then "No tests found in class" and "No tests executed!", and exits 2. The class contributes nothing, and it does so without a single failure to read.
+
 ```php
-/**
- * @dataProvider providerStatusCodes
- */
+use PHPUnit\Framework\Attributes\DataProvider;
+
+#[DataProvider('providerStatusCodes')]
 public function testRouteAccess($path, $permissions, $expected_code): void {
   $user = $this->createUser($permissions);
   $this->drupalLogin($user);
@@ -79,7 +82,7 @@ public function testRouteAccess($path, $permissions, $expected_code): void {
   $this->assertSession()->statusCodeEquals($expected_code);
 }
 
-public function providerStatusCodes(): array {
+public static function providerStatusCodes(): array {
   return [
     'admin page denied' => ['/admin', [], 403],
     'admin page allowed' => ['/admin', ['access administration pages'], 200],

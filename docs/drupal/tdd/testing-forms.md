@@ -23,7 +23,9 @@ Verifying form structure, validation, submission, and AJAX behaviors.
 namespace Drupal\Tests\my_module\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class MyFormTest extends KernelTestBase {
 
   protected static $modules = ['system', 'my_module'];
@@ -44,7 +46,9 @@ class MyFormTest extends KernelTestBase {
 namespace Drupal\Tests\my_module\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class MyFormValidationTest extends BrowserTestBase {
 
   protected $defaultTheme = 'stark';
@@ -71,7 +75,9 @@ class MyFormValidationTest extends BrowserTestBase {
 namespace Drupal\Tests\my_module\FunctionalJavascript;
 
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class AjaxFormTest extends WebDriverTestBase {
 
   protected $defaultTheme = 'stark';
@@ -95,10 +101,11 @@ Reference: `/core/modules/system/tests/src/Functional/Form/`
 - Not testing validation separately from submission -- can't distinguish which failed
 - Hardcoding form element keys -- breaks when form structure changes (use FormBuilder to get form array in Kernel tests)
 - Not waiting for AJAX in JS tests -- intermittent failures
-- Testing form rendering in Kernel tests -- forms need HTTP context (use Browser test)
+- Reaching for `submitForm()` in a Kernel test -- a Kernel test can request the form page but cannot submit it (use a Browser test)
 - Not testing access control -- form accessible to users who shouldn't see it
 
 ## See Also
 - [Testing Plugins](testing-plugins.md)
 - [Testing Entities](testing-entities.md)
+- Reference: Drupal Form API Guide — [Drupal Form API](../forms/index.md)
 - Example: `/core/modules/system/tests/src/Functional/Form/FormTest.php`

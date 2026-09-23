@@ -30,7 +30,7 @@ Measuring how much of your code is executed during tests, identifying untested c
 | **Path coverage** | % of unique execution paths | Function with 3 ifs = 8 possible paths | Ensures all combinations tested |
 | **Function coverage** | % of functions/methods called | 10 methods, 8 called = 80% | Identifies dead code |
 
-**Line coverage** is the baseline -- fast to collect, easy to understand. **Branch coverage** catches the "happy path only" problem. **Path coverage** is expensive but critical for security-sensitive code. **Function coverage** is a sanity check (0% = completely untested class).
+**Line coverage** is the baseline -- fast to collect, easy to understand. **Branch coverage** catches the "happy path only" problem where you test success but not failure. **Path coverage** is expensive (combinatorial explosion) but critical for security-sensitive code. **Function coverage** is a sanity check (0% = completely untested class).
 
 ## Pattern
 

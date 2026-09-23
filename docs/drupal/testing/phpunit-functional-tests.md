@@ -28,12 +28,14 @@ Write Functional tests for complete user workflows: admin configuration forms, c
 namespace Drupal\Tests\my_module\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * Tests the my_module admin configuration interface.
- *
- * @group my_module
  */
+#[Group('my_module')]
+#[RunTestsInSeparateProcesses]
 class AdminConfigurationTest extends BrowserTestBase {
 
   protected $defaultTheme = 'stark';
@@ -108,11 +110,13 @@ class AdminConfigurationTest extends BrowserTestBase {
 
 ## Common Mistakes
 
-- **Wrong**: Not setting `$defaultTheme` → **Right**: Always set `$defaultTheme = 'stark'` or another stable theme
-- **Wrong**: Not logging in before accessing protected pages → **Right**: Call `drupalLogin()` before accessing admin pages
-- **Wrong**: Using JavaScript methods like `getSession()->getPage()` → **Right**: Use FunctionalJavascript for JavaScript interactions
-- **Wrong**: Creating users with wrong permissions → **Right**: Create users with exact permissions needed for test
-- **Wrong**: Not checking status codes → **Right**: Verify both HTTP status and page content
+- Not setting `$defaultTheme` → Tests fail with theme errors
+- Not logging in before accessing protected pages → 403 errors
+- Using JavaScript methods like `getSession()->getPage()` → Use FunctionalJavascript instead
+- Creating users with wrong permissions → Access denied errors
+- Not checking status codes → Tests pass even when pages error
+
+**WHY these are mistakes**: Functional tests perform a full Drupal installation for each test. Missing theme configuration causes unpredictable rendering errors. Authentication state must be explicitly managed. Using JavaScript methods fails because Functional tests use a simulated browser, not a real one. Always verify both HTTP status and page content.
 
 ## See Also
 

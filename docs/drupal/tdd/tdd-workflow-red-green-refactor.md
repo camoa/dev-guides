@@ -43,7 +43,9 @@ Applying the Test-Driven Development cycle to Drupal module development. Use thi
 namespace Drupal\Tests\my_module\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class DiscountCalculatorTest extends KernelTestBase {
 
   protected static $modules = ['my_module'];
@@ -58,6 +60,10 @@ class DiscountCalculatorTest extends KernelTestBase {
   }
 }
 ```
+
+Every Kernel, Functional and FunctionalJavascript class carries `#[RunTestsInSeparateProcesses]`. Core's `KernelTestBase` and `BrowserTestBase` each trigger a deprecation when it is absent — "Kernel test classes must specify the #[RunTestsInSeparateProcesses] attribute, not doing so is deprecated in drupal:11.3.0 and will throw an exception in drupal:12.0.0" ([change record](https://www.drupal.org/node/3548485)), with the matching wording for Functional and FunctionalJavascript. Unit tests have no such check, so `UnitTestCase` subclasses do not carry it.
+
+The attribute is not inherited. PHPUnit reads it off the concrete class only, so a project's own test base class cannot carry it for its children — decorate every concrete class, which is what core does.
 
 Run test -> **RED** (failure expected). Output: "Service 'my_module.discount_calculator' not found."
 
@@ -120,22 +126,26 @@ RED -> add 'SAVE20' to DISCOUNT_RATES -> GREEN -> refactor if needed.
 - `testNodeCreation()` -- acceptable for simple cases
 - `testSave()` -- too vague, AVOID
 
-**Group annotations**: Use `#[Group('module_name')]` for filtering
+**Group attributes**: Use `#[Group('module_name')]` for filtering
 ```php
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 #[Group('my_module')]
 #[Group('commerce')]
+#[RunTestsInSeparateProcesses]
 class DiscountCalculatorTest extends KernelTestBase {
   // ...
 }
 ```
 
-**Covers annotations**: Document what code is tested (optional but useful for coverage)
+**Covers attributes**: Document what code is tested (optional but useful for coverage)
 ```php
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 #[CoversClass(DiscountCalculator::class)]
+#[RunTestsInSeparateProcesses]
 class DiscountCalculatorTest extends KernelTestBase {
   // ...
 }
@@ -161,6 +171,7 @@ Spikes and prototypes are exploration. Throw them away; the real change starts a
 ## See Also
 - [Test Type Decision Matrix](test-type-decision-matrix.md)
 - [PHPUnit Configuration](phpunit-configuration.md)
+- Universal TDD guide: [TDD & Spec-Driven Development](../../development/tdd-spec-driven/index.md)
 - [Red, Green, Refactor | Codecademy](https://www.codecademy.com/article/tdd-red-green-refactor)
 - [The Cycles of TDD - Uncle Bob](https://blog.cleancoder.com/uncle-bob/2014/12/17/TheCyclesOfTDD.html)
 - Related: [TDD & Spec-Driven Development — Changing Existing Tests](https://camoa.github.io/dev-guides/development/tdd-spec-driven/changing-existing-tests/) -- who may change a test, and when

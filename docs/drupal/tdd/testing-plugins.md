@@ -22,7 +22,9 @@ Testing blocks, field types, field formatters, field widgets, views plugins, and
 namespace Drupal\Tests\my_module\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class MyBlockTest extends KernelTestBase {
 
   protected static $modules = ['system', 'block', 'my_module'];
@@ -46,7 +48,9 @@ namespace Drupal\Tests\my_module\Kernel;
 
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\KernelTests\KernelTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class MyFormatterTest extends KernelTestBase {
 
   protected static $modules = ['field', 'entity_test', 'my_module'];

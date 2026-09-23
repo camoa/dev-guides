@@ -12,8 +12,8 @@ Choose the right test type based on what you're testing and the level of Drupal 
 | If you need to test... | Use... | Why |
 |---|---|---|
 | Pure PHP logic with no Drupal dependencies | Unit Test (UnitTestCase) | Fastest execution, no database, no container overhead |
-| Service integration, database access, entity API without HTTP | Kernel Test (KernelTestBase) | Lightweight Drupal bootstrap, container access, database available |
-| Full page rendering, form submission, HTTP requests without JavaScript | Browser Test (BrowserTestBase) | Complete Drupal installation, simulates user browsing |
+| Service integration, database access, entity API, reading a page | Kernel Test (KernelTestBase) | Lightweight Drupal bootstrap, container access, database, and page requests through the HTTP kernel |
+| Form submission, a logged-in session, anything needing a real web server, without JavaScript | Browser Test (BrowserTestBase) | Complete Drupal installation, simulates user browsing |
 | JavaScript interactions, AJAX callbacks, DOM manipulation | JavaScript Test (WebDriverTestBase) | Real browser with JS engine via Selenium/chromedriver |
 | Composer/build scripts, project scaffolding | Build Test | Tests project structure without Drupal bootstrap |
 

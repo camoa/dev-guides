@@ -90,8 +90,8 @@
     "guides_extracted": 13
   },
   "drupal/testing": {
-    "source_hash": "ca89d7ebffb24699edaff888a5e4a0ea5c72829c77aafa85fe518c347936468c",
-    "partitioned": "2026-09-01",
+    "source_hash": "cfb4416e796762b2d0477583e56d2e9efa80078db4b0f834ae11b32d6d27b92c",
+    "partitioned": "2026-09-23",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 11
   },
@@ -192,8 +192,8 @@
     "guides_extracted": 26
   },
   "drupal/tdd": {
-    "source_hash": "f6a62d4b36087a9c282e9d2ff32a57fa5448e37223826656229b273d6bcbaa31",
-    "partitioned": "2026-09-06",
+    "source_hash": "75978433d99a63048d5e0df814ff37b6c1c3f7c92f0caeb1de868f145367e33a",
+    "partitioned": "2026-09-23",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 25
   },
