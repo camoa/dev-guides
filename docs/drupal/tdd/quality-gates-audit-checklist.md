@@ -240,7 +240,7 @@ jobs:
 1. Re-run 3 times
 2. If 2/3 pass -- investigate but don't block merge
 3. If 0/3 or 1/3 pass -- block merge, fix test or code
-4. Tag test with `@group flaky` temporarily, create issue to fix
+4. Tag the class with `#[Group('flaky')]` temporarily, create issue to fix
 
 ## Common Mistakes
 

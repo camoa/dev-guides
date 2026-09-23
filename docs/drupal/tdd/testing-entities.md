@@ -14,7 +14,7 @@ Testing entity CRUD, field values, entity references, computed fields, validatio
 | Entity CRUD (create/load/update/delete) | Kernel | Database required |
 | Field value storage/retrieval | Kernel | Field system required |
 | Entity access control | Kernel or Browser | Browser if UI matters |
-| Entity rendering | Browser | Needs view modes, themes |
+| Entity rendering | Kernel | Render through the renderer service; install a theme and set it active when the output depends on one |
 
 ## Pattern
 **Testing entity CRUD (Kernel)**:
@@ -23,7 +23,9 @@ namespace Drupal\Tests\my_module\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\node\Entity\Node;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class EntityCrudTest extends KernelTestBase {
 
   protected static $modules = ['system', 'user', 'node', 'field'];
@@ -87,7 +89,7 @@ Reference: `/core/modules/node/tests/src/Kernel/`
 - Not installing entity schema -- "Table doesn't exist"
 - Forgetting `node_access` schema for nodes -- access checks fail
 - Not saving entity after modification -- changes lost
-- Testing entity rendering in Kernel tests -- no theme system (use Browser test)
+- Expecting a themed page from a Kernel test render -- there is no active theme until the test installs one and sets it active
 - Not testing validation constraints -- invalid data accepted
 
 ## See Also

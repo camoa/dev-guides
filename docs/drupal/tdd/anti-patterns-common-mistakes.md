@@ -13,11 +13,14 @@ Avoid these patterns that lead to slow, brittle, unmaintainable tests.
 ### Using Wrong Test Type
 **Problem**: BrowserTestBase for testing service logic
 **Why it's bad**: 10-30 seconds per test vs 0.5 seconds for Kernel test -- no benefit, massive cost
-**Fix**: Use lightest test type that can verify requirement -- Unit for pure logic, Kernel for services/database, Browser only for HTTP simulation
+**Fix**: Use lightest test type that can verify requirement -- Unit for pure logic, Kernel for services, database and reading a page, Browser for a form submission or a logged-in session
 
 **Example**:
 ```php
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+
 // ANTI-PATTERN: Browser test for service logic
+#[RunTestsInSeparateProcesses]
 class MyServiceTest extends BrowserTestBase {
   public function testServiceMethod(): void {
     $this->drupalGet('/'); // Unnecessary HTTP overhead
@@ -28,6 +31,7 @@ class MyServiceTest extends BrowserTestBase {
 }
 
 // CORRECT: Kernel test
+#[RunTestsInSeparateProcesses]
 class MyServiceTest extends KernelTestBase {
   public function testServiceMethod(): void {
     $service = $this->container->get('my_module.service');
@@ -172,7 +176,7 @@ public function testB(): void {
 ### Performance Testing
 - Installing unnecessary modules -- 2x-5x slower tests
 - Using Browser tests when Kernel would work -- 10x slower
-- Not using `@group` tags -- can't run fast tests separately
+- Not using `#[Group]` attributes -- can't run fast tests separately
 - Running full test suite on every commit -- slow feedback loop
 
 ### Reliability

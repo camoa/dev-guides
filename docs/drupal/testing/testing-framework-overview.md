@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Every Drupal module should include automated testing. Use this guide to understand the five testing frameworks Drupal provides and when each is appropriate.
+Every Drupal module should include automated testing. This section helps you understand the five testing frameworks Drupal provides and when each is appropriate.
 
 ## Decision
 
@@ -50,11 +50,11 @@ use Drupal\FunctionalJavascriptTests\PerformanceTestBase;
 
 ## Common Mistakes
 
-- **Wrong**: Using Functional tests when Unit/Kernel would suffice → **Right**: Use the simplest test type that validates your code (faster execution and easier maintenance)
-- **Wrong**: Not testing at all → **Right**: Start with minimal Unit/Kernel coverage for core logic
-- **Wrong**: Skipping JavaScript tests for AJAX features → **Right**: Use FunctionalJavascript for any AJAX or client-side interactions
-- **Wrong**: Testing everything in one test method → **Right**: One test method per behavior, use `@dataProvider` for variations
-- **Wrong**: Not using `@dataProvider` for similar test cases → **Right**: DRY principle applies to tests too
+- Using Functional tests when Unit/Kernel would suffice → Slower test execution and harder maintenance
+- Not testing at all → Production bugs that could have been caught early
+- Skipping JavaScript tests for AJAX features → Undetected JavaScript failures
+- Testing everything in one test method → Hard to debug when tests fail
+- Not using `#[DataProvider]` for similar test cases → Code duplication
 
 ## See Also
 

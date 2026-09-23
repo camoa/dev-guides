@@ -22,7 +22,9 @@ Verifying permission checks, role-based access, entity access, route access.
 namespace Drupal\Tests\my_module\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class AccessTest extends BrowserTestBase {
 
   protected $defaultTheme = 'stark';
@@ -52,7 +54,9 @@ namespace Drupal\Tests\my_module\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\node\Entity\Node;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class EntityAccessTest extends KernelTestBase {
 
   use UserCreationTrait;

@@ -8,7 +8,7 @@ drupal_version: "11.x"
 
 ## When to Use
 
-Use this guide when planning testing coverage for a new module or deciding which test type to write for specific functionality.
+Use this section when planning testing coverage for a new module or deciding which test type to write for specific functionality.
 
 ## Decision: Module Complexity Categories
 
@@ -47,11 +47,11 @@ tests/src/FunctionalJavascript/PerformanceTest.php // Add performance testing
 
 ## Common Mistakes
 
-- **Wrong**: Starting with FunctionalJavascript tests → **Right**: Write simpler Unit/Kernel tests first to build foundation
-- **Wrong**: Testing everything at the Functional level → **Right**: Use fastest test type that validates the behavior
-- **Wrong**: Skipping Kernel tests → **Right**: Kernel tests catch integration issues between services
-- **Wrong**: Writing performance tests too early → **Right**: Add performance tests after features stabilize
-- **Wrong**: Not documenting test type decisions → **Right**: Document coverage goals in README or test base classes
+- Starting with FunctionalJavascript tests → Write simpler tests first to build foundation
+- Testing everything at the Functional level → Slower test suite, harder debugging
+- Skipping Kernel tests → Miss integration issues between services
+- Writing performance tests too early → Premature optimization before features stabilize
+- Not documenting test type decisions → Team confusion about coverage goals
 
 ## See Also
 

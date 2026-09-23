@@ -26,7 +26,9 @@ Testing JavaScript interactions, AJAX callbacks, dynamic DOM manipulation requir
 namespace Drupal\Tests\my_module\FunctionalJavascript;
 
 use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class AjaxFormTest extends WebDriverTestBase {
 
   protected $defaultTheme = 'stark';
@@ -80,4 +82,5 @@ Reference: `/core/tests/Drupal/FunctionalJavascriptTests/WebDriverTestBase.php`
 - [Browser Tests with BrowserTestBase](browser-tests.md)
 - [Test Traits & Utilities](test-traits-utilities.md)
 - Reference: `/core/tests/Drupal/FunctionalJavascriptTests/WebDriverTestBase.php`
+- Setup guide: `/core/tests/README.md` lines 81-89
 - [Running PHPUnit JavaScript tests | Drupal.org](https://www.drupal.org/docs/develop/automated-testing/phpunit-in-drupal/running-phpunit-javascript-tests)

@@ -24,7 +24,9 @@ Reusing common test setup patterns: creating users, nodes, content types, blocks
 **Usage Example (Kernel test)**:
 ```php
 use Drupal\Tests\user\Traits\UserCreationTrait;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class MyTest extends KernelTestBase {
   use UserCreationTrait;
 
@@ -55,7 +57,9 @@ class MyTest extends KernelTestBase {
 **Usage Example (Browser test)**:
 ```php
 use Drupal\Tests\node\Traits\NodeCreationTrait;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class MyTest extends BrowserTestBase {
   use NodeCreationTrait;
 

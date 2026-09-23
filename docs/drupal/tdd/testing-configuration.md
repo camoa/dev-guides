@@ -22,7 +22,9 @@ Testing config schema, config import/export, default config, config overrides.
 namespace Drupal\Tests\my_module\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class ConfigSchemaTest extends KernelTestBase {
 
   use SchemaCheckTestTrait;
@@ -56,7 +58,9 @@ public function testDefaultConfig(): void {
 namespace Drupal\Tests\my_module\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class ConfigFormTest extends BrowserTestBase {
 
   protected $defaultTheme = 'stark';

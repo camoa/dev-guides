@@ -42,7 +42,9 @@ class DataProcessorTest extends UnitTestCase {
 namespace Drupal\Tests\my_module\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class MyServiceTest extends KernelTestBase {
 
   protected static $modules = ['system', 'my_module'];
@@ -58,7 +60,9 @@ class MyServiceTest extends KernelTestBase {
 **Replacing service with mock in Kernel test**:
 ```php
 use Drupal\Core\DependencyInjection\ServiceModifierInterface;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class MyServiceTest extends KernelTestBase implements ServiceModifierInterface {
 
   public function alter(ContainerBuilder $container): void {

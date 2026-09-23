@@ -24,7 +24,9 @@ Testing complete user workflows: page rendering, form submission, access control
 namespace Drupal\Tests\my_module\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class MyFeatureTest extends BrowserTestBase {
 
   protected $defaultTheme = 'stark';

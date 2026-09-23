@@ -11,7 +11,7 @@ Testing custom routes, controller methods, route parameters, response codes.
 ## Decision
 | What to test | Test type | Why |
 |---|---|---|
-| Route returns 200 | Browser | Needs HTTP simulation |
+| Route returns 200 | Kernel or Browser | A Kernel test can request the page from 11.4; Browser when the route needs a logged-in session |
 | Route parameters parsed correctly | Kernel or Browser | Depends on complexity |
 | Controller logic only | Unit or Kernel | Depends on dependencies |
 | Access control on route | Browser | Needs user context |
@@ -22,7 +22,9 @@ Testing custom routes, controller methods, route parameters, response codes.
 namespace Drupal\Tests\my_module\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
+#[RunTestsInSeparateProcesses]
 class RouteTest extends BrowserTestBase {
 
   protected $defaultTheme = 'stark';
