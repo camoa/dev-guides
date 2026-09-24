@@ -6,7 +6,7 @@ description: Use when a Drupal project on DDEV gives a task's git worktree a run
 # Metadata, read only after a match.
 label: Worktree environment (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.4.0
+version: 0.4.1
 recipe_class: process
 framework: drupal
 drupal_compatibility: "^10.3 || ^11"
@@ -67,9 +67,13 @@ from a directory DDEV no longer knows, cannot land on another project.
   says why, because DDEV would run every command against the main project.
 - `.ddev/config.yaml` is committed with no `name:` line, so each checkout is named after its
   directory. The check below refuses bring-up while the line is there and names it; the recipe
-  never edits a committed file. The remedy is the person's: delete the line and commit, and run
-  `ddev config global --omit-project-name-by-default` once so DDEV stops writing it into new
-  projects, as its worktree post says.
+  never edits a committed file. The remedy is the person's: delete the line and commit it on the
+  branch the worktree has checked out. A commit on the branch the worktree was cut from does not
+  reach it until someone merges it in. That one-line change then sits in the task's diff though
+  the task's contract does not name it, and the task's review should expect it. Deleting the line
+  is all bring-up needs. `ddev config global --omit-project-name-by-default` is optional: DDEV's
+  configuration page says it "determines whether `ddev config` updates the `name` field", so it
+  only stops a later `ddev config` from writing the line back, which would fail the next bring-up.
 - DDEV 1.25.4 or later: the sibling-worktree snapshot restore the seed depends on was observed on
   that version.
 - The main checkout's DDEV project is running: `ddev list -j` shows one row whose `approot` is the
@@ -98,7 +102,7 @@ before anything is committed or a token runs, as arguments and never through a s
 wrote, and commits nothing:
 
 ```sh
-bash .aida/environment/preconditions.sh {codePath}
+bash .aida/worktree-environment/preconditions.sh {codePath}
 ```
 
 The script checks, in order, that the worktree is not inside `{codePath}`, that
@@ -168,14 +172,14 @@ worktree's own project from there.
 input:  {codePath}                       held by the consumer
 
 files (written where absent, committed after the check passes):
-        .aida/environment/preconditions.sh, main-row.sh, main-project.sh, main-files.sh, address.sh
+        .aida/worktree-environment/preconditions.sh, main-row.sh, main-project.sh, main-files.sh, address.sh
 
 preconditions (in the worktree, before the commit):
         preconditions.sh {codePath}       → exit 0, or one line naming the first failure
 
 tokens (in the worktree, before bring-up):
-        main-project.sh {codePath}        → {mainProject}, from ddev list -j
-        main-files.sh {codePath}          → {mainFiles}, from the same row
+        main-project.sh {codePath}        → {mainProject}, the name field of the checkout's ddev list -j row
+        main-files.sh {codePath}          → {mainFiles}, the checkout's resolved path, its docroot field, sites/default/files
 
 bring up, before ## Address (in the worktree):
         ddev start                        → the worktree's containers, named after the directory
@@ -238,8 +242,9 @@ only for a task whose record carries an address, which is the mark that bring-up
 
 In the worktree, with the main checkout running:
 
-1. Before bring-up, `bash .aida/environment/preconditions.sh <main checkout>` prints nothing and
-   exits 0. Run from a directory inside the checkout, from a project whose `.ddev/config.yaml`
+1. Before bring-up, `bash .aida/worktree-environment/preconditions.sh <main checkout>` prints nothing and
+   exits 0, including for a main checkout whose DDEV `docroot` is empty because its Drupal root
+   is the repository root. Run from a directory inside the checkout, from a project whose `.ddev/config.yaml`
    has a `name:` line, with a main checkout that is no listed project, or from a directory named
    `Bad_Name`, it prints one line saying which and exits 1.
 
@@ -247,7 +252,7 @@ After bring-up:
 
 2. `ddev list -j` shows two rows with the main checkout's `approot` and the worktree's, each
    `running`, with different `name` and `primary_url` values.
-3. `bash .aida/environment/address.sh` prints three lines, `address:`, `project:` and `root:`, the
+3. `bash .aida/worktree-environment/address.sh` prints three lines, `address:`, `project:` and `root:`, the
    root being the worktree's path and the address `https://<worktree name>.ddev.site`; `curl -sSI`
    on that address returns `HTTP/2 200`.
 4. `ddev drush status --field=uri` prints the worktree's address, and
@@ -282,6 +287,17 @@ cleanup with no name lists the project's own snapshot directory and deletes each
 empty directory exits 0. A cleanup with a name that does not exist exits 1. A failure inside a
 snapshot prints a warning and exits 0, so step 4's listing is the check that both names exist.
 
+The 0.4.1 scripts were run on 2026-09-24 with bash 5.2.21 against a stub `ddev` that printed a
+fixed project list; no DDEV ran. The list held a project with an empty `docroot`, one with `web`,
+and one with no `docroot` key at all. Each checkout was given plain, with a trailing slash, and
+through a symbolic link. The empty-docroot project read `status` `running` and its files
+directory as the checkout's own `sites/default/files`, where 0.4.0's loop had read `status` empty
+and the files directory as `<checkout>/running/sites/default/files`. The project with no
+`docroot` key read an empty docroot rather than `null`, which is what the `// ""` in
+`main-row.sh` is for. A directory that is no listed project, and one that does not exist, both
+exited 4 from all three scripts. A run against a real project whose Drupal root is the repository
+root is not yet observed.
+
 ## Tokens
 
 One fenced `sh` block per token, the token's name as the fence's second word, one command. The
@@ -290,26 +306,34 @@ shell, with `{codePath}` filled whole, and takes the first line of standard outp
 command that prints nothing, or exits non-zero, refuses the bring-up and names the token.
 
 ```sh mainProject
-bash .aida/environment/main-project.sh {codePath}
+bash .aida/worktree-environment/main-project.sh {codePath}
 ```
 
 ```sh mainFiles
-bash .aida/environment/main-files.sh {codePath}
+bash .aida/worktree-environment/main-files.sh {codePath}
 ```
 
-Both scripts read the main checkout's row of DDEV's project list through `main-row.sh`, because
-a pipe and a filter are more than one argument can say. A checkout that is not a listed project
-prints nothing and exits 4, which is the refusal.
+Both scripts ask `main-row.sh` for one field of the main checkout's row of DDEV's project list,
+because a pipe and a filter are more than one argument can say. A checkout that is not a listed
+project prints nothing and exits 4, which is the refusal. The script never splits the row on
+tabs. A tab is whitespace to `read`, so an empty field between two tabs vanishes. A project whose
+Drupal root is the repository root lists an empty `docroot`, and every field after it then moves
+one place to the left.
 
 ## Files
 
-Five scripts, written where absent, the path as the fence's second word. They hold every DDEV and
-`jq` invocation the checks, the tokens and the address need, so the consumer runs them and knows
-neither. Paths are compared as the filesystem resolves them, in one place, because DDEV lists a
+Five scripts in `.aida/worktree-environment/`, written where absent, the path as the fence's
+second word. They hold every DDEV and `jq` invocation the checks, the tokens and the address
+need, so the consumer runs them and knows neither. Paths are compared as the filesystem resolves them, in one place, because DDEV lists a
 checkout under the path it was started from, and a consumer may hold that path with a trailing
 slash or through a link.
 
-```sh .aida/environment/preconditions.sh
+Until 0.4.1 the scripts lived in `.aida/environment/`. A file that exists with different content
+refuses the whole bring-up, so a project that had committed the 0.4.0 scripts would refuse the
+corrected ones at the same paths until a person removed the old files. At the new paths they are
+absent and are written. The old directory is no longer read, and a person may delete it.
+
+```sh .aida/worktree-environment/preconditions.sh
 #!/usr/bin/env bash
 # Checks what must be true before this worktree gets a site. $1 is the main checkout.
 # One line per failure, exit 1 at the first; silence and exit 0 when everything holds.
@@ -321,7 +345,7 @@ esac
 [ -f .ddev/config.yaml ] || { echo "no .ddev/config.yaml in $here; this recipe is for a DDEV project"; exit 1; }
 line="$(grep -n '^name:' .ddev/config.yaml | head -1 | cut -d: -f1)"
 if [ -n "$line" ]; then
-  echo ".ddev/config.yaml:$line pins the project name, so every worktree would collide with it; delete that line and commit, and run 'ddev config global --omit-project-name-by-default' once so DDEV stops writing it"
+  echo ".ddev/config.yaml:$line pins the project name, so every worktree would collide with it; delete that line and commit it on the branch this worktree has checked out, since a commit on the branch it was cut from does not reach it"
   exit 1
 fi
 command -v ddev >/dev/null || { echo "ddev is not on PATH"; exit 1; }
@@ -331,7 +355,7 @@ if [ "${major:-0}" -lt 1 ] || { [ "$major" -eq 1 ] && [ "${minor:-0}" -lt 25 ]; 
   echo "DDEV $version is older than 1.25.4, the version that restores a snapshot from a sibling worktree"
   exit 1
 fi
-status="$(bash "$(dirname "$0")/main-row.sh" "$1" | cut -f4)"
+status="$(bash "$(dirname "$0")/main-row.sh" "$1" status)"
 [ "$status" = "running" ] || { echo "the main checkout $1 is not a running DDEV project (status: ${status:-not listed}); run ddev start there first"; exit 1; }
 name="$(basename "$here")"
 case "$name" in
@@ -339,37 +363,38 @@ case "$name" in
 esac
 ```
 
-```sh .aida/environment/main-row.sh
+```sh .aida/worktree-environment/main-row.sh
 #!/usr/bin/env bash
-# Prints the DDEV project row for the checkout at $1 as "approot<TAB>name<TAB>docroot<TAB>status".
-# Paths are compared as the filesystem resolves them, so a trailing slash or a symlink on either
-# side still matches. Prints nothing and exits 4 when no listed project is that checkout.
+# Prints one field of the DDEV project row for the checkout at $1; $2 names it: name, docroot or status.
+# One path is read per line, so an empty field cannot shift the others. Paths are compared as the
+# filesystem resolves them, so a trailing slash or a symlink on either side still matches.
+# Prints nothing and exits 4 when no listed project is that checkout.
 want="$(cd "$1" 2>/dev/null && pwd -P)" || exit 4
-while IFS=$'\t' read -r root name docroot status; do
+list="$(ddev list -j)" || exit 4
+while IFS= read -r root; do
   if [ "$(cd "$root" 2>/dev/null && pwd -P)" = "$want" ]; then
-    printf '%s\t%s\t%s\t%s\n' "$root" "$name" "$docroot" "$status"
+    jq -r --arg root "$root" --arg field "$2" 'first(.raw[] | select(.approot == $root)) | .[$field] // ""' <<<"$list"
     exit 0
   fi
-done < <(ddev list -j | jq -r '.raw[] | [.approot, .name, .docroot, .status] | @tsv')
+done < <(jq -r '.raw[].approot' <<<"$list")
 exit 4
 ```
 
-```sh .aida/environment/main-project.sh
+```sh .aida/worktree-environment/main-project.sh
 #!/usr/bin/env bash
 # Prints the DDEV project name of the checkout at $1.
-bash "$(dirname "$0")/main-row.sh" "$1" | cut -f2
-exit "${PIPESTATUS[0]}"
+exec bash "$(dirname "$0")/main-row.sh" "$1" name
 ```
 
-```sh .aida/environment/main-files.sh
+```sh .aida/worktree-environment/main-files.sh
 #!/usr/bin/env bash
-# Prints the public files directory of the checkout at $1: its approot, its docroot, sites/default/files.
-row="$(bash "$(dirname "$0")/main-row.sh" "$1")" || exit $?
-IFS=$'\t' read -r root _ docroot _ <<<"$row"
+# Prints the public files directory of the checkout at $1: its resolved path, its docroot, sites/default/files.
+root="$(cd "$1" 2>/dev/null && pwd -P)" || exit 4
+docroot="$(bash "$(dirname "$0")/main-row.sh" "$1" docroot)" || exit $?
 printf '%s/sites/default/files\n' "${root}${docroot:+/$docroot}"
 ```
 
-```sh .aida/environment/address.sh
+```sh .aida/worktree-environment/address.sh
 #!/usr/bin/env bash
 # Prints the worktree project's address, name and root, one key per line, from where it is run.
 ddev describe -j | jq -r '.raw | "address: \(.primary_url)\nproject: \(.name)\nroot: \(.approot)"'
@@ -394,7 +419,7 @@ code to serve until Composer runs.
 One command, run in the worktree. Its standard output is `key: value` lines:
 
 ```sh
-bash .aida/environment/address.sh
+bash .aida/worktree-environment/address.sh
 ```
 
 `address:` is the site's address, for example `https://add-login.ddev.site`, which review and
