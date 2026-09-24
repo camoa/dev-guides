@@ -130,7 +130,10 @@ $database->query('SELECT * FROM {node} WHERE nid = :nid', [':nid' => $nid]);
 # Check for security updates
 composer outdated drupal/*
 # Apply security updates immediately
-composer update drupal/core --with-dependencies
+# Standard projects use drupal/core-recommended:
+composer update "drupal/core-*" --with-all-dependencies
+# Projects on bare drupal/core (no core-recommended) instead run:
+# composer update drupal/core --with-dependencies
 drush updb -y
 ```
 
