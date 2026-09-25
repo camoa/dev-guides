@@ -595,8 +595,9 @@ def validate_test_commands(body: str) -> list[str]:
 # posture as `test_commands`: absent is an answer, a row nobody wrote is not,
 # which is why each set of ids is fixed and ordered. Optional keys exist because
 # tools did not fit the plain shape when they were run: `extensions:` narrows
-# `{paths}` to the file types the tool reads (mypy parses a `.toml` as Python;
-# that row now runs whole, and the key stays for the next such tool),
+# `{paths}`, `{file}` or `{dirs}` to the file types the tool reads (mypy parses
+# a `.toml` as Python; that row now runs whole, and the key stays for the
+# next such tool),
 # `signal: empty-stdout` marks a tool that cannot fail by exit status (`gofmt -l`
 # exits 0 whether or not it lists a file), and `silent_pass:` on a surface row
 # says how a run that selected nothing prints itself.
@@ -611,7 +612,7 @@ SURFACE_COMMAND_IDS = [
 ]
 SURFACE_COMMAND_KEYS = CHECK_COMMAND_KEYS | {"silent_pass"}
 SIGNAL_VALUES = {"exit-status", "empty-stdout"}
-PATHS_PLACEHOLDER = "{paths}"
+FILE_SCOPED_PLACEHOLDERS = {"{paths}", "{file}", "{dirs}"}
 EXTENSION_RE = re.compile(r"^\.[a-z0-9]+$")
 
 
@@ -663,11 +664,13 @@ def validate_command_rows(
                     )
         if "extensions" in row:
             exts = row["extensions"]
-            takes_paths = isinstance(row.get("argv"), list) and PATHS_PLACEHOLDER in row["argv"]
-            if not takes_paths:
+            takes_scoped_placeholder = isinstance(row.get("argv"), list) and any(
+                t in FILE_SCOPED_PLACEHOLDERS for t in row["argv"]
+            )
+            if not takes_scoped_placeholder:
                 errors.append(
-                    f"{label} {rid or i} carries `extensions:` but its `argv` has no "
-                    f"`{PATHS_PLACEHOLDER}` token; the key narrows what that token expands to"
+                    f"{label} {rid or i} carries `extensions:` but its `argv` has none of "
+                    f"{sorted(FILE_SCOPED_PLACEHOLDERS)}; the key narrows what those tokens expand to"
                 )
             if (
                 not isinstance(exts, list)
