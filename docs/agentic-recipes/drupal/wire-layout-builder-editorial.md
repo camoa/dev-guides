@@ -68,6 +68,7 @@ Provision Layout Builder on a content type so content editors compose visually c
 - For any *curated* or *locked* posture: `layout_builder_restrictions` and `layout_builder_styles` available (the palette and style groups depend on them). See `drupal/layout-builder/lb-restrictions`.
 - The target content-type bundle exists, with its `Manage display` view mode available.
 - The editor role to enable exists.
+- When `list_components` is non-empty, a custom module exists, or is created, to hold `hook_block_content_view()`: core invokes entity view hooks for modules only. On Drupal 10 or 11.0 it also needs the `#[LegacyHook]` procedural function and the `services.yml` entry the guide shows. See `drupal/layout-builder/block-content-list-components`.
 - Config export is in use (the capability must be exportable — see the state-awareness contract).
 - DDEV runs the site; the verifier's commands go through `ddev`.
 
@@ -107,13 +108,13 @@ If invoked in dry-run mode, perform all reads and derivations but emit a preview
 
 2. **Enable Layout Builder on the bundle view display** with the resolved `allow_custom`. See `drupal/layout-builder/enabling-lb`.
 
-3. **Model the list components.** For each entry in `list_components`, ensure its `block_content` bundle, its taxonomy-term grouping field, and the View of block_content that lists it — including per-category fixed-argument displays where a single placement must render one category. No Paragraphs. See `drupal/layout-builder/block-content-list-components` and `drupal/layout-builder/field-extra-field-blocks`.
+3. **Model the list components.** For each entry in `list_components`, ensure its `block_content` bundle, its taxonomy-term grouping field, and the View of block_content that lists it — including per-category fixed-argument displays where a single placement must render one category. Create a dedicated `block_content` view mode for the rows, such as `list_item`, and select it as the View's row view mode on its default display. No Paragraphs. See `drupal/layout-builder/block-content-list-components` and `drupal/layout-builder/field-extra-field-blocks`.
 
 4. **Curate the palette.** For non-*open* postures, apply the `layout_builder_restrictions` allowlist for `block_palette` and `layout_palette` on the view display. See `drupal/layout-builder/lb-restrictions`.
 
 5. **Expose the style palette.** Wire the `style_palette` groups/styles as the Layout Builder Styles editors may apply. See `drupal/layout-builder/lb-styles-overview`, `drupal/layout-builder/lb-styles-groups`.
 
-6. **Ensure render theming.** Where list components render as View rows, ensure the block_content render theme-hook trio is registered; ensure every inline-block template used in LB emits `{{ attributes }}` and `{{ title_suffix }}`. See `drupal/layout-builder/block-content-list-components`, `drupal/layout-builder/theming-lb`.
+6. **Ensure render theming.** Where list components render as View rows, ensure the block_content render theme-hook trio is registered: `hook_theme()` and the bundle suggestions alter in the theme, and `hook_block_content_view()` in a module, since core fires entity view hooks for modules only. Scope that hook to a dedicated `block_content` view mode, such as `list_item`: create the view mode and select it as the row view mode of each `list_components` View, so placed and inline blocks keep their output; ensure every inline-block template used in LB emits `{{ attributes }}` and `{{ title_suffix }}`. See `drupal/layout-builder/block-content-list-components`, `drupal/layout-builder/theming-lb`.
 
 7. **Harden the editor form display.** Use the Media Library widget for media fields, hide legacy/raw fields, and add field descriptions on the bundle (and on any block_content bundle used inline). See `drupal/layout-builder/editor-form-display-hardening`.
 
@@ -136,7 +137,7 @@ reads project state:
        block_content.type.* / field.* / views.view.*           (list components)
        layout_builder_styles.style.* / .group.*                (style palette)
        core.entity_form_display.*                              (editor form hardening)
-       theme templates + hooks                                 (render theming)
+       theme templates + hooks, module block_content_view hook (render theming)
 
 applies opinion (guardrails):
        posture-first · curate-don't-open · styles-not-CSS ·
@@ -157,7 +158,9 @@ emits:
        block_content.type.* / field.* / views.view.*  (list components)
        layout_builder_styles exposure     (style palette)
        core.entity_form_display.*         (hardened editor form)
-       theme: block_content render trio + attribute-emitting inline templates
+       theme: block_content theme hook + suggestions + attribute-emitting inline templates
+       core.entity_view_mode.block_content.<row view mode>  (View rows only)
+       module: hook_block_content_view setting #theme in the row view mode
 ```
 
 ## State-awareness contract
@@ -224,7 +227,7 @@ What the entries do not prove, and where the proof is:
 - `templates-emit-attributes` stands in for the template half. It renders a block through the default theme for each `block_content` bundle, once as an inline block and once as a reusable `block_content` block, as a user who may see contextual links. The block's content is the view builder's `full` build of an unsaved block of that bundle, so core's `#block_content` suggestions, such as `block__block_content__type__<bundle>`, pick the template. Nothing is saved. The block's attributes carry a probe attribute and core's contextual module adds its placeholder to `title_suffix`, so the markup shows whether the template that won prints each one. Rendering follows `include`, `extends` and `embed`, and aliases such as `{% set block_attributes = attributes %}`, which a text search of the template misses. A template that prints only on some condition the probe does not meet, such as a label, is not caught.
 - `style-palette` checks each listed group and style exists, and each style belongs to its group. Layout Builder Styles are site-wide, so styles outside the palette are not flagged. An absent or empty `style_palette` checks nothing.
 - `list-components` checks the `block_content` bundle, a taxonomy-term reference field on it, and a View whose base table is `block_content_field_data`, so no Paragraphs type backs the list. An absent or empty `list_components` checks nothing, and so does `block-content-theme-hook`.
-- `block-content-theme-hook` checks two of the three hooks: a `block_content` theme hook is registered, and an unsaved `block_content` of each listed bundle builds with `#theme` set to `block_content`. The second is not implied by the first: core's `BlockContentViewBuilder` removes the `#theme` its parent sets, so only the second hook puts it back. The bundle suggestions from the third hook are not checked.
+- `block-content-theme-hook` checks two of the three hooks: a `block_content` theme hook is registered, and an unsaved `block_content` of each listed bundle builds with `#theme` set to `block_content`. It reads the row of the entry's `view` from its default display. The entry fails when that View does not exist, when that row's type is not `entity:block_content`, when its view mode is `default` or `full`, which placed and inline blocks also build in, or when `core.entity_view_mode.block_content.<mode>` does not exist. A View whose row is overridden on a non-default display (`defaults.row: false`) fails the entry, because the check reads the default display, which is where Sequence step 3 sets it. Otherwise it builds in that view mode. The second is not implied by the first: core's `BlockContentViewBuilder` removes the `#theme` its parent sets, so only the second hook puts it back. The bundle suggestions from the third hook are not checked.
 - `active-equals-export` proves the permissions, restrictions, styles and display are in the export after Sequence step 9, not only in the database.
 
 ## Files
@@ -458,11 +461,39 @@ switch ($check) {
         continue;
       }
       if ($check === 'trio') {
-        $view_builder = $etm->getViewBuilder('block_content');
+        if ($view === '' || \Drupal::config("views.view.$view")->isNew()) {
+          $v[] = "list_components[$i]: views.view.$view does not exist";
+          continue;
+        }
+        $displays = \Drupal::config("views.view.$view")->get('display') ?? [];
+        foreach ($displays as $display_id => $display) {
+          if ($display_id !== 'default' && ($display['display_options']['defaults']['row'] ?? TRUE) === FALSE) {
+            $v[] = "list_components[$i]: views.view.$view overrides the row on display $display_id; set it on the default display only";
+          }
+        }
+        $row = $displays['default']['display_options']['row'] ?? [];
+        if (($row['type'] ?? NULL) !== 'entity:block_content') {
+          $v[] = "list_components[$i]: views.view.$view's default display row is not entity:block_content";
+          continue;
+        }
+        $row_mode = $row['options']['view_mode'] ?? NULL;
+        if (!is_string($row_mode) || $row_mode === '') {
+          $v[] = "list_components[$i]: views.view.$view has no row view mode on its default display";
+          continue;
+        }
+        if (in_array($row_mode, ['default', 'full'], TRUE)) {
+          $v[] = "list_components[$i]: views.view.$view builds its rows in view mode $row_mode, which placed and inline blocks also use; select a dedicated view mode such as list_item";
+          continue;
+        }
+        if (\Drupal::config("core.entity_view_mode.block_content.$row_mode")->isNew()) {
+          $v[] = "list_components[$i]: core.entity_view_mode.block_content.$row_mode, the row view mode of views.view.$view, does not exist";
+          continue;
+        }
         $block = $etm->getStorage('block_content')->create(['type' => $block_bundle, 'info' => 'aida verify fixture']);
-        $build = $view_builder->build($view_builder->view($block));
+        // BlockContentViewBuilder::view() already runs buildMultiple().
+        $build = $etm->getViewBuilder('block_content')->view($block, $row_mode);
         if (($build['#theme'] ?? NULL) !== 'block_content') {
-          $v[] = "a block_content of type $block_bundle builds without #theme block_content";
+          $v[] = "a block_content of type $block_bundle builds in view mode $row_mode, the row view mode of views.view.$view, without #theme block_content";
         }
         continue;
       }
