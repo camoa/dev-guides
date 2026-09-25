@@ -18,6 +18,12 @@ Recipes are published to a separate index, `agentic-recipes.txt` (not `llms.txt`
 | `drupal-seo-foundation` | [Drupal SEO foundation](drupal/drupal-seo-foundation.md) | A Drupal site needs its SEO/GEO foundation wired to an opinionated, verifier-gated contract — metatag per bundle, Schema.org/JSON-LD, sitemap, pathauto + redirect, robots. |
 | `drupal-module-test-authoring` | [Drupal module test authoring](drupal/module-test-authoring.md) | A Drupal module needs tests written or extended: which kind each behaviour gets, written to the conventions current core and PHPUnit enforce, and proved by a run whose output was read. |
 | `drupal-dependency-update` | [Drupal dependency update](drupal/dependency-update.md) | A Drupal site must update named packages, the whole site, or core along a version path, and reach a stable point with nothing pending and every moved package reported. |
+| `pathauto-alias-pattern-configuration` | [Configure Pathauto alias pattern](drupal/configure-pathauto-alias-pattern.md) | A single bundle or vocabulary needs a clean URL-alias pattern via Pathauto, scoped with a selection-criteria condition — not a full SEO build. |
+| `content-moderation-workflow-provisioning` | [Content moderation workflow](drupal/content-moderation-workflow.md) | A content type needs an editorial workflow via core content_moderation + workflows — states, transitions, and backfilling existing content. |
+| `editorial-roles-permissions-provisioning` | [Editorial roles & permissions](drupal/editorial-roles-permissions.md) | A site needs its editorial content roles — a single content_editor or a two-tier author/editor split, granted per bundle, never via `is_admin`. |
+| `content-type-field-provisioning` | [Provision content type fields](drupal/provision-content-type-fields.md) | A content type needs its fields defined — per-field storage decisions, shared storages, custom compound fields only where genuinely polymorphic. |
+| `drupal-site-template-publishing` | [Site template publishing](drupal/site-template-publishing.md) | A working Drupal CMS site must become a standalone, marketplace-compliant site template, exported from a disposable scratch install. |
+| `layout-builder-editorial-wiring` | [Wire Layout Builder for editorial use](drupal/wire-layout-builder-editorial.md) | A content type must be handed to editors to compose pages in Layout Builder — palette curation, repeating sections, and editor-UX hardening. |
 
 ## Authoring an agentic recipe
 
@@ -49,7 +55,7 @@ Optional machine-readable dependencies — `requires_guides:` / `requires_plays:
 
 **5. Reference, don't duplicate; don't bake in examples.** A recipe cites guides and plays for *mechanics* and carries only the prescriptive stance and the sequencing. The `## Input contract` is a **generic schema** the operator fills — do not bake operator-specific input values or worked examples into the body.
 
-**6. Every `## Verifier` check must declare its runnability — the consumer fail-closes on a check it cannot run.** The `ai-dev-assistant` plugin (v5.12.0+) runs each adopted recipe's `## Verifier` as a **hard-block review gate** and treats any check it *cannot* run as **unresolved → fail-closed HALT**, never a silent "skipped → pass". So a check that is ambiguously specified or depends on something the `## Input contract` doesn't provide will spuriously block a review. Classify every check as one of:
+**6. Every `## Verifier` check must declare its runnability — the consumer fail-closes on a check it cannot run.** The `aida` plugin (version 6) runs each adopted recipe's `## Verifier` as a **hard-block review gate** and treats any check it *cannot* run as **unresolved → fail-closed HALT**, never a silent "skipped → pass". So a check that is ambiguously specified or depends on something the `## Input contract` doesn't provide will spuriously block a review. Classify every check as one of:
 
 - **`config-assert`** — reads config/state via `drush` / file reads; deterministic, no served site needed.
 - **`live-site`** — fetches a served page and asserts on the response/DOM; needs a served site. Its absence is a *correct* fail-close, not a recipe defect — say so explicitly so the consumer treats a no-site environment as expected.

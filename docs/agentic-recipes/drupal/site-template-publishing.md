@@ -6,11 +6,12 @@ description: Use when turning a working Drupal CMS site into a standalone, marke
 # Metadata — read only after a match.
 label: Site template publishing
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.1.1
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/recipes
   - drupal/config-management
+  - drupal/tdd/phpunit-configuration
 requires_plays:
   - drupal/best-practices/camoa/ddev-composer-path-repo-drupal-recipe
   - drupal/best-practices/camoa/ship-search-index-view-mode-defensively
@@ -106,7 +107,7 @@ If invoked in dry-run mode, perform all reads and derivations but emit a preview
 
 6. **Prove via a fresh consumer.** New distro codebase; add the package via a path repo (`symlink: false`); because the template carries pre-stable deps, set `composer config minimum-stability dev` + `prefer-stable true` first — play `drupal/best-practices/camoa/pre-stable-template-consumer-minimum-stability`. `drush site:install <recipes/<name>>` must exit 0; render-check every `verify.pages` route (200s, brand-string count 0, expected sections present).
 
-7. **Run the scaffold's PHPUnit tests.** With drupal/core-dev in the consumer codebase and `SIMPLETEST_*` env set, run `vendor/bin/phpunit --configuration=web/core recipes/<name>/tests`. InstallTest (installs from the recipe), ValidationTest (applies via the recipe CLI AND asserts every Canvas component used by shipped content exists as `canvas.component.*` config), RequirementsTest. Handle pre-stable minimum-stability for the test codebase the same way as the consumer. Note: PHPUnit 11 boolean flags (`--fail-on-warning`, `--display-deprecations`) take no value. The recipe CLI path (not `site:install`) is what catches a desynced Canvas `active_version` — treat a ValidationTest hash failure as the Canvas raw-edit trap.
+7. **Run the scaffold's PHPUnit tests.** With drupal/core-dev in the consumer codebase and `SIMPLETEST_*` env set, copy `web/core/phpunit.xml.dist` to `phpunit.xml` at the consumer's project root, rewrite its paths for the docroot, and run `vendor/bin/phpunit -c phpunit.xml recipes/<name>/tests` — see `drupal/tdd/phpunit-configuration`; `-c web/core` runs core's own contrib-wide suite instead. InstallTest (installs from the recipe), ValidationTest (applies via the recipe CLI AND asserts every Canvas component used by shipped content exists as `canvas.component.*` config), RequirementsTest. Handle pre-stable minimum-stability for the test codebase the same way as the consumer. Note: PHPUnit 11 boolean flags (`--fail-on-warning`, `--display-deprecations`) take no value. The recipe CLI path (not `site:install`) is what catches a desynced Canvas `active_version` — treat a ValidationTest hash failure as the Canvas raw-edit trap.
 
 8. **axe-core WCAG scan.** Run an axe-core scan over the rendered `verify.pages`; zero critical and zero serious violations is the bar.
 
@@ -174,6 +175,7 @@ The recipe ships no verifier *script*, but every check is a runnable method: che
 |---|---|
 | `drupal/recipes` | Recipe structure, `type: Site`, flat `install:` vs composed `recipes:`, config actions, import ordering |
 | `drupal/config-management` | Active config export, config→action rewrite, dependencies, `core.extension` handling |
+| `drupal/tdd/phpunit-configuration` | The consumer's `phpunit.xml` at the project root, its rewritten paths, and why `-c web/core` is wrong |
 
 ### Plays applied
 

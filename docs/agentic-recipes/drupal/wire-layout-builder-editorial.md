@@ -6,7 +6,7 @@ description: Use when a content type must be handed to content editors to compos
 # Metadata — read only after a match.
 label: Wire Layout Builder for editorial use
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.1.1
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/layout-builder/enabling-lb
@@ -116,7 +116,7 @@ If invoked in dry-run mode, perform all reads and derivations but emit a preview
 
 7. **Harden the editor form display.** Use the Media Library widget for media fields, hide legacy/raw fields, and add field descriptions on the bundle (and on any block_content bundle used inline). See `drupal/layout-builder/editor-form-display-hardening`.
 
-8. **Grant the editor role its permissions.** For a scoped posture, prefer the per-bundle `configure editable <entity_type> <bundle> layout overrides` permission over `configure any layout`; always include `create and edit custom blocks` when inline blocks are in play. See `drupal/layout-builder/enabling-lb`.
+8. **Grant the editor role its permissions.** For a scoped posture, prefer the per-bundle `configure editable <bundle> <entity_type> layout overrides` permission over `configure any layout`; always include `create and edit custom blocks` when inline blocks are in play. See `drupal/layout-builder/enabling-lb`.
 
 9. **Export and confirm the capability is in config.** Export configuration and confirm the role permissions, restriction allowlist, style groups, and view-display settings are all present in the export — not only in the database.
 
