@@ -7,7 +7,7 @@ tldr: "For Drupal, point the Planner at *.routing.yml, buildForm(), and *.permis
 
 ## When to Use
 
-> Use this when applying the AI test generation pattern to a Drupal site, optionally with ATK installed.
+> You're using the pattern with a Drupal site, optionally with ATK installed.
 
 ## Decision
 
@@ -41,6 +41,8 @@ test('seed Drupal state', async () => {
 });
 ```
 
+The seed runs before scenario tests; resets Drupal to a known state.
+
 ## Pattern: ATK selector hooks in generated code
 
 If ATK is installed, its preprocess hooks add body classes (`node-type-*`, `node-nid-*`, `term-vid-*`, `term-tid-*`) and a `data-media-id` attribute on media images:
@@ -53,7 +55,7 @@ The Generator's output can scope locators from the body class. Media IDs differ 
 
 ## Pattern: Drupal-specific negatives
 
-Include these in every plan for a Drupal site:
+Common Drupal negative checks to include in plans:
 
 ```markdown
 **Negative checks:**
@@ -63,6 +65,8 @@ Include these in every plan for a Drupal site:
 - No `.messages--error` regions are visible
 - The page does not redirect to `/user/login`
 ```
+
+These catch Drupal-specific bug classes the Planner won't otherwise notice.
 
 ## Pattern: when the codebase uses ATK
 

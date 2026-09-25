@@ -7,7 +7,7 @@ tldr: "Map \"As an X, I want Y so that Z\" to: Preconditions = X, scenario title
 
 ## When to Use
 
-> Use this when translating Jira tickets, PRD excerpts, design docs, or Markdown user stories into test plans.
+> Translating Jira tickets, PRD excerpts, design docs, or Markdown user stories into test plans.
 
 ## Decision
 
@@ -30,9 +30,16 @@ As an X, I want Y so that Z
 | `I want Y` | Scenario title (imperative): "X does Y" |
 | `so that Z` | First acceptance criterion: "Z is observable as ..." |
 
+## Pattern: multiple stories per input
+
+If a single Jira epic contains five stories:
+- One H2 epic in the plan
+- One H3 scenario per story under the epic
+- Shared preconditions hoisted to the plan level if they apply to all stories
+
 ## Pattern: extracting from Jira
 
-Jira tickets contain noise (comments, status changes, Slack-quote pastes). Tell the Planner explicitly:
+Jira tickets contain noise (comments, status changes that become acceptance criteria, Slack-quote pastes). Tell the Planner explicitly:
 
 ```
 Extract the Acceptance Criteria block and the Description only.
@@ -49,12 +56,17 @@ PRDs have prose, not enumerated AC. The Planner should:
 2. Convert each to an acceptance criterion (observable, present-tense)
 3. Surface ambiguities as `## Clarifications needed` at the top of the plan
 
+## Anti-Patterns
+
+- **Pasting the whole Jira ticket with comments** — stale AC from comments override canonical AC
+- **Translating "should be fast" literally** — non-functional criteria need different assertions (Lighthouse, performance traces), not E2E asserts
+- **One scenario per user story regardless of size** — large stories split into multiple scenarios; sometimes one story = one epic
+
 ## Common Mistakes
 
-- **Wrong**: No Clarifications block when the story is ambiguous → **Right**: Planner invents an interpretation; reviewer rubber-stamps it
-- **Wrong**: Story title becomes plan title verbatim without imperative rewriting → **Right**: "User Login Story" becomes "User logs in"
-- **Wrong**: Pasting the whole Jira ticket with comments → **Right**: stale AC from comments override canonical AC
-- **Wrong**: One scenario per user story regardless of size → **Right**: large stories split into multiple scenarios
+- **No Clarifications block** when the story is ambiguous — Planner invents an interpretation; reviewer rubber-stamps it
+- **Story title becomes plan title verbatim** without imperative rewriting — "User Login Story" instead of "User logs in"
+- **Acceptance criteria copied as bullets without translation** — keeping "User should be able to log in" instead of "Logged-in user reaches dashboard"
 
 ## See Also
 

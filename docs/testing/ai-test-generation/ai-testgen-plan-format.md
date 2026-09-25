@@ -7,14 +7,16 @@ tldr: "Plans use a specific Markdown hierarchy: H2 = epic/area, H3 = scenario gr
 
 ## When to Use
 
-> Use this format when authoring or reviewing any Markdown test plan — whether written by the Planner agent or by hand.
+> Authoring or reviewing a Markdown test plan.
 
 ## Two Anti-Patterns That Recur
 
 - **Too vague** ("test the form works") — Generator invents its own success criteria; Healer can't distinguish regression from ambiguity
 - **Too detailed / imperative** (selectors, literal copy, exact wait times) — every UI tweak forces a plan rewrite; defeats the regenerable-code premise
 
-## Decision
+## Decision: The De Facto Schema
+
+Playwright Test Agents emit and parse a specific Markdown shape. Heading hierarchy maps to test code:
 
 | Markdown level | Maps to |
 |---|---|
@@ -35,9 +37,9 @@ tldr: "Plans use a specific Markdown hierarchy: H2 = epic/area, H3 = scenario gr
 | Expected | One assertable fact per bullet | "Form works correctly" |
 | Negative | Specific observable | "Nothing bad happens" |
 
-## Pattern
+## Pattern: Canonical Section Structure
 
-Canonical section order for each scenario:
+For each scenario, in this order:
 
 1. **Title** — one short imperative sentence
 2. **Seed reference** — pointer to the seed test that bootstraps state
@@ -73,9 +75,9 @@ Plan-level scope is the contract. The Generator respects this header on regenera
 
 ## Common Mistakes
 
-- **Wrong**: No version line in the header → **Right**: can't tell which plan was reviewed if multiple were drafted
-- **Wrong**: Free-form prose without numbered steps → **Right**: Generator can't map prose to step calls
-- **Wrong**: Plan that mixes happy-path and edge-case in the same scenario → **Right**: split into siblings
+- **No version line in the header** — can't tell which plan was reviewed if multiple were drafted
+- **Free-form prose without numbered steps** — Generator can't map prose to step calls
+- **Plan that mixes happy-path and edge-case in the same scenario** — split into siblings
 
 ## See Also
 

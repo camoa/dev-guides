@@ -7,7 +7,11 @@ tldr: Crawl-based plan generation catches forgotten surfaces on inherited projec
 
 ## When to Use
 
-> Use crawled discovery when backfilling tests on an inherited project with no docs and no organized user stories. Do not use it as the default workflow.
+> You want broad regression coverage and don't have user stories or code organized by feature.
+
+## What Crawling Does
+
+Playwright MCP gives the Planner `browser_navigate`, `browser_snapshot`, `browser_network_request` — enough to crawl. The Planner follows links from a seed URL, snapshots each page, generates a scenario per surface.
 
 ## Decision
 
@@ -24,7 +28,7 @@ tldr: Crawl-based plan generation catches forgotten surfaces on inherited projec
 - Good for "regression net" plans where breadth > depth
 - Useful when documentation is poor
 
-**Cons:**
+**Cons (the common case):**
 - Plans become flat: "Visit /node/1, see a node"
 - Crawls follow auth-gated links that fail without seed login → useless "redirect to /login" scenarios
 - Drupal sites have infinite-axis surfaces (filtered views, paginated listings, every node URL) — Planner can't tell which are meaningfully different
@@ -42,9 +46,9 @@ Treat plans as starting points humans prune.
 
 ## Common Mistakes
 
-- **Wrong**: Crawl-and-generate as the default workflow → **Right**: produces 200 redundant scenarios; one selector change breaks all; PM cannot review
-- **Wrong**: No path exclusions → **Right**: Planner generates auth-gate scenarios for every admin URL
-- **Wrong**: Treating crawl output as final tests → **Right**: crawl output is discovery material; humans prune and scope before generating code
+- **Crawl-and-generate as the default workflow** — produces 200 redundant scenarios; one selector change breaks all; PM cannot review
+- **No path exclusions** — Planner generates auth-gate scenarios for every admin URL
+- **Treating crawl output as final tests** instead of as discovery
 
 ## See Also
 

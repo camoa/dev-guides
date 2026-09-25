@@ -7,7 +7,7 @@ tldr: Install with `claude mcp add playwright npx @playwright/mcp@latest`, then 
 
 ## When to Use
 
-> Use this guide when wiring Claude Code (or Cursor / Copilot) to drive a real browser for plan generation.
+> Wiring Claude Code (or Cursor / Copilot) to drive a real browser for plan generation.
 
 ## Decision
 
@@ -28,7 +28,7 @@ One command:
 claude mcp add playwright npx @playwright/mcp@latest
 ```
 
-Restart Claude Code to load.
+This adds the MCP server to Claude Code's config. Restart Claude Code to load.
 
 ## Pattern: explicit config
 
@@ -48,7 +48,7 @@ Restart Claude Code to load.
 | Tool | Purpose |
 |---|---|
 | `browser_navigate(url)` | Open URL |
-| `browser_snapshot()` | Accessibility-tree snapshot (token-efficient) |
+| `browser_snapshot()` | Accessibility-tree snapshot of current page (token-efficient) |
 | `browser_click(ref)` | Click via ref from snapshot |
 | `browser_type(ref, text)` | Type into element |
 | `browser_select(ref, value)` | Select option |
@@ -61,9 +61,9 @@ Playwright MCP supports a `--codegen typescript` flag that emits real Playwright
 
 ## Common Mistakes
 
-- **Wrong**: Mixing Playwright MCP and Chrome DevTools MCP in the same agent call → **Right**: token cost doubles; pick one per task
-- **Wrong**: Running MCP against production URLs → **Right**: the agent will navigate, click, fill forms; always route to a test environment
-- **Wrong**: Skipping the MCP restart after install → **Right**: Claude Code doesn't auto-detect the new server
+- **Mixing Playwright MCP and Chrome DevTools MCP in the same agent call** — token cost doubles; pick one per task
+- **Running MCP against production URLs** without thinking — the agent will navigate, click, fill forms; route to a test environment
+- **Skipping the MCP restart** after install — Claude Code doesn't auto-detect the new server
 
 ## See Also
 

@@ -7,7 +7,7 @@ tldr: Write each criterion as an observable present-tense state ("The success me
 
 ## When to Use
 
-> Use this guide when writing the "what should be true at the end" section of any scenario in a test plan.
+> Writing the "what should be true at the end" section of a scenario.
 
 ## Decision
 
@@ -19,9 +19,9 @@ tldr: Write each criterion as an observable present-tense state ("The success me
 
 A scenario with 10 expected results usually has multiple concerns smuggled in.
 
-## Pattern
+## Pattern: observable present-tense assertions
 
-Observable present-tense assertions:
+The phrasing that works for both humans and AI:
 
 ```markdown
 **Expected results:**
@@ -35,22 +35,31 @@ Each bullet is:
 - **Present-tense state** (not action)
 - **Independently checkable** (Generator emits one `expect()` per bullet)
 
-### Given-When-Then mental model (without keywords)
+### Pattern: Given-When-Then mental model (without keywords)
 
-- **Preconditions** section = Given
-- **Steps** section = When
-- **Expected results** section = Then
+Use the structure without writing the keywords explicitly:
 
-Don't write `Given/When/Then` literally unless committing to playwright-bdd or Cucumber.
+- **Preconditions** section is the *Given*
+- **Steps** section is the *When*
+- **Expected results** section is the *Then*
+
+Don't paste `Given/When/Then` literally unless you're committing to playwright-bdd or Cucumber — they become redundant with the section names.
+
+## Anti-Patterns
+
+| Bad | Why | Better |
+|---|---|---|
+| "It should work" | No observable | "The success message is visible" |
+| "`expect(page.locator('.alert-success')).toBeVisible()`" | Already code — demote to Generator | "The success message is visible" |
+| "Form succeeds without errors" | Negative without specificity | "No error toast is visible AND a confirmation toast is visible" |
+| "User can proceed" | Non-observable | "The 'Continue' button becomes enabled" |
+| "Performance is acceptable" | Non-functional, wrong tool | Use Lighthouse or performance traces, not E2E asserts |
 
 ## Common Mistakes
 
-- **Wrong**: "It should work" → **Right**: "The success message is visible"
-- **Wrong**: `` `expect(page.locator('.alert-success')).toBeVisible()` `` → **Right**: "The success message is visible" (that's already code — let the Generator write it)
-- **Wrong**: "Form succeeds without errors" → **Right**: "No error toast is visible AND a confirmation toast is visible" (split into two bullets)
-- **Wrong**: "User can proceed" → **Right**: "The 'Continue' button becomes enabled"
-- **Wrong**: One mega-assertion (`page.toMatchSnapshot()`) → **Right**: one bullet per fact
-- **Wrong**: No expected results on a "happy path" scenario → **Right**: every scenario has at least one assertable fact
+- **One mega-assertion** (`page.toMatchSnapshot()`) — hides what changed; use one bullet per fact
+- **No expected results at all** on a "happy path" scenario — defaulting to "page loaded" misses the actual behavior
+- **Expected results that overlap with steps** — if the step is "click submit," don't also assert "user clicked submit"
 
 ## See Also
 

@@ -7,7 +7,7 @@ tldr: "Scenario intent, step lists, acceptance criteria, negative assertions, an
 
 ## When to Use
 
-> Use this guide when deciding what belongs in the plan versus what belongs in the generated code — during authoring, review, or when a plan starts growing implementation details.
+> Deciding what belongs in the plan vs what belongs in the generated code.
 
 ## Decision
 
@@ -18,7 +18,7 @@ tldr: "Scenario intent, step lists, acceptance criteria, negative assertions, an
 | Acceptance criteria ("success message visible") | Plan | Non-developer can confirm |
 | Negative assertions ("no email sent on validation failure") | Plan | Crucial; non-devs must see them |
 | Out-of-scope notes | Plan | Constraint on the Generator |
-| Field labels ("Your name") | Plan | User-facing — change rarely; aids reviewers |
+| Field labels ("Your name") | Plan | These are user-facing — change rarely; expressing them aids reviewers |
 | CSS selectors | Generated code | Implementation detail; Healer's job |
 | Wait/timeout tactics | Generated code | Playwright handles via web-first assertions |
 | Test helpers / fixtures | Code | Reusable across tests; plan references by name |
@@ -33,7 +33,9 @@ tldr: "Scenario intent, step lists, acceptance criteria, negative assertions, an
 | CSS class (`.btn-primary`) | Code — implementation |
 | Test ID (`data-testid`) | Gray — only put in plan if the design team owns the contract |
 
-## Pattern
+Rule of thumb: if a manual tester could act on the hint by reading the rendered page, it belongs in the plan.
+
+## Pattern: behavioral language
 
 ```markdown
 <!-- Good — plan stays behavioral -->
@@ -49,9 +51,9 @@ The Generator handles selector derivation. If the plan locks in a selector, the 
 
 ## Common Mistakes
 
-- **Wrong**: Putting selectors in plans → **Right**: plans stay behavioral; reviewers can't read selectors; Healer can't fix them when the plan overrides
-- **Wrong**: Putting business logic in tests → **Right**: should be in fixtures or seed tests, not duplicated per scenario
-- **Wrong**: Hardcoding literal copy in the plan → **Right**: one product-copy change breaks every plan
+- **Putting selectors in plans** — turns plans into code; reviewers can't read; Healer can't fix
+- **Putting business logic in tests** — should be in fixtures or seed tests, not duplicated per scenario
+- **Hardcoding literal copy in the plan** — locks in current strings; one product-copy change breaks every plan
 
 ## See Also
 

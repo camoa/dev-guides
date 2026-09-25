@@ -7,7 +7,18 @@ tldr: Use AI generation when backfilling coverage on an existing site or transla
 
 ## When to Use
 
-> Use AI test generation when the site exists, behavior is defined, and you need coverage you don't have time to write by hand. Do not use it when intent is unclear — the AI will encode whatever it finds, which may be the bug.
+> AI test generation pays off when:
+>
+> - The site already exists and you need broad coverage you don't have time to write by hand
+> - A PR description / user story / Jira ticket already describes the desired behavior — let an agent translate it
+> - You're triaging a regression and need a test that reproduces it quickly
+> - Tests need to be re-generated when the UI changes substantially (plan stays, code regenerates)
+>
+> AI test generation is **not** a substitute for:
+>
+> - Writing the test plan yourself when intent is unclear — the AI will encode whatever it finds, which may be the bug
+> - Reading the code review of a generated test — the Healer can't fix what wasn't right to begin with
+> - Designing the test architecture (fixtures, helpers, page objects) — that's a human decision
 
 ## Decision
 
@@ -45,9 +56,9 @@ Three review gates. Skipping any of them defeats the workflow.
 
 ## Common Mistakes
 
-- **Wrong**: Generating code directly from a prompt without the plan stage → **Right**: plan first, every time — it's the only review gate a non-developer can use
-- **Wrong**: Treating AI tests as final on commit → **Right**: review every output as if a junior engineer wrote it
-- **Wrong**: Using AI generation when you can't articulate what "correct" looks like → **Right**: define intent first; then generate
+- **Generating code directly from a prompt** without the plan stage — you skip the only review gate a non-developer can use
+- **Treating AI tests as final on commit** — review every output as if a junior engineer wrote it, because that's what happened
+- **Using AI generation when you can't articulate what "correct" looks like** — the agent will pick a definition for you, and it'll be wrong
 
 ## See Also
 
@@ -55,4 +66,4 @@ Three review gates. Skipping any of them defeats the workflow.
 - [Anti-Patterns](ai-testgen-anti-patterns.md)
 - [Playwright (E2E)](../playwright/index.md)
 - [Automated Testing Kit (ATK)](../atk/index.md)
-- [TDD & Spec-Driven Development](https://camoa.github.io/dev-guides/development/tdd-spec-driven/) — the general TDD cycle this specializes for generated E2E suites
+- Related: [TDD & Spec-Driven Development](https://camoa.github.io/dev-guides/development/tdd-spec-driven/) — the general TDD cycle this specializes for generated E2E suites

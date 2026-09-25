@@ -522,8 +522,8 @@
     "guides_extracted": 14
   },
   "testing/ai-test-generation": {
-    "source_hash": "ffc4b9d34c51a994ac44c4010f5ecdb01275059e72e5c6b461b7a1f3f98d8e62",
-    "partitioned": "2026-09-24",
+    "source_hash": "7251507c61b0f31757262ac0a11576e4f8a91ba9cdbac5eff3446b83a0115eb2",
+    "partitioned": "2026-09-25",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 18
   },

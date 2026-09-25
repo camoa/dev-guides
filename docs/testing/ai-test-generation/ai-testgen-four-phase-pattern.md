@@ -7,7 +7,7 @@ tldr: "Every AI test generation cycle runs four phases: Plan (Planner agent writ
 
 ## When to Use
 
-> Use this pattern for every AI test generation cycle. It is the spine — not a shortcut for large tests.
+> Every AI test generation cycle. This is the spine.
 
 ## The Four Phases
 
@@ -64,9 +64,9 @@ This is the general rule specialized for a generated E2E suite: the party that r
 
 ## Common Mistakes
 
-- **Wrong**: Letting the Healer auto-commit → **Right**: every locator change should be human-approved or the suite drifts away from the plan
-- **Wrong**: Editing tests, not the plan, when intent changes → **Right**: the plan is source of truth; next regeneration overwrites edits made to generated code
-- **Wrong**: No plan stage at all → **Right**: the most common adoption failure — you lose the only artifact non-developers can review
+- **Letting the Healer auto-commit** — every locator change should be human-approved or the suite drifts away from the plan
+- **Editing tests, not the plan, when intent changes** — the plan becomes stale; next regeneration overwrites your edit
+- **No plan stage at all** — the most common adoption failure; you lose the only artifact non-developers can review
 
 ## See Also
 
@@ -74,4 +74,4 @@ This is the general rule specialized for a generated E2E suite: the party that r
 - [Test Plan Format](ai-testgen-plan-format.md)
 - [End-to-End Workflow](ai-testgen-end-to-end-workflow.md)
 - [Playwright Test Agents](ai-testgen-playwright-test-agents.md)
-- [TDD & Spec-Driven Development — Changing Existing Tests](https://camoa.github.io/dev-guides/development/tdd-spec-driven/changing-existing-tests/)
+- Related: [TDD & Spec-Driven Development — Changing Existing Tests](https://camoa.github.io/dev-guides/development/tdd-spec-driven/changing-existing-tests/)

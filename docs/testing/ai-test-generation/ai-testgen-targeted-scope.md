@@ -7,7 +7,7 @@ tldr: "A scope-narrow prompt expresses three things: feature (\"password reset\"
 
 ## When to Use
 
-> Use this when you need a plan limited to a single flow, page, or viewport — "Test only the password reset flow on mobile."
+> "Test only the password reset flow on mobile."
 
 ## Decision
 
@@ -38,17 +38,19 @@ A scope-narrow prompt expresses:
 
 Preconditions become `test.use({ viewport: ... })`. Steps become noisy with `setViewportSize` calls if you put surface there.
 
-## Pattern: when the Planner should refuse or ask
+## Pattern: when to refuse
+
+The Planner should refuse / ask when:
 
 - The feature isn't reachable from the seed test's state
 - "Mobile" isn't specified (responsive CSS only? native app webview? PWA?)
-- The surface implies tools not present (a native iOS test needs a different runner)
+- The surface implies tools not present (a native iOS test needs a different runner — bail)
 
 ## Common Mistakes
 
-- **Wrong**: "Test only X" without saying what to skip → **Right**: out-of-scope must be explicit; Generator extrapolates anyway
-- **Wrong**: Surface constraint in the steps instead of Preconditions → **Right**: pollutes every step with viewport noise
-- **Wrong**: Targeted scope that's also the only scope → **Right**: if you target mobile, plan a desktop scenario in a sibling spec
+- **"Test only X" without saying what to skip** — Generator extrapolates anyway; out-of-scope must be explicit
+- **Surface constraint in the steps instead of preconditions** — pollutes every step
+- **Targeted scope that's also the only scope** — single-viewport coverage misses responsive issues; if you target mobile, plan a desktop scenario in a sibling spec
 
 ## See Also
 
