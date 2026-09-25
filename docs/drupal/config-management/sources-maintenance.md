@@ -27,6 +27,8 @@ Claims here were checked against a local Drupal install of core and the modules 
 | Configuration Override System | https://www.drupal.org/docs/drupal-apis/configuration-api/configuration-override-system | 12.0 | 2026-02-14 |
 | Providing Default Configuration | https://www.drupal.org/docs/drupal-apis/configuration-api/providing-default-configuration | 16.0 | 2026-02-14 |
 | Recipes Initiative | https://www.drupal.org/project/distributions_recipes | 18.0 | 2026-02-14 |
+| Drush Deploy Command | https://www.drush.org/latest/commands/deploy/ | 17.0 | 2026-09-24 |
+| Update Hooks Changing Config (Issue #3110362) | https://www.drupal.org/project/drupal/issues/3110362 | 17.0 | 2026-09-24 |
 
 ## Code Sources
 
@@ -44,7 +46,7 @@ Claims here were checked against a local Drupal install of core and the modules 
 
 ---
 
-**Version:** 1.0
-**Last Updated:** 2026-02-14
+**Version:** 1.1
+**Last Updated:** 2026-09-24
 **Drupal Version:** 11.x
 **Guide Type:** Atomic-Ready Single File

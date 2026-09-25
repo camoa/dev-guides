@@ -18,11 +18,13 @@ When deploying configuration changes from development to staging to production, 
 4. **Commit to Git** — `git add config/sync/ && git commit -m "Add feature"`
 5. **Pull on staging** — `git pull origin main` on staging server
 6. **Validate changes** — `drush config:status` shows pending imports
-7. **Import on staging** — `drush cim -y` imports config
+7. **Deploy on staging** — `drush deploy -y` runs database updates, then imports config
 8. **Test on staging** — Validate functionality, check logs
 9. **Pull on production** — `git pull origin main` on production server
-10. **Import on production** — `drush cim -y` imports config
+10. **Deploy on production** — `drush deploy -y` runs database updates, then imports config
 11. **Validate production** — Smoke tests, monitoring
+
+An update hook may change configuration, so on the development site run `drush updatedb` before exporting and committing, and never run `drush cim` between the two ([Drupal core issue #3110362](https://www.drupal.org/project/drupal/issues/3110362)).
 
 ## Pre-Deployment Checklist
 
@@ -72,23 +74,15 @@ echo "Checking config status..."
 drush config:status
 
 # Prompt for confirmation
-read -p "Import config? (yes/no): " CONFIRM
+read -p "Deploy? (yes/no): " CONFIRM
 if [ "$CONFIRM" != "yes" ]; then
   echo "Deployment cancelled"
   exit 1
 fi
 
-# Import config
-echo "Importing config..."
-drush cim -y
-
-# Clear cache
-echo "Clearing cache..."
-drush cr
-
-# Run updates
-echo "Running database updates..."
-drush updb -y
+# Deploy — runs updatedb, config:import, cache:rebuild, deploy:hook in that order
+echo "Deploying..."
+drush deploy -y
 
 # Verify
 echo "Verifying deployment..."

@@ -162,8 +162,8 @@
     "guides_extracted": 20
   },
   "drupal/config-management": {
-    "source_hash": "6fc8c95d7a7004fec78e82de8343eee1cde296def3b68f2a9cb676491c4dce1a",
-    "partitioned": "2026-08-17",
+    "source_hash": "b5dc627c9302d176c0b4e5127badf6b64a1bf0aaba41d717d557d6cfa8e9c9fb",
+    "partitioned": "2026-09-24",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 22
   },
@@ -174,8 +174,8 @@
     "guides_extracted": 19
   },
   "drupal/security": {
-    "source_hash": "cd092e3be63de4c5abe9101d035fce141306b5a533645353515fe7e2fe907459",
-    "partitioned": "2026-02-14",
+    "source_hash": "e1df960e0fb548a752a2dd0fcfd60746eca48fea1c643538cccf85f98bcc612d",
+    "partitioned": "2026-09-24",
     "partitioned_by": "camoa",
     "guides_extracted": 21
   },

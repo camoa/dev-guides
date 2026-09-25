@@ -328,8 +328,8 @@ point, and a consumer that finds none says so once and goes on with a worktree t
 no site.
 
 **`## Configuration gate` is the contract an `implement` recipe offers for a unit that writes no
-test, and it fails closed for the orders that need it.** As of 2026-09-22 only
-`drupal/standards-and-tests.md` carries one, at 0.9.0; this is the shape a consumer meets. A unit
+test, and it fails closed for the orders that need it.** As of 2026-09-24 only
+`drupal/standards-and-tests.md` carries one, at 0.10.0; this is the shape a consumer meets. A unit
 whose deliverable is exported configuration has no PHPUnit test to freeze. The design recipe sizes
 it around the operation it performs, and this section is its proof. The section holds two `sh`
 fences, one command per line, each line one command split on spaces and never run through a shell,
@@ -337,7 +337,8 @@ from the worktree's project root, carrying the `{project}` token the `worktree-e
 records. The first fence is the gate: its first lines keep the worktree's database as the builder
 left it under a name and prove the copy exists, then one restores the seed the
 `worktree-environment` recipe, at 0.4.0 or later, left under a name at bring-up, so the import
-that follows is real. Every line must exit 0; the consumer stops at the first non-zero line, that
+that follows is real, then one runs `updatedb` so that import meets the branch's code at the
+schema it expects. Every line must exit 0; the consumer stops at the first non-zero line, that
 line is the finding, and the recipe's prose says what each line's failure means. The second fence
 puts the site back by restoring the kept database; the consumer runs it after a gate that reached
 the seed restore stops, pass or fail, and before anything looks at the site, because until then

@@ -15,6 +15,7 @@ Claims here were checked against a local Drupal install of core and the modules 
 | Drupal Security Best Practices 2025 | https://www.thedroptimes.com/50778/top-drupal-security-practices-2025-threats-tools-and-drupal-11-features | 2, 19 | 2026-02-14 |
 | Pantheon Drupal Security | https://pantheon.io/learning-center/drupal-security | 2 | 2026-02-14 |
 | Drupal Security Advisories | https://www.drupal.org/security | 2, 19 | 2026-02-14 |
+| Updating Drupal Core via Composer | https://www.drupal.org/docs/updating-drupal/updating-drupal-core-via-composer | 2 | 2026-09-24 |
 | Route Access Checking | https://www.drupal.org/docs/8/api/routing-system/access-checking-on-routes | 3, 5 | 2026-02-14 |
 | CSRF Access Checking | https://www.drupal.org/docs/8/api/routing-system/access-checking-on-routes/csrf-access-checking | 12 | 2026-02-14 |
 | Entity Access API | https://www.drupal.org/docs/8/api/entity-api/access-checking-for-content-entities | 7 | 2026-02-14 |
@@ -51,3 +52,7 @@ Claims here were checked against a local Drupal install of core and the modules 
 | Core Form | `core/lib/Drupal/Core/Form/` | 12, 13, 21 | 11.x |
 
 ---
+
+## Version History
+- **2026-02-14**: Guide created with comprehensive security coverage across 22 sections.
+- **2026-09-24**: Corrected the Section 2 update-strategy command to lead with the `drupal/core-recommended` form, per drupal.org.
