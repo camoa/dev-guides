@@ -6,15 +6,21 @@ description: Use when a Drupal site must update its Composer dependencies — na
 # Metadata — read only after a match.
 label: Drupal dependency update
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.1.1
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/config-management/deployment-workflows
   - drupal/config-management/config-import-export
   - drupal/config-management/config-installer
+  - drupal/config-management/update-functions
   - drupal/github-actions/multi-environment-deployment
   - drupal/github-actions/code-quality-checks
   - drupal/security/owasp-top-10-in-drupal
+  - drupal/composer/composer-update-vs-require
+  - drupal/composer/composer-dependency-flags
+  - drupal/composer/composer-patches
+  - drupal/composer/composer-audit
+  - drupal/composer/composer-conflicts
 drupal_compatibility: "^8.8 || ^9 || ^10 || ^11 || ^12"
 assumes:
   - composer
@@ -48,7 +54,7 @@ Take one of three kinds of update to a stable point on the development site. The
 
 **Held packages are a given.** The input names them. We never edit a held package's constraint, in any kind of update, and we never pin one. When a hold blocks a step, we stop and name the hold and the step. The person decides whether to migrate, patch or remove.
 
-**Database updates run before configuration is touched.** `drush deploy` runs `updatedb`, `config:import`, `cache:rebuild`, then `deploy:hook`. `hook_update_N()` and `hook_post_update_NAME()` run inside `updatedb`, before the import. `hook_deploy_NAME()` runs in `deploy:hook`, after it.
+**Database updates run before configuration is touched.** `drush deploy` runs `updatedb`, `config:import`, `cache:rebuild`, then `deploy:hook`. On core 11.2 or later it also runs `cache:warm` after `deploy:hook`. `hook_update_N()` and `hook_post_update_NAME()` run inside `updatedb`, before the import. `hook_deploy_NAME()` runs in `deploy:hook`, after it. See `drupal/config-management/update-functions`.
 
 **On the development site, export after the updates, never import.** An update hook may change or remove active configuration. An import from a stale export restores the old values, and a removed key comes back. The method's author saw that cause 500 errors across a multisite. So the sequence is `updatedb`, then `config:export`, then a commit. Drupal core issue #3110362 is open on this loss.
 
@@ -175,9 +181,9 @@ If invoked in dry-run mode, run steps 1 to 3 and write nothing. For named packag
    - for each lifted pin, `ddev composer require <name>:<restore_constraint> --no-update`, or `ddev composer remove <name> --no-update` when it has no `restore_constraint`.
 
    Read the whole output:
-   - A resolution failure is a stopping point. The talk "From Fear to Freedom" places the real conflict in the first or last few lines. Quote them and name the culprit package. The person fixes one conflict at a time.
+   - A resolution failure is a stopping point. The talk "From Fear to Freedom" places the real conflict in the first or last few lines. Quote them and name the culprit package. The person fixes one conflict at a time. See `drupal/composer/composer-conflicts`.
    - A held package that blocks the resolution, or whose release does not support the step's core, is a stopping point. Name the hold and the step.
-   - cweagans/composer-patches 1.x prints `Could not apply patch! Skipping.` and continues, and the command exits 0. That line is a stopping point. Version 2.x throws instead.
+   - cweagans/composer-patches 1.x prints `Could not apply patch! Skipping.` and continues, exiting 0 unless `extra.composer-exit-on-patch-failure` or the `COMPOSER_EXIT_ON_PATCH_FAILURE` environment variable is true. That line is a stopping point. Version 2.x throws on a failed patch and the command's non-zero exit is the stopping point instead.
 
 6. **Run the database updates.** Run `ddev drush updatedb --yes`. A non-zero exit is a stopping point.
    - **The one forced pin.** In a core step, a contrib release dated after the step's core release may claim compatibility it does not have, and break. The recipe may resolve that break only when the error names that module's code, and never for a held package. Restore the step 4 snapshot. Read the module's feed, `https://updates.drupal.org/release-history/<project>/current`. Take its release dated closest to the step's core release, not after it, whose `<core_compatibility>` includes the step's core. Run `ddev composer require <name>:<that version> --with-all-dependencies`. Record the pin: its version, the root constraint it replaced or none, its reason, and its lift condition, core passing that date. Rerun from this step. A second break stops the recipe.
@@ -293,15 +299,16 @@ What the entries do not prove, and where the proof is:
 | `drupal/config-management/deployment-workflows` | Export, commit and import across environments |
 | `drupal/config-management/config-import-export` | `config:export` and its `--diff` preview |
 | `drupal/config-management/config-installer` | Default configuration is installed with the module, never on update |
+| `drupal/config-management/update-functions` | The three kinds of update function, and their order relative to `config:import` |
 | `drupal/github-actions/multi-environment-deployment` | `updatedb` before `config:import` on deploy |
 | `drupal/github-actions/code-quality-checks` | `composer audit` as a build gate |
 | `drupal/security/owasp-top-10-in-drupal` | Applying security updates promptly |
 | `drupal/best-practices/camoa/composer-module-removal-order` | Why removal is not this recipe |
-
-### Missing atomic guides
-
-- Updating a module, a theme or core with Composer: `update` against `require`, `--with-all-dependencies` against `--with-dependencies`, `--dry-run`, patches, and `composer audit`.
-- The three kinds of update function, `hook_update_N()`, `hook_post_update_NAME()` and `hook_deploy_NAME()`: their order relative to `config:import`, and why their configuration changes must be exported and committed.
+| `drupal/composer/composer-update-vs-require` | `update` against `require`, for named packages, the whole site, and a major move |
+| `drupal/composer/composer-dependency-flags` | `--with-all-dependencies` against `--with-dependencies`, and `--dry-run` |
+| `drupal/composer/composer-patches` | The patch plugin's major version, and whether a failed patch stops Composer |
+| `drupal/composer/composer-audit` | `composer audit --locked`, and accepting an advisory or abandoned package |
+| `drupal/composer/composer-conflicts` | Reading a resolution failure to the one culprit package |
 
 ### Related recipes
 
@@ -323,7 +330,8 @@ What the entries do not prove, and where the proof is:
 | consolidation/output-formatters 4.7, `TsvFormatter.php` | TSV prints no header row by default, so zero rows print nothing |
 | Composer 2.10, CLI and config documentation, changelog, `Installer.php`, `Locker.php` | `update`, `require` and `remove` flags, `--dry-run`, `validate`; `Nothing to modify in lock file` on standard error; `audit` exits 0 or 1 from 2.10; abandoned packages fail by default from 2.7; `policy.advisories.ignore-id` and `policy.abandoned.ignore` from 2.10, `audit.ignore` and `audit.ignore-abandoned` deprecated; the lock file's content hash reads no `config` key but `platform` |
 | cweagans/composer-patches 1.x, `Patches.php` and README | A failed patch prints `Could not apply patch! Skipping.` and the command succeeds, unless `extra.composer-exit-on-patch-failure` is true |
-| drupal.org issue #3564942 | Drupal projects stay on composer-patches 1.x; 2.0.0 does not yet work with Drupal 11 |
+| cweagans/composer-patches 2.0.0, `src/Plugin/Patches.php` | A failed patch throws an exception, which the command's non-zero exit surfaces; there is no skip-and-continue path |
+| drupal.org issue #3564942, marked Fixed 2026-02-19, auto-closed 2026-03-05 | Not a core compatibility issue: a support request. The reporter's failures came from patches missing `a/`/`b/` path prefixes and from 2.x's changed configuration and workflow — plugin options under `extra.composer-patches`, `patches.lock.json`, and `composer patches-relock` / `composer patches-repatch` after editing patches |
 | Drupal core-composer-scaffold, README and `Plugin.php` | Scaffolding runs after every `composer update` and `composer install`; with `gitignore` unset it updates `.gitignore` files when the project is a git working copy that ignores `vendor` |
 | Drupal core 11.4, `ModuleInstaller.php`, `ThemeInstaller.php`, `ConfigInstaller.php` | `installDefaultConfig()` runs on install only; optional configuration installs when a later install meets its dependencies |
 | DDEV 1.25, `ddevapp.go` | `describe -j` carries `name` and `status_desc`; a snapshot name that exists is refused |
