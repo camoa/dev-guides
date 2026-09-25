@@ -31,3 +31,4 @@ The Drupal-specific example code in Section 16 (`site_contact` module, `*.routin
 | Date | Change |
 |------|--------|
 | 2026-06-10 | Manifest reconstructed from the guide's own citations and the installed source. |
+| 2026-09-25 | Section 16 seed test: its own `seed` project, excluded from `chromium`, named in the agent prompt. Checked against `playwright` 1.63.0 `lib/mcp/test/seed.js` and `testContext.js`, and the 1.63 test-agents docs. Snapshot name aligned to `qa`. |

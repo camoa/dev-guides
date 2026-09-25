@@ -35,13 +35,30 @@ tldr: "For Drupal, point the Planner at *.routing.yml, buildForm(), and *.permis
 import { test, expect } from '@playwright/test';
 import { execSync } from 'child_process';
 
-test('seed Drupal state', async () => {
-  // Requires a stored qa-baseline snapshot and a configured .testor.yml.
-  execSync('ddev exec testor snapshot:restore --name=qa-baseline', { stdio: 'inherit' });
+test('seed Drupal state', async ({ page }) => {
+  // Requires a stored qa snapshot and a configured .testor.yml.
+  execSync('ddev exec testor snapshot:restore --name=qa', { stdio: 'inherit' });
+  await page.goto('/');
 });
 ```
 
-The seed runs before scenario tests; resets Drupal to a known state.
+The Planner and Generator run the seed test before they explore. `npx playwright test` runs it as an ordinary spec, in parallel with scenario tests and in no set order. The seed must request the `page` fixture: the agents drive the browser the seed opened, and a seed without `page` or `context` fails setup with "Only tests that use default Playwright context or page fixture support test_debug". The agents run the seed inside one project. `planner_setup_page` and `generator_setup_page` take an optional `project` argument that the agent fills from the prompt; without it they use the first top-level project, in ATK `chromium`. If the seed file is outside that project, the agent reports "seed test not found" when it passed a seed path, and otherwise writes a blank `seed.spec.ts` in the project's test directory and explores with no restore. Give the seed its own project, and name the `seed` project in the agent prompt:
+
+```ts
+// playwright.config.ts (ATK ships playwright.config.js; the keys are the same)
+projects: [
+  { name: 'setup', testMatch: /.*\.setup\.js/ },
+  {
+    name: 'chromium',
+    use: { ...devices['Desktop Chrome'] },
+    dependencies: ['setup'],
+    testIgnore: /seed\.drupal\.spec\.ts/,
+  },
+  { name: 'seed', use: { ...devices['Desktop Chrome'] }, testMatch: /seed\.drupal\.spec\.ts/ },
+],
+```
+
+A plain `npx playwright test` runs every top-level project, `seed` included, so suite runs pass `--project=chromium`. For suite runs, put the same restore in a setup project, as in [ATK Integration's database decision](../playwright/pw-e2e-atk-integration.md#decision-database-state-across-parallel-workers). The Planner runs project dependencies before the seed. Once the seed project depends on a `restore` project, directly or through `setup`, the restore runs a second time; the seed can drop its own restore then.
 
 ## Pattern: ATK selector hooks in generated code
 

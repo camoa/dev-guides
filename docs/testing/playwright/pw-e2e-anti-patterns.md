@@ -18,7 +18,7 @@ Ranked by how often they cause flake or wasted CI minutes:
 7. **`expect(true).toBe(false)` for sad-path** — use `throw new Error('Unexpected branch')` or `test.fail()`
 8. **Overusing `page.evaluate()`** — bypasses auto-wait, breaks trace viewer's locator picker, Selenium-porting tell. Most calls have a Playwright API
 9. **Using `isVisible()` / `textContent()` for assertions** — return immediately, no auto-retry. Always `expect(locator)`
-10. **Disabling `fullyParallel` to "stabilize"** — hides flake; right answer is locator/auth/state isolation
+10. **Disabling `fullyParallel` to "stabilize"** — hides flake; right answer is locator/auth/state isolation. Against one shared DDEV database, isolation means one worker or a site per test; see [ATK Integration](pw-e2e-atk-integration.md)'s database decision
 11. **Committing `playwright/.auth/*.json`** — leaks session cookies; gitignore
 12. **Trace viewer only for failures** — open them on slow CI runs to find race conditions in green tests
 13. **`.first()` instead of `.filter()`** — hides "two elements match" bugs. Pair `.toHaveCount(1)` if uniqueness matters
