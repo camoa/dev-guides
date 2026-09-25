@@ -114,8 +114,8 @@
     "guides_extracted": 16
   },
   "drupal/layout-builder": {
-    "source_hash": "d265331b2e719d17ab87ff7a32f8c30f27fe593b0c75d10f9cd6203c93a17585",
-    "partitioned": "2026-07-01",
+    "source_hash": "c5140dae7f6ca2e73c927d049a5cf989736321b85228f23d87806b8af93df3f6",
+    "partitioned": "2026-09-25",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 27
   },
