@@ -6,9 +6,11 @@ description: Use when a Drupal project on DDEV sets up end-to-end testing with P
 # Metadata, read only after a match.
 label: ATK end-to-end test setup (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.2.1
+version: 0.2.2
 recipe_class: process
 framework: drupal
+requires_tooling:
+  - playwright
 drupal_compatibility: "^11"
 requires_modules:
   - automated_testing_kit

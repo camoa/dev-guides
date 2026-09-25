@@ -52,5 +52,10 @@ Without this listing the pages exist and nothing can find them. A process recipe
 
 | Framework | Tool | Recipe |
 |---|---|---|
+| `drupal` | `infection` | [Infection](drupal/infection.md) |
+| `drupal` | `phpcpd` | [PHPCPD](drupal/phpcpd.md) |
 | `drupal` | `phpcs` | [PHP_CodeSniffer](drupal/phpcs.md) |
+| `drupal` | `phpmd` | [PHPMD](drupal/phpmd.md) |
 | `drupal` | `phpstan` | [PHPStan](drupal/phpstan.md) |
+| `drupal` | `phpunit` | [PHPUnit](drupal/phpunit.md) |
+| `drupal` | `playwright` | [Playwright](drupal/playwright.md) |
