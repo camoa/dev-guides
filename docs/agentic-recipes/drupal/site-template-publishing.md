@@ -6,7 +6,7 @@ description: Use when turning a working Drupal CMS site into a standalone, marke
 # Metadata — read only after a match.
 label: Site template publishing
 recipe_schema_version: 1.0.0
-version: 0.1.1
+version: 0.2.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/recipes
@@ -58,6 +58,7 @@ Produce a standalone, installable, marketplace-compliant Drupal CMS **site templ
 - DDEV (or equivalent) for the scratch and verify codebases; host Composer available for path-repo require ops (see play `drupal/best-practices/camoa/ddev-composer-path-repo-drupal-recipe`).
 - Rights to all shipped imagery (marketplace rule) — provenance documented.
 - A consumer codebase for verification, plus drupal/core-dev for the scaffold's PHPUnit tests.
+- DDEV runs the consumer site for steps 6 to 8, and step 8 needs `npx` with a Chrome driver. The verifier reads files only and needs `jq`.
 
 ## Input contract
 
@@ -86,6 +87,9 @@ brand:
       path: string
 
 verify:
+  package_path: string         # the exported package, recipes/<machine_name> in the scratch
+                               # codebase; absolute, or relative to where the verifier runs
+  consumer_root: string        # the consumer codebase's project root, given the same way
   run_scaffold_tests: boolean  # InstallTest / ValidationTest / RequirementsTest (default true)
   run_axe_scan: boolean        # axe-core WCAG scan on rendered pages (default true)
   pages: [string]              # routes to render-check (home, listings, full pages)
@@ -105,13 +109,13 @@ If invoked in dry-run mode, perform all reads and derivations but emit a preview
 
 5. **Compliance greps on the GENERATED files.** Fail-closed checks on the export output: no `patches` key; every `require` a caret range (no `==`/exact pins); no install-profile dependency; `type: Site` + `type: drupal-recipe` + `license: GPL-2.0-or-later`; the package name is not prefixed `drupal_cms_`/`drupal-cms-`; zero brand/vertical strings across `config/` + `content/` + manifests (recursive grep of the old identity).
 
-6. **Prove via a fresh consumer.** New distro codebase; add the package via a path repo (`symlink: false`); because the template carries pre-stable deps, set `composer config minimum-stability dev` + `prefer-stable true` first — play `drupal/best-practices/camoa/pre-stable-template-consumer-minimum-stability`. `drush site:install <recipes/<name>>` must exit 0; render-check every `verify.pages` route (200s, brand-string count 0, expected sections present).
+6. **Prove via a fresh consumer.** Create a new distro codebase at `verify.consumer_root`; add the package via a path repo (`symlink: false`); because the template carries pre-stable deps, set `composer config minimum-stability dev` + `prefer-stable true` first — play `drupal/best-practices/camoa/pre-stable-template-consumer-minimum-stability`. Run `ddev drush site:install recipes/<name> --yes` in `verify.consumer_root` and record its exit code, which must be 0. Render-check every `verify.pages` route (200s, brand-string count 0, expected sections present). For each page, fetch it from the consumer's DDEV URL with `curl -sS -o <file> -w '%{http_code}'`, then count each `brand.string_replacements` `from` string in it with `grep -cF`. Record the HTTP status, the brand count and whether the expected sections are present, per page.
 
-7. **Run the scaffold's PHPUnit tests.** With drupal/core-dev in the consumer codebase and `SIMPLETEST_*` env set, copy `web/core/phpunit.xml.dist` to `phpunit.xml` at the consumer's project root, rewrite its paths for the docroot, and run `vendor/bin/phpunit -c phpunit.xml recipes/<name>/tests` — see `drupal/tdd/phpunit-configuration`; `-c web/core` runs core's own contrib-wide suite instead. InstallTest (installs from the recipe), ValidationTest (applies via the recipe CLI AND asserts every Canvas component used by shipped content exists as `canvas.component.*` config), RequirementsTest. Handle pre-stable minimum-stability for the test codebase the same way as the consumer. Note: PHPUnit 11 boolean flags (`--fail-on-warning`, `--display-deprecations`) take no value. The recipe CLI path (not `site:install`) is what catches a desynced Canvas `active_version` — treat a ValidationTest hash failure as the Canvas raw-edit trap.
+7. **Run the scaffold's PHPUnit tests.** With drupal/core-dev in the consumer codebase and `SIMPLETEST_*` env set, copy `web/core/phpunit.xml.dist` to `phpunit.xml` at the consumer's project root, rewrite its paths for the docroot, and run `vendor/bin/phpunit -c phpunit.xml recipes/<name>/tests` — see `drupal/tdd/phpunit-configuration`; `-c web/core` runs core's own contrib-wide suite instead. InstallTest (installs from the recipe), ValidationTest (applies via the recipe CLI AND asserts every Canvas component used by shipped content exists as `canvas.component.*` config), RequirementsTest. Handle pre-stable minimum-stability for the test codebase the same way as the consumer. Note: PHPUnit 11 boolean flags (`--fail-on-warning`, `--display-deprecations`) take no value. The recipe CLI path (not `site:install`) is what catches a desynced Canvas `active_version` — treat a ValidationTest hash failure as the Canvas raw-edit trap. Record the PHPUnit status line verbatim; only a line starting `OK (` passes. Skip this step when `verify.run_scaffold_tests` is `false`.
 
-8. **axe-core WCAG scan.** Run an axe-core scan over the rendered `verify.pages`; zero critical and zero serious violations is the bar.
+8. **axe-core WCAG scan.** Run an axe-core scan over the rendered `verify.pages`; zero critical and zero serious violations is the bar. Per page, run `npx --yes @axe-core/cli <url> --stdout` and count the violations whose `impact` is `critical` or `serious`. A run that returns no results is a failure, not a zero. Skip this step when `verify.run_axe_scan` is `false`.
 
-9. **Emit summary.** Package identity, export warnings captured, post-export patches applied, compliance-grep counts, install exit code, per-page render/brand-count results, PHPUnit tallies, axe results, and confirmation that the seed/theme source repos are zero-diff.
+9. **Emit summary.** Package identity, export warnings captured, post-export patches applied, compliance-grep counts, install exit code, per-page HTTP status, brand count and expected sections present, the PHPUnit status line, per-page axe critical and serious counts, and confirmation that the seed/theme source repos are zero-diff. Report a skipped step 7 or 8 as skipped.
 
 ## Data flow
 
@@ -119,7 +123,7 @@ If invoked in dry-run mode, perform all reads and derivations but emit a preview
 input: seed (recipe_path, distro, required_theme)
        package (machine_name, composer_name, label, license)
        brand (neutral_identity, string_replacements, brand_assets)
-       verify (run_scaffold_tests, run_axe_scan, pages)
+       verify (package_path, consumer_root, run_scaffold_tests, run_axe_scan, pages)
 
 reads / mutates scratch state:
        live DB of a DISPOSABLE scratch install (content + config)
@@ -142,10 +146,13 @@ emits (the shipped package under recipes/<name>/):
        tests/ + CI + Tugboat + AGENTS.md   (from the pre-placed scaffold)
        screenshot.webp    (neutral demo)
 
-proves (verifier):
+proves (verifier, static reads of the package):
+       structure · compliance · brand-count 0 · post-export patches
+
+reports (steps 6-8, run by the agent):
        fresh consumer site:install exit 0 · pages 200 · brand-count 0 ·
        PHPUnit InstallTest/ValidationTest/RequirementsTest green ·
-       axe 0 critical / 0 serious · source repos zero-diff
+       axe 0 critical / 0 serious
 ```
 
 ## State-awareness contract
@@ -154,18 +161,164 @@ The scratch and consumer sites are **disposable** — the recipe mutates them fr
 
 ## Verifier
 
-Every check is falsifiable and agent-runnable against the generated package and a live consumer install:
+Each entry is one command, run from the project root after the recipe ran. It is split on spaces and never run through a shell. A non-zero exit fails the entry, whatever `pass` says. `stdout empty` reads standard output only. Every entry calls `.aida/site-template-publishing/verify.sh`, the script in `## Files`. It prints one line per violation and exits non-zero when it printed any.
 
-1. **Structure (config-assert, no served site):** generated `recipe.yml` has `type: Site`; generated `composer.json` has `type: drupal-recipe` and `license: GPL-2.0-or-later`; package name not prefixed `drupal_cms_`/`drupal-cms-`.
-2. **Compliance greps = 0 (config-assert):** no `patches` key; zero exact/`==` version pins (all caret); no install-profile dependency; zero occurrences of the old brand/vertical strings across `config/` + `content/` + manifests.
-3. **Post-export patches present (config-assert):** each schemadotorg mapping declares its `mapping_type` in `dependencies.config`; brand-asset overrides carry `use_default: false`; no theme-`examples:`-derived brand string survives.
-4. **Install (live-site):** on a fresh consumer with `minimum-stability dev` + `prefer-stable`, `drush site:install <recipes/<name>>` exits 0.
-5. **Render (live-site):** every `verify.pages` route returns 200, shows its expected sections, and a brand-string scan of the rendered HTML counts 0.
-6. **Scaffold tests (live-site):** InstallTest, ValidationTest, RequirementsTest all pass — a ValidationTest `active_version … does not match hash of settings` failure is a fail-closed signal of the Canvas raw-edit trap, not a skip.
-7. **Accessibility (live-site):** axe-core reports 0 critical and 0 serious violations across `verify.pages`.
-8. **Source integrity (config-assert):** `git status` on the seed and theme repos is clean.
+verifier:
+  - id: package-structure
+    kind: config-assert
+    run: bash .aida/site-template-publishing/verify.sh structure {verify.package_path} {package.machine_name}
+    pass: stdout empty
+  - id: compliance
+    kind: config-assert
+    run: bash .aida/site-template-publishing/verify.sh compliance {verify.package_path}
+    pass: stdout empty
+  - id: no-brand-strings
+    kind: config-assert
+    run: bash .aida/site-template-publishing/verify.sh brand {verify.package_path} {brand.string_replacements:json}
+    pass: stdout empty
+  - id: post-export-patches
+    kind: config-assert
+    run: bash .aida/site-template-publishing/verify.sh patches {verify.package_path} {brand.brand_assets:json}
+    pass: stdout empty
 
-The recipe ships no verifier *script*, but every check is a runnable method: checks 1–3 and 8 are `config-assert`; checks 4–7 are `live-site` and are **fail-closed, not skipped**, when no served site is available.
+What the entries do not prove, and where the proof is:
+
+- The entries read the exported package's files at `verify.package_path` and nothing else. They install nothing and need no DDEV. A missing path prints a violation.
+- No entry installs the package, renders a page, runs the scaffold tests or scans accessibility. A verifier entry is always a command, with no kind for an instruction the agent follows. Sequence steps 6 to 8 carry those checks, and step 9 reports their results.
+- `package-structure` reads the prefix rule from the name in the generated `composer.json` and from `package.machine_name`.
+- `compliance` fails a `patches` or `patches-file` key anywhere in `composer.json`, and any `require` value that does not start with `^`. It does not check "no install-profile dependency": the recipe names no file or key that would carry one.
+- `no-brand-strings` scans `recipe.yml`, `composer.json`, `config/` and `content/` for each `from` string, case-sensitive, skipping binary files. Canvas `default_value` strings re-seeded from the theme's SDC `examples:` live in `config/`, so this entry covers them too. An absent or empty `brand.string_replacements` fails it, because an empty scan proves nothing.
+- `post-export-patches` checks that each `schemadotorg.schemadotorg_mapping.<entity>.*.yml` lists `schemadotorg.schemadotorg_mapping_type.<entity>` in `dependencies.config`. It reads the default theme from `config/system.theme.yml`, or else from the `system.theme` action in `recipe.yml`. That theme's settings must carry `use_default: false` under `logo` for a `logo-light` or `logo-dark` asset, and under `favicon` for a `favicon` asset. An absent or empty `brand.brand_assets` skips the theme check. The script reads the YAML as Drupal exports it, by indentation, not with a YAML parser.
+- No entry checks that the seed and theme repos are unchanged. Rule 7 bars a `git status` check in a recipe that ships `## Files`, and the Input contract has no path for the theme repo. Sequence step 9's summary carries that confirmation.
+
+## Files
+
+One script, which the consumer writes before the verifier runs and removes after it. Do not edit it or commit it. `bash` runs it from the project root.
+
+```sh .aida/site-template-publishing/verify.sh
+# Verifier checks for site-template-publishing.
+# bash verify.sh structure <package> <machine_name>
+#              | compliance <package>
+#              | brand <package> <string_replacements JSON>
+#              | patches <package> <brand_assets JSON>
+# <package> is the exported package directory. Reads files only. Prints one
+# line per violation and exits 1 when it printed any; exits 2 on a usage error.
+# Needs jq; uses the grep on PATH with POSIX ERE only.
+check=${1:-}
+a=${2:-}
+b=${3:-}
+v=0
+say() { printf '%s\n' "$*"; v=1; }
+# Prints each line of $1 as a violation.
+each() {
+  [ -n "$1" ] || return 0
+  while IFS= read -r line; do say "$check: $line"; done <<EOF
+$1
+EOF
+}
+finish() { [ $v -eq 0 ] || exit 1; exit 0; }
+
+case $check in
+  structure|compliance|brand|patches) ;;
+  *) echo "usage: verify.sh structure|compliance|brand|patches <args>" >&2; exit 2 ;;
+esac
+command -v jq >/dev/null || { echo "verify.sh needs jq" >&2; exit 2; }
+
+[ -n "$a" ] || { say "$check: verify.package_path is missing"; finish; }
+[ -d "$a" ] || { say "$check: verify.package_path $a is not a directory"; finish; }
+
+# Sets $froms to the `from` strings of $1, one per line.
+read_froms() {
+  case $1 in ''|null) say "$check: brand.string_replacements is missing"; return 1 ;; esac
+  froms=$(printf '%s' "$1" | jq -r '.[] | .from // empty') || exit 2
+  [ -n "$froms" ] || { say "$check: brand.string_replacements is empty, so there is no old identity to scan for"; return 1; }
+}
+
+case $check in
+structure)
+  case $b in
+    '') say "structure: package.machine_name is missing" ;;
+    drupal_cms_*|drupal-cms-*) say "structure: package.machine_name $b starts with a drupal_cms_ prefix" ;;
+  esac
+  if [ -f "$a/recipe.yml" ]; then
+    grep -Eq "^type:[[:space:]]*[\"']?Site[\"']?[[:space:]]*$" "$a/recipe.yml" || say "structure: $a/recipe.yml has no top-level type: Site"
+  else
+    say "structure: $a/recipe.yml is missing"
+  fi
+  out=$(jq -r '
+    (if .type != "drupal-recipe" then "composer.json type is \(.type), not drupal-recipe" else empty end),
+    (if .license != "GPL-2.0-or-later" then "composer.json license is \(.license), not GPL-2.0-or-later" else empty end),
+    ((.name // "") | split("/") | last | if startswith("drupal_cms_") or startswith("drupal-cms-") then "composer.json name \(.) starts with a drupal_cms_ prefix" else empty end)
+  ' "$a/composer.json" 2>/dev/null) || say "structure: $a/composer.json is missing or not JSON"
+  each "$out" ;;
+
+compliance)
+  out=$(jq -r '
+    (paths | map(tostring) | select(.[-1] == "patches" or .[-1] == "patches-file") | "composer.json carries a \(.[-1]) key at \(join("."))"),
+    ((.require // {}) | to_entries[] | select(.value | tostring | startswith("^") | not) | "composer.json requires \(.key) at \(.value), not a caret range")
+  ' "$a/composer.json" 2>/dev/null) || say "compliance: $a/composer.json is missing or not JSON"
+  each "$out" ;;
+
+brand)
+  read_froms "$b" || finish
+  while IFS= read -r from; do
+    out=$(cd "$a" && grep -rlIF -e "$from" -- recipe.yml composer.json config content 2>/dev/null)
+    [ -n "$out" ] || continue
+    while IFS= read -r file; do say "brand: $a/$file carries '$from'"; done <<EOT
+$out
+EOT
+  done <<EOF
+$froms
+EOF
+  ;;
+
+patches)
+  for f in "$a"/config/schemadotorg.schemadotorg_mapping.*.yml; do
+    [ -e "$f" ] || continue
+    rest=${f##*/schemadotorg.schemadotorg_mapping.}
+    want=schemadotorg.schemadotorg_mapping_type.${rest%%.*}
+    awk -v want="$want" '
+      /^dependencies:/ { d = 1; next }
+      d && /^[^[:space:]]/ { d = 0 }
+      d && /^  config:/ { c = 1; next }
+      d && c && /^  [a-z]/ { c = 0 }
+      d && c && /^ *- / { item = $0; sub(/^ *- */, "", item); gsub(/["\047[:space:]]/, "", item); if (item == want) found = 1 }
+      END { exit !found }
+    ' "$f" || say "patches: $f does not list $want in dependencies.config"
+  done
+  case $b in '') say "patches: brand.brand_assets is missing"; finish ;; null) finish ;; esac
+  roles=$(printf '%s' "$b" | jq -r '.[].role') || exit 2
+  [ -n "$roles" ] || finish
+  theme=
+  if [ -f "$a/config/system.theme.yml" ]; then
+    theme=$(sed -n "s/^default:[[:space:]]*[\"']\{0,1\}\([a-z0-9_]*\).*/\1/p" "$a/config/system.theme.yml")
+  elif [ -f "$a/recipe.yml" ]; then
+    theme=$(awk '
+      /^[[:space:]]+system\.theme:[[:space:]]*$/ { match($0, /^[[:space:]]+/); ind = RLENGTH; inb = 1; next }
+      inb && /[^[:space:]]/ { match($0, /^[[:space:]]*/); if (RLENGTH <= ind) inb = 0 }
+      inb && /^[[:space:]]+default:/ { t = $0; sub(/^[[:space:]]+default:[[:space:]]*/, "", t); gsub(/["\047[:space:]]/, "", t); print t; exit }
+    ' "$a/recipe.yml")
+  fi
+  [ -n "$theme" ] || { say "patches: neither config/system.theme.yml nor a system.theme action in recipe.yml names the default theme"; finish; }
+  settings=$a/config/$theme.settings.yml
+  [ -f "$settings" ] || { say "patches: $settings is missing, so no brand asset overrides the theme's"; finish; }
+  for role in $roles; do
+    case $role in
+      logo-light|logo-dark) key=logo ;;
+      favicon) key=favicon ;;
+      *) say "patches: brand asset role $role is not logo-light, logo-dark or favicon"; continue ;;
+    esac
+    awk -v k="$key" '
+      $0 ~ "^" k ":" { b = 1; next }
+      b && /^[^[:space:]]/ { b = 0 }
+      b && /^[[:space:]]+use_default:[[:space:]]*false[[:space:]]*$/ { f = 1 }
+      END { exit !f }
+    ' "$settings" || say "patches: $settings $key does not carry use_default: false"
+  done ;;
+esac
+
+finish
+```
 
 ## References
 

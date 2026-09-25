@@ -6,7 +6,7 @@ description: Use when a Drupal site must update its Composer dependencies — na
 # Metadata — read only after a match.
 label: Drupal dependency update
 recipe_schema_version: 1.0.0
-version: 0.1.1
+version: 0.1.2
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/config-management/deployment-workflows
@@ -251,7 +251,7 @@ Running it twice on the same input changes nothing the second time. For named pa
 
 ## Verifier
 
-Each entry is one command, run from the project root after the recipe ran. It is split on spaces and never run through a shell. A non-zero exit fails the entry, whatever `pass` says. `stdout empty` reads standard output only; a non-interactive `ddev drush` keeps Drush's messages on standard error.
+Each entry is one command, run from the project root after the recipe ran. It is split on spaces and never run through a shell. A non-zero exit fails the entry, whatever `pass` says. `stdout empty` reads standard output only; a non-interactive `ddev drush` keeps Drush's messages on standard error. A stopped DDEV project prints its start-up text on standard output, so start the site before the verify run.
 
 verifier:
   - id: composer-valid

@@ -6,7 +6,7 @@ description: Use when a Drupal module needs tests written or extended — decidi
 # Metadata — read only after a match.
 label: Drupal module test authoring
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/testing/framework-selection-decision-matrix
@@ -47,6 +47,7 @@ Give a module the tests its behaviours deserve: one kind chosen per behaviour ra
 - The module exists and its `.info.yml` is in place. Nothing here scaffolds a module, and a test cannot be watched to fail against a module the extension scan cannot find.
 - For Kernel and above, a database the runner can reach. For Functional, a served site. For FunctionalJavascript, a WebDriver endpoint.
 - Knowledge of which kinds the project's pipeline actually runs. If that cannot be established, this recipe's first sequence step surfaces it as a finding rather than guessing.
+- DDEV runs the project; the verifier runs PHPUnit through `ddev exec`.
 
 ## Input contract
 
@@ -120,19 +121,200 @@ Re-running this recipe over a module that already has tests extends rather than 
 
 ## Verifier
 
-Each check names what the consumer runs and what makes it pass.
+Each entry is one command, run from the project root after the recipe ran. It is split on spaces and never run through a shell. A non-zero exit fails the entry, whatever `pass` says. `stdout empty` reads standard output only. Every entry calls `.aida/module-test-authoring/verify.sh`, the script in `## Files`, with the files the order owns. It prints one line per violation and exits non-zero when it printed any.
 
-1. **`config-assert` — every class carries the attribute its kind requires.** Read each new test file. Every class extending `KernelTestBase`, `BrowserTestBase` or `WebDriverTestBase` declares `#[RunTestsInSeparateProcesses]` with the matching `use` statement; no class extending `UnitTestCase` declares it; and no abstract base class is relied on to supply it, because the attribute is not inherited. Fails on the first class missing it.
+verifier:
+  - id: separate-process-attribute
+    kind: config-assert
+    run: bash .aida/module-test-authoring/verify.sh attributes {paths}
+    pass: stdout empty
+  - id: static-data-providers
+    kind: config-assert
+    run: bash .aida/module-test-authoring/verify.sh providers {paths}
+    pass: stdout empty
+  - id: no-doc-comment-metadata
+    kind: config-assert
+    run: bash .aida/module-test-authoring/verify.sh metadata {paths}
+    pass: stdout empty
+  - id: tests-run
+    kind: live-site
+    run: bash .aida/module-test-authoring/verify.sh run {paths}
+    pass: stdout empty
+  - id: assertion-can-fail
+    kind: self-fixture
+    run: bash .aida/module-test-authoring/verify.sh mutant {paths}
+    pass: stdout empty
 
-2. **`config-assert` — no data provider is an instance method.** Read each new test file. Every method named by a `#[DataProvider]` is declared `static`. A non-static provider drops every test it feeds. When that is the only test in the class the run prints `No tests found in class` and `No tests executed!`; when the class has other tests it keeps them and prints `ERRORS!`. Neither outcome asserts the provider's cases.
+What the entries do not prove, and where the proof is:
 
-3. **`config-assert` — no metadata sits in a doc-comment.** No new test file uses `@group`, `@covers`, `@coversDefaultClass` or `@dataProvider`. The runner prints a deprecation for each and drops support in PHPUnit 12.
+- Every entry reads only the `*Test.php` files under `tests/src/` among the order's files. With none, it prints a violation, so an order that owns no test file fails rather than passing on an empty list.
+- The test kind comes from the directory after `tests/src/`, not from the base class, because a project's own base class hides core's. `separate-process-attribute` skips abstract classes and every directory other than `Unit`, `Kernel`, `Functional` and `FunctionalJavascript`. It accepts the attribute with its `use` statement, a grouped `use`, or a fully qualified name. A commented-out attribute or `use` does not count.
+- `static-data-providers` reads `#[DataProvider('name')]` and `#[DataProvider(methodName: 'name')]`. It fails a provider that is not static or not public. It also fails one that is not declared in the same file, including one inherited from a base class. PHPUnit accepts an inherited provider, so this entry is stricter than the runner. `#[DataProviderExternal]` is not checked.
+- `no-doc-comment-metadata` fails every tag PHPUnit 11.5's annotation parser reads, not only `@group`, `@covers`, `@coversDefaultClass` and `@dataProvider`. It also fails such a tag on a `*` line of a plain `/* */` comment.
+- `tests-run` runs `ddev exec vendor/bin/phpunit -c phpunit.xml` over the test files. It passes on a status line of `FAILURES!` or one starting `OK (`. `ERRORS!`, `No tests executed!`, `OK, but there were issues!`, `OK, but some tests were skipped!`, a PHP fatal error, a missing status line, and an `OK (` whose exit code is not 0 all fail it. Kernel and above need a database, Functional a served site, and FunctionalJavascript a WebDriver endpoint. Where one is missing the entry fails, and that is a correct fail-close.
+- `tests-run` accepts `FAILURES!` because Sequence step 4 leaves each new test red on purpose, failing an assertion before its code exists. It proves the tests were collected and their assertions ran, not that the behaviour holds. A test that errors instead of failing is still refused, as step 4 requires.
+- `assertion-can-fail` picks the first Unit or Kernel test file, or the first test file when the order owns neither kind. No input names "one behaviour of the caller's choosing", so the script chooses. It first runs that file unmutated. `FAILURES!` passes the entry at once, because an assertion is already shown to fail, as step 4 leaves it. Any status other than `FAILURES!` or one starting `OK (` fails the entry, and so does an `OK (` whose exit code is not 0. On `OK (`, it inverts the first `assertTrue`, `assertFalse`, `assertSame`, `assertEquals` or `assertNull` call, or its `Not` form, in a copy under `.aida/module-test-authoring/mutant/`. It runs the copy, passes only on `FAILURES!`, and removes the copy. An assertion in a helper that no test calls leaves the copy green, and the entry fails. A red file proves that one assertion fails, not which one.
+- No entry checks that the report accounts for every behaviour, because the report has no defined file. Sequence step 6 carries that contract.
 
-4. **`config-assert` — every behaviour in the input is accounted for.** The report has one row per behaviour, each with a kind, a reason, and either a test with its status line or a stated reason for no test. A behaviour silently absent from the report fails this check.
+## Files
 
-5. **`live-site` — the tests run and the status line says so.** Run the new tests with the project's configuration. Unit tests need no site; Kernel and above need a database, and Functional a served site. The run prints `OK` with a non-zero test count, and prints neither `No tests executed!` nor `ERRORS!`. In an environment with no database or no served site this check cannot run, and that is a correct fail-close rather than a recipe defect: the consumer halts and says which environment piece is missing.
+One script, which the consumer writes before the verifier runs and removes after it. Do not edit it or commit it. `bash` runs it from the project root, with the order's files as its arguments.
 
-6. **`self-fixture` — a passing test can be made to fail.** For one behaviour of the caller's choosing, invert a single assertion in a copy of the test, run it, and confirm the run prints `FAILURES!` rather than `OK`; then discard the copy. A test that passes both ways is asserting nothing about the behaviour. The fixture is the copy, and the check removes it.
+```sh .aida/module-test-authoring/verify.sh
+# Verifier checks for module-test-authoring.
+# bash verify.sh attributes|providers|metadata|run|mutant <file>...
+# Reads only the *Test.php files under tests/src/ among its arguments. The test
+# kind is the directory after tests/src/, because a project's own base class
+# hides the core one. Prints one line per violation and exits 1 when it printed
+# any; exits 2 on a usage error. Uses the grep on PATH with POSIX ERE only.
+check=${1:-}
+[ $# -gt 0 ] && shift
+case $check in
+  attributes|providers|metadata|run|mutant) ;;
+  *) echo "usage: verify.sh attributes|providers|metadata|run|mutant <file>..." >&2; exit 2 ;;
+esac
+
+v=0
+say() { printf '%s\n' "$*"; v=1; }
+kind_of() { rest=${1#*tests/src/}; printf '%s' "${rest%%/*}"; }
+# The lines of $1 outside a comment. A line opening with //, with # but not #[,
+# or with /*, and every line up to the closing */, is dropped whole.
+code_of() {
+  awk '
+    inc { if ($0 ~ /\*\//) inc = 0; next }
+    /^[[:space:]]*\/\*/ { if ($0 !~ /\*\//) inc = 1; next }
+    /^[[:space:]]*(\/\/|#($|[^[]))/ { next }
+    { print }
+  ' "$1"
+}
+
+tests=()
+for f in "$@"; do
+  case $f in
+    tests/src/*Test.php|*/tests/src/*Test.php)
+      if [ -f "$f" ]; then tests+=("$f"); else say "$f: not found"; fi ;;
+  esac
+done
+if [ ${#tests[@]} -eq 0 ]; then
+  say "$check: the order owns no *Test.php file under tests/src/, so there is nothing to check"
+  exit 1
+fi
+
+phpunit() { ddev exec vendor/bin/phpunit -c phpunit.xml --colors=never "$@" 2>&1; }
+status_line() { printf '%s\n' "$1" | grep -E '^(OK|OK, but|FAILURES!|ERRORS!|No tests executed!)' | tail -n 1; }
+
+case $check in
+attributes)
+  attr='#\[([^]]*[[:space:],])?\\?(PHPUnit\\Framework\\Attributes\\)?RunTestsInSeparateProcesses([],([:space:]]|$)'
+  for f in "${tests[@]}"; do
+    kind=$(kind_of "$f")
+    code=$(code_of "$f")
+    has=no
+    printf '%s\n' "$code" | grep -Eq "$attr" && has=yes
+    case $kind in
+      Kernel|Functional|FunctionalJavascript)
+        printf '%s\n' "$code" | grep -Eq '^[[:space:]]*([a-z]+[[:space:]]+)*abstract[[:space:]]+([a-z]+[[:space:]]+)*class[[:space:]]' && continue
+        imported=no
+        printf '%s\n' "$code" | grep -Eq '#\[([^]]*[[:space:],])?\\PHPUnit\\Framework\\Attributes\\RunTestsInSeparateProcesses' && imported=yes
+        printf '%s\n' "$code" | grep -Eq '^use[[:space:]]+PHPUnit\\Framework\\Attributes\\(RunTestsInSeparateProcesses[[:space:]]*;|\{[^}]*RunTestsInSeparateProcesses)' && imported=yes
+        if [ $has = no ]; then
+          say "$f: a $kind class without #[RunTestsInSeparateProcesses]; the attribute is not inherited"
+        elif [ $imported = no ]; then
+          say "$f: #[RunTestsInSeparateProcesses] without its use statement or a fully qualified name"
+        fi ;;
+      Unit)
+        [ $has = yes ] && say "$f: a Unit class declares #[RunTestsInSeparateProcesses]; Unit tests take none" ;;
+    esac
+  done ;;
+
+providers)
+  for f in "${tests[@]}"; do
+    code=$(code_of "$f")
+    for name in $(printf '%s\n' "$code" | sed -n "s/.*DataProvider([[:space:]]*\(methodName:[[:space:]]*\)\{0,1\}[\"']\([A-Za-z0-9_]*\)[\"'][[:space:]]*).*/\2/p" | sort -u); do
+      decl=$(printf '%s\n' "$code" | grep -E "function[[:space:]]+$name[[:space:]]*\(" | head -n 1)
+      mods=${decl%%function*}
+      if [ -z "$decl" ]; then
+        say "$f: data provider $name() is not declared in this file"
+      else
+        case " $mods " in *[[:space:]]static[[:space:]]*) ;; *) say "$f: data provider $name() is not static" ;; esac
+        case " $mods " in *[[:space:]]public[[:space:]]*) ;; *) say "$f: data provider $name() is not public" ;; esac
+      fi
+    done
+  done ;;
+
+metadata)
+  tags='after|afterClass|backupGlobals|backupStaticAttributes|backupStaticProperties|before|beforeClass|covers|coversDefaultClass|coversNothing|dataProvider|depends|doesNotPerformAssertions|excludeGlobalVariableFromBackup|excludeStaticPropertyFromBackup|group|large|medium|postCondition|preCondition|preserveGlobalState|requires|runClassInSeparateProcess|runInSeparateProcess|runTestsInSeparateProcesses|small|test|testdox|testWith|ticket|uses|usesDefaultClass'
+  for f in "${tests[@]}"; do
+    hits=$(grep -nE "^[[:space:]]*(/\*\*|\*)[[:space:]]*@($tags)([[:space:]]|\*|$)" "$f")
+    [ -z "$hits" ] && continue
+    while IFS= read -r line; do
+      say "$f:${line%%:*}: doc-comment metadata; write it as an attribute:${line#*:}"
+    done <<EOF
+$hits
+EOF
+  done ;;
+
+run)
+  out=$(phpunit "${tests[@]}"); rc=$?
+  line=$(status_line "$out")
+  if printf '%s\n' "$out" | grep -Eq 'Fatal error'; then
+    say "run: phpunit hit a PHP fatal error"
+  fi
+  case $line in
+    OK\ \(*) [ "$rc" -eq 0 ] || say "run: phpunit printed '$line' but exited $rc" ;;
+    FAILURES!) ;;
+    *) say "run: phpunit printed '${line:-no status line}', not OK or FAILURES!" ;;
+  esac ;;
+
+mutant)
+  target=
+  for f in "${tests[@]}"; do
+    case $(kind_of "$f") in Unit|Kernel) target=$f; break ;; esac
+  done
+  [ -n "$target" ] || target=${tests[0]}
+  # A red target already shows an assertion failing; only a green one is mutated.
+  out=$(phpunit "$target"); rc=$?
+  base=$(status_line "$out")
+  case $base in
+    FAILURES!) ;;
+    OK\ \(*)
+      if [ "$rc" -ne 0 ]; then
+        say "mutant: $target unmutated printed '$base' but exited $rc"
+      else
+        dir=.aida/module-test-authoring/mutant
+        copy=$dir/$(basename "$target")
+        mkdir -p "$dir" || exit 2
+        trap 'rm -f "$copy"; rmdir "$dir" 2>/dev/null' EXIT
+        awk '
+          !done && match($0, /assert(Not)?(True|False|Same|Equals|Null)\(/) {
+            a = substr($0, RSTART, RLENGTH)
+            if (a == "assertTrue(") b = "assertFalse("
+            else if (a == "assertFalse(") b = "assertTrue("
+            else if (a ~ /^assertNot/) b = "assert" substr(a, 10)
+            else b = "assertNot" substr(a, 7)
+            $0 = substr($0, 1, RSTART - 1) b substr($0, RSTART + RLENGTH)
+            done = 1
+          }
+          { print }
+          END { if (!done) exit 3 }
+        ' "$target" > "$copy"
+        if [ $? -ne 0 ]; then
+          say "mutant: $target has no assertTrue, assertFalse, assertSame, assertEquals or assertNull call to invert"
+        else
+          out=$(phpunit "$copy")
+          line=$(status_line "$out")
+          case $line in
+            FAILURES!) ;;
+            *) say "mutant: $target with its first assertion inverted printed '${line:-no status line}', not FAILURES!" ;;
+          esac
+        fi
+      fi ;;
+    *) say "mutant: $target unmutated printed '${base:-no status line}', not OK or FAILURES!" ;;
+  esac ;;
+esac
+
+[ $v -eq 0 ] || exit 1
+```
 
 ## References
 

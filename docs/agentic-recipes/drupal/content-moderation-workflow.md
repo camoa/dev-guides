@@ -6,7 +6,7 @@ description: Use when a content type needs an editorial workflow via core conten
 # Metadata — read only after a match.
 label: Content moderation workflow
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/editorial-workflow/content-moderation-state-machine
@@ -51,6 +51,7 @@ Provision an editorial workflow with core `content_moderation` + `workflows` —
 - The target bundle(s) exist.
 - Config export is in use, so the workflow is deployable.
 - For a bundle with existing content, a backfill mechanism (Batch API / queue) is available.
+- DDEV runs the site; the verifier's commands go through `ddev`.
 
 ## Input contract
 
@@ -138,16 +139,164 @@ Idempotent: running the recipe twice on identical input and identical project st
 
 ## Verifier
 
-After the recipe runs, verify:
+Each entry is one command, run from the project root after the recipe ran. It is split on spaces and never run through a shell. A non-zero exit fails the entry, whatever `pass` says. `stdout empty` reads standard output only; a non-interactive `ddev drush` keeps Drush's messages on standard error. A stopped DDEV project prints its start-up text on standard output, so start the site before the verify run. Entries that call `.aida/content-moderation-workflow/verify.php` run the script in `## Files`. It prints one line per violation and exits non-zero when it printed any.
 
-1. `workflows.workflow.{id}` exists with `type: content_moderation` and the expected states, transitions, and `default_moderation_state`.
-2. Each target bundle appears in `type_settings.entity_types.{entity_type}`, and was added via the `add_moderation` action (handlers wired), not a raw `entity_types` edit.
-3. Each state's `published`/`default_revision` flags match the intended model.
-4. On a bundle that had pre-existing content, every existing entity now has a `content_moderation_state` (backfill complete), or the deferral was flagged for the operator.
-5. The emitted `use {workflow} transition {id}` list is correctly formed and handed to the roles recipe (this recipe grants no permissions itself).
-6. A second apply produces no config changes (idempotent).
+verifier:
+  - id: workflow-shape
+    kind: config-assert
+    run: ddev drush php:script /var/www/html/.aida/content-moderation-workflow/verify.php -- workflow {workflow:json}
+    pass: stdout empty
+  - id: moderation-on-bundles
+    kind: config-assert
+    run: ddev drush php:script /var/www/html/.aida/content-moderation-workflow/verify.php -- bundles {workflow.id} {enable_on.entity_type} {enable_on.bundles}
+    pass: stdout empty
+  - id: backfill-complete
+    kind: config-assert
+    run: ddev drush php:script /var/www/html/.aida/content-moderation-workflow/verify.php -- backfill {workflow.id} {enable_on.entity_type} {enable_on.bundles} {backfill_existing:json}
+    pass: stdout empty
+  - id: active-equals-export
+    kind: config-assert
+    run: ddev drush config:status
+    pass: stdout empty
 
-The recipe ships no verifier *script*, but every check is **agent-runnable**. Checks 1–3, 5, 6 are `config-assert` (drush + config reads). Check 4 is `self-fixture` — it seeds a pre-moderation revision, runs the backfill, and asserts a `content_moderation_state` entity now exists, cleaning up the fixture afterward; it does not assume an operator fixture.
+What the entries do not prove, and where the proof is:
+
+- `workflow-shape` always checks the type, that every published state is also the default revision, and that `default_moderation_state` names a state. It compares states, transitions and the default state with the input only where the input gives them. When the input leaves `states` out, the summary carries the resolved model.
+- `moderation-on-bundles` and `backfill-complete` run once per bundle in `enable_on.bundles`, and `*` checks every bundle of the entity type. An empty list reads unknown, not pass.
+- `moderation-on-bundles` proves the bundle is moderated by this workflow. It cannot tell the `add_moderation` action from a raw `entity_types` edit, because both leave the same config.
+- `backfill-complete` reads content, not config, and names up to 20 entities with no moderation state. An absent `backfill_existing` counts as true, its default. When it is false, the entry checks nothing, and the summary carries the operator flag.
+- The transition-permission list handed to the roles recipe is not checked here. It is in the summary, and the roles recipe's `transition-permissions` entry checks the grants.
+- `active-equals-export` proves the export is current after Sequence step 7. The state-awareness contract makes a second apply a no-op on that state.
+
+## Files
+
+One script, which the consumer writes before the verifier runs and removes after it. Do not edit it or commit it. Drush runs it with Drupal booted and passes the words after `--` in `$extra`.
+
+```php .aida/content-moderation-workflow/verify.php
+<?php
+
+// Verifier checks for content-moderation-workflow.
+// $extra: workflow <workflow JSON> | bundles <id> <entity type> <bundle>
+//   | backfill <id> <entity type> <bundle> <backfill_existing JSON>
+// Prints one line per violation, then throws so Drush exits non-zero.
+$check = $extra[0] ?? '';
+$v = [];
+
+if ($check === 'workflow') {
+  $input = json_decode($extra[1] ?? 'null', TRUE, 512, JSON_THROW_ON_ERROR);
+  $id = $input['id'] ?? '';
+  $config = \Drupal::config("workflows.workflow.$id");
+  if ($id === '') {
+    $v[] = 'workflow: the workflow id is missing';
+  }
+  elseif ($config->isNew()) {
+    $v[] = "workflows.workflow.$id does not exist";
+  }
+  else {
+    $settings = $config->get('type_settings');
+    $states = $settings['states'] ?? [];
+    $transitions = $settings['transitions'] ?? [];
+    $default = $settings['default_moderation_state'] ?? '';
+    if ($config->get('type') !== 'content_moderation') {
+      $v[] = "workflows.workflow.$id has type '" . $config->get('type') . "', not 'content_moderation'";
+    }
+    foreach ($states as $state_id => $state) {
+      if (!empty($state['published']) && empty($state['default_revision'])) {
+        $v[] = "state $state_id is published but not the default revision";
+      }
+    }
+    if (!isset($states[$default])) {
+      $v[] = "default_moderation_state '$default' is not a state of $id";
+    }
+    if (isset($input['default_moderation_state']) && $input['default_moderation_state'] !== $default) {
+      $v[] = "default_moderation_state is '$default', not '{$input['default_moderation_state']}'";
+    }
+    if (isset($input['states'])) {
+      $want = array_column($input['states'], NULL, 'id');
+      if (array_diff_key($want, $states) || array_diff_key($states, $want)) {
+        $v[] = 'states are ' . implode(',', array_keys($states)) . ', not ' . implode(',', array_keys($want));
+      }
+      foreach (array_intersect_key($want, $states) as $state_id => $state) {
+        foreach (['published', 'default_revision'] as $flag) {
+          if ((bool) ($state[$flag] ?? FALSE) !== (bool) ($states[$state_id][$flag] ?? FALSE)) {
+            $v[] = "state $state_id has $flag " . var_export((bool) ($states[$state_id][$flag] ?? FALSE), TRUE) . ', not as the input says';
+          }
+        }
+      }
+    }
+    if (isset($input['transitions'])) {
+      $want = array_column($input['transitions'], NULL, 'id');
+      if (array_diff_key($want, $transitions) || array_diff_key($transitions, $want)) {
+        $v[] = 'transitions are ' . implode(',', array_keys($transitions)) . ', not ' . implode(',', array_keys($want));
+      }
+      foreach (array_intersect_key($want, $transitions) as $transition_id => $transition) {
+        $from = (array) ($transition['from'] ?? []);
+        $have = $transitions[$transition_id]['from'] ?? [];
+        sort($from);
+        sort($have);
+        if ($from !== $have) {
+          $v[] = "transition $transition_id goes from " . implode(',', $have) . ', not ' . implode(',', $from);
+        }
+        if (($transition['to'] ?? '') !== ($transitions[$transition_id]['to'] ?? '')) {
+          $v[] = "transition $transition_id goes to '" . ($transitions[$transition_id]['to'] ?? '') . "', not '" . ($transition['to'] ?? '') . "'";
+        }
+      }
+    }
+  }
+}
+elseif ($check === 'bundles' || $check === 'backfill') {
+  [, $id, $type, $bundle] = array_pad($extra, 4, '');
+  $backfill = json_decode($extra[4] ?? 'null', TRUE, 512, JSON_THROW_ON_ERROR) ?? TRUE;
+  if ($id === '' || $type === '' || $bundle === '') {
+    $v[] = "$check: the workflow id, entity type or bundle argument is missing";
+  }
+  elseif ($check === 'bundles' || $backfill) {
+    $bundles = $bundle === '*' ? array_keys(\Drupal::service('entity_type.bundle.info')->getBundleInfo($type)) : [$bundle];
+    if (!$bundles) {
+      $v[] = "$type has no bundles";
+    }
+    foreach ($bundles as $b) {
+      if ($check === 'bundles') {
+        $workflow = \Drupal::service('content_moderation.moderation_information')->getWorkflowForEntityTypeAndBundle($type, $b);
+        if ($workflow?->id() !== $id) {
+          $v[] = "$type bundle $b is moderated by '" . ($workflow?->id() ?? 'no workflow') . "', not '$id'";
+        }
+        continue;
+      }
+      $bundle_key = \Drupal::entityTypeManager()->getDefinition($type)->getKey('bundle');
+      $query = \Drupal::entityTypeManager()->getStorage($type)->getQuery()->accessCheck(FALSE);
+      if ($bundle_key) {
+        $query->condition($bundle_key, $b);
+      }
+      $missing = [];
+      $state_storage = \Drupal::entityTypeManager()->getStorage('content_moderation_state');
+      foreach (array_chunk(array_values($query->execute()), 500) as $chunk) {
+        $state_ids = $state_storage->getQuery()->accessCheck(FALSE)
+          ->condition('workflow', $id)
+          ->condition('content_entity_type_id', $type)
+          ->condition('content_entity_id', $chunk, 'IN')
+          ->execute();
+        $stated = [];
+        foreach ($state_storage->loadMultiple($state_ids) as $state) {
+          $stated[] = (int) $state->get('content_entity_id')->value;
+        }
+        $missing = array_merge($missing, array_diff(array_map('intval', $chunk), $stated));
+      }
+      if ($missing) {
+        $v[] = count($missing) . " $type of bundle $b have no moderation state in $id, including " . implode(',', array_slice($missing, 0, 20));
+      }
+    }
+  }
+}
+else {
+  throw new \InvalidArgumentException("unknown check '$check'");
+}
+
+if ($v) {
+  echo implode(PHP_EOL, $v) . PHP_EOL;
+  throw new \RuntimeException(count($v) . ' violation(s)');
+}
+```
 
 ## References
 

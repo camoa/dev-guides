@@ -6,7 +6,7 @@ description: Use when a content type needs its fields defined — running an ord
 # Metadata — read only after a match.
 label: Provision content type fields
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/entities/field-storage-decision
@@ -71,6 +71,7 @@ Provision a content type's fields with the correct **storage architecture** — 
 - The target content-type bundle exists, or is created as step 1 (see `drupal/entities/content-type-configuration`).
 - A field/content model is supplied via the input contract.
 - Config export is in use, so the provisioned model is deployable.
+- DDEV runs the site; the verifier's commands go through `ddev`.
 
 ## Input contract
 
@@ -82,7 +83,7 @@ target:
   bundle: string               # the content type
 
 fields:
-  - name: string               # concern-named machine name (snake_case)
+  - name: string               # concern-named field machine name, with its field_ prefix
     concern: string            # semantic role — used to detect sharing
     shape: string              # human description of the data shape
     polymorphic: boolean       # ≥2 mutually-exclusive sub-shapes? (default false)
@@ -163,16 +164,174 @@ Idempotent: running the recipe twice on identical input and identical project st
 
 ## Verifier
 
-After the recipe runs, verify:
+Each entry is one command, run from the project root after the recipe ran. It is split on spaces and never run through a shell. A non-zero exit fails the entry, whatever `pass` says. `stdout empty` reads standard output only; a non-interactive `ddev drush` keeps Drush's messages on standard error. A stopped DDEV project prints its start-up text on standard output, so start the site before the verify run. Entries that call `.aida/provision-content-type-fields/verify.php` run the script in `## Files`. It prints one line per violation and exits non-zero when it printed any.
 
-1. Each field's storage shape matches its decision verdict — polymorphic → a `type: custom` compound; classification → an `entity_reference` to a taxonomy vocabulary; independent entity → `entity_reference`; else a plain field.
-2. Each recurring concern is exactly ONE concern-named storage instanced across its bundles — not N bundle-named storages — and its cardinality equals the maximum any bundle needs.
-3. Every `entity_reference` field keeps `handler`/`handler_settings` on the instance and only `target_type` on the storage.
-4. No `custom` compound exists where a single non-required core field would suffice (no over-engineering).
-5. A sub-column added to a seeded `custom` field via the managed update service leaves existing rows intact (zero data loss).
-6. Every created field has a form-display widget and a view-display formatter wired.
+verifier:
+  - id: storage-shapes
+    kind: config-assert
+    run: ddev drush php:script /var/www/html/.aida/provision-content-type-fields/verify.php -- storages {target.entity_type} {target.bundle} {fields:json}
+    pass: stdout empty
+  - id: shared-storage-instanced
+    kind: config-assert
+    run: ddev drush php:script /var/www/html/.aida/provision-content-type-fields/verify.php -- instances {target.entity_type} {target.bundle} {fields:json}
+    pass: stdout empty
+  - id: reference-settings-on-instance
+    kind: config-assert
+    run: ddev drush php:script /var/www/html/.aida/provision-content-type-fields/verify.php -- references {target.entity_type} {target.bundle} {fields:json}
+    pass: stdout empty
+  - id: displays-wired
+    kind: config-assert
+    run: ddev drush php:script /var/www/html/.aida/provision-content-type-fields/verify.php -- displays {target.entity_type} {target.bundle} {fields:json}
+    pass: stdout empty
+  - id: no-update-pending
+    kind: config-assert
+    run: ddev drush updatedb:status
+    pass: stdout empty
+  - id: active-equals-export
+    kind: config-assert
+    run: ddev drush config:status
+    pass: stdout empty
 
-The recipe ships no verifier *script*, but every check is **agent-runnable**. Checks 1–4 and 6 are `config-assert` (drush + config reads, no served site needed). Check 5 is `self-fixture` — it seeds a `custom` field with rows, runs `custom_field.update_manager` to add a column, and asserts the rows survive, cleaning up the fixture afterward (it does not assume an operator fixture). No check requires a served site, so none is fail-closed on its absence.
+What the entries do not prove, and where the proof is:
+
+- `storage-shapes` checks each field's storage against its input flags: `type: custom` if and only if `polymorphic`; a classification is an `entity_reference` to `taxonomy_term`; a `reference_target` is an `entity_reference` to that entity type. It cannot tell which core type a plain field should be, because `shape` is free text. It also stands in for the over-engineering check: a `custom` storage on a field not marked polymorphic is a violation.
+- One storage per concern is checked in the positive: each field's one storage is instanced on the target bundle and on every `shared_across_bundles` entry. No naming rule tells a bundle-named storage from a concern-named one.
+- Cardinality is checked as at least the declared value, or unlimited. The input carries one cardinality per field, so "the maximum any bundle needs" has nothing else to compare against.
+- `shared-storage-instanced` compares `required` on the target bundle only. The input gives one `required` per field, and the other bundles may carry their own.
+- `reference-settings-on-instance` reads the raw config. A classification's instance must also list at least one vocabulary in `target_bundles`, and each must exist.
+- `displays-wired` checks the `default` form and view displays of every bundle the field is on. The `display` hints are free text, so the widget and formatter chosen are not checked, nor is a UI Patterns source mapping.
+- The zero-data-loss check of a sub-column added to a populated `custom` field is not run. It would test the `custom_field` module's own update service, not this recipe's output, and `custom_field:add-column` is interactive only. `no-update-pending` proves no update hook is pending on the site, so the hook that carries such a change ran. It is not scoped to this recipe: a pending update from any module fails it, and it passes on a run that evolved no compound field.
+- `active-equals-export` proves the export is current after Sequence step 8. The state-awareness contract makes a second apply a no-op on that state.
+- An absent or empty `fields` prints a violation in every script entry. Flags absent from a field take the Input contract defaults.
+
+## Files
+
+One script, which the consumer writes before the verifier runs and removes after it. Do not edit it or commit it. Drush runs it with Drupal booted and passes the words after `--` in `$extra`.
+
+```php .aida/provision-content-type-fields/verify.php
+<?php
+
+// Verifier checks for provision-content-type-fields.
+// $extra: <check> <entity type> <bundle> <fields as JSON>
+// Prints one line per violation, then throws so Drush exits non-zero.
+[$check, $type, $bundle, $json] = array_pad($extra, 4, '');
+$v = [];
+
+if (!in_array($check, ['storages', 'instances', 'references', 'displays'], TRUE)) {
+  throw new \InvalidArgumentException("unknown check '$check'");
+}
+$fields = json_decode($json === '' ? 'null' : $json, TRUE, 512, JSON_THROW_ON_ERROR);
+if ($type === '' || $bundle === '') {
+  $v[] = "$check: the entity type or bundle argument is missing";
+}
+elseif (!is_array($fields) || !$fields) {
+  $v[] = "$check: fields is absent or empty";
+}
+else {
+  foreach ($fields as $i => $field) {
+    $name = $field['name'] ?? '';
+    if ($name === '') {
+      $v[] = "$check: fields[$i] has no name";
+      continue;
+    }
+    $bundles = array_values(array_unique(array_merge([$bundle], $field['shared_across_bundles'] ?? [])));
+    $storage = \Drupal::config("field.storage.$type.$name");
+
+    if ($check === 'storages') {
+      if ($storage->isNew()) {
+        $v[] = "field.storage.$type.$name does not exist";
+        continue;
+      }
+      $field_type = $storage->get('type');
+      $target = $storage->get('settings.target_type');
+      if (!empty($field['polymorphic'])) {
+        if ($field_type !== 'custom') {
+          $v[] = "field.storage.$type.$name is polymorphic but has type '$field_type', not 'custom'";
+        }
+      }
+      elseif ($field_type === 'custom') {
+        $v[] = "field.storage.$type.$name has type 'custom' but is not polymorphic";
+      }
+      elseif (!empty($field['classification'])) {
+        if ($field_type !== 'entity_reference' || $target !== 'taxonomy_term') {
+          $v[] = "field.storage.$type.$name is a classification but is not an entity_reference to taxonomy_term";
+        }
+      }
+      elseif (($field['reference_target'] ?? '') !== '') {
+        if ($field_type !== 'entity_reference' || $target !== $field['reference_target']) {
+          $v[] = "field.storage.$type.$name is not an entity_reference to {$field['reference_target']}";
+        }
+      }
+      $declared = (int) ($field['cardinality'] ?? 1);
+      $actual = (int) $storage->get('cardinality');
+      if ($declared === -1 ? $actual !== -1 : ($actual !== -1 && $actual < $declared)) {
+        $v[] = "field.storage.$type.$name has cardinality $actual, below the declared $declared";
+      }
+    }
+    elseif ($check === 'instances') {
+      foreach ($bundles as $b) {
+        $instance = \Drupal::config("field.field.$type.$b.$name");
+        if ($instance->isNew()) {
+          $v[] = "field.field.$type.$b.$name does not exist";
+        }
+        elseif ($b === $bundle && (bool) $instance->get('required') !== !empty($field['required'])) {
+          $v[] = "field.field.$type.$b.$name has required " . var_export((bool) $instance->get('required'), TRUE) . ', not ' . var_export(!empty($field['required']), TRUE);
+        }
+      }
+    }
+    elseif ($check === 'references') {
+      if ($storage->isNew() || $storage->get('type') !== 'entity_reference') {
+        continue;
+      }
+      $storage_settings = $storage->get('settings') ?? [];
+      if (array_key_exists('handler', $storage_settings) || array_key_exists('handler_settings', $storage_settings)) {
+        $v[] = "field.storage.$type.$name carries handler settings, which belong on the instance";
+      }
+      if (empty($storage_settings['target_type'])) {
+        $v[] = "field.storage.$type.$name has no target_type";
+      }
+      foreach ($bundles as $b) {
+        $instance = \Drupal::config("field.field.$type.$b.$name");
+        if ($instance->isNew()) {
+          continue;
+        }
+        if (empty($instance->get('settings.handler'))) {
+          $v[] = "field.field.$type.$b.$name has no handler";
+        }
+        if (!empty($field['classification'])) {
+          $vocabularies = array_keys($instance->get('settings.handler_settings.target_bundles') ?? []);
+          if (!$vocabularies) {
+            $v[] = "field.field.$type.$b.$name is a classification with no vocabulary in target_bundles";
+          }
+          foreach ($vocabularies as $vid) {
+            if (\Drupal::config("taxonomy.vocabulary.$vid")->isNew()) {
+              $v[] = "field.field.$type.$b.$name targets vocabulary $vid, which does not exist";
+            }
+          }
+        }
+      }
+    }
+    else {
+      foreach ($bundles as $b) {
+        foreach (['form', 'view'] as $kind) {
+          $display = \Drupal::config("core.entity_{$kind}_display.$type.$b.default");
+          if ($display->isNew()) {
+            $v[] = "core.entity_{$kind}_display.$type.$b.default does not exist";
+          }
+          elseif ($display->get("content.$name") === NULL || $display->get("hidden.$name") !== NULL) {
+            $v[] = "core.entity_{$kind}_display.$type.$b.default does not show $name";
+          }
+        }
+      }
+    }
+  }
+}
+
+if ($v) {
+  echo implode(PHP_EOL, $v) . PHP_EOL;
+  throw new \RuntimeException(count($v) . ' violation(s)');
+}
+```
 
 ## References
 
