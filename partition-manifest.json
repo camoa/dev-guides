@@ -90,7 +90,7 @@
     "guides_extracted": 13
   },
   "drupal/testing": {
-    "source_hash": "cfb4416e796762b2d0477583e56d2e9efa80078db4b0f834ae11b32d6d27b92c",
+    "source_hash": "1b05a1c440e2a1657b39966f870fd71f408a6e8ed2b7119f8efb302aa6a477a7",
     "partitioned": "2026-09-23",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 11
@@ -504,20 +504,20 @@
     "guides_extracted": 15
   },
   "testing/atk": {
-    "source_hash": "76dcf499556739af06a4e56bf829bb5e32bed6a013ad137098e743be61f9b355",
-    "partitioned": "2026-05-08",
+    "source_hash": "a8aa3a1f9bb694487e1a5f5623b0600074f5c93c92d373de6fefc37fc81820a9",
+    "partitioned": "2026-09-24",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 18
   },
   "testing/playwright": {
-    "source_hash": "dc5f177b54bb383d14985fceeed310947587988daa775c6dc301939a5eb56d25",
-    "partitioned": "2026-09-02",
+    "source_hash": "b65c2b7f58202fd3323f450adfdd182799a883bd8020428accf2afa8b933a7b7",
+    "partitioned": "2026-09-24",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 14
   },
   "testing/ai-test-generation": {
-    "source_hash": "8045964510de8297c8a5ae77382d1feb9738a35158c605d4183d7eb1465344b3",
-    "partitioned": "2026-08-31",
+    "source_hash": "ffc4b9d34c51a994ac44c4010f5ecdb01275059e72e5c6b461b7a1f3f98d8e62",
+    "partitioned": "2026-09-24",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 18
   },

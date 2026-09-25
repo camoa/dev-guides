@@ -1,6 +1,6 @@
 ---
-description: ATK's ~36 shipped tests organized by area — authentication, content, page errors, forms, navigation, search, media, email, and FedRAMP.
-tldr: ATK ships ~36 tests organized by area (auth, content, page errors, forms, navigation, search, media, email, FedRAMP) with parallel Cypress and Playwright variants. Run only the auth + page-error suites for a first-day smoke check; never modify ATK's shipped test files in-place.
+description: "ATK's test catalog by area for 2.1.0-beta5, how to run a subset by tag, and what the catalog doesn't cover."
+tldr: "39 Playwright test declarations (38 active, 18 spec files) and 37 Cypress declarations (36 active, 17 files) cover register/login, contact, error pages, sitemap, caching, entity CRUD, menu, search and feeds — no logout, role-access, admin, forms, navigation, revision or scheduling suite exists. Tags are uneven upstream."
 drupal_version: "11.x"
 ---
 
@@ -8,69 +8,74 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when picking which ATK tests to run against your site or when scoping a smoke vs full suite.
+> Picking which ATK tests to run against your site.
+
+## Pattern: how tests are organised
+
+Each area has a directory, and each test carries a numeric ID in its title:
+
+| Cypress | Playwright |
+|---|---|
+| `cypress/e2e/atk_register_login/atk_register_login.cy.js` (`ATK-CY-1010`) | `playwright/e2e/atk_register_login/atk_register_login.spec.js` (`ATK-PW-1010`) |
+| `cypress/e2e/atk_entity/atk_node.cy.js` (`ATK-CY-1110`) | `playwright/e2e/atk_entity/atk_node.spec.js` (`ATK-PW-1110`) |
+
+## Pattern: catalog by area (2.1.0-beta5)
+
+| IDs | Directory | Covers | Needs |
+|---|---|---|---|
+| 1000–1030 | `atk_register_login` | Register, login form, login via ULI, reset password | `qa_accounts` |
+| 1050–1051 | `atk_contact_us` | Contact webform, site feedback form, email sent | `webform`; `email.provider` for the email check |
+| 1060–1061 | `atk_page_error` | 403 and 404 pages | Custom error pages (demo recipe) |
+| 1070–1071 | `atk_sitemap` | XML sitemap count and regenerate | `xmlsitemap` |
+| 1080–1081 | `atk_simple_sitemap` (Cypress only) | Simple sitemap | `simple_sitemap` |
+| 1090 | `atk_caching` | Block caching and cache tags | — |
+| 1100–1101 (PW), 1020–1021 (CY) | `atk_entity/atk_user`; CY 1020–1021 also duplicated verbatim in `atk_register_login` | Create and delete a user with Drush | — |
+| 1110–1111 | `atk_entity/atk_node` | Page and article CRUD via the UI | — |
+| 1120 | `atk_entity/atk_taxonomy` | Term CRUD via the UI | — |
+| 1130 | `atk_entity/atk_media` | Image media CRUD via the UI | `media` |
+| 1150 | `atk_menu` | Menu item CRUD | — |
+| 1160–1163 | `atk_search` | Keyword and advanced search, empty input | Indexed content (cron) |
+| 1180 (PW); 1180–1181 (CY, under `ATK-PW-` IDs) | `atk_feeds` | Feed type and import | `feeds` |
+| 1200–1251 | `atk_fedramp` | See [FedRAMP & 2.1 Features](atk-fedramp.md) | See [FedRAMP & 2.1 Features](atk-fedramp.md) |
+
+There is no logout test, no role-access suite, no admin, forms or navigation suite, and no revision or scheduling test.
+
+## Pattern: running a subset
+
+Playwright tags sit in the title. Cypress tags sit in `{ tags: [...] }`.
+
+```bash
+# Playwright
+npx playwright test --grep @smoke
+npx playwright test --grep @register-login
+npx playwright test --grep-invert @alters-db     # skip tests that change the database
+npx playwright test --grep @ATK-PW-1160          # one test
+npx playwright test tests/atk_register_login/
+
+# Cypress (@cypress/grep)
+npx cypress run --env grepTags=@smoke
+npx cypress run --spec "cypress/e2e/atk_register_login/**"
+```
+
+Tags are uneven upstream. Several Cypress tests tag `alters-db` without the `@`. `ATK-PW-1012` carries `@ATK-PY-1012`. The Cypress feeds tests use `ATK-PW-` IDs.
 
 ## Decision
 
 | If you're starting | Run |
 |---|---|
-| First-day smoke check | Auth + page-error suites only |
-| Full pre-deploy run | All ATK + your custom tests |
-| Per-PR | Smoke + tests covering the changed area |
-| Nightly | Full suite + FedRAMP (if 2.1) |
-
-## Pattern
-
-### How tests are organized
-
-Each test exists in both runner variants with parallel IDs:
-
-| Cypress | Playwright |
-|---|---|
-| `auth-login.cy.js` (`-CY-LOGIN-001`) | `auth-login.spec.js` (`-PW-LOGIN-001`) |
-| `content-create.cy.js` (`-CY-CONTENT-001`) | `content-create.spec.js` (`-PW-CONTENT-001`) |
-
-### Catalog by area
-
-| Area | Examples |
-|---|---|
-| **Authentication** | Login, logout, login-with-redirect, password reset, login limits (2.1+) |
-| **User management** | Create user, edit user, delete user, role assignment, role-based access checks |
-| **Content** | Create node, edit node, delete node, view modes, revisions, scheduled publishing |
-| **Page errors** | 403 unauthorized, 404 not found, custom error pages |
-| **Administrative** | Toolbar interactions, admin pages reachable by role, configuration form submissions |
-| **Forms** | Standard form submission, validation errors, AJAX interactions, multi-step forms |
-| **Navigation** | Menus, breadcrumbs, primary/secondary navigation, search blocks |
-| **Search (1.3+)** | Default search, search with filters, no-results handling |
-| **Menu (1.3+)** | Menu link CRUD, hierarchy, position |
-| **Media (1.3+)** | Image upload, `.webp` rendering, media library |
-| **Email (2.0+)** | Mailtrap verification, Testmail.app integration, reroute_email assertions |
-| **Feeds (2.1-beta+)** | Feeds module import workflows |
-| **FedRAMP (2.1-beta+)** | Login attempt limits, CORS, session timeout, unauthorized resource access |
-
-### Running a subset
-
-```bash
-# Playwright — by tag
-npx playwright test --grep "@smoke"
-npx playwright test --grep "@atk-auth"
-
-# Playwright — by file pattern
-npx playwright test e2e/atk/auth/
-
-# Cypress
-npx cypress run --spec "e2e/atk/auth/**"
-```
+| First-day check | `--grep @smoke` |
+| Against a shared test site whose data others rely on | `--grep-invert @alters-db` |
+| Per-PR | Smoke, plus tests for the changed area |
+| Nightly | Full catalog, plus FedRAMP if on 2.1 |
 
 ## Common Mistakes
 
-- **Wrong**: Running the entire catalog on every PR → **Right**: slow, reduces signal; use smoke subset per-PR
-- **Wrong**: Adding ATK tests without the demo recipe → **Right**: tests reference content/users that don't exist; everything fails
-- **Wrong**: Modifying ATK's shipped tests in-place → **Right**: your changes get lost on upgrade; copy and rename instead
+- **Running the whole catalog without the modules it needs** — contact, sitemap, feeds and FedRAMP tests fail on a bare site
+- **Running `@alters-db` tests against shared data** — they create and delete content
+- **Editing `tests/atk_*` in place** — re-running `atk_setup` overwrites them; copy and rename instead
 
 ## See Also
 
-- [Custom Tests](atk-custom-tests.md)
 - [Helper Functions](atk-helper-functions.md)
-- [Installation](atk-installation.md)
-- Reference: `tests/playwright/` and `tests/cypress/` in the 2.0.x branch
+- [Custom Tests](atk-custom-tests.md)
+- [FedRAMP & 2.1 Features](atk-fedramp.md)

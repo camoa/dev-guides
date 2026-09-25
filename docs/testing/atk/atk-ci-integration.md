@@ -1,6 +1,6 @@
 ---
-description: Running ATK in CI — GitHub Actions + DDEV canonical pattern, Tugboat preview environments, and Pantheon SSH Drush invocation.
-tldr: "The canonical CI pattern is ddev/github-action-setup-ddev + composer install + demo recipe + preflight + playwright test. There is no ddev-atk addon. Always pass --with-deps to playwright install in CI and upload the report artifact with if: always()."
+description: "Running ATK in CI — a DDEV/GitHub Actions sketch, Tugboat and Pantheon Drush routing, with no ddev-atk addon and no preflight command."
+tldr: "ATK ships no GitHub Actions workflow and no ddev-atk addon — build your own against ddev/github-action-setup-ddev, or route Drush through the tugboat or pantheon config block. Never add a drush atk:preflight CI step; the pre-flight runs inside npx playwright test itself."
 drupal_version: "11.x"
 ---
 
@@ -8,26 +8,15 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when running ATK in continuous integration (GitHub Actions, Tugboat, Pantheon).
+> Running ATK in continuous integration.
 
-## Decision
+## Pattern: GitHub Actions + DDEV
 
-| Environment | CI strategy |
-|---|---|
-| Local dev | DDEV + ATK + tests run via `ddev exec` (or host) |
-| Per-PR (GitHub) | github-action-setup-ddev + smoke subset of tests |
-| Nightly (GitHub) | github-action-setup-ddev + full ATK + project tests |
-| Preview env (Tugboat) | Tugboat init runs ATK pre-flight; CI runs tests against Tugboat URL |
-| Pantheon staging/test | SSH Drush invocation; tests run from CI runner |
-
-## Pattern
-
-### GitHub Actions + DDEV (canonical 2026 shape)
+ATK ships no GitHub Actions workflow for DDEV. This sketch runs Playwright on the runner host against DDEV, as the demo subscriber configures it (`drushCmd: 'ddev drush'`).
 
 ```yaml
 # .github/workflows/atk.yml
 name: ATK E2E
-
 on: [push, pull_request]
 
 jobs:
@@ -36,85 +25,87 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup DDEV
-        uses: ddev/github-action-setup-ddev@v1
-        with:
-          autostart: false
+      - uses: ddev/github-action-setup-ddev@v1   # autostart defaults to true
 
-      - name: Start DDEV
-        run: ddev start
-
-      - name: Install Drupal
-        run: ddev composer install
-
-      - name: Apply demo recipe
-        run: ddev drush recipe modules/contrib/automated_testing_kit_demo_recipe
-
-      - name: Pre-flight check
-        run: ddev drush atk:preflight
+      - name: Build the site
+        run: |
+          ddev composer install
+          ddev drush site:install -y
+          ddev drush recipe ../recipes/automated_testing_kit_demo_recipe
 
       - name: Install Playwright
-        working-directory: tests/playwright
         run: |
-          npm ci
+          npm install
           npx playwright install --with-deps
 
-      - name: Run ATK tests
-        working-directory: tests/playwright
-        env:
-          DDEV_PRIMARY_URL: https://my-site.ddev.site
-        run: npx playwright test
+      - name: Run ATK tests (pre-flight runs in the setup project)
+        run: npx playwright test --grep @smoke
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
-          path: tests/playwright/playwright-report/
+          path: playwright-report/
           retention-days: 30
 ```
 
-There is no `ddev-atk` addon. Use `ddev/github-action-setup-ddev` + ATK module install. For Playwright in DDEV, `Lullabot/ddev-playwright` is a separate optional addon.
+`package.json` and `playwright.config.js` sit at `ATK_HOME`, usually the project root. `baseURL` must match the DDEV URL; ATK reads no environment variable for it.
 
-### Tugboat (preview environments, 2.1+)
+## Pattern: there is no `ddev-atk` addon
 
-```yaml
-# .tugboat/config.yml
-services:
-  php:
-    image: tugboatqa/php:8.3-apache
-    default: true
-    commands:
-      init:
-        - composer install
-        - drush si --existing-config -y
-        - drush recipe modules/contrib/automated_testing_kit_demo_recipe
-        - drush testor:pull tugboat-base
-      build:
-        - drush atk:preflight
+ATK ships no DDEV addon. Install it with Composer like any module. For Playwright inside DDEV, **`Lullabot/ddev-playwright`** is a separate addon.
+
+## Pattern: Tugboat (2.1)
+
+ATK routes Drush to a Tugboat preview when `tugboat.isTarget` is `true`. It runs `tugboat shell <service> command="vendor/drush/drush/drush …"`, so the runner needs the Tugboat CLI.
+
+Testor can create the preview and point ATK at it:
+
+```bash
+testor preview:create --set       # new preview; rewrites baseURL and the tugboat block
+testor preview:set <preview-id>   # point ATK at an existing preview
 ```
 
-Then trigger an ATK run from your CI workflow against the Tugboat URL.
+ATK's own `.github/workflows/test-tugboat-preview-gha-pw.yml` creates a preview on `workflow_dispatch`. Its Playwright step is commented out.
 
-### Pantheon (SSH Drush)
+## Pattern: Pantheon
 
 ```js
-// atk.config.js
-export default {
-  baseUrl: 'https://test-mysite.pantheonsite.io',
-  drushCmd: 'terminus drush mysite.test --',
-};
+// playwright.atk.config.js
+pantheon: {
+  isTarget: true,
+  site: 'mysite',
+  environment: 'test',
+},
 ```
+
+```js
+// playwright.config.js
+use: { baseURL: 'https://test-mysite.pantheonsite.io/' },
+```
+
+ATK then runs Drush as `terminus remote:drush mysite.test -- <cmd>`. The runner needs Terminus and its login.
+
+## Decision
+
+| Environment | CI strategy |
+|---|---|
+| Local dev | DDEV; run Playwright on the host with `drushCmd: 'ddev drush'` |
+| Per-PR (GitHub) | setup-ddev + `--grep @smoke` |
+| Nightly (GitHub) | setup-ddev + full catalog + project tests |
+| Preview env (Tugboat) | `tugboat` block; Testor `preview:create --set` |
+| Pantheon test env | `pantheon` block; Terminus on the runner |
 
 ## Common Mistakes
 
-- **Wrong**: Looking for a `ddev-atk` addon → **Right**: doesn't exist; use the canonical pattern
-- **Wrong**: Forgetting `--with-deps` on `playwright install` in CI → **Right**: fonts/system libs missing; tests fail
-- **Wrong**: Not uploading the report on failure → **Right**: use `if: always()` + artifact upload; otherwise CI failures are unreviewable
-- **Wrong**: Running pre-flight against production → **Right**: pre-flight is for test environments only
+- **Adding a `drush atk:preflight` step** — the command does not exist; the pre-flight runs inside `npx playwright test`
+- **Using `--no-deps` in CI** — it skips the pre-flight
+- **Forgetting `--with-deps`** on `playwright install` — system libraries are missing
+- **Not uploading the report on failure** — use `if: always()`
 
 ## See Also
 
-- [Pre-flight Checks](atk-preflight.md)
 - [Runner Configuration](atk-runner-config.md)
 - [Testor Snapshots](atk-testor.md)
+- [Pre-flight Checks](atk-preflight.md)
 - Reference: https://github.com/ddev/github-action-setup-ddev

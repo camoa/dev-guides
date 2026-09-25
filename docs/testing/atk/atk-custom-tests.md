@@ -1,6 +1,6 @@
 ---
-description: Writing project-specific tests on top of ATK's catalog — directory structure, helper imports, test tagging for selective runs.
-tldr: Put project-specific tests in e2e/content/ or e2e/workflows/ separate from ATK's copied catalog. Use ATK helpers (loginAsRole, runDrush) and selector hooks (data-qa-id) in your custom tests. Tag tests with @smoke and @auth for selective CI runs.
+description: "Writing project-specific ATK tests — directory layout, a worked example, and tagging for selective runs."
+tldr: "Keep custom tests in directories without the atk_ prefix — atk_setup … back copies all of tests/atk*/, tests/support/* and tests/data/* back into the module, so project helpers and data belong outside those two directories, for example tests/project-support/."
 drupal_version: "11.x"
 ---
 
@@ -8,81 +8,73 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when writing project-specific tests on top of ATK's catalog.
+> Writing project-specific tests beside ATK's catalog.
 
-## Decision
+## Pattern: directory structure
+
+Keep your tests next to ATK's, in directories without the `atk_` prefix:
+
+```
+tests/
+├── atk_*/            # ATK's catalog, copied by atk_setup
+├── data/             # ATK fixtures + your own
+├── support/          # atk_commands.js, atk_utilities.js, atk_reporter.js
+├── smoke/            # your smoke set
+└── content/          # your content tests
+```
+
+`atk_setup … back` copies the `tests/atk*` directories back into the module. It also copies **all** of `tests/support/*` and `tests/data/*` back. Keep project helpers and data outside those two directories, for example in `tests/project-support/`.
+
+## Pattern: a custom test using ATK helpers
+
+For fixtures, locators and web-first assertions, see [Playwright for Visual Regression](../visual-regression/playwright/index.md). The same Playwright practice applies here.
+
+```js
+import { test, expect } from '@playwright/test'
+import * as atkCommands from '../support/atk_commands'
+import playwrightConfig from '../../playwright.config'
+import qaUserAccounts from '../data/qaUsers.json'
+
+const baseUrl = playwrightConfig.use.baseURL
+
+test('(PROJ-001) admin publishes a landing page @smoke @landing', async ({ browser }) => {
+  const page = await atkCommands.getUserPage(browser, qaUserAccounts.admin)
+  await page.goto(`${baseUrl}node/add/landing_page`)
+  await page.locator('input[name="title[0][value]"]').fill('Spring campaign')
+  await page.getByRole('button', { name: 'Save' }).first().click()
+  await atkCommands.expectMessage(page, 'has been created')
+  atkCommands.deleteNodeWithNid(await atkCommands.getNid(page))
+})
+```
+
+## Decision: where to put a new test
 
 | Test scope | Location |
 |---|---|
-| Pure ATK use case (login, generic content) | Already in ATK catalog — don't duplicate |
-| Project-specific content type or workflow | `e2e/content/` or `e2e/workflows/` |
-| Project-specific helper | `helpers/project/` |
-| Modification of an ATK behavior | Copy the ATK test into `e2e/atk-overrides/`, modify; don't edit upstream |
+| Already covered by ATK | Run ATK's test; don't duplicate |
+| Project content type or workflow | `tests/content/`, `tests/workflows/` |
+| Project helper | A directory outside `tests/support/`, such as `tests/project-support/` |
+| Changed ATK behaviour | Copy the ATK test to your own directory and rename its ID |
 
-## Pattern
+## Pattern: tags for selective runs
 
-### Directory structure
-
-```
-tests/playwright/
-├── e2e/
-│   ├── atk/                    # ATK's shipped tests (copied or symlinked)
-│   ├── smoke/                  # Your project's smoke set
-│   ├── content/                # Project-specific content tests
-│   └── workflows/              # End-to-end workflow tests
-├── helpers/
-│   ├── atk/                    # ATK's helpers (copied or symlinked)
-│   └── project/                # Your project's helpers
-└── playwright.config.js
-```
-
-### A custom test using ATK helpers
-
-```ts
-import { test, expect } from '@playwright/test';
-import { loginAsRole } from '../helpers/atk';
-
-test.describe('custom workflow', () => {
-  test.beforeEach(async ({ page }) => {
-    await loginAsRole(page, 'editor');
-  });
-
-  test('editor publishes a curated landing page', async ({ page }) => {
-    await page.goto('/node/add/landing_page');
-    await page.fill('[data-qa-id="landing-title"]', 'Spring 2026 Campaign');
-    await page.click('[data-qa-id="landing-publish"]');
-    await expect(page.locator('.messages--status')).toContainText('saved');
-  });
-});
-```
-
-For Playwright fixtures, web-first assertions, locator strategies, and DDEV specifics, see [Playwright for Visual Regression](../visual-regression/playwright/index.md) — the same knowledge applies to ATK functional tests, just without the `toHaveScreenshot()` step.
-
-### Test tagging for selective runs
-
-```ts
-// Playwright
-test('login works @smoke @auth', async ({ page }) => { /* ... */ });
-```
-
-```bash
-npx playwright test --grep "@smoke"
+```js
+// Playwright: tags in the title
+test('login works @smoke @project', async ({ page }) => { /* ... */ })
 ```
 
 ```js
-// Cypress
-describe('login', { tags: ['@smoke', '@auth'] }, () => { /* ... */ });
+// Cypress: tags in the options
+it('login works', { tags: ['@smoke', '@project'] }, () => { /* ... */ })
 ```
 
-```bash
-npx cypress run --env grepTags="@smoke"
-```
+Run them with `npx playwright test --grep @smoke` or `npx cypress run --env grepTags=@smoke`.
 
 ## Common Mistakes
 
-- **Wrong**: Modifying ATK's shipped files in-place → **Right**: lost on next upgrade; copy and rename instead
-- **Wrong**: No tagging strategy → **Right**: can't run a smoke subset without listing every test path
-- **Wrong**: Helpers that only work in one runner → **Right**: write helpers shared across both when possible
+- **Naming your directories `atk_*`, or keeping your files in `tests/support/` or `tests/data/`** — `atk_setup back` copies them into the module
+- **Leaving test data behind** — clean up what the test created, as ATK's tests do
+- **No tagging strategy** — you cannot run a smoke subset without listing paths
 
 ## See Also
 

@@ -1,56 +1,54 @@
 ---
-description: Choosing Cypress or Playwright as the ATK runner — what differs, what's shared, and why Playwright is the 2026 default.
-tldr: Use Playwright for new projects in 2026 — cross-browser, built-in parallelism, web-first assertions, and the emerging community direction. Use Cypress only when an existing suite justifies staying. ATK ships both catalogs; pick one runner per project.
+description: "Cypress vs Playwright as the ATK runner — what's shared, what differs, and why Playwright leads for new projects."
+tldr: "Pick Playwright for new ATK projects — the larger 2.1 catalog (6 FedRAMP spec files against 4) and core's accepted policy both point that way. Keep Cypress only for an existing suite; ATK ships both catalogs but atk_setup writes package.json per runner, so running both overwrites the first."
 drupal_version: "11.x"
 ---
 
-# Cypress vs Playwright (ATK Runner Choice)
+# Cypress vs Playwright (ATK Runner)
 
 ## When to Use
 
-> Use Playwright when starting fresh in 2026. Use Cypress only when you have an existing suite that justifies staying on it. ATK supports both; pick one per project.
+> Picking the runner ATK will drive.
 
 ## Decision
 
 | If you... | Pick |
 |---|---|
-| Have an existing Cypress suite | Cypress (ATK still maintains the Cypress catalog) |
-| Are starting fresh in 2026 | Playwright (see [Playwright for Visual Regression](../visual-regression/playwright/index.md) for the runner's full surface — same setup applies to ATK functional tests) |
-| Need cross-browser (Firefox, WebKit) | Playwright (Cypress is Chromium-family only) |
-| Need parallel sharding without paid services | Playwright (Cypress paid for parallel until recently) |
-| Want strong web-first assertions | Playwright (auto-retry semantics) |
+| Have an existing Cypress suite | Cypress (ATK still ships the Cypress catalog) |
+| Are starting fresh | Playwright: it has the larger 2.1 catalog, and core's accepted policy picks Playwright. See [Playwright for Visual Regression](../visual-regression/playwright/index.md) for runner setup |
+| Want the full FedRAMP set | Playwright (6 FedRAMP spec files against 4 for Cypress) |
 | Already use Playwright for visual regression | Playwright (one runner, one set of fixtures) |
 
-## Pattern
-
-### What's the Same Across Runners
+## What's the Same Across Runners
 
 | Convention | Cypress | Playwright |
 |---|---|---|
 | File suffix | `*.cy.js` | `*.spec.js` |
-| Test ID prefix | `-CY-` | `-PW-` |
-| Helpers | `js-helpers/cypress/*` | `js-helpers/playwright/*` |
-| Selector strategy | Same (selector hooks from ATK module) | Same |
-| Drush invocation | Same (configurable: local / container / SSH) | Same |
-| Pre-flight checks | Same (`atk_prerequisites.yml`) | Same |
-| Testor snapshots | Same Drush commands | Same |
+| Test ID | `ATK-CY-NNNN` | `ATK-PW-NNNN` |
+| ATK config file | `cypress.atk.config.js` | `playwright.atk.config.js` |
+| Drush routing | `drushCmd`, `pantheon`, `targetSite`, `tugboat` keys | Same keys |
+| Pre-flight | `preflightTests.yml` | Same file |
+| Test accounts | `data/qaUsers.json` | Same file |
 
-### What Differs
+## What Differs
 
 | Concern | Cypress | Playwright |
 |---|---|---|
-| Browsers | Chromium family only | Chromium + Firefox + WebKit |
-| Auto-retry semantics | `cy.should()` chains | Web-first `expect()` assertions |
-| Test parallelization | Limited free tier; paid for sharding | Built-in workers + sharding |
-| Network mocking | `cy.intercept()` | `page.route()` |
-| Iframe/cross-origin | Restricted by design | Full support |
-| Trace viewer / debugger | Cypress App with time-travel UI | Playwright Trace Viewer with DOM snapshots |
+| Helper style | Custom commands: `cy.execDrush(...)` | ES module: `atkCommands.execDrush(...)` |
+| Helper location after setup | `cypress/support/` | `tests/support/` |
+| Pre-flight trigger | `before()` in `cypress/support/e2e.js` | `preflightTest()` in the `setup` project |
+| Login reuse | `cy.session()` inside `cy.logInViaForm()` | `getUserPage()` caches `storageState` files |
+| Tag filtering | `@cypress/grep`: `--env grepTags=@smoke` | Built in: `--grep @smoke` |
+| Logging | `cypress-log-to-term`, `env.atkLogLevel` | `atk_reporter.js` with a `level` option |
+| Pinned runner | `cypress: ^13` | `@playwright/test: ^1.48` |
+
+Both pins come from `module_support/development/*.package.json`, which `atk_setup` copies to your `package.json`.
 
 ## Common Mistakes
 
-- **Wrong**: Asserting one runner is "better" → **Right**: ATK supports both; pick what your team knows or can adopt
-- **Wrong**: Mixing runners on the same component → **Right**: pick one per project; keeping two suites is double the maintenance
-- **Wrong**: Assuming tests are 1:1 portable → **Right**: assertion idioms differ; helpers carry over but test bodies need translation
+- **Declaring one runner "better"** — ATK supports both; pick what your team runs
+- **Running both runners in one project** — `atk_setup` writes `package.json` at the project root for each, so the second run overwrites the first
+- **Assuming tests are 1:1 portable** — helper names mostly match, but signatures and test bodies differ
 
 ## See Also
 

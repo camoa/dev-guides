@@ -1,6 +1,6 @@
 ---
-description: ATK vs Lullabot/playwright-drupal vs PHPUnit FunctionalJavascript vs Nightwatch — when to use each and when to combine them.
-tldr: Use ATK for a curated Drupal-aware test catalog; use Lullabot/playwright-drupal for parallel SQLite infrastructure — they solve different problems and combining both is valid. Avoid starting new projects on Nightwatch, which is being replaced in Drupal core by Playwright.
+description: "ATK vs Lullabot/playwright-drupal vs core PHPUnit FunctionalJavascript vs Nightwatch, and core's accepted move to Playwright."
+tldr: "Choose ATK for a Drupal-aware Cypress/Playwright test catalog, Lullabot/playwright-drupal for isolated parallel test sites, or core PHPUnit to stay in PHP. Nightwatch is not deprecated — core accepted a policy to replace it with Playwright, but nothing has landed yet."
 drupal_version: "11.x"
 ---
 
@@ -8,39 +8,38 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when choosing between ATK, Lullabot's playwright-drupal, core's PHPUnit FunctionalJavascript, and the broader migration from Nightwatch to Playwright.
+> Choosing between ATK, Lullabot's playwright-drupal and core's PHPUnit FunctionalJavascript, given core's move from Nightwatch to Playwright.
 
 ## Decision
 
 | Tool | Strength | Weakness |
 |---|---|---|
-| **ATK** | Curated Drupal-aware catalog; supports both Cypress + Playwright; selector hooks; FedRAMP pack | Smaller adoption (~89 sites on drupal.org); no SA coverage; you still install the runner separately |
-| **Lullabot/playwright-drupal** | Parallel SQLite per worker; console error capture; `VisualDiffTestCases` for VR | Playwright-only; no test catalog; you write all the tests |
-| **PHPUnit FunctionalJavascript (core)** | Stays in PHP; runs in `phpunit`; CI-friendly with no JS runtime | Slow; harder to debug than browser-driven tools; tied to Mink WebDriver |
-| **Drupal core's Nightwatch (legacy)** | Was core's recommended JS E2E framework | Being replaced by Playwright per drupal.org #3467492 — don't start new projects on it |
+| **ATK** | Drupal-aware test catalog for Cypress and Playwright; FedRAMP tests on 2.1 | Small adoption (107 sites on drupal.org, 2026-09-24); not covered by security advisories; 2.1 is beta |
+| **Lullabot/playwright-drupal** | Parallel tests on SQLite site copies; Drush from tests; browser console errors; PHP error log attached to results; `VisualDiffTestCases` | Playwright only; no test catalog |
+| **PHPUnit FunctionalJavascript (core)** | Stays in PHP; runs under `phpunit` via `WebDriverTestBase` | No Drupal site-level test catalog; you write every test |
+| **Core's Nightwatch** | Still ships in core 11.x | Core accepted a policy (#3467492, November 2025) to replace it with Playwright |
 
-### Which to Combine?
+## Decision: which to combine?
 
 | Goal | Combination |
 |---|---|
-| Drupal-aware tests + parallel infrastructure | ATK + Lullabot/playwright-drupal (use both) |
-| Drupal-aware tests + visual regression | ATK + Playwright VR APIs (or `VisualDiffTestCases` from Lullabot's package) |
-| Just want to start | ATK alone — install runner of choice, run the demo recipe, extend |
-| FedRAMP compliance | ATK 2.1-beta — currently the only option |
+| Drupal-aware tests + isolated parallel sites | ATK tests on Lullabot/playwright-drupal infrastructure |
+| Drupal-aware tests + visual regression | ATK + Playwright `toHaveScreenshot()` (or Lullabot's `VisualDiffTestCases`) |
+| Just want to start | ATK alone: apply the demo recipe, run the catalog, extend |
+| FedRAMP-oriented checks | ATK 2.1.0-beta |
 
-## Pattern
+## Drupal Core's Direction
 
-Drupal core's policy issue **#3467492** ("Replace Nightwatch with Playwright") signals the broader ecosystem direction. Even if you stay on Cypress for now, expect new tooling, examples, and integration help in the wider community to land first on Playwright.
+Nightwatch is **not** deprecated. Core accepted a policy in November 2025 (#3467492) to replace it with Playwright. The migration issue (#3553673) is still open and targets Drupal 12. Nothing has landed in core yet.
 
 ## Common Mistakes
 
-- **Wrong**: Picking Cypress for a new project in 2026 → **Right**: ATK still ships Cypress tests, but the centre of gravity is Playwright; you'll have less community help long-term
-- **Wrong**: Using ATK and Lullabot's playwright-drupal as either/or → **Right**: they solve different problems; using both is fine and common
-- **Wrong**: Expecting Nightwatch to be the answer for new work → **Right**: it's being replaced in core
+- **Treating ATK and Lullabot's playwright-drupal as either/or** — they solve different problems
+- **Starting new Nightwatch coverage** — core has decided to move away from it; the work will need migrating
+- **Assuming ATK has security advisory coverage** — the project has not opted in
 
 ## See Also
 
 - [ATK Overview](atk-overview.md)
 - [Cypress vs Playwright](atk-cypress-vs-playwright.md)
-- Reference: https://github.com/Lullabot/playwright-drupal
 - Reference: https://www.drupal.org/project/drupal/issues/3467492
