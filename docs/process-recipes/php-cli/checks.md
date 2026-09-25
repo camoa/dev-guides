@@ -6,13 +6,18 @@ description: Use when a PHP CLI implementation (a Composer library or applicatio
 # Metadata — read only after a match.
 label: PHP CLI review checks
 recipe_schema_version: 1.0.0
-version: 0.3.1
+version: 0.3.2
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
 # applies_to_phase. `framework` is the second routing dimension.
 recipe_class: process
 framework: php-cli
+requires_tooling:
+  - phpcs
+  - phpstan
+  - phpcpd
+  - phpmd
 assumes:
   - composer
 authors:
@@ -180,15 +185,18 @@ check_commands:
     argv: ["php", "vendor/bin/phpmd", "{paths}", "text", "codesize,design"]
 ```
 
-**The phpcs row and the phpmd row do not reach an extensionless binary; the phpstan row does.**
-PHP_CodeSniffer 3.13.6 and PHPMD 2.15.0 both skip a file whose extension is not in their list even
-when the file is named on the command line — `bin/<tool>` produces exit 0 and no output from
-either — and neither `--extensions` nor `--suffixes` can name "no extension". That is the gap
-Opinion describes, and it holds for these rows too: the every-shipped-binary check stays with the
-reviewer. PHPStan 2.2.8 analyses an explicit extensionless path, so the static-analysis row does
-cover a binary the caller lists.
+**The phpmd row does not reach an extensionless binary; the phpstan row does, and the phpcs row does on PHP_CodeSniffer 4.x.**
+PHPMD 2.15.0 skips a file whose extension is not in its list even when the file is named on the
+command line — `bin/<tool>` produces exit 0 and no output — and neither `--extensions` nor
+`--suffixes` can name "no extension". That is the gap Opinion describes, and it still holds for
+this row: the every-shipped-binary check stays with the reviewer. PHP_CodeSniffer 4.x changed this
+for the coding-standards row: a file with no extension is now checked when it is passed explicitly
+on the command line, rather than reached by a recursive directory scan, so `{paths}` reaches
+`bin/<tool>` the same way. On 3.x, phpcs skips it with exit 0 and no output, so the
+every-shipped-binary check stays with the reviewer there too. PHPStan 2.2.8 analyses an explicit extensionless path too, so the
+static-analysis row also covers a binary the caller lists.
 
-**The duplication row takes a directory, not `{paths}`.** `phpcpd` 8.0.0 (the `systemsdk/phpcpd`
+**The duplication row takes a directory, not `{paths}`.** `phpcpd` 9.1.0 (the `systemsdk/phpcpd`
 fork; the original is unmaintained) scans directories only — a file on its command line produces
 `No files found to scan` and exit 1 — so the row names `src/`, where this framework keeps the
 library. Exit 1 means a clone was found, and also means no file was found, so an empty `src/`

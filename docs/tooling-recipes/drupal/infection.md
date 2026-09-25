@@ -6,7 +6,7 @@ description: Use when a Drupal project needs Infection mutation testing with a c
 # Metadata, read only after a match.
 label: Infection (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.1.1
 recipe_class: tooling
 framework: drupal
 authors:
@@ -33,11 +33,11 @@ it the other way round and `infection/infection` installs while the plugin does 
 run.
 
 ```sh
-composer config --no-plugins allow-plugins.infection/extension-installer true
+ddev composer config --no-plugins allow-plugins.infection/extension-installer true
 ```
 
 ```sh
-composer require --dev infection/infection
+ddev composer require --dev infection/infection
 ```
 
 `infection/extension-installer` is a direct dependency of `infection/infection`

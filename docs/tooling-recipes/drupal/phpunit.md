@@ -6,7 +6,7 @@ description: Use when a Drupal project needs PHPUnit installed and configured th
 # Metadata, read only after a match.
 label: PHPUnit (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.1.1
 recipe_class: tooling
 framework: drupal
 authors:
@@ -52,10 +52,10 @@ there. Allowing all four here keeps the step correct for a project that was not
 built from that template.
 
 ```sh
-composer config --no-plugins allow-plugins.tbachert/spi false
-composer config --no-plugins allow-plugins.phpstan/extension-installer true
-composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
-composer config --no-plugins allow-plugins.php-http/discovery true
+ddev composer config --no-plugins allow-plugins.tbachert/spi false
+ddev composer config --no-plugins allow-plugins.phpstan/extension-installer true
+ddev composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+ddev composer config --no-plugins allow-plugins.php-http/discovery true
 ```
 
 Require `drupal/core-dev` as a dev dependency, with the flag drupal.org's own
@@ -64,7 +64,7 @@ dependency set against what the project already requires, rather than only
 against `core-dev` itself.
 
 ```sh
-composer require drupal/core-dev --dev --update-with-all-dependencies
+ddev composer require drupal/core-dev --dev --update-with-all-dependencies
 ```
 
 Do not add `phpunit/phpunit` to the project's own `composer.json`. `core-dev`

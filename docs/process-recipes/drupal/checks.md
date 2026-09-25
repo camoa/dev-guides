@@ -6,7 +6,7 @@ description: 'Use when a Drupal implementation reaches the review phase and must
 # Metadata — read only after a match.
 label: Implementation review checks (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.6.1
+version: 0.6.2
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/security
@@ -254,8 +254,9 @@ check_commands:
     extensions: [".php", ".module", ".inc", ".install", ".profile", ".theme", ".engine"]
 ```
 
-**The duplication row takes `{dirs}`, not `{paths}`.** `phpcpd` 8.0.0 (the `systemsdk/phpcpd`
-fork; the original is unmaintained) scans directories only — a file named on its command line
+**The duplication row takes `{dirs}`, not `{paths}`.** `phpcpd` (the `systemsdk/phpcpd` fork;
+the original is unmaintained; 9.1.0 on PHP 8.4 or later, an 8.x release on PHP 8.3) scans
+directories only — a file named on its command line
 produces `No files found to scan` and exit 1 — so the row takes the directories that hold the
 caller's files. It does not name `web/modules/custom`: run against a project that keeps its own
 modules at `web/modules/<name>` with an unrelated `web/modules/custom` beside them, that row
