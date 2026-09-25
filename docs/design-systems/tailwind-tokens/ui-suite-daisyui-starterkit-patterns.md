@@ -77,4 +77,4 @@ Vite + PostCSS. Source .pcss files are processed by Tailwind v4 / Lightning CSS.
 - [Custom DaisyUI Theme Definition](custom-daisyui-theme-definition.md)
 - [Typography Token Mapping](typography-token-mapping.md)
 - [Spacing & Layout Token System](spacing-layout-token-system.md)
-- Reference: ~/workspace/contrib/web/themes/contrib/ui_suite_daisyui/starterkits/ui_suite_daisyui_starterkit/
+- Reference: `themes/contrib/ui_suite_daisyui/starterkits/ui_suite_daisyui_starterkit/`

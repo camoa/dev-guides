@@ -5,7 +5,7 @@ description: "Source references and maintenance manifest for the ui patterns gui
 # Sources & Maintenance
 
 ## Drupal Research Install
-Path: `~/workspace/contrib/web/` (ui_patterns **2.0.15** installed there)
+Checked against Drupal core 11.x with ui_patterns **2.0.15** installed.
 
 ## Verification Note (2026-08-18)
 

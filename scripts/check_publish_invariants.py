@@ -43,8 +43,15 @@ BORN_ATOMIC = "new-guide-no-source"
 # Not published guides: an index page and a generated manifest page.
 NOT_A_GUIDE = {"index.md", "sources-maintenance.md"}
 
-# A home directory from any machine, not just this one.
-LOCAL_PATH_RE = re.compile(r"(?:/home/[a-z_][a-z0-9_-]*|/Users/[A-Za-z][A-Za-z0-9._-]*)/")
+# A home directory from any machine, not just this one — including the `~`
+# and `$HOME` shorthands, and a bare `workspace/<folder>` checkout reference
+# with no leading slash or tilde.
+LOCAL_PATH_RE = re.compile(
+    r"(?:/home/[a-z_][a-z0-9_-]*|/Users/[A-Za-z][A-Za-z0-9._-]*)/"
+    r"|~/[\w.-]+"
+    r"|\$HOME/[\w.-]+"
+    r"|\bworkspace/[\w.-]+"
+)
 
 # The source writes this heading more than one way; the published heading is
 # always `## When to Use`.
@@ -61,8 +68,16 @@ BASELINE = PROJECT_ROOT / "publish-invariants-baseline.json"
 # remote snapshot host whose service account is named `testor`, so
 # `/home/testor/snapshots` is the path being documented rather than a path
 # from anyone's machine.
+#
+# The `~/.ssh`, `~/.composer` and `~/.bashrc` entries are a CI runner's own
+# home directory and a reader's own shell rc file — portable Unix
+# conventions, not a path into any particular developer's checkout.
 ALLOWED_LOCAL_PATHS = {
     ("docs/testing/atk/atk-testor.md", "/home/testor/"),
+    ("docs/drupal/github-actions/secret-management.md", "~/.ssh"),
+    ("docs/drupal/github-actions/multi-environment-deployment.md", "~/.ssh"),
+    ("docs/drupal/github-actions/caching-strategies.md", "~/.composer"),
+    ("docs/ai-tooling/modern-web-guidance/using-it-effectively.md", "~/.bashrc"),
 }
 
 

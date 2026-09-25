@@ -6,7 +6,7 @@ description: "Source references and maintenance manifest for the layout builder 
 
 ## Drupal Research Install
 
-Path: ~/workspace/contrib/web/
+Checked against Drupal core 11.x with Layout Builder Styles 2.1.0 installed.
 
 ## Web Sources
 

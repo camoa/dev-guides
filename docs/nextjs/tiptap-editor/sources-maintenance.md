@@ -32,11 +32,11 @@ description: "Source references and maintenance manifest for the tiptap editor g
 | OWASP XSS Guide | https://owasp.org/www-community/attacks/xss/ | 18.1 | 2026-02-14 |
 
 ## Code Sources
-**Note:** No Drupal research install needed for this guide. All code references are from Tiptap's npm packages and local documentation at `claude_memory/future_skills/tiptap-docs/`.
+**Note:** No Drupal research install needed for this guide. All code references are from Tiptap's npm packages and a local documentation mirror.
 
 | Source | Path | Guide Sections | Version |
 |--------|------|----------------|---------|
-| Tiptap Local Docs | `claude_memory/future_skills/tiptap-docs/src/content/editor/` | All sections | 2.5+ |
+| Tiptap Local Docs | local documentation mirror | All sections | 2.5+ |
 | Tiptap Core Package | `node_modules/@tiptap/core` | 3.1, 8.1, 9.1 | 3.11.1 |
 | Tiptap React Package | `node_modules/@tiptap/react` | 2.2, 17.1 | 3.11.1 |
 | Tiptap StarterKit | `node_modules/@tiptap/starter-kit` | 7.1 | 3.11.1 |

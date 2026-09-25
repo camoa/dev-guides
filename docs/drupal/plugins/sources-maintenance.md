@@ -25,12 +25,12 @@ description: "Source references and maintenance manifest for the plugins guides 
 
 | Module/Library | Path | Version |
 |---|---|---|
-| Drupal Core Plugin API | ~/workspace/contrib/web/core/lib/Drupal/Core/Plugin/ | 11.x |
-| Commerce Payment | ~/workspace/contrib/web/modules/contrib/commerce/modules/payment/ | contrib |
-| AI Module | ~/workspace/contrib/web/modules/contrib/ai/ | 1.2.x |
-| Orchestration Module | ~/workspace/contrib/web/modules/contrib/orchestration/ | contrib |
+| Drupal Core Plugin API | core/lib/Drupal/Core/Plugin/ | 11.x |
+| Commerce Payment | modules/contrib/commerce/modules/payment/ | contrib |
+| AI Module | modules/contrib/ai/ | 1.2.x |
+| Orchestration Module | modules/contrib/orchestration/ | contrib |
 
-**Drupal Research Install**: `~/workspace/contrib/web/`
+**Checked against**: Drupal core 11.x with the modules above installed.
 
 ## Version History
 - v3.0 (2026-02-12): Reformatted to atomic-ready with PARTITION markers; added TOC routing table, Security and Performance best practices, Sources & Maintenance Manifest

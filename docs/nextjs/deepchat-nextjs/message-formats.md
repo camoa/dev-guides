@@ -201,4 +201,4 @@ const sendMessage = async (text: string) => {
 
 - [Drupal Backend Integration](drupal-backend.md)
 - [Custom Handlers](custom-handlers.md)
-- Reference: `claude_memory/skills/drupal-ai/references/deepchat-frontend-integration.md`
+- Reference: the Deepchat frontend-integration reference notes

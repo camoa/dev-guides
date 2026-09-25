@@ -74,7 +74,7 @@ radix_starterkit/               # Sub-theme root
 └── webpack.mix.js              # Laravel Mix config
 ```
 
-**Reference Source:** Radix starterkit at `~/workspace/contrib/web/themes/contrib/radix/src/kits/radix_starterkit/`
+**Reference Source:** Radix starterkit at `themes/contrib/radix/src/kits/radix_starterkit/`
 
 #### Common Mistakes and WHY They Matter
 - **Putting SDCs in wrong location** — Must be in `components/` directory (not `src/components/`). WHY: Drupal scans for leaf directories with `.component.yml` files only in the `components/` folder; files elsewhere won't be discovered.

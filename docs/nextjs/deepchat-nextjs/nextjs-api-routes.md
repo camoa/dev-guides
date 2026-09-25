@@ -218,4 +218,4 @@ async function getCsrfToken(accessToken: string): Promise<string> {
 
 - [Authentication & Sessions](authentication-sessions.md)
 - [Drupal Backend Integration](drupal-backend.md)
-- Reference: `claude_memory/guides/deepchat-nextjs-drupal-integration.md`
+- Reference: the companion Deepchat/Next.js-Drupal integration guide

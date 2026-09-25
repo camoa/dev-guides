@@ -6,7 +6,7 @@ description: "Source references and maintenance manifest for the testing guides 
 
 ## Drupal Research Install
 
-Path: `~/workspace/contrib/web/`
+Checked against Drupal core 11.x.
 
 ## Web Sources
 

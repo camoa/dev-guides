@@ -5,7 +5,7 @@ description: "Source references and maintenance manifest for the solid principle
 # Sources & Maintenance
 
 ## Drupal Research Install
-Path: ~/workspace/contrib/web/ (not used for this tool-agnostic guide)
+Not applicable — this guide is tool-agnostic.
 
 ## Web Sources
 

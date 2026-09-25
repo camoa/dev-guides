@@ -5,7 +5,7 @@ description: "Source references and maintenance manifest for the radix component
 # Sources & Maintenance
 
 ## Drupal Research Install
-Path: `~/workspace/contrib/web/`
+Checked against Drupal core 11.x with Radix theme 6.0.8 installed.
 
 ## Web Sources
 

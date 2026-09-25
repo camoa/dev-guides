@@ -5,7 +5,7 @@ description: "Source references and maintenance manifest for the breadcrumbs gui
 # Sources & Maintenance
 
 ## Drupal Research Install
-Path: ~/workspace/contrib/web/
+Checked against Drupal core 11.x with Easy Breadcrumb 2.x installed.
 
 ## Web Sources
 
@@ -37,5 +37,7 @@ Path: ~/workspace/contrib/web/
 | Help module — HelpBreadcrumbBuilder | core/modules/help/src/HelpBreadcrumbBuilder.php | 3 | 11.x |
 | Demo Umami profile — breadcrumb block config | core/profiles/demo_umami/config/install/block.block.umami_breadcrumbs.yml | 12 | 11.x |
 | Easy Breadcrumb module | modules/contrib/easy_breadcrumb/src/ | 4, 5, 7, 8 | 2.x |
-| UI Suite DaisyUI — breadcrumbs component | themes/contrib/ui_suite_daisyui/components/breadcrumbs/ | 10 | alpha6+ |
-| UI Suite DaisyUI — breadcrumb template | themes/contrib/ui_suite_daisyui/templates/system/breadcrumb.html.twig | 10 | alpha6+ |
+| UI Suite DaisyUI — breadcrumbs component | themes/contrib/ui_suite_daisyui/components/breadcrumbs/ | 10 | 5.0.0-alpha6 |
+| UI Suite DaisyUI — breadcrumb template | themes/contrib/ui_suite_daisyui/templates/system/breadcrumb.html.twig | 10 | 5.0.0-alpha6 |
+| UI Patterns — links prop type normalizer | modules/contrib/ui_patterns/src/Plugin/UiPatterns/PropType/LinksPropType.php | 10 | 2.0.19 |
+| UI Patterns — SDC node visitor | modules/contrib/ui_patterns/src/Template/ModuleNodeVisitorBeforeSdc.php | 10 | 2.0.19 |

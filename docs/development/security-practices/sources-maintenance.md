@@ -5,7 +5,7 @@ description: "Source references and maintenance manifest for the security practi
 # Sources & Maintenance
 
 ## Drupal Research Install
-Path: ~/workspace/contrib/web/
+Not applicable — this guide is tool-agnostic.
 
 ## Web Sources
 

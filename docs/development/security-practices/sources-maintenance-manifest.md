@@ -7,7 +7,7 @@ tldr: "Web sources, code sources, and version history for the security best prac
 
 ## Drupal Research Install
 
-Path: ~/workspace/contrib/web/
+Not applicable — this guide is tool-agnostic.
 
 ## Web Sources
 

@@ -78,4 +78,4 @@ Tailwind v4 uses --spacing as a base unit. All numeric spacing utilities are mul
 
 - [UI Suite DaisyUI Starterkit Patterns](ui-suite-daisyui-starterkit-patterns.md)
 - [Tailwind v4 Namespace Reference](tailwind-v4-namespace-reference.md)
-- Reference: ~/workspace/contrib/web/themes/contrib/ui_suite_daisyui/starterkits/ui_suite_daisyui_starterkit/css/utilities/
+- Reference: `themes/contrib/ui_suite_daisyui/starterkits/ui_suite_daisyui_starterkit/css/utilities/`

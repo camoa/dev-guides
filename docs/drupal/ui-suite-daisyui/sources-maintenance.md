@@ -6,7 +6,7 @@ description: "Source references and maintenance manifest for the ui suite daisyu
 
 ## Drupal Research Install
 
-Path: `~/workspace/contrib/web/`
+Checked against Drupal core 11.x with UI Suite DaisyUI 5.0.0-alpha6, UI Patterns 2.0.20, and UI Styles 8.x-1.21 installed.
 
 ## Web Sources
 

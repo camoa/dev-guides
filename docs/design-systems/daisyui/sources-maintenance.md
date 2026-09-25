@@ -5,7 +5,7 @@ description: "Source references and maintenance manifest for the daisyui guides 
 # Sources & Maintenance
 
 ## Next.js Research Install
-Path: `~/workspace/contrib-nextjs/nextjs-app/`
+Checked against Next.js 16.1.6 with the packages below installed.
 
 DaisyUI package path: `node_modules/daisyui/` (v5.5.18)
 
