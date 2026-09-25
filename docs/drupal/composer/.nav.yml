@@ -1,0 +1,9 @@
+nav:
+- index.md
+- composer-update-vs-require.md
+- composer-dependency-flags.md
+- composer-patches.md
+- composer-audit.md
+- composer-conflicts.md
+- sources-maintenance.md
+append_unmatched: true

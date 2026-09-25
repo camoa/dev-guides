@@ -28,7 +28,10 @@ Claims here were checked against a local Drupal install of core and the modules 
 | Providing Default Configuration | https://www.drupal.org/docs/drupal-apis/configuration-api/providing-default-configuration | 16.0 | 2026-02-14 |
 | Recipes Initiative | https://www.drupal.org/project/distributions_recipes | 18.0 | 2026-02-14 |
 | Drush Deploy Command | https://www.drush.org/latest/commands/deploy/ | 17.0 | 2026-09-24 |
-| Update Hooks Changing Config (Issue #3110362) | https://www.drupal.org/project/drupal/issues/3110362 | 17.0 | 2026-09-24 |
+| Update Hooks Changing Config (Issue #3110362) | https://www.drupal.org/project/drupal/issues/3110362 | 17.0, 17.1 | 2026-09-24 |
+| Drush Deploy (update function types) | https://www.drush.org/13.x/deploycommand/ | 17.1 | 2026-09-24 |
+| hook_update_N() API | https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Extension!module.api.php/function/hook_update_N | 17.1 | 2026-09-24 |
+| hook_post_update_NAME() API | https://api.drupal.org/api/drupal/core!lib!Drupal!Core!Extension!module.api.php/function/hook_post_update_NAME | 17.1 | 2026-09-24 |
 
 ## Code Sources
 
@@ -43,10 +46,19 @@ Claims here were checked against a local Drupal install of core and the modules 
 | Views Module | `core/modules/views/` | 8.0, 22.0 | 11.x |
 | Language Module | `core/modules/language/` | 12.0, 22.0 | 11.x |
 | Config Split (Contrib) | `modules/contrib/config_split/` | 13.0 | 2.x |
+| Core Update API | `core/lib/Drupal/Core/Update/`, `core/lib/Drupal/Core/Extension/module.api.php`, `core/includes/update.inc` | 17.1 | 11.4.5 |
+| Core Hook Collector | `core/lib/Drupal/Core/Hook/HookCollectorPass.php` | 17.1 | 11.4.5 |
+| System Module (update requirements) | `core/modules/system/src/Hook/SystemRequirementsHooks.php` | 17.1 | 11.4.5 |
+| Drush | `vendor/drush/drush/` (`src/Commands/core/DeployCommands.php`, `UpdateDBCommands.php`, `DeployHookCommands.php`, `drush.api.php`) | 17.0, 17.1 | Drush 13.7.6 |
+| Output Formatters | `vendor/consolidation/output-formatters/` (`TableFormatter.php`, `TsvFormatter.php`) | 17.1 | 4.7.1 |
 
 ---
 
-**Version:** 1.1
+## Version History
+
+- 2026-09-24 — Added 17.1 Update Functions: the three kinds of update function, their order around `config:import`, and why their config changes are exported.
+
+**Version:** 1.2
 **Last Updated:** 2026-09-24
 **Drupal Version:** 11.x
 **Guide Type:** Atomic-Ready Single File

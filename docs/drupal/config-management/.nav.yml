@@ -19,6 +19,7 @@ nav:
 - config-system-overview.md
 - core-data-types-schema.md
 - deployment-workflows.md
+- update-functions.md
 - security-and-performance.md
 - simple-config-vs-config-entities.md
 - writing-config-schema.md

@@ -115,7 +115,7 @@
   },
   "drupal/layout-builder": {
     "source_hash": "c5140dae7f6ca2e73c927d049a5cf989736321b85228f23d87806b8af93df3f6",
-    "partitioned": "2026-09-25",
+    "partitioned": "2026-09-24",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 27
   },
@@ -162,10 +162,16 @@
     "guides_extracted": 20
   },
   "drupal/config-management": {
-    "source_hash": "b5dc627c9302d176c0b4e5127badf6b64a1bf0aaba41d717d557d6cfa8e9c9fb",
-    "partitioned": "2026-09-24",
+    "source_hash": "ddc76ac1da93aab382a1279c376e8fe1e5187f05e95612cb1a90d11e880792a0",
+    "partitioned": "2026-09-25",
     "partitioned_by": "Carlos Ospina",
-    "guides_extracted": 22
+    "guides_extracted": 23
+  },
+  "drupal/composer": {
+    "source_hash": "91b1acb1789dde5de2a6d5007faf2216ede467252b301633c57e14e4aa13e418",
+    "partitioned": "2026-09-25",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 5
   },
   "drupal/render-api": {
     "source_hash": "f9a4867a7c6becbf8ede69b5fa0e7d20b0d98cab7bd0e479a2d4b14800309d6a",
@@ -174,8 +180,8 @@
     "guides_extracted": 19
   },
   "drupal/security": {
-    "source_hash": "e1df960e0fb548a752a2dd0fcfd60746eca48fea1c643538cccf85f98bcc612d",
-    "partitioned": "2026-09-24",
+    "source_hash": "24d874c309dd9ec32d17e7d34e666eebbb30d464fd507b36ce3596b2fe32d3b3",
+    "partitioned": "2026-09-25",
     "partitioned_by": "camoa",
     "guides_extracted": 21
   },

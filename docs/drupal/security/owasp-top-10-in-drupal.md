@@ -127,8 +127,9 @@ $database->query('SELECT * FROM {node} WHERE nid = :nid', [':nid' => $nid]);
 
 **Update Strategy:**
 ```bash
-# Check for security updates
-composer outdated drupal/*
+# Lists newer releases available; security advisories come from composer audit
+composer outdated "drupal/*"
+composer audit
 # Apply security updates immediately
 # Standard projects use drupal/core-recommended:
 composer update "drupal/core-*" --with-all-dependencies
