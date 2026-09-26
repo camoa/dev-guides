@@ -91,7 +91,7 @@ Reference source files and docs for full implementation.
 
 ### See Also
 - ← Previous related section | Next related section →
-- Reference: source file path or documentation URL
+- Reference: Drupal-relative source path (core/..., modules/contrib/...) or documentation URL; never a local machine path
 <!-- END PARTITION: section-slug -->
 ```
 

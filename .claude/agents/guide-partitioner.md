@@ -93,7 +93,7 @@ Reference source files for full implementation.
 ## See Also
 
 - [Related guide](../related.md)
-- Reference: [source file path or documentation URL]
+- Reference: [Drupal-relative source path (core/..., modules/contrib/...) or documentation URL; never a local machine path or folder name]
 ```
 
 ### Section Preservation — never drop source content
