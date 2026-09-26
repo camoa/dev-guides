@@ -121,7 +121,7 @@ drupal_version: "11.x"
 **Process:**
 1. Copy component directory from Radix to sub-theme:
    ```bash
-   cp -r ~/workspace/contrib/web/themes/contrib/radix/components/button \
+   cp -r themes/contrib/radix/components/button \
          themes/custom/THEME_NAME/components/button
    ```
 

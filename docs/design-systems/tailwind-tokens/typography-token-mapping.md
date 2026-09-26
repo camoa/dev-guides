@@ -83,4 +83,4 @@ Creates utilities like text-title-xl, text-copy-md.
 
 - [UI Suite DaisyUI Starterkit Patterns](ui-suite-daisyui-starterkit-patterns.md)
 - [Tailwind v4 Namespace Reference](tailwind-v4-namespace-reference.md)
-- Reference: ~/workspace/contrib/web/themes/contrib/ui_suite_daisyui/starterkits/ui_suite_daisyui_starterkit/css/utilities/typography.pcss
+- Reference: `themes/contrib/ui_suite_daisyui/starterkits/ui_suite_daisyui_starterkit/css/utilities/typography.pcss`

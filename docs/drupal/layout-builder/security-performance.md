@@ -207,7 +207,7 @@ public function build() {
 
 **Permissions:**
 - `configure any layout` — Administer all default layouts
-- `configure editable {entity_type} {bundle} layout overrides` — Per-entity overrides
+- `configure editable {bundle} {entity_type} layout overrides` — Per-entity overrides
 - `administer blocks` — See all blocks in LB (often needed for editors)
 
 **Best Practices:**

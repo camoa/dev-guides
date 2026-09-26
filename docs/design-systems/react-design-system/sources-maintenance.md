@@ -8,7 +8,7 @@ description: "Source references and maintenance manifest for the react design sy
 Path: Not applicable — this guide covers React/Next.js ecosystem, not Drupal.
 
 ## Next.js Research Install
-Path: `~/workspace/contrib-nextjs/nextjs-app/`
+Checked against Next.js 16.x with the packages below installed.
 
 ## Web Sources
 
@@ -16,13 +16,13 @@ Path: `~/workspace/contrib-nextjs/nextjs-app/`
 |--------|-----|----------------|---------------|
 | Radix UI Primitives — Overview | https://www.radix-ui.com/primitives/docs/overview/introduction | 1, 4, 9 | 2026-02-19 |
 | Radix UI — Composition (asChild) | https://www.radix-ui.com/primitives/docs/guides/composition | 3, 4 | 2026-02-19 |
-| CVA Docs — Getting Started | https://cva.style/docs | 5, 6 | 2026-02-19 |
-| CVA Docs — Variants | https://cva.style/docs/getting-started/variants | 6 | 2026-02-19 |
+| CVA Docs — Getting Started | https://cva.style/ | 5, 6 | 2026-02-19 |
+| CVA Docs — Variants | https://cva.style/getting-started/variants/ | 6 | 2026-02-19 |
 | tailwind-merge (GitHub) | https://github.com/dcastil/tailwind-merge | 5 | 2026-02-19 |
 | tailwind-variants — Introduction | https://www.tailwind-variants.org/docs/introduction | 5, 6 | 2026-02-19 |
 | tailwind-variants — Slots | https://www.tailwind-variants.org/docs/slots | 6 | 2026-02-19 |
 | tailwind-variants vs CVA Comparison | https://www.tailwind-variants.org/docs/comparison | 5, 6 | 2026-02-19 |
-| shadcn/ui — Button component | https://ui.shadcn.com/docs/components/button | 1, 3, 5 | 2026-02-19 |
+| shadcn/ui — Button component | https://ui.shadcn.com/docs/components/base/button | 1, 3, 5 | 2026-02-19 |
 | shadcn/ui — Theming / CSS variables | https://ui.shadcn.com/docs/theming | 7 | 2026-02-19 |
 | shadcn/ui — Manual Installation (utils) | https://ui.shadcn.com/docs/installation/manual | 5 | 2026-02-19 |
 | React TypeScript Cheatsheet | https://react-typescript-cheatsheet.netlify.app/ | 8 | 2026-02-19 |
@@ -32,7 +32,7 @@ Path: `~/workspace/contrib-nextjs/nextjs-app/`
 | Kent C. Dodds — Compound Components | https://kentcdodds.com/blog/compound-components-with-react-hooks | 4 | 2026-02-19 |
 | Patterns.dev — Compound Pattern | https://www.patterns.dev/react/compound-pattern/ | 1, 4 | 2026-02-19 |
 | WAI-ARIA Authoring Practices Guide | https://www.w3.org/WAI/ARIA/apg/ | 9 | 2026-02-19 |
-| React Aria — Accessibility | https://react-spectrum.adobe.com/react-aria/accessibility.html | 9 | 2026-02-19 |
+| React Aria — Accessibility | https://react-aria.adobe.com/quality#accessibility | 9 | 2026-02-19 |
 | Divotion — Accessible by Design | https://www.divotion.com/blog/accessible-by-design | 9 | 2026-02-19 |
 | Storybook 10 Docs | https://storybook.js.org/docs/ | 10 | 2026-02-19 |
 | Storybook — Accessibility Testing | https://storybook.js.org/docs/writing-tests/accessibility-testing | 10, 15 | 2026-02-19 |
@@ -46,7 +46,7 @@ Path: `~/workspace/contrib-nextjs/nextjs-app/`
 | React Docs — useMemo | https://react.dev/reference/react/useMemo | 14 | 2026-02-19 |
 | React 19 release blog | https://react.dev/blog/2024/12/05/react-19 | 4, 8, 14 | 2026-02-19 |
 | React 19 — ref as prop | https://react.dev/blog/2024/12/05/react-19#ref-as-a-prop | 4, 8 | 2026-02-19 |
-| Tailwind CSS v4 upgrade guide | https://tailwindcss.com/docs/v4-upgrade | 7 | 2026-02-19 |
+| Tailwind CSS v4 upgrade guide | https://tailwindcss.com/docs/upgrade-guide | 7 | 2026-02-19 |
 | Saeloun — memo vs useMemo | https://blog.saeloun.com/2024/02/15/memo-vs-usememo-when-to-use-each-for-better-react-performance/ | 14 | 2026-02-19 |
 | React Testing Library | https://testing-library.com/docs/react-testing-library/intro/ | 15 | 2026-02-19 |
 | jest-axe (GitHub) | https://github.com/nickcolley/jest-axe | 15 | 2026-02-19 |
@@ -55,7 +55,7 @@ Path: `~/workspace/contrib-nextjs/nextjs-app/`
 | UXPin — Managing Global Styles with Design Tokens | https://www.uxpin.com/studio/blog/managing-global-styles-in-react-with-design-tokens/ | 7 | 2026-02-19 |
 
 ## Code Sources
-All paths relative to `~/workspace/contrib-nextjs/nextjs-app/`
+All paths are package-relative (`node_modules/`).
 
 | Package | Relative Path | Guide Sections | Version |
 |---------|---------------|----------------|---------|

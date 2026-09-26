@@ -58,6 +58,7 @@ The litmus test: *Could a manual implementer act on this guide by reading Drupal
 - Source priority: Core code > Contrib code > Official documentation > Community best practices
 - **Freshness requirement**: Only use sources published within the last 2 years or matching the target Drupal/framework version. Discard articles referencing deprecated APIs or outdated versions. When researching, add year constraints to searches (e.g., "Drupal form API best practices 2025 2026")
 - Reference exact file paths and URLs that Claude Code can access
+- Cite code with Drupal-relative paths; never a local machine path or folder name
 - Avoid `/modules/custom/` examples unless specifically requested
 - Include `/modules/contrib/` as valid pattern sources
 - Always verify current versions and practices through authoritative sources

@@ -19,3 +19,4 @@ description: "Source references and maintenance manifest for the playwright guid
 | Date | Change |
 |------|--------|
 | 2026-05-08 | Manifest reconstructed from the guide's own citations and the installed source. |
+| 2026-09-25 | Section 9: "isolate per-worker" replaced — all workers share one DDEV database; the options are one worker or a per-test site (Lullabot/playwright-drupal). `mode: 'serial'` is not isolation; a per-project `workers: 1` (`TestProject.workers` in `playwright` 1.63.0 `types/test.d.ts`) is. |

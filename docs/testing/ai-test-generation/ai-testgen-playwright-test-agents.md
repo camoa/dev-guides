@@ -7,7 +7,15 @@ tldr: "Playwright 1.56+ ships three agents: Planner (explores app via MCP, write
 
 ## When to Use
 
-> Use Playwright Test Agents (1.56+) as the canonical Plan-Generate-Heal toolchain. This is the built-in implementation of the four-phase pattern.
+> Playwright 1.56+ ships three official agents. This is the canonical Plan-Generate-Heal toolchain.
+
+## The Three Agents
+
+**Planner** — explores the app via Playwright MCP, writes a Markdown test plan with `planner_save_plan` tool. Output: `specs/<feature>.md`.
+
+**Generator** — reads an approved plan, writes Playwright code. Output: `tests/<feature>.spec.ts`.
+
+**Healer** — reads a failing test, opens the app, finds new locators, patches the code. Tests cite `// spec:` and `// seed:` headers so regenerations stay traceable.
 
 ## Decision
 
@@ -27,6 +35,8 @@ tldr: "Playwright 1.56+ ships three agents: Planner (explores app via MCP, write
 | Node/TS project | Java pending as of 2026-05 |
 
 ## Pattern: invoke Planner
+
+Through Claude Code with Playwright MCP installed:
 
 ```
 Use the Playwright Planner to write a test plan for the contact form.
@@ -55,9 +65,9 @@ Do not change assertions — only locators.
 
 ## Common Mistakes
 
-- **Wrong**: Invoking the Generator without an approved plan → **Right**: defeats the review gate
-- **Wrong**: Letting the Healer rewrite assertions → **Right**: assertions are the plan's contract; only locators are the Healer's job
-- **Wrong**: Skipping the seed test → **Right**: every scenario needs a deterministic starting state
+- **Invoking the Generator without an approved plan** — defeats the review gate
+- **Letting the Healer rewrite assertions** — assertions are the plan's contract; only locators are the Healer's job
+- **Skipping the seed test** — every scenario needs a deterministic starting state
 
 ## See Also
 

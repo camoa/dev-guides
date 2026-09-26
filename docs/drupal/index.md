@@ -45,6 +45,7 @@ guide-meta:
 | Build layouts with Layout Builder | [Layout Builder](layout-builder/index.md) |
 | Create and customize Views | [Views](views/index.md) |
 | Manage configuration and schema | [Config Management](config-management/index.md) |
+| Update dependencies with Composer, apply patches, or audit the lock file | [Composer](composer/index.md) |
 | Build render arrays and templates | [Render API](render-api/index.md) |
 | Define or use services | [Services & DI](services/index.md) |
 | Handle security correctly | [Security](security/index.md) |

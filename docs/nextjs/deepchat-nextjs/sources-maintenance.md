@@ -41,10 +41,10 @@ Claims here were checked against a local Drupal install of core and the modules 
 
 | File | Guide Sections |
 |------|----------------|
-| `claude_memory/guides/deepchat-nextjs-drupal-integration.md` | 4.2, 7.1, 12.1 |
-| `claude_memory/skills/drupal-ai/references/deepchat-frontend-integration.md` | 3.1, 3.2, 6.1, 6.2 |
-| `claude_memory/skills/drupal-ai/references/deepchat-backend.md` | 7.1, 7.2 |
-| `claude_memory/future_skills/deep-chat-docs.md` | 1.1, 3.1, 9.1, 10.1 |
+| the companion Deepchat/Next.js-Drupal integration guide | 4.2, 7.1, 12.1 |
+| the Deepchat frontend-integration reference notes | 3.1, 3.2, 6.1, 6.2 |
+| the Deepchat backend reference notes | 7.1, 7.2 |
+| the Deepchat local documentation mirror | 1.1, 3.1, 9.1, 10.1 |
 
 ---
 
@@ -52,4 +52,3 @@ Claims here were checked against a local Drupal install of core and the modules 
 **Created:** 2026-02-14
 **Last Updated:** 2026-02-14
 **Maintainer:** Guide Framework Maintainer
-<!-- END PARTITION: sources-maintenance -->

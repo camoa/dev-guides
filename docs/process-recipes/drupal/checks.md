@@ -6,11 +6,17 @@ description: 'Use when a Drupal implementation reaches the review phase and must
 # Metadata — read only after a match.
 label: Implementation review checks (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.5.1
+version: 0.6.2
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/security
   - drupal/services
+requires_tooling:
+  - phpcs
+  - phpstan
+  - phpcpd
+  - phpmd
+  - playwright
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -227,8 +233,10 @@ because the container mirrors the project root.
 check_commands:
   - id: coding-standards
     argv: ["ddev", "exec", "vendor/bin/phpcs", "--standard=Drupal,DrupalPractice", "--extensions=php,module,inc,install,profile,theme,engine", "{paths}"]
+    extensions: [".php", ".module", ".inc", ".install", ".profile", ".theme", ".engine"]
   - id: static-analysis
     argv: ["ddev", "exec", "vendor/bin/phpstan", "analyse", "{paths}"]
+    extensions: [".php", ".module", ".inc", ".install", ".profile", ".theme", ".engine"]
   - id: security
     absent: >-
       Drupal names no dedicated security-scanning tool. The security-sink reading (Form
@@ -240,12 +248,15 @@ check_commands:
       passed the table through.
   - id: duplication
     argv: ["ddev", "exec", "vendor/bin/phpcpd", "--suffix", ".php", "--suffix", ".module", "--suffix", ".inc", "--suffix", ".install", "--suffix", ".profile", "--suffix", ".theme", "--suffix", ".engine", "{dirs}"]
+    extensions: [".php", ".module", ".inc", ".install", ".profile", ".theme", ".engine"]
   - id: design-metrics
     argv: ["ddev", "exec", "vendor/bin/phpmd", "{paths}", "text", "codesize,design", "--suffixes", "php,module,inc,install,profile,theme,engine"]
+    extensions: [".php", ".module", ".inc", ".install", ".profile", ".theme", ".engine"]
 ```
 
-**The duplication row takes `{dirs}`, not `{paths}`.** `phpcpd` 8.0.0 (the `systemsdk/phpcpd`
-fork; the original is unmaintained) scans directories only — a file named on its command line
+**The duplication row takes `{dirs}`, not `{paths}`.** `phpcpd` (the `systemsdk/phpcpd` fork;
+the original is unmaintained; 9.1.0 on PHP 8.4 or later, an 8.x release on PHP 8.3) scans
+directories only — a file named on its command line
 produces `No files found to scan` and exit 1 — so the row takes the directories that hold the
 caller's files. It does not name `web/modules/custom`: run against a project that keeps its own
 modules at `web/modules/<name>` with an unrelated `web/modules/custom` beside them, that row
@@ -270,9 +281,15 @@ sets no file extensions, so PHP_CodeSniffer keeps its default of `php`, `inc`, `
 a `.module`, `.install`, `.theme`, `.profile` or `.engine` file named on the command line is skipped
 in silence, with exit 0 and no output, verified on PHP_CodeSniffer 3.13.6. The flag lists the PHP
 file types this recipe's own `## Code-quality extensions` declares, so the two agree; a file type
-outside it, `.twig` or `.yml`, is skipped rather than failed, which is why the row needs no
-`extensions:` key. PHPStan needs no flag: `mglaman/phpstan-drupal` 2.1.2 registers those same
-extensions, and a `.yml` handed to it is skipped in the same way.
+outside it, `.twig` or `.yml`, is skipped by phpcs itself rather than failed. PHPStan needs no flag:
+`mglaman/phpstan-drupal` 2.1.2 registers those same extensions, and a `.yml` handed to it is skipped
+in the same way.
+
+All four rows above now carry that same list under `extensions:`. AIDA filters the changed files
+to it before a row runs, and only then expands `{paths}` or `{dirs}` from what is left. For the
+duplication row this means `{dirs}` is derived from the directories of the matching files only, so
+a change that touches only `composer.json`, `composer.lock`, or config YAML no longer reaches
+phpcpd as `.`. A row whose filtered list is empty is not applicable, never a pass.
 
 Both commands override what the project declares in one direction each. `--standard` wins over a
 project's `phpcs.xml.dist`, so the row enforces this recipe's standard rather than a narrower

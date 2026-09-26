@@ -5,7 +5,7 @@ description: "Source references and maintenance manifest for the routing guides 
 # Sources & Maintenance
 
 ## Drupal Research Install
-Path: ~/workspace/contrib/web/
+Checked against Drupal core 11.x.
 
 ## Web Sources
 | Source | URL | Guide Sections | Last Verified |

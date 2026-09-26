@@ -6,7 +6,7 @@ description: Use when a Drupal project needs PHP_CodeSniffer with the Drupal and
 # Metadata, read only after a match.
 label: PHP_CodeSniffer (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.2.0
+version: 0.2.1
 recipe_class: tooling
 framework: drupal
 authors:
@@ -34,11 +34,11 @@ carries them. Composer refuses to run an unlisted plugin, so this order matters:
 run it the other way round and `coder` installs while its standards do not appear.
 
 ```sh
-composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+ddev composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
 ```
 
 ```sh
-composer require --dev drupal/coder
+ddev composer require --dev drupal/coder
 ```
 
 `dealerdirect/phpcodesniffer-composer-installer` comes in as a dependency of

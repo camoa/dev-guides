@@ -25,9 +25,10 @@ Internal cross-links to other dev-guides topics (TDD & Spec-Driven Development, 
 | Playwright Test Agents (Planner/Generator/Healer) | node_modules/playwright/lib/agents/ | 13, 15 | 1.57.0 (npm) — guide states "1.56+"; the agent files, tool names (`planner_save_plan`), and Planner/Generator/Healer split match this installed copy |
 | @playwright/test | node_modules/@playwright/test/ | 14, 18 | 1.57.0 (npm) |
 
-The Drupal-specific example code in Section 16 (`site_contact` module, `*.routing.yml`, the ATK seed script, `data-qa-id` selector hooks) is example code in the guide, not verified against an installed module. No `automated_testing_kit` or `site_contact` module exists under `contrib/web`, so this pass could not confirm those specifics against a real Drupal installation. `@playwright/mcp` (the MCP server package used in Section 14) is not installed locally in this workspace; its registry version (0.0.80 at verification time) is not asserted in the guide text and is not verified in this pass.
+The Drupal-specific example code in Section 16 (`site_contact` module, `*.routing.yml`) is example code in the guide, not verified against an installed module — no `site_contact` module exists under `contrib/web`, so this pass could not confirm those specifics against a real Drupal installation. The ATK seed script and selector hooks were checked against ATK 2.1.0-beta5 source; `site_contact` remains unverified. `@playwright/mcp` (the MCP server package used in Section 14) is not installed locally in this workspace; its registry version (0.0.80 at verification time) is not asserted in the guide text and is not verified in this pass.
 
 ## Version History
 | Date | Change |
 |------|--------|
 | 2026-06-10 | Manifest reconstructed from the guide's own citations and the installed source. |
+| 2026-09-25 | Section 16 seed test: its own `seed` project, excluded from `chromium`, named in the agent prompt. Checked against `playwright` 1.63.0 `lib/mcp/test/seed.js` and `testContext.js`, and the 1.63 test-agents docs. Snapshot name aligned to `qa`. |

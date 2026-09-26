@@ -11,7 +11,7 @@ None — these rules originated from camoa development practice, not external pu
 None — these are framework-agnostic rules informed by Drupal core, Bootstrap, and Layout Builder behavior, not specific module/theme implementations.
 
 ## Origin
-Initial 20 rules sourced from `~/workspace/claude_code_projects/idexx/docs/technical/guides/development-patterns.md` (universal subset, project-specific guidance excluded). Curated by camoa for the `drupal/best-practices/camoa` playbook set.
+Initial 20 rules sourced from a private project's development-pattern notes (universal subset, project-specific guidance excluded). Curated by camoa for the `drupal/best-practices/camoa` playbook set.
 
 ---
 

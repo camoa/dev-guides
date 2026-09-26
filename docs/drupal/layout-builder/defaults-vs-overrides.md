@@ -81,7 +81,7 @@ Verified: one production site ran a templated bundle (`allow_custom: false`) alo
 
 - **Enabling overrides by default** → Creates maintenance burden. Changing defaults doesn't update overridden entities. Start with defaults only
 - **Not communicating override behavior** → Editors expect layout changes to apply everywhere. Once entity overridden, it's disconnected from defaults — document this clearly
-- **Forgetting override permission** → Overrides need separate permission: "Configure editable {entity_type} {bundle} layout overrides". Editors frustrated when can't edit
+- **Forgetting override permission** → Overrides need separate permission: "Configure editable {bundle} {entity_type} layout overrides". Editors frustrated when can't edit
 - **Not planning for default updates** → With overrides, no easy way to push default changes to overridden entities. Either accept divergence or manually update/revert
 - **Mixing content and config** → Defaults are config (exportable). Overrides are content (in entity field). Config-only deployment workflows break with overrides
 - **Ignoring revert workflows** → Once overridden, only way back to default is "Revert to defaults" button (blows away custom content). No partial revert

@@ -15,7 +15,7 @@ drupal_version: "11.x"
 
 #### Pattern: Radix 6.x SDC Components
 
-**Source:** `~/workspace/contrib/web/themes/contrib/radix/components/`
+**Source:** `themes/contrib/radix/components/`
 
 This catalog contains all 57 actual Radix SDC components. Each entry lists key props and slots for quick reference.
 
@@ -116,7 +116,7 @@ All components are marked as `experimental` status in Radix 6.x except:
 
 #### See Also
 - [8.2 Reuse Decision Framework](#82-reuse-decision-framework)
-- Radix Component Files: `~/workspace/contrib/web/themes/contrib/radix/components/`
+- Radix Component Files: `themes/contrib/radix/components/`
 - Radix Documentation: https://docs.trydrupal.com/radix/working-with-the-components/
 
 ---
@@ -175,7 +175,7 @@ All components are marked as `experimental` status in Radix 6.x except:
 
 ```bash
 # Copy entire component directory
-cp -r ~/workspace/contrib/web/themes/contrib/radix/components/button \
+cp -r themes/contrib/radix/components/button \
       themes/custom/THEME_NAME/components/button
 ```
 

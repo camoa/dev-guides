@@ -18,26 +18,26 @@ Path: N/A — this guide is framework-agnostic (not Drupal-specific)
 | Tailwind Theme Variables (v4) | https://tailwindcss.com/docs/theme | 3, 5, 7 | 2026-02-19 |
 | Tailwind Adding Custom Styles | https://tailwindcss.com/docs/adding-custom-styles | 3, 7, 10 | 2026-02-19 |
 | Tailwind Detecting Classes in Source | https://tailwindcss.com/docs/detecting-classes-in-source-files | 12 | 2026-02-19 |
-| Tailwind Reusing Styles | https://tailwindcss.com/docs/reusing-styles | 10 | 2026-02-19 |
+| Tailwind Reusing Styles | https://tailwindcss.com/docs/styling-with-utility-classes#managing-duplication | 10 | 2026-02-19 |
 | Tailwind Responsive Design | https://tailwindcss.com/docs/responsive-design | 8 | 2026-02-19 |
 | Tailwind Dark Mode | https://tailwindcss.com/docs/dark-mode | 9 | 2026-02-19 |
 | Tailwind Hover/Focus/States | https://tailwindcss.com/docs/hover-focus-and-other-states | 6, 14 | 2026-02-19 |
 | Tailwind Upgrade Guide (v3→v4) | https://tailwindcss.com/docs/upgrade-guide | 1, 4 | 2026-02-19 |
 | Tailwind v3 Configuration | https://v3.tailwindcss.com/docs/configuration | 4 | 2026-02-19 |
-| Class Variance Authority Docs | https://cva.style/docs | 10.2 | 2026-02-19 |
-| CVA Variants Reference | https://cva.style/docs/getting-started/variants | 10.2 | 2026-02-19 |
+| Class Variance Authority Docs | https://cva.style/ | 10.2 | 2026-02-19 |
+| CVA Variants Reference | https://cva.style/getting-started/variants/ | 10.2 | 2026-02-19 |
 | Style Dictionary | https://styledictionary.com/ | 11 | 2026-02-19 |
 | Tailwind Tokens Figma Plugin | https://www.figma.com/community/plugin/1513618945140968492/tailwind-tokens-create-tailwind-css-variables-styles | 11 | 2026-02-19 |
 | Accreditly Tailwind Accessibility | https://accreditly.io/articles/make-the-web-accessible-with-tailwind-css | 14 | 2026-02-19 |
 | Colour A11y for Tailwind | https://colour-a11y.vercel.app/ | 14 | 2026-02-19 |
-| Tailwind Best Practices 2025 | https://www.faraazcodes.com/blog/tailwind-2025-best-practices | 13 | 2026-02-19 |
+| Tailwind Best Practices 2025 — DEAD, 404 as of 2026-09-02 | https://www.faraazcodes.com/blog/tailwind-2025-best-practices | 13 | 2026-02-19 |
 | Tailwind Best Practices (Wisp) | https://www.wisp.blog/blog/best-practices-for-using-tailwind-css-in-large-projects | 13 | 2026-02-19 |
 | CVA + Tailwind Tutorial | https://fveracoechea.com/blog/cva-and-tailwind/ | 10.2 | 2026-02-19 |
 | tailwind-merge GitHub | https://github.com/dcastil/tailwind-merge | 10.3 | 2026-02-19 |
 | clsx GitHub | https://github.com/lukeed/clsx | 10.3 | 2026-02-19 |
 
 ## Next.js Research Install
-Path: `~/workspace/contrib-nextjs/nextjs-app/`
+Checked against Next.js 16.1.6 with the packages below installed.
 
 ## Code Sources
 

@@ -1,6 +1,6 @@
 ---
-description: Adding visual regression on top of ATK's E2E tests — ATK doesn't ship VR, so layer Playwright's native toHaveScreenshot() or Lullabot's VisualDiffTestCases.
-tldr: ATK's test catalog is functional E2E only — no VR assertions. Layer visual regression using Playwright's native toHaveScreenshot() combined with ATK's loginAsRole() for auth setup. Keep VR in dedicated test files separate from functional tests.
+description: "Layering visual regression on top of ATK — native Playwright, Lullabot's VisualDiffTestCases, or pixelmatch, since ATK ships none."
+tldr: "ATK ships no visual-regression layer — no test takes a screenshot baseline. Layer native Playwright toHaveScreenshot(), Lullabot's VisualDiffTestCases, or a custom pixelmatch script on top; ATK's getUserPage() handles the login, Playwright's API does the VR."
 drupal_version: "11.x"
 ---
 
@@ -8,64 +8,68 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this guide when adding visual regression on top of an ATK-using project.
+> Adding visual regression on top of ATK's E2E tests.
 
-## Decision
+## ATK Doesn't Ship VR
 
-| Need | Approach |
-|---|---|
-| Homepage / landing pages | Native `toHaveScreenshot()` (per the VR guides) |
-| Component-level VR with Drupal-aware helpers | Lullabot's `VisualDiffTestCases` |
-| Cross-runner VR (need Cypress + Playwright VR) | ATK won't help; pick one runner for VR |
-
-### VR sources
+ATK's catalog is functional: login, entity CRUD, page errors, contact forms, search, menus. No test takes a screenshot baseline. To add VR:
 
 | Layer | Source |
 |---|---|
-| Native Playwright VR | `expect(page).toHaveScreenshot()` — see [Playwright Screenshot APIs](../visual-regression/playwright/pw-vr-screenshot-apis.md) |
+| Native Playwright VR | `expect(page).toHaveScreenshot()` — see [Playwright for Visual Regression — Screenshot APIs](../visual-regression/playwright/pw-vr-screenshot-apis.md) |
 | VR procedure (workflow, baselines, threshold tuning) | See [Visual Regression Workflow](../visual-regression/workflow/index.md) |
-| Lullabot's `VisualDiffTestCases` | `@lullabot/playwright-drupal` |
-| Custom pixelmatch script | See [Pixelmatch Image Diff](../visual-regression/pixelmatch/index.md) |
+| Lullabot's `VisualDiffTestCases` | `@lullabot/playwright-drupal` — URL-driven VR cases for Drupal |
+| Custom pixelmatch script | `pixelmatch` directly — see [Pixelmatch Image Diff](../visual-regression/pixelmatch/index.md) |
 | Triage UI for VR diffs | [Playwright HTML Report — VR Diff Panel](../visual-regression/html-report/pw-report-vr-diff-panel.md) |
 
-## Pattern
+## Pattern: VR in an ATK-using project
 
-ATK's `loginAsRole()` sets up the auth; Playwright's native API does the VR:
+```js
+import { test, expect } from '@playwright/test'
+import * as atkCommands from '../support/atk_commands'
+import playwrightConfig from '../../playwright.config'
+import qaUserAccounts from '../data/qaUsers.json'
 
-```ts
-import { test, expect } from '@playwright/test';
-import { loginAsRole } from '../helpers/atk';
+const baseUrl = playwrightConfig.use.baseURL
 
 test('homepage visual regression', async ({ page }) => {
-  await page.goto('/');
-  await page.evaluate(() => document.fonts.ready);
+  await page.goto(baseUrl)
+  await page.evaluate(() => document.fonts.ready)
   await expect(page).toHaveScreenshot({
     fullPage: true,
     mask: [page.locator('[data-vrt-mask]')],
-  });
-});
+  })
+})
 
-test('admin dashboard visual regression', async ({ page }) => {
-  await loginAsRole(page, 'site_admin');
-  await page.goto('/admin');
+test('admin dashboard visual regression', async ({ browser }) => {
+  const page = await atkCommands.getUserPage(browser, qaUserAccounts.admin)
+  await page.goto(`${baseUrl}admin`)
   await expect(page).toHaveScreenshot({
-    mask: [
-      page.locator('time[datetime]'),
-      page.locator('[data-contextual-id]'),
-    ],
-  });
-});
+    mask: [page.locator('time[datetime]'), page.locator('[data-contextual-id]')],
+  })
+})
 ```
+
+ATK's `getUserPage()` handles the login; Playwright's API does the VR.
+
+## Decision: VR strategy
+
+| Need | Approach |
+|---|---|
+| Homepage and landing pages | Native `toHaveScreenshot()` (per the VR guides) |
+| URL lists with Drupal-aware defaults | Lullabot's `VisualDiffTestCases` |
+| VR in both Cypress and Playwright | ATK won't help; pick one runner for VR |
 
 ## Common Mistakes
 
-- **Wrong**: Expecting ATK to do VR out of the box → **Right**: it doesn't; layer on Playwright's native API
-- **Wrong**: Using `cy-image-snapshot` or similar Cypress VR plugins alongside Playwright VR → **Right**: different baselines, different OS sensitivity; pick one
-- **Wrong**: Mixing ATK functional tests and VR assertions in the same test → **Right**: separate concerns; keep VR in dedicated test files
+- **Expecting ATK to do VR** — it doesn't; layer Playwright's API on top
+- **Using a Cypress VR plugin alongside Playwright VR** — two baseline sets; pick one
+- **Mixing functional and VR assertions in one test** — keep VR in its own files
 
 ## See Also
 
 - [ATK Overview](atk-overview.md)
-- [Playwright Screenshot APIs](../visual-regression/playwright/pw-vr-screenshot-apis.md)
+- [Playwright for Visual Regression](../visual-regression/playwright/index.md)
 - [Visual Regression Workflow](../visual-regression/workflow/index.md)
-- [Pixelmatch](../visual-regression/pixelmatch/index.md)
+- [Pixelmatch Image Diff](../visual-regression/pixelmatch/index.md)
+- [Playwright HTML Report](../visual-regression/html-report/index.md)

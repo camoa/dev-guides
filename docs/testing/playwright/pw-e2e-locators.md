@@ -47,7 +47,7 @@ await page.getByTestId('nav-toggle').click();
 
 ## Pattern: `testIdAttribute` Config
 
-By default `getByTestId` reads `data-testid`. To target a different attribute (e.g. ATK's `data-qa-id`):
+By default `getByTestId` reads `data-testid`. To target a different attribute (some teams add a project convention like `data-qa-id`):
 
 ```ts
 // playwright.config.ts
@@ -110,5 +110,5 @@ await page.getByRole('listitem').nth(2);
 ## See Also
 
 - [Web-First Assertions](pw-e2e-assertions.md) — what to assert after locating
-- [ATK Integration](pw-e2e-atk-integration.md) — using `data-qa-id` with ATK's selector hooks
+- [ATK Integration](pw-e2e-atk-integration.md) — locating elements via ATK's body-class and `data-media-id` selector hooks
 - Reference: [Playwright Locators](https://playwright.dev/docs/locators)

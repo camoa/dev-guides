@@ -6,6 +6,7 @@ nav:
 - Breadcrumbs: breadcrumbs
 - Blocks: blocks
 - Caching: caching
+- Composer: composer
 - Config Forms: config-forms
 - Config Management: config-management
 - Custom Field: custom-field

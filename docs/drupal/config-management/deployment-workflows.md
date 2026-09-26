@@ -80,7 +80,7 @@ if [ "$CONFIRM" != "yes" ]; then
   exit 1
 fi
 
-# Deploy — runs updatedb, config:import, cache:rebuild, deploy:hook in that order
+# Deploy — runs updatedb, config:import, cache:rebuild, deploy:hook, and cache:warm on core 11.2+, in that order
 echo "Deploying..."
 drush deploy -y
 

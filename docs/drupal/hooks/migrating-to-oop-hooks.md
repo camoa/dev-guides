@@ -21,7 +21,7 @@ drupal_version: "11.x"
 
 3. **Move each convertible hook** — copy the body into a method, keep the signature, add `#[Hook('<name>')]`, and a docblock `Implements hook_<name>().` Replace `\Drupal::service()` calls with injected properties.
 
-4. **Decide on the legacy shim** — if your `core_version_requirement` still admits 10.x or 11.0.x, keep a procedural function with `#[LegacyHook]` that delegates to the class. Otherwise delete the procedural function. See [Hook Implementation Decision](hook-implementation-decision.md).
+4. **Decide on the legacy shim** — if your `core_version_requirement` still admits 10.1 to 11.0.x, keep a procedural function with `#[LegacyHook]` that delegates to the class. Otherwise delete the procedural function. See [Hook Implementation Decision](hook-implementation-decision.md).
 
 5. **Split `hook_requirements()`** — install phase to `src/Install/Requirements/MyModuleRequirements.php`, runtime to `#[Hook('runtime_requirements')]`, update to `#[Hook('update_requirements')]`. See [Procedural-Only Hooks](procedural-only-hooks.md).
 

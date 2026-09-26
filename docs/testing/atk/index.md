@@ -2,9 +2,10 @@
 description: Automated Testing Kit (ATK) — decision guides for installing, configuring, and extending this Drupal-aware E2E test catalog for Cypress and Playwright.
 tracks:
   - project: automated_testing_kit
-    channel: stable
-    declared: "2.0.0"
-    verified: 2026-05-08
+    channel: alpha
+    reason: guides follow the 2.1 line, which is beta-only; 2.0.0 is the latest stable
+    declared: "2.1.0-beta5"
+    verified: 2026-09-24
 guide-meta:
   concepts:
     - automated_testing_kit
@@ -12,27 +13,40 @@ guide-meta:
     - Drupal E2E testing
     - qa_accounts
     - automated_testing_kit_demo_recipe
+    - automated_testing_kit_demo
     - selector hooks
-    - data-qa-id
-    - atk_prerequisites.yml
+    - data-media-id
+    - node-nid
+    - preflightTests.yml
     - pre-flight checks
     - Testor snapshots
-    - testor:pull
-    - testor:push
-    - loginAsRole
-    - runDrush
-    - drushCmd
+    - testor snapshot:create
+    - testor snapshot:restore
+    - atk_commands.js
+    - atk_utilities.js
+    - execDrush
+    - getUserPage
+    - qaUsers.json
     - FedRAMP tests
+    - atk_fedramp
+    - ATK-PW-
+    - ATK-CY-
     - Drupal functional tests
     - E2E test catalog
     - test helpers
     - PerformantLabs
+    - atk_setup
+    - Tugboat
+    - Pantheon
   not:
     - Playwright VR baselines (see testing/visual-regression/playwright)
     - toHaveScreenshot (see testing/visual-regression/playwright)
     - pixelmatch (see testing/visual-regression/pixelmatch)
     - PHPUnit (see drupal/tdd)
     - Drupal kernel tests (see drupal/tdd)
+    - data-qa-id (ATK never added this attribute, in any release)
+    - drush atk:preflight (no such command; pre-flight runs inside the test run)
+    - drush testor:* (Testor is its own CLI binary, not a Drush command set)
   requires: []
   complements:
     - testing/visual-regression/playwright
@@ -45,21 +59,21 @@ guide-meta:
 
 | I need to... | Guide | Summary |
 |-------------|-------|---------|
-| Understand what ATK is and when to choose it | [Overview](atk-overview.md) | Use ATK when you need a curated catalog of ~36 Drupal-aware E2E tests plus helpers without writing them from scratch; it provides the test catalog and Drupal-side glue, while you supply the Cypress or Playwright runner. ATK does not include a visual regression layer. |
-| Choose between ATK, Lullabot/playwright-drupal, or PHPUnit | [Ecosystem & Alternatives](atk-ecosystem.md) | Use ATK for a curated Drupal-aware test catalog; use Lullabot/playwright-drupal for parallel SQLite infrastructure — they solve different problems and combining both is valid. Avoid starting new projects on Nightwatch, which is being replaced in Drupal core by Playwright. |
-| Pick Cypress or Playwright as the runner | [Cypress vs Playwright](atk-cypress-vs-playwright.md) | Use Playwright for new projects in 2026 — cross-browser, built-in parallelism, web-first assertions, and the emerging community direction. Use Cypress only when an existing suite justifies staying. ATK ships both catalogs; pick one runner per project. |
-| Pick the right ATK release track | [Versions & Compatibility](atk-versions.md) | Use ATK 2.0.0 stable for production Drupal 11 sites. Use 2.1-beta only if you need FedRAMP tests, Feeds, or Tugboat support. Use 3.0-alpha only for Drupal CMS 2.x. The canonical source is git.drupalcode.org — GitHub PerformantLabs repos 404. |
-| Install ATK on a Drupal site | [Installation](atk-installation.md) | Install the module and qa_accounts companion, apply the demo recipe so shipped tests have the expected content and users, then install Cypress or Playwright separately in a sandboxed subdirectory. ATK does not bundle the runner. |
-| Configure Cypress or Playwright for ATK | [Runner Configuration](atk-runner-config.md) | Set baseURL from DDEV_PRIMARY_URL, use ignoreHTTPSErrors for DDEV self-signed certs, and configure drushCmd to match your environment (local, container exec, or SSH). Wrong drushCmd is the most common ATK CI failure. |
-| Run ATK's pre-flight checks | [Pre-flight Checks](atk-preflight.md) | Pre-flight runs before any test via atk_prerequisites.yml and aborts with a structured error if any check fails. Run it in CI always — that is exactly where misconfigured environments produce confusing test failures. Extend it only when your tests assume state that isn't enforced by Composer or config-import. |
-| Target Drupal markup without volatile class names | [Selector Hooks](atk-selector-hooks.md) | ATK adds stable data-qa-id attributes to common Drupal markup via preprocess hooks, decoupling tests from volatile class names and Form API ID mangling. Extend the same convention in your module/theme preprocess hooks for custom markup. |
-| Find the test that fits my use case | [Test Catalog](atk-test-catalog.md) | ATK ships ~36 tests organized by area (auth, content, page errors, forms, navigation, search, media, email, FedRAMP) with parallel Cypress and Playwright variants. Run only the auth + page-error suites for a first-day smoke check; never modify ATK's shipped test files in-place. |
-| Use the helper utility functions | [Helper Functions](atk-helper-functions.md) | ATK ships ~24 helpers covering auth (loginAsRole), Drush invocation (runDrush), snapshot management (testorPull), form interactions, email verification, and cleanup. Use loginAsRole instead of hardcoded credentials; use runDrush instead of cy.exec — both handle environment-specific invocation automatically. |
-| Write custom Drupal-aware tests | [Custom Tests](atk-custom-tests.md) | Put project-specific tests in e2e/content/ or e2e/workflows/ separate from ATK's copied catalog. Use ATK helpers (loginAsRole, runDrush) and selector hooks (data-qa-id) in your custom tests. Tag tests with @smoke and @auth for selective CI runs. |
-| Snapshot databases with Testor | [Testor Snapshots](atk-testor.md) | Testor is ATK's Drush command set for pushing and pulling sanitised DB snapshots to S3-compatible or SFTP storage, categorised by audience (dev, qa, tugboat-base). Always use --sanitize when pushing; store access keys in env vars or CI secrets, never in YAML. |
-| Run ATK in CI (GitHub Actions + DDEV) | [CI Integration](atk-ci-integration.md) | The canonical CI pattern is ddev/github-action-setup-ddev + composer install + demo recipe + preflight + playwright test. There is no ddev-atk addon. Always pass --with-deps to playwright install in CI and upload the report artifact with if: always(). |
-| Use the FedRAMP compliance pack | [FedRAMP & 2.1 Features](atk-fedramp.md) | ATK 2.1-beta adds FedRAMP-aligned tests (login lockout, CORS headers, session timeout, 403 checks) plus Feeds, Tugboat Drush, and persistent sessions. These tests pass does not mean the site is FedRAMP-compliant — they are one verification mechanism. Stay on 2.0 stable if you don't need these features. |
-| Migrate from Cypress to Playwright | [Cypress → Playwright Migration](atk-cypress-to-playwright-migration.md) | Selector hooks, Drush config, Testor snapshots, qa_accounts, and pre-flight checks are all reusable. Test logic needs translation — adopt Playwright's web-first assertions rather than translating literally. Never build a compatibility shim. |
-| Add visual regression on top of ATK | [Visual Regression Layering](atk-visual-regression-layering.md) | ATK's test catalog is functional E2E only — no VR assertions. Layer visual regression using Playwright's native toHaveScreenshot() combined with ATK's loginAsRole() for auth setup. Keep VR in dedicated test files separate from functional tests. |
-| Avoid common mistakes | [Anti-Patterns](atk-anti-patterns.md) | The most damaging ATK mistakes are following dead GitHub URLs, skipping the demo recipe, editing shipped tests in-place, hardcoding drushCmd or credentials, and treating FedRAMP test passes as compliance certification. |
-| Find services, modules, files | [Code Reference](atk-code-reference.md) | Canonical source is git.drupalcode.org/project/automated_testing_kit (not GitHub). Key files are automated_testing_kit.module (selector hooks), atk_prerequisites.yml (preflight), js-helpers/ (test helpers), and src/Commands/TestorCommands.php (snapshot Drush). Verify Drush command names with drush list on your install. |
+| Understand what ATK is and when to use it | [Overview](atk-overview.md) | Use ATK for ready-made Drupal E2E tests (login, forms, CRUD, menus, search, caching, sitemaps) plus Cypress/Playwright helpers; never enable ATK or qa_accounts on production — it serves data/ files, including qaUsers.json, to anonymous users. |
+| Decide between ATK, Lullabot's playwright-drupal, or core's test tools | [Ecosystem & Alternatives](atk-ecosystem.md) | Choose ATK for a Drupal-aware Cypress/Playwright test catalog, Lullabot/playwright-drupal for isolated parallel test sites, or core PHPUnit to stay in PHP. Nightwatch is not deprecated — core accepted a policy to replace it with Playwright, but nothing has landed yet. |
+| Pick Cypress or Playwright as the runner | [Cypress vs Playwright](atk-cypress-vs-playwright.md) | Pick Playwright for new ATK projects — the larger 2.1 catalog (6 FedRAMP spec files against 4) and core's accepted policy both point that way. Keep Cypress only for an existing suite; ATK ships both catalogs but atk_setup writes package.json per runner, so running both overwrites the first. |
+| Pick the right ATK release, or run on 2.0.0 stable | [Versions & Compatibility](atk-versions.md) | This guide targets 2.1.0-beta5 (2026-02-04); latest stable is 2.0.0 (2025-05-15). Use 2.1.0-beta for FedRAMP tests, Feeds, or Tugboat; on a 2.0.0 site the pre-flight filename, setup project and file:create don't exist, so 2.1 instructions break there. |
+| Install ATK on a Drupal site | [Installation](atk-installation.md) | Install with the demo recipe on a fresh site (needs minimum-stability dev for performant-labs/qa_accounts:dev-main), or install drupal/qa_accounts:^1.1 yourself on an existing site, then run module_support/atk_setup playwright and npm install. Test sites only. |
+| Configure the target site and Drush access | [Runner Configuration](atk-runner-config.md) | *.atk.config.js sets drushCmd, *Url routes, email and the pantheon/targetSite/tugboat blocks; execDrush() tries Pantheon, then SSH targetSite, then Tugboat, then drushCmd, in that order. baseURL lives in the runner's own config, not *.atk.config.js. |
+| Run and extend the pre-flight check | [Pre-flight Checks](atk-preflight.md) | The pre-flight runs inside the test run, not via a Drush command — Playwright's setup project calls preflightTest() before chromium; Cypress checks in a global before(). Only eq conditions are implemented; there is no drush atk:preflight command in any release. |
+| Use ATK's preprocess hooks to find IDs in markup | [Selector Hooks](atk-selector-hooks.md) | ATK adds no generic test attribute — only two preprocess hooks: body classes like node-nid-42 on node/term routes, and data-media-id on images tied to a media entity. Read them with atkCommands.getNid()/getMid() or cy.getNid()/getMid(); ATK never added data-qa-id. |
+| Find the test that fits my use case | [Test Catalog](atk-test-catalog.md) | 39 Playwright test declarations (38 active, 18 spec files) and 37 Cypress declarations (36 active, 17 files) cover register/login, contact, error pages, sitemap, caching, entity CRUD, menu, search and feeds — no logout, role-access, admin, forms, navigation, revision or scheduling suite exists. Tags are uneven upstream. |
+| Use the helper functions | [Helper Functions](atk-helper-functions.md) | Playwright ships 27 helpers in atk_commands.js (login, execDrush, config, users, nodes/media, assertions, preflightTest, skipIfLocal) plus 4 in atk_utilities.js. Never call Drush with execSync or cy.exec — it bypasses the Pantheon, SSH and Tugboat routing; read credentials from data/qaUsers.json, never hardcode them. |
+| Write custom Drupal-aware tests | [Custom Tests](atk-custom-tests.md) | Keep custom tests in directories without the atk_ prefix — atk_setup … back copies all of tests/atk*/, tests/support/* and tests/data/* back into the module, so project helpers and data belong outside those two directories, for example tests/project-support/. |
+| Snapshot databases with Testor | [Testor Snapshots](atk-testor.md) | Testor is a separate Robo CLI (performantlabs/testor), not an ATK or Drush command — install with composer require performantlabs/testor, then testor snapshot:create/list/get/restore/delete. The default snapshot:create --env=@self runs drush sql:sanitize on your LOCAL database before dumping it; run it on a throwaway copy. |
+| Run ATK in CI | [CI Integration](atk-ci-integration.md) | ATK ships no GitHub Actions workflow and no ddev-atk addon — build your own against ddev/github-action-setup-ddev, or route Drush through the tugboat or pantheon config block. Never add a drush atk:preflight CI step; the pre-flight runs inside npx playwright test itself. |
+| Use the FedRAMP tests and other 2.1 features | [FedRAMP & 2.1 Features](atk-fedramp.md) | 2.1.0-beta adds FedRAMP-oriented tests (rapid login, CORS/CSRF, session termination, unauthorized access, HTTPS redirect, security headers), Feeds tests and Tugboat routing — Playwright ships 6 FedRAMP spec files, Cypress 4. A green run covers some control areas; it is not an audit, and 2.1 has had betas only since 2025-08-05. |
+| Migrate from Cypress to Playwright | [Cypress → Playwright Migration](atk-cypress-to-playwright-migration.md) | Preprocess hooks, drushCmd/pantheon/targetSite/tugboat config, preflightTests.yml, qaUsers.json and Testor snapshots carry over unchanged — only test bodies need translation. Playwright's execDrush() returns stdout directly instead of chaining like a Cypress command. |
+| Add visual regression on top of ATK | [Visual Regression Layering](atk-visual-regression-layering.md) | ATK ships no visual-regression layer — no test takes a screenshot baseline. Layer native Playwright toHaveScreenshot(), Lullabot's VisualDiffTestCases, or a custom pixelmatch script on top; ATK's getUserPage() handles the login, Playwright's API does the VR. |
+| Avoid common mistakes | [Anti-Patterns](atk-anti-patterns.md) | The most repeated ATK mistakes: following dead PerformantLabs GitHub URLs, running drush atk:preflight or drush testor:*, selecting [data-qa-id], enabling ATK or qa_accounts on production, and treating a green FedRAMP run as compliance certification. |
+| Find module files, commands and URLs | [Code Reference](atk-code-reference.md) | Canonical source is git.drupalcode.org/project/automated_testing_kit, not GitHub — PerformantLabs' own atk-cypress/atk-playwright repos 404. ATK defines exactly two Drush commands, file:properties and file:create; check drush list --filter=file to confirm on your install. |

@@ -6,9 +6,11 @@ description: Use when a Drupal project on DDEV sets up visual regression testing
 # Metadata, read only after a match.
 label: Visual-regression setup (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.3.1
+version: 0.3.2
 recipe_class: process
 framework: drupal
+requires_tooling:
+  - playwright
 drupal_compatibility: "^10.3 || ^11"
 authors:
   - name: camoa

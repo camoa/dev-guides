@@ -24,7 +24,7 @@ A tooling recipe is named for its tool, and whatever needs the tool refers to it
 
 ## How install steps run
 
-Each step runs as arguments, never through a shell. A step containing a shell metacharacter is refused rather than run to mean something its author did not intend — write two steps instead of joining them with `&&`.
+Each step runs as arguments, never through a shell. A step containing a shell metacharacter is refused rather than run to mean something its author did not intend — write two steps instead of joining them with `&&`. In the Drupal recipes, a Composer step runs as `ddev composer`, inside the DDEV web container, so it resolves each package's version against the PHP that will run it rather than against the host's. The php-cli recipes have no DDEV container, so their Composer steps run as plain `composer`, against the host's own PHP.
 
 Every step is safe to run twice, because a project may already have part of what the tool needs.
 
@@ -52,5 +52,16 @@ Without this listing the pages exist and nothing can find them. A process recipe
 
 | Framework | Tool | Recipe |
 |---|---|---|
+| `drupal` | `infection` | [Infection](drupal/infection.md) |
+| `drupal` | `phpcpd` | [PHPCPD](drupal/phpcpd.md) |
 | `drupal` | `phpcs` | [PHP_CodeSniffer](drupal/phpcs.md) |
+| `drupal` | `phpmd` | [PHPMD](drupal/phpmd.md) |
 | `drupal` | `phpstan` | [PHPStan](drupal/phpstan.md) |
+| `drupal` | `phpunit` | [PHPUnit](drupal/phpunit.md) |
+| `drupal` | `playwright` | [Playwright](drupal/playwright.md) |
+| `php-cli` | `infection` | [Infection](php-cli/infection.md) |
+| `php-cli` | `phpcpd` | [PHPCPD](php-cli/phpcpd.md) |
+| `php-cli` | `phpcs` | [PHP_CodeSniffer](php-cli/phpcs.md) |
+| `php-cli` | `phpmd` | [PHPMD](php-cli/phpmd.md) |
+| `php-cli` | `phpstan` | [PHPStan](php-cli/phpstan.md) |
+| `php-cli` | `phpunit` | [PHPUnit](php-cli/phpunit.md) |

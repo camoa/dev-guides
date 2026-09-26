@@ -1,6 +1,6 @@
 ---
-description: ATK selector hooks — stable data-qa-id test attributes added via Drupal preprocess hooks to prevent test breakage from volatile DOM changes.
-tldr: ATK adds stable data-qa-id attributes to common Drupal markup via preprocess hooks, decoupling tests from volatile class names and Form API ID mangling. Extend the same convention in your module/theme preprocess hooks for custom markup.
+description: "ATK's two preprocess hooks (body classes, data-media-id) for finding entity IDs, and how ATK's own tests select markup otherwise."
+tldr: "ATK adds no generic test attribute — only two preprocess hooks: body classes like node-nid-42 on node/term routes, and data-media-id on images tied to a media entity. Read them with atkCommands.getNid()/getMid() or cy.getNid()/getMid(); ATK never added data-qa-id."
 drupal_version: "11.x"
 ---
 
@@ -8,58 +8,63 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use selector hooks when targeting Drupal-rendered markup from tests. Use volatile class names only when no selector hook exists and the element has no other stable identifier.
+> Finding the ID of the node, term or media item a test just created.
 
-## Decision
+## What ATK Adds
 
-| Test target | Selector |
-|---|---|
-| ATK-supplied UI (login, content edit, admin menu) | ATK's `data-qa-id` attribute |
-| Your custom markup | Add `data-qa-id` in a preprocess hook in your module/theme |
-| Third-party module's rendered markup | Add a preprocess hook in your module/theme to inject the attribute |
+ATK adds **no generic test attribute**. `automated_testing_kit.module` has two preprocess hooks:
 
-### The Problem
+| Hook | Adds | Example |
+|---|---|---|
+| `automated_testing_kit_preprocess_html()` | Body classes on node and term routes | `node-type-article`, `node-nid-42`, `term-vid-tags`, `term-tid-7` |
+| `automated_testing_kit_preprocess_image()` | `data-media-id` on an image that belongs to a media entity | `<img data-media-id="12">` |
 
-Drupal's rendered DOM contains classes and IDs that change across versions, themes, and modules:
-- `#edit-name` becomes `#edit-name--BG87f2qDxQk` after Form API mangling
-- `.node--type-article` varies by render context
-- View list classes change when the view's machine name does
+The image hook matches the file by name, strips a `.webp` or `.avif` suffix, and reads `field_media_image`.
 
-## Pattern
+## Pattern: reading the IDs
 
-### Use ATK's selector hook (Playwright)
-
-```ts
-await page.locator('[data-qa-id="login-form-submit"]').click();
-await page.locator('[data-qa-id="user-menu-account"]').hover();
-```
-
-### Use ATK's selector hook (Cypress)
+The helpers read these for you:
 
 ```js
-cy.get('[data-qa-id="login-form-submit"]').click();
+// Playwright
+const nid = await atkCommands.getNid(page)          // parses node-nid-N from <body>
+const mid = await atkCommands.getMid(imageLocator)  // reads data-media-id
 ```
 
-### Extend in your module/theme
+```js
+// Cypress
+cy.getNid().then((nid) => { /* ... */ })
+cy.get('img[alt*="token"]').getMid().then((mid) => { /* ... */ })
+```
+
+## Pattern: selecting everything else
+
+ATK's own tests use Drupal's markup directly:
+
+- Form IDs: `#edit-name`, `#edit-pass`, `#user-login-form > #edit-actions > #edit-submit`
+- Labels and roles: `page.getByLabel('Username')`, `page.getByRole('button', { name: 'Log in' })`
+- Field names: `input[name="title[0][value]"]`
+- Messages: `[data-drupal-selector="messages"]` (in `expectMessage()`)
+
+If you want a dedicated test attribute, add your own in a preprocess hook:
 
 ```php
 function mytheme_preprocess_node(array &$variables): void {
-  if ($variables['node']->bundle() === 'article') {
-    $variables['attributes']['data-qa-id'] = 'article-' . $variables['view_mode'];
-  }
+  $variables['attributes']['data-testid'] = 'node-' . $variables['node']->bundle();
 }
 ```
 
-Your tests now select `[data-qa-id="article-teaser"]` reliably across theme changes.
+Playwright's `getByTestId()` reads `data-testid` by default.
 
 ## Common Mistakes
 
-- **Wrong**: Using Drupal-generated class names in selectors → **Right**: they break on every Drupal upgrade or theme change
-- **Wrong**: Adding `data-qa-id` to render arrays directly → **Right**: preprocess hooks are the right place; render arrays get rebuilt and lose attribute additions
-- **Wrong**: Reusing the same `data-qa-id` value across multiple elements → **Right**: selectors return ambiguous matches
+- **Looking for `data-qa-id`** — ATK never added it, in any release
+- **Calling `getNid()` on a non-node page** — it throws, because the body has no `node-nid-*` class
+- **Expecting `data-media-id` on every image** — only images whose file belongs to a media entity get it
 
 ## See Also
 
+- [Helper Functions](atk-helper-functions.md)
 - [Custom Tests](atk-custom-tests.md)
 - [Anti-Patterns](atk-anti-patterns.md)
-- Reference: `automated_testing_kit.module` in the canonical repo
+- Reference: `automated_testing_kit.module` at https://git.drupalcode.org/project/automated_testing_kit

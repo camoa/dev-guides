@@ -1,6 +1,6 @@
 ---
-description: ATK's ~24 utility helpers — loginAsRole, runDrush, testorPull, expectEmailSent, and more — and how to import them in Playwright and Cypress.
-tldr: ATK ships ~24 helpers covering auth (loginAsRole), Drush invocation (runDrush), snapshot management (testorPull), form interactions, email verification, and cleanup. Use loginAsRole instead of hardcoded credentials; use runDrush instead of cy.exec — both handle environment-specific invocation automatically.
+description: "ATK's Playwright and Cypress helper functions (atk_commands.js), by category, with runnable examples for both runners."
+tldr: "Playwright ships 27 helpers in atk_commands.js (login, execDrush, config, users, nodes/media, assertions, preflightTest, skipIfLocal) plus 4 in atk_utilities.js. Never call Drush with execSync or cy.exec — it bypasses the Pantheon, SSH and Tugboat routing; read credentials from data/qaUsers.json, never hardcode them."
 drupal_version: "11.x"
 ---
 
@@ -8,67 +8,77 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use ATK's helpers in your custom tests instead of reimplementing them. Use `loginAsRole()` over hardcoded credentials; use `runDrush()` over `cy.exec('drush ...')`.
+> Reusing ATK's helpers in your own tests.
+
+## Pattern: the helpers (Playwright `atk_commands.js`, 2.1.0-beta5)
+
+| Category | Helpers |
+|---|---|
+| Login | `logInViaForm(page, context, account)`, `logInViaUli(page, context, uid)`, `logOutViaUi(page)`, `getUserPage(browser, account)` |
+| Drush | `execDrush(cmd, args = [], options = [])`, `execPantheonDrush(cmd)`, `getDrushAlias()` |
+| Config | `getDrupalConfiguration(objectName, key)`, `setDrupalConfiguration(objectName, key, value)` |
+| Users | `createUserWithUserObject(user, roles, args, options)`, `deleteUserWithEmail`, `deleteUserWithUid`, `deleteUserWithUserName`, `getUidWithEmail`, `getUsernameWithEmail` |
+| Nodes and media | `getNid(page)`, `getMid(imageLocator)`, `deleteNodeWithNid(nid)`, `deleteNodeViaUiWithNid(page, context, nid)`, `deleteCurrentNodeViaUi(page)` |
+| Assertions | `expectMessage(page, text)`, `expectEmail(mailto, subject)` |
+| Page helpers | `inputTextIntoCKEditor(page, text)`, `openSearchForm(page)`, `checkSearchResult(page, item)` |
+| Run control | `preflightTest()`, `skipIfLocal()` |
+
+`atk_utilities.js` adds `createRandomString()`, `createRandomUser()`, `readYAML()` and `getProperty()`.
+
+`getUserPage()` reuses a stored login for 15 minutes. It keeps `loginAuth-<userName>.json` in `supportDir`.
+
+## Pattern: Playwright
+
+```js
+import { test, expect } from '@playwright/test'
+import * as atkCommands from '../support/atk_commands'
+import playwrightConfig from '../../playwright.config'
+import qaUserAccounts from '../data/qaUsers.json'
+
+const baseUrl = playwrightConfig.use.baseURL
+
+test('admin reaches the content list', async ({ browser }) => {
+  const page = await atkCommands.getUserPage(browser, qaUserAccounts.admin)
+  await page.goto(`${baseUrl}admin/content`)
+  await expect(page.locator('h1')).toHaveText('Content')
+  atkCommands.execDrush('cr')
+})
+```
+
+## Pattern: Cypress
+
+Cypress helpers are custom commands. `cypress/support/e2e.js` loads them.
+
+```js
+import qaUserAccounts from '../../data/qaUsers.json'
+
+describe('admin access', () => {
+  it('reaches the content list', () => {
+    cy.logInViaForm(qaUserAccounts.admin)
+    cy.visit('admin/content')
+    cy.execDrush('cr')
+  })
+})
+```
 
 ## Decision
 
 | Need | Helper |
 |---|---|
-| Log in for a test | `loginAsRole(page, 'editor')` — uses qa_accounts users |
-| Run any Drush command | `runDrush(args)` — handles environment-specific invocation |
-| Reset DB to known state | `testorPull()` — pulls fresh snapshot |
-| Verify an email was sent | `expectEmailSent(predicate)` — works with Mailtrap or Testmail |
-| Clean up after a test | `deleteAllOfType('article')` — removes test fixtures |
-
-## Pattern
-
-### Canonical helpers by category
-
-| Category | Helpers |
-|---|---|
-| Auth | `loginViaForm()`, `loginAsRole()`, `logout()`, `getCurrentUser()` |
-| Drush | `runDrush()`, `drushConfigGet()`, `drushConfigSet()` |
-| Snapshots | `testorPull()`, `testorPush()`, `testorReset()` |
-| Forms | `fillFormField()`, `submitForm()`, `assertFormError()` |
-| Email | `expectEmailSent()`, `latestEmail()`, `clearMailbox()` |
-| Cleanup | `deleteAllOfType()`, `resetUsers()`, `truncateTable()` |
-| Navigation | `gotoNode()`, `gotoAdminPage()`, `expectAccessDenied()` |
-
-### Import in Playwright
-
-```ts
-import { test, expect } from '@playwright/test';
-import { loginAsRole, gotoAdminPage } from '../helpers/atk';
-
-test('admin can access content list', async ({ page }) => {
-  await loginAsRole(page, 'site_admin');
-  await gotoAdminPage(page, '/admin/content');
-  await expect(page.locator('h1')).toHaveText('Content');
-});
-```
-
-### Import in Cypress
-
-```js
-import { loginAsRole, gotoAdminPage } from '../helpers/atk';
-
-describe('admin access', () => {
-  it('can reach content list', () => {
-    loginAsRole('site_admin');
-    gotoAdminPage('/admin/content');
-    cy.get('h1').should('have.text', 'Content');
-  });
-});
-```
+| Log in for a test | `getUserPage(browser, qaUserAccounts.admin)` (PW) / `cy.logInViaForm(account)` (CY) |
+| Run any Drush command | `execDrush()` — it follows the config's target |
+| Read or write config | `getDrupalConfiguration()` / `setDrupalConfiguration()` |
+| Check an email arrived | `expectEmail(mailto, subject)` — Mailpit or testmail.app |
+| Clean up | `deleteNodeWithNid()`, `deleteUserWithUserName()` |
 
 ## Common Mistakes
 
-- **Wrong**: Reimplementing helpers in your project → **Right**: adds maintenance; leverage what's there
-- **Wrong**: Calling Drush directly with `cy.exec()` instead of `runDrush()` → **Right**: bypasses the configurable invocation, fails in CI/Pantheon
-- **Wrong**: Hardcoded user credentials in test files → **Right**: use `loginAsRole()` against the qa_accounts seed
+- **Calling Drush with `execSync` or `cy.exec`** — it bypasses the Pantheon, SSH and Tugboat routing
+- **Hardcoding credentials** — read them from `data/qaUsers.json`
+- **Relying on `expectEmail()` without an `email.provider`** — it logs a warning and checks nothing
 
 ## See Also
 
+- [Selector Hooks](atk-selector-hooks.md)
 - [Custom Tests](atk-custom-tests.md)
-- [Testor Snapshots](atk-testor.md)
-- Reference: `js-helpers/playwright/` and `js-helpers/cypress/` in the module
+- [Runner Configuration](atk-runner-config.md)

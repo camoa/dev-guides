@@ -81,7 +81,7 @@ test.beforeAll(() => {
 });
 ```
 
-Wrap in a worker-scoped fixture if the cost is significant. Couples tests to a DDEV/Drush environment — fine for project repos, problematic for portable test catalogs.
+`beforeAll` runs once per worker, and so does a worker-scoped fixture, so against one DDEV site both repeat a site-wide change in every worker. Put site-wide setup in a setup project that runs once (see [ATK Integration's database decision](pw-e2e-atk-integration.md#decision-database-state-across-parallel-workers)). Couples tests to a DDEV/Drush environment — fine for project repos, problematic for portable test catalogs.
 
 ## Decision: Entity CRUD via UI vs JSON:API + UI Verification
 
@@ -111,5 +111,5 @@ UI-creating a node touches dozens of fields, alters, and behaviors irrelevant to
 
 - [API Testing](pw-e2e-api-testing.md) — the JSON:API + UI hybrid pattern in detail
 - [Authentication](pw-e2e-authentication.md) — Drupal session cookies and `storageState`
-- [ATK Integration](pw-e2e-atk-integration.md) — Drush-backed DB reset with Testor
-- Reference: [Lullabot/playwright-drupal](https://github.com/Lullabot/playwright-drupal) — parallel SQLite per worker for full DB isolation
+- [ATK Integration](pw-e2e-atk-integration.md) — resetting the shared DDEV database with Testor, and when to use one worker
+- Reference: [Lullabot/playwright-drupal](https://github.com/Lullabot/playwright-drupal) — a SQLite copy of the site for each test; recommended for full DB isolation per test

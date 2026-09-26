@@ -7,13 +7,13 @@ tldr: Include a "Negative checks" subsection in every scenario. The AI Planner e
 
 ## When to Use
 
-> Include in every scenario. This is the countermeasure to the encode-current-behavior gotcha — the most common way AI-generated tests silently approve regressions.
+> Every scenario. This is the countermeasure to the encode-current-behavior gotcha.
 
 ## The Gotcha (Why This Section Exists)
 
 AI test generation tools observe the site as it currently is. If the site has a bug — a broken empty state showing "Undefined", a 302 redirect that shouldn't happen, a cache-tag mistake producing stale content — the Planner sees that as "expected behavior" and writes an assertion encoding it.
 
-Once committed, the assertion becomes ground truth. The suite passes on day one. The bug ships forever.
+Once committed, the assertion becomes ground truth. The suite passes on day one. The bug ships forever. Negative assertions are how you break this cycle.
 
 ## Pattern: explicit "Negative checks" subsection
 
@@ -35,6 +35,8 @@ Once committed, the assertion becomes ground truth. The suite passes on day one.
 - `watchdog` has no new PHP notices or warnings for this request.
 - The submission does NOT appear in the public contact list.
 ```
+
+The Negative checks block forces the Planner (and the reviewer) to think about what *shouldn't* happen.
 
 ## Pattern: boundary tables for input validation
 
@@ -62,11 +64,15 @@ For every "happy path" scenario, include a sibling named `<scenario> — invalid
 
 The sibling pattern surfaces coverage in the plan TOC. Reviewers see the negative cases without hunting.
 
+## Pattern: handling expected flakiness
+
+The Healer prompt supports `test.fixme()` with a comment for known-flaky negatives. If a negative assertion is genuinely intermittent (clock-dependent, race condition under investigation), mark it `fixme` with a ticket link rather than removing it.
+
 ## Common Mistakes
 
-- **Wrong**: Skipping negative checks → **Right**: universal first-month failure; suite passes; bugs ship
-- **Wrong**: Generic negatives ("no errors") → **Right**: specific observable — "No `.messages--error` regions are visible"
-- **Wrong**: Mixing happy-path and negative in one scenario → **Right**: when it fails, you can't tell which path broke
+- **Skipping negative checks** — universal first-month failure; suite passes; bugs ship
+- **Generic negatives** ("no errors") — too vague to fail meaningfully
+- **Mixing happy-path and negative in one scenario** — when it fails, you can't tell which path broke
 
 ## See Also
 

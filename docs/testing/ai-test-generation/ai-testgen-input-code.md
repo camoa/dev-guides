@@ -1,13 +1,13 @@
 ---
 description: Seeding plan generation from codebase analysis — which source files yield the most useful test plan vocabulary for Drupal, React/Next.js, and generic projects.
-tldr: Point the Planner at routing + form + permissions + one existing spec — not the whole codebase. For Drupal, *.routing.yml and buildForm() yield routes, field labels, and required-field negatives automatically. Always combine code analysis with live exploration — the rendered DOM (with hooks, Ajax fields, #states) is authoritative over the PHP source.
+tldr: "Point the Planner at routing + form + permissions + one existing spec — not the whole codebase. For Drupal, *.routing.yml and buildForm() yield routes, field labels, and required-field negatives automatically. Always combine code analysis with live exploration — the rendered DOM (with hooks, Ajax fields, #states) is authoritative over the PHP source."
 ---
 
 # Input: Code Analysis
 
 ## When to Use
 
-> Use this when generating plans from the codebase — the Planner reads source files to extract routes, forms, content types, and permissions.
+> Generating plans from the codebase — the Planner reads source files to extract routes, forms, content types, permissions.
 
 ## Decision
 
@@ -16,6 +16,8 @@ tldr: Point the Planner at routing + form + permissions + one existing spec — 
 | Single file (routing + form for one feature) | Targeted plan generation |
 | Module directory | Plan for one bounded feature |
 | Whole repo | Almost never — token waste, shallow output |
+
+Be selective. Routing + form + permissions + one existing spec is usually enough for a focused plan.
 
 ## Pattern: useful extractions per codebase
 
@@ -70,11 +72,17 @@ This focuses the Planner. Without scope, it crawls broadly and produces flat pla
 
 The Planner can produce this list automatically if pointed at the form class.
 
+## Anti-Patterns
+
+- **"Read every PHP file"** — token budget; shallow understanding
+- **Generate plan from form class alone, without exploring live** — misses JS-only fields (Ajax-added), conditional fields (`#states`), client-side validation
+- **Trusting the code over the live site** — if the form has been overridden by a hook or alter, the rendered DOM is authoritative
+
 ## Common Mistakes
 
-- **Wrong**: Pointing at the whole codebase → **Right**: feature-specific subset only
-- **Wrong**: Skipping the live exploration step → **Right**: Playwright Test Agents Planner reads code AND opens the browser; honor both
-- **Wrong**: Trusting the code over the live site → **Right**: the rendered DOM is authoritative — hooks and alters change the form at runtime
+- **Pointing at the whole codebase** instead of the feature-specific subset
+- **Skipping the live exploration step** — Playwright Test Agents Planner *both* reads code and opens the browser; honor both
+- **Using stale routes** — Drupal route changes don't always rebuild caches in dev; verify against actual `drush route:list`
 
 ## See Also
 

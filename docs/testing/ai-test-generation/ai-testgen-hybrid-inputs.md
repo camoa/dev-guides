@@ -7,7 +7,7 @@ tldr: When inputs conflict, user-story constraints win (define what's in/out), c
 
 ## When to Use
 
-> Use this for realistic plan generation — most good plans benefit from multiple input sources combined with an explicit precedence rule.
+> Realistic mode — most plans benefit from multiple input sources.
 
 ## Decision
 
@@ -17,6 +17,8 @@ When inputs conflict, use this precedence (highest first):
 2. **Code analysis fills in vocabulary** — exact field labels, route paths, required fields
 3. **Live exploration validates** — Planner opens the page to confirm the form matches what code suggests
 4. **Crawl only fills gaps the user-story didn't cover** — and only inside scope
+
+This precedence keeps the plan from drifting outward.
 
 ## Pattern: the unifying principle
 
@@ -43,9 +45,9 @@ verification beyond queue insertion.
 
 ## Common Mistakes
 
-- **Wrong**: No precedence rule → **Right**: code analysis discoveries silently expand scope past the user story
-- **Wrong**: Live exploration without code analysis → **Right**: Planner uses imprecise field labels
-- **Wrong**: Code analysis without live exploration → **Right**: Planner misses Ajax-added or `#states`-conditional fields
+- **No precedence rule** — code analysis discoveries silently expand scope past the user story
+- **Live exploration without code analysis** — Planner uses imprecise field labels
+- **Code analysis without live exploration** — Planner misses Ajax-added or `#states`-conditional fields
 
 ## See Also
 

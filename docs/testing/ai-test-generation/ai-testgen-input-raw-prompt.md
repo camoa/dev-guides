@@ -7,7 +7,7 @@ tldr: Raw prompts ("test the checkout flow") produce over-broad crawls, hallucin
 
 ## When to Use
 
-> Use this guide when a developer types a vague instruction ("Test the checkout flow") and needs to turn it into a bounded, reviewable plan.
+> A developer types "Test the checkout flow" and wants a plan.
 
 ## Decision
 
@@ -20,10 +20,12 @@ tldr: Raw prompts ("test the checkout flow") produce over-broad crawls, hallucin
 ### The Three Failure Modes
 
 1. **Over-broad crawl** — Planner generates 40 scenarios, most low-value
-2. **Hallucinated fields** — Planner invents features that don't exist
+2. **Hallucinated fields** — Planner invents "Apply coupon code" that doesn't exist
 3. **Happy paths only** — no negative coverage
 
 ## Pattern: clarifying questions the Planner should ask
+
+A well-tuned Planner asks before saving any plan:
 
 ```
 Before I write the plan, I need to confirm:
@@ -39,6 +41,8 @@ Before I write the plan, I need to confirm:
 ```
 
 ## Pattern: clarifications block
+
+If the harness doesn't allow interactive clarification, the Planner writes a draft plan with a `## Clarifications needed` block at the top:
 
 ```markdown
 # Checkout flow
@@ -58,11 +62,15 @@ If wrong, update the Clarifications block and regenerate.)
 
 Reviewer answers the clarifications, regenerates, gets a real plan.
 
+## Pattern: bounding without explicit scope
+
+When the user can't articulate scope, the Planner picks **one** representative happy path and **one** representative negative case. Reviewer extends from there.
+
 ## Common Mistakes
 
-- **Wrong**: Accepting "test everything" as scope → **Right**: produces unreviewable output; every plan needs explicit boundaries
-- **Wrong**: Letting the Planner make up acceptance criteria from observed behavior without flagging → **Right**: encodes whatever happens to be there
-- **Wrong**: Not surfacing assumptions in the draft → **Right**: reviewer can't tell what was decided vs invented
+- **Accepting "test everything" as scope** — produces unreviewable output
+- **Letting the Planner make up acceptance criteria from observed behavior** without flagging — encodes whatever happens to be there
+- **Not surfacing assumptions** in the draft — reviewer can't tell what was decided vs invented
 
 ## See Also
 

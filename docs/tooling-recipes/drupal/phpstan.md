@@ -6,7 +6,7 @@ description: Use when a Drupal project needs PHPStan static analysis with the Dr
 # Metadata, read only after a match.
 label: PHPStan (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.1.1
 recipe_class: tooling
 framework: drupal
 authors:
@@ -35,11 +35,11 @@ carry them. Composer refuses to run an unlisted plugin, so this order matters:
 run it the other way round and the extensions install without being loaded.
 
 ```sh
-composer config --no-plugins allow-plugins.phpstan/extension-installer true
+ddev composer config --no-plugins allow-plugins.phpstan/extension-installer true
 ```
 
 ```sh
-composer require --dev phpstan/phpstan phpstan/extension-installer mglaman/phpstan-drupal phpstan/phpstan-deprecation-rules
+ddev composer require --dev phpstan/phpstan phpstan/extension-installer mglaman/phpstan-drupal phpstan/phpstan-deprecation-rules
 ```
 
 `phpstan/extension-installer` registers the Drupal extension and the deprecation

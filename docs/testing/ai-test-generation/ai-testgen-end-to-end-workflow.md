@@ -1,13 +1,13 @@
 ---
 description: Full end-to-end AI test generation loop — 10-step workflow, plan review checklist, code review checklist, and reviewer assignment guide.
-tldr: "The full loop is 10 steps: state intent, gather inputs, invoke Planner, human reviews plan, commit plan, invoke Generator, human reviews code, run tests, commit on pass (or debug/Healer on fail), then CI runs with Healer on locator drift only. Three separate reviewers for plan, generated code, and every Healer patch — same-person review of all three defeats every gate."
+tldr: "The full loop is 10 steps: state intent, gather inputs, invoke Planner, human reviews plan, commit plan, invoke Generator, human reviews code, run tests, commit on pass (or debug/Healer on fail), then CI runs with Healer on locator drift only. Three review gates — plan, generated code, every Healer patch — each reviewed by someone other than its author."
 ---
 
 # End-to-End Workflow
 
 ## When to Use
 
-> Use this when running the full loop for a new feature from intent to CI.
+> Running the full loop for a new feature.
 
 ## Pattern: 10-step workflow
 
@@ -29,6 +29,8 @@ tldr: "The full loop is 10 steps: state intent, gather inputs, invoke Planner, h
 ```
 
 ## Pattern: review checklist for plans
+
+When reviewing a Planner output, check:
 
 - [ ] Title is a single imperative scenario
 - [ ] Preconditions describe state only, not procedure
@@ -61,9 +63,9 @@ tldr: "The full loop is 10 steps: state intent, gather inputs, invoke Planner, h
 
 ## Common Mistakes
 
-- **Wrong**: Same person writes the plan, generates the code, and approves both → **Right**: no real review gate
-- **Wrong**: Plan committed without running the Generator → **Right**: plan reviewed but not validated to be code-generable
-- **Wrong**: Tests committed without re-running → **Right**: Generator output not verified to actually pass
+- **Same person writes the plan, generates the code, and approves both** — no real review gate
+- **Plan committed without running the Generator** — plan reviewed but not validated to be code-generable
+- **Tests committed without re-running** — Generator output not verified to actually pass
 
 ## See Also
 

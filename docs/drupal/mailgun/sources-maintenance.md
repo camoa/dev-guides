@@ -26,7 +26,7 @@ description: "Source references and maintenance manifest for the mailgun guides 
 | Mailgun webhooks API | https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/webhooks | 12.1 | 2026-04-26 |
 | Mailgun message API | https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/messages | 10.1 | 2026-04-26 |
 | Mailgun pricing | https://www.mailgun.com/pricing/ | 17.1 | 2026-04-26 |
-| Mailgun suppression API | https://documentation.mailgun.com/docs/mailgun/api-reference/suppressions/bounces | 13.1 | 2026-04-26 |
+| Mailgun suppression API | https://documentation.mailgun.com/docs/mailgun/api-reference/send/mailgun/bounces | 13.1 | 2026-04-26 |
 | Picozzi 2025 walkthrough | https://picozzi.com/notebook/2025/jul/drupal-mailgun-simple-setup-transactional-email | 4.1, 5.1, 7.1 | 2026-04-26 |
 | Drupal MailManager API | https://api.drupal.org/api/drupal/core%21lib%21Drupal%21Core%21Mail%21MailManagerInterface.php | 9.1 | 2026-04-26 |
 | Drupal config override system | https://www.drupal.org/docs/8/api/configuration-api/configuration-override-system | 5.1, 8.1 | 2026-04-26 |
@@ -44,7 +44,7 @@ description: "Source references and maintenance manifest for the mailgun guides 
 | Symfony Mailgun bridge | `vendor/symfony/mailgun-mailer/` | 1.1, 6.1 | latest stable |
 
 ## Origin
-Initial setup runbook reconstructed from `~/workspace/ixp-dev` commit `ddcee964` (2025-09-12, Brevo→Mailgun migration). Expanded for v2.0 with comprehensive 2026 research covering programmatic sending, queue patterns, webhook handling, bounce/complaint suppression, and provider comparison.
+Initial setup runbook reconstructed from a private project's commit `ddcee964` (2025-09-12, Brevo→Mailgun migration). Expanded for v2.0 with comprehensive 2026 research covering programmatic sending, queue patterns, webhook handling, bounce/complaint suppression, and provider comparison.
 
 ---
 

@@ -5,7 +5,7 @@ description: "Source references and maintenance manifest for the icon api guides
 # Sources & Maintenance
 
 ## Drupal Research Install
-Path: `~/workspace/contrib/web/`
+Checked against Drupal core 11.3.11.
 
 ## Web Sources
 | Source | URL | Guide Sections | Last Verified |

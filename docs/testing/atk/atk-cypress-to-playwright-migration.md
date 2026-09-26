@@ -1,72 +1,66 @@
 ---
-description: Migrating an existing Cypress ATK suite to Playwright — what's reusable, translation patterns, and when to migrate incrementally vs all at once.
-tldr: Selector hooks, Drush config, Testor snapshots, qa_accounts, and pre-flight checks are all reusable. Test logic needs translation — adopt Playwright's web-first assertions rather than translating literally. Never build a compatibility shim.
+description: "What's reusable moving ATK's Cypress suite to Playwright, translation patterns, helper gaps, and side-by-side migration."
+tldr: "Preprocess hooks, drushCmd/pantheon/targetSite/tugboat config, preflightTests.yml, qaUsers.json and Testor snapshots carry over unchanged — only test bodies need translation. Playwright's execDrush() returns stdout directly instead of chaining like a Cypress command."
 drupal_version: "11.x"
 ---
 
-# Cypress → Playwright Migration (ATK)
+# Cypress → Playwright Migration
 
 ## When to Use
 
-> Use this guide when moving an existing Cypress ATK suite to Playwright.
+> Moving an existing Cypress ATK suite to Playwright.
 
-## Decision
-
-### Migrate all at once or incrementally?
-
-| Approach | When |
-|---|---|
-| All at once | Suite < 30 tests; small team; can dedicate a sprint |
-| Incrementally | Larger suite; mix CI to run both; migrate per-area |
-| Stay on Cypress | Existing investment; team velocity > migration value |
-
-## Pattern
-
-### What's reusable
+## What's Reusable
 
 | Asset | Reusable? |
 |---|---|
-| Selector hooks | Yes — same `data-qa-id` attribute |
-| Drush invocation strategy | Yes — same `drushCmd` pattern |
-| Testor snapshots | Yes — runner-agnostic |
-| Pre-flight checks | Yes |
-| qa_accounts users + roles | Yes |
-| Test logic / assertions | Translation needed (idiom differences) |
-| Helper functions | Mostly yes — APIs are parallel; runner-specific glue differs |
+| Preprocess hooks (body classes, `data-media-id`) | Yes — module-side |
+| `drushCmd`, `pantheon`, `targetSite`, `tugboat` settings | Yes — same keys in `playwright.atk.config.js` |
+| `preflightTests.yml`, `qaUsers.json` | Yes — same files |
+| Testor snapshots | Yes — Testor is runner-agnostic |
+| Test bodies | Translation needed |
+| Helpers | Mostly the same names; signatures differ |
 
-### Translation patterns
+## Pattern: Translation Patterns
 
 | Cypress | Playwright |
 |---|---|
-| `cy.visit('/path')` | `await page.goto('/path')` |
+| `cy.visit('/path')` | `await page.goto(baseUrl + 'path')` |
 | `cy.get(sel).click()` | `await page.locator(sel).click()` |
 | `cy.get(sel).type('foo')` | `await page.locator(sel).fill('foo')` |
-| `cy.get(sel).should('be.visible')` | `await expect(page.locator(sel)).toBeVisible()` |
 | `cy.get(sel).should('contain', 'X')` | `await expect(page.locator(sel)).toContainText('X')` |
-| `cy.intercept('POST', '/api', ...)` | `await page.route('/api', ...)` |
-| `cy.exec('drush ...')` | `runDrush(...)` (use ATK helper) |
-| `cy.session('user', () => {...})` | `storageState` + `auth.setup.ts` pattern |
+| `cy.execDrush(cmd)` | `atkCommands.execDrush(cmd)` (synchronous; a string locally, a Buffer via Pantheon, SSH or Tugboat) |
+| `cy.logInViaForm(account)` | `await atkCommands.getUserPage(browser, account)` or `logInViaForm(page, context, account)` |
+| `cy.getNid()` | `await atkCommands.getNid(page)` |
+| `cy.inputCKEditor(text)` | `await atkCommands.inputTextIntoCKEditor(page, text)` |
+| `{ tags: ['@smoke'] }` | `@smoke` in the test title |
 | `describe / it` | `test.describe / test` |
 
-### Side-by-side during migration
+## Helper Gaps
 
-```
-tests/
-├── cypress/                    # existing suite
-│   ├── e2e/
-│   └── cypress.config.js
-└── playwright/                 # new suite
-    ├── e2e/
-    └── playwright.config.js
-```
+- Playwright only: `expectMessage`, `openSearchForm`, `checkSearchResult`, `deleteCurrentNodeViaUi`, `getUserPage`, `getDrushAlias`, `preflightTest`, `skipIfLocal`
+- Cypress only: `getByLabel`, `getIframeBodyWithId`, `save`, `debugLog`, `trace`
+- Cypress commands, unexported in Playwright: `execViaSsh`, `execTugboatDrush`
+- Different IDs: Cypress user tests are 1020/1021; Playwright's are 1100/1101
+- Cypress only: simple sitemap (1080/1081)
 
-CI runs both; remove Cypress when migration completes.
+## Decision: migrate all at once or incrementally?
+
+| Approach | When |
+|---|---|
+| All at once | Small suite; one sprint available |
+| Incrementally | Larger suite; migrate per area |
+| Stay on Cypress | The suite works and the team knows it |
+
+## Pattern: side by side during migration
+
+`atk_setup` puts Playwright tests in `tests/` and Cypress tests in `cypress/e2e/`, so they can coexist. Both write `package.json` at `ATK_HOME`. Merge the two dependency lists by hand, or set a different `ATK_HOME` per runner.
 
 ## Common Mistakes
 
-- **Wrong**: Migrating without first stabilizing the Cypress suite → **Right**: flake migrates with you
-- **Wrong**: Translating tests literally without adopting Playwright's web-first assertions → **Right**: verbose; doesn't gain stability benefits
-- **Wrong**: Attempting a "compatibility shim" library → **Right**: every team that tries this regrets it; idiom differences are real
+- **Migrating a flaky Cypress suite** — the flakes migrate too
+- **Translating literally** — adopt Playwright's web-first assertions
+- **Treating `execDrush()` as a Cypress chain** — the Playwright version returns stdout directly: a string locally, a Buffer via Pantheon, SSH or Tugboat
 
 ## See Also
 

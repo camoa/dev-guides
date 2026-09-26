@@ -5,7 +5,7 @@ description: "Source references and maintenance manifest for the jsx to twig gui
 # Sources & Maintenance
 
 ## Drupal Research Install
-Path: `~/workspace/contrib/web/`
+Checked against Drupal core 11.x with UI Suite DaisyUI 4.x installed.
 
 ## Web Sources
 | Source | URL | Guide Sections | Last Verified |

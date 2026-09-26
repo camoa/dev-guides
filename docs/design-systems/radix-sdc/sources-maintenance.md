@@ -106,10 +106,10 @@ description: "Source references and maintenance manifest for the radix sdc guide
 
 | Topic | Source Location | Description |
 |-------|----------------|-------------|
-| Radix Base Theme | `~/workspace/contrib/web/themes/contrib/radix/` | Radix 6.x contrib theme |
-| Radix Components | `~/workspace/contrib/web/themes/contrib/radix/components/` | Radix SDC components |
-| Radix Starterkit | `~/workspace/contrib/web/themes/contrib/radix/src/kits/radix_starterkit/` | Sub-theme template |
-| Starterkit SCSS | `~/workspace/contrib/web/themes/contrib/radix/src/kits/radix_starterkit/src/scss/` | SCSS structure |
+| Radix Base Theme | `themes/contrib/radix/` | Radix 6.x contrib theme |
+| Radix Components | `themes/contrib/radix/components/` | Radix SDC components |
+| Radix Starterkit | `themes/contrib/radix/src/kits/radix_starterkit/` | Sub-theme template |
+| Starterkit SCSS | `themes/contrib/radix/src/kits/radix_starterkit/src/scss/` | SCSS structure |
 | Bootstrap Source | `node_modules/bootstrap/scss/` | Bootstrap 5 SCSS files |
 | Component Schema | https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json | SDC YAML schema |
 
@@ -117,9 +117,9 @@ description: "Source references and maintenance manifest for the radix sdc guide
 
 | Guide | Location | Relationship |
 |-------|----------|--------------|
-| Design System Recognition Guide | `claude_memory/guides/design_system_recognition_guide.md` | **Use FIRST** to identify design system layers |
-| Design System Bootstrap Mapping Guide | `claude_memory/guides/design_system_bootstrap_mapping_guide.md` | **Use SECOND** to map tokens to Bootstrap variables |
-| **This Guide** | `claude_memory/guides/design-system-radix-sdc-mapping.md` | **Use THIRD** to implement in Radix with SDCs |
+| Design System Recognition Guide | companion source guide | **Use FIRST** to identify design system layers |
+| Design System Bootstrap Mapping Guide | companion source guide | **Use SECOND** to map tokens to Bootstrap variables |
+| **This Guide** | this file | **Use THIRD** to implement in Radix with SDCs |
 
 ## Maintenance Notes
 

@@ -14,6 +14,8 @@ honest. It checks, per recipe file:
      An unresolved citation is a BLOCKER — it is also the signal that a
      referenced guide needs to be authored (the "auto-generate guides when
      needed" hook).
+  5. A task recipe's `## Verifier` is one `verifier:` block of entries
+     (docs/agentic-recipes/index.md, rule 7).
 
 Exit code is non-zero if any recipe fails. Pure stdlib + PyYAML; safe to run
 locally and in CI before `mkdocs build`.
@@ -468,6 +470,25 @@ PLACEHOLDER_RE = re.compile(r"^\{[a-z][a-z0-9_]*\}$")
 BRACE_CHARS = set("{}")
 
 
+# A task recipe's `## Verifier` is one `verifier:` block (docs/agentic-recipes/
+# index.md, rule 7), consumed by AIDA 6.0.0-beta.26's `design-actions.sh verify`.
+# `id` and `kind` are optional at the consumer, but the catalog requires both —
+# an entry with neither is unreadable to a person routing it. `VERIFIER_REFUSED`
+# mirrors AIDA's `refuse_if_unsafe` (recipes.sh): every character a `run` line
+# may not carry, newline included, plus tab, which AIDA does not refuse but
+# `split(" ")` would leave glued inside a token rather than splitting on. Space
+# is not refused — the line IS split on it.
+VERIFIER_KEYS = {"id", "kind", "run", "pass"}
+VERIFIER_KINDS = {"config-assert", "live-site", "self-fixture"}
+VERIFIER_PASS_RE = re.compile(r"^(exit 0|stdout empty|stdout contains \S.*)$")
+VERIFIER_REFUSED = set("`$;&|<>()\\\"'") | {"\t", "\n"}
+# A placeholder is a whole token: `{field}`, `{a.b}` (an `## Input contract`
+# field by dotted path), `{a.b:json}`, or one of the consumer-supplied
+# `{paths}` / `{file}` / `{dirs}` — all already shaped like `[A-Za-z0-9_.]+`.
+VERIFIER_PLACEHOLDER_RE = re.compile(r"^\{[A-Za-z0-9_.]+(?::json)?\}$")
+NUMBERED_ITEM_RE = re.compile(r"^\d+\.\s")
+
+
 def argv_errors(argv: object, where: str) -> list[str]:
     """Check one argv token list."""
     if not isinstance(argv, list) or not argv or not all(isinstance(t, str) for t in argv):
@@ -595,8 +616,9 @@ def validate_test_commands(body: str) -> list[str]:
 # posture as `test_commands`: absent is an answer, a row nobody wrote is not,
 # which is why each set of ids is fixed and ordered. Optional keys exist because
 # tools did not fit the plain shape when they were run: `extensions:` narrows
-# `{paths}` to the file types the tool reads (mypy parses a `.toml` as Python;
-# that row now runs whole, and the key stays for the next such tool),
+# `{paths}`, `{file}` or `{dirs}` to the file types the tool reads (mypy parses
+# a `.toml` as Python; that row now runs whole, and the key stays for the
+# next such tool),
 # `signal: empty-stdout` marks a tool that cannot fail by exit status (`gofmt -l`
 # exits 0 whether or not it lists a file), and `silent_pass:` on a surface row
 # says how a run that selected nothing prints itself.
@@ -611,7 +633,7 @@ SURFACE_COMMAND_IDS = [
 ]
 SURFACE_COMMAND_KEYS = CHECK_COMMAND_KEYS | {"silent_pass"}
 SIGNAL_VALUES = {"exit-status", "empty-stdout"}
-PATHS_PLACEHOLDER = "{paths}"
+FILE_SCOPED_PLACEHOLDERS = {"{paths}", "{file}", "{dirs}"}
 EXTENSION_RE = re.compile(r"^\.[a-z0-9]+$")
 
 
@@ -663,11 +685,13 @@ def validate_command_rows(
                     )
         if "extensions" in row:
             exts = row["extensions"]
-            takes_paths = isinstance(row.get("argv"), list) and PATHS_PLACEHOLDER in row["argv"]
-            if not takes_paths:
+            takes_scoped_placeholder = isinstance(row.get("argv"), list) and any(
+                t in FILE_SCOPED_PLACEHOLDERS for t in row["argv"]
+            )
+            if not takes_scoped_placeholder:
                 errors.append(
-                    f"{label} {rid or i} carries `extensions:` but its `argv` has no "
-                    f"`{PATHS_PLACEHOLDER}` token; the key narrows what that token expands to"
+                    f"{label} {rid or i} carries `extensions:` but its `argv` has none of "
+                    f"{sorted(FILE_SCOPED_PLACEHOLDERS)}; the key narrows what those tokens expand to"
                 )
             if (
                 not isinstance(exts, list)
@@ -717,6 +741,199 @@ def validate_surface_commands(body: str) -> list[str]:
         body, "surface_commands", "Surface commands", SURFACE_COMMAND_IDS,
         SURFACE_COMMAND_KEYS, "surface command",
     )
+
+
+def validate_verifier_block(body: str, line_offset: int) -> list[str]:
+    """Check `## Verifier`'s `verifier:` block for a task recipe (rule 7).
+
+    Task recipes only — a process recipe keeps numbered-prose verifiers by
+    design (`## Verifier` presence is already enforced for both by
+    REQUIRED_SECTIONS; this checks the block's shape, required here).
+    """
+    section = section_lines(body, "Verifier", line_offset)
+    if section is None:
+        return []  # missing section already reported
+
+    rows, errors = load_body_block("\n".join(text for _, text in section), "verifier")
+    if errors:
+        return errors
+    if rows is None:
+        return ["`## Verifier` carries no `verifier:` block (rule 7)"]
+    if not isinstance(rows, list) or not rows:
+        return ["`verifier:` must be a non-empty list of entries"]
+
+    ids: list[str] = []
+    for i, row in enumerate(rows):
+        if not isinstance(row, dict):
+            errors.append(f"verifier entry {i} must be a mapping, not {type(row).__name__}")
+            continue
+        missing = sorted(VERIFIER_KEYS - set(row))
+        if missing:
+            errors.append(
+                f"verifier entry {i} is missing key(s) {missing}; the keys are "
+                f"{sorted(VERIFIER_KEYS)}"
+            )
+        unknown = sorted(set(row) - VERIFIER_KEYS)
+        if unknown:
+            errors.append(
+                f"verifier entry {i} carries unknown key(s) {unknown}; the keys are "
+                f"{sorted(VERIFIER_KEYS)}"
+            )
+
+        rid = row.get("id")
+        if isinstance(rid, str):
+            if not TOKEN_RE.match(rid):
+                errors.append(
+                    f"verifier entry `id` must be a single token matching "
+                    f"{TOKEN_RE.pattern}; found {rid!r}"
+                )
+            elif rid in ids:
+                errors.append(f"verifier entry id {rid!r} appears more than once")
+            ids.append(rid)
+        elif "id" in row:
+            errors.append(f"verifier entry {i} `id:` must be a string")
+
+        kind = row.get("kind")
+        if kind is not None and kind not in VERIFIER_KINDS:
+            errors.append(
+                f"verifier entry {rid or i} `kind:` must be one of "
+                f"{sorted(VERIFIER_KINDS)}; found {kind!r}"
+            )
+
+        pass_ = row.get("pass")
+        if pass_ is not None and not (
+            isinstance(pass_, str) and VERIFIER_PASS_RE.match(pass_)
+        ):
+            errors.append(
+                f"verifier entry {rid or i} `pass:` must be `exit 0`, `stdout empty` "
+                f"or `stdout contains <literal>`; found {pass_!r}"
+            )
+
+        run = row.get("run")
+        if run is not None:
+            if not isinstance(run, str) or not run.strip():
+                errors.append(f"verifier entry {rid or i} `run:` must be a non-empty string")
+            else:
+                bad = sorted(set(run) & VERIFIER_REFUSED)
+                if bad:
+                    errors.append(
+                        f"verifier entry {rid or i} `run:` carries refused character(s) "
+                        f"{bad}; it is split on spaces and never run through a shell"
+                    )
+                for token in run.split(" "):
+                    if token and ("{" in token or "}" in token):
+                        if not VERIFIER_PLACEHOLDER_RE.match(token):
+                            errors.append(
+                                f"verifier entry {rid or i} `run:` token {token!r} is not "
+                                "a whole placeholder; nothing substitutes inside a token"
+                            )
+
+    # AIDA reads the block line by line, not as YAML (design-actions.sh
+    # `do_verify`): an entry opens at `- `, and a value is the rest of the line
+    # after `id:`, `kind:`, `run:` or `pass:`, trimmed. Only `run` and `pass`
+    # lose one pair of outer quotes. A `#` comment, a wrapped line, a block
+    # scalar or a quoted `id`/`kind` reaches AIDA as written, so the value YAML
+    # reads must be the value AIDA reads.
+    raw_entries: list[dict[str, tuple[int, str]]] = []
+    in_block = False
+    for lineno, text in section:
+        if not in_block:
+            in_block = text.startswith("verifier:")
+            continue
+        if text.strip() and not text[:1].isspace() and not text.startswith("-"):
+            break
+        trimmed = text.strip()
+        if trimmed.startswith("- "):
+            raw_entries.append({})
+            trimmed = trimmed[2:].strip()
+        for key in ("id", "kind", "run", "pass"):
+            if raw_entries and trimmed.startswith(f"{key}:"):
+                value = trimmed[len(key) + 1:].strip()
+                if (key in ("run", "pass") and len(value) >= 2
+                        and value[0] == value[-1] and value[0] in "'\""):
+                    value = value[1:-1]
+                raw_entries[-1][key] = (lineno, value)
+    if len(raw_entries) != len(rows):
+        errors.append(
+            f"AIDA reads {len(raw_entries)} verifier entries, YAML reads {len(rows)}; "
+            "open every entry with `- ` inside the block"
+        )
+    for i, (raw, row) in enumerate(zip(raw_entries, rows)):
+        if not isinstance(row, dict):
+            continue
+        for key in ("run", "pass"):
+            if key not in raw:
+                errors.append(
+                    f"verifier entry {i}: AIDA sees no `{key}:` line; write each key "
+                    "on its own line as `key: value`, not a flow mapping or a quoted key"
+                )
+        for key in ("id", "kind"):
+            if key not in raw and row.get(key) is not None:
+                errors.append(
+                    f"verifier entry {i}: AIDA sees no `{key}:` line, YAML reads "
+                    f"{row.get(key)!r}; write it on its own line as `{key}: value`"
+                )
+        for key, (lineno, value) in raw.items():
+            if row.get(key) != value:
+                errors.append(
+                    f"line {lineno}: AIDA reads `{key}:` as {value!r}, YAML as "
+                    f"{row.get(key)!r}; write it on one line, with no `#` comment, "
+                    "no block scalar and no quotes around `id` or `kind`"
+                )
+
+    # AIDA writes a recipe's `## Files` into the worktree for the run, so a
+    # `git status` entry in the same recipe sees them as untracked. A file is
+    # what `recipe_files_into` (recipes.sh) takes for one: a column-1 fence whose
+    # info string, split on runs of blanks, has a non-empty second word. So
+    # ```` ``` .aida/x/v.sh ```` is a file, its first word being empty.
+    ships_files = False
+    in_fence = False
+    for _, text in section_lines(body, "Files", line_offset) or []:
+        if not text.startswith("```"):
+            continue
+        if in_fence:
+            in_fence = False
+            continue
+        in_fence = True
+        words = re.split(r"[ \t]+", text.lstrip("`"))
+        ships_files = ships_files or (len(words) >= 2 and words[1] != "")
+    if ships_files:
+        for raw in raw_entries:
+            lineno, run = raw.get("run", (0, ""))
+            tokens = run.split()
+            if "git" in tokens and "status" in tokens[tokens.index("git"):]:
+                errors.append(
+                    f"line {lineno}: a recipe that ships `## Files` must not check "
+                    "`git status`; its own files are untracked during the run"
+                )
+
+    # Notes after the block are read as bullets. A numbered item under
+    # `## Verifier` is read by the consumer as a model-judged check, so none may
+    # appear — outside the `verifier:` block itself and outside a fence.
+    in_fence = False
+    in_block = False
+    for lineno, text in section:
+        m = FENCE_LINE_RE.match(text)
+        if m:
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+        if text.rstrip() == "verifier:":
+            in_block = True
+            continue
+        if in_block:
+            if text.strip() and not text[:1].isspace():
+                in_block = False
+            else:
+                continue
+        if NUMBERED_ITEM_RE.match(text.strip()):
+            errors.append(
+                f"line {lineno}: a numbered item under `## Verifier` is read by the "
+                "consumer as a check; write notes as bullets"
+            )
+
+    return errors
 
 
 def validate_recipe(path: Path, kind: str = "task") -> list[str]:
@@ -922,6 +1139,13 @@ def validate_recipe(path: Path, kind: str = "task") -> list[str]:
                 f"move this file there so it routes to the {declared} index, "
                 "not the task index"
             )
+
+        # `## Verifier` is a `verifier:` block for a task recipe (rule 7). A
+        # process recipe keeps numbered-prose verifiers by design, so this check
+        # is task-only.
+        errors.extend(
+            validate_verifier_block(body, text[: len(text) - len(body)].count("\n"))
+        )
 
     if is_process:
         errors.extend(validate_oracle_block(body))
