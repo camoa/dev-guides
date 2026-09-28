@@ -6,7 +6,7 @@ description: Use when a Drupal project on DDEV gives a task's git worktree a run
 # Metadata, read only after a match.
 label: Worktree environment (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.4.1
+version: 0.5.0
 recipe_class: process
 framework: drupal
 drupal_compatibility: "^10.3 || ^11"
@@ -79,7 +79,7 @@ from a directory DDEV no longer knows, cannot land on another project.
 - The main checkout's DDEV project is running: `ddev list -j` shows one row whose `approot` is the
   main checkout with `status` `running`. The snapshot is taken from that project.
 - Docker has room for a second web container, a second database container and a second database
-  volume. `bash` and `jq` are on the host's `PATH`, for the three scripts under `## Files`.
+  volume. `bash` and `jq` are on the host's `PATH`, for the six scripts under `## Files`.
 - The worktree's directory name is lowercase letters, digits and hyphens, because it becomes a
   hostname label. DDEV replaces `_` with `-` and changes nothing else, so `Add_login.v2` becomes
   the project `Add-login.v2` at `add-login.v2.ddev.site`, a name with a dot inside the label. A
@@ -172,7 +172,7 @@ worktree's own project from there.
 input:  {codePath}                       held by the consumer
 
 files (written where absent, committed after the check passes):
-        .aida/worktree-environment/preconditions.sh, main-row.sh, main-project.sh, main-files.sh, address.sh
+        .aida/worktree-environment/preconditions.sh, main-row.sh, main-project.sh, main-files.sh, address.sh, status.sh
 
 preconditions (in the worktree, before the commit):
         preconditions.sh {codePath}       → exit 0, or one line naming the first failure
@@ -223,7 +223,7 @@ checkout, never this recipe's. The worktree's own `.ddev/db_snapshots/` holds `s
 `gate-{project}`; the cleanup line clears it at each bring-up, and `git worktree remove` takes the
 directory with it, because `ddev delete` leaves the `.ddev` folder alone.
 
-The five `## Files` are written once, where absent, and refused where a file exists with other
+The six `## Files` are written once, where absent, and refused where a file exists with other
 content, the rule every setup recipe's files follow. The consumer commits them on the task's
 branch once the `## Preconditions` line has exited 0 and before a token runs, so the tree is
 clean for the stages that check it, and a refused bring-up leaves no file behind. A worktree made
@@ -298,6 +298,18 @@ and the files directory as `<checkout>/running/sites/default/files`. The project
 exited 4 from all three scripts. A run against a real project whose Drupal root is the repository
 root is not yet observed.
 
+## Status
+
+One command, run before a consumer's verify lines, because `ddev drush` and `ddev exec` silently
+start a stopped project and print start-up text that fails every `stdout empty` check.
+
+```sh
+bash .aida/worktree-environment/status.sh
+```
+
+Exit 0 means the worktree's project is up. A non-zero exit prints the project's status and stops
+the step, which the consumer reports as `task environment <id> up`.
+
 ## Tokens
 
 One fenced `sh` block per token, the token's name as the fence's second word, one command. The
@@ -322,7 +334,7 @@ one place to the left.
 
 ## Files
 
-Five scripts in `.aida/worktree-environment/`, written where absent, the path as the fence's
+Six scripts in `.aida/worktree-environment/`, written where absent, the path as the fence's
 second word. They hold every DDEV and `jq` invocation the checks, the tokens and the address
 need, so the consumer runs them and knows neither. Paths are compared as the filesystem resolves them, in one place, because DDEV lists a
 checkout under the path it was started from, and a consumer may hold that path with a trailing
@@ -398,6 +410,14 @@ printf '%s/sites/default/files\n' "${root}${docroot:+/$docroot}"
 #!/usr/bin/env bash
 # Prints the worktree project's address, name and root, one key per line, from where it is run.
 ddev describe -j | jq -r '.raw | "address: \(.primary_url)\nproject: \(.name)\nroot: \(.approot)"'
+```
+
+```sh .aida/worktree-environment/status.sh
+#!/usr/bin/env bash
+# Exits 0 when the worktree's DDEV project is running; otherwise prints its status and exits 1.
+command -v jq >/dev/null || { echo "jq is not installed"; exit 1; }
+status="$(ddev describe -j 2>/dev/null | jq -r '.raw.status // empty')"
+[ "$status" = "running" ] || { echo "the worktree's DDEV project is not running (status: ${status:-not a DDEV project})"; exit 1; }
 ```
 
 ## Bring up

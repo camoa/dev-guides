@@ -6,7 +6,7 @@ description: Use when a PHP CLI project needs PHP_CodeSniffer with the PSR12 sta
 # Metadata, read only after a match.
 label: PHP_CodeSniffer (PHP CLI)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.1.1
 recipe_class: tooling
 framework: php-cli
 authors:
@@ -47,15 +47,26 @@ separate package such as `drupal/coder`; `PSR12` ships inside
 ## Run
 
 ```sh
+vendor/bin/phpcs --version
+```
+
+Run the binary directly, not through `php`: a missing `vendor/bin/phpcs` then
+exits 127, the exit code that says a tool is absent rather than merely
+failing. Exit 0 with a line naming the installed version proves the binary is
+present.
+To confirm `PSR12` is registered as a standard, not just that the binary
+exists:
+
+```text
 php vendor/bin/phpcs -i
 ```
 
 Exit 0 with a line reading `The installed coding standards are …` naming
-`PSR12` among them proves the standard is registered, not just that the
-binary exists. On PHP_CodeSniffer 4.x, with only `squizlabs/php_codesniffer`
-installed, the bundled set is `PEAR, PSR1, PSR2, PSR12, Squiz, Zend` — 4.x
-dropped `MySource`. Installing `drupal/coder` on top adds four names, not
-two: `Drupal` and `DrupalPractice` from coder itself, plus `VariableAnalysis`
+`PSR12` among them proves the standard is registered. On PHP_CodeSniffer 4.x,
+with only `squizlabs/php_codesniffer` installed, the bundled set is `PEAR,
+PSR1, PSR2, PSR12, Squiz, Zend` — 4.x dropped `MySource`. Installing
+`drupal/coder` on top adds four names, not two: `Drupal` and
+`DrupalPractice` from coder itself, plus `VariableAnalysis`
 and `SlevomatCodingStandard` from the sniff packages coder requires —
 verified against `phpcs -i` run with `drupal/coder` 8.3.31 installed, on
 PHP_CodeSniffer 3.13.5. The coder major decides the phpcs major: coder 8.3.31
@@ -65,5 +76,5 @@ and 9.0.1 require `^4.0.1`. `drupal/core-dev` 11.4.5 pins `drupal/coder`
 12.0.0-alpha1 pins `^9.0`. The four added names do not come from squizlabs's
 own standards and do not change with the major.
 
-If the command itself is not found, the package is absent: install, then run
-it again.
+If `vendor/bin/phpcs` is absent, the shell exits 127: install, then run the
+version command again.

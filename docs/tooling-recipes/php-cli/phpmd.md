@@ -6,7 +6,7 @@ description: Use when a PHP CLI project needs PHPMD to flag oversized methods an
 # Metadata, read only after a match.
 label: PHPMD (PHP CLI)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.1.1
 recipe_class: tooling
 framework: php-cli
 authors:
@@ -48,8 +48,12 @@ example below changes once 3.0 ships.
 ## Run
 
 ```sh
-php vendor/bin/phpmd --version
+vendor/bin/phpmd --version
 ```
+
+Run the binary directly, not through `php`: a missing `vendor/bin/phpmd`
+then exits 127, the exit code that says a tool is absent rather than merely
+failing.
 
 PHPMD's own usage is `phpmd <paths> <report-format> <ruleset(s)>`, all three
 positional and required, so a bare `--version` is the only invocation that proves
@@ -71,5 +75,5 @@ directly on the command line, so it never reaches an extensionless Composer bina
 under `bin/` — that file is linted and analysed by hand or by a glob-capable pass
 instead.
 
-If the command itself is not found, the package is absent: install, then run it
+If `vendor/bin/phpmd` is absent, the shell exits 127: install, then run it
 again.

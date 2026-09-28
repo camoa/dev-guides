@@ -6,7 +6,7 @@ description: Use when a context is about to write the tests for one unit of work
 # Metadata — read only after a match.
 label: Test authoring (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.2.3
+version: 0.3.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -94,19 +94,45 @@ exit 255 and `Fatal error` with `not found`, a harness marker and not an asserti
 order that creates the module, or the first tests extend `KernelTestBase` or `BrowserTestBase`
 directly. Observed on core 11.4.5, eleven kernel tests of a new module, every one refused.
 
-**A test for a class that does not exist yet opens with one assertion that names it.** The
-commonest red in test-first work is a class, or a service, inside a module that exists, and the
-natural first run errors in autoload: `Error: Class "..." not found`, `ERRORS!`, exit 2, which
-the freeze reads as a setup gap and not as a red, because a red is read by the assertion marker
-and an autoload error carries none. So the first line of the test asserts the thing exists,
-`assertTrue(class_exists(OccurrenceExpander::class), 'OccurrenceExpander does not exist yet')`
-for a class, `assertTrue($this->container->has('module.occurrence_expander'))` for a service in a
-Kernel test, and
-the body follows. The first run then fails that assertion, `FAILURES!` and exit 1, and stops
-there; once the class exists the assertion passes and the body runs. Observed on PHPUnit
-11.5.56: the unguarded form printed `ERRORS! Tests: 1, Assertions: 2, Errors: 1`, the guarded
-form `FAILURES! Tests: 1, Assertions: 3, Failures: 1`, the extra assertions being the test's
-own `setUp()`.
+**A test for a class that does not exist yet must still fail on its own assertion, not on
+autoload, and not on a line every other test in the order shares.** The commonest red in
+test-first work is a class, or a service, inside a module that exists, and the natural first run
+errors in autoload: `Error: Class "..." not found`, `ERRORS!`, exit 2, which the freeze reads as a
+setup gap and not as a red, because a red is read by the assertion marker and an autoload error
+carries none. Do not repair this by opening the test with an assertion that names the missing
+class or service — `assertTrue(class_exists(...))` or `assertTrue($this->container->has(...))` —
+because every test in an order then stops on that identical line: on a live ten-test order, all
+ten opened this way and every red pointed at the shared opener, not at the ten behaviours, and
+five of the ten would still have passed against an implementation that returns an empty list.
+Tests that stop on one shared line prove one fact, not many.
+
+Guard the lookup instead, so it yields an empty value when the class or service is absent, and let
+the test's own assertion fail on that value. Kernel or Functional, where the missing name is a
+service:
+
+```php
+$service = $this->container->has('my_module.occurrence_expander')
+  ? $this->container->get('my_module.occurrence_expander')
+  : NULL;
+$this->assertSame(['expected'], $service?->expand($input));
+```
+
+Unit, where the missing name is a plain class with no container dependency:
+
+```php
+$expander = class_exists(OccurrenceExpander::class) ? new OccurrenceExpander() : NULL;
+$this->assertSame(['expected'], $expander?->expand($input));
+```
+
+`::class` does not autoload the name it names, so `class_exists()` returns `FALSE` rather than
+erroring when the class is absent. Each guard is expected to fail on the mismatch between `NULL`
+and `['expected']`, in that test alone; once the class or service exists and returns correctly the
+assertion passes. Where the behaviour's own correct answer is itself an empty result, a loose
+assertion such as `assertEmpty()` or `assertEquals([], ...)` would pass against `NULL` too, for the
+wrong reason — prefer `assertSame()`, which does not, because `NULL` is never `[]`. Add a case for
+a non-empty `$input` whose correct result is non-empty, so the guard still fails it. Observed on
+PHPUnit 11.5.56: an unguarded reference to the missing class prints `ERRORS! Tests: 1, Assertions:
+2, Errors: 1`.
 
 ## Preconditions
 

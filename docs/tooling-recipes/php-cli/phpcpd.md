@@ -6,7 +6,7 @@ description: Use when a PHP CLI project needs copy/paste detection over its PHP 
 # Metadata, read only after a match.
 label: PHPCPD (PHP CLI)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.1.1
 recipe_class: tooling
 framework: php-cli
 authors:
@@ -46,11 +46,14 @@ floor supports rather than taking the latest.
 ## Run
 
 ```sh
-php vendor/bin/phpcpd --version
+vendor/bin/phpcpd --version
 ```
 
-Prints the installed version and exits 0. If the command is not found, the package
-is absent: install, then run it again.
+Run the binary directly, not through `php`: a missing `vendor/bin/phpcpd`
+then exits 127, the exit code that says a tool is absent rather than merely
+failing. Prints the installed version and exits 0 otherwise. If
+`vendor/bin/phpcpd` is absent, the shell exits 127: install, then run it
+again.
 
 PHPCPD scans directories, not individual files — a file named on its command line
 produces `No files found to scan` and exits 1. A real scan names the directory to

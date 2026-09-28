@@ -6,7 +6,7 @@ description: Use when a PHP CLI project needs Infection mutation testing with a 
 # Metadata, read only after a match.
 label: Infection (PHP CLI)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.1.1
 recipe_class: tooling
 framework: php-cli
 authors:
@@ -60,11 +60,14 @@ only the lines coverage did not reach.
 ## Run
 
 ```sh
-php vendor/bin/infection --version
+vendor/bin/infection --version
 ```
 
-Prints the application name and version and exits 0, confirming the binary
-resolves. Verified against Infection 0.35.4's own `Application` class: it extends
+Run the binary directly, not through `php`: a missing `vendor/bin/infection`
+then exits 127, the exit code that says a tool is absent rather than merely
+failing. Otherwise it prints the application name and version and exits 0,
+confirming the binary resolves. Verified against Infection 0.35.4's own
+`Application` class: it extends
 Symfony Console's `Application`, and `--version` carries no positional argument, so
 Infection's own routing — which otherwise rewrites a bare invocation to its `run`
 command — leaves it untouched and Symfony's own `--version` handling answers
@@ -75,5 +78,6 @@ php vendor/bin/infection run --no-interaction src
 ```
 
 This is the form mutation runs take once `infection.json5` and a coverage driver
-are in place; `--version` above only proves the binary is on the `PATH`. If the
-command is not found at all, the package is absent: install, then run it again.
+are in place; `--version` above only proves the binary is on the `PATH`. If
+`vendor/bin/infection` is absent, the shell exits 127: install, then run it
+again.

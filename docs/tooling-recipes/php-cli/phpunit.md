@@ -6,7 +6,7 @@ description: Use when a PHP CLI project needs PHPUnit installed and configured. 
 # Metadata, read only after a match.
 label: PHPUnit (PHP CLI)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.1.1
 recipe_class: tooling
 framework: php-cli
 authors:
@@ -52,16 +52,18 @@ something to enumerate.
 ## Run
 
 ```sh
-php vendor/bin/phpunit --list-suites
+vendor/bin/phpunit --list-suites
 ```
 
-Exit 0 with an `Available test suite:` header means the configuration file
-parsed, its `bootstrap` path resolved, and PHPUnit reached its `<testsuites>`
-block — proof the tool is installed and the configuration is at least
-structurally sound. Verified on PHPUnit 11.5.56. The header can print with
-nothing listed under it and still exit 0 — PHPUnit lists a suite only where
-its `<directory>` glob matches at least one test class, so an empty list on a
-project with no tests yet is expected.
+Run the binary directly, not through `php`: a missing `vendor/bin/phpunit`
+then exits 127, the exit code that says a tool is absent rather than merely
+failing. Exit 0 with an `Available test suite:` header means the
+configuration file parsed, its `bootstrap` path resolved, and PHPUnit reached
+its `<testsuites>` block — proof the tool is installed and the configuration
+is at least structurally sound. Verified on PHPUnit 11.5.56. The header can
+print with nothing listed under it and still exit 0 — PHPUnit lists a suite
+only where its `<directory>` glob matches at least one test class, so an
+empty list on a project with no tests yet is expected.
 
-If the command itself is not found, the package is absent: install, then run
-it again.
+If `vendor/bin/phpunit` is absent, the shell exits 127: install, then run it
+again.

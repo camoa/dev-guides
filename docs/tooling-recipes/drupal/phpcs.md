@@ -6,7 +6,7 @@ description: Use when a Drupal project needs PHP_CodeSniffer with the Drupal and
 # Metadata, read only after a match.
 label: PHP_CodeSniffer (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.2.1
+version: 0.2.2
 recipe_class: tooling
 framework: drupal
 authors:
@@ -50,6 +50,14 @@ running it as well does no harm and no good.
 ## Run
 
 ```sh
+ddev exec vendor/bin/phpcs --version
+```
+
+Exit 0 with a line naming the installed version proves the binary is present,
+without running a sniff whose findings would exit non-zero. The check that
+actually reads the code:
+
+```text
 ddev exec vendor/bin/phpcs --standard=Drupal,DrupalPractice --extensions=php,module,inc,install,profile,theme,engine web/modules/custom
 ```
 
@@ -73,4 +81,5 @@ ddev exec vendor/bin/phpcs -i
 ```
 
 `Drupal` and `DrupalPractice` appear in that list once the install above has run. If
-the command itself is not found, the package is absent: install, then run it again.
+the version command itself is not found, the package is absent: install, then run it
+again.

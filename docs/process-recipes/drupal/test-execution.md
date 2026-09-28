@@ -6,7 +6,7 @@ description: Use when anything needs to run a Drupal test — the failing-test s
 # Metadata — read only after a match.
 label: Test execution (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.3.2
+version: 0.4.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/testing
@@ -91,9 +91,9 @@ paths: [string]               # optional; the test files a change is scoped to
 
 ## Test commands
 
-Six rows. Each is a command or a named statement that Drupal has none. `{file}` is one test file path, `{test_id}` one anchored filter, `{tier}` one testsuite name, and `{paths}` a list that expands to one token per element.
+Six rows. Each is a command or a named statement that Drupal has none. `{file}` is one test file path, `{test_id}` one anchored filter, `{tier}` one testsuite name, `{paths}` a list that expands to one token per element, and `{custom_root}` the project's custom-code root, filled from `## Tokens`.
 
-**Every row calls the binary, with the project's configuration named.** `ddev exec vendor/bin/phpunit -c phpunit.xml` runs from the project root inside the container, and `phpunit.xml` at that root is where drupal.org's PHPUnit documentation puts the file; nothing scaffolds it, so it is the project's own copy, `core/phpunit.xml.dist` copied to the root with its paths and `SIMPLETEST_DB` filled in, and in practice with its suites narrowed to the project's own modules. A project that keeps the file anywhere else moves or copies it to the root; the rows do not follow it. The rows used to call `ddev phpunit`, the ddev-drupal-contrib add-on's wrapper, and a wrapper decides what the caller's arguments mean: on a project with no root `phpunit.xml`, copies of the add-on older than 2025-08-28 put their own target path before the caller's, so a `{file}` landed second and was ignored, a `--filter` applied to the whole custom directory, and every per-attempt run was the whole suite, observed as a five-minute timeout on a two-second file. Calling the binary gives the row its arguments back. Core's own configuration lost as the default: `-c web/core` reads `core/phpunit.xml.dist`, whose suites scan contrib and whose `SIMPLETEST_DB` ships empty, and its `../modules/*/**` suite directories sweep every contrib module's tests into the listing, so one contrib module with a broken or duplicated test class fatals `--list-suites` with exit 255; observed on two projects, once on a missing base class and once on a duplicate class declaration from a vendored copy of core. The smoke row keeps `web/modules/custom` before `--list-suites` for the same reason: without a path the listing loads every suite the configuration declares, and with one it lists only the classes under that path, observed on PHPUnit 11.5.56. A project whose docroot is not `web/`, or whose custom modules live elsewhere, sets that path in its own copy.
+**Every row calls the binary, with the project's configuration named.** `ddev exec vendor/bin/phpunit -c phpunit.xml` runs from the project root inside the container, and `phpunit.xml` at that root is where drupal.org's PHPUnit documentation puts the file; nothing scaffolds it, so it is the project's own copy, `core/phpunit.xml.dist` copied to the root with its paths and `SIMPLETEST_DB` filled in, and in practice with its suites narrowed to the project's own modules. A project that keeps the file anywhere else moves or copies it to the root; the rows do not follow it. The rows used to call `ddev phpunit`, the ddev-drupal-contrib add-on's wrapper, and a wrapper decides what the caller's arguments mean: on a project with no root `phpunit.xml`, copies of the add-on older than 2025-08-28 put their own target path before the caller's, so a `{file}` landed second and was ignored, a `--filter` applied to the whole custom directory, and every per-attempt run was the whole suite, observed as a five-minute timeout on a two-second file. Calling the binary gives the row its arguments back. Core's own configuration lost as the default: `-c web/core` reads `core/phpunit.xml.dist`, whose suites scan contrib and whose `SIMPLETEST_DB` ships empty, and its `../modules/*/**` suite directories sweep every contrib module's tests into the listing, so one contrib module with a broken or duplicated test class fatals `--list-suites` with exit 255; observed on two projects, once on a missing base class and once on a duplicate class declaration from a vendored copy of core. The smoke row keeps `{custom_root}` before `--list-suites` for the same reason: without a path the listing loads every suite the configuration declares, and with one it lists only the classes under that path, observed on PHPUnit 11.5.56.
 
 ```yaml
 test_commands:
@@ -125,7 +125,7 @@ test_commands:
       caller decides which test files cover the change and passes them.
     nearest: ["ddev", "exec", "vendor/bin/phpunit", "-c", "phpunit.xml", "{paths}"]
   - id: smoke
-    argv: ["ddev", "exec", "vendor/bin/phpunit", "-c", "phpunit.xml", "web/modules/custom", "--list-suites"]
+    argv: ["ddev", "exec", "vendor/bin/phpunit", "-c", "phpunit.xml", "{custom_root}", "--list-suites"]
     cost: every-attempt
     trap: >-
       Proves the configuration parses and the project's own test classes resolve
@@ -270,6 +270,17 @@ After the recipe runs, verify:
 6. Any result reported as red carried `FAILURES!`. A run reporting `ERRORS!`, or `No tests executed!`, was reported as having said nothing rather than as a pass or a failure, whatever its assertion count.
 
 This recipe ships no executable verifier of its own — it produces a command and the means to read the result, and the phase that runs it owns the gate.
+
+## Tokens
+
+One fenced `sh` block, the token's name as the fence's second word, one command. AIDA runs it at
+preconditions and fills `{custom_root}` in every later row, as arguments and never through a shell.
+
+```sh custom_root
+find . -maxdepth 3 -type d -path */modules/custom -not -path ./vendor/* -print -quit
+```
+
+The command finds the first `modules/custom` directory within three levels of the project root, skipping `vendor/`, and `-quit` stops at that first match — a project with more than one `modules/custom` directory resolves to whichever `find` reaches first; `-quit`'s behaviour on macOS's BSD `find` is unverified here. Where no `modules/custom` exists within three levels, the command prints nothing and `{custom_root}` reads unknown, which fails preconditions by the token's name. A caller that knows the project's custom-code root passes it directly with `--value custom_root=<path>`, which wins over this command because a supplied value is read before the token is resolved.
 
 ## References
 
