@@ -139,11 +139,11 @@ here.
 | Type | Declaration (exact heading) | Posture |
 |---|---|---|
 | `implement` | `## Oracle files`, `## Routing hints`, `## Preconditions`, `## Configuration gate`, `## Unit declaration` | fail-open (`## Preconditions` fails closed; `## Configuration gate` fails closed for an order whose proof is the gate; a missing `## Unit declaration` means no file declares a unit, so a red that holds only a harness marker is refused for every order) |
-| `test-execution` | `## Test commands`, `## Preconditions` | **fail-closed** (both) |
+| `test-execution` | `## Test commands`, `## Preconditions`, `## Tokens` | **fail-closed** (all three) |
 | `review` | `## Change-impact globs`, `## Code-quality extensions`, `## Check commands`, `## Surface commands` | fail-open (`## Check commands` and `## Surface commands` fail closed) |
 | `visual-regression` | `## Install`, `## Files`, `## Viewports`, `## Surfaces`, `## Discovery` | **fail-closed** (`## Install` with no `sh` block refuses the install; the rest read as empty) |
 | `e2e-setup` | `## Install`, `## Files`, `## Surfaces`, `## Discovery` | **fail-closed** (`## Install` with no `sh` block refuses the install; the rest read as empty) |
-| `worktree-environment` | `## Preconditions` (prose and one `sh` line), `## Tokens`, `## Files`, `## Bring up` (twice, around `## Address`), `## Address`, `## Tear down`, `## Build in place` | **fail-closed** (any of `## Bring up`, `## Address` or `## Tear down` with no `sh` block refuses the offer, because an environment nobody can remove is not offered; a `## Preconditions` line that exits non-zero refuses it, removes the files that run wrote and commits nothing; a `## Tokens` command that prints nothing refuses it by the token's name; `## Files` follows the setup rule; `## Build in place` reads as empty) |
+| `worktree-environment` | `## Preconditions` (prose and one `sh` line), `## Status`, `## Tokens`, `## Files`, `## Bring up` (twice, around `## Address`), `## Address`, `## Tear down`, `## Build in place` | **fail-closed** (any of `## Bring up`, `## Address` or `## Tear down` with no `sh` block refuses the offer, because an environment nobody can remove is not offered; a `## Preconditions` line that exits non-zero refuses it, removes the files that run wrote and commits nothing; a `## Tokens` command that prints nothing refuses it by the token's name; `## Files` follows the setup rule; `## Build in place` reads as empty) |
 
 Spelling is load-bearing. A fail-open declaration with a misspelled heading does not error — it silently
 degrades to the neutral floor, and the run looks clean while checking less than you think.
@@ -301,7 +301,7 @@ is prose a consumer prints for the person who confirms the list. The commands re
 installed harness are not here: they are the `## Surface commands` rows of the same framework's
 `review` recipe, and a setup recipe names those ids in one sentence so a reader knows where to look.
 
-**`## Preconditions`, `## Tokens`, `## Files`, `## Bring up`, `## Address`, `## Tear down` and
+**`## Preconditions`, `## Status`, `## Tokens`, `## Files`, `## Bring up`, `## Address`, `## Tear down` and
 `## Build in place` are parsed from a `worktree-environment` recipe, in document order.**
 `## Preconditions` keeps its prose, the reason for each check, and holds one fenced `sh` block, one
 command per line, `{codePath}` as a whole argument. The consumer runs it in the worktree after

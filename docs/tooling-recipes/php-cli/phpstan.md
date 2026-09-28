@@ -6,7 +6,7 @@ description: Use when a PHP CLI project needs PHPStan static analysis installed.
 # Metadata, read only after a match.
 label: PHPStan (PHP CLI)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.1.1
 recipe_class: tooling
 framework: php-cli
 authors:
@@ -47,11 +47,14 @@ skipped, but it stops short of the project's intended level.
 ## Run
 
 ```sh
-php vendor/bin/phpstan --version
+vendor/bin/phpstan --version
 ```
 
-Exit 0 with a line reading `PHPStan - PHP Static Analysis Tool <version>`
-means the binary is installed and runnable. Verified on PHPStan 2.2.8.
+Run the binary directly, not through `php`: a missing `vendor/bin/phpstan`
+then exits 127, the exit code that says a tool is absent rather than merely
+failing. Exit 0 with a line reading `PHPStan - PHP Static Analysis Tool
+<version>` means the binary is installed and runnable. Verified on PHPStan
+2.2.8.
 
-If the command is not found, the package is absent: install, then run it
+If `vendor/bin/phpstan` is absent, the shell exits 127: install, then run it
 again.

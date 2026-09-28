@@ -6,7 +6,7 @@ description: Use when a Drupal module needs tests written or extended — decidi
 # Metadata — read only after a match.
 label: Drupal module test authoring
 recipe_schema_version: 1.0.0
-version: 0.2.0
+version: 0.3.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/testing/framework-selection-decision-matrix
@@ -94,7 +94,25 @@ existing_tests: boolean        # whether the module already has a test suite to 
 
 3. **Write the test to the kind's guide.** `drupal/testing/phpunit-unit-tests`, `drupal/testing/phpunit-kernel-tests`, `drupal/testing/phpunit-functional-tests` and `drupal/testing/phpunit-functionaljavascript-tests` each carry the base class, directory, namespace and setup calls. Four things this recipe requires on top, because the runner or core enforces them and a guide example is easy to copy past: every Kernel, Functional and FunctionalJavascript class declares `#[RunTestsInSeparateProcesses]` and no Unit class does; the attribute is not inherited, so a project's own test base class cannot carry it for its subclasses; every data provider is `static` and named by `#[DataProvider]`; and metadata goes in attributes, not doc-comments.
 
-4. **Watch each new test fail before the code exists, and read why it failed.** A test that has never been seen red proves nothing about the behaviour. The failure must be an assertion that ran and did not hold, not a harness error and not a run that selected nothing. For a class that does not exist yet, open the test with one assertion that names it so the first run fails an assertion instead of erroring in autoload.
+4. **Watch each new test fail before the code exists, and read why it failed.** A test that has never been seen red proves nothing about the behaviour. The failure must be an assertion that ran and did not hold, not a harness error and not a run that selected nothing, and it must be the test's own assertion, not a line every test in the order shares — a run where ten tests all stop on the same line proves that line, not the ten behaviours. Do not open with an assertion that names the missing class or service; on a live run, all ten tests in an order opened with `$this->container->has(...)`, every red stopped there, and five of the ten would have passed against an implementation that always returns an empty list.
+
+   For a new class in an existing module, guard the lookup instead so it yields an empty value when the class or service is absent, and let the test's real assertion fail on that value. Kernel or Functional, where the missing name is a service:
+
+   ```php
+   $service = $this->container->has('my_module.occurrence_expander')
+     ? $this->container->get('my_module.occurrence_expander')
+     : NULL;
+   $this->assertSame(['expected'], $service?->expand($input));
+   ```
+
+   Unit, where the missing name is a plain class with no container dependency:
+
+   ```php
+   $expander = class_exists(OccurrenceExpander::class) ? new OccurrenceExpander() : NULL;
+   $this->assertSame(['expected'], $expander?->expand($input));
+   ```
+
+   `::class` does not autoload the name it names, so `class_exists()` returns `FALSE` rather than erroring when the class is absent. Each guard is expected to fail on the mismatch between `NULL` and the expected array, in that test alone. Where a behaviour's own assertion would accept an empty result as correct — an empty list is a valid answer for some input — a loose assertion such as `assertEmpty()` or `assertEquals([], ...)` would pass against `NULL` too, for the wrong reason; `assertSame()` does not, because `NULL` is never `[]`. Add a case for that behaviour asserting that an empty result is wrong, for example a non-empty `$input` for which `expand()` must return a non-empty list, so the guard still fails it.
 
 5. **Run, and read the status line.** Run the narrowest scope that covers the new tests, with the project's own configuration named. Quote the status line and the counts in the report. `No tests executed!` is not a pass. A path argument and `--testsuite` do not combine — the path wins and the flag is ignored — so pass one or the other, never both.
 

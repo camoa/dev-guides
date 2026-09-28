@@ -6,7 +6,7 @@ description: Use when a Drupal project needs PHPStan static analysis with the Dr
 # Metadata, read only after a match.
 label: PHPStan (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.1.1
+version: 0.1.2
 recipe_class: tooling
 framework: drupal
 authors:
@@ -53,6 +53,14 @@ PHPStan has nothing to read.
 ## Run
 
 ```sh
+ddev exec vendor/bin/phpstan --version
+```
+
+Exit 0 with a line naming the installed version proves the binary is present,
+without running an analysis whose findings would exit non-zero. The check that
+actually reads the code:
+
+```text
 ddev exec vendor/bin/phpstan analyse
 ```
 
@@ -67,4 +75,5 @@ path and the level on the command line instead:
 ddev exec vendor/bin/phpstan analyse --level 8 web/modules/custom/my_module
 ```
 
-If the command is not found, the package is absent: install, then run it again.
+If the version command is not found, the package is absent: install, then run it
+again.
