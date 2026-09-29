@@ -6,7 +6,7 @@ description: Use when a Drupal project needs PHPUnit installed and configured th
 # Metadata, read only after a match.
 label: PHPUnit (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.1.1
+version: 0.1.2
 recipe_class: tooling
 framework: drupal
 authors:
@@ -67,6 +67,11 @@ against `core-dev` itself.
 ddev composer require drupal/core-dev --dev --update-with-all-dependencies
 ```
 
+That flag lets Composer move packages the project already has, not only `core-dev`'s own. On
+one fresh `drupal/recommended-project` install it moved Symfony, Twig and `nikic/php-parser`,
+and took `sebastian/diff` down a major version. The command does not show this, so tell the person
+approving the install, and read the lock-file diff afterwards.
+
 Do not add `phpunit/phpunit` to the project's own `composer.json`. `core-dev`
 already carries the constraint core itself is tested against, so a direct
 requirement is redundant and can drift from core's — it conflicts with the pin
@@ -87,7 +92,9 @@ usable is several edits inside one XML file: which lines change, to what, and
 why the docroot has to be repeated in front of each one is not a command an
 argv-safe step can express without a shell to carry it, so it is done by hand.
 Follow [PHPUnit Configuration](../../drupal/tdd/phpunit-configuration.md) for
-the rewrite, line by line.
+the rewrite, line by line. That rewrite includes the two values Functional tests
+need, `SIMPLETEST_BASE_URL` and `SIMPLETEST_DB`, which the guide gives for DDEV.
+Until the file exists, this recipe's own Run fails, as `## Run` describes.
 
 ## Run
 

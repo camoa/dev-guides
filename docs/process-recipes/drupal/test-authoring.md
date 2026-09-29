@@ -6,7 +6,7 @@ description: Use when a context is about to write the tests for one unit of work
 # Metadata — read only after a match.
 label: Test authoring (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.3.0
+version: 0.4.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -73,6 +73,44 @@ Kernel installs nothing on its own. A Kernel test that needs a table calls `inst
 `installConfig()` or `installSchema()` itself. "Table does not exist" is that call missing, not the
 behaviour absent — the running-a-test twin of this is declared in `drupal/test-execution.md`, which
 reads it out of a failure rather than preventing it.
+
+**A unit that ships a recipe is proved at Functional, core's own convention for a recipe test.**
+When a recipe's `content/` folder creates terms or entities, a Functional test that applies it and
+checks what it created proves that. A Kernel test can apply a recipe too, through
+`RecipeRunner::processRecipe()` (see `core/tests/Drupal/KernelTests/Core/Recipe/RecipeRunnerTest.php`),
+but this recipe picks Functional, the tier `GenericRecipeTestBase` already uses. The gate never
+applies a recipe, so it cannot.
+
+Use `GenericRecipeTestBase` (`core/modules/system/tests/src/Functional/Recipe/GenericRecipeTestBase.php`)
+as the model, not the base class. Its only test, `testRecipeCanBeApplied()`, applies the recipe
+twice to prove it applies and is idempotent, asserts nothing about what the recipe created, and runs
+unguarded in any subclass, with no criterion suffix and no `#[Group]` — extending it puts that
+uncriteria'd test in your class too. Extend `BrowserTestBase` and `use RecipeTestTrait`
+(`Drupal\FunctionalTests\Core\Recipe\RecipeTestTrait`) directly instead, and write your own test
+method against its own criterion. Mirror the base's `$profile = 'minimal'` and
+`$defaultTheme = 'stark'` properties, and call `$this->setUpCurrentUser(admin: TRUE)` before
+applying, as the base does. If a test should also prove idempotency, apply the recipe twice inside
+that test, under its own criterion.
+
+**Before the recipe exists, guard the apply so each test still fails on its own assertion.**
+`getRecipePath()` and `doApply()` belong to the base class and are not inherited here, so compute
+the recipe's path directly: `InstalledVersions::getRootPackage()['install_path']` — the same call
+`RecipeTestTrait::runDrupalCommand()` uses to find the project root — plus `recipes/<name>`. Call
+`$this->applyRecipe($path)` only when `is_dir($path)` is `TRUE`, then assert on the entities
+regardless. Calling `applyRecipe()` against a path that does not exist yet fails inside
+`RecipeTestTrait::applyRecipe()`, on the `Process exit code mismatch` line — the shared line every
+unguarded recipe test would fail on. With the guard closed, the entity assertion fails on its own
+missing value instead.
+
+**Do not put this test in the recipe's own folder.** The only recipes directory core's functional
+suite scans is `recipes/*/tests/src/Functional`, under core. A drupal/recommended-project site
+installs recipes into a project-root `recipes/` folder that no suite scans. A test copied there
+never runs, and the miss is silent. Put the test in a custom module's `tests/src/Functional/`
+instead — deriving the path from `InstalledVersions::getRootPackage()['install_path']`, as above,
+resolves it whether or not the docroot sits inside the project root. `$this->root`, the Drupal
+docroot set in `core/tests/Drupal/Tests/DrupalTestCaseTrait.php`, is not that project root. The
+alternative is adding the project's `recipes/` folder to the project-root `phpunit.xml` that
+`drupal/test-execution.md` reaches the runner through.
 
 **All five tiers are written before the code. Playwright and visual regression are not.** Those run
 against a site that already stands, cannot drive a design decision, and never substitute for a tier
