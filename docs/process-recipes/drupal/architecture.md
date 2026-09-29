@@ -6,7 +6,7 @@ description: Use when a Drupal project enters the design phase and must turn res
 # Metadata — read only after a match.
 label: Design (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.3.0
+version: 0.4.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/services
@@ -52,6 +52,9 @@ The plugin owns the generic mechanism — when the design phase runs, the shape 
 **A configuration answer is a buildable unit, not only a storage choice.** Drupal answers a great deal with configuration — a view, a content type, a field, a display mode — and none of it is code. That is still a unit to build: it states what its gate must show, and the files it owns are configuration files. A design that does not know this writes a code order for something nobody should write code for, and every count-and-match check downstream still passes, because those checks cannot see that an order is about the wrong kind of thing. The storage table below already draws the content-entity against config-entity line; what matters here is that the config side is a thing to build, not merely a place to put data.
 
 **A configuration unit is the Drupal operation, and it owns every file that operation rewrites.** The unit is not a file; it is delete a field, add a view mode, change a display, and it owns every file Drupal rewrites when that operation runs through it. Find that set before the orders are cut: run the operation on a scratch site and export, or walk the `dependencies:` of the files the change touches. A display that lists a field is rewritten when the field is deleted; on core 11.4.6, deleting one field rewrote five files, the two field files gone and three displays changed. An order that owns the field files and leaves the displays to other orders cuts one atomic change into pieces that cannot import on their own. A unit whose files are all configuration writes no PHPUnit test: a test that reads the YAML back restates the file and cannot fail for the right reason. Its proof is the `## Configuration gate` in `drupal/standards-and-tests.md`, which restores the worktree's database to the seed and imports the branch's export onto it, plus the behavioural test of the order that consumes what it configures.
+
+**A unit that ships a Drupal recipe is its own kind, not a configuration unit.** Recipe content — a recipe's `content/` folder that creates terms or entities — is the clearest case. The `## Configuration gate` in `drupal/standards-and-tests.md` restores the seed database and imports the branch's config export, but it never applies a recipe. A recipe unit gives the gate nothing to import, so the gate cannot prove it. It owns the recipe folder and the recipe test file. The test sits in a custom module's
+`tests/src/Functional/`. Its proof is the recipe test in `drupal/test-authoring.md`: a Functional test that applies the recipe, then asserts what it created. Core's nearest example, `core/recipes/tags_taxonomy/tests/src/Functional/GenericTest.php`, only proves the recipe applies. The assertions on what it created are the unit's own.
 
 **The critic's check on a configuration unit is one question: does the order own every file the operation rewrites, and does its gate exist?** An order that fails either half is not buildable, whatever its count-and-match checks say. The sentence is prose a critic reads, not a declaration a script parses; design carries none.
 
@@ -195,7 +198,8 @@ After the recipe runs, verify:
 4. Forms and controllers in the design hold orchestration only — no business logic has been left in a `buildForm()` or a controller method.
 5. Every unit names the files it owns, including what must exist beside its code — the `*.services.yml` entry and, where the unit calls for them, its route, permission, config schema, library declaration or `*.info.yml` dependency — read against the couplings list; and every candidate, prior art or an exported entity of the unit's kind, carries one of the four verdicts with its reason.
 6. A feature Drupal answers with configuration is a unit in its own right, sized around the operation so it owns every file the operation rewrites, with what its gate must show stated and no PHPUnit test asked of it, rather than a code unit written for something nobody should write code for.
-7. The design left the project code unchanged — no service registered, no module file written by the method itself, nothing installed; the units and their order were returned for the caller to record.
+7. A unit that ships a recipe names its recipe test file, which sits in a custom module's `tests/src/Functional/`.
+8. The design left the project code unchanged — no service registered, no module file written by the method itself, nothing installed; the units and their order were returned for the caller to record.
 
 This recipe ships no executable verifier of its own — the checks above are the agent-driven protocol; the caller owns the work order's shape and the check that every acceptance criterion is served by one.
 
