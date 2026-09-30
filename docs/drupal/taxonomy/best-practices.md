@@ -28,7 +28,7 @@ drupal_version: "11.x"
 
 1. Define vocabularies as YAML in module `config/install/`
 2. Export field config (storage, instances, displays)
-3. Manage terms via UI or import tools (Default Content, Migrate)
+3. Manage terms via the UI, a recipe's `content/` folder, or Migrate
 4. Never create vocabularies programmatically unless dynamic requirement
 
 **Naming conventions:**

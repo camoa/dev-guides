@@ -36,8 +36,10 @@ HEADER_RE = re.compile(
     re.MULTILINE | re.IGNORECASE,
 )
 
-# Match a link like [Name](filename.md) or [Name](./filename.md)
-LINK_RE = re.compile(r"\[([^\]]+)\]\(\.?\/?([a-z0-9\-_/]+\.md)\)", re.IGNORECASE)
+# Match a link like [Name](filename.md), [Name](./filename.md), or an up-tree
+# relative link like [Name](../../development/x.md). The `../` segments are kept
+# in the captured group so resolution against the index file's directory still works.
+LINK_RE = re.compile(r"\[([^\]]+)\]\(((?:\.\.?/)*[a-z0-9\-_/]+\.md)\)", re.IGNORECASE)
 
 FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
 
@@ -109,8 +111,12 @@ def process_index(index_path: Path, dry_run: bool = False, refresh: bool = False
         # Must be a table row.
         match = LINK_RE.search(row)
         if not match:
-            # Row without a link — append as-is with empty summary column.
-            new_rows.append(row.rstrip(" |") + " | |\n")
+            if already:
+                # Table already has a Summary column — leave this row unchanged.
+                new_rows.append(row + "\n")
+            else:
+                # Row without a link — append as-is with empty summary column.
+                new_rows.append(row.rstrip(" |") + " | |\n")
             row_idx += 1
             continue
 
@@ -174,8 +180,15 @@ def main():
     if args.topic:
         targets = [DOCS_DIR / args.topic / "index.md"]
     else:
-        # All topic index.md files (2 levels deep: docs/<category>/<topic>/index.md)
-        targets = sorted(DOCS_DIR.glob("*/*/index.md"))
+        # All topic index.md files: docs/<category>/<topic>/index.md and deeper
+        # nested topics like docs/<category>/<topic>/<subtopic>/index.md. Excludes
+        # category-level indexes (docs/<category>/index.md, 2 path parts), which
+        # have no routing table of guides.
+        targets = sorted(
+            p
+            for p in DOCS_DIR.glob("**/index.md")
+            if len(p.relative_to(DOCS_DIR).parts) >= 3
+        )
 
     counts = {}
     samples = []

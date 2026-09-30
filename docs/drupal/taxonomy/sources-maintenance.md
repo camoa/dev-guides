@@ -22,6 +22,8 @@ Claims here were checked against a local Drupal install of core and the modules 
 | Seth Shaw: Large Vocab loadTree Error | https://seth-shaw-unlv.github.io/2020-09-07/large_vocab_list_error | 9.1, 15.2 | 2026-02-14 |
 | Drupal.org Issue: DB caching for loadTree | https://www.drupal.org/project/drupal/issues/106015 | 15.2 | 2026-02-14 |
 | Wishdesk: Architectural Patterns for Complex Taxonomies | https://wishdesk.com/blog/7-game-changing-architectural-patterns-that-scale-complex-drupal-taxonomies-without-killing-performance | 14.1, 15.2 | 2026-02-14 |
+| Drupal Recipes Initiative: Default Content | https://project.pages.drupalcode.org/distributions_recipes/default_content.html | 12.1 | 2026-09-30 |
+| Drupal.org issue 3479980: Taxonomy fallback display without Views | https://www.drupal.org/project/drupal/issues/3479980 | 12.1 | 2026-09-30 |
 
 ## Code Sources
 
@@ -29,8 +31,13 @@ Claims here were checked against a local Drupal install of core and the modules 
 |--------|---------------|----------------|----------------|
 | Taxonomy module | `core/modules/taxonomy/` | All sections | 11.x |
 | Taxonomy config schema | `core/modules/taxonomy/config/schema/` | 2.1 | 11.x |
-| Tags taxonomy recipe | `core/recipes/tags_taxonomy/` | 3.1, 12.1, 16.1 | 11.x |
+| Tags taxonomy recipe | `core/recipes/tags_taxonomy/` | 3.1, 12.1, 16.1 | 11.4.5 |
 | Article tags recipe | `core/recipes/article_tags/` | 4.1, 11.1, 12.1, 16.1 | 11.x |
+| Core Recipe API | `core/lib/Drupal/Core/Recipe/` | 12.1 | 11.4.5 |
+| Core DefaultContent API | `core/lib/Drupal/Core/DefaultContent/` | 12.1 | 11.4.5 |
+| Path module (DefaultContent subscriber) | `core/modules/path/` | 12.1 | 11.4.5 |
+| Config StorageComparer | `core/lib/Drupal/Core/Config/StorageComparer.php` | 12.1 | 11.4.5 |
+| Basic shortcuts recipe | `core/recipes/basic_shortcuts/` | 12.1 | 11.4.5 |
 
 ## Maintenance Notes
 
@@ -38,6 +45,7 @@ Claims here were checked against a local Drupal install of core and the modules 
 - Term entity added revision support in Drupal 8.7; `new_revision` property added to vocabulary config
 - Views plugins use PHP 8 attributes as of Drupal 10; older documentation shows annotations
 - Recipe format introduced in Drupal 10.3; examples here are Drupal 11 format
+- Recipes import a `content/` folder from Drupal 10.3. The `content:export` command shipped in Drupal 11.3; on 11.2 and earlier, export the content with the contrib Default Content module
 - `loadTree()` performance issues documented since Drupal 7; still relevant in Drupal 11
 
 ## Version History
@@ -45,3 +53,4 @@ Claims here were checked against a local Drupal install of core and the modules 
 | Date | Change |
 |------|--------|
 | 2026-02-14 | Initial guide creation — Drupal 11.x, comprehensive config-first approach |
+| 2026-09-30 | Corrected "Include default terms": core recipes ship terms via `content/`, not contrib-only (verified against core 11.4.5) |
