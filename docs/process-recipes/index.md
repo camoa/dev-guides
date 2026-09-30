@@ -182,6 +182,10 @@ backslash class inside a bracket expression, or one that sits on an `absent:` ro
 both sides, and records the selector it used; a recipe without the key keeps whole-output
 subtraction, with the limit above.
 
+**A suite row may also carry `warning_line:`, a POSIX ERE for lines a runner prints that fail no
+test.** AIDA 6.0.10 and later read it; an older AIDA ignores it. The validator checks it the same
+way it checks `failure_line:`.
+
 **The `mutation` row is a report, not a gate.** Every mutation tool run for it — Infection, mutmut,
 gremlins — exits 0 with surviving mutants, and gremlins exited 0 with its own efficacy threshold
 unmet, so a caller reading exit status learns nothing from this row. Its `trap:` says where the
