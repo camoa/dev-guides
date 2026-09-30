@@ -29,8 +29,8 @@ drush php:eval '$term = \Drupal\taxonomy\Entity\Term::create(["vid" => "tags", "
 # Delete term
 drush php:eval '\Drupal::entityTypeManager()->getStorage("taxonomy_term")->load(123)->delete();'
 
-# Export terms (requires contrib)
-drush migrate:import --tag=term_export
+# Export terms (core, Drupal 11.3+)
+drush content:export taxonomy_term --bundle=VOCAB_ID --dir=DIR
 ```
 
 **Programmatic creation:**

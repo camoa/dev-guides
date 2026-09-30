@@ -58,7 +58,7 @@ Config-first approach ensures consistent vocabulary structure across environment
 - Not enforcing module dependencies → Vocabulary persists after module uninstall, becomes orphaned config. Always add enforced dependency for module-owned vocabularies
 - Using `drush cex` instead of hand-crafting config → Exports include UUIDs and unnecessary metadata. For module config, write YAML manually following schema
 - Forgetting to clear cache after config import → Drupal caches entity definitions. Run `drush cr` after importing vocabulary config
-- Mixing content (terms) with config (vocabulary) → Vocabularies are config, terms are content. Export vocabularies as YAML, manage terms separately (or use content_as_config contrib)
+- Mixing content (terms) with config (vocabulary) → Vocabularies are config, terms are content. Export vocabularies as YAML; ship terms in a recipe's `content/` folder (see Config Export & Recipes)
 
 ## See Also
 

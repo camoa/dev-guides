@@ -201,7 +201,6 @@
     "drupal/taxonomy/hierarchical-taxonomy",
     "drupal/taxonomy/programmatic-terms",
     "drupal/taxonomy/security-performance",
-    "drupal/taxonomy/taxonomy-config-recipes",
     "drupal/taxonomy/taxonomy-overview",
     "drupal/taxonomy/taxonomy-permissions",
     "drupal/taxonomy/taxonomy-views",
