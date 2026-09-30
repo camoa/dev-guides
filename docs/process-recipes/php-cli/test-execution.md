@@ -6,10 +6,10 @@ description: Use when anything needs to run a PHP CLI project's tests — the fa
 # Metadata — read only after a match.
 label: Test execution (PHP CLI)
 recipe_schema_version: 1.0.0
-version: 0.2.5
+version: 0.2.6
 requires_guides:
   - development/tdd-spec-driven
-requires_tooling:
+requires_tooling_with_tests:
   - phpunit
   - infection
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
