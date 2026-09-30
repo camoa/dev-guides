@@ -448,13 +448,17 @@ def validate_preconditions_block(body: str) -> list[str]:
 # print.
 TEST_EXECUTION_PHASE = "test-execution"
 TEST_COMMAND_IDS = ["suite", "file", "test", "changed", "smoke", "mutation"]
-TEST_COMMAND_KEYS = {"id", "argv", "absent", "nearest", "cost", "trap", "id_form", "failure_line"}
+TEST_COMMAND_KEYS = {
+    "id", "argv", "absent", "nearest", "cost", "trap", "id_form", "failure_line", "warning_line",
+}
 # `failure_line:` is a regular expression that selects the lines naming one failing
 # test, one line per failure, stable across runs that add or fix other tests. A
 # consumer that subtracts a red baseline line by line subtracts only these lines,
 # because a progress line and a counts line change whenever a test is added. It is
 # optional and lives on a row with `argv:`; it must compile, or the consumer would
 # fall back to whole-output subtraction while believing it had a selector.
+# `warning_line:` is the same kind of selector, for lines that fail no test — a
+# runner warning rather than a failure — checked the same way.
 PERL_CLASS_IN_BRACKET = re.compile(r"\[[^\]]*\\[wds]")
 COST_VALUES = {"every-attempt", "end-of-task"}
 # A command is argv, never a shell string: the caller executes the token list
@@ -554,12 +558,14 @@ def validate_test_commands(body: str) -> list[str]:
                 )
         if has_absent and not str(row.get("absent", "")).strip():
             errors.append(f"test command {rid or i} `absent:` must say why")
-        if "failure_line" in row:
-            fl = row["failure_line"]
+        for line_key in ("failure_line", "warning_line"):
+            if line_key not in row:
+                continue
+            fl = row[line_key]
             if has_absent:
-                errors.append(f"test command {rid or i} `failure_line:` needs a command; an `absent:` row prints nothing to select")
+                errors.append(f"test command {rid or i} `{line_key}:` needs a command; an `absent:` row prints nothing to select")
             if not isinstance(fl, str) or not fl.strip():
-                errors.append(f"test command {rid or i} `failure_line:` must be a non-empty regular expression")
+                errors.append(f"test command {rid or i} `{line_key}:` must be a non-empty regular expression")
             else:
                 # The consumer applies the selector with `grep -E`, so it is checked in
                 # that dialect: POSIX ERE has no `\w`, `\d` or `\s` inside a bracket
@@ -567,13 +573,13 @@ def validate_test_commands(body: str) -> list[str]:
                 # as two literal characters.
                 if PERL_CLASS_IN_BRACKET.search(fl):
                     errors.append(
-                        f"test command {rid or i} `failure_line:` uses a backslash class inside a "
+                        f"test command {rid or i} `{line_key}:` uses a backslash class inside a "
                         "bracket expression; POSIX ERE reads it as literal characters, spell the set out"
                     )
                 probe = subprocess.run(["grep", "-E", "-e", fl], input=b"", capture_output=True)
                 if probe.returncode == 2:
                     errors.append(
-                        f"test command {rid or i} `failure_line:` does not compile under grep -E: "
+                        f"test command {rid or i} `{line_key}:` does not compile under grep -E: "
                         f"{probe.stderr.decode().strip()}"
                     )
         if "nearest" in row:

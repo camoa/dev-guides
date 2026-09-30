@@ -6,7 +6,7 @@ description: Use when anything needs to run a Drupal test — the failing-test s
 # Metadata — read only after a match.
 label: Test execution (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.4.1
+version: 0.4.2
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/testing
@@ -101,6 +101,7 @@ test_commands:
     argv: ["ddev", "exec", "vendor/bin/phpunit", "-c", "phpunit.xml"]
     cost: end-of-task
     failure_line: '^[0-9]+\) [A-Za-z0-9_\\]+::[A-Za-z0-9_]+'
+    warning_line: '^(There (was 1|were [0-9]+) PHPUnit test runner warnings?:|[0-9]+\) Cannot add file .+ to test suite )'
     trap: >-
       Runs every tier, Functional and FunctionalJavascript included, each booting a
       real site. This is the end-of-task gate, not something to run inside a loop.
@@ -150,6 +151,8 @@ test_commands:
 ```
 
 **The suite row's `failure_line:` selects one line per failing test.** `'^[0-9]+\) [A-Za-z0-9_\\]+::[A-Za-z0-9_]+'` matches PHPUnit's numbered headers whose subject is a test, `1) Class::method`, one per failing, erroring or risky test; observed on PHPUnit 11.5.56 with two failures and one error. The selector is POSIX ERE, because the consumer applies it with `grep -E`, which on Linux is GNU grep: `\w`, `\d` and `\s` mean nothing inside a bracket expression there, so `[\w\\]` was the two literal characters and matched no header on the machine that ran the check, while a shell whose `grep` resolves to ugrep accepted it and hid the difference. Check a selector through `/bin/grep -E`, not through whatever `grep` the shell resolves to. The numbering restarts in each section; the ask's consumer removes digit runs before comparing, so that does not register. The `Class::method` part is what keeps the issue lists out: with `displayDetailsOnTestsThatTriggerDeprecations` and its siblings on, as Drupal core's `phpunit.xml.dist` sets them, PHPUnit also prints `N) <message>` headers for deprecations, warnings and PHP notices, one per distinct message rather than per test, and a bare `'^[0-9]+\) '` would count a new deprecation as a new failing test. A message that itself begins with a `Class::method` token still matches; that is the residual. The progress line, the `file:line` under each header and the `Tests: N, Assertions: N, Failures: N.` line are not selected: the first and last change whenever a test is added.
+
+**`warning_line:` selects runner warnings, which fail no test.** It matches the header PHPUnit prints over them, plus the one warning kind seen so far: the overlapping-suite `Cannot add file … to test suite` line, one per file, so a refusal names each file. Observed on PHPUnit 11.5.56, where a project's `phpunit.xml` set `failOnWarning="true"` and its `all` suite overlapped `kernel`; the run exited 1 with `OK, but there were issues!` and no failed test. The consumer, AIDA 6.0.10 and later, reads such a suite as warned, and `finish` still refuses, listing the warning lines. The two repairs belong to the person: a suite command that does not fail on warnings, or a `phpunit.xml` without overlapping suites. Add other warning kinds when they are seen, and never a bare `'^[0-9]+\) '`, which also matches failed tests. An older AIDA ignores the key.
 
 **The mutation row takes its files as positional arguments.** `--filter` is deprecated since
 Infection 0.34 and refused when paths are also given, so the row passes the changed files as
