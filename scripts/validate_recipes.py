@@ -1028,30 +1028,34 @@ def validate_recipe(path: Path, kind: str = "task") -> list[str]:
     #     per stack, which is why phpunit is two recipes and not one.
     #     OPTIONAL, checked only when present, so a recipe whose framework has no
     #     tooling recipes yet stays valid.
-    decl = meta.get("requires_tooling")
-    if decl is not None:
+    #     `requires_tooling_with_tests` (AIDA 6.0.8+) names tools needed only when the
+    #     task has automated tests; its names are checked the same way.
+    for key in ("requires_tooling", "requires_tooling_with_tests"):
+        decl = meta.get(key)
+        if decl is None:
+            continue
         if not isinstance(decl, list):
             errors.append(
-                f"`requires_tooling` must be a list of tool names (got {type(decl).__name__})"
+                f"`{key}` must be a list of tool names (got {type(decl).__name__})"
             )
         else:
             fw = meta.get("framework")
             for tool in decl:
                 if not isinstance(tool, str) or not TOKEN_RE.match(tool):
                     errors.append(
-                        f"`requires_tooling` entry must be a single lowercase token naming a "
+                        f"`{key}` entry must be a single lowercase token naming a "
                         f"tool (got {tool!r})"
                     )
                     continue
                 if not fw:
                     errors.append(
-                        f"`requires_tooling` names `{tool}` but the recipe declares no "
+                        f"`{key}` names `{tool}` but the recipe declares no "
                         "`framework`; a tool resolves per framework, so it cannot be checked"
                     )
                     continue
                 if not (TOOLING_RECIPES_DIR / str(fw) / f"{tool}.md").is_file():
                     errors.append(
-                        f"`requires_tooling` names `{tool}`, which has no tooling recipe for "
+                        f"`{key}` names `{tool}`, which has no tooling recipe for "
                         f"framework `{fw}` (expected docs/tooling-recipes/{fw}/{tool}.md)"
                     )
 
