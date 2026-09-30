@@ -419,6 +419,8 @@ requires_tooling:                 # optional; tool names, resolved for THIS reci
 
 The name is the whole contract — a tooling recipe is named for its tool, and whatever needs the tool refers to it by that name. `scripts/validate_recipes.py` checks that each declared name resolves to a real tooling recipe for the recipe's own framework, so a name that resolves to nothing fails when the recipe is published rather than when somebody runs it. The key is optional and checked only when present, so a recipe whose framework has no tooling recipes yet stays valid.
 
+A tool that is needed only when the task has automated tests goes under `requires_tooling_with_tests:` instead, with the same form and the same check. AIDA 6.0.8 and later drop those tools from a task whose contract turns automated tests off. An older AIDA ignores the key, so it never names them.
+
 **6. Reference origin; do not ship code assets.** A process recipe carries the framework-specific *binding* as prose and **references** canonical sources (module docs, Playwright, etc.) — it does not bake in `.ts`/`.sh` files. The plugin owns the generic machinery; the recipe binds the framework into it.
 
 ### What the build produces
