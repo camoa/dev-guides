@@ -20,10 +20,10 @@ Path: (not yet set — ask user on first use of code sources)
 
 ## Code Sources
 
-Research install path: `dev-guides/eca-src-research/`
+Paths are relative to `modules/contrib/`.
 (Commit reference: `modeler_api` 1.1.x at `63ec949`)
 
-| Module | Relative path (from research dir) | Guide Sections | Version |
+| Module | Relative path (from `modules/contrib/`) | Guide Sections | Version |
 |--------|----------------------------------|----------------|---------|
 | modeler_api — core API | `modeler_api/src/Api.php` | Architecture, Component Model, Routes | 1.1.2 |
 | modeler_api — ModelOwner attribute | `modeler_api/src/Attribute/ModelOwner.php` | Registering a Model Owner | 1.1.2 |

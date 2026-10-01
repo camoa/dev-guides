@@ -528,8 +528,8 @@
     "guides_extracted": 18
   },
   "drupal/modeler-api": {
-    "source_hash": "e408b34818790dafc8b2b54878bd84a7750e57cf664b04bd8683c3e6267f4750",
-    "partitioned": "2026-05-20",
+    "source_hash": "f8e7be303057be613bd23276916e998247cf0cdccaac6f2a201da797b244c761",
+    "partitioned": "2026-10-01",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 11
   },
