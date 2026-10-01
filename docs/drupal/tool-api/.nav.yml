@@ -1,0 +1,25 @@
+nav:
+- index.md
+- what-tool-api-is.md
+- which-tool-this-guide-means.md
+- installation-and-submodules.md
+- defining-a-tool.md
+- operation-and-destructive.md
+- input-definitions.md
+- output-definitions.md
+- entity-inputs-and-handles.md
+- doexecute-and-executableresult.md
+- access-control.md
+- checkrequirements.md
+- scaffolding-with-drush-generate.md
+- calling-a-tool-from-drush.md
+- calling-a-tool-from-php.md
+- calling-a-tool-from-the-ai-module.md
+- calling-a-tool-from-eca.md
+- calling-a-tool-over-mcp.md
+- tool-explorer.md
+- tool-belt-catalog.md
+- what-changes-at-rc1.md
+- security-best-practices.md
+- performance-best-practices.md
+- sources-maintenance.md

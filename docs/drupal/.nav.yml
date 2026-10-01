@@ -19,6 +19,8 @@ nav:
 - Group: group
 - Modeler API: modeler-api
 - Orchestration: orchestration
+- Tool API: tool-api
+- MCP Server: mcp-server
 - Better Exposed Filters: better-exposed-filters
 - Facets: facets
 - Search API: search-api

@@ -32,6 +32,8 @@ drupal_version: "11.x"
 - [ ] Separate high-privilege agents from user-facing ones
 - [ ] Prompt injection awareness: any user content is a vector
 
+The MCP item applies to Drupal consuming tools from outside MCP servers. Serving Drupal's own tools to MCP clients is a different case; see [MCP Server](../mcp-server/security-considerations.md).
+
 ## Permissions Reference
 
 | Permission | Module | Description |
