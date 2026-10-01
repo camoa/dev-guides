@@ -77,6 +77,8 @@ guide-meta:
 | Manage group-based content access | [Group](group/index.md) |
 | Register config entities as visual workflow editors, build Model Owner or Modeler plugins | [Modeler API](modeler-api/index.md) |
 | Expose ECA workflows, AI agents, and Tool plugins to external automation platforms via HTTP | [Orchestration](orchestration/index.md) |
+| Define an operation once as a Tool API plugin and call it from Drush, PHP, AI, ECA and MCP | [Tool API](tool-api/index.md) |
+| Serve Drupal tools, resources and prompts to AI clients over MCP (STDIO or HTTP with OAuth) | [MCP Server](mcp-server/index.md) |
 | Use HTMX for progressive enhancement | [HTMX](htmx/index.md) |
 | Integrate Salesforce with Drupal | [Salesforce](salesforce/index.md) |
 | Optimize SEO and GEO for Drupal sites | [SEO & GEO](seo-geo/index.md) |

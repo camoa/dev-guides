@@ -112,6 +112,8 @@ $progress = \Drupal::service('ai_agents.agent_status_poller')
 4. **Prompt injection** — any user content is a vector; use Guardrails; separate high-privilege agents
 5. **MCP tools** — do NOT use on critical sites (tool description injection risk)
 
+This applies to Drupal consuming tools from outside MCP servers. Serving Drupal's own tools to MCP clients is a different case; see [MCP Server](../mcp-server/security-considerations.md).
+
 ## Common Mistakes
 
 | Mistake | Why it's wrong |

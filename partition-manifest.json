@@ -408,8 +408,8 @@
     "guides_extracted": 27
   },
   "drupal/ai-module": {
-    "source_hash": "60bf5c29b50ea6d222376d0df4675b0ec0b1e06a6b322454503cc9ca89f38641",
-    "partitioned": "2026-09-02",
+    "source_hash": "47ce16399d1ac2799bdfc352b0d4d82dcba27e7410e5f9a1d9464d03e1419b84",
+    "partitioned": "2026-10-01",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 25
   },
@@ -592,5 +592,17 @@
     "partitioned": "2026-07-03",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 5
+  },
+  "drupal/tool-api": {
+    "source_hash": "77407e324695e3230905ab2622d4af0465965e2f629c7ab40e14f22b68218a2b",
+    "partitioned": "2026-10-01",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 22
+  },
+  "drupal/mcp-server": {
+    "source_hash": "e1eb341440121098889bc423b3a3f8ce25d0d9ad956814295bd66d55de189d17",
+    "partitioned": "2026-10-01",
+    "partitioned_by": "Carlos Ospina",
+    "guides_extracted": 16
   }
 }

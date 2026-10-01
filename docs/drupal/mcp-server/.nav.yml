@@ -1,0 +1,19 @@
+nav:
+- index.md
+- what-mcp-server-is.md
+- installation-and-setup.md
+- stdio-transport.md
+- http-transport.md
+- authentication-and-the-acting-user.md
+- oauth-setup.md
+- oauth-scopes-per-tool.md
+- oauth-client-connection.md
+- custom-authorization-subscriber.md
+- native-tool-plugins.md
+- tool-api-bridge.md
+- resources-and-resource-templates.md
+- prompts.md
+- server-configuration-and-extension-points.md
+- security-considerations.md
+- troubleshooting.md
+- sources-maintenance.md
