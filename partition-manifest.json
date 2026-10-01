@@ -144,8 +144,8 @@
     "guides_extracted": 22
   },
   "drupal/jsonapi": {
-    "source_hash": "ccae87733322df9e0a4fc97fa80426583ae657618229b4f84bf8b07d0d174d7d",
-    "partitioned": "2026-08-16",
+    "source_hash": "272de8396ded401e436b297c98b72b3be8b6ba7cec5a8f5515245c0feae22373",
+    "partitioned": "2026-10-01",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 21
   },
@@ -408,7 +408,7 @@
     "guides_extracted": 27
   },
   "drupal/ai-module": {
-    "source_hash": "47ce16399d1ac2799bdfc352b0d4d82dcba27e7410e5f9a1d9464d03e1419b84",
+    "source_hash": "d5c730b7d85d86c7428658f86e26dd16b3fbd25d157bc8eb43a2b18c186a2437",
     "partitioned": "2026-10-01",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 25
@@ -534,8 +534,8 @@
     "guides_extracted": 11
   },
   "drupal/orchestration": {
-    "source_hash": "f069d7529935a7cfc993475bfc0897c3af535597c3208a2f40f96b8b8cbc43da",
-    "partitioned": "2026-09-02",
+    "source_hash": "4ea5a9d322e0de06086e3708913e791125f481877284fedd985382c65e7b3150",
+    "partitioned": "2026-10-01",
     "partitioned_by": "Carlos Ospina",
     "guides_extracted": 12
   },

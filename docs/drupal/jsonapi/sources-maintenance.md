@@ -16,7 +16,8 @@ Claims here were checked against a local Drupal install of core and the modules 
 | JSON:API Security | https://www.drupal.org/docs/core-modules-and-themes/core-modules/jsonapi-module/security-considerations | 14 | 2026-02-13 |
 | JSON:API Specification | https://jsonapi.org/ | 1, 3, 20 | 2026-02-13 |
 | JSON:API Extras Module | https://www.drupal.org/project/jsonapi_extras | 15, 16 | 2026-08-16 |
-| Drupal Simple OAuth | https://www.drupal.org/project/simple_oauth | 13 | 2026-02-13 |
+| Drupal Simple OAuth | https://www.drupal.org/project/simple_oauth | 13 | 2026-10-01 |
+| OAuth 2.0 Security BCP (RFC 9700) | https://www.rfc-editor.org/rfc/rfc9700 | 13 | 2026-10-01 |
 | Drupal JWT Module | https://www.drupal.org/project/jwt | 13 | 2026-02-13 |
 | Drupal Cache API | https://www.drupal.org/docs/drupal-apis/cache-api | 17 | 2026-02-13 |
 | Drupal Security Docs | https://www.drupal.org/docs/security-in-drupal | 14 | 2026-02-13 |
@@ -27,5 +28,6 @@ Claims here were checked against a local Drupal install of core and the modules 
 |--------|---------------|----------------|----------------|
 | JSON:API Core | `core/modules/jsonapi/` | 1, 3-12, 18-20 | Drupal 10.x/11.x |
 | JSON:API Extras | `modules/contrib/jsonapi_extras/` | 15, 16, 19 | 8.x-3.28 |
+| Simple OAuth | `modules/contrib/simple_oauth/` | 13 | 6.1.1 tag (source clone) |
 
 <!-- END PARTITION: sources-maintenance -->

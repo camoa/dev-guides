@@ -30,7 +30,7 @@ Path: not yet configured — ask user on next guide update requiring code-source
 
 ## Code Sources (1.0.x branch, commit `a31a0a0`)
 
-All paths relative to the cloned research source at `eca-src-research/orch-src/` within the dev-guides project.
+Paths are relative to the root of an orchestration 1.0.x checkout (commit a31a0a0). `docs/` and `orchestration.install` are not in the 1.0.0 release.
 
 | File | Relative Path | Guide Sections | Module Version |
 |---|---|---|---|

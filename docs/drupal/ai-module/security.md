@@ -21,7 +21,7 @@ drupal_version: "11.x"
 
 ## Security Checklist
 
-- [ ] Tools check `$this->currentUser->hasPermission()` before operations
+- [ ] `#[FunctionCall]` tools check `$this->currentUser->hasPermission()` before operations; Tool API tools declare `permission` or override `checkAccess()`
 - [ ] Agent `max_loops` set conservatively (3-5)
 - [ ] Tool Property Restrictions configured (entity types, bundles)
 - [ ] `ai_observability` enabled for audit trail
