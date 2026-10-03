@@ -1,6 +1,6 @@
 ---
-description: Expose ECA models to external platforms via the orchestration_eca submodule — Tool event configuration, arguments YAML, poll events, and outbound webhook actions
-tldr: "Use orchestration_eca to make ECA models callable from external platforms. The model must subscribe to the `eca_base.tool` event and define an `arguments` YAML field — those become the service's callable parameters. Service UUID format is `eca::{wildcard}`."
+description: "Expose ECA models to external platforms via orchestration_eca (ECA 3.0.x only; ECA 3.1 route via Tool API) — Tool event, arguments YAML, poll events, outbound webhook actions"
+tldr: "Use orchestration_eca 1.0.0 to expose ECA models as services; it works with ECA 3.0.x only (3.1 removed eca_base.tool, so no models appear). Model needs a Tool event with arguments YAML. UUID: eca::{wildcard}."
 drupal_version: "11.x"
 ---
 
@@ -8,7 +8,21 @@ drupal_version: "11.x"
 
 ## When to Use
 
-> Use this when you want external automation platforms to trigger ECA workflows from Drupal. This is the most common Orchestration integration pattern.
+> Use this when you want external automation platforms to trigger ECA workflows from Drupal. This is the most common Orchestration integration pattern. `orchestration_eca` 1.0.0 works with ECA 3.0.x only; under ECA 3.1.x it finds no models.
+
+## Version Compatibility
+
+| ECA version | `orchestration_eca` 1.0.0 |
+|---|---|
+| 3.0.x | Works. `BaseEvents::TOOL` (`eca_base.tool`) and `Drupal\eca_base\Event\ToolEvent` exist |
+| 3.1.x | Broken. ECA 3.1 removed both. The module enables without error, but `getAll()` finds no subscribed models, so no `eca::` services appear. `execute()` references a class that no longer exists |
+
+Orchestration 1.0.0 (2025-10-12) is the latest release. The `1.0.x` branch (commit a31a0a0) has the same `ServicesProvider.php`, so it fails the same way. No fix has been released.
+
+| If you... | Then... |
+|---|---|
+| Need external platforms to call ECA models through Orchestration today | Pin `drupal/eca` to `~3.0.0` |
+| Run ECA 3.1 or later | Expose the ECA model as a Tool API tool with the separate `drupal/eca_tool` project (1.0.0-beta1) and its `eca_tool.tool` event. It derives Tool API plugins with IDs `eca:<wildcard>`, so the orchestration service UUID becomes `tool::eca:<wildcard>`. Call it through `orchestration_tool`. The route runs on two betas: eca_tool 1.0.0-beta1 and Tool API 1.0.0-beta11. See [Calling a Tool from ECA](../tool-api/calling-a-tool-from-eca.md) |
 
 ## How It Works
 
@@ -23,7 +37,7 @@ An ECA model appears in the service catalog only if:
 
 ## Pattern: ECA Model as Orchestration Service
 
-Configure an ECA model to use the Tool event (`eca_base.tool`). In the event's configuration, set the **Arguments** field with YAML that defines callable parameters:
+On ECA 3.0.x, configure an ECA model to use the Tool event (`eca_base.tool`). In the event's configuration, set the **Arguments** field with YAML that defines callable parameters:
 
 ```yaml
 # Arguments YAML in the ECA Tool event configuration:
@@ -81,6 +95,7 @@ Each poll event carries a `wildcard` that must match the poll request's `name` f
 ## Common Mistakes
 
 - **Building an ECA model without a Tool event subscription and wondering why it does not appear in `/orchestration/services`** — the model must subscribe specifically to `eca_base.tool`
+- **Updating ECA from 3.0.x to 3.1.x with `orchestration_eca` enabled** — every `eca::` service disappears from the catalog; pin ECA 3.0.x or move to the Tool API route
 - **Omitting the `arguments` YAML in the Tool event config** — the service appears with no configuration fields; the external caller has no way to pass parameters
 - **Dispatching webhooks from ECA without first registering the webhook** — `Webhooks::dispatch()` looks up the webhook config by ID from KeyValue storage and returns `null` silently if not found
 - **Using `orchestration_add_item_to_poll_result_timestamp` inside a "Poll by ID" ECA model** — the action's `access()` check verifies the event type and returns forbidden if mismatched
@@ -89,4 +104,5 @@ Each poll event carries a `wildcard` that must match the poll request's `name` f
 
 - [Webhooks and Outbound Events](webhooks-and-outbound-events.md) → for outbound webhook setup
 - [Orchestration API Reference](orchestration-api-reference.md) → for the `/orchestration/poll` endpoint details
-- Reference: `modules/eca/src/ServicesProvider.php`, `modules/eca/src/Plugin/ECA/Event/Poll.php`, `modules/eca/src/Plugin/Action/`
+- [Calling a Tool from ECA](../tool-api/calling-a-tool-from-eca.md) → the ECA 3.1 route through `eca_tool`
+- Reference: `modules/contrib/orchestration/modules/eca/src/ServicesProvider.php` (`eca_base.tool` lookup, `ToolEvent` dispatch), `modules/contrib/orchestration/modules/eca/src/Plugin/ECA/Event/Poll.php`, `modules/contrib/orchestration/modules/eca/src/Plugin/Action/`, `modules/contrib/eca/modules/base/src/BaseEvents.php`

@@ -106,7 +106,7 @@ $progress = \Drupal::service('ai_agents.agent_status_poller')
 
 ## Security Considerations
 
-1. **Tools without permissions** — always check `hasPermission()` in tools
+1. **Tools without permissions** — always check `hasPermission()` in `#[FunctionCall]` tools; Tool API tools use the `permission` attribute parameter and `checkAccess()` instead
 2. **Tools too widely scoped** — use Property Restrictions to lock entity types/bundles
 3. **Loose instructions** — write 4+ sentences per tool describing what agent can/cannot do
 4. **Prompt injection** — any user content is a vector; use Guardrails; separate high-privilege agents
