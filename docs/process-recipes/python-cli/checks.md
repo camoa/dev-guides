@@ -6,7 +6,7 @@ description: Use when a Python change reaches the review phase and must pass its
 # Metadata — read only after a match.
 label: Python review checks
 recipe_schema_version: 1.0.0
-version: 0.3.2
+version: 0.3.3
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -47,9 +47,7 @@ The plugin owns the generic review phase — when it runs, the verdict artifact,
 
 **The dependency audit is `pip-audit`, and that one is named outright.** No churn argument applies to it: it is maintained in the `pypa` organisation, it reads the Python Packaging Advisory Database through the PyPI JSON API, and it audits an environment, a requirements file, or a project directory directly. There is no equivalent second option whose existence would make naming it presumptuous, so it is named rather than deferred.
 
-**`.py` is not in the change-scoping floor, which is why this recipe declares it.** The review command scopes its change-scoped gates by file extension, unioning the framework's declared extensions onto a framework-neutral floor of `.php` `.js` `.mjs` `.cjs` `.ts` `.tsx` `.vue`. No Python extension is in that floor, so without the `## Code-quality extensions` declaration below, **a pure-Python change would filter down to an empty file list and every change-scoped gate would skip itself** — a run that looks clean because it examined nothing.
-
-**This framework declares no change-impact globs, and the absence is deliberate.** Change-impact globs route a changed file to the **e2e** and **visual-regression** gates. A Python CLI binds neither phase — it has no rendered or browser surface those harnesses target — so declaring globs here would route to gates that cannot fire. A CLI's end-to-end shape is a test tier, not a phase: it lives in the implement recipe as the entry-point tier and is checked here under the test gate.
+**This framework binds no e2e or visual-regression phase.** A Python CLI has no rendered or browser surface those harnesses target. No recipe routes changed files to those gates in any framework: review picks the surfaces to run from each surface's own registered `--path` globs. A CLI's end-to-end shape is a test tier, not a phase: it lives in the implement recipe as the entry-point tier and is checked here under the test gate.
 
 ## Preconditions
 
@@ -102,20 +100,6 @@ step 7: pass, or block with the violation list
 output: verdict and findings, returned to the caller. The plugin's review phase records it.
 ```
 
-## Code-quality extensions
-
-```
-code_quality_extensions: [".py", ".pyi", ".toml"]
-```
-
-Without this declaration a pure-Python change filters to an empty list against the framework-neutral floor (`.php` `.js` `.mjs` `.cjs` `.ts` `.tsx` `.vue`) and every change-scoped gate skips itself — a clean-looking run that examined nothing.
-
-`.pyi` is in because a stub file *is* the declared public typing surface under PEP 561: an edit to one changes the contract the type-checker gate reads, and it is code in every sense the gates care about even though no runtime executes it.
-
-`.toml` is the judgement call, and it goes in for the same reason Go declares `.mod`. `pyproject.toml` is where the dependency posture, the target versions and the tool configuration are decided, and a change that touches only it — adding a dependency the design did not decide, which is a blocking finding above — would otherwise scope to an empty list and be judged by nothing. The honest cost is that this filter matches **extensions, not paths**, so it cannot scope in the manifest while scoping out a generated lockfile the way Go excludes `.sum`: a PEP 751 `pylock` file is also `.toml` and will be pulled in. Treat a lockfile diff as evidence of the dependency decision, not as code to judge on its own terms — and note that the same limitation cuts the other way for suppressions, which is the subject of the next paragraph.
-
-`# noqa` and `# type: ignore` are the checks most worth watching and are reachable by no extension declaration at all, because they are inline comments rather than files. The unexplained-suppression rule in the Sequence is a read of the diff by the reviewer for exactly that reason; no value this block could hold would reach it.
-
 ## Check commands
 
 Five rows — `coding-standards`, `static-analysis`, `security`, `duplication`, `design-metrics` —
@@ -128,6 +112,7 @@ it exits 1 when it finds a known vulnerability and 0 otherwise.
 check_commands:
   - id: coding-standards
     argv: ["ruff", "check", "{paths}"]
+    extensions: [".py", ".pyi"]
   - id: static-analysis
     argv: ["mypy"]
   - id: security
@@ -143,6 +128,13 @@ check_commands:
       project's choice. This recipe selects no rule set for a project.
 ```
 
+**The ruff row names the file types it reads.** AIDA filters a row's `{paths}` by that row's own
+`extensions:` key before the row runs, and reads no `## Code-quality extensions` section. Without
+the key, a shell script in a change's file list reached ruff, which parsed it as Python and
+reported `invalid-syntax`. `.pyi` is in because a stub is the declared public typing surface under
+PEP 561. A change with no `.py` or `.pyi` file leaves the row not applicable, never met. The mypy
+and pip-audit rows take no `{paths}`, so the key does not apply to them.
+
 **The first two rows are the floor, not the project's choice.** Opinion says the project's
 `pyproject.toml` names the linter and the type checker and this recipe names them only where it
 does not. A block a script reads cannot express that deferral, so the rows carry the floor, and a
@@ -157,7 +149,7 @@ overrides it. Run with `{paths}` against a project declaring `files = ["src"]` a
 the row handed mypy 2.3.1 the tests as well and got thirteen errors in six test files that the
 project had scoped out on purpose, while bare `mypy` on the same tree reported `Success: no issues
 found in 14 source files`. mypy also parses whatever it is handed, so a `pyproject.toml` in the
-list — this recipe scopes `.toml` in — reports `Name "project" is not defined`. Bare `mypy` reads
+list reports `Name "project" is not defined`. Bare `mypy` reads
 `files` and `strict` from the project and neither problem arises. Where `[tool.mypy]` declares no
 `files`, mypy exits 2 with `Missing target module, package, files, or command`: unmet, with the
 reason in the output, and the fix is a line in `pyproject.toml`. Ruff has neither problem:
@@ -232,6 +224,6 @@ This recipe ships no executable verifier of its own — the checks above are the
 
 ### Plugin-side generic mechanism (ai-dev-assistant)
 
-The stack-neutral review phase this recipe binds Python into — when the checks run, the verdict artifact they emit, how the `## Code-quality extensions` declaration above is consumed for change-scoping, and what a block does to the pull request — is documented in the plugin itself, not duplicated here. The recipe supplies only the Python-specific gate set, the blocking order, and the conformance reads a linter cannot express.
+The stack-neutral review phase this recipe binds Python into — when the checks run, the verdict artifact they emit, how a row's `extensions:` key scopes its `{paths}`, and what a block does to the pull request — is documented in the plugin itself, not duplicated here. The recipe supplies only the Python-specific gate set, the blocking order, and the conformance reads a linter cannot express.
 
 Note that, unlike the PHP CLI recipe under this root, this one does not defer linter execution to the `code-quality-tools` plugin: that plugin detects Drupal and Next.js projects and lints PHP and JavaScript file extensions, and has no Python arm. The commands above are therefore named directly.

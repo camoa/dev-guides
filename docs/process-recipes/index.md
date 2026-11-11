@@ -50,9 +50,9 @@ Process recipes are **resolved by an orchestrator**, keyed by **`(phase × frame
 
 > **`php-cli` binds six phases.** A PHP CLI tool has no rendered or behavioural runtime surface, so this framework declares **no `e2e-setup` or `visual-regression` recipe**. Do not run `/setup-e2e` or `/setup-visual-regression` on a PHP CLI project — the loader correctly returns no recipe, but those commands' generic fallback would still try to scaffold a Playwright harness that does not apply. "No e2e" means no *browser* e2e: a CLI tool's end-to-end shape — run the built binary against a fixture tree and assert on output and exit code — is a test level chosen in `test-authoring` and checked at `review`, not an `e2e-setup` binding.
 
-> **`go` binds six phases, and declares no change-impact globs.** A Go module has no rendered or browser surface, so this framework declares **no `e2e-setup` or `visual-regression` recipe** — and, because change-impact globs exist to route a changed file to exactly those two gates, the review recipe deliberately declares none. A Go CLI's end-to-end shape is a test level, not a phase: the `test-authoring` recipe names it as the entry-point level (calling `run(ctx, args, stdin, stdout, stderr) error` with buffers) and the subprocess level (for the exit status, signals, and a real stdin pipe), and it is checked under the test gate at `review`. The `review` recipe **does** declare `## Code-quality extensions`, and that one is load-bearing rather than optional: no Go extension is in the framework-neutral change-scoping floor, so without it a pure-Go change filters to an empty file list and every change-scoped gate skips itself — a clean-looking run that examined nothing.
+> **`go` binds six phases.** A Go module has no rendered or browser surface, so this framework declares **no `e2e-setup` or `visual-regression` recipe**. A Go CLI's end-to-end shape is a test level, not a phase: the `test-authoring` recipe names it as the entry-point level (calling `run(ctx, args, stdin, stdout, stderr) error` with buffers) and the subprocess level (for the exit status, signals, and a real stdin pipe), and it is checked under the test gate at `review`. None of the `review` recipe's check rows takes `{paths}`: each runs over the whole module, so no row needs an `extensions:` key.
 
-> **`python-cli` binds six phases, and declares no change-impact globs.** A Python library or console-script tool has no rendered or browser surface, so this framework declares **no `e2e-setup` or `visual-regression` recipe** — and, because change-impact globs exist to route a changed file to exactly those two gates, the review recipe deliberately declares none. A CLI's end-to-end shape is a test level, not a phase: the `test-authoring` recipe names it as the entry-point level the tests import, and it is checked under the test gate at `review`. The `review` recipe **does** declare `## Code-quality extensions`, and that one is load-bearing rather than optional: no Python extension is in the framework-neutral change-scoping floor, so without it a pure-Python change filters to an empty file list and every change-scoped gate skips itself. It declares `.py`, `.pyi` (a stub is the declared public typing surface, not dead text) and `.toml` — the last one deliberately, because a change that touches only `pyproject.toml` carries the dependency and version decisions this framework blocks on. The machine-checkable `## Preconditions` for running a test — the manifest, the interpreter and the runner in the project's own environment — are declared by the `test-execution` recipe, alongside the commands they are conditions of.
+> **`python-cli` binds six phases.** A Python library or console-script tool has no rendered or browser surface, so this framework declares **no `e2e-setup` or `visual-regression` recipe**. A CLI's end-to-end shape is a test level, not a phase: the `test-authoring` recipe names it as the entry-point level the tests import, and it is checked under the test gate at `review`. The `review` recipe's ruff row carries `extensions: [".py", ".pyi"]`, so `{paths}` hands ruff only Python source and stubs; a stub is the declared public typing surface, not dead text. The machine-checkable `## Preconditions` for running a test — the manifest, the interpreter and the runner in the project's own environment — are declared by the `test-execution` recipe, alongside the commands they are conditions of.
 
 ## What each phase type is for
 
@@ -140,13 +140,14 @@ here.
 |---|---|---|
 | `implement` | `## Oracle files`, `## Routing hints`, `## Preconditions`, `## Configuration gate`, `## Unit declaration` | fail-open (`## Preconditions` fails closed; `## Configuration gate` fails closed for an order whose proof is the gate; a missing `## Unit declaration` means no file declares a unit, so a red that holds only a harness marker is refused for every order) |
 | `test-execution` | `## Test commands`, `## Preconditions`, `## Tokens` | **fail-closed** (all three) |
-| `review` | `## Change-impact globs`, `## Code-quality extensions`, `## Check commands`, `## Surface commands` | fail-open (`## Check commands` and `## Surface commands` fail closed) |
+| `review` | `## Check commands`, `## Surface commands` | **fail-closed** (both) |
 | `visual-regression` | `## Install`, `## Files`, `## Viewports`, `## Surfaces`, `## Discovery` | **fail-closed** (`## Install` with no `sh` block refuses the install; the rest read as empty) |
 | `e2e-setup` | `## Install`, `## Files`, `## Surfaces`, `## Discovery` | **fail-closed** (`## Install` with no `sh` block refuses the install; the rest read as empty) |
 | `worktree-environment` | `## Preconditions` (prose and one `sh` line), `## Status`, `## Tokens`, `## Files`, `## Bring up` (twice, around `## Address`), `## Address`, `## Tear down`, `## Build in place` | **fail-closed** (any of `## Bring up`, `## Address` or `## Tear down` with no `sh` block refuses the offer, because an environment nobody can remove is not offered; a `## Preconditions` line that exits non-zero refuses it, removes the files that run wrote and commits nothing; a `## Tokens` command that prints nothing refuses it by the token's name; `## Files` follows the setup rule; `## Build in place` reads as empty) |
 
-Spelling is load-bearing. A fail-open declaration with a misspelled heading does not error — it silently
-degrades to the neutral floor, and the run looks clean while checking less than you think.
+Spelling is load-bearing. A fail-open declaration with a misspelled heading does not error: the consumer
+reads it as absent, and the run looks clean while checking less than you think. A misspelled
+`## Unit declaration`, for example, refuses every harness-only red.
 
 **`## Test commands` is parsed, and it fails closed.** A `test-execution` recipe declares six rows —
 `suite`, `file`, `test`, `changed`, `smoke`, `mutation` — and each is either a command or a named
@@ -253,13 +254,17 @@ in silence or parses it as its own language and fails on it. Where the expansion
 does not run and is recorded as not applicable, never as met. mypy was the tool that first needed
 it and turned out not to: it replaces the project's declared scope with whatever paths it is
 given, so its row runs whole instead. The Drupal review recipe's `coding-standards`,
-`static-analysis`, `duplication` and `design-metrics` rows carry it. `signal: empty-stdout` marks a tool that cannot fail by
+`static-analysis`, `duplication` and `design-metrics` rows carry it, and so does the Python
+recipe's `coding-standards` row. `signal: empty-stdout` marks a tool that cannot fail by
 exit status: the caller reads a zero exit with anything on standard output as unmet, and a caller
 that does not read the key must record the row as not run rather than met, because reading that
 tool's exit status alone is a gate wired to nothing. Without the key, the exit status decides —
-zero is met, and any other status is unmet. The list of ids grows by editing the validator and
-this paragraph together, never by a recipe adding a row on its own: a consumer addresses a row by
-an id it already knows, and an id it does not know is a row it never runs.
+zero is met, and any other status is unmet. The five ids are the set a catalog recipe must
+answer, and `scripts/validate_recipes.py` rejects a catalog recipe that adds a sixth; that list
+grows by editing the validator and this paragraph together. A project's own copy of a review
+recipe may add rows with ids of its own, for a tool no catalog id fits. AIDA 6.1.6 review runs
+every row the resolved recipe declares, whatever its id, and its baseline keeps each row's result
+by that id.
 
 **`## Surface commands` is parsed, and it fails closed.** A `review` recipe declares six rows —
 `e2e-preflight`, `e2e`, `visual-regression`, `visual-regression-accept`, `visual-parity`,
@@ -355,9 +360,10 @@ recipe has no such section, that order is refused at design, because a unit nobo
 cut. A framework that answers nothing with configuration declares no section, and nothing changes
 for it.
 
-**`## Unit declaration` names the file whose presence makes a unit exist, as data.** As of
-2026-09-14 only `drupal/standards-and-tests.md` 0.8.1 carries one, and no consumer reads it yet;
-this is the shape a consumer meets. A new module's first red is a setup gap by the `harness:` rule above: its
+**`## Unit declaration` names the file whose presence makes a unit exist, as data.** Only
+`drupal/standards-and-tests.md` carries one. AIDA 6.1.6 reads it at the tests freeze: an order whose
+owned files match a glob may freeze a red that holds only a harness marker. This is the shape the
+consumer meets. A new module's first red is a setup gap by the `harness:` rule above: its
 tests error where the harness enables the module, or fatal at autoload on a base class in the module's
 own test namespace, before any assertion runs, and nothing in a build
 may write the module first to get a better red. The block is one `unit_declaration:` mapping in the
@@ -365,9 +371,7 @@ same YAML shape as `preconditions:`, holding `globs:`, the patterns of the file 
 in this framework. An order whose owned files match one is a new unit, and a consumer may accept a
 red that holds only a harness marker for it, with the reason that nothing can fail an assertion
 before the unit exists. `scripts/validate_recipes.py` checks the block when present: a mapping holding
-`globs:` and no other key, a non-empty list of strings. The review recipe's `## Change-impact globs` lists the same file
-to say which checks a change to it triggers, which is a different question; a consumer wanting to
-know what makes a unit exist reads this block. A framework with no such file declares no section,
+`globs:` and no other key, a non-empty list of strings. A framework with no such file declares no section,
 and a harness-only red stays refused for it.
 
 **`## Oracle files` is parsed, not just read.** As of 2026-09-01 a consumer takes the `globs` off the
@@ -380,9 +384,17 @@ The markdown table above the fence and the fence itself state the same rules, an
 checks that they agree — before it did not, so the table a person reads could drift away from the
 rules a machine applies. When restructuring this section, keep a `test_delete` row resolvable from
 the recipe's own body: a row present only by inheritance is invisible to anything reading the
-published page. Where a stack
-has no extension in the framework-neutral change-scoping floor, `## Code-quality extensions` stops being
-optional: without it every change-scoped gate filters to an empty file list and skips itself.
+published page.
+
+**`## Code-quality extensions` is not read.** AIDA 6.1.6 has no reader for that section or for a
+`code_quality_extensions:` key. Review and implementation scope each `check_commands` row by that
+row's own `extensions:` key, described under `## Check commands` above. A recipe that still carries
+the section documents it for a person only; a file type a tool reads goes on that tool's row.
+
+**`## Change-impact globs` is not read either.** AIDA 6.1.6 has no reader for that section. Review
+picks which e2e and visual-regression surfaces to run from each surface's own `--path` globs in
+`.visual-review/surfaces.json`, set by `/aida:surfaces register`. A critical surface, one with
+no glob, and one whose baseline a person accepted run on every review. No recipe declares which changed files reach a surface.
 
 ## Authoring a process recipe
 

@@ -6,7 +6,7 @@ description: Use when a PHP CLI implementation (a Composer library or applicatio
 # Metadata — read only after a match.
 label: PHP CLI review checks
 recipe_schema_version: 1.0.0
-version: 0.3.2
+version: 0.3.3
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -51,7 +51,7 @@ The plugin owns the generic mechanism — when the review phase runs, the gate e
 
 **Review verifies; it does not fix.** The phase returns a verdict and the violations behind it for a human (and the implementer) to act on. It edits no code, reverts nothing, and installs nothing. Acting on a blocking finding is a downstream step.
 
-**This framework declares neither `## Change-impact globs` nor `## Code-quality extensions`.** The two absences are deliberate and have different reasons worth stating so an author does not try to declare their way out of either. Change-impact globs route a changed file to the **e2e** / **visual-regression** gates, and `php-cli` binds *neither* of those phases — a CLI tool has no browser or rendered surface those harnesses target — so declaring globs here would route to gates that cannot fire: inert. Code-quality extensions are the more interesting case, because PHP genuinely *is* a linter target. But there is still nothing to declare, for two reasons. First, the framework-neutral floor already includes `.php`, so a change to a source file under `src/` is already scoped into the change-scoped tdd / solid / dry / security gates — there is nothing material to add. Second, and this is the real gap, the one thing that *should* be scoped cannot be expressed by this declaration at all: `code_quality_extensions` is an *extension* filter applied to `git diff --name-only`, and Composer binaries are conventionally extensionless, so a `bin/<tool>` has no extension to match and can never be pulled into the change-scoped gates by any value this declaration could hold. Only a full audit (`--full-audit`) sees an extensionless binary; a change-scoped run does not. No declaration fixes this — it needs a glob-capable filter, which is a plugin-side change. This is why the "every shipped binary is linted, including the extensionless ones" check above must be enforced by the reviewer directly rather than left to the change-scoped gates: the tooling structurally cannot reach those files in change-scoped mode.
+**This framework declares neither `## Change-impact globs` nor `## Code-quality extensions`, and AIDA 6.1.6 reads neither.** Neither section can be declared into effect, so an author should not try. `php-cli` binds no **e2e** or **visual-regression** phase, because a CLI tool has no browser or rendered surface those harnesses target; in any framework, review picks the surfaces to run from each surface's own registered `--path` globs, never from a recipe. AIDA 6.1.6 scopes each check row by that row's own `extensions:` key instead. The rows under Check commands carry no `extensions:` key, so `{paths}` hands each tool every changed file except the frozen tests, which review removes first, an extensionless `bin/<tool>` included. Whether the tool then reads that file is its own behaviour: PHPStan does, PHP_CodeSniffer 4.x does, and PHPMD and PHP_CodeSniffer 3.x skip it with exit 0. An `extensions:` key cannot name "no extension" either. This is why the "every shipped binary is linted, including the extensionless ones" check above must be enforced by the reviewer directly rather than left to the check rows.
 
 ## Preconditions
 
@@ -104,7 +104,7 @@ If invoked in dry-run mode, perform all reads and emit a findings preview instea
    | Nothing shells out with an unescaped argument — subprocess arguments are escaped, or a native API is used in place of the shell | YES |
    | `unserialize()` is never run on untrusted input | YES |
    | File handling is safe — no path joined from unvalidated input without normalisation, no predictable temp file in a world-writable location | YES |
-   | **Every shipped binary in the `bin` array was linted and statically analysed — including the extensionless ones** (a `*.php` glob silently skips them; change-scoped gates structurally cannot reach them, per Opinion — verify by hand or a glob-capable pass) | YES |
+   | **Every shipped binary in the `bin` array was linted and statically analysed — including the extensionless ones** (a `*.php` glob silently skips them; the phpmd row, and the phpcs row on PHP_CodeSniffer 3.x, skip them, per Opinion — verify by hand or a glob-capable pass) | YES |
 
 4. **Run the purposefulness checks.** Over the changed code:
 
@@ -154,7 +154,7 @@ Idempotent: running the review twice on the same change set, the same architectu
 After the recipe runs, verify:
 
 1. The architecture-conformance checks ran over the changed code — the no-logic-in-a-binary check, the programmatic-entry-point-per-capability check, the recorded-pattern and named-dependency checks, and the documented-entry-point reachability check — each with a pass/fail and a blocking/advisory flag.
-2. The standards + security-sink checks ran — PSR-12 and `strict_types`, static analysis clean at the declared level, the exit-code contract and the stdout/stderr split, input validation, the shell-out / `unserialize` / file-handling sinks, and the every-shipped-binary-linted-including-extensionless check — each flagged blocking, with the extensionless-binary lint confirmed reached (by hand or a glob-capable pass) rather than assumed covered by the change-scoped gates.
+2. The standards + security-sink checks ran — PSR-12 and `strict_types`, static analysis clean at the declared level, the exit-code contract and the stdout/stderr split, input validation, the shell-out / `unserialize` / file-handling sinks, and the every-shipped-binary-linted-including-extensionless check — each flagged blocking, with the extensionless-binary lint confirmed reached (by hand or a glob-capable pass) rather than assumed covered by the check rows.
 3. The purposefulness checks ran — real symbols only (no hallucinated call, no call to an unrequired package) and no instruction-style comments — with each flagged blocking.
 4. The verdict is PASS or BLOCKED; any blocking failure produced BLOCKED with every blocking violation named against its file and the check it failed.
 5. The review left the project code unchanged — nothing edited, nothing reverted, nothing installed; the verdict was returned for the plugin's review phase to record and gate on.

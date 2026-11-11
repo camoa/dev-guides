@@ -6,7 +6,7 @@ description: 'Use when a Drupal implementation reaches the review phase and must
 # Metadata — read only after a match.
 label: Implementation review checks (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.6.2
+version: 0.6.3
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/security
@@ -159,66 +159,6 @@ After the recipe runs, verify:
 
 This recipe ships no executable verifier of its own — the checks above are the agent-driven protocol; the plugin's review phase owns the gate envelope and what a BLOCKED verdict does to the lifecycle. The concrete static-analysis run that complements this review is the code-quality-tools plugin's, not this recipe's.
 
-## Change-impact globs
-
-The plugin's change-impact classifier ships a framework-neutral floor (stylesheet / plain-script / markup extensions) and asks the active framework's review recipe for the stack's own file types. This section is that declaration for Drupal: it maps each Drupal source file type to the review gates a change to it could justify — `visual_regression` (rendered output could change), `e2e` (behavior could change), or both. The plugin reconstructs this list on the fly each review run and unions it onto the neutral floor; nothing here is persisted as a project-local file a builder could edit to drop a gate. **Both YAML spellings are declared.** Drupal core is `.yml` throughout, so a `.yaml` file is rarely a Drupal file — but the classifier runs over the whole diff, and a Drupal repository carries plenty of non-Drupal YAML. Neither the neutral floor nor this list previously matched the long extension, so those files classified as "no rule matched". Do not remove the `.yaml` rule for looking redundant.
-
-| Glob | Gates | Why |
-|---|---|---|
-| `**/*.twig` | `visual_regression` | Template — rendered surface, not behavior. |
-| `**/*.php` | `e2e`, `visual_regression` | Logic and render output both. |
-| `**/*.inc` | `e2e`, `visual_regression` | Procedural PHP include — behavior and output. |
-| `**/*.install` | `e2e`, `visual_regression` | Install/update hooks — behavioral, can alter output. |
-| `**/*.profile` | `e2e`, `visual_regression` | Install profile glue — behavioral. |
-| `**/*.engine` | `e2e`, `visual_regression` | Theme engine — behavioral and output. |
-| `**/*.theme` | `e2e`, `visual_regression` | Theme preprocessing — alters render arrays (output) and can branch behavior. |
-| `**/*.module` | `e2e`, `visual_regression` | Server-side module code — behavioral, and routinely carries `hook_preprocess_HOOK` / `hook_theme` / render-altering hooks that change output. |
-| `**/*.info.yml` | `e2e` | Module/theme info — dependency and configuration wiring. |
-| `**/*.yml` | `e2e`, `visual_regression` | Config / routing / services — broad blast radius. |
-| `**/*.yaml` | `e2e`, `visual_regression` | Same gates as `**/*.yml`. Drupal's own convention is the short extension, but the classifier reads the **whole diff**, not just the Drupal subtree — `.ddev/config.yaml`, `docker-compose.yaml`, and CI configs are routinely present and would otherwise match no rule at any layer. Symfony's YAML loader accepts either spelling. |
-
-Machine-readable form the plugin lifts directly into `--rules-from`:
-
-```json
-{
-  "rules": [
-    { "glob": "**/*.twig",     "gates": ["visual_regression"] },
-    { "glob": "**/*.php",      "gates": ["e2e", "visual_regression"] },
-    { "glob": "**/*.inc",      "gates": ["e2e", "visual_regression"] },
-    { "glob": "**/*.install",  "gates": ["e2e", "visual_regression"] },
-    { "glob": "**/*.profile",  "gates": ["e2e", "visual_regression"] },
-    { "glob": "**/*.engine",   "gates": ["e2e", "visual_regression"] },
-    { "glob": "**/*.theme",    "gates": ["e2e", "visual_regression"] },
-    { "glob": "**/*.module",   "gates": ["e2e", "visual_regression"] },
-    { "glob": "**/*.info.yml", "gates": ["e2e"] },
-    { "glob": "**/*.yml",      "gates": ["e2e", "visual_regression"] },
-    { "glob": "**/*.yaml",     "gates": ["e2e", "visual_regression"] }
-  ]
-}
-```
-
-## Code-quality extensions
-
-The plugin's review command scopes the code-quality gates (tdd / solid / dry / security) to the changed files, filtering the diff to the file types those static-analysis tools actually read. It ships a framework-neutral language floor — the extensions that name no framework (`.php`, `.js`, `.mjs`, `.cjs`, `.ts`, `.tsx`, `.vue`) — and asks the active framework's review recipe for the stack's own code-bearing file types. This section is that declaration for Drupal: the file types that carry PHP or template code a Drupal quality tool (phpcs / phpstan / Twig lint) reads, beyond the neutral floor. The plugin reconstructs this list on the fly each review run and unions it onto the floor, so a change touching only these Drupal file types is still scoped into the code-quality gates rather than escaping them. Nothing here is persisted as a project-local file a builder could edit to drop the scope.
-
-| Extension | Why it is code-quality-relevant |
-|---|---|
-| `.module` | Module PHP — hooks and procedural glue. |
-| `.inc` | PHP include — procedural code. |
-| `.install` | Install / update hook PHP. |
-| `.profile` | Install-profile PHP glue. |
-| `.theme` | Theme preprocess PHP. |
-| `.engine` | Theme-engine PHP. |
-| `.twig` | Twig template — escaping and markup the security/quality pass reads. |
-
-Machine-readable form the plugin unions onto the neutral language floor:
-
-```json
-{
-  "code_quality_extensions": [".module", ".inc", ".install", ".profile", ".theme", ".engine", ".twig"]
-}
-```
-
 ## Check commands
 
 Five rows — `coding-standards`, `static-analysis`, `security`, `duplication`, `design-metrics` —
@@ -280,7 +220,7 @@ on the command line is skipped in silence, verified on the same file that phpcs 
 sets no file extensions, so PHP_CodeSniffer keeps its default of `php`, `inc`, `js` and `css` — and
 a `.module`, `.install`, `.theme`, `.profile` or `.engine` file named on the command line is skipped
 in silence, with exit 0 and no output, verified on PHP_CodeSniffer 3.13.6. The flag lists the PHP
-file types this recipe's own `## Code-quality extensions` declares, so the two agree; a file type
+file types the row's own `extensions:` key names, so the two agree; a file type
 outside it, `.twig` or `.yml`, is skipped by phpcs itself rather than failed. PHPStan needs no flag:
 `mglaman/phpstan-drupal` 2.1.2 registers those same extensions, and a `.yml` handed to it is skipped
 in the same way.
@@ -367,6 +307,9 @@ regular expression against each test title. Every title in both suites begins wi
 so `front|about` selects those two surfaces, at every viewport in the visual suite, and no other,
 verified on 1.63.0. A caller running the whole set fills the token with every enabled id, so the
 rows never run with an empty grep; one running the surfaces a diff touched fills it with those.
+The surface decides what touched means, not this recipe: the `--path` globs it was registered with
+in `.visual-review/surfaces.json`. A critical surface, one registered with no glob, and one whose baseline a person accepted run on
+every review.
 On the `e2e` row the grep leaves the `setup` project's test in the run, because a dependency is
 not filtered, and a fill that matches no title is `Error: No tests found` with exit 1 before any
 project runs. An id that is a prefix of another id, `front` and `front-page`, selects both; a

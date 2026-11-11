@@ -6,7 +6,7 @@ description: Use when a Drupal project on DDEV gives a task's git worktree a run
 # Metadata, read only after a match.
 label: Worktree environment (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.6.0
+version: 0.6.1
 recipe_class: process
 framework: drupal
 drupal_compatibility: "^10.3 || ^11"
@@ -81,7 +81,7 @@ from a directory DDEV no longer knows, cannot land on another project.
 - The main checkout's DDEV project is running: `ddev list -j` shows one row whose `approot` is the
   main checkout with `status` `running`. The snapshot is taken from that project.
 - Docker has room for a second web container, a second database container and a second database
-  volume. `bash` and `jq` are on the host's `PATH`, for the six scripts under `## Files`.
+  volume. `bash` and `jq` are on the host's `PATH`, for the seven scripts under `## Files`.
 - The worktree's directory name is lowercase letters, digits and hyphens, because it becomes a
   hostname label. DDEV replaces `_` with `-` and changes nothing else, so `Add_login.v2` becomes
   the project `Add-login.v2` at `add-login.v2.ddev.site`, a name with a dot inside the label. A
@@ -119,7 +119,7 @@ is still in the main checkout. One line names the first failure and what to do a
 One token the consumer holds, and three the recipe produces, each a whole argument:
 
 ```yaml
-{codePath}: string         # the main checkout's path; the consumer fills it, in ## Tokens only
+{codePath}: string         # the main checkout's path; the consumer fills it, in ## Preconditions, ## Tokens and ## Tear down
 {mainProject}: string      # ## Tokens: the main checkout's DDEV project name
 {mainFiles}: string        # ## Tokens: the main site's public files directory, absolute
 {project}: string          # ## Address, the project: line; kept in the task record for the second ## Bring up, ## Tear down and the configuration gate
@@ -175,7 +175,7 @@ worktree's own project from there.
 input:  {codePath}                       held by the consumer
 
 files (written where absent, committed after the check passes):
-        .aida/worktree-environment/preconditions.sh, main-row.sh, main-project.sh, main-files.sh, address.sh, status.sh
+        .aida/worktree-environment/preconditions.sh, main-row.sh, main-project.sh, main-files.sh, address.sh, status.sh, main-seed-cleanup.sh
 
 preconditions (in the worktree, before the commit):
         preconditions.sh {codePath}       → exit 0, or one line naming the first failure
@@ -209,6 +209,8 @@ bring up, after ## Address (in the worktree):
 tear down (in the worktree, before git worktree remove):
         ddev delete --omit-snapshot --yes {project}
                                           → containers, volume, registry entry gone; files stay
+        main-seed-cleanup.sh {codePath} {mainProject} {project}
+                                          → a main-seed-{project} a failed bring-up left, removed; none is fine
 ```
 
 ## State-awareness contract
@@ -231,15 +233,15 @@ Each bring-up takes one named snapshot in the main checkout's `.ddev/db_snapshot
 `main-seed-{project}`, and removes it by name right after the restore, so nothing accumulates
 there. A bring-up that fails before that removal leaves the snapshot behind. `## Preconditions`
 refuses the next bring-up on that worktree until the person removes it, using the command the
-refusal prints. The worktree's own `.ddev/db_snapshots/` holds `seed-{project}` and
+refusal prints, and `## Tear down` removes it too. The worktree's own `.ddev/db_snapshots/` holds `seed-{project}` and
 `gate-{project}`; the cleanup line clears it at each bring-up, and `git worktree remove` takes the
 directory with it, because `ddev delete` leaves the `.ddev` folder alone.
 
-The six `## Files` are written once, where absent, and refused where a file exists with other
+The seven `## Files` are written once, where absent, and refused where a file exists with other
 content, the rule every setup recipe's files follow. The consumer commits them on the task's
 branch once the `## Preconditions` line has exited 0 and before a token runs, so the tree is
-clean for the stages that check it, and a refused bring-up leaves no file behind. A worktree made
-after that branch merges carries them already.
+clean for the stages that check it, and a refused bring-up leaves no file behind. They leave the
+branch before it merges, as `## Tear down` says.
 
 Beyond those, nothing here writes a tracked file. `.ddev/db_snapshots/` is ignored by DDEV's own
 `.ddev/.gitignore`; the worktree's `sites/default/files` is ignored by the same rule that ignores
@@ -304,6 +306,10 @@ The three lines changed on 2026-09-30, naming the main checkout's seed snapshot
 documented `snapshot`, `snapshot restore` and `snapshot --cleanup --name` commands and are not yet
 run end to end.
 
+The tear-down guard added on 2026-11-11 is read from DDEV 1.25.5's source and not yet run. A
+cleanup with a name passes it to `DeleteSnapshot`, which returns an error when no file matches,
+and the command then exits 1 (`cmd/ddev/cmd/snapshot.go:208-211`, `pkg/ddevapp/snapshot.go:81-84`).
+
 The 0.4.1 scripts were run on 2026-09-24 with bash 5.2.21 against a stub `ddev` that printed a
 fixed project list; no DDEV ran. The list held a project with an empty `docroot`, one with `web`,
 and one with no `docroot` key at all. Each checkout was given plain, with a trailing slash, and
@@ -351,9 +357,9 @@ one place to the left.
 
 ## Files
 
-Six scripts in `.aida/worktree-environment/`, written where absent, the path as the fence's
-second word. They hold every DDEV and `jq` invocation the checks, the tokens and the address
-need, so the consumer runs them and knows neither. Paths are compared as the filesystem resolves them, in one place, because DDEV lists a
+Seven scripts in `.aida/worktree-environment/`, written where absent, the path as the fence's
+second word. They hold every DDEV and `jq` invocation the checks, the tokens, the address and the
+tear-down guard need, so the consumer runs them and knows neither. Paths are compared as the filesystem resolves them, in one place, because DDEV lists a
 checkout under the path it was started from, and a consumer may hold that path with a trailing
 slash or through a link.
 
@@ -390,8 +396,10 @@ name="$(basename "$here")"
 case "$name" in
   *[!a-z0-9-]*) echo "the worktree directory name '$name' becomes a hostname label; use lowercase letters, digits and hyphens"; exit 1 ;;
 esac
-stale="$(ls "$main"/.ddev/db_snapshots/main-seed-"$name"* 2>/dev/null | head -1)"
-if [ -n "$stale" ]; then
+shopt -s nullglob
+found=("$main"/.ddev/db_snapshots/main-seed-"$name"-{mariadb,mysql,postgres}_*.{zst,gz,mbstream,xbstream})
+if [ "${#found[@]}" -gt 0 ]; then
+  stale="${found[0]}"
   mainName="$(bash "$(dirname "$0")/main-row.sh" "$1" name)"
   echo "$stale is left from a bring-up that did not finish; remove it first: ddev snapshot $mainName --cleanup --name main-seed-$name --yes"
   exit 1
@@ -441,6 +449,19 @@ ddev describe -j | jq -r '.raw | "address: \(.primary_url)\nproject: \(.name)\nr
 command -v jq >/dev/null || { echo "jq is not installed"; exit 1; }
 status="$(ddev describe -j 2>/dev/null | jq -r '.raw.status // empty')"
 [ "$status" = "running" ] || { echo "the worktree's DDEV project is not running (status: ${status:-not a DDEV project})"; exit 1; }
+```
+
+```sh .aida/worktree-environment/main-seed-cleanup.sh
+#!/usr/bin/env bash
+# Removes main-seed-$3 from the main checkout at $1, whose DDEV project is $2, when a bring-up
+# that did not finish left it. Exits 0 when there is none, because DDEV's cleanup of a name
+# that does not exist exits 1. The pattern is DDEV's own snapshot file name, so a sibling
+# worktree's main-seed-$3-<more> is never matched.
+main="$(cd "$1" 2>/dev/null && pwd -P)" || { echo "the main checkout $1 is not a directory"; exit 1; }
+shopt -s nullglob
+found=("$main"/.ddev/db_snapshots/main-seed-"$3"-{mariadb,mysql,postgres}_*.{zst,gz,mbstream,xbstream})
+[ "${#found[@]}" -gt 0 ] || exit 0
+exec ddev snapshot "$2" --cleanup --name "main-seed-$3" --yes
 ```
 
 ## Bring up
@@ -519,15 +540,29 @@ Run in the worktree, before `git worktree remove`. The last argument is `{projec
 
 ```sh
 ddev delete --omit-snapshot --yes {project}
+bash .aida/worktree-environment/main-seed-cleanup.sh {codePath} {mainProject} {project}
 ```
+
+The second line removes `main-seed-{project}` from the main checkout when a bring-up failed
+before its third line, so a task pruned and never brought up again leaves no copy of the main
+database behind. It is a script, not `ddev snapshot {mainProject} --cleanup --name
+main-seed-{project} --yes` on its own, because that command exits 1 when no such snapshot exists,
+which is the normal case, and the consumer stops a tear-down at the first line that fails. A
+line runs as arguments, so `|| true` is not available. It runs after `ddev delete` because it
+needs only the main project and the worktree's files, which `ddev delete` leaves in place. A
+worktree brought up before 0.6.1 does not hold the script: its project is deleted, then the
+second line fails. Commit the script from `## Files` on the branch and tear down again, or
+remove the snapshot by hand with the command above.
 
 `--omit-snapshot` skips DDEV's pre-delete snapshot because the database is a copy the main
 checkout still has. The worktree's files stay for `git worktree remove`.
 
-Before the task branch merges, the person tears the site down and puts the `name:` line back in
-`.ddev/config.yaml`. Merged without that, the missing `name:` renames the main checkout's DDEV
-project to its folder name, only when that differs from the pinned name. The renamed project
-gets a new, empty database. The person does this before the merge.
+Before the task branch merges, the person tears the site down, puts the `name:` line back in
+`.ddev/config.yaml`, and removes `.aida/worktree-environment/`, the `## Files` scripts bring-up
+committed on the branch. Merged without the `name:` line, the main checkout's DDEV project is
+renamed to its folder name, only when that differs from the pinned name. The renamed project
+gets a new, empty database. Merged with the scripts, trunk carries files only a worktree's
+bring-up uses. The person does both before the merge.
 
 ## Build in place
 

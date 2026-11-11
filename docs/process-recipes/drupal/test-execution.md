@@ -6,7 +6,7 @@ description: Use when anything needs to run a Drupal test — the failing-test s
 # Metadata — read only after a match.
 label: Test execution (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.4.2
+version: 0.4.3
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/testing
@@ -148,6 +148,12 @@ test_commands:
       (pcov or Xdebug) in the web container, and a PHPUnit config it can reuse; a
       Kernel or Functional test in that run boots a site once per mutant, so keep the
       source scope to code Unit tests cover, or the run does not finish.
+      Infection reads every existing positional path outside the configured source as a test
+      path and passes it to PHPUnit, so a non-PHP file in `{paths}` (a `composer.json`,
+      a word list) fails the initial test run, no mutant runs and the output has no
+      `Metrics:` block. The project passes on only its `src/*.php` paths, through a
+      wrapper in the mutation row of its own copy of this recipe; AIDA reads `extensions:` on
+      check rows only, not on test rows.
 ```
 
 **The suite row's `failure_line:` selects one line per failing test.** `'^[0-9]+\) [A-Za-z0-9_\\]+::[A-Za-z0-9_]+'` matches PHPUnit's numbered headers whose subject is a test, `1) Class::method`, one per failing, erroring or risky test; observed on PHPUnit 11.5.56 with two failures and one error. The selector is POSIX ERE, because the consumer applies it with `grep -E`, which on Linux is GNU grep: `\w`, `\d` and `\s` mean nothing inside a bracket expression there, so `[\w\\]` was the two literal characters and matched no header on the machine that ran the check, while a shell whose `grep` resolves to ugrep accepted it and hid the difference. Check a selector through `/bin/grep -E`, not through whatever `grep` the shell resolves to. The numbering restarts in each section; the ask's consumer removes digit runs before comparing, so that does not register. The `Class::method` part is what keeps the issue lists out: with `displayDetailsOnTestsThatTriggerDeprecations` and its siblings on, as Drupal core's `phpunit.xml.dist` sets them, PHPUnit also prints `N) <message>` headers for deprecations, warnings and PHP notices, one per distinct message rather than per test, and a bare `'^[0-9]+\) '` would count a new deprecation as a new failing test. A message that itself begins with a `Class::method` token still matches; that is the residual. The progress line, the `file:line` under each header and the `Tests: N, Assertions: N, Failures: N.` line are not selected: the first and last change whenever a test is added.
