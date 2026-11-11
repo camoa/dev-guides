@@ -2,11 +2,11 @@
 # Routing block — an orchestrator reads to here and decides.
 name: claude_code_plugins_test_authoring
 capability: test-authoring
-description: Use when a context is about to write the tests for executable code a Claude Code plugin ships — a hook script, a validator, a helper — before that code exists, and needs to know which level the behaviour belongs at, where the spec file goes, what it is called, how the criterion it specifies is traced to it, and what such a spec may not do. Not for a plugin component whose whole substance is instructions; that is paper-traced instead, and this recipe says where.
+description: Use when a context is about to write the tests for executable code a Claude Code plugin ships — a hook script, a validator, a helper — before that code exists, and needs to know which level the behaviour belongs at, where the spec file goes, what it is called, how the criterion it specifies is reported for it, and what such a spec may not do. Not for a plugin component whose whole substance is instructions; that is paper-traced instead, and this recipe says where.
 # Metadata — read only after a match.
 label: Test authoring (Claude Code plugins)
 recipe_schema_version: 1.0.0
-version: 0.2.0
+version: 0.3.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -26,7 +26,7 @@ license: GPL-2.0-or-later
 
 Answer four questions for whoever is about to write a test for the executable code a plugin ships:
 which level the behaviour belongs at, where the file goes and what it is called, how the criterion it
-specifies is recoverable from it, and what such a spec may not do.
+specifies is reported for it, and what such a spec may not do.
 
 **This recipe stops at red.** Its reader writes the spec, watches it fail, and stops. It does not
 write the script that turns the spec green, and nothing here tells it to. The authoring half of the
@@ -74,7 +74,7 @@ belongs to `development/tdd-spec-driven` and is cited, not restated.
 ## Preconditions
 
 This phase writes files and runs nothing itself, so it declares no machine-checkable environment
-condition of its own. What this framework has instead of a test harness, and what answers in its
+condition of its own. What this framework has in place of a suite row, and what answers in its
 place, is declared by `claude-code-plugins/test-execution.md`.
 
 ```yaml
@@ -86,7 +86,7 @@ preconditions: []
 ```yaml
 code_path: string             # absolute path to the plugin root
 script: string                # the script the behaviour belongs to, relative to the plugin root
-criterion_id: string          # the identifier of the criterion this spec case specifies
+criterion_id: string          # the criterion this spec case proves, reported to the freeze; the test need not carry it
 behavior: string              # what the spec must observe, in a sentence
 interface: string             # what the script declares: its exit codes, the fields it prints, or the event it binds
 test_level: string            # optional; unit | script-contract | event-contract | runner
@@ -114,13 +114,18 @@ planned, and write nothing. Dry-run is required.
 3. **Place and name the file.** Under `<plugin>/tests/`, named for the topic it specifies and ending
    in `-spec.sh` for a shell spec. The `tests/` segment is load-bearing rather than tidy: the delete
    guard's globs are `**/tests/**`-prefixed, so a spec outside a `tests/` directory is not watched.
+   An order puts all its cases in one spec file: the `file` row in
+   `claude-code-plugins/test-execution.md` runs `bash` on the order's test files, and bash runs only
+   the first.
 
-4. **Name the criterion in the case label.** Every assertion in a spec carries a label that is
-   printed when it fails; the criterion identifier goes at the end of that label and nothing follows
-   it — `bad decodes-header-c3 "..."`. The label is the whole mechanism here, because a shell spec
-   has no runner-level selector: the file is the unit of execution, and a criterion is found by
-   grepping the tests directory for its identifier. Put it in the section comment above the case as
-   well, so the file reads as a specification and not only as a script.
+4. **Name each case for the behaviour it checks.** Every assertion in a spec carries a label that is
+   printed when it fails; write the label as the behaviour, in the project's own convention —
+   `bad "decodes the header" "..."`. Report the criterion each case proves to the freeze; that record is
+   the mapping, so the case does not have to carry it. Label text is unique across the
+   plugin's specs, so a printed failure names one case. A criterion identifier in the label or
+   in the section comment above the case is optional: a project may keep one to find a case by
+   grepping the tests directory, and if it does, it sets the identifier off from the words around it.
+   A spec bound for an upstream project follows that project's naming and carries none.
 
 5. **Write the spec.** Build fixtures under `mktemp -d`, with a `trap` that removes them on exit.
    Invoke the real script — not a copy of its logic — and assert on the exit code and on a parsed
@@ -130,16 +135,19 @@ planned, and write nothing. Dry-run is required.
    catch, in the spec itself.
 
 6. **Watch it fail.** Run the spec and confirm the case fails on its assertion, and that the failure
-   line names the criterion. A case that passes with no script behind it is rewritten once; if it
+   line names the behaviour. A shell spec has no case selector: it is a plain script, and
+   `claude-code-plugins/test-execution.md` declares its `test` row absent. The spec file is the
+   smallest unit that runs, so each case's recorded red holds the whole spec's output. Find the
+   case in it by its printed label. A case that passes with no script behind it is rewritten once; if it
    still passes, stop and report it as proving nothing.
 
-7. **Stop.** Return the level, the path, the case labels, the criterion each carries, and the failure
+7. **Stop.** Return the level, the path, the case labels, the criterion each case proves, and the failure
    output for each. Write no script under test.
 
 ## Data flow
 
 Input: one criterion, the behaviour it names, the script's declared interface.
-Output: one spec file under `<plugin>/tests/`, and for each case the criterion it carries and the
+Output: one spec file under `<plugin>/tests/`, and for each case the criterion it proves and the
 output of the run that failed.
 Boundaries: reads no production script source; writes only under the plugin's tests directory; builds
 every fixture under a temporary directory it removes; produces no task record of its own.
@@ -147,7 +155,7 @@ every fixture under a temporary directory it removes; produces no task record of
 ## State-awareness contract
 
 Before writing a new spec, look for an existing spec that already covers the script, by searching the
-plugin's tests directory for the criterion identifier and for the script's own name. Add a case to
+plugin's tests directory for the behaviour's wording and for the script's own name. Add a case to
 the existing spec rather than starting a second file for the same script. A bug fix almost always
 belongs on the existing case for the behaviour that broke.
 
@@ -156,8 +164,8 @@ not.
 
 ## Verifier
 
-- Each case carries its criterion identifier at the end of its printed label, so a failure line names
-  the criterion.
+- Each case's printed label describes the behaviour its body checks, and is unique across the suite.
+- A criterion is reported for every case.
 - Each spec sits under a `tests/` directory inside the plugin and ends in `-spec.sh`, so the delete
   guard watches it.
 - Each spec builds its fixtures under a temporary directory and removes them, and touches nothing
@@ -184,7 +192,7 @@ not.
 
 | Recipe | What it holds |
 |---|---|
-| `claude-code-plugins/test-execution.md` | That this framework ships no test harness, what the paper trace and the structural validator answer instead, and which framework answers for a component that ships executable code |
+| `claude-code-plugins/test-execution.md` | That no suite row runs this framework's components, what the paper trace and the structural validator answer instead, and which framework answers for a component that ships executable code |
 | `claude-code-plugins/authoring-standards.md` | The component contracts, the paper trace that stands in for a failing test where a component is only instructions, and the `## Oracle files` declaration that names the spec file patterns |
 
 ### External origins (referenced, not authored here)

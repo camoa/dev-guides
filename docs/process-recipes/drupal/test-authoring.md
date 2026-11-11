@@ -2,11 +2,11 @@
 # Routing block — an orchestrator reads to here and decides.
 name: drupal_test_authoring
 capability: test-authoring
-description: Use when a context is about to write the tests for one unit of work on a Drupal project, before any production code exists, and needs to know which tier the behaviour belongs at, where the file goes, what it is called, how the criterion it specifies is traced to it, and what a Drupal test may not do.
+description: Use when a context is about to write the tests for one unit of work on a Drupal project, before any production code exists, and needs to know which tier the behaviour belongs at, where the file goes, what it is called, how the criterion it specifies is reported for it, and what a Drupal test may not do.
 # Metadata — read only after a match.
 label: Test authoring (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.4.0
+version: 0.5.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -29,8 +29,8 @@ license: GPL-2.0-or-later
 ## Goal
 
 Answer four questions for whoever is about to write a Drupal test: which tier the behaviour belongs
-at, where the file goes and what it is called, how the criterion it specifies is recoverable from it,
-and what a Drupal test may not do.
+at, where the file goes and what it is called, how the criterion each test proves is reported, and what
+a Drupal test may not do.
 
 **This recipe stops at red.** Its reader writes the test, watches it fail, and stops. It does not
 write the code that turns the test green, and nothing here tells it to. The green and refactor half
@@ -58,7 +58,7 @@ booted. A Unit test that mocks the container proves the mock.
 |---|---|---|---|
 | Kernel | `tests/src/Kernel/` | a service, an entity, code that reads configuration, or the database, with a minimal container. Exported site configuration itself is no tier's subject: it is proved by the `## Configuration gate` in `drupal/standards-and-tests.md`, not by a test | seconds per test |
 | Functional | `tests/src/Functional/` | a real request, a form, a route, or rendered output, with no JavaScript | a site boot per test |
-| FunctionalJavascript | `tests/src/FunctionalJavascript/` | JavaScript executed in a browser: Ajax, a modal, dynamic visibility | a site boot plus a browser session per test |
+| FunctionalJavascript | `tests/src/FunctionalJavascript/` | JavaScript executed in a browser: Ajax, a modal, dynamic visibility. Never written test-first, as below | a site boot plus a browser session per test |
 | Unit | `tests/src/Unit/` | nothing from Drupal at all: a pure function over its arguments | milliseconds |
 | Build | `tests/src/Build/` | the assembled codebase itself, such as Composer resolution, driven from the command line | rare, advanced |
 
@@ -84,8 +84,8 @@ applies a recipe, so it cannot.
 Use `GenericRecipeTestBase` (`core/modules/system/tests/src/Functional/Recipe/GenericRecipeTestBase.php`)
 as the model, not the base class. Its only test, `testRecipeCanBeApplied()`, applies the recipe
 twice to prove it applies and is idempotent, asserts nothing about what the recipe created, and runs
-unguarded in any subclass, with no criterion suffix and no `#[Group]` — extending it puts that
-uncriteria'd test in your class too. Extend `BrowserTestBase` and `use RecipeTestTrait`
+unguarded in any subclass and proves no criterion — extending it puts that test in your class too.
+Extend `BrowserTestBase` and `use RecipeTestTrait`
 (`Drupal\FunctionalTests\Core\Recipe\RecipeTestTrait`) directly instead, and write your own test
 method against its own criterion. Mirror the base's `$profile = 'minimal'` and
 `$defaultTheme = 'stark'` properties, and call `$this->setUpCurrentUser(admin: TRUE)` before
@@ -112,10 +112,17 @@ docroot set in `core/tests/Drupal/Tests/DrupalTestCaseTrait.php`, is not that pr
 alternative is adding the project's `recipes/` folder to the project-root `phpunit.xml` that
 `drupal/test-execution.md` reaches the runner through.
 
-**All five tiers are written before the code. Playwright and visual regression are not.** Those run
-against a site that already stands, cannot drive a design decision, and never substitute for a tier
-chosen here. "The end-to-end suite covers it" is not an answer to "which tier specifies this
+**Kernel, Functional, Unit and Build are written before the code. FunctionalJavascript, Playwright
+and visual regression are not.** All three drive a browser. They run against a site that already
+stands, cannot drive a design decision, and never substitute for a tier chosen here. A person adds
+one after the code stands. Where a browser behaviour has a server half, such as the response an
+Ajax callback returns or the value a form saves, specify that half test-first at Kernel or
+Functional. "The end-to-end suite covers it" is not an answer to "which tier specifies this
 behaviour".
+
+The tests written first run on every build attempt, whatever their tier. A Functional test
+therefore pays a site boot per test on each attempt, which is the reason to choose Kernel wherever
+Kernel shows the behaviour. The whole suite still runs once, at the end of a task.
 
 **One test per behaviour the criterion names, and no more.** Past that, tests make the change harder
 to review without specifying anything new. The full set of excess cases belongs to
@@ -172,6 +179,27 @@ a non-empty `$input` whose correct result is non-empty, so the guard still fails
 PHPUnit 11.5.56: an unguarded reference to the missing class prints `ERRORS! Tests: 1, Assertions:
 2, Errors: 1`.
 
+A method that does not exist yet, on a class or service that does, takes a reflection guard:
+
+```php
+$expander = $this->container->get('my_module.occurrence_expander');
+$result = (new \ReflectionObject($expander))->hasMethod('lookahead')
+  ? $expander->lookahead($input)
+  : NULL;
+$this->assertSame(['expected'], $result);
+```
+
+It calls the method directly, so the method's visibility and declared return type still apply. Do
+not guard with `method_exists()` or `is_callable()`. Once the method exists, PHPStan reports each
+as `function.alreadyNarrowedType`, always true, so the test fails the project's own static analysis
+after the task finishes. Do not call through `ReflectionMethod::invoke()` either: it also reaches
+a protected or private method, and it returns `mixed`. Until the method exists, PHPStan reports
+`method.notFound` on the call, as it does for any test written before its code. This guard is for
+an existing class only. A class that is itself new takes the `class_exists()` guard above, and
+`?->` covers its methods. Observed on PHPStan 2.3.5 at levels 5 and max, with PHPUnit 11.5.57, on
+an object whose class PHPStan knows: before the method exists the test fails with `Failed asserting that null is identical to`, and
+after it exists the test passes and analysis is clean.
+
 ## Preconditions
 
 This phase writes files and runs nothing, so it declares no machine-checkable environment condition
@@ -188,10 +216,10 @@ preconditions: []
 ```yaml
 code_path: string             # absolute path to the Drupal project root
 module: string                # the module the test belongs to
-criterion_id: string          # the identifier of the criterion this test specifies
+criterion_id: string          # the criterion this test proves, reported to the freeze; the test need not carry it
 behavior: string              # what the test must observe, in a sentence
 interface: string             # the names the unit declares, and the names its dependencies declare
-test_tier: string             # optional; kernel | functional | functional-javascript | unit | build
+test_tier: string             # optional; kernel | functional | unit | build
 ```
 
 `interface` is the only thing this reader gets about code that already exists, and it is a
@@ -215,27 +243,31 @@ planned, and write nothing. Dry-run is required.
    pattern is declared once, in `drupal/standards-and-tests.md` under `## Oracle files`, and is not
    repeated here.
 
-3. **Name the method so the runner collects it, then name the criterion in it.** A method is
+3. **Name the method so the runner collects it, then name it for the behaviour.** A method is
    collected only when its name begins with `test` or it carries the `#[Test]` attribute. Neither is a
    style preference: a method with neither is not collected and nothing says so — on the PHPUnit
    11.5.56 that core 11.4.5 resolves, it simply does not appear in `--list-tests`, so the behaviour
    looks covered and is not.
 
-   The criterion identifier goes at the end of the
-   test method name, capitalised, with no separator, because the Drupal coding standard rejects an
-   underscore in a method name: `testSubmittedFormSavesTheNodeC3()`. It goes last and nothing follows
-   it, which keeps the criterion in the failure output and findable by grep with no runner support.
+   Name each test for the behaviour its body checks, in the project's own convention:
+   `testSubmittedFormSavesTheNode()`. The Drupal coding standard rejects an underscore in a method
+   name, so use camel case. Report the criterion each test proves, with the test's path and name, in
+   the return of step 6; the freeze records that mapping, and every later reader joins on the
+   recorded name. A test needs no criterion identifier in its name or its tags. Keep the module
+   `#[Group]` the project already uses: in Drupal it names the module, and a test keeps it.
 
-   For **selection**, add `#[Group('c3')]` to the method as well. The group is the mechanism the
-   runner gives that the name cannot match: `--group c3` is an **exact** match, while `--filter`
-   takes a regular expression over the test identifier, so a bare `--filter C3` also selects
-   `testDecodeC30` and only the anchored `--filter '/C3$/'` selects the one test — and `--filter`
-   alone searches every discovered tier, so it needs `--testsuite` or a path beside it. Both forms
-   were checked on the PHPUnit 11.5.56 that core 11.4.5 resolves, against a deliberate `C30` sibling.
-   A criterion group is a *second* group beside the module group every Drupal test class already
-   carries; core stacks two `#[Group]` attributes on a class itself, so this is idiomatic rather than
-   a local invention. A script reads the tags back out with `--list-groups`, or resolves one with
-   `--list-tests --group <id>`. A test that specifies two criteria carries both names and both tags.
+   Test names are unique across the suite, not only within a class. A failure is matched back to its
+   criterion by the bare test name, ignoring the path, so two classes that share a name tie one
+   failure to both criteria.
+
+   A project may still carry the identifier for its own navigation, as a name suffix or a second
+   `#[Group]` on the method (a group on the class selects every method in it). If it does, put the identifier last, capitalised, with no separator, and delimit it so
+   it cannot be a prefix of another: `testSubmittedFormSavesTheNodeC3()` with `#[Group('c3')]`. An
+   anchored `--filter '/C3$/'` then selects the one test, where a bare `--filter C3` also selects
+   `testDecodeC30`, and `--group c3` is an exact match. Both forms were checked on the PHPUnit 11.5.56
+   that core 11.4.5 resolves, against a deliberate `C30` sibling. `--filter` alone searches every
+   discovered tier, so it needs `--testsuite` or a path beside it. A test bound for an upstream
+   project, such as a contrib merge request, follows that project's naming and carries no identifier.
 
 4. **Write the test, shaped Arrange-Act-Assert.** Declare `#[RunTestsInSeparateProcesses]` on a
    Kernel, Functional or FunctionalJavascript class — not on a Unit test, which needs none. As of
@@ -250,13 +282,13 @@ planned, and write nothing. Dry-run is required.
    proves nothing. A test that passes immediately is rewritten once; if it still passes with no code
    behind it, stop and report it as proving nothing.
 
-6. **Stop.** Return the tier, the path, the test names, the criterion each carries, and the failure
+6. **Stop.** Return the tier, the path, the test names, the criterion each proves, and the failure
    output for each. Write no production code.
 
 ## Data flow
 
 Input: one criterion, the behaviour it names, the declared interface, the module.
-Output: one or more test files, and for each test the criterion it carries and the output of the run
+Output: one or more test files, and for each test the criterion it proves and the output of the run
 that failed.
 Boundaries: reads no production source; writes only under the module's test tree; runs no command
 except through `drupal/test-execution.md`; produces no task record of its own.
@@ -264,16 +296,16 @@ except through `drupal/test-execution.md`; produces no task record of its own.
 ## State-awareness contract
 
 Before writing a new test, look for an existing test that already specifies the behaviour, by
-searching the module's test tree for the criterion identifier and for the behaviour's own vocabulary.
-Update the existing test rather than adding a second one that overlaps it. A bug fix almost always
-belongs on the existing test for the behaviour that broke.
+searching the module's test tree for the behaviour's own vocabulary, and for the criterion
+identifier where the project carries one. Update the existing test rather than adding a second one
+that overlaps it. A bug fix almost always belongs on the existing test for the behaviour that broke.
 
 Do not read the production source to make that decision. The test tree is readable; the code is not.
 
 ## Verifier
 
-- Each test carries its criterion identifier at the end of its method name and a matching
-  `#[Group]` tag, so the criterion is both readable in the failure output and exactly selectable.
+- Each test name describes the behaviour its body checks, and is unique across the suite.
+- A criterion is reported for every test, with its path and name.
 - Every test method begins with `test` or carries `#[Test]`. A method with neither is not collected
   and nothing reports it.
 - Every data provider method is `static`. On PHPUnit 11.5 a non-static provider makes the whole class

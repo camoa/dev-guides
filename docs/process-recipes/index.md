@@ -14,7 +14,7 @@ Process recipes are **resolved by an orchestrator**, keyed by **`(phase × frame
 |---|---|---|---|
 | `research` | `drupal` | [Prior-art research](drupal/contrib-prior-art.md) | A Drupal project must establish prior art — first in its own custom code and exported configuration, then on drupal.org and in contrib by usage, maintenance, security coverage and core-version fit — before any custom build. |
 | `design` | `drupal` | [Design](drupal/architecture.md) | Turning researched requirements into a service-based architecture — business logic in injected services, a Drush entry point, and the form / entity / plugin pattern per component. |
-| `test-authoring` | `drupal` | [Test authoring](drupal/test-authoring.md) | Writing a Drupal test before the code exists — which tier the behaviour belongs at, where the file goes and what it is called, how the criterion it specifies is traced to it, and what a Drupal test may not do. Stops at red. |
+| `test-authoring` | `drupal` | [Test authoring](drupal/test-authoring.md) | Writing a Drupal test before the code exists — which tier the behaviour belongs at, where the file goes and what it is called, how the criterion it specifies is reported for it, and what a Drupal test may not do. Stops at red. |
 | `implement` | `drupal` | [Coding standards and test discipline](drupal/standards-and-tests.md) | Turning a test that already fails green, under Drupal coding standards and the implementation-time security rules, then refactoring under a green bar. |
 | `test-execution` | `drupal` | [Test execution](drupal/test-execution.md) | Running a Drupal test at any scope — the suite, one file, one case, the tests covering a change, or the cheapest thing that proves the runner works — with the tier's cost and how to read what came back. |
 | `review` | `drupal` | [Implementation review checks](drupal/checks.md) | Validating a Drupal implementation against its architecture and Drupal security — static `\Drupal::` in new code, logic in forms/controllers, Form API CSRF — before acceptance. |
@@ -25,34 +25,35 @@ Process recipes are **resolved by an orchestrator**, keyed by **`(phase × frame
 | `design` | `claude-code-plugins` | [Design](claude-code-plugins/architecture.md) | Turning a researched need into a component map — type choice, progressive disclosure, manifest + boundary. |
 | `test-authoring` | `claude-code-plugins` | [Test authoring](claude-code-plugins/test-authoring.md) | Writing a spec for the executable code a plugin ships — a hook script, a validator, a helper — before that code exists, and knowing why a component that is only instructions is paper-traced instead. |
 | `implement` | `claude-code-plugins` | [Component authoring standards](claude-code-plugins/authoring-standards.md) | Authoring skills / commands / agents / hooks to contract, with paper-test as the test-first gate for the part that is prose, and a spec that already fails for the part that is executable code. |
-| `test-execution` | `claude-code-plugins` | [Test execution](claude-code-plugins/test-execution.md) | Establishing that this framework has no test harness, what the paper-test and the structural validator answer instead, and which framework answers for a component that ships executable code. |
+| `test-execution` | `claude-code-plugins` | [Test execution](claude-code-plugins/test-execution.md) | Establishing that no suite row runs this framework's components, that the `file` row runs one shell spec, what the paper-test and the structural validator answer instead, and which framework answers for a component that ships executable code. |
 | `review` | `claude-code-plugins` | [Plugin review checks](claude-code-plugins/checks.md) | Validating a plugin (structural + semantic) before acceptance, routing each check to its owning tool. |
 | `research` | `php-cli` | [PHP CLI prior-art research](php-cli/prior-art.md) | A PHP CLI project (a Composer library/app whose interface is one or more binaries) must establish prior art (reuse / extend / build-new) before building — Packagist is dense. |
 | `design` | `php-cli` | [Design](php-cli/architecture.md) | Turning a researched need into a library-first architecture — the library/CLI boundary, the entrypoint contract (exit codes, stream split, machine-readable output), and the dependency posture. |
-| `test-authoring` | `php-cli` | [Test authoring](php-cli/test-authoring.md) | Writing a PHP CLI test before the code exists — which level the behaviour belongs at, where the file goes, what the class and method are called, how the criterion is traced to it, and what a PHPUnit test may not do. Stops at red. |
+| `test-authoring` | `php-cli` | [Test authoring](php-cli/test-authoring.md) | Writing a PHP CLI test before the code exists — which level the behaviour belongs at, where the file goes, what the class and method are called, how the criterion is reported for it, and what a PHPUnit test may not do. Stops at red. |
 | `implement` | `php-cli` | [PHP CLI standards and tests](php-cli/standards-and-tests.md) | Turning a test that already fails green, under PSR-12 / `strict_types`, with the flag-and-exit-code coverage check and the extensionless-binary syntax check. |
 | `test-execution` | `php-cli` | [Test execution](php-cli/test-execution.md) | Running a PHP CLI project's tests at any scope, with the PHPUnit filter and exit-code traps that make a run mean something other than what it reads as. |
 | `review` | `php-cli` | [PHP CLI review checks](php-cli/checks.md) | Validating a PHP CLI implementation (boundary, exit-code contract, dependency policy, security sinks, every binary linted) before acceptance. |
 | `research` | `go` | [Go prior-art research](go/prior-art.md) | A Go project must decide whether a capability needs a dependency at all — standard library first, then transitive depth, deprecation and reachable-vulnerability evidence per candidate. |
 | `design` | `go` | [Design](go/architecture.md) | Turning researched requirements into a package layout whose boundary the compiler enforces — `internal/` by default, `cmd/` as a shim, the module path and its compatibility promise, consumer-side interfaces, context and the exported error surface. |
-| `test-authoring` | `go` | [Test authoring](go/test-authoring.md) | Writing a Go test before the code exists — which level the behaviour belongs at, which package the file declares, what the test function is called, how the criterion is traced to it, and what a Go test may not do. Stops at red. |
+| `test-authoring` | `go` | [Test authoring](go/test-authoring.md) | Writing a Go test before the code exists — which level the behaviour belongs at, which package the file declares, what the test function is called, how the criterion is reported for it, and what a Go test may not do. Stops at red. |
 | `implement` | `go` | [Go standards and tests](go/standards-and-tests.md) | Turning a test that already fails green, under `gofmt` and the vet floor, with `-race` in the ordinary test command and the map-iteration and unstable-sort ordering traps. |
 | `test-execution` | `go` | [Test execution](go/test-execution.md) | Running a Go module's tests at any scope, with the `-run` over-selection trap, the silent zero-exit cases, and the marker that separates a failed assertion from a package that never compiled. |
 | `review` | `go` | [Go review checks](go/checks.md) | Validating a Go change against its architecture and the toolchain gates — including the three gates commonly written in a form that can never fail — before acceptance. |
 | `research` | `python-cli` | [Python prior-art research](python-cli/prior-art.md) | A Python project must establish what already exists before anything is written — the standard library first, then PyPI, with each candidate judged on maintenance, typing, dependency weight, licence, yanked status and a pre-adoption vulnerability audit rather than on stars. |
 | `design` | `python-cli` | [Design](python-cli/architecture.md) | Turning researched requirements into a library-first architecture with a thin console script — the package boundary, a named programmatic entry point per capability, the entrypoint contract (exit codes, stream split, machine-readable output), protocol seams, and the dependency and typing postures. |
-| `test-authoring` | `python-cli` | [Test authoring](python-cli/test-authoring.md) | Writing a Python test before the code exists — which level the behaviour belongs at, where the file goes, what the test function is called, how the criterion is traced to it, and what a pytest test may not do. Stops at red. |
+| `test-authoring` | `python-cli` | [Test authoring](python-cli/test-authoring.md) | Writing a Python test before the code exists — which level the behaviour belongs at, where the file goes, what the test function is called, how the criterion is reported for it, and what a pytest test may not do. Stops at red. |
 | `implement` | `python-cli` | [Python implementation standards and tests](python-cli/standards-and-tests.md) | Turning a test that already fails green, under the project's formatting, linting and typing standards — one exception type per failure class, and the import-time, mutable-default and shell-injection traps. |
 | `test-execution` | `python-cli` | [Test execution](python-cli/test-execution.md) | Running a Python project's tests at any scope through the runner the project declares, with the node-identifier form and the exit codes that separate a failed assertion from a collection that never happened. |
 | `review` | `python-cli` | [Python review checks](python-cli/checks.md) | Validating a Python change against its architecture and the toolchain gates in a blocking order, plus the conformance reads a linter structurally cannot make, before acceptance. |
+| `worktree-environment` | `python-cli` | [Worktree environment](python-cli/worktree-environment.md) | A Python project managed by uv gives a task's git worktree its own `.venv`, built from the lock file, with the environment's path as its address. |
 
 > **`claude-code-plugins` binds six phases.** A Claude Code plugin has no rendered or behavioural runtime surface, so this framework declares **no `e2e-setup` or `visual-regression` recipe**. Do not run `/setup-e2e` or `/setup-visual-regression` on a plugin project — the loader correctly returns no recipe, but those commands' generic fallback would still try to scaffold a Playwright harness that does not apply.
 
-> **`php-cli` binds six phases.** A PHP CLI tool has no rendered or behavioural runtime surface, so this framework declares **no `e2e-setup` or `visual-regression` recipe**. Do not run `/setup-e2e` or `/setup-visual-regression` on a PHP CLI project — the loader correctly returns no recipe, but those commands' generic fallback would still try to scaffold a Playwright harness that does not apply. "No e2e" means no *browser* e2e: a CLI tool's end-to-end shape — run the built binary against a fixture tree and assert on output and exit code — is a test level chosen in `test-authoring` and checked at `review`, not an `e2e-setup` binding.
+> **`php-cli` binds six phases.** A PHP CLI tool has no rendered or behavioural runtime surface, so this framework declares **no `e2e-setup` or `visual-regression` recipe**. Do not run `/setup-e2e` or `/setup-visual-regression` on a PHP CLI project — the loader correctly returns no recipe, but those commands' generic fallback would still try to scaffold a Playwright harness that does not apply. "No e2e" means no *browser* e2e: a CLI tool's end-to-end shape — run the built binary against a fixture tree and assert on output and exit code — is a test level chosen in `test-authoring` and checked at `review`, not an `e2e-setup` binding. A CLI may still register a command as its end-to-end surface, with no recipe: see **Not every framework binds every type** below.
 
-> **`go` binds six phases.** A Go module has no rendered or browser surface, so this framework declares **no `e2e-setup` or `visual-regression` recipe**. A Go CLI's end-to-end shape is a test level, not a phase: the `test-authoring` recipe names it as the entry-point level (calling `run(ctx, args, stdin, stdout, stderr) error` with buffers) and the subprocess level (for the exit status, signals, and a real stdin pipe), and it is checked under the test gate at `review`. None of the `review` recipe's check rows takes `{paths}`: each runs over the whole module, so no row needs an `extensions:` key.
+> **`go` binds six phases.** A Go module has no rendered or browser surface, so this framework declares **no `e2e-setup` or `visual-regression` recipe**. A Go CLI's end-to-end shape is a test level, not a phase: the `test-authoring` recipe names it as the entry-point level (calling `run(ctx, args, stdin, stdout, stderr) error` with buffers) and the subprocess level (for the exit status, signals, and a real stdin pipe), and it is checked under the test gate at `review`. A CLI may still register a command as its end-to-end surface, with no recipe: see **Not every framework binds every type** below. None of the `review` recipe's check rows takes `{paths}`: each runs over the whole module, so no row needs an `extensions:` key.
 
-> **`python-cli` binds six phases.** A Python library or console-script tool has no rendered or browser surface, so this framework declares **no `e2e-setup` or `visual-regression` recipe**. A CLI's end-to-end shape is a test level, not a phase: the `test-authoring` recipe names it as the entry-point level the tests import, and it is checked under the test gate at `review`. The `review` recipe's ruff row carries `extensions: [".py", ".pyi"]`, so `{paths}` hands ruff only Python source and stubs; a stub is the declared public typing surface, not dead text. The machine-checkable `## Preconditions` for running a test — the manifest, the interpreter and the runner in the project's own environment — are declared by the `test-execution` recipe, alongside the commands they are conditions of.
+> **`python-cli` binds seven phases.** A Python library or console-script tool has no rendered or browser surface, so this framework declares **no `e2e-setup` or `visual-regression` recipe**. A CLI's end-to-end shape is a test level, not a phase: the `test-authoring` recipe names it as the entry-point level the tests import, and it is checked under the test gate at `review`. A CLI may still register a command as its end-to-end surface, with no recipe: see **Not every framework binds every type** below. The `review` recipe's ruff row carries `extensions: [".py", ".pyi"]`, so `{paths}` hands ruff only Python source and stubs; a stub is the declared public typing surface, not dead text. The machine-checkable `## Preconditions` for running a test — the manifest, the interpreter and the runner in the project's own environment — are declared by the `test-execution` recipe, alongside the commands they are conditions of.
 
 ## What each phase type is for
 
@@ -76,14 +77,14 @@ them. A recipe ships no code assets. Two tests before anything goes in a recipe:
 | `research` | Establish what already exists, in the project's own code and configuration first and then in the ecosystem, and return **named** candidates with the evidence behind each, ordered by closeness. | Returning a verdict. The reuse-or-build call belongs to the stage that decides the architecture, and a recipe that returns one is one edit away from a recipe that decides. Judging code that does not exist yet. |
 | `design` | Turn researched requirements into structure — where business logic lives, the programmatic entry point, which of the stack's patterns each component takes, and the boundary the language or framework enforces. Return the units to build and the order to build them in; the caller records them, and there is no architecture document. | Coding standards. Test levels. Anything about how the code will be written. |
 | `implement` | The rules applied **while** code is written: coding standards, the implementation-time security guarantees, and the green-and-refactor half of the cycle applied to a test that arrived red. This is where a stack's best practices live. | Running linters — the recipe judges what a standard means, the tooling runs it. Post-hoc validation. Choosing a test's level or writing it — that is `test-authoring`'s, because this reader may write production code and that one may not. |
-| `test-authoring` | Where a test goes, what shape it takes, and how it is traced to the criterion it specifies. Read by the context that writes tests and cannot read production source. | Running the test. Writing the code that passes it. |
+| `test-authoring` | Where a test goes, what shape it takes, and how the criterion it specifies is reported for it. Read by the context that writes tests and cannot read production source. | Running the test. Writing the code that passes it. |
 | `test-execution` | The command that runs a test at each scope a caller asks for, its cost, and how to read what came back. Its several readers are the reason it is its own file: the failing-test step, the baseline, each build check, and the fixer all ask the same question at different moments. | Deciding what to test, or judging the result. It returns a command and the means to read the output; it runs nothing. |
 | `protected-tests` | What may change a test: which classes of test may be weakened at all, what an exemption looks like, and who may grant one. Read by a rule rather than by a model. | Judging a test's content. Deciding whether a change is warranted. Saying **which files are tests** — that is declared under `implement`, in `## Oracle files`, and stays there. |
 | `build-checks` | The checks a script runs after code is written and before anything judges it, in the stack's own terms. | The blocking acceptance validations — those are `review`'s, and the difference is when they run, not what they run. |
 | `review` | The **blocking** validations run before work is accepted, in the stack's own terms, in a deliberate order. | Restating the generic review. Re-authoring checks `implement` already applied inline. |
 | `e2e-setup` | One-time setup of an end-to-end harness: the commands that install it, the files it writes, and the sources discovery reads to propose the surfaces. | Running the suite. Deciding which surfaces a project has: discovery proposes, a person confirms. |
 | `visual-regression` | One-time setup of a visual-regression suite: the commands that install it, the files it writes, the viewports it starts from, and the sources discovery reads. | Capturing or approving baselines on an ongoing basis. Holding an address. |
-| `worktree-environment` | Giving a task's git worktree a running environment of its own: what must be true first, the commands that bring it up and seed it from the main checkout, the one command that prints its address, the commands that tear it down, and which tasks build on the served checkout instead. | Bringing an environment up without a person's yes. Holding a database command of its own: the consumer runs the recipe's lines. A framework with no served environment declares nothing at this point, and a worktree there has files and no site. |
+| `worktree-environment` | Giving a task's git worktree a running environment of its own: what must be true first, the commands that bring it up and seed it from the main checkout, the one command that prints its address, the commands that tear it down, and which tasks build on the served checkout instead. | Bringing an environment up without a person's yes. Holding a database command of its own: the consumer runs the recipe's lines. A framework with no recipe here declares nothing at this point, and a worktree there has files and no site. python-cli: `python-cli/worktree-environment.md` gives each task worktree its own `.venv`, built by `uv sync --frozen` from the committed `uv.lock` and never shared with the main checkout's. Its address is that environment's path, not a URL. |
 
 **Two of these phases are named and not yet written.** `protected-tests` and `build-checks` have
 their names and their jobs above, and no recipe files. They were named alongside `test-authoring`
@@ -103,8 +104,11 @@ cites rather than repeats.
 
 **Not every framework binds every type.** A stack with no rendered or browser surface declares no
 `e2e-setup` and no `visual-regression` recipe, and that is a complete set, not a gap — see the
-per-framework notes above the authoring rules. A CLI's end-to-end shape is a **test level** chosen
-in `test-authoring`, checked under `review`, never a phase of its own.
+per-framework notes above the authoring rules. A CLI is tested test-first through its entry-point
+and subprocess **test levels**, chosen in `test-authoring` and checked under `review`. AIDA 6.1.6
+also lets a CLI project register a command as its end-to-end surface through `/aida:surfaces`, with
+no `e2e-setup` recipe and no install. Review runs that command in the task's tree, and exit 0 is a
+pass. Like any e2e surface it is outer verification, and it never stands in for a test level.
 
 **`test-authoring` and `implement` share the TDD loop between them; `e2e-setup` and
 `visual-regression` are outside it.** The tests a `test-authoring` recipe chooses a level for are
@@ -112,9 +116,10 @@ written before the code and seen to fail, where the red comes from a behaviour t
 yet rather than from code broken to force it — they constrain a design that does not exist yet. That
 recipe stops there; `implement` takes the red test and turns it green without changing it. The
 suites the other two phases wire up run against something already built, cannot drive a design
-decision, and are therefore outer verification. The line is not whether a browser or a subprocess is
-involved: Drupal's FunctionalJavascript tier drives a real browser and is inside the loop, and a
-CLI's fixture-driven end-to-end level spawns a process and is inside it too. What follows is that
+decision, and are therefore outer verification. Spawning a process does not put a test outside the
+loop: a CLI's fixture-driven end-to-end level spawns one and is inside it. A browser does: Drupal's
+FunctionalJavascript tier drives one against a site that already stands, so
+`drupal/test-authoring.md` never writes it test-first. What follows is that
 e2e or visual-regression coverage never substitutes for a level `test-authoring` must choose, and is
 reported separately rather than counted toward the test-first requirement. The stack-neutral
 statement of this, and of what makes an added test excess rather than coverage, lives in
@@ -143,7 +148,7 @@ here.
 | `review` | `## Check commands`, `## Surface commands` | **fail-closed** (both) |
 | `visual-regression` | `## Install`, `## Files`, `## Viewports`, `## Surfaces`, `## Discovery` | **fail-closed** (`## Install` with no `sh` block refuses the install; the rest read as empty) |
 | `e2e-setup` | `## Install`, `## Files`, `## Surfaces`, `## Discovery` | **fail-closed** (`## Install` with no `sh` block refuses the install; the rest read as empty) |
-| `worktree-environment` | `## Preconditions` (prose and one `sh` line), `## Status`, `## Tokens`, `## Files`, `## Bring up` (twice, around `## Address`), `## Address`, `## Tear down`, `## Build in place` | **fail-closed** (any of `## Bring up`, `## Address` or `## Tear down` with no `sh` block refuses the offer, because an environment nobody can remove is not offered; a `## Preconditions` line that exits non-zero refuses it, removes the files that run wrote and commits nothing; a `## Tokens` command that prints nothing refuses it by the token's name; `## Files` follows the setup rule; `## Build in place` reads as empty) |
+| `worktree-environment` | `## Preconditions` (prose and one `sh` line), `## Status`, `## Tokens`, `## Files`, `## Bring up` (once or twice, around `## Address`), `## Address`, `## Tear down`, `## Build in place` | **fail-closed** (any of `## Bring up`, `## Address` or `## Tear down` with no `sh` block refuses the offer, because an environment nobody can remove is not offered; a `## Preconditions` line that exits non-zero refuses it, removes the files that run wrote and commits nothing; a `## Tokens` command that prints nothing refuses it by the token's name; `## Files` follows the setup rule; `## Build in place` reads as empty) |
 
 Spelling is load-bearing. A fail-open declaration with a misspelled heading does not error: the consumer
 reads it as absent, and the run looks clean while checking less than you think. A misspelled
@@ -187,12 +192,13 @@ subtraction, with the limit above.
 test.** AIDA 6.0.10 and later read it; an older AIDA ignores it. The validator checks it the same
 way it checks `failure_line:`.
 
-**The `mutation` row is a report, not a gate.** Every mutation tool run for it — Infection, mutmut,
-gremlins — exits 0 with surviving mutants, and gremlins exited 0 with its own efficacy threshold
+**The `mutation` row is a report, not a gate.** Both mutation tools run for it, Infection and
+gremlins, exit 0 with surviving mutants, and gremlins exited 0 with its own efficacy threshold
 unmet, so a caller reading exit status learns nothing from this row. Its `trap:` says where the
-score and the survivors print, in that tool's own output, and that is what a caller reads. Two of
-the three tools take no file list: mutmut scopes by `pyproject.toml` and gremlins by the module
-root, so `{paths}` appears only where the tool documents positional file arguments.
+score and the survivors print, in that tool's own output, and that is what a caller reads. gremlins
+takes no file list and scopes by the module root, so `{paths}` appears only where the tool documents
+positional file arguments. `python-cli` declares the row absent: mutmut 3.8.1 cannot be scoped to
+changed files by argv, so a run would mutate the whole package on every review.
 
 These blocks are plain YAML in the body, introduced by a line that is exactly the key. A fenced
 ```yaml block reads the same to the parser and renders as a code block rather than as one collapsed
@@ -333,7 +339,7 @@ resolved the project from; the consumer stops when it is not the worktree, becau
 resolved another project would seed that one. Every other key is a token for the blocks that
 follow and for `## Tear down`. `## Build in place` is prose the consumer shows at the point of
 choice: which kinds of task should not have a worktree environment at all, and why.
-A framework with no served environment writes no recipe at this
+A framework with no `worktree-environment` recipe declares nothing at this
 point, and a consumer that finds none says so once and goes on with a worktree that has files and
 no site.
 

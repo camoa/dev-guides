@@ -2,11 +2,11 @@
 # Routing block — an orchestrator reads to here and decides.
 name: php_cli_test_authoring
 capability: test-authoring
-description: Use when a context is about to write the tests for one unit of work on a PHP CLI project, before any production code exists, and needs to know which level the behaviour belongs at, where the file goes, what the class and method are called, how the criterion it specifies is traced to it, and what a PHPUnit test may not do.
+description: Use when a context is about to write the tests for one unit of work on a PHP CLI project, before any production code exists, and needs to know which level the behaviour belongs at, where the file goes, what the class and method are called, how the criterion it specifies is reported for it, and what a PHPUnit test may not do.
 # Metadata — read only after a match.
 label: Test authoring (PHP CLI)
 recipe_schema_version: 1.0.0
-version: 0.2.0
+version: 0.3.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -26,7 +26,7 @@ license: GPL-2.0-or-later
 
 Answer four questions for whoever is about to write a PHP CLI test: which level the behaviour belongs
 at, where the file goes and what the class and method are called, how the criterion it specifies is
-recoverable from it, and what a PHPUnit test may not do.
+reported for it, and what a PHPUnit test may not do.
 
 **This recipe stops at red.** Its reader writes the test, watches it fail, and stops. It does not
 write the code that turns the test green, and nothing here tells it to. The green and refactor half
@@ -133,15 +133,18 @@ assertions planned, and write nothing. Dry-run is required.
    neither is not collected and nothing says so — on PHPUnit 11.5 it simply does not appear in
    `--list-tests`, so the behaviour looks covered and is not.
 
-4. **Name the criterion in the test, and tag it.** The criterion identifier goes at the end of the
-   method name and nothing follows it: `testRejectsAnUnknownFlagC3()`. That keeps the criterion in
-   the failure output and findable by grep with no runner support. For **selection**, add
-   `#[Group('c3')]` to the method as well, because the group is the mechanism PHPUnit gives that the
-   name cannot match: `--group c3` is an **exact** match, while `--filter` is a regular expression
-   over the test identifier, so `--filter C3` also selects `testDecodeC30` and only the anchored
-   `--filter '/C3$/'` selects the one test. Both were checked on PHPUnit 11.5.56 against a deliberate
-   `C30` sibling. A script reads the tags back out with `--list-groups`, or resolves one with
-   `--list-tests --group <id>`. A test that specifies two criteria carries both names and both tags.
+4. **Name the test for the behaviour, and report the criterion.** Name the method for what it checks,
+   in the project's own convention: `testRejectsAnUnknownFlag()`. Report the criterion each test
+   proves to the freeze; that record is the mapping, so the test does not have to carry it. **The name
+   is unique across the whole suite, not only within its class**, because review matches a failure to
+   a criterion by the bare test name, and two classes that share a name tie one failure to both
+   criteria. Carrying the identifier in code is **optional**: a project may end the method name with
+   it (`testRejectsAnUnknownFlagC3()`, nothing after it) and add a second `#[Group('c3')]` on the method (a group on the class selects every method in it)
+   for its own navigation. If it does, `--group c3` is an **exact** match while `--filter` is a regular
+   expression over the test identifier, so `--filter C3` also selects `testDecodeC30` and only the
+   anchored `--filter '/C3$/'` selects the one test (checked on PHPUnit 11.5.56 against a deliberate
+   `C30` sibling). A test bound for an upstream project, such as a contrib merge request or a
+   library's own suite, follows that project's naming and carries no identifier.
 
 5. **Write the test, shaped Arrange-Act-Assert.** A data provider is declared with
    `#[DataProvider('name')]` and the provider method **must be static** — see Verifier for what
@@ -152,30 +155,32 @@ assertions planned, and write nothing. Dry-run is required.
    that ran and did not hold is a red run. A test that passes immediately is rewritten once; if it
    still passes with no code behind it, stop and report it as proving nothing.
 
-7. **Stop.** Return the level, the path, the class and method names, the criterion each carries, and
+7. **Stop.** Return the level, the path, the class and method names, the criterion each proves, and
    the failure output for each. Write no production code.
 
 ## Data flow
 
 Input: one criterion, the behaviour it names, the declared interface, the unit.
-Output: one or more test classes under `tests/`, and for each test the criterion it carries and the
-output of the run that failed.
+Output: one or more test classes under `tests/`, and for each test the criterion it proves, reported to
+the freeze, and the output of the run that failed.
 Boundaries: reads no production source; writes only under the test tree and its fixtures; runs no
 command except through `php-cli/test-execution.md`; produces no task record of its own.
 
 ## State-awareness contract
 
 Before writing a new test, look for an existing test that already specifies the behaviour, by
-searching the test tree for the criterion identifier, for the group tag, and for the behaviour's own
-vocabulary. Add a case to the existing class rather than adding a second one that overlaps it. A bug
-fix almost always belongs on the existing test for the behaviour that broke.
+searching the test tree for the behaviour's own vocabulary and, where the project carries
+identifiers in code, for the criterion identifier and the group tag. Add a case to the existing
+class rather than adding a second one that overlaps it. A bug fix almost always belongs on the
+existing test for the behaviour that broke.
 
 Do not read the production source to make that decision. The test tree is readable; the code is not.
 
 ## Verifier
 
-- Each test carries its criterion identifier at the end of its method name and a matching
-  `#[Group]` tag, so the criterion is both readable in the failure output and exactly selectable.
+- Each test name describes the behaviour its body checks, and is unique across the suite.
+- A criterion is reported for every test. A project that carries identifiers in code does so
+  consistently, and a test bound for an upstream project carries none.
 - Each test class sits under `tests/` in the namespace `autoload-dev` maps there, and its file name
   ends in `Test.php`.
 - Every test method begins with `test` or carries `#[Test]`. A method with neither is not collected

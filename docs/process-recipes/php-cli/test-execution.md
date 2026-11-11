@@ -6,7 +6,7 @@ description: Use when anything needs to run a PHP CLI project's tests — the fa
 # Metadata — read only after a match.
 label: Test execution (PHP CLI)
 recipe_schema_version: 1.0.0
-version: 0.2.7
+version: 0.2.8
 requires_guides:
   - development/tdd-spec-driven
 requires_tooling_with_tests:
@@ -87,7 +87,11 @@ test_commands:
     argv: ["php", "vendor/bin/phpunit", "{file}"]
     cost: every-attempt
     trap: >-
-      A path argument overrides the configured suites, so a file outside the
+      The `every-attempt` label is real for an order's own test-first files: they
+      run on every build attempt whatever their tier, so a CLI end-to-end file
+      spawns the binary once per case on each attempt, which is why a unit or
+      integration test is preferred. `end-of-task` in the cost table means a tier's
+      whole suite, run at finish. A path argument overrides the configured suites, so a file outside the
       configured test tree still runs. That is useful and it also means a typo in
       the path is an error rather than a silently empty run — exit 2, not exit 0.
   - id: test
@@ -145,7 +149,7 @@ observed.
 |---|---|---|
 | Plain unit, unit with collaborators | milliseconds per test | every build attempt |
 | Integration / fixture | seconds, composed library API | every build attempt, over the changed scope |
-| CLI end-to-end | a process spawn per case, against a fixture tree | once, at the end of a task |
+| CLI end-to-end | a process spawn per case, against a fixture tree | the whole tier once, at the end of a task; an order's own test-first file on every build attempt, a spawn per case each time |
 
 **Telling a failed assertion from harness noise.** All exit codes below were observed on PHPUnit 11.5.56.
 
@@ -179,7 +183,7 @@ If invoked in dry-run mode, resolve and return the command without executing it.
 
 2. **Substitute the placeholders.** Replace each placeholder token whole. A list placeholder expands to one token per element. Nothing is concatenated into a token and nothing is passed through a shell.
 
-3. **Apply the cost label.** Return the row's `cost` with the command, so a caller running on every build attempt does not receive a command that spawns the binary once per case.
+3. **Apply the cost label.** Return the row's `cost` with the command, so a caller running on every build attempt does not receive the suite or the whole CLI end-to-end tier.
 
 4. **Return the command, the cost, and the failure signal.** The caller runs it. This recipe neither executes it nor judges its output.
 
@@ -220,7 +224,7 @@ After the recipe runs, verify:
 1. The returned command is a token list, and every placeholder was substituted as a whole token — nothing was concatenated into a token and nothing reached a shell.
 2. The row requested was the row returned. A row answered `absent:` returned that statement, not a wider command that happens to include the wanted tests.
 3. A command selecting one case used an anchored filter, and the run's test count was read rather than its exit code alone.
-4. The cost label travelled with the command, and no caller running on every build attempt received the CLI end-to-end tier.
+4. The cost label travelled with the command, and no caller running on every build attempt received the suite or the whole CLI end-to-end tier. An end-to-end file there is an order's own test-first file.
 5. Any result reported as red carried `FAILURES!`; an `ERRORS!` run was reported as having said nothing whatever its assertion count, and an exit 2 was classified by whether a counts line was present at all.
 6. A run reporting `No tests executed!` was reported as having said nothing rather than as a pass.
 

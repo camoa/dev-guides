@@ -6,7 +6,7 @@ description: Use when a Claude Code plugin project enters the implementation pha
 # Metadata — read only after a match.
 label: Component authoring standards (Claude Code)
 recipe_schema_version: 1.0.0
-version: 0.4.0
+version: 0.4.1
 # Machine-readable dependency declaration (recipe-loader resolves these
 # without parsing prose). The test-discipline rules are stack-neutral: they are
 # cited here, never restated per framework.
@@ -188,7 +188,7 @@ Two things about this list are worth stating, because they are what makes it wor
 | Recipe | What it holds |
 |---|---|
 | `claude-code-plugins/test-authoring.md` | For the executable code a plugin ships: which level a behaviour belongs at, where the spec file goes and what it is called, how a criterion is traced to a case, and what such a spec may not do — and why a component that is only instructions is paper-traced here instead |
-| `claude-code-plugins/test-execution.md` | That this framework ships no test harness, and what answers in its place |
+| `claude-code-plugins/test-execution.md` | That no suite row runs this framework's components, and what answers in its place |
 
 ### External origins (referenced, not authored here)
 

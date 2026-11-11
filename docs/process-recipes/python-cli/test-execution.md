@@ -6,7 +6,7 @@ description: Use when anything needs to run a Python project's tests — the fai
 # Metadata — read only after a match.
 label: Test execution (Python CLI)
 recipe_schema_version: 1.0.0
-version: 0.2.3
+version: 0.3.0
 requires_guides:
   - development/tdd-spec-driven
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
@@ -96,6 +96,11 @@ test_commands:
     argv: ["{runner}", "{file}"]
     cost: every-attempt
     trap: >-
+      The `every-attempt` label is real for an order's own test-first files: they
+      run on every build attempt whatever their tier, so a subprocess file spawns a
+      process per case on each attempt, which is why a unit, integration or
+      entry-point test is preferred. `end-of-task` in the tier table means a tier's
+      whole suite, run at finish.
       A path that does not exist is a usage error and exits 4, not an empty run.
       This is the framework where a typo is caught rather than reported as success.
   - id: test
@@ -123,29 +128,30 @@ test_commands:
       nothing about behaviour — but an import error in the package surfaces here,
       which is the failure most often mistaken for a failing test.
   - id: mutation
-    argv: ["mutmut", "run"]
-    cost: end-of-task
-    trap: >-
-      A report, not a gate, and it takes no path. mutmut 3.8.0 exited 0 with 658 of
-      2,982 mutants survived; the last line of the run is a count per outcome — `🎉`
-      killed, `🙁` survived, `⏰` timed out, `🫥` no test covered it — and
-      `mutmut results` lists each survivor by mutant name, `pkg.m.x_big__mutmut_1`.
-      What it mutates comes from `[tool.mutmut] source_paths` in `pyproject.toml`, not
-      from argv: `run` accepts mutant names, and `--paths-to-mutate` is not an option.
-      Scoping to changed files is `use_git_change_detection` in that section, not a
-      change to this row. It rewrites the source into a `mutants/` directory at the
-      project root and leaves it there, and its first step runs the whole suite once
-      and stops at the first failure with `failed to collect stats. runner returned 1`,
-      exit 1.
+    absent: >-
+      mutmut 3.8.1 cannot be scoped to changed files by argv. `mutmut run` takes
+      only `--max-children` and mutant names, which are dotted globs such as
+      `pkg.a.*`, never file paths: `mutmut run src/pkg/a.py` stops with
+      `Filtered for specific mutants, but nothing matches`, exit 1. The two scopes
+      it honours are `only_mutate` in `[tool.mutmut]`, which no argv token sets,
+      and a mutant-name glob per module, which needs a path-to-module step that
+      no token-only command can carry. `use_git_change_detection` does not scope
+      a run either. Without a scope, `mutmut run` mutates the whole package on
+      every review, so there is no row to run.
 ```
 
 **The suite row's `failure_line:` selects one line per failing test.** `'^(FAILED|ERROR) '` matches the lines of pytest's short test summary, `FAILED tests/test_x.py::test_y - AssertionError: nope` and, for a test whose setup raised, `ERROR tests/test_x.py::test_z - RuntimeError: boom`, one per test; both observed on pytest 9.1.1 under the default `-r fE`. The per-test lines `-v` prints end with the word rather than start with it, so they are not selected, and neither is the `3 failed, 1 passed in 0.02s` counts line. The text after ` - ` is the assertion message and changes with the test's data; a project whose `addopts` sets `-r` without `f` and `E` (`-rN` drops the summary) prints no such lines and has nothing to select.
 
-**Why the mutation row carries no `{paths}`.** mutmut 3 rewrote its interface: `mutmut run` takes
-mutant names, the source paths live in `pyproject.toml`, and the older `paths_to_mutate` key is
-deprecated in favour of `source_paths`. A mutant name that matches nothing —
-`mutmut run pkg.m.big` — stops with `Filtered for specific mutants, but nothing matches` and exit 1,
-so a scoped run that mistypes its target is an error rather than an empty pass.
+**Why the mutation row is absent.** mutmut 3 rewrote its interface: `mutmut run` takes mutant names, the source paths live in `pyproject.toml`, and the older `paths_to_mutate` key is deprecated in favour of `source_paths`. Measured on mutmut 3.8.1 with a two-module package, git-committed, and one changed module:
+
+- A fresh `mutmut run` with `use_git_change_detection = true` ran all 11 of 11 mutants, across both modules and `__init__.py`. That key, true by default, only decides how mutmut finds the non-`.py` files changed since its last run, to clear cached results. It selects no mutant.
+- `mutmut run src/pkg/a.py tests/test_a.py` stopped with `Filtered for specific mutants, but nothing matches`, exit 1.
+- `mutmut run 'pkg.a.*'` ran only that module's 3 mutants and exited 0 with 2 survived. The other 8 read `not checked`. A test-file glob beside it matched nothing and did no harm.
+- `only_mutate = ["src/pkg/a.py"]` in `[tool.mutmut]` ran only those 3 mutants.
+
+A mutant key is the module path with `src.` stripped, then the function: `pkg.a.x_add__mutmut_1`, `pkg.b.xǁBoxǁdouble__mutmut_1` for a method, and `pkg.x_hello__mutmut_1` for `pkg/__init__.py`. So a person scoping a run by hand passes `'pkg.a.x_*'` and `'pkg.a.xǁ*'` per changed module. A program that builds those globs from the changed files worked through the review's own path expansion, but its source is a token with spaces and quotes, which this catalog's argv rule refuses. A mutant name that matches nothing stops with exit 1, so a mistyped target is an error rather than an empty pass.
+
+Two things hold for any run. Every mutant is still generated, and the first step runs the whole suite once for stats and stops at the first failure with `failed to collect stats. runner returned 1`, exit 1. And the last line of a full run is `N mutations/second`; the counts per outcome — `🎉` killed, `🙁` survived, `⏰` timed out, `🫥` no test covered it — are the last carriage-return segment of the line before. A run given mutant names prints one result line per mutant after that, so its last line is one mutant, not the counts. `mutmut results` lists each survivor by mutant name. mutmut rewrites the source into a `mutants/` directory at the project root and leaves it there.
 
 **Two kinds of test do not work under mutmut, and both are ones this catalog asks for.** mutmut runs
 pytest from inside `mutants/`, a copy of the tree holding a rewritten package whose every function
@@ -167,7 +173,7 @@ results sat in the one module that is tested through the console script.
 | Plain unit, unit with collaborators | milliseconds per test | every build attempt |
 | Integration / fixture | seconds, composed pieces | every build attempt, over the changed scope |
 | Entry point | in-process, imports the package | every build attempt |
-| Subprocess | a process spawn per case | once, at the end of a task |
+| Subprocess | a process spawn per case | the whole tier once, at the end of a task; an order's own test-first file on every build attempt, a spawn per case each time |
 
 **Telling a failed assertion from harness noise.** Exit codes 0, 1, 4 and 5 were observed on pytest 9.1.1; 2 and 3 are pytest's documented interrupted and internal-error codes.
 
@@ -201,7 +207,7 @@ If invoked in dry-run mode, resolve and return the command without executing it.
 
 3. **Substitute the placeholders.** Replace each placeholder token whole. A list placeholder expands to one token per element. Nothing is concatenated into a token and nothing is passed through a shell.
 
-4. **Apply the cost label.** Return the row's `cost` with the command, so a caller running on every build attempt does not receive the subprocess tier.
+4. **Apply the cost label.** Return the row's `cost` with the command, so a caller running on every build attempt does not receive the suite or the whole subprocess tier.
 
 5. **Return the command, the cost, and the failure signal.** The caller runs it. This recipe neither executes it nor judges its output.
 
@@ -243,7 +249,7 @@ After the recipe runs, verify:
 2. The runner came from the project's declaration rather than a hard-coded binary, and the same runner was used for every command in the run.
 3. The row requested was the row returned. A row answered `absent:` returned that statement, not a wider command that happens to include the wanted tests.
 4. A command selecting one case used a node identifier, and `-k` was used only where selecting several cases was the intent.
-5. The cost label travelled with the command, and no caller running on every build attempt received the subprocess tier.
+5. The cost label travelled with the command, and no caller running on every build attempt received the suite or the whole subprocess tier. A subprocess file there is an order's own test-first file.
 6. Only an exit 1 was reported as a red. An exit 4 or 5 was reported as the run not having happened.
 
 This recipe ships no executable verifier of its own — it produces a command and the means to read the result, and the phase that runs it owns the gate.

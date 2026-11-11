@@ -6,7 +6,7 @@ description: Use when a Go change reaches the review phase and must pass its gat
 # Metadata — read only after a match.
 label: Go review checks
 recipe_schema_version: 1.0.0
-version: 0.3.2
+version: 0.3.3
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -58,7 +58,7 @@ The plugin owns the generic mechanism — when the review phase runs, the gate e
 
 **Review verifies; it does not fix.** The phase returns a verdict and the violations behind it for a human (and the implementer) to act on. It edits no code, reverts nothing, and requires nothing. Acting on a blocking finding is a downstream step.
 
-**This framework binds no e2e or visual-regression phase.** A Go module has no rendered or browser surface those harnesses target. No recipe routes changed files to those gates in any framework: review picks the surfaces to run from each surface's own registered `--path` globs. A Go CLI's end-to-end shape is a test tier, not a phase: it lives in the implement recipe as the entry-point and subprocess tiers, and is checked here as part of the test gate.
+**This framework binds no e2e or visual-regression phase.** A Go module has no rendered or browser surface those harnesses target; a project may still register a command as its end-to-end surface through `/aida:surfaces`, which needs no recipe. No recipe routes changed files to those gates in any framework: review picks the surfaces to run from each surface's own registered `--path` globs. A Go CLI's end-to-end shape is a test tier, not a phase: it lives in the implement recipe as the entry-point and subprocess tiers, and is checked here as part of the test gate.
 
 ## Preconditions
 
@@ -224,8 +224,8 @@ recorded as not run, never as met.
 
 ## Surface commands
 
-Five rows, all absent. Surface commands are the suites review runs over a framework's user-visible
-surfaces, and a Go module has none: a Go CLI's end-to-end shape is the entry-point and subprocess levels chosen in `go/test-authoring.md`, not a phase. The rows are declared absent rather than left out because a
+Six rows, all absent. Surface commands are the suites review runs over a framework's user-visible
+surfaces, and this framework declares none: a Go CLI's end-to-end shape is the entry-point and subprocess levels chosen in `go/test-authoring.md`. The rows stay absent because a command surface needs no recipe row: a project may register one through `/aida:surfaces`, and review runs it from that registration. The rows are declared absent rather than left out because a
 present block with absent rows is how review knows a framework has no surfaces, while a missing
 block is a heading it could not find.
 
@@ -233,7 +233,7 @@ block is a heading it could not find.
 surface_commands:
   - id: e2e-preflight
     absent: >-
-      There is no e2e suite here, so there is no site readiness to check before one runs.
+      No recipe-driven e2e suite exists here, so there is no site readiness to check before one runs. A registered command surface needs no preflight.
   - id: e2e
     absent: >-
       A CLI's end-to-end coverage is the entry-point or subprocess level the test-authoring recipe chooses, run by the suite row of `go/test-execution.md`; there is no browser surface for a separate e2e suite to drive.

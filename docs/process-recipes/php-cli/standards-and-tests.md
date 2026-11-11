@@ -6,7 +6,7 @@ description: Use when a PHP CLI project (a Composer library or application whose
 # Metadata — read only after a match.
 label: PHP CLI standards and tests
 recipe_schema_version: 1.0.0
-version: 0.6.0
+version: 0.6.1
 # Machine-readable dependency declaration (recipe-loader resolves these
 # without parsing prose). The test-mutability rule is stack-neutral: it is
 # cited here, never restated per framework.
@@ -42,7 +42,7 @@ The plugin owns the generic mechanism — when the implement phase runs, the tes
 
 **Every CLI flag and exit code needs a test, and a check-style unit needs a negative case.** Each flag the binary accepts and each exit code it can return is a behaviour with a contract, and each gets a test that pins it — a flag that changes output, a bad-input path that returns the documented non-zero code. A **check-style** unit — one whose job is to *report problems* (a linter rule, a scanner, a validator) — additionally needs a **negative case**: an assertion that correct input produces **no** output and no finding. Without the negative case the check cannot be tuned — a rule that flags everything and a rule that flags nothing both pass a suite that only ever feeds them bad input.
 
-**Fixture-driven end-to-end IS the CLI's e2e, and it is not a phase.** "No e2e" for a PHP CLI means no *browser* e2e — it does not mean the tool has no end-to-end shape. The plugin's e2e-setup machinery is Playwright-shaped and does not fit a tool with no rendered surface, so that coverage never becomes an `e2e-setup` binding: it is a test level, chosen in `php-cli/test-authoring.md` and checked at `review` like any other.
+**Fixture-driven end-to-end is a test level, and it is not a phase.** "No e2e" for a PHP CLI means no *browser* e2e — it does not mean the tool has no end-to-end shape. The plugin's e2e-setup machinery is Playwright-shaped and does not fit a tool with no rendered surface, so that coverage never becomes an `e2e-setup` binding: it is a test level, chosen in `php-cli/test-authoring.md` and checked at `review` like any other. AIDA 6.1.6 also lets a project register a command as its end-to-end surface through `/aida:surfaces`, with no recipe; review runs it as outer verification, and it never stands in for a test level.
 
 **That fixture tier is inside the TDD loop; a browser suite would not be.** The distinction is not whether a subprocess or a browser is involved, it is whether the test was written before the code and run red. The fixture-driven CLI test is written from the flag-and-exit-code contract before the flag exists, so it constrains the design. Visual regression and browser E2E, where a project has them, run against something already built, cannot drive a design decision, and do not count toward the test-first requirement here.
 
@@ -81,7 +81,7 @@ architecture_ref: string      # optional; pointer to the design decision this im
 
 If invoked in dry-run mode, perform all reads and emit a standards plan (what the code must do to turn the test green, the flag and exit-code coverage to confirm, the binaries to syntax-check) instead of writing production code. Dry-run is required.
 
-1. **Take the failing test.** The level, the file, the class and method names and the criterion each carries are `php-cli/test-authoring.md`'s, and it hands them over red. Confirm the failure is an assertion that ran and did not hold rather than a harness error or a run that selected nothing — `php-cli/test-execution.md` declares how to tell those apart. A behaviour arriving with no failing test does not enter this phase; send it back.
+1. **Take the failing test.** The level, the file, the class and method names and the criterion each proves are `php-cli/test-authoring.md`'s, and it hands them over red. Confirm the failure is an assertion that ran and did not hold rather than a harness error or a run that selected nothing — `php-cli/test-execution.md` declares how to tell those apart. A behaviour arriving with no failing test does not enter this phase; send it back.
 
 2. **Confirm the red is the right red, and that the coverage the contract needs arrived with it.** The behaviour is absent — not a failure produced by breaking or reverting working code, which proves the test is sensitive and never that it came first (see `development/tdd-spec-driven/what-a-failing-test-proves`). Confirm the set covers every CLI flag and exit code the component touches, and that a check-style unit brought its **negative case** — correct input yields no output and no finding. A gap in that coverage goes back to test authoring; it is not filled here. A test that passed on arrival is not a starting point; return it. Once a test is committed, who may change or delete it is the mutability matrix's answer in `development/tdd-spec-driven`, not this phase's — and this phase changes none.
 

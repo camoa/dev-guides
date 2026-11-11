@@ -6,7 +6,7 @@ description: Use when a Drupal project enters the design phase and must turn res
 # Metadata — read only after a match.
 label: Design (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.4.0
+version: 0.4.1
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/services
@@ -144,7 +144,7 @@ If invoked in dry-run mode, perform all reads but emit an architecture-decision 
 
 6. **Name what each unit needs beside its code.** Per unit: its `*.services.yml` entry, and where the unit calls for them a `*.routing.yml` route, a permission in `*.permissions.yml`, a config schema under `config/schema/`, a library declaration in `*.libraries.yml`, read against the couplings list in the Opinion. A unit built with configuration rather than code names every configuration file its operation rewrites instead, found as the Opinion says. These are the files the unit owns and no other unit may write, and the unit is not finished until they exist.
 
-7. **Return the units and their order.** Per unit: what it is, the interface it offers to the units that depend on it (its PHP interface plus its registered service id), the pattern chosen with its reasoning and its core example path, the files it owns, and — for a unit built with configuration — what its gate must show, since there is no code to read and no PHPUnit test to write. A unit's test is one of the five tiers in `drupal/test-authoring.md`, a file written before the code, red then green. The visual-regression and end-to-end rows of `drupal/checks.md` run at review, after every order has closed, and are not a unit's test: a criterion that only a screenshot or a browser walk can prove is verified by a person at review's surface row and is declared so in the scope contract, and a unit that names one of its own surfaces as its test has named a check the tests step cannot take. The order is the dependency between them: services → Drush commands → forms and controllers → integration. Hand these to the caller, which records them. The recipe method writes no file of its own, and produces no architecture document — the units and their order are the architecture.
+7. **Return the units and their order.** Per unit: what it is, the interface it offers to the units that depend on it (its PHP interface plus its registered service id), the pattern chosen with its reasoning and its core example path, the files it owns, and — for a unit built with configuration — what its gate must show, since there is no code to read and no PHPUnit test to write. A unit's test is written at one of the four tiers `drupal/test-authoring.md` writes before the code, Kernel, Functional, Unit or Build, red then green. The visual-regression and end-to-end rows of `drupal/checks.md` run at review, after every order has closed, and are not a unit's test: a criterion that only a screenshot or a browser walk can prove is verified by a person at review's surface row and is declared so in the scope contract, and a unit that names one of its own surfaces as its test has named a check the tests step cannot take. The order is the dependency between them: services → Drush commands → forms and controllers → integration. Hand these to the caller, which records them. The recipe method writes no file of its own, and produces no architecture document — the units and their order are the architecture.
 
 ## Data flow
 
@@ -219,7 +219,7 @@ This recipe ships no executable verifier of its own — the checks above are the
 | Recipe | What it holds |
 |---|---|
 | `drupal/standards-and-tests.md` | The `## Configuration gate` that proves a configuration unit, and the rule that exported configuration is produced through Drupal, never by hand |
-| `drupal/test-authoring.md` | The five tiers a unit's test is written at, before the code |
+| `drupal/test-authoring.md` | The four tiers a unit's test is written at, before the code |
 | `drupal/checks.md` | The visual-regression and end-to-end rows that run at review, which are not a unit's test |
 
 ### External origins (referenced, not authored here)

@@ -2,11 +2,11 @@
 # Routing block — an orchestrator reads to here and decides.
 name: go_test_authoring
 capability: test-authoring
-description: Use when a context is about to write the tests for one unit of work on a Go module, before any production code exists, and needs to know which level the behaviour belongs at, which package the test file declares, what the test function is called, how the criterion it specifies is traced to it, and what a Go test may not do.
+description: Use when a context is about to write the tests for one unit of work on a Go module, before any production code exists, and needs to know which level the behaviour belongs at, which package the test file declares, what the test function is called, how the criterion it specifies is reported for it, and what a Go test may not do.
 # Metadata — read only after a match.
 label: Test authoring (Go)
 recipe_schema_version: 1.0.0
-version: 0.1.0
+version: 0.2.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -26,7 +26,7 @@ license: GPL-2.0-or-later
 
 Answer four questions for whoever is about to write a Go test: which level the behaviour belongs at,
 where the file goes and what the test function is called, how the criterion it specifies is
-recoverable from it, and what a Go test may not do.
+reported for it, and what a Go test may not do.
 
 **This recipe stops at red.** Its reader writes the test, watches it fail, and stops. It does not
 write the code that turns the test green, and nothing here tells it to. The green and refactor half
@@ -121,14 +121,17 @@ names and the table cases planned, and write nothing. Dry-run is required.
    test. The default case shape — a table of named cases ranged into `t.Run`, and when to depart
    from it — is stated once in `go/standards-and-tests.md` and is not repeated here.
 
-4. **Name the criterion in the test.** The criterion identifier goes at the end of the name and
-   nothing follows it — `TestDecodesTheHeaderC3` for a plain test, and the row name
-   `decodes_header_c3` for a table case. That makes the criterion selectable, with the qualification
-   that decides whether the selection is right: `-run` takes an **unanchored regular expression**, so
-   `-run C3` also selects `TestDecodesTheHeaderC30`, and only `-run 'C3$'` selects the one test. For
-   a table case the pattern splits on `/`, so `-run 'TestDecodesTheHeader/c3$'` selects the one row.
-   Both forms were checked on Go 1.27 against a deliberate `c30` sibling. A test that specifies two
-   criteria carries both, in order.
+4. **Report the criterion for each test.** Name each test for the behaviour it checks, in the
+   project's own convention, and report the criterion it proves to the freeze; that record is the
+   mapping, so the test need not carry an identifier. The name must be unique across the suite, not only
+   within one package: review searches the suite output for the name you report, bounded by
+   non-word characters, so report it as `go test` prints it. For a table row that is `TestX/case`;
+   `go test` turns spaces in a row name into `_` and adds `#01` to a duplicate row name. Record the
+   row, not the parent `TestX`, because a recorded parent would match every `TestX/row` failure. A project may still keep the criterion
+   identifier at the end of the name for its own navigation, and then nothing follows it, so
+   `-run 'C3$'` selects the one test: `-run` takes an **unanchored regular expression**, and
+   `-run C3` also selects a sibling ending `C30`. A test bound for an upstream project, or for a
+   library's own suite, follows that project's naming and carries no identifier.
 
 5. **Write the test.** Assert errors with `errors.Is` for a sentinel and `errors.As` for a typed
    error, against the names the design exported. Where the behaviour is safe to parallelise call
@@ -141,31 +144,33 @@ names and the table cases planned, and write nothing. Dry-run is required.
    not hold is a red run. A test that passes immediately is rewritten once; if it still passes with
    no code behind it, stop and report it as proving nothing.
 
-7. **Stop.** Return the level, the path, the test names, the criterion each carries, and the failure
+7. **Stop.** Return the level, the path, the test names, the criterion each proves, and the failure
    output for each. Write no production code.
 
 ## Data flow
 
 Input: one criterion, the behaviour it names, the exported interface, the package.
 Output: one or more `_test.go` files and any golden files under `testdata/`, and for each test the
-criterion it carries and the output of the run that failed.
+criterion it proves, reported to the freeze, and the output of the run that failed.
 Boundaries: reads no production source; writes only test files and goldens; runs no command except
 through `go/test-execution.md`; never runs a golden `-update`; produces no task record of its own.
 
 ## State-awareness contract
 
 Before writing a new test, look for an existing test that already specifies the behaviour, by
-searching the package's `_test.go` files for the criterion identifier and for the behaviour's own
-vocabulary. Add a row to an existing table rather than adding a second test that overlaps it. A bug
-fix almost always belongs on the existing test for the behaviour that broke.
+searching the package's `_test.go` files for the behaviour's own vocabulary and, where the project
+keeps identifiers in names, for the criterion identifier. Add a row to an existing table rather
+than adding a second test that overlaps it. A bug fix almost always belongs on the existing test for
+the behaviour that broke.
 
 Do not read the production source to make that decision. The test files are readable; the code is
 not.
 
 ## Verifier
 
-- Each test carries its criterion identifier at the end of its function name, or of its table row
-  name, recoverable by an end-anchored match and not as a substring of a longer identifier.
+- Each test name describes the behaviour the body checks, and is unique across the suite, so the
+  full name the test runner prints, `TestX/case` for a table row, identifies one test.
+- The criterion each test proves is reported to the freeze for every test.
 - Each test file sits beside the code it tests and declares `package <pkg>_test`, or records why the
   behaviour has no exported surface.
 - No test function has a lowercase letter after `Test`, which vet rejects and which therefore breaks
