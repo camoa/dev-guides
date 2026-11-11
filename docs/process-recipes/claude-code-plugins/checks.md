@@ -6,7 +6,7 @@ description: Use when a Claude Code plugin reaches the review phase and must be 
 # Metadata — read only after a match.
 label: Plugin review checks (Claude Code)
 recipe_schema_version: 1.0.0
-version: 0.3.1
+version: 0.3.2
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -44,7 +44,7 @@ The plugin owns the generic mechanism — when the review phase runs, the gate e
 
 **Review verifies; it does not fix.** The phase returns a verdict and the violations behind it for a human (and the author) to act on. It edits no component, reverts nothing, installs nothing. Acting on a blocking finding is a downstream step.
 
-**This framework declares neither `## Change-impact globs` nor `## Code-quality extensions`.** Both optional declarations exist to feed gates this framework does not run: change-impact globs route a changed file to the **e2e** / **visual-regression** gates, and a Claude Code plugin has no rendered or behavioural runtime surface those harnesses target (this framework binds no e2e-setup or visual-regression phase); code-quality extensions scope the **language-linter** gates (phpstan / eslint-class), and a plugin's substance is markdown and JSON manifests, not a linter target. Declaring either here would route to gates that cannot fire — inert. The plugin review is structural and semantic, owned by the tools above, which is why neither block is present.
+**This framework declares neither `## Change-impact globs` nor `## Code-quality extensions`, and AIDA 6.1.6 reads neither.** A Claude Code plugin has no rendered or behavioural runtime surface, so this framework binds no e2e-setup or visual-regression phase. In any framework, review picks the e2e and visual-regression surfaces to run from each surface's own registered `--path` globs, never from a recipe. AIDA 6.1.6 scopes each check row by that row's own `extensions:` key instead, and every check row below is absent, because a plugin's substance is markdown and JSON manifests, not a linter target. The plugin review is structural and semantic, owned by the tools above, which is why neither block is present.
 
 ## Preconditions
 
@@ -178,8 +178,7 @@ script can read.
 check_commands:
   - id: coding-standards
     absent: >-
-      A plugin's substance is markdown and JSON manifests, not a linter target. This
-      framework declares no code-quality extensions for the same reason.
+      A plugin's substance is markdown and JSON manifests, not a linter target.
   - id: static-analysis
     absent: >-
       Structural validity is /plugin-creation-tools:validate, a slash command an agent

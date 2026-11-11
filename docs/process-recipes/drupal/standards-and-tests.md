@@ -6,7 +6,7 @@ description: Use when a Drupal project enters the implementation phase holding a
 # Metadata — read only after a match.
 label: Coding standards and test discipline (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.10.0
+version: 0.10.1
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -154,7 +154,7 @@ This recipe ships no executable verifier of its own — the checks above are the
 
 A unit whose deliverable is exported site configuration, a field, a display, a view, a content type under the sync folder, is proved by this gate, not by a PHPUnit test. The design recipe sizes such a unit around the Drupal operation and says why a test that reads YAML back proves nothing; this section says how the configuration is produced and what proves it.
 
-**Produce it through Drupal, never by hand.** Make the change in the worktree's site, through the UI or `drush`, then `ddev drush config:export`, and commit what the export wrote. Hand-authored YAML skips what Drupal does when it saves an object: it calculates the dependencies and casts the values to the schema. The export only copies what the site holds and repairs nothing: `config:export` compares data, not bytes, so a file whose data the site already holds is left as written. Two things the unit may not do: carry site configuration in a module's `config/install`, and edit exported YAML by hand after the export.
+**Produce it through Drupal, never by hand.** Make the change in the worktree's site, through the UI or `drush`, then `ddev drush config:export`, and commit what the export wrote. Hand-authored YAML skips what Drupal does when it saves an object: it calculates the dependencies and casts the values to the schema. The export only copies what the site holds and repairs nothing: `config:export` compares data, not bytes, so a file whose data the site already holds is left as written. To make Drupal write a file that started hand-written, export to an empty folder, `ddev drush config:export --destination=<dir>`, and copy only the file this order owns from there into the sync folder. `<dir>` must be a folder inside the project, because `ddev drush` runs in the web container and does not see a host `/tmp`; remove it after the copy, because an untracked folder fails the clean-tree check. Two things the unit may not do: carry site configuration in a module's `config/install`, and edit exported YAML by hand after the export.
 
 **"Implement only what the test demands" is about production code.** A configuration unit has no test to demand anything; its done-when lines bind on their own and the gate is how they are proved. The builder runs the gate and reports what it printed.
 
@@ -210,7 +210,7 @@ unit_declaration:
     - "**/*.info.yml"
 ```
 
-An order whose owned files match a glob here is a new unit. `checks.md` carries the same glob under `## Change-impact globs`, as the row that says which review checks a change to an info file triggers; that table answers what to re-run when the file changes, not what makes a unit exist, and a consumer asking the second question reads this block.
+An order whose owned files match a glob here is a new unit.
 
 What the plugin does with it: at the tests freeze, a red file that holds the `harness:` marker and no `assertion:` marker is a setup gap and is refused, unless the order's owned files match a glob here, in which case the file is accepted as the new unit's red with the reason that nothing can fail an assertion before the unit exists. Deciding that is the plugin's; the glob and what it means are this recipe's.
 

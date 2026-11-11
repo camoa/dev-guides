@@ -6,7 +6,7 @@ description: Use when a Go change reaches the review phase and must pass its gat
 # Metadata — read only after a match.
 label: Go review checks
 recipe_schema_version: 1.0.0
-version: 0.3.1
+version: 0.3.2
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -58,9 +58,7 @@ The plugin owns the generic mechanism — when the review phase runs, the gate e
 
 **Review verifies; it does not fix.** The phase returns a verdict and the violations behind it for a human (and the implementer) to act on. It edits no code, reverts nothing, and requires nothing. Acting on a blocking finding is a downstream step.
 
-**`.go` is not in the change-scoping floor, which is why this recipe declares it.** The review command scopes its change-scoped gates by file extension, unioning the framework's declared extensions onto a framework-neutral floor of `.php` `.js` `.mjs` `.cjs` `.ts` `.tsx` `.vue`. No Go extension is in that floor, so without the `## Code-quality extensions` declaration below, **a pure-Go change would filter down to an empty file list and every change-scoped gate would skip itself** — a run that looks clean because it examined nothing. The declaration adds `.go` and `.mod`. It deliberately does **not** add `.sum`: `go.sum` is a generated verification lockfile with no reviewable decision in it, and the dependency decision it records is already visible in `go.mod`, so scoping it in would feed a checksum diff to gates that judge design.
-
-**This framework declares no change-impact-globs block, and the absence is deliberate.** Change-impact globs route a changed file to the **e2e** and **visual-regression** gates. Go binds neither phase — a Go module has no rendered or browser surface those harnesses target — so declaring globs here would route to gates that cannot fire. A Go CLI's end-to-end shape is a test tier, not a phase: it lives in the implement recipe as the entry-point and subprocess tiers, and is checked here as part of the test gate.
+**This framework binds no e2e or visual-regression phase.** A Go module has no rendered or browser surface those harnesses target. No recipe routes changed files to those gates in any framework: review picks the surfaces to run from each surface's own registered `--path` globs. A Go CLI's end-to-end shape is a test tier, not a phase: it lives in the implement recipe as the entry-point and subprocess tiers, and is checked here as part of the test gate.
 
 ## Preconditions
 
@@ -182,14 +180,6 @@ emits (to the caller; the recipe writes nothing):
        verdict:   PASS | BLOCKED, with each blocking violation named
 ```
 
-## Code-quality extensions
-
-```
-code_quality_extensions: [".go", ".mod"]
-```
-
-Without this declaration a pure-Go change filters to an empty list against the framework-neutral floor (`.php` `.js` `.mjs` `.cjs` `.ts` `.tsx` `.vue`) and every change-scoped gate skips itself — a clean-looking run that examined nothing. `.sum` is deliberately excluded: `go.sum` is a generated verification lockfile carrying no reviewable decision, and the dependency decision it reflects is already visible in `.mod`.
-
 ## Check commands
 
 Five rows — `coding-standards`, `static-analysis`, `security`, `duplication`, `design-metrics` —
@@ -297,6 +287,6 @@ This recipe ships no executable verifier of its own — the checks above are the
 
 ### Plugin-side generic mechanism (ai-dev-assistant)
 
-The stack-neutral review phase this recipe binds Go into — when the checks run, the gate envelope they emit, how the `## Code-quality extensions` declaration above is consumed for change-scoping, and what a BLOCKED verdict does to the lifecycle — is documented in the plugin itself, not duplicated here. The recipe supplies only the Go-specific check set and the blocking / advisory line for each.
+The stack-neutral review phase this recipe binds Go into — when the checks run, the gate envelope they emit, how a check row is scoped, and what a BLOCKED verdict does to the lifecycle — is documented in the plugin itself, not duplicated here. The recipe supplies only the Go-specific check set and the blocking / advisory line for each.
 
 Note that, unlike the PHP CLI recipe under this root, this one names its gate commands directly rather than deferring execution to the `code-quality-tools` plugin: that plugin detects Drupal and Next.js projects and lints PHP and JavaScript file extensions, and has no Go arm. Go needs none — every blocking gate above except the optional linter ships with the toolchain.
