@@ -23,6 +23,7 @@ Recipes are published to a separate index, `agentic-recipes.txt` (not `llms.txt`
 | `editorial-roles-permissions-provisioning` | [Editorial roles & permissions](drupal/editorial-roles-permissions.md) | A site needs its editorial content roles — a single content_editor or a two-tier author/editor split, granted per bundle, never via `is_admin`. |
 | `content-type-field-provisioning` | [Provision content type fields](drupal/provision-content-type-fields.md) | A content type needs its fields defined — per-field storage decisions, shared storages, custom compound fields only where genuinely polymorphic. |
 | `drupal-site-template-publishing` | [Site template publishing](drupal/site-template-publishing.md) | A working Drupal CMS site must become a standalone, marketplace-compliant site template, exported from a disposable scratch install. |
+| `claude-code-skill-authoring` | [Claude Code skill authoring](claude-code-plugins/skill-authoring.md) | A Claude Code plugin needs a skill written or changed — a description that fires on the right requests and not others, progressive disclosure into references/ and scripts/, and an eval suite `claude plugin eval` runs with graders that call no judge. |
 | `layout-builder-editorial-wiring` | [Wire Layout Builder for editorial use](drupal/wire-layout-builder-editorial.md) | A content type must be handed to editors to compose pages in Layout Builder — palette curation, repeating sections, and editor-UX hardening. |
 
 ## Authoring an agentic recipe

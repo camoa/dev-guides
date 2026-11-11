@@ -6,7 +6,7 @@ description: Use when a Drupal project on DDEV gives a task's git worktree a run
 # Metadata, read only after a match.
 label: Worktree environment (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.6.1
+version: 0.7.0
 recipe_class: process
 framework: drupal
 drupal_compatibility: "^10.3 || ^11"
@@ -97,6 +97,12 @@ from a directory DDEV no longer knows, cannot land on another project.
 - The worktree is a fresh checkout. On a project that ignores `vendor/` and the Composer-installed
   directories, as the Composer template for a Drupal site does once it has a `.gitignore`, bring-up installs them
   and needs the network; on a project that tracks them, that step changes nothing.
+  Until bring-up has run, such a worktree holds no site to test. The `{custom_root}` token of
+  `drupal/test-execution.md` looks for a folder named modules/custom, which the standard layout keeps
+  in git. It prints nothing in two cases: the project's custom modules are Composer-installed
+  (`type:drupal-custom-module`) and bring-up has not run, or the project has no custom module yet.
+  An empty value there is one of those, not a wrong command. Run bring-up before passing
+  `--value custom_root=<path>`, because a folder that does not exist yet fails the same way.
 
 The checks a script can make are one line, run in the worktree after `## Files` is written and
 before anything is committed or a token runs, as arguments and never through a shell. It must exit
@@ -192,13 +198,14 @@ address (in the worktree):
         address.sh                        → root: checked; address: recorded; project: → {project}
 
 bring up, after ## Address (in the worktree):
-        ddev snapshot {mainProject} --name main-seed-{project}
+        ddev snapshot {mainProject} --name main-seed-{project} --yes
                                           → <main>/.ddev/db_snapshots/main-seed-{project}-<db>.zst, DDEV-ignored
         ddev snapshot restore main-seed-{project}
                                           → the worktree database, from that snapshot
-        ddev snapshot {mainProject} --cleanup --name main-seed-{project}
+        ddev snapshot {mainProject} --cleanup --name main-seed-{project} --yes
                                           → the main checkout's copy removed by name
-        ddev import-files {mainFiles}     → the worktree's sites/default/files, replaced
+        ddev import-files --source {mainFiles}
+                                          → the worktree's sites/default/files, replaced
         ddev drush cr                     → caches rebuilt under the worktree's hostname
         ddev snapshot --cleanup --yes     → the worktree's own earlier snapshots removed, none is fine
         ddev snapshot --name seed-{project} --yes
@@ -240,8 +247,8 @@ directory with it, because `ddev delete` leaves the `.ddev` folder alone.
 The seven `## Files` are written once, where absent, and refused where a file exists with other
 content, the rule every setup recipe's files follow. The consumer commits them on the task's
 branch once the `## Preconditions` line has exited 0 and before a token runs, so the tree is
-clean for the stages that check it, and a refused bring-up leaves no file behind. They leave the
-branch before it merges, as `## Tear down` says.
+clean for the stages that check it, and a refused bring-up leaves no file behind. Task completion
+takes them off the branch before it merges, as `## Tear down` says.
 
 Beyond those, nothing here writes a tracked file. `.ddev/db_snapshots/` is ignored by DDEV's own
 `.ddev/.gitignore`; the worktree's `sites/default/files` is ignored by the same rule that ignores
@@ -250,7 +257,45 @@ already ignores.
 
 `## Tear down` names the project, so a repeat run reports the project as deleted and touches
 nothing else; DDEV does not fail on a name it has already removed. A consumer runs the tear-down
-only for a task whose record carries an address, which is the mark that bring-up ran.
+only for a task whose record carries an address from a bring-up. An address recorded for a site
+that was already up marks no bring-up, as the next paragraphs say.
+
+**A site that is already up.** A worktree can run a site before any bring-up of this task, for
+example when a later task takes over an earlier task's worktree. Bring-up must not run on that
+site, because its second `## Bring up` replaces the database with the main checkout's and loses
+the branch's content. The site may be recorded as it stands. A consumer that adopts it writes
+the `## Files`, runs `## Address` with its `root:` check, and records the address. It runs no
+`## Preconditions`, `## Tokens` or `## Bring up` line.
+
+The site must still be this worktree's own project. Of the `## Preconditions` checks, the DDEV
+version, the running main checkout and the stale `main-seed-` snapshot guard the seed, and none
+applies to a site nobody seeds. The `name:` check and the nested-layout check guard which project
+a command reaches, and the `root:` check alone does not cover them. `ddev describe` reports the
+`approot` of the directory it was run from, while it finds the containers by project name. So
+`status.sh` checks both: the project resolved from the worktree is rooted at the worktree, and
+its name is the worktree's directory name. A site that fails either check is not adopted. The
+consumer then takes the bring-up path, and `## Preconditions` refuses it before anything is
+written to a database. A pinned `name:` line, or a directory name with an `_` or an uppercase
+letter, ends there. A person resolves it, and runs no bring-up over a database the branch needs.
+
+An adopted site has no seed this recipe took. Never take `seed-{project}` from the adopted site
+itself. That database already holds the branch's change, so the configuration gate would import
+onto it, change nothing and prove nothing. The only true seed is the main checkout's database. Check
+for a seed at adoption, not first at the gate. Run `ddev snapshot --list` in the worktree and look
+for `seed-{project}`; the list includes snapshots in sibling worktrees of the same repository. A seed
+that is listed was taken from the main checkout at an earlier bring-up, of unknown age. When
+no bring-up took `gate-{project}` either, the gate's first line fails on that missing snapshot.
+With that name put back, a missing seed fails the fourth line. Either stop comes before the
+database changes. The way to a true seed is a person's choice between two remedies:
+
+- Run bring-up, after exporting the database with `ddev export-db` to a file outside the
+  worktree. Bring-up replaces the site's content.
+- Take `ddev snapshot {mainProject} --name seed-{project} --yes` in the main checkout while it
+  runs. The gate's restore by name finds it there. That copy of the main database then stays in
+  the main checkout until a person removes it with
+  `ddev snapshot {mainProject} --cleanup --name seed-{project} --yes`.
+
+An adopted site is never torn down by a consumer, as `## Tear down` says.
 
 ## Verifier
 
@@ -321,6 +366,11 @@ and the files directory as `<checkout>/running/sites/default/files`. The project
 exited 4 from all three scripts. A run against a real project whose Drupal root is the repository
 root is not yet observed.
 
+The root and name checks added to `status.sh` in 0.7.0 are read from DDEV 1.25.5's source and
+were run only against a stub `ddev`. `ddev describe` loads the project from the nearest
+`.ddev/config.yaml` at or above the directory (`pkg/ddevapp/utils.go:162-176`), and `app.Init`
+finds its web container by the project's name (`pkg/ddevapp/ddevapp.go:203-217`).
+
 ## Status
 
 One command, run before a consumer's verify lines, because `ddev drush` and `ddev exec` silently
@@ -330,8 +380,12 @@ start a stopped project and print start-up text that fails every `stdout empty` 
 bash .aida/worktree-environment/status.sh
 ```
 
-Exit 0 means the worktree's project is up. A non-zero exit prints the project's status and stops
-the step, which the consumer reports as `task environment <id> up`.
+Exit 0 means the worktree's own project is up. That is the project DDEV resolves from the
+worktree, rooted at the worktree and named after its directory. A non-zero exit prints which
+condition failed and stops the step, which the consumer reports as `task environment <id> up`.
+A consumer also runs this line to decide whether a worktree already runs a site it may adopt,
+as `## State-awareness contract` says. Without the root and name checks, a project resolved
+somewhere else would read as up.
 
 ## Tokens
 
@@ -445,10 +499,20 @@ ddev describe -j | jq -r '.raw | "address: \(.primary_url)\nproject: \(.name)\nr
 
 ```sh .aida/worktree-environment/status.sh
 #!/usr/bin/env bash
-# Exits 0 when the worktree's DDEV project is running; otherwise prints its status and exits 1.
+# Exits 0 when the DDEV project resolved from here is running, is rooted here and is named after
+# this directory; otherwise prints which and exits 1. describe reports the approot of the directory
+# it ran in but finds containers by name, so the name check is what ties the containers to here.
 command -v jq >/dev/null || { echo "jq is not installed"; exit 1; }
-status="$(ddev describe -j 2>/dev/null | jq -r '.raw.status // empty')"
+here="$(pwd -P)"
+raw="$(ddev describe -j 2>/dev/null | jq -c '.raw // empty')"
+status="$(jq -r '.status // empty' <<<"$raw")"
 [ "$status" = "running" ] || { echo "the worktree's DDEV project is not running (status: ${status:-not a DDEV project})"; exit 1; }
+root="$(jq -r '.approot // empty' <<<"$raw")"
+[ -n "$root" ] && [ "$(cd "$root" 2>/dev/null && pwd -P)" = "$here" ] \
+  || { echo "DDEV resolved the project at ${root:-no folder}, not this worktree $here, so a command here reaches another project"; exit 1; }
+name="$(jq -r '.name // empty' <<<"$raw")"
+[ "$name" = "$(basename "$here")" ] \
+  || { echo "the project here is named ${name:-nothing}, not $(basename "$here") after this directory; a name: line in .ddev/config.yaml or an _ in the directory name does that"; exit 1; }
 ```
 
 ```sh .aida/worktree-environment/main-seed-cleanup.sh
@@ -557,12 +621,34 @@ remove the snapshot by hand with the command above.
 `--omit-snapshot` skips DDEV's pre-delete snapshot because the database is a copy the main
 checkout still has. The worktree's files stay for `git worktree remove`.
 
-Before the task branch merges, the person tears the site down, puts the `name:` line back in
-`.ddev/config.yaml`, and removes `.aida/worktree-environment/`, the `## Files` scripts bring-up
-committed on the branch. Merged without the `name:` line, the main checkout's DDEV project is
-renamed to its folder name, only when that differs from the pinned name. The renamed project
+An adopted site, one that was up before any bring-up of this task, is not torn down by a
+consumer. Its database is no copy of the main checkout's, so `--omit-snapshot` is wrong for it,
+and a snapshot DDEV takes on delete sits in the worktree's `.ddev/db_snapshots/`, which
+`git worktree remove` deletes. A person decides whether that database may go. If they keep it,
+they export it with `ddev export-db` to a file outside the worktree first, and then run the first
+line. No bring-up of this task took `main-seed-{project}`, so `{mainProject}` has no value for
+the second line. Run that line only when the main checkout holds that snapshot, with the main
+project's name filled in by hand.
+
+None of this may reach trunk. Merged without the `name:` line, the main checkout's DDEV project
+is renamed to its folder name, only when that differs from the pinned name. The renamed project
 gets a new, empty database. Merged with the scripts, trunk carries files only a worktree's
-bring-up uses. The person does both before the merge.
+bring-up uses. The consumer's task completion handles both before the merge. It tears the site
+down first, while the project still has the worktree's name. Then it commits on the branch each
+file bring-up recorded, back at its content where the branch started. That puts the `name:` line
+back in `.ddev/config.yaml` and removes the `## Files` scripts in `.aida/worktree-environment/`.
+
+A person still acts in three cases:
+
+- An order changed one of those files after bring-up, or one holds an uncommitted change.
+  Completion then puts nothing back, and its warning names the files.
+- The task records no point where the branch started. Completion's warning says so.
+- The site was adopted. Completion leaves it up and still takes the `## Files` scripts off the
+  branch. Adoption recorded no `name:` change, so a person checks `.ddev/config.yaml` by hand.
+  The PR body names the adoption.
+
+In the first two cases the person puts the files back by hand before the merge. A site adopted or kept up
+comes down only by the person's choice, as above.
 
 ## Build in place
 

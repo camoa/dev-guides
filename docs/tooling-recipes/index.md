@@ -24,7 +24,7 @@ A tooling recipe is named for its tool, and whatever needs the tool refers to it
 
 ## How install steps run
 
-Each step runs as arguments, never through a shell. A step containing a shell metacharacter is refused rather than run to mean something its author did not intend — write two steps instead of joining them with `&&`. In the Drupal recipes, a Composer step runs as `ddev composer`, inside the DDEV web container, so it resolves each package's version against the PHP that will run it rather than against the host's. The php-cli recipes have no DDEV container, so their Composer steps run as plain `composer`, against the host's own PHP.
+Each step runs as arguments, never through a shell. A step containing a shell metacharacter is refused rather than run to mean something its author did not intend — write two steps instead of joining them with `&&`. In the Drupal recipes, a Composer step runs as `ddev composer`, inside the DDEV web container, so it resolves each package's version against the PHP that will run it rather than against the host's. The php-cli recipes have no DDEV container, so their Composer steps run as plain `composer`, against the host's own PHP. The python-cli recipes install into the project's `.venv` through its own `.venv/bin/python -m pip`. Their Run lines and the `python-cli/checks.md` rows both call `.venv/bin/<tool>`, so the presence check and the row run the same binary. The Drupal PHPUnit recipe, from 0.2.0, writes `phpunit.xml` at the project root from core's dist, through a script it ships under `## Files`.
 
 Every step is safe to run twice, because a project may already have part of what the tool needs.
 
@@ -65,3 +65,6 @@ Without this listing the pages exist and nothing can find them. A process recipe
 | `php-cli` | `phpmd` | [PHPMD](php-cli/phpmd.md) |
 | `php-cli` | `phpstan` | [PHPStan](php-cli/phpstan.md) |
 | `php-cli` | `phpunit` | [PHPUnit](php-cli/phpunit.md) |
+| `python-cli` | `mypy` | [mypy](python-cli/mypy.md) |
+| `python-cli` | `pip-audit` | [pip-audit](python-cli/pip-audit.md) |
+| `python-cli` | `ruff` | [Ruff](python-cli/ruff.md) |

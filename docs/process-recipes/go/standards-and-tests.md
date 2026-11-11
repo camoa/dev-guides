@@ -6,7 +6,7 @@ description: Use when a Go project enters the implementation phase holding a tes
 # Metadata — read only after a match.
 label: Go standards and tests
 recipe_schema_version: 1.0.0
-version: 0.5.0
+version: 0.6.0
 # Machine-readable dependency declaration (recipe-loader resolves these
 # without parsing prose). The test-mutability rule is stack-neutral: it is
 # cited here, never restated per framework.
@@ -43,7 +43,7 @@ The plugin owns the generic mechanism — when the implement phase runs, the tes
 
 **`t.Parallel()` is worth it, and it makes shared state a bug rather than a smell.** Marking tests parallel is how a suite stays fast as it grows, but it converts anything process-global from a latent hazard into an actual flake. What it rules out — `t.Setenv`, `t.Chdir`, and a package-level variable a test mutates — is stated in `go/test-authoring.md`, beside the reader that would write one. What it means for **production** code is the part that belongs here: package-level mutable state is what makes those rules bite at all, so new code carries none, and configuration is a parameter rather than an environment read. Concurrency that involves waiting is better tested with the standard library's testing/synctest bubble and its fake clock than with a `time.Sleep` tuned until CI stops complaining.
 
-**`-race` belongs in the normal test command, not a nightly job.** The race detector only reports races on code paths that actually execute during the run, so its coverage is exactly the coverage of the tests it runs under — which means running it once a night against the same tests finds nothing that running it every time would not have found sooner and cheaper. `go test -race ./...` is *the* test command. It costs roughly an order of magnitude in time and memory, and that is the correct trade at the size of a test suite. Two companions belong in the same habit: `-shuffle=on`, which randomises test order and is **off by default**, catching tests that only pass because an earlier test left state behind; and `-count=1` when you need to defeat the test result cache and force a real run.
+**`-race` belongs in the normal test command, not a nightly job.** The race detector only reports races on code paths that actually execute during the run, so its coverage is exactly the coverage of the tests it runs under — which means running it once a night against the same tests finds nothing that running it every time would not have found sooner and cheaper. `go test -race <packages>` is *the* test command, run over the packages the work order touches; the whole-module `go test -race ./...` belongs to the end-of-task gate, which `go/test-execution.md` labels `cost: end-of-task`. It costs roughly an order of magnitude in time and memory, and that is the correct trade at the size of a test suite. Two companions belong in the same habit: `-shuffle=on`, which randomises test order and is **off by default**, catching tests that only pass because an earlier test left state behind; and `-count=1` when you need to defeat the test result cache and force a real run.
 
 **Errors are wrapped on the way up with `%w`, so they can be matched structurally.** A sentinel or a typed error the design exported only survives the call stack if every layer wraps rather than reformats, and an error rebuilt with `fmt.Errorf("...: %v", err)` has thrown the match away. `errors.Join` is the tool when a single operation genuinely produces several failures worth reporting together. How a **test** asserts on one — `errors.Is` for a sentinel, `errors.As` for a typed error, never message text — is stated in `go/test-authoring.md`.
 
@@ -88,19 +88,19 @@ architecture_ref: string      # optional; pointer to the design decision this im
 
 If invoked in dry-run mode, perform all reads and emit a standards plan (what the code must do to turn the test green, the golden files involved, the ordering sweep to run) instead of writing production code. Dry-run is required.
 
-1. **Take the failing test.** The level, the file, the package declaration, the test name and the criterion it carries are `go/test-authoring.md`'s, and it hands them over red. Confirm the failure is an assertion that ran and did not hold rather than a package that never compiled or a selector that matched nothing — `go/test-execution.md` declares how to tell those apart, and all three exit statuses lie about which one happened. A behaviour arriving with no failing test does not enter this phase; send it back.
+1. **Take the failing test.** The level, the file, the package declaration, the test name and the criterion it proves are `go/test-authoring.md`'s, and it hands them over red. Confirm the failure is an assertion that ran and did not hold rather than a package that never compiled or a selector that matched nothing — `go/test-execution.md` declares how to tell those apart, and all three exit statuses lie about which one happened. A behaviour arriving with no failing test does not enter this phase; send it back.
 
 2. **Confirm the red is the right red.** The behaviour is absent — not a failure produced by breaking or reverting working code, which proves the test is sensitive and never that it came first. A test that passed on arrival is not a starting point; return it. Once a test is committed, who may change or delete it is the mutability matrix's answer in `development/tdd-spec-driven`, not this phase's — and this phase changes none.
 
-3. **Write the minimum code to pass (GREEN).** Implement only what the tests demand. As you write, hold the design's boundary: new packages under `internal/` unless the design promoted them, the command a shim over the entry point, `ctx` first on anything that blocks, errors wrapped with `%w`, no `init` side effects, no package-level mutable state, and `os.Exit` confined to `main`. Run `go test ./...` to green.
+3. **Write the minimum code to pass (GREEN).** Implement only what the tests demand. As you write, hold the design's boundary: new packages under `internal/` unless the design promoted them, the command a shim over the entry point, `ctx` first on anything that blocks, errors wrapped with `%w`, no `init` side effects, no package-level mutable state, and `os.Exit` confined to `main`. Run `go test <packages>` to green, over the packages the work order touches.
 
 4. **Sweep the two ordering traps before the unit is called done.** Search the new code for a `range` over a map whose iteration reaches output, and for a `sort.Slice` or `slices.SortFunc` whose comparison does not fully distinguish two elements. Fix the first by collecting keys, sorting the slice, and ranging that; fix the second by making the sort key total with a tiebreaker (reaching for the stable variant only where preserving input order of ties is the actual requirement). A behaviour whose order is part of the contract needs a test that pins it — one that would fail against the unsorted version, which for the map case means asserting the full sequence rather than set membership. That test is authored by `go/test-authoring.md` and arrives red like any other; where the sweep finds an ordering bug no test pins, report it as a gap rather than writing one here.
 
 5. **Apply the formatting and the vet floor.** Run `gofmt -l .` and confirm it lists nothing, remembering that it exits 0 either way, so the assertion is on empty output; run `gofmt -s -w` on anything it named. Run `go vet ./...` over the whole module — not just the changed package, and not relying on `go test` to have done it, because `go test` runs only a high-confidence subset of the analyzers and several of the ones that matter most here are outside that subset.
 
-6. **Run the real test command.** `go test -race ./...`, with `-shuffle=on` at least once before handing back, and `-count=1` where the result cache would otherwise hide a real run. A race the detector reports is fixed now — it is a real data race that happened, not a warning.
+6. **Run the real test command.** `go test -race <packages>` over the packages the work order touches, such as `./internal/foo` or `./internal/foo/...`, with `-shuffle=on` at least once before handing back, and `-count=1` where the result cache would otherwise hide a real run. A race the detector reports is fixed now — it is a real data race that happened, not a warning.
 
-7. **Refactor under green (REFACTOR).** With tests green, improve structure without changing behaviour — collapse duplication, narrow a consumer-side interface to what the consumer actually calls, tighten a value type. Re-run `go test -race ./...`; it stays green or the refactor is reverted.
+7. **Refactor under green (REFACTOR).** With tests green, improve structure without changing behaviour — collapse duplication, narrow a consumer-side interface to what the consumer actually calls, tighten a value type. Re-run `go test -race <packages>` over the same packages; it stays green or the refactor is reverted.
 
 8. **Confirm the module manifest and hand back.** Run `go mod tidy -diff`, which prints the changes tidy would make and exits non-zero when there are any, so a requirement added or orphaned during the work is caught here rather than in review. Return the test results, the ordering-trap sweep, the formatting and vet outcome, the race-detector result, and the tidy result to the caller; the plugin's implement phase records them against the task and owns the completion gate. The recipe writes production code for the component, changes no test, and writes no task record of its own.
 
@@ -135,8 +135,8 @@ emits (to the caller; the recipe writes no task record):
        tests:      the test(s) it received red, now green and unchanged
        code:       the minimum production code that turns them green, design boundary held
        ordering:   the map-range and unstable-sort sweep result + the tests that pin order
-       toolchain:  gofmt (empty list) · go vet ./... · go test -race ./... · -shuffle=on ·
-                   go mod tidy -diff
+       toolchain:  gofmt (empty list) · go vet ./... · go test -race <packages> · -shuffle=on ·
+                   go mod tidy -diff  (go test -race ./... runs at the end-of-task suite)
 ```
 
 ## State-awareness contract
@@ -155,7 +155,7 @@ After the recipe runs, verify:
 5. Any golden file under `testdata/` that changed was reviewed as a diff, and a golden that moved in a change that was not meant to alter output is raised as a finding rather than accepted.
 6. The ordering sweep ran: no `range` over a map reaches output without the keys being collected and sorted first, and every `sort.Slice` / `slices.SortFunc` comparison either distinguishes all elements or has a recorded reason for using the stable variant — with a test pinning the resulting order.
 7. `gofmt -l .` lists nothing (asserted on empty output, not on the exit code), and `go vet ./...` is clean over the whole module rather than left to the reduced analyzer subset `go test` runs.
-8. `go test -race ./...` is green, has been run at least once with `-shuffle=on`, and no reported race was left unfixed.
+8. `go test -race <packages>` over the packages the work order touches is green, has been run at least once with `-shuffle=on`, and no reported race was left unfixed.
 9. `go mod tidy -diff` exits zero — no requirement was added, orphaned, or left un-tidied by the work.
 10. No test in the change was written after the code it covers — a test that cannot name a behaviour is measuring or ratifying, and does not count toward item 1. This phase wrote none of them.
 11. Every new table row reaches a branch or boundary no other row reaches; rows differing only in input formatting are duplication, not coverage.

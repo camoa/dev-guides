@@ -6,7 +6,7 @@ description: Use when a Python project enters the implementation phase holding a
 # Metadata — read only after a match.
 label: Python implementation standards and tests
 recipe_schema_version: 1.0.0
-version: 0.5.0
+version: 0.5.1
 # Machine-readable dependency declaration (recipe-loader resolves these
 # without parsing prose). The test-mutability rule is stack-neutral: it is
 # cited here, never restated per framework.
@@ -84,7 +84,7 @@ If invoked in dry-run mode, perform all reads and report the plan and the comman
 
 1. **Read the component map for the scope.** Find the entry point this change delivers, the protocol it implements or consumes, and the entrypoint contract it must honour. A change with no corresponding entry in the map is out of scope; stop and say so.
 
-2. **Take the failing test.** The level, the file, the function name and the criterion it carries are `python-cli/test-authoring.md`'s, and it hands them over red. A capability arriving with no failing test does not enter this phase; send it back.
+2. **Take the failing test.** The level, the file, the function name and the criterion it proves are `python-cli/test-authoring.md`'s, and it hands them over red. A capability arriving with no failing test does not enter this phase; send it back.
 
 3. **Confirm the red is the right red.** The failure is the assertion, not an `ImportError`, and it is there because the behaviour is absent rather than because working code was removed (see `development/tdd-spec-driven/what-a-failing-test-proves`). Record the failure message. A test that passed on arrival is not a starting point; return it. Once a test is committed, who may change or delete it is the mutability matrix's answer in `development/tdd-spec-driven`, not this phase's — and this phase changes none.
 

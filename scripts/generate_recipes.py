@@ -34,6 +34,7 @@ DOMAIN_MAP = {
     "js": "JavaScript",
     "nextjs": "Next.js",
     "design-systems": "Design Systems",
+    "claude-code-plugins": "Claude Code Plugins",
 }
 DOMAIN_ORDER = ["Drupal", "CSS", "JavaScript", "Next.js", "Design Systems"]
 

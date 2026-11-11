@@ -6,7 +6,7 @@ description: Use when anything needs to run a Drupal test — the failing-test s
 # Metadata — read only after a match.
 label: Test execution (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.4.3
+version: 0.4.4
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - drupal/testing
@@ -44,7 +44,7 @@ This recipe runs nothing and judges nothing. It is read by whatever is about to 
 
 **`ERRORS!` is the tell that the harness never reached the behaviour, whatever the assertion count.** A Kernel test with no `SIMPLETEST_DB` reports `ERRORS!` with `Assertions: 0` and exits 2 — the same exit code as a mistyped option. The count is not the marker: a base class that asserts in `setUp()` makes it non-zero on every erroring run, and on one live run a test whose body met a class that did not exist yet printed `ERRORS! Tests: 1, Assertions: 20, Errors: 1`, twenty assertions from the base class and none from the test. A test that errors has said nothing about the behaviour, and treating it as a red is how a phase concludes that absent code is proven absent when the database was simply not there.
 
-**The four tiers differ by an order of magnitude, so they carry different costs.** Unit and Kernel are cheap enough to run on every build attempt over the changed scope. Functional boots a real site per test; FunctionalJavascript adds a browser on top of that. Both belong at the end of a task, not inside the loop. A caller with no cost label either runs the cheapest thing and under-checks, or runs everything on every attempt and pays for a full site boot per attempt.
+**The four tiers differ by an order of magnitude, so they carry different costs.** Unit and Kernel are cheap enough to run on every build attempt over the changed scope. Functional boots a real site per test; FunctionalJavascript adds a browser on top of that. The whole suite of either tier belongs at the end of a task, not inside the loop. An order's own test-first files are different: they run on every build attempt, whatever their tier, so a Functional test-first file pays a site boot per test on each attempt. That is why Kernel or Unit is preferred wherever it shows the behaviour. FunctionalJavascript is never written test-first, as the Drupal test-authoring recipe says, so it never enters the loop. A caller with no cost label either runs the cheapest thing and under-checks, or runs everything on every attempt and pays for a full site boot per attempt.
 
 **Drupal has no changed-file test selection, and saying so is the answer.** No flag maps a set of changed paths to the tests that cover them. The caller passes the test file paths it decided cover the change, and every run therefore has a scope somebody chose rather than one the tool derived.
 
@@ -67,6 +67,8 @@ One limit, in the safe direction. The literal includes the closing quote, so it 
 
 What this still does not decide is `SIMPLETEST_DB`. It reaches the runner either from the container environment or from an `<env>` element in the project's own `phpunit.xml`, and a check is one command that never passes through a shell, so the two places cannot be combined. That condition stays prose, and a Kernel test erroring with `Assertions: 0` is how it surfaces — see the failure signal below.
 
+**`ddev describe -j` answers for whichever project DDEV resolves, and that may not be this tree.** DDEV loads the project from the nearest `.ddev/config.yaml` at or above the folder it runs in. A worktree nested inside another DDEV project, with no config of its own, therefore describes the outer project, and a running outer project reads as this tree's runner. The check cannot compare the `approot` it prints with the folder the rows run in: a check is fixed text, and `expect:` is a fixed literal, so neither can carry this tree's path. The `project-root` entry asks the nearer question instead. A `.ddev/config.yaml` in the folder the rows run in makes that folder the root DDEV resolves. Two things stay with the person. DDEV finds the containers by project name, so a `name:` line shared with another project still reads that project's state; the Drupal worktree-environment recipe checks the name. And a module-only repository fails this entry until its worktree has a site of its own.
+
 ```yaml
 preconditions:
   - id: test-runner
@@ -74,6 +76,10 @@ preconditions:
     check: ddev describe -j
     expect: '"status_desc":"running"'
     owner: code-quality-tools:setup
+  - id: project-root
+    what: a DDEV config in the folder the rows run in, so DDEV resolves this tree and not a project above it
+    check: test -f .ddev/config.yaml
+    owner: operator
 ```
 
 ## Input contract
@@ -109,8 +115,12 @@ test_commands:
     argv: ["ddev", "exec", "vendor/bin/phpunit", "-c", "phpunit.xml", "{file}"]
     cost: every-attempt
     trap: >-
-      Cost follows the tier the file belongs to, not the fact that it is one file.
-      One FunctionalJavascript file is not an every-attempt command.
+      The `every-attempt` label is real for an order's own test-first files: they
+      run on every build attempt whatever their tier, so a Functional file pays a
+      site boot per test on each attempt, which is why Kernel or Unit is preferred.
+      `end-of-task` in the tier table means a tier's whole suite, run at finish.
+      No FunctionalJavascript file reaches this row per attempt, because none is
+      written test-first.
   - id: test
     argv: ["ddev", "exec", "vendor/bin/phpunit", "-c", "phpunit.xml", "{file}", "--filter", "{test_id}"]
     id_form: >-
@@ -176,14 +186,14 @@ own process. So `infection.json5` carries a `bootstrap` of its own that requires
 runs inside PHPUnit. Observed on a module with 104 unit tests: 434 mutants in 1m 26s on 15
 threads with pcov.
 
-**Tiers and what they cost.** Core's `phpunit.xml.dist` declares six testsuites, not four: `unit-component`, `unit`, `kernel`, `functional`, `functional-javascript` and `build`. The four the implement phase selects among are the middle ones; a caller passing `--testsuite` sees all six and should not invent a name.
+**Tiers and what they cost.** Core's `phpunit.xml.dist` declares six testsuites, not four: `unit-component`, `unit`, `kernel`, `functional`, `functional-javascript` and `build`. The project's own `phpunit.xml`, written by the PHPUnit tooling recipe, declares five of them, every one but `unit-component`, over the project's custom modules. `--list-suites` lists only the suites that hold a test, so an empty tier is absent from it; a caller passing `--testsuite` uses one of the five and does not invent a name.
 
 | Tier | `--testsuite` | Cost | Run it |
 |---|---|---|---|
 | Unit | `unit` | milliseconds per test, no bootstrap | every build attempt |
 | Kernel | `kernel` | seconds per test, minimal container and an installed schema | every build attempt, over the changed scope |
-| Functional | `functional` | a real site boot per test | once, at the end of a task |
-| FunctionalJavascript | `functional-javascript` | a site boot plus a browser session per test | once, at the end of a task |
+| Functional | `functional` | a real site boot per test | the whole suite once, at the end of a task; an order's own test-first file on every build attempt, a site boot per test each time |
+| FunctionalJavascript | `functional-javascript` | a site boot plus a browser session per test | once, at the end of a task; never written test-first, so never per attempt |
 
 **Telling a failed assertion from harness noise.** PHPUnit's exit code is not enough on its own, because 2 covers both a test that errored and a runner that was misused. The status line is what separates them: `ERRORS!` is a test that threw or a harness that stopped, `FAILURES!` a run that reached the behaviour and found it wrong, and a bare message with no counts line is a runner that never started.
 
@@ -229,7 +239,7 @@ If invoked in dry-run mode, resolve and return the command without executing it.
 
 2. **Substitute the placeholders.** Replace each placeholder token whole, from the caller's input. A list placeholder expands to one token per element. Nothing is concatenated into a token, and nothing is passed through a shell.
 
-3. **Apply the cost label.** Return the row's `cost` with the command, so the caller running on every build attempt does not receive a command that boots a site per test.
+3. **Apply the cost label.** Return the row's `cost` with the command, so the caller running on every build attempt does not receive the suite or a whole Functional or FunctionalJavascript tier.
 
 4. **Return the command, the cost, and the failure signal.** The caller runs it. This recipe neither executes it nor judges its output.
 
@@ -263,7 +273,7 @@ emits (to the caller; the recipe runs nothing):
 
 ## State-awareness contract
 
-The recipe reads. It writes no file, runs no command, starts no container, and records nothing against the task. The one state it depends on is the DDEV environment already running, and it deliberately declines to probe that, because the only command that would is one that starts it.
+The recipe reads. It writes no file, runs no command, starts no container, and records nothing against the task. The one state it depends on is the DDEV environment already running. The recipe does not probe that itself: its `## Preconditions` name `ddev describe -j` and a `.ddev/config.yaml` check for the caller to run, and neither starts a stopped project.
 
 Idempotent by construction: resolving the same row with the same input returns the same command. What the command then does depends on the project's state, which is the caller's to observe and this recipe's to explain.
 
@@ -275,7 +285,7 @@ After the recipe runs, verify:
 2. The row requested was the row returned. A row answered `absent:` returned that statement, not a wider command that happens to include the wanted tests.
 3. A command scoping a tier used `--testsuite` with one of core's declared suite names, never `--filter`.
 4. A command selecting one case used an anchored filter, and the run's test count was read rather than its exit code alone.
-5. The cost label travelled with the command, and no caller running on every build attempt received a Functional or FunctionalJavascript command.
+5. The cost label travelled with the command, and no caller running on every build attempt received the suite or a whole Functional or FunctionalJavascript tier. A Functional file there is an order's own test-first file; no FunctionalJavascript file is.
 6. Any result reported as red carried `FAILURES!`. A run reporting `ERRORS!`, or `No tests executed!`, was reported as having said nothing rather than as a pass or a failure, whatever its assertion count.
 
 This recipe ships no executable verifier of its own — it produces a command and the means to read the result, and the phase that runs it owns the gate.

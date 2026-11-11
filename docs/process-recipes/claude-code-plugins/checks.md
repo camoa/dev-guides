@@ -6,7 +6,7 @@ description: Use when a Claude Code plugin reaches the review phase and must be 
 # Metadata — read only after a match.
 label: Plugin review checks (Claude Code)
 recipe_schema_version: 1.0.0
-version: 0.3.2
+version: 0.3.3
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -200,7 +200,7 @@ check_commands:
 
 ## Surface commands
 
-Five rows, all absent. Surface commands are the suites review runs over a framework's user-visible
+Six rows, all absent. Surface commands are the suites review runs over a framework's user-visible
 surfaces, and a Claude Code plugin has none: it has no rendered or behavioural runtime surface, which is why it binds no e2e-setup or visual-regression phase. The rows are declared absent rather than left out because a
 present block with absent rows is how review knows a framework has no surfaces, while a missing
 block is a heading it could not find.

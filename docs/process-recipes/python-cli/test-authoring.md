@@ -2,11 +2,11 @@
 # Routing block — an orchestrator reads to here and decides.
 name: python_cli_test_authoring
 capability: test-authoring
-description: Use when a context is about to write the tests for one unit of work on a Python library or console-script project, before any production code exists, and needs to know which level the behaviour belongs at, where the file goes, what the test function is called, how the criterion it specifies is traced to it, and what a pytest test may not do.
+description: Use when a context is about to write the tests for one unit of work on a Python library or console-script project, before any production code exists, and needs to know which level the behaviour belongs at, where the file goes, what the test function is called, how the criterion it specifies is reported for it, and what a pytest test may not do.
 # Metadata — read only after a match.
 label: Test authoring (Python CLI)
 recipe_schema_version: 1.0.0
-version: 0.2.0
+version: 0.3.0
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -26,7 +26,7 @@ license: GPL-2.0-or-later
 
 Answer four questions for whoever is about to write a Python test: which level the behaviour belongs
 at, where the file goes and what the test function is called, how the criterion it specifies is
-recoverable from it, and what a pytest test may not do.
+reported for it, and what a pytest test may not do.
 
 **This recipe stops at red.** Its reader writes the test, watches it fail, and stops. It does not
 write the code that turns the test green, and nothing here tells it to. The green and refactor half
@@ -79,9 +79,15 @@ instruction anyone can follow.
 - A file is named `test_<module>.py`. pytest's default discovery accepts `test_*.py` and `*_test.py`
   both; pick the first and be consistent, because the delete guard watches both and a project mixing
   them makes its own test tree harder to read.
-- A test function is named `test_<behaviour>_<criterion>`. pytest collects a function only when its
-  name starts with `test`, so a helper named `check_something` in a test file is silently not
-  collected — verified on pytest 9.1.1, where it simply does not appear in `--collect-only`.
+- A test function is named `test_<behaviour>`, for the behaviour its body checks, in the project's
+  own convention. pytest collects a function only when its name starts with `test`, so a helper
+  named `check_something` in a test file is silently not collected — verified on pytest 9.1.1,
+  where it simply does not appear in `--collect-only`.
+- A test name is unique across the whole suite, not only within its file or class. Review matches
+  a failure to its criterion by the bare test name, so two tests named alike in different files
+  tie one failure to both criteria. No test function shares its name with a test module's stem:
+  pytest's default output prints `tests/test_parser.py ..F`, which a function named `test_parser`
+  would also match.
 - Shared fixtures go in `tests/conftest.py`. That file is a declared oracle rather than ordinary
   test code, because it can drop files from collection entirely and turn a suite green by running
   less; `python-cli/standards-and-tests.md` declares it and says why.
@@ -106,7 +112,7 @@ preconditions: []
 ```yaml
 code_path: string             # absolute path to the project root (the dir with pyproject.toml)
 module: string                # the package module the behaviour belongs to
-criterion_id: string          # the identifier of the criterion this test specifies
+criterion_id: string          # the criterion this test proves, reported to the freeze; the test need not carry it
 behavior: string              # what the test must observe, in a sentence
 interface: string             # the names the module declares, and the names its dependencies declare
 test_level: string            # optional; plain-unit | unit-with-collaborators | integration | entry-point | subprocess
@@ -127,14 +133,25 @@ cases and the assertions planned, and write nothing. Dry-run is required.
 
 2. **Place and name the file.** `tests/<path mirroring the package>/test_<module>.py`.
 
-3. **Name the criterion in the test, and mark it.** The criterion identifier goes at the end of the
-   function name, after an underscore, and nothing follows it:
-   `test_submitted_form_saves_the_node_c3`. That keeps the criterion in the failure output and
-   findable by grep with no runner support.
+3. **Report the criterion; carry an identifier only where the project does.** Report the criterion
+   each test proves. The freeze records it, and that record is the mapping, so the test itself
+   needs no identifier. A project may keep one in code for its own navigation. A test bound for an
+   upstream project, such as a library's own suite, follows that project's conventions and carries
+   none. Where a project keeps one:
 
-   For **selection**, add `@pytest.mark.criterion(id="c3")` as well, and register `criterion` under
-   `[tool.pytest.ini_options] markers` so `--strict-markers` accepts it. Three things about this were
-   checked on pytest 9.1.1 and each changes what a caller should write:
+   - **In the name**, it goes at the end, after an underscore, and nothing follows it:
+     `test_submitted_form_saves_the_node_c3`. That keeps the criterion in the failure output and
+     findable by grep with no runner support.
+   - **As a marker**, `@pytest.mark.criterion(id="c3")`, only when the project already registers
+     it. Before the first marked test, run `{runner} --markers` with the runner
+     `python-cli/test-execution.md` resolves. It runs no test and exits 0 either way; it lists
+     a line beginning `@pytest.mark.criterion` only when the project registers the marker (pytest
+     9.2.0 copies the registration string, so `criterion(id)` may not appear literally). Where it is
+     not listed, write no marker. Under `--strict-markers` an unregistered marker fails every run at
+     collection, and registering it means writing `pyproject.toml`, which this reader may not do.
+
+   Three things about the marker were checked on pytest 9.1.1 and each changes what a caller should
+   write:
 
    - `-k` is an unanchored substring match with no regular expression and no anchor, so `-k c3` also
      selects `test_decodes_header_c30`. It cannot express "this criterion and no other" except as
@@ -145,8 +162,9 @@ cases and the assertions planned, and write nothing. Dry-run is required.
      parses as the bare marker name and selects every test carrying the marker at all. A caller that
      writes it gets a green run over the wrong set.
 
-   The reliable selector without the marker is the node id, `tests/test_x.py::test_..._c3`, which is
-   exact. A script reads the marks back out with `--collect-only -q` plus the marker expression.
+   The reliable selector without the marker is the node id, `tests/test_x.py::test_decodes_header`,
+   which is exact. A script reads the marks back out with `--collect-only -q` plus the marker
+   expression.
 
 4. **Write the test.** At the level selected, importing the package rather than shelling out. Assert
    on the return value, the exception type the contract assigns, or the exit code — never on prose
@@ -158,34 +176,36 @@ cases and the assertions planned, and write nothing. Dry-run is required.
    an import has not tested anything. A test that passes immediately is rewritten once; if it still
    passes with no code behind it, stop and report it as proving nothing.
 
-6. **Stop.** Return the level, the path, the test names, the criterion each carries, and the failure
+6. **Stop.** Return the level, the path, the test names, the criterion each proves, and the failure
    output for each. Write no production code.
 
 ## Data flow
 
 Input: one criterion, the behaviour it names, the declared interface, the module.
-Output: one or more test files under `tests/`, and for each test the criterion it carries and the
+Output: one or more test files under `tests/`, and for each test the criterion it proves and the
 output of the run that failed.
 Boundaries: reads no production source; writes only under the test tree and its fixtures; runs no
-command except through `python-cli/test-execution.md`; produces no task record of its own.
+command except through `python-cli/test-execution.md` and its runner; produces no task record of
+its own.
 
 ## State-awareness contract
 
 Before writing a new test, look for an existing test that already specifies the behaviour, by
-searching the test tree for the criterion identifier, for the marker, and for the behaviour's own
-vocabulary. Add a `parametrize` row to the existing test rather than adding a second one that
-overlaps it. A bug fix almost always belongs on the existing test for the behaviour that broke.
+searching the test tree for the behaviour's own vocabulary, and for the criterion identifier and the
+marker where the project uses them. Add a `parametrize` row to the existing test rather than adding
+a second one that overlaps it. A bug fix almost always belongs on the existing test for the behaviour that broke.
 
 Do not read the production source to make that decision. The test tree is readable; the code is not.
 
 ## Verifier
 
-- Each test carries its criterion identifier at the end of its function name and a matching
-  `@pytest.mark.criterion(id=...)`, so the criterion is both readable in the failure output and
-  exactly selectable.
+- Each test name describes the behaviour its body checks, no other test in the suite shares it, and
+  none shares its name with a test module's stem.
+- The criterion each test proves is reported for every test.
 - Each test file sits under `tests/`, is named `test_<module>.py`, and every test function name
   starts with `test`. A helper that does not is not collected and nothing reports it.
-- The `criterion` marker is registered in `pyproject.toml`, so `--strict-markers` does not reject it.
+- A test carries `@pytest.mark.criterion(id=...)` only where `{runner} --markers` lists a line beginning
+  `@pytest.mark.criterion`, so `--strict-markers` does not reject it.
 - Each new test was seen to fail on its assertion, not on an import, and not because working code was
   removed.
 - No test asserts on prose captured from `capsys` that no contract pins. Assert on the return value,
@@ -215,3 +235,4 @@ Do not read the production source to make that decision. The test tree is readab
 | Origin | What it settled |
 |---|---|
 | pytest 9.1.1 | That a function not named `test*` is silently not collected; that `-k` is an unanchored substring match; that `-m` matches marker **keyword** arguments exactly, and that the positional form silently selects every test carrying the marker |
+| pytest 9.2.0 | That `--markers` exits 0 whether or not `criterion` is registered, and lists it only when it is |

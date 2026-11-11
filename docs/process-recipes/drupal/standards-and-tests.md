@@ -6,7 +6,7 @@ description: Use when a Drupal project enters the implementation phase holding a
 # Metadata — read only after a match.
 label: Coding standards and test discipline (Drupal)
 recipe_schema_version: 1.0.0
-version: 0.10.1
+version: 0.10.2
 # Machine-readable dependency declaration (recipe-loader resolves these without parsing prose).
 requires_guides:
   - development/tdd-spec-driven
@@ -85,7 +85,7 @@ architecture_ref: string      # optional; pointer to the design decision this im
 
 If invoked in dry-run mode, perform all reads and emit a standards-and-security plan (what the code must do to turn the test green, and the standards and security checklist it must hold) instead of writing production code. Dry-run is required.
 
-1. **Take the failing test.** The tier, the file, the namespace, the test name and the criterion it carries are `drupal/test-authoring.md`'s, and it hands them over red. Confirm the failure is an assertion that ran and did not hold rather than a harness error or a run that selected nothing — `drupal/test-execution.md` declares how to tell those apart. A behaviour arriving with no failing test does not enter this phase; send it back. The one exception is a unit whose deliverable is exported site configuration: it arrives with no test and goes to `## Configuration gate`.
+1. **Take the failing test.** The tier, the file, the namespace, the test name and the criterion it proves are `drupal/test-authoring.md`'s, and it hands them over red. Confirm the failure is an assertion that ran and did not hold rather than a harness error or a run that selected nothing — `drupal/test-execution.md` declares how to tell those apart. A behaviour arriving with no failing test does not enter this phase; send it back. The one exception is a unit whose deliverable is exported site configuration: it arrives with no test and goes to `## Configuration gate`.
 
 2. **Confirm the red is the right red.** The behaviour is absent — not a broken test, and not working code broken or reverted to force the failure, which proves the test is sensitive and never that it came first (see `development/tdd-spec-driven/what-a-failing-test-proves`). A test that passed on arrival is not a starting point; return it. Once a test is committed, who may change or delete it is the mutability matrix's answer in `development/tdd-spec-driven`, not this phase's — and this phase changes none.
 

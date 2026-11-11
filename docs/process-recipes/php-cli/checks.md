@@ -6,7 +6,7 @@ description: Use when a PHP CLI implementation (a Composer library or applicatio
 # Metadata — read only after a match.
 label: PHP CLI review checks
 recipe_schema_version: 1.0.0
-version: 0.3.3
+version: 0.4.0
 # Process-recipe routing keys, enforced by validate_recipes.py for any recipe
 # under docs/process-recipes/. `capability` above doubles as the phase (the
 # lifecycle moment the orchestrator resolves on); there is no separate
@@ -51,7 +51,7 @@ The plugin owns the generic mechanism — when the review phase runs, the gate e
 
 **Review verifies; it does not fix.** The phase returns a verdict and the violations behind it for a human (and the implementer) to act on. It edits no code, reverts nothing, and installs nothing. Acting on a blocking finding is a downstream step.
 
-**This framework declares neither `## Change-impact globs` nor `## Code-quality extensions`, and AIDA 6.1.6 reads neither.** Neither section can be declared into effect, so an author should not try. `php-cli` binds no **e2e** or **visual-regression** phase, because a CLI tool has no browser or rendered surface those harnesses target; in any framework, review picks the surfaces to run from each surface's own registered `--path` globs, never from a recipe. AIDA 6.1.6 scopes each check row by that row's own `extensions:` key instead. The rows under Check commands carry no `extensions:` key, so `{paths}` hands each tool every changed file except the frozen tests, which review removes first, an extensionless `bin/<tool>` included. Whether the tool then reads that file is its own behaviour: PHPStan does, PHP_CodeSniffer 4.x does, and PHPMD and PHP_CodeSniffer 3.x skip it with exit 0. An `extensions:` key cannot name "no extension" either. This is why the "every shipped binary is linted, including the extensionless ones" check above must be enforced by the reviewer directly rather than left to the check rows.
+**This framework declares neither `## Change-impact globs` nor `## Code-quality extensions`, and AIDA 6.1.6 reads neither.** Neither section can be declared into effect, so an author should not try. `php-cli` binds no **e2e** or **visual-regression** phase, because a CLI tool has no browser or rendered surface those harnesses target; in any framework, review picks the surfaces to run from each surface's own registered `--path` globs, never from a recipe. AIDA 6.1.6 scopes each check row by that row's own `extensions:` key instead. The three rows under Check commands that take `{paths}` carry `extensions: [".php"]`, so a changed `composer.json` or YAML file never reaches them. AIDA keeps a file only if its path ends in one of the listed extensions, and an extensionless `bin/<tool>` ends in none, so those three rows now drop it before the tool runs, even though PHPStan and PHP_CodeSniffer 4.x would have read it. An `extensions:` key cannot name "no extension". This is why the "every shipped binary is linted, including the extensionless ones" check above must be enforced by the reviewer directly rather than left to the check rows.
 
 ## Preconditions
 
@@ -173,8 +173,10 @@ executable bit Composer sets on its proxies.
 check_commands:
   - id: coding-standards
     argv: ["php", "vendor/bin/phpcs", "--standard=PSR12", "{paths}"]
+    extensions: [".php"]
   - id: static-analysis
     argv: ["php", "vendor/bin/phpstan", "analyse", "{paths}"]
+    extensions: [".php"]
   - id: security
     absent: >-
       Same reasoning as Drupal. The input-validation, shell-out, unserialize and
@@ -183,9 +185,10 @@ check_commands:
     argv: ["php", "vendor/bin/phpcpd", "src"]
   - id: design-metrics
     argv: ["php", "vendor/bin/phpmd", "{paths}", "text", "codesize,design"]
+    extensions: [".php"]
 ```
 
-**The phpmd row does not reach an extensionless binary; the phpstan row does, and the phpcs row does on PHP_CodeSniffer 4.x.**
+**No check row reaches an extensionless binary.** `extensions: [".php"]` filters it out before any tool runs. The notes below describe what each tool does with such a file, which is what a reviewer's direct run sees.
 PHPMD 2.15.0 skips a file whose extension is not in its list even when the file is named on the
 command line — `bin/<tool>` produces exit 0 and no output — and neither `--extensions` nor
 `--suffixes` can name "no extension". That is the gap Opinion describes, and it still holds for
@@ -205,8 +208,8 @@ that commits a `phpmd.xml` names it in place of the two shipped rulesets.
 
 ## Surface commands
 
-Five rows, all absent. Surface commands are the suites review runs over a framework's user-visible
-surfaces, and a PHP CLI tool has none: its interface is one or more binaries, and its end-to-end shape is a test level chosen in `php-cli/test-authoring.md`, not a phase. The rows are declared absent rather than left out because a
+Six rows, all absent. Surface commands are the suites review runs over a framework's user-visible
+surfaces, and this framework declares none: a PHP CLI tool's interface is one or more binaries, and its end-to-end shape is a test level chosen in `php-cli/test-authoring.md`. The rows stay absent because a command surface needs no recipe row: a project may register one through `/aida:surfaces`, and review runs it from that registration. The rows are declared absent rather than left out because a
 present block with absent rows is how review knows a framework has no surfaces, while a missing
 block is a heading it could not find.
 
@@ -214,7 +217,7 @@ block is a heading it could not find.
 surface_commands:
   - id: e2e-preflight
     absent: >-
-      There is no e2e suite here, so there is no site readiness to check before one runs.
+      No recipe-driven e2e suite exists here, so there is no site readiness to check before one runs. A registered command surface needs no preflight.
   - id: e2e
     absent: >-
       A CLI's end-to-end coverage is the fixture-driven level the test-authoring recipe chooses, run by the suite row of `php-cli/test-execution.md`; there is no browser surface for a separate e2e suite to drive.
